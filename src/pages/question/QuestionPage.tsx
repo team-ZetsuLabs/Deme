@@ -187,10 +187,12 @@ function QuestionView({ id }: { id: number }) {
               key={a.id}
               answer={a}
               canAccept={isAuthor}
+              isOwn={user?.id === a.author.id}
               sameCountry={!!q.context.country && a.author.country === q.context.country}
               accepting={acceptingId === a.id}
               onAccept={() => onAccept(a)}
               onVote={(votes, voted) => updateAnswer(a.id, { votes, voted })}
+              onEdited={(updated) => updateAnswer(a.id, updated)}
             />
           ))
         )}
@@ -198,7 +200,12 @@ function QuestionView({ id }: { id: number }) {
 
       <section className={`${styles.panel} ${styles.answerBox}`}>
         {user ? (
-          <AnswerForm questionId={q.id} onPosted={onPosted} />
+          <AnswerForm
+            idPrefix="answer"
+            submitLabel={t('question.publish')}
+            resetOnSuccess
+            onSubmit={async (body) => onPosted(await questionsApi.answer(q.id, body))}
+          />
         ) : (
           <>
             <h2 className={styles.sectionTitle}>{t('question.yourAnswer')}</h2>

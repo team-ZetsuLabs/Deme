@@ -96,6 +96,7 @@ export type QuestionSummary = {
 
 export type Answer = {
   id: number;
+  body: string; // Markdown d'origine, pour que l'auteur puisse modifier sa réponse (QA-3)
   bodyHtml: string; // Markdown converti et nettoyé par le serveur
   code: string | null; // texte brut
   author: Author;
@@ -130,7 +131,7 @@ export type QuestionRequest = {
   context: QuestionContext;
 };
 
-/** POST /api/v1/questions/{id}/answers */
+/** POST /api/v1/questions/{id}/answers et PUT /api/v1/answers/{id} */
 export type AnswerRequest = {
   body: string;
   code: string | null;

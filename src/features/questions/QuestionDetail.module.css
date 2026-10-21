@@ -64,6 +64,17 @@
   color: var(--gold-text);
 }
 
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.post:focus {
+  outline: none;
+}
+
 .foot {
   display: flex;
   flex-wrap: wrap;

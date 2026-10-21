@@ -4,6 +4,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import i18n from '../../i18n';
 import { ToastProvider } from '../../components/ToastProvider';
+import { authApi } from '../auth/authApi';
 import { SessionProvider } from '../auth/SessionProvider';
 import QuestionPage from '../../pages/question/QuestionPage';
 import { AskForm } from './AskForm';
@@ -81,6 +82,66 @@ describe('AskForm', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Publier la question' }));
     expect(await screen.findByText(/entre 15 et 150 caractères/)).toBeTruthy();
     expect(create).not.toHaveBeenCalled();
+  });
+});
+
+describe('QuestionPage, modification (QA-3)', () => {
+  it("permet à l'auteur, et à lui seul, de modifier sa réponse", async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue({
+      id: 10,
+      name: 'Mamadou Ndiaye',
+      email: 'mamadou.ndiaye@example.com',
+      country: 'SN',
+      city: 'Thiès',
+      photoUrl: null,
+      reputation: 365,
+      level: 'MEMBER',
+      language: 'fr',
+      skills: [],
+      onboarded: true,
+    });
+    const update = vi.spyOn(questionsApi, 'updateAnswer').mockResolvedValue({
+      id: 12,
+      body: 'Utilisez bien l’URL de production, les tokens du bac à sable ne marchent pas.',
+      bodyHtml:
+        '<p>Utilisez bien l’URL de production, les tokens du bac à sable ne marchent pas.</p>',
+      code: null,
+      author: {
+        id: 10,
+        name: 'Mamadou Ndiaye',
+        photoUrl: null,
+        country: 'SN',
+        city: 'Thiès',
+        reputation: 365,
+      },
+      createdAt: '2026-10-21T09:25:00Z',
+      votes: 3,
+      voted: false,
+      accepted: false,
+    });
+    wrap(
+      <Routes>
+        <Route path="/questions/:id" element={<QuestionPage />} />
+      </Routes>,
+      '/questions/1',
+    );
+
+    // Un seul bouton Modifier : celui de la réponse de Mamadou.
+    const edit = await screen.findByRole('button', { name: 'Modifier' });
+    expect(screen.getAllByRole('button', { name: 'Modifier' })).toHaveLength(1);
+    fireEvent.click(edit);
+
+    const textarea = screen.getByLabelText(/^Votre réponse/, { selector: '#edit-12-body' });
+    expect((textarea as HTMLTextAreaElement).value).toContain('URL de production');
+    fireEvent.change(textarea, {
+      target: {
+        value: 'Utilisez bien l’URL de production, les tokens du bac à sable ne marchent pas.',
+      },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Enregistrer la modification' }));
+
+    await waitFor(() => expect(update).toHaveBeenCalledWith(12, expect.any(Object)));
+    expect(await screen.findByText(/les tokens du bac à sable ne marchent pas/)).toBeTruthy();
   });
 });
 

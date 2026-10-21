@@ -1,5 +1,6 @@
 {
   "id": 501,
+  "body": "Réponse publiée en mode mock : l'API renvoie toujours ce contenu fixe.",
   "bodyHtml": "<p>Réponse publiée en mode mock : l'API renvoie toujours ce contenu fixe.</p>",
   "code": null,
   "author": {

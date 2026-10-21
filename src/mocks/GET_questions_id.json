@@ -25,6 +25,7 @@
   "answers": [
     {
       "id": 11,
+      "body": "Oui, le header doit être préfixé par `Bearer`. Attention aussi : le token expire au bout d'une heure, il faut le renouveler avant chaque lot d'appels.",
       "bodyHtml": "<p>Oui, le header doit être préfixé par <code>Bearer</code>. Attention aussi : le token expire au bout d'une heure, il faut le renouveler avant chaque lot d'appels.</p>",
       "code": "headers: {\n  \"Authorization\": `Bearer ${token}`,\n  \"Content-Type\": \"application/json\"\n}  // renouveler le token avant expiration",
       "author": {
@@ -42,6 +43,7 @@
     },
     {
       "id": 12,
+      "body": "Vérifiez aussi que vous utilisez bien l'URL de production et non celle du bac à sable : les tokens ne sont pas interchangeables entre les deux.",
       "bodyHtml": "<p>Vérifiez aussi que vous utilisez bien l'URL de production et non celle du bac à sable : les tokens ne sont pas interchangeables entre les deux.</p>",
       "code": null,
       "author": {
@@ -59,6 +61,7 @@
     },
     {
       "id": 13,
+      "body": "J'avais le même souci : c'était un espace en trop avant le token dans ma variable d'environnement. Un `trim()` au chargement de la configuration l'a réglé.",
       "bodyHtml": "<p>J'avais le même souci : c'était un espace en trop avant le token dans ma variable d'environnement. Un <code>trim()</code> au chargement de la configuration l'a réglé.</p>",
       "code": null,
       "author": {
