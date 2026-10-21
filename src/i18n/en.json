@@ -428,5 +428,36 @@
       "confirm": "Delete for good",
       "done": "Your account has been deleted."
     }
+  },
+  "notifications": {
+    "pageTitle": "Notifications",
+    "readAll": "Mark all as read",
+    "allRead": "All notifications are read",
+    "empty": "No notifications yet. You will be told when someone answers your questions.",
+    "unread": "Unread",
+    "unreadShort": "unread",
+    "bellLabel_one": "Notifications, {{count}} unread",
+    "bellLabel_other": "Notifications, {{count}} unread",
+    "groups": {
+      "today": "Today",
+      "week": "This week",
+      "earlier": "Earlier"
+    },
+    "types": {
+      "ANSWER_ON_QUESTION": "{{actor}} answered your question",
+      "ANSWER_ACCEPTED": "{{actor}} accepted your answer",
+      "VOTE": "{{actor}} voted for your content",
+      "JOB_MATCH": "A job matches your profile",
+      "MISSION_MATCH": "A gig matches your profile",
+      "NEW_CHALLENGE": "New challenge of the week",
+      "APPLICATION_DECISION": "Your application was {{decision}}",
+      "PROJECT_REQUEST_DECISION": "Your request to join the project was {{decision}}"
+    },
+    "decisions": {
+      "VIEWED": "viewed",
+      "SHORTLISTED": "shortlisted",
+      "ACCEPTED": "accepted",
+      "REJECTED": "declined"
+    }
   }
 }

@@ -46,6 +46,21 @@
   box-shadow: 0 0 0 1px var(--line);
 }
 
+.count {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  margin-left: auto;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--green);
+  color: var(--green-ink);
+  font-family: var(--f-mono);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+
 .space[aria-current='page'] svg {
   color: var(--green-text);
 }

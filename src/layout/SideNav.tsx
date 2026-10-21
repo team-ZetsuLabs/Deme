@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '../components/Icon';
 import { useSession } from '../features/auth/useSession';
+import { useUnread } from '../features/notifications/useUnread';
 import { ACCOUNT_LINKS, NAV_ITEMS, type NavItem } from './navItems';
 import styles from './SideNav.module.css';
 
@@ -9,6 +10,7 @@ import styles from './SideNav.module.css';
 export function SideNav() {
   const { t } = useTranslation();
   const { user } = useSession();
+  const { count } = useUnread();
 
   const link = (item: NavItem) => (
     <NavLink
@@ -19,6 +21,12 @@ export function SideNav() {
     >
       <Icon name={item.icon} size={18} />
       {t(item.labelKey)}
+      {item.to === '/notifications' && count > 0 && (
+        <span className={styles.count}>
+          {count}
+          <span className="sr-only"> {t('notifications.unreadShort')}</span>
+        </span>
+      )}
     </NavLink>
   );
 

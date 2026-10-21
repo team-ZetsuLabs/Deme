@@ -428,5 +428,36 @@
       "confirm": "Supprimer définitivement",
       "done": "Votre compte a été supprimé."
     }
+  },
+  "notifications": {
+    "pageTitle": "Notifications",
+    "readAll": "Tout marquer comme lu",
+    "allRead": "Toutes les notifications sont lues",
+    "empty": "Aucune notification pour le moment. Vous serez prévenu quand quelqu'un répondra à vos questions.",
+    "unread": "Non lue",
+    "unreadShort": "non lues",
+    "bellLabel_one": "Notifications, {{count}} non lue",
+    "bellLabel_other": "Notifications, {{count}} non lues",
+    "groups": {
+      "today": "Aujourd'hui",
+      "week": "Cette semaine",
+      "earlier": "Plus ancien"
+    },
+    "types": {
+      "ANSWER_ON_QUESTION": "{{actor}} a répondu à votre question",
+      "ANSWER_ACCEPTED": "{{actor}} a accepté votre réponse",
+      "VOTE": "{{actor}} a voté pour votre contenu",
+      "JOB_MATCH": "Une offre correspond à votre profil",
+      "MISSION_MATCH": "Une mission correspond à votre profil",
+      "NEW_CHALLENGE": "Nouveau défi de la semaine",
+      "APPLICATION_DECISION": "Votre candidature est {{decision}}",
+      "PROJECT_REQUEST_DECISION": "Votre demande pour rejoindre le projet est {{decision}}"
+    },
+    "decisions": {
+      "VIEWED": "vue",
+      "SHORTLISTED": "retenue",
+      "ACCEPTED": "acceptée",
+      "REJECTED": "refusée"
+    }
   }
 }

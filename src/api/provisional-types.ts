@@ -190,6 +190,39 @@ export type ReportRequest = {
   comment: string | null;
 };
 
+export type NotificationType =
+  | 'ANSWER_ON_QUESTION'
+  | 'ANSWER_ACCEPTED'
+  | 'VOTE'
+  | 'JOB_MATCH'
+  | 'MISSION_MATCH'
+  | 'NEW_CHALLENGE'
+  | 'APPLICATION_DECISION'
+  | 'PROJECT_REQUEST_DECISION';
+
+export type NotificationTargetType =
+  'QUESTION' | 'JOB' | 'MISSION' | 'CHALLENGE' | 'PROJECT' | 'APPLICATION';
+
+/** Élément de GET /api/v1/notifications (NOT-1). */
+export type AppNotification = {
+  id: number;
+  type: NotificationType;
+  actor: Author | null; // null pour une notification de la plateforme (offre, défi…)
+  targetType: NotificationTargetType;
+  targetId: number;
+  targetTitle: string;
+  /** Décision pour une candidature ou une demande de projet : VIEWED, SHORTLISTED, ACCEPTED, REJECTED. */
+  decision: 'VIEWED' | 'SHORTLISTED' | 'ACCEPTED' | 'REJECTED' | null;
+  createdAt: string;
+  read: boolean;
+};
+
+/** GET /api/v1/notifications/unread-count */
+export type UnreadCount = { count: number };
+
+/** POST /api/v1/notifications/read : des notifications précises, ou toutes. */
+export type MarkReadRequest = { ids: number[] } | { all: true };
+
 /** Réponse de PUT et DELETE /api/v1/votes/{question|answer}/{id} */
 export type VoteResult = {
   votes: number;

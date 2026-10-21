@@ -1,0 +1,94 @@
+{
+  "items": [
+    {
+      "id": 41,
+      "type": "ANSWER_ON_QUESTION",
+      "actor": {
+        "id": 5,
+        "name": "Fatou Diallo",
+        "photoUrl": null,
+        "country": "CI",
+        "city": "Abidjan",
+        "reputation": 455
+      },
+      "targetType": "QUESTION",
+      "targetId": 21,
+      "targetTitle": "BeanCreationException au démarrage quand PostgreSQL tourne dans Docker",
+      "decision": null,
+      "createdAt": "2026-10-21T14:10:00Z",
+      "read": false
+    },
+    {
+      "id": 40,
+      "type": "VOTE",
+      "actor": {
+        "id": 3,
+        "name": "Ibrahim Sawadogo",
+        "photoUrl": null,
+        "country": "BF",
+        "city": "Ouagadougou",
+        "reputation": 790
+      },
+      "targetType": "QUESTION",
+      "targetId": 3,
+      "targetTitle": "Garder une app Flutter utilisable quand la connexion coupe",
+      "decision": null,
+      "createdAt": "2026-10-21T11:45:00Z",
+      "read": false
+    },
+    {
+      "id": 39,
+      "type": "NEW_CHALLENGE",
+      "actor": null,
+      "targetType": "CHALLENGE",
+      "targetId": 4,
+      "targetTitle": "Simuler une API de paiement mobile",
+      "decision": null,
+      "createdAt": "2026-10-21T07:00:00Z",
+      "read": false
+    },
+    {
+      "id": 38,
+      "type": "ANSWER_ACCEPTED",
+      "actor": {
+        "id": 14,
+        "name": "Yao Kouassi",
+        "photoUrl": null,
+        "country": "CI",
+        "city": "Bouaké",
+        "reputation": 230
+      },
+      "targetType": "QUESTION",
+      "targetId": 14,
+      "targetTitle": "Webhook Moov Money reçu deux fois pour le même paiement",
+      "decision": null,
+      "createdAt": "2026-10-20T18:20:00Z",
+      "read": true
+    },
+    {
+      "id": 37,
+      "type": "JOB_MATCH",
+      "actor": null,
+      "targetType": "JOB",
+      "targetId": 1,
+      "targetTitle": "Développeur full-stack Spring Boot et React chez Sahel Paiements",
+      "decision": null,
+      "createdAt": "2026-10-19T09:00:00Z",
+      "read": true
+    },
+    {
+      "id": 36,
+      "type": "APPLICATION_DECISION",
+      "actor": null,
+      "targetType": "APPLICATION",
+      "targetId": 7,
+      "targetTitle": "Développeur mobile Flutter chez AgriLien",
+      "decision": "SHORTLISTED",
+      "createdAt": "2026-10-12T16:30:00Z",
+      "read": true
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 6
+}
