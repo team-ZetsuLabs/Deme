@@ -137,6 +137,17 @@ export type AnswerRequest = {
   code: string | null;
 };
 
+export type ReportTargetType = 'QUESTION' | 'ANSWER' | 'JOB' | 'MISSION' | 'PROJECT' | 'PROFILE';
+export type ReportReason = 'SPAM' | 'OFFENSIVE' | 'OFF_TOPIC' | 'IMPERSONATION' | 'FRAUD';
+
+/** POST /api/v1/reports (MOD-1). 409 ALREADY_REPORTED si déjà signalé par ce membre. */
+export type ReportRequest = {
+  targetType: ReportTargetType;
+  targetId: number;
+  reason: ReportReason;
+  comment: string | null;
+};
+
 /** Réponse de PUT et DELETE /api/v1/votes/{question|answer}/{id} */
 export type VoteResult = {
   votes: number;

@@ -42,7 +42,8 @@
       "prev": "Page précédente",
       "next": "Page suivante",
       "status": "Page {{page}} sur {{pages}}"
-    }
+    },
+    "close": "Fermer"
   },
   "errors": {
     "NETWORK_ERROR": "Impossible de joindre le serveur. Vérifiez votre connexion.",
@@ -52,7 +53,8 @@
     "INVALID_CREDENTIALS": "Email ou mot de passe incorrect.",
     "EMAIL_ALREADY_USED": "Cette adresse ne peut pas être utilisée. Si vous avez déjà un compte, connectez-vous.",
     "TOO_MANY_ATTEMPTS": "Trop de tentatives. Réessayez dans 15 minutes.",
-    "ACCOUNT_SUSPENDED": "Ce compte est suspendu. Contactez l'équipe Zetsu si vous pensez que c'est une erreur."
+    "ACCOUNT_SUSPENDED": "Ce compte est suspendu. Contactez l'équipe Zetsu si vous pensez que c'est une erreur.",
+    "ALREADY_REPORTED": "Vous avez déjà signalé ce contenu."
   },
   "auth": {
     "browse": "Parcourir sans compte",
@@ -278,5 +280,25 @@
     "submit": "C'est parti",
     "busy": "Enregistrement",
     "later": "Plus tard"
+  },
+  "report": {
+    "button": "Signaler",
+    "title": "Signaler ce contenu",
+    "lead": "Les signalements sont traités par les Référents de la communauté. Après 5 signalements de membres différents, le contenu est masqué en attendant leur décision.",
+    "reasonLegend": "Motif",
+    "reasons": {
+      "SPAM": "Spam ou publicité",
+      "OFFENSIVE": "Propos offensants",
+      "OFF_TOPIC": "Hors sujet",
+      "IMPERSONATION": "Usurpation d'identité",
+      "FRAUD": "Offre frauduleuse"
+    },
+    "comment": "Précisions",
+    "commentHint": "300 caractères maximum.",
+    "submit": "Envoyer le signalement",
+    "busy": "Envoi en cours",
+    "sent": "Signalement envoyé. Merci de votre vigilance.",
+    "level": "Il faut 50 points de réputation (niveau Membre) pour signaler.",
+    "reasonRequired": "Choisissez un motif."
   }
 }

@@ -18,7 +18,8 @@ export type IconName =
   | 'sun'
   | 'moon'
   | 'star'
-  | 'offline';
+  | 'offline'
+  | 'flag';
 
 export type IconProps = {
   name: IconName;

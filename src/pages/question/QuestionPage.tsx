@@ -20,6 +20,7 @@ import { AuthorCard } from '../../features/questions/AuthorCard';
 import { ContextChips } from '../../features/questions/ContextChips';
 import { questionsApi } from '../../features/questions/questionsApi';
 import { VoteControl } from '../../features/questions/VoteControl';
+import { ReportButton } from '../../features/moderation/ReportButton';
 import detail from '../../features/questions/QuestionDetail.module.css';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
@@ -143,15 +144,18 @@ function QuestionView({ id }: { id: number }) {
             <MemberContent html={q.bodyHtml} />
             {q.code && <CodeBlock code={q.code} />}
             <div className={detail.foot}>
-              <ul className={styles.tags}>
-                {q.tags.map((tag) => (
-                  <li key={tag}>
-                    <Link className={styles.tag} to={`/questions?tag=${encodeURIComponent(tag)}`}>
-                      {tag}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <div className={detail.actions}>
+                <ul className={styles.tags}>
+                  {q.tags.map((tag) => (
+                    <li key={tag}>
+                      <Link className={styles.tag} to={`/questions?tag=${encodeURIComponent(tag)}`}>
+                        {tag}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <ReportButton targetType="QUESTION" targetId={q.id} authorId={q.author.id} />
+              </div>
               <AuthorCard author={q.author} label={t('question.askedBy')} />
             </div>
           </div>
@@ -193,6 +197,9 @@ function QuestionView({ id }: { id: number }) {
               onAccept={() => onAccept(a)}
               onVote={(votes, voted) => updateAnswer(a.id, { votes, voted })}
               onEdited={(updated) => updateAnswer(a.id, updated)}
+              extraActions={
+                <ReportButton targetType="ANSWER" targetId={a.id} authorId={a.author.id} />
+              }
             />
           ))
         )}
