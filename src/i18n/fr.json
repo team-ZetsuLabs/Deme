@@ -37,7 +37,11 @@
     "en": "English"
   },
   "network": {
-    "offline": "Vous êtes hors ligne. Les questions déjà consultées restent lisibles."
+    "offline": "Vous êtes hors ligne. Les questions déjà consultées restent lisibles.",
+    "loadingOffline": "Vous êtes hors ligne. Le chargement reprendra dès le retour de la connexion.",
+    "loadingSlow": "Connexion lente : le chargement prend un peu plus de temps.",
+    "pageOffline": "Cette page n'a pas pu être chargée car vous êtes hors ligne. Elle se rechargera dès le retour de la connexion.",
+    "pageFailed": "Cette page n'a pas pu être chargée. Vérifiez votre connexion et réessayez."
   },
   "common": {
     "loading": "Chargement en cours",

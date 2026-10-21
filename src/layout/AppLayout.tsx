@@ -6,6 +6,7 @@ import { OfflineBanner } from './OfflineBanner';
 import { SideNav } from './SideNav';
 import { Topbar } from './Topbar';
 import { PageLoader } from './PageLoader';
+import { RouteErrorBoundary } from './RouteErrorBoundary';
 import styles from './AppLayout.module.css';
 
 export function AppLayout() {
@@ -31,9 +32,11 @@ export function AppLayout() {
         <main id="main" tabIndex={-1} className={styles.main}>
           {/* La clé relance l'animation d'entrée à chaque changement de page. */}
           <div key={pathname} className="page-enter">
-            <Suspense fallback={<PageLoader />}>
-              <Outlet />
-            </Suspense>
+            <RouteErrorBoundary>
+              <Suspense fallback={<PageLoader />}>
+                <Outlet />
+              </Suspense>
+            </RouteErrorBoundary>
           </div>
         </main>
       </div>
