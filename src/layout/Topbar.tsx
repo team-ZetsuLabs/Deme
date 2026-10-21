@@ -3,9 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { buttonClass } from '../components/buttonClass';
 import { Icon } from '../components/Icon';
+import { useSession } from '../features/auth/useSession';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { Logo } from './Logo';
 import { ThemeToggle } from './ThemeToggle';
+import { UserMenu } from './UserMenu';
 import styles from './Topbar.module.css';
 
 function isTyping(target: EventTarget | null) {
@@ -15,6 +17,7 @@ function isTyping(target: EventTarget | null) {
 export function Topbar() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { status, user } = useSession();
   const searchRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState('');
 
@@ -59,16 +62,24 @@ export function Topbar() {
         <div className={styles.right}>
           <LanguageSwitcher />
           <ThemeToggle />
-          {/* Sur mobile, l'onglet « Compte » de la barre du bas mène à la connexion. */}
-          <Link to="/login" className={`${buttonClass({ variant: 'ghost' })} ${styles.authLink}`}>
-            {t('topbar.login')}
-          </Link>
-          <Link
-            to="/register"
-            className={`${buttonClass({ variant: 'primary' })} ${styles.authLink}`}
-          >
-            {t('topbar.register')}
-          </Link>
+          {user && <UserMenu user={user} />}
+          {status === 'anonymous' && (
+            <>
+              {/* Sur mobile, l'onglet « Compte » de la barre du bas mène à la connexion. */}
+              <Link
+                to="/login"
+                className={`${buttonClass({ variant: 'ghost' })} ${styles.authLink}`}
+              >
+                {t('topbar.login')}
+              </Link>
+              <Link
+                to="/register"
+                className={`${buttonClass({ variant: 'primary' })} ${styles.authLink}`}
+              >
+                {t('topbar.register')}
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

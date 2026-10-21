@@ -1,0 +1,12 @@
+{
+  "id": 9,
+  "name": "Aminata Ouédraogo",
+  "email": "aminata.ouedraogo@example.com",
+  "country": "BF",
+  "city": "Ouagadougou",
+  "photoUrl": null,
+  "reputation": 42,
+  "level": "NEW",
+  "language": "fr",
+  "onboarded": true
+}
