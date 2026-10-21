@@ -1,0 +1,47 @@
+.rail {
+  position: sticky;
+  top: calc(var(--topbar-h) + var(--s5));
+}
+
+.label {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+  margin: 0 0 var(--s2) var(--s3);
+}
+
+.space {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  min-height: var(--control-h);
+  padding: 0 var(--s3);
+  border-radius: var(--r-md);
+  color: var(--text-2);
+  font-weight: 500;
+  font-size: var(--fs-base-sm);
+  transition:
+    background-color var(--t-fast) ease-out,
+    color var(--t-fast) ease-out;
+}
+
+.space svg {
+  flex-shrink: 0;
+  color: var(--text-3);
+}
+
+.space:hover {
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.space[aria-current='page'] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.space[aria-current='page'] svg {
+  color: var(--green-text);
+}

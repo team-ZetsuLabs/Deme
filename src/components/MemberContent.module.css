@@ -1,0 +1,37 @@
+.content {
+  font-size: var(--fs-base-sm);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.content > * + * {
+  margin-top: var(--s3);
+}
+
+.content ul,
+.content ol {
+  padding-left: var(--s5);
+}
+
+.content blockquote {
+  padding-left: var(--s3);
+  border-left: 2px solid var(--line-strong);
+  color: var(--text-2);
+}
+
+.content pre {
+  padding: var(--s3) var(--s4);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  font-family: var(--f-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+  overflow-x: auto;
+}
+
+.content pre code {
+  padding: 0;
+  border: none;
+  background: none;
+}

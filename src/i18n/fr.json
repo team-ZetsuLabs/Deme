@@ -1,0 +1,52 @@
+{
+  "app": {
+    "name": "Zetsu",
+    "home": "Zetsu, accueil",
+    "skipToContent": "Aller au contenu"
+  },
+  "nav": {
+    "label": "Navigation principale",
+    "spaces": "Espaces",
+    "questions": "Aide",
+    "jobs": "Emploi",
+    "missions": "Missions",
+    "challenges": "Défis",
+    "account": "Compte"
+  },
+  "topbar": {
+    "search": "Rechercher",
+    "searchPlaceholder": "Rechercher une erreur, un tag, une techno",
+    "login": "Se connecter",
+    "register": "Créer un compte"
+  },
+  "theme": {
+    "toLight": "Passer en mode clair",
+    "toDark": "Passer en mode sombre"
+  },
+  "language": {
+    "label": "Langue de l'interface",
+    "fr": "Français",
+    "en": "English"
+  },
+  "network": {
+    "offline": "Vous êtes hors ligne. Les questions déjà consultées restent lisibles."
+  },
+  "common": {
+    "loading": "Chargement en cours",
+    "retry": "Réessayer"
+  },
+  "errors": {
+    "NETWORK_ERROR": "Impossible de joindre le serveur. Vérifiez votre connexion.",
+    "MOCK_NOT_FOUND": "Les données d'exemple de cet écran ne sont pas encore disponibles.",
+    "UNKNOWN_ERROR": "Une erreur est survenue. Réessayez dans un instant."
+  },
+  "questions": {
+    "title": "Questions récentes",
+    "lead": "Décrivez l'erreur. Des développeurs de Dakar à Nairobi l'ont peut-être déjà rencontrée."
+  },
+  "notFound": {
+    "title": "Cette page n'existe pas",
+    "text": "Le lien est peut-être incomplet, ou la page a été supprimée.",
+    "back": "Retour aux questions"
+  }
+}

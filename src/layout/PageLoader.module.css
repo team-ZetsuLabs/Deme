@@ -1,0 +1,9 @@
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  padding: var(--s7) var(--s5);
+  color: var(--text-3);
+  font-size: var(--fs-md);
+}
