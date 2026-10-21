@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: zetsu
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/zetsu}
+    username: ${DATABASE_USER:zetsu}
+    password: ${DATABASE_PASSWORD:zetsu}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.jdbc.time_zone: UTC
+  flyway:
+    enabled: true
+  jackson:
+    time-zone: UTC
+    serialization:
+      write-dates-as-timestamps: false
+  mvc:
+    problemdetails:
+      enabled: false
+
+server:
+  port: ${PORT:8080}
+  # Derrière Caddy : X-Forwarded-For / X-Forwarded-Proto pour l'IP réelle (limitation de débit) et le HTTPS.
+  forward-headers-strategy: native
+  compression:
+    enabled: true
+    mime-types: application/json
+    min-response-size: 1024
+  servlet:
+    session:
+      timeout: 30d
+      cookie:
+        http-only: true
+        secure: ${COOKIE_SECURE:true}
+        same-site: lax
+        max-age: 30d
+  error:
+    whitelabel:
+      enabled: false
+    include-stacktrace: never
+    include-message: never
+
+zetsu:
+  front-url: ${FRONT_URL:/}
+  cookie-secure: ${COOKIE_SECURE:true}
+
+springdoc:
+  api-docs:
+    path: /api/v1/openapi.json
+  swagger-ui:
+    path: /api/v1/docs
+    csrf:
+      enabled: true
+  default-produces-media-type: application/json
+  paths-to-match: /api/**
+
+logging:
+  level:
+    org.springframework.security: INFO

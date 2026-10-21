@@ -1,0 +1,45 @@
+{
+  "items": [
+    {
+      "id": 512,
+      "questionId": 101,
+      "bodyMarkdown": "Ne fais jamais confiance au contenu du webhook seul. À la réception, relis le statut avec l'API `transactionstatus` en utilisant `pay_token` et ton jeton d'accès, et ne crédite que si le statut est `SUCCESS`.\n\nStocke aussi `txnid` avec une contrainte d'unicité pour ignorer les doublons.",
+      "bodyHtml": "<p>Ne fais jamais confiance au contenu du webhook seul. À la réception, relis le statut avec l'API <code>transactionstatus</code> en utilisant <code>pay_token</code> et ton jeton d'accès, et ne crédite que si le statut est <code>SUCCESS</code>.</p>\n<p>Stocke aussi <code>txnid</code> avec une contrainte d'unicité pour ignorer les doublons.</p>\n",
+      "author": {
+        "username": "kwame_codes",
+        "displayName": "Kwame Asante",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/1024",
+        "countryCode": "GH",
+        "reputation": 1287
+      },
+      "score": 9,
+      "accepted": true,
+      "myVote": 1,
+      "canEdit": false,
+      "createdAt": "2026-10-19T15:30:00Z",
+      "updatedAt": "2026-10-19T15:30:00Z"
+    },
+    {
+      "id": 518,
+      "questionId": 101,
+      "bodyMarkdown": "Ajoute aussi une liste blanche des IP d'Orange sur ton reverse proxy, en plus de la vérification du statut.",
+      "bodyHtml": "<p>Ajoute aussi une liste blanche des IP d'Orange sur ton reverse proxy, en plus de la vérification du statut.</p>\n",
+      "author": {
+        "username": "njeri_w",
+        "displayName": "Njeri Wanjiku",
+        "avatarUrl": null,
+        "countryCode": "KE",
+        "reputation": 896
+      },
+      "score": 2,
+      "accepted": false,
+      "myVote": null,
+      "canEdit": false,
+      "createdAt": "2026-10-20T07:48:00Z",
+      "updatedAt": "2026-10-20T07:48:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 2
+}

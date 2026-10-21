@@ -1,0 +1,20 @@
+# Activé par SPRING_PROFILES_ACTIVE=oauth quand les identifiants GitHub et Google sont fournis dans .env.
+# Adresses de retour à déclarer chez GitHub et Google :
+#   https://<domaine>/api/v1/auth/oauth2/callback/github
+#   https://<domaine>/api/v1/auth/oauth2/callback/google
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            redirect-uri: "{baseUrl}/api/v1/auth/oauth2/callback/{registrationId}"
+            scope: read:user,user:email
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: "{baseUrl}/api/v1/auth/oauth2/callback/{registrationId}"
+            # Sans « openid » : on reste sur le flux OAuth2 simple, le même que GitHub.
+            scope: profile,email

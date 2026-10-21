@@ -1,0 +1,1857 @@
+{
+  "openapi" : "3.1.0",
+  "info" : {
+    "title" : "Zetsu API",
+    "description" : "API de Zetsu. Session par cookie (JSESSIONID, HttpOnly) et jeton CSRF : lire le cookie XSRF-TOKEN (ou GET /api/v1/auth/csrf) et le renvoyer dans l'en-tête X-XSRF-TOKEN sur chaque POST, PUT, PATCH et DELETE. Toutes les erreurs ont la forme ApiError.",
+    "version" : "v1"
+  },
+  "servers" : [ {
+    "url" : "http://localhost",
+    "description" : "Generated server url"
+  } ],
+  "security" : [ {
+    "session" : [ ]
+  } ],
+  "tags" : [ {
+    "name" : "answers",
+    "description" : "Réponses aux questions et réponse acceptée"
+  }, {
+    "name" : "votes",
+    "description" : "Votes +1 / -1 sur les questions et les réponses"
+  }, {
+    "name" : "auth",
+    "description" : "Inscription, connexion par email ou OAuth, session"
+  }, {
+    "name" : "users",
+    "description" : "Profils des membres"
+  }, {
+    "name" : "questions",
+    "description" : "Entraide : questions avec contexte africain"
+  } ],
+  "paths" : {
+    "/api/v1/users/me" : {
+      "put" : {
+        "tags" : [ "users" ],
+        "summary" : "Modifier son profil",
+        "operationId" : "update",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateProfileRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Profil à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/questions/{questionId}/accepted-answer" : {
+      "put" : {
+        "tags" : [ "answers" ],
+        "summary" : "Accepter une réponse (auteur de la question seulement)",
+        "operationId" : "accept",
+        "parameters" : [ {
+          "name" : "questionId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AcceptAnswerRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Question à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "ANSWER_NOT_IN_QUESTION",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_QUESTION_AUTHOR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "QUESTION_NOT_FOUND, ANSWER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "answers" ],
+        "summary" : "Retirer l'acceptation (auteur de la question seulement)",
+        "operationId" : "unaccept",
+        "parameters" : [ {
+          "name" : "questionId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Question à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionDetail"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_QUESTION_AUTHOR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/questions/{id}" : {
+      "get" : {
+        "tags" : [ "questions" ],
+        "summary" : "Détail d'une question",
+        "operationId" : "get",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "La question",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionDetail"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "QUESTION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "questions" ],
+        "summary" : "Modifier sa question",
+        "operationId" : "update_1",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QuestionRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Question modifiée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_QUESTION_AUTHOR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "QUESTION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/answers/{answerId}" : {
+      "put" : {
+        "tags" : [ "answers" ],
+        "summary" : "Modifier sa réponse",
+        "operationId" : "update_2",
+        "parameters" : [ {
+          "name" : "answerId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AnswerRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Réponse modifiée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Answer"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_ANSWER_AUTHOR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "ANSWER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/questions" : {
+      "get" : {
+        "tags" : [ "questions" ],
+        "summary" : "Liste et recherche des questions",
+        "description" : "Recherche plein texte en français et en anglais avec q (syntaxe web : \"phrase exacte\", -exclu, OR).",
+        "operationId" : "list",
+        "parameters" : [ {
+          "name" : "q",
+          "in" : "query",
+          "description" : "Texte recherché",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "tag",
+          "in" : "query",
+          "description" : "Nom d'étiquette exact",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "country",
+          "in" : "query",
+          "description" : "Code pays ISO, ex. SN",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "operator",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "ORANGE_MONEY", "MTN_MOMO", "MPESA", "WAVE", "MOOV_MONEY", "AIRTEL_MONEY", "FREE_MONEY", "OTHER" ]
+          }
+        }, {
+          "name" : "author",
+          "in" : "query",
+          "description" : "Pseudo de l'auteur",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "RELEVANCE",
+            "enum" : [ "RELEVANCE", "RECENT", "SCORE", "UNANSWERED" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de questions",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseQuestionSummary"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "INVALID_PAGE, INVALID_PAGE_SIZE, INVALID_PARAMETER, INVALID_COUNTRY",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "questions" ],
+        "summary" : "Poser une question",
+        "operationId" : "create",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QuestionRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Question publiée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG, TAG_REQUIRED, TOO_MANY_TAGS",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/questions/{questionId}/votes" : {
+      "post" : {
+        "tags" : [ "votes" ],
+        "summary" : "Voter pour une question",
+        "description" : "Voter l'inverse de son vote actuel le remplace.",
+        "operationId" : "voteQuestion",
+        "parameters" : [ {
+          "name" : "questionId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/VoteRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Vote enregistré",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VoteResult"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_VOTE",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "CANNOT_VOTE_OWN_CONTENT",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "QUESTION_NOT_FOUND, ANSWER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "ALREADY_VOTED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "votes" ],
+        "summary" : "Retirer son vote sur une question",
+        "operationId" : "unvoteQuestion",
+        "parameters" : [ {
+          "name" : "questionId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "QUESTION_NOT_FOUND, VOTE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/questions/{questionId}/answers" : {
+      "get" : {
+        "tags" : [ "answers" ],
+        "summary" : "Réponses d'une question",
+        "description" : "Réponse acceptée en tête, puis par score.",
+        "operationId" : "list_1",
+        "parameters" : [ {
+          "name" : "questionId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de réponses",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseAnswer"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "QUESTION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "answers" ],
+        "summary" : "Répondre à une question",
+        "operationId" : "create_1",
+        "parameters" : [ {
+          "name" : "questionId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AnswerRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Réponse publiée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Answer"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "QUESTION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/register" : {
+      "post" : {
+        "tags" : [ "auth" ],
+        "summary" : "Inscription par email (secours d'OAuth)",
+        "description" : "Connecte le membre dans la foulée.",
+        "operationId" : "register",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Compte créé et session ouverte",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "EMAIL_TAKEN, USERNAME_TAKEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login" : {
+      "post" : {
+        "tags" : [ "auth" ],
+        "summary" : "Connexion par email et mot de passe",
+        "operationId" : "login",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Session ouverte",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "INVALID_CREDENTIALS",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/answers/{answerId}/votes" : {
+      "post" : {
+        "tags" : [ "votes" ],
+        "summary" : "Voter pour une réponse",
+        "description" : "Voter l'inverse de son vote actuel le remplace.",
+        "operationId" : "voteAnswer",
+        "parameters" : [ {
+          "name" : "answerId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/VoteRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Vote enregistré",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VoteResult"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_VOTE",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "CANNOT_VOTE_OWN_CONTENT",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "QUESTION_NOT_FOUND, ANSWER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "ALREADY_VOTED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "votes" ],
+        "summary" : "Retirer son vote sur une réponse",
+        "operationId" : "unvoteAnswer",
+        "parameters" : [ {
+          "name" : "answerId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "ANSWER_NOT_FOUND, VOTE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{username}" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "summary" : "Profil public d'un membre",
+        "operationId" : "profile",
+        "parameters" : [ {
+          "name" : "username",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Le profil",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PublicProfile"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "USER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{username}/reputation" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "summary" : "Historique de réputation d'un membre",
+        "operationId" : "reputation",
+        "parameters" : [ {
+          "name" : "username",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page d'événements, du plus récent au plus ancien",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseReputationEntry"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "USER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tags" : {
+      "get" : {
+        "tags" : [ "tags" ],
+        "summary" : "Étiquettes les plus utilisées, filtrables par début de nom (autocomplétion)",
+        "operationId" : "list_2",
+        "parameters" : [ {
+          "name" : "q",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/TagCount"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/providers" : {
+      "get" : {
+        "tags" : [ "auth" ],
+        "summary" : "Fournisseurs OAuth activés sur ce serveur",
+        "operationId" : "providers",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthProviders"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/me" : {
+      "get" : {
+        "tags" : [ "auth" ],
+        "summary" : "Membre connecté",
+        "operationId" : "me",
+        "responses" : {
+          "200" : {
+            "description" : "Membre connecté",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/csrf" : {
+      "get" : {
+        "tags" : [ "auth" ],
+        "summary" : "Jeton CSRF courant",
+        "description" : "Pose aussi le cookie XSRF-TOKEN. À appeler au démarrage du front.",
+        "operationId" : "csrf",
+        "parameters" : [ {
+          "name" : "token",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/CsrfToken"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CsrfToken"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout" : {
+      "post" : {
+        "tags" : [ "auth" ],
+        "summary" : "Déconnexion",
+        "operationId" : "logout",
+        "responses" : {
+          "204" : {
+            "description" : "Session fermée"
+          },
+          "403" : {
+            "description" : "CSRF_INVALID",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "UpdateProfileRequest" : {
+        "type" : "object",
+        "properties" : {
+          "displayName" : {
+            "type" : "string",
+            "maxLength" : 80,
+            "minLength" : 0
+          },
+          "bio" : {
+            "type" : "string",
+            "maxLength" : 1000,
+            "minLength" : 0
+          },
+          "countryCode" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string",
+            "maxLength" : 80,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "displayName" ]
+      },
+      "ApiError" : {
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "example" : "QUESTION_NOT_FOUND"
+          },
+          "message" : {
+            "type" : "string",
+            "example" : "Question introuvable"
+          },
+          "fields" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "example" : "{\"title\":\"Obligatoire\"}"
+            },
+            "example" : {
+              "title" : "Obligatoire"
+            }
+          }
+        },
+        "required" : [ "code", "message" ]
+      },
+      "Me" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "username" : {
+            "type" : "string",
+            "example" : "aminata_dev"
+          },
+          "displayName" : {
+            "type" : "string",
+            "example" : "Aminata Diallo"
+          },
+          "email" : {
+            "type" : "string",
+            "example" : "aminata@exemple.sn"
+          },
+          "avatarUrl" : {
+            "type" : "string"
+          },
+          "bio" : {
+            "type" : "string"
+          },
+          "countryCode" : {
+            "type" : "string",
+            "example" : "SN"
+          },
+          "city" : {
+            "type" : "string",
+            "example" : "Dakar"
+          },
+          "role" : {
+            "type" : "string",
+            "enum" : [ "MEMBER", "REFERENT", "ADMIN" ]
+          },
+          "reputation" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "createdAt", "displayName", "id", "reputation", "role", "username" ]
+      },
+      "AcceptAnswerRequest" : {
+        "type" : "object",
+        "properties" : {
+          "answerId" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "answerId" ]
+      },
+      "AuthorSummary" : {
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "type" : "string"
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "avatarUrl" : {
+            "type" : "string"
+          },
+          "countryCode" : {
+            "type" : "string"
+          },
+          "reputation" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        },
+        "required" : [ "displayName", "reputation", "username" ]
+      },
+      "QuestionContext" : {
+        "type" : "object",
+        "properties" : {
+          "countryCode" : {
+            "type" : "string",
+            "description" : "Code pays ISO 3166-1 alpha-2",
+            "example" : "CI"
+          },
+          "mobileMoneyOperator" : {
+            "type" : "string",
+            "enum" : [ "ORANGE_MONEY", "MTN_MOMO", "MPESA", "WAVE", "MOOV_MONEY", "AIRTEL_MONEY", "FREE_MONEY", "OTHER" ]
+          },
+          "networkQuality" : {
+            "type" : "string",
+            "enum" : [ "MOBILE_2G", "MOBILE_3G", "MOBILE_4G", "MOBILE_5G", "FIXED_LINE", "UNSTABLE" ]
+          }
+        }
+      },
+      "QuestionDetail" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "bodyMarkdown" : {
+            "type" : "string",
+            "description" : "Markdown d'origine, pour pré-remplir le formulaire d'édition"
+          },
+          "bodyHtml" : {
+            "type" : "string",
+            "description" : "HTML nettoyé côté serveur, à afficher avec MemberContent"
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "context" : {
+            "$ref" : "#/components/schemas/QuestionContext"
+          },
+          "author" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "answerCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "acceptedAnswerId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "myVote" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Vote du membre connecté : 1, -1, ou null s'il n'a pas voté ou n'est pas connecté"
+          },
+          "canEdit" : {
+            "type" : "boolean",
+            "description" : "Vrai si le membre connecté peut modifier la question"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "answerCount", "author", "bodyHtml", "bodyMarkdown", "canEdit", "context", "createdAt", "id", "score", "tags", "title", "updatedAt" ]
+      },
+      "QuestionRequest" : {
+        "type" : "object",
+        "description" : "Création ou modification complète d'une question",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "example" : "Comment vérifier un paiement Orange Money côté serveur ?",
+            "maxLength" : 150,
+            "minLength" : 15
+          },
+          "body" : {
+            "type" : "string",
+            "description" : "Markdown. Le HTML brut est ignoré.",
+            "maxLength" : 30000,
+            "minLength" : 30
+          },
+          "tags" : {
+            "type" : "array",
+            "example" : [ "mobile-money", "spring-boot" ],
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 5,
+            "minItems" : 1
+          },
+          "context" : {
+            "$ref" : "#/components/schemas/QuestionContext"
+          }
+        },
+        "required" : [ "body", "tags", "title" ]
+      },
+      "AnswerRequest" : {
+        "type" : "object",
+        "properties" : {
+          "body" : {
+            "type" : "string",
+            "description" : "Markdown. Le HTML brut est ignoré.",
+            "maxLength" : 30000,
+            "minLength" : 20
+          }
+        },
+        "required" : [ "body" ]
+      },
+      "Answer" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "questionId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "bodyMarkdown" : {
+            "type" : "string"
+          },
+          "bodyHtml" : {
+            "type" : "string",
+            "description" : "HTML nettoyé côté serveur, à afficher avec MemberContent"
+          },
+          "author" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "accepted" : {
+            "type" : "boolean"
+          },
+          "myVote" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "canEdit" : {
+            "type" : "boolean"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "accepted", "author", "bodyHtml", "bodyMarkdown", "canEdit", "createdAt", "id", "questionId", "score", "updatedAt" ]
+      },
+      "VoteRequest" : {
+        "type" : "object",
+        "properties" : {
+          "value" : {
+            "type" : "integer",
+            "format" : "int32",
+            "enum" : [ "1", "-1" ],
+            "example" : 1
+          }
+        },
+        "required" : [ "value" ]
+      },
+      "VoteResult" : {
+        "type" : "object",
+        "properties" : {
+          "score" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Nouveau score du contenu"
+          },
+          "myVote" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Vote du membre après l'opération : 1, -1 ou null"
+          }
+        },
+        "required" : [ "score" ]
+      },
+      "RegisterRequest" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "format" : "email",
+            "example" : "kofi.mensah@exemple.gh",
+            "maxLength" : 254,
+            "minLength" : 0
+          },
+          "password" : {
+            "type" : "string",
+            "example" : "un-mot-de-passe-long",
+            "maxLength" : 72,
+            "minLength" : 10
+          },
+          "username" : {
+            "type" : "string",
+            "example" : "kofi_dev",
+            "minLength" : 1,
+            "pattern" : "^[A-Za-z0-9_]{3,30}$"
+          },
+          "displayName" : {
+            "type" : "string",
+            "example" : "Kofi Mensah",
+            "maxLength" : 80,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "displayName", "email", "password", "username" ]
+      },
+      "LoginRequest" : {
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "minLength" : 1
+          },
+          "password" : {
+            "type" : "string",
+            "minLength" : 1
+          }
+        },
+        "required" : [ "email", "password" ]
+      },
+      "PublicProfile" : {
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "type" : "string"
+          },
+          "displayName" : {
+            "type" : "string"
+          },
+          "avatarUrl" : {
+            "type" : "string"
+          },
+          "bio" : {
+            "type" : "string"
+          },
+          "countryCode" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string"
+          },
+          "role" : {
+            "type" : "string",
+            "enum" : [ "MEMBER", "REFERENT", "ADMIN" ]
+          },
+          "reputation" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "questionCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "answerCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "answerCount", "createdAt", "displayName", "questionCount", "reputation", "role", "username" ]
+      },
+      "PageResponseReputationEntry" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ReputationEntry"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "ReputationEntry" : {
+        "type" : "object",
+        "properties" : {
+          "delta" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 10
+          },
+          "reason" : {
+            "type" : "string",
+            "enum" : [ "QUESTION_UPVOTED", "QUESTION_DOWNVOTED", "ANSWER_UPVOTED", "ANSWER_DOWNVOTED", "ANSWER_ACCEPTED", "ACCEPTED_AN_ANSWER" ]
+          },
+          "questionId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "answerId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "createdAt", "delta", "reason" ]
+      },
+      "TagCount" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "mobile-money"
+          },
+          "questionCount" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 42
+          }
+        },
+        "required" : [ "name", "questionCount" ]
+      },
+      "PageResponseQuestionSummary" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/QuestionSummary"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "QuestionSummary" : {
+        "type" : "object",
+        "description" : "Question telle qu'affichée dans une liste",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "excerpt" : {
+            "type" : "string",
+            "description" : "Début du texte, sans mise en forme (200 caractères)"
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "context" : {
+            "$ref" : "#/components/schemas/QuestionContext"
+          },
+          "author" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "answerCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "hasAcceptedAnswer" : {
+            "type" : "boolean"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "answerCount", "author", "context", "createdAt", "excerpt", "hasAcceptedAnswer", "id", "score", "tags", "title" ]
+      },
+      "PageResponseAnswer" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Answer"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "AuthProvider" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "github"
+          },
+          "authorizationUrl" : {
+            "type" : "string",
+            "description" : "Adresse vers laquelle naviguer (pas un appel fetch) pour lancer la connexion",
+            "example" : "/api/v1/auth/oauth2/authorization/github"
+          }
+        },
+        "required" : [ "authorizationUrl", "id" ]
+      },
+      "AuthProviders" : {
+        "type" : "object",
+        "properties" : {
+          "providers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AuthProvider"
+            }
+          }
+        },
+        "required" : [ "providers" ]
+      },
+      "CsrfToken" : {
+        "type" : "object",
+        "properties" : {
+          "token" : {
+            "type" : "string"
+          },
+          "parameterName" : {
+            "type" : "string"
+          },
+          "headerName" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "session" : {
+        "type" : "apiKey",
+        "name" : "JSESSIONID",
+        "in" : "cookie"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": 12,
+  "username": "aminata_dev",
+  "displayName": "Aminata Diallo",
+  "email": "aminata.diallo@exemple.sn",
+  "avatarUrl": null,
+  "bio": "Développeuse back-end à Dakar. Java, Spring et paiements mobiles.",
+  "countryCode": "SN",
+  "city": "Dakar",
+  "role": "MEMBER",
+  "reputation": 342,
+  "createdAt": "2026-09-14T08:21:00Z"
+}

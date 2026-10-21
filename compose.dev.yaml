@@ -1,0 +1,17 @@
+# PostgreSQL pour le développement local : docker compose -f compose.dev.yaml up -d
+# Si le port 5432 est déjà pris : DB_PORT=55432 et DATABASE_URL=jdbc:postgresql://localhost:55432/zetsu
+# Le docker-compose de production (application, PostgreSQL, Caddy) est dans infra/.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: zetsu
+      POSTGRES_USER: zetsu
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-zetsu}
+    ports:
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
+    volumes:
+      - zetsu-db:/var/lib/postgresql/data
+
+volumes:
+  zetsu-db:
