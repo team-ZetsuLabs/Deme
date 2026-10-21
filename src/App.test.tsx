@@ -6,9 +6,9 @@ import { App } from './App';
 afterEach(cleanup);
 
 describe('App', () => {
-  it('affiche la mise en page et le fil des questions', async () => {
+  it("affiche la page d'accueil", async () => {
     render(<App />);
-    expect(screen.getAllByRole('navigation').length).toBeGreaterThan(0);
     expect(await screen.findByRole('heading', { level: 1 }, { timeout: 4000 })).toBeTruthy();
+    expect(screen.getAllByRole('navigation').length).toBeGreaterThan(0);
   });
 });

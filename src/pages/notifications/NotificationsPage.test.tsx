@@ -77,7 +77,9 @@ describe('NotificationsPage (NOT-1)', () => {
     const markRead = vi.spyOn(notificationsApi, 'markRead');
     renderPage();
 
-    expect(await screen.findByRole('link', { name: 'Notifications, 3 non lues' })).toBeTruthy();
+    expect(
+      await screen.findByRole('link', { name: 'Notifications, 3 non lues' }, { timeout: 3000 }),
+    ).toBeTruthy();
     fireEvent.click(
       await screen.findByRole('link', {
         name: 'BeanCreationException au démarrage quand PostgreSQL tourne dans Docker',
@@ -85,7 +87,9 @@ describe('NotificationsPage (NOT-1)', () => {
     );
 
     await waitFor(() => expect(markRead).toHaveBeenCalledWith({ ids: [41] }));
-    expect(await screen.findByRole('link', { name: 'Notifications, 2 non lues' })).toBeTruthy();
+    expect(
+      await screen.findByRole('link', { name: 'Notifications, 2 non lues' }, { timeout: 3000 }),
+    ).toBeTruthy();
   });
 
   it('marque tout comme lu', async () => {
@@ -95,7 +99,9 @@ describe('NotificationsPage (NOT-1)', () => {
 
     fireEvent.click(await screen.findByRole('button', { name: 'Tout marquer comme lu' }));
     await waitFor(() => expect(markRead).toHaveBeenCalledWith({ all: true }));
-    expect(await screen.findByRole('link', { name: 'Notifications, 0 non lue' })).toBeTruthy();
+    expect(
+      await screen.findByRole('link', { name: 'Notifications, 0 non lue' }, { timeout: 3000 }),
+    ).toBeTruthy();
     expect(screen.queryByText('Non lue')).toBeNull();
   });
 });

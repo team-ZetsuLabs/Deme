@@ -228,3 +228,14 @@ export type VoteResult = {
   votes: number;
   voted: boolean;
 };
+
+/** GET /api/v1/stats : chiffres publics de la page d'accueil, calculés depuis la base. */
+export type PublicStats = {
+  questions: number;
+  answers: number;
+  solvedRate: number; // part des questions résolues, entre 0 et 1
+  members: number;
+  countries: number;
+  /** Seuils de réputation en vigueur (abaissés pour la démo, section 8 du cahier). */
+  levels: { MEMBER: number; CONTRIBUTOR: number; REFERENT: number };
+};
