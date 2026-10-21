@@ -28,6 +28,7 @@ const ApplicationsPage = lazy(() => import('./pages/applications/ApplicationsPag
 const MissionsPage = lazy(() => import('./pages/missions/MissionsPage'));
 const MissionPage = lazy(() => import('./pages/mission/MissionPage'));
 const NewMissionPage = lazy(() => import('./pages/mission-new/NewMissionPage'));
+const ChallengesPage = lazy(() => import('./pages/challenges/ChallengesPage'));
 const LegalPage = lazy(() => import('./pages/legal/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/notfound/NotFoundPage'));
 
@@ -109,6 +110,7 @@ export function App() {
                         }
                       />
                       <Route path="missions/:id" element={<MissionPage />} />
+                      <Route path="challenges" element={<ChallengesPage />} />
                       <Route path="rules" element={<LegalPage doc="rules" />} />
                       <Route path="terms" element={<LegalPage doc="terms" />} />
                       <Route path="privacy" element={<LegalPage doc="privacy" />} />

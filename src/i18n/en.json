@@ -63,7 +63,8 @@
     "EMAIL_ALREADY_USED": "This address cannot be used. If you already have an account, log in.",
     "TOO_MANY_ATTEMPTS": "Too many attempts. Try again in 15 minutes.",
     "ACCOUNT_SUSPENDED": "This account is suspended. Contact the Zetsu team if you think this is a mistake.",
-    "ALREADY_REPORTED": "You already reported this content."
+    "ALREADY_REPORTED": "You already reported this content.",
+    "ALREADY_SUBMITTED": "You already submitted a repository for this challenge."
   },
   "auth": {
     "browse": "Browse without an account",
@@ -914,6 +915,51 @@
         "delay": "Enter a timeline between 1 and 90 days.",
         "budget": "The budget must be a positive amount."
       }
+    }
+  },
+  "challenges": {
+    "pageTitle": "Challenges",
+    "current": "Current challenge",
+    "reward": "+{{points}} points for an accepted submission",
+    "none": "No challenge is running right now. The next one will be announced in your notifications.",
+    "closesIn": "Closes in",
+    "closesInFull": "Closes in {{days}} days, {{hours}} hours and {{minutes}} minutes.",
+    "ended": "This challenge is closed. Submissions are being graded.",
+    "units": {
+      "days_one": "day",
+      "days_other": "days",
+      "hours_one": "hour",
+      "hours_other": "hours",
+      "minutes_one": "minute",
+      "minutes_other": "minutes"
+    },
+    "submissions_one": "{{count}} submission so far",
+    "submissions_other": "{{count}} submissions so far",
+    "submission": {
+      "PENDING": "Submission received, waiting for grading",
+      "REVIEWED": "Submission graded: {{score}}/100",
+      "REJECTED": "Submission rejected"
+    },
+    "submit": {
+      "button": "Submit my repository",
+      "title": "Submit my repository",
+      "label": "GitHub repository link",
+      "hint": "The repository must be public, with a README explaining how to run the project.",
+      "badUrl": "Enter a link like https://github.com/account/repository.",
+      "notice": "One submission per challenge. The team grades it out of 100 after closing.",
+      "submit": "Submit",
+      "sent": "Submission received. The team will grade it after closing."
+    },
+    "board": {
+      "title": "Leaderboard",
+      "caption": "Leaderboard of the current challenge",
+      "rank": "Rank",
+      "member": "Developer",
+      "score": "Score",
+      "scoreValue": "{{score}}/100",
+      "pending": "To grade",
+      "you": "(you)",
+      "empty": "No submission yet. Be the first to take on the challenge."
     }
   }
 }

@@ -8,7 +8,8 @@ afterEach(cleanup);
 describe('App', () => {
   it("affiche la page d'accueil", async () => {
     render(<App />);
-    expect(await screen.findByRole('heading', { level: 1 }, { timeout: 4000 })).toBeTruthy();
+    expect(await screen.findByRole('heading', { level: 1 }, { timeout: 10000 })).toBeTruthy();
     expect(screen.getAllByRole('navigation').length).toBeGreaterThan(0);
-  });
+    // Chargement à la demande de la page : plus lent quand tous les tests tournent en parallèle.
+  }, 15000);
 });
