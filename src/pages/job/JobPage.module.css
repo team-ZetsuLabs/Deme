@@ -1,0 +1,153 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  align-items: start;
+  gap: var(--s5);
+}
+
+.main {
+  min-width: 0;
+  padding: var(--s5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-bottom: var(--s4);
+  font-size: var(--fs-md);
+  color: var(--text-3);
+}
+
+.crumbs a {
+  color: var(--text-2);
+}
+
+.pending {
+  margin-bottom: var(--s4);
+  padding: var(--s3);
+  border: 1px dashed var(--gold);
+  border-radius: var(--r-md);
+  font-size: var(--fs-md);
+  color: var(--text);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s4);
+}
+
+.headText {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: var(--lh-tight);
+}
+
+.company {
+  margin: var(--s1) 0 var(--s3);
+  color: var(--text-3);
+}
+
+.company a {
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.description {
+  margin-top: var(--s5);
+  color: var(--text-2);
+}
+
+.sectionTitle {
+  margin: var(--s5) 0 var(--s2);
+  font-size: var(--fs-base);
+  font-weight: 600;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+}
+
+.tags li {
+  padding: 2px var(--s2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  font-family: var(--f-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.report {
+  margin-top: var(--s5);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--line);
+}
+
+.side {
+  display: grid;
+  gap: var(--s4);
+  position: sticky;
+  top: calc(var(--topbar-h) + var(--s5));
+}
+
+.box {
+  padding: var(--s5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+
+.boxTitle {
+  margin-bottom: var(--s2);
+  font-size: var(--fs-base-sm);
+  font-weight: 600;
+}
+
+.boxText {
+  margin-bottom: var(--s4);
+  font-size: var(--fs-md);
+  color: var(--text-2);
+}
+
+.boxLink {
+  display: block;
+  margin-top: var(--s3);
+  font-size: var(--fs-md);
+}
+
+@media (max-width: 1099px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .side {
+    position: static;
+    grid-row: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .main,
+  .box {
+    padding: var(--s4);
+  }
+  .title {
+    font-size: var(--fs-xl);
+  }
+  .head > :first-child {
+    display: none;
+  }
+}

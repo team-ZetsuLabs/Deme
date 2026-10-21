@@ -1,0 +1,29 @@
+.panel {
+  max-width: 760px;
+  padding: var(--s5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+
+.title {
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: var(--lh-tight);
+}
+
+.lead {
+  max-width: 62ch;
+  margin: var(--s2) 0 var(--s5);
+  color: var(--text-2);
+}
+
+@media (max-width: 767px) {
+  .panel {
+    padding: var(--s4);
+  }
+  .title {
+    font-size: var(--fs-xl);
+  }
+}

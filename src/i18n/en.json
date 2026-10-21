@@ -15,7 +15,8 @@
     "profile": "My profile",
     "settings": "Settings",
     "notifications": "Notifications",
-    "myAccount": "My account"
+    "myAccount": "My account",
+    "applications": "My applications"
   },
   "topbar": {
     "search": "Search",
@@ -717,6 +718,116 @@
           ]
         }
       ]
+    }
+  },
+  "jobs": {
+    "pageTitle": "Jobs",
+    "title": "Jobs for developers",
+    "lead": "Company job offers, checked by the team before they are published.",
+    "publish": "Post a job",
+    "view": "View job",
+    "viewLabel": "View job: {{title}}",
+    "empty": "No job matches these filters yet.",
+    "remote": "Remote",
+    "published": "Posted",
+    "technologies": "Technologies",
+    "pendingNotice": "This offer is waiting for review by the Zetsu team. Only you can see it.",
+    "contract": {
+      "FULL_TIME": "Permanent",
+      "CONTRACT": "Freelance contract",
+      "INTERNSHIP": "Internship"
+    },
+    "status": {
+      "SENT": "Sent",
+      "VIEWED": "Viewed",
+      "SHORTLISTED": "Shortlisted",
+      "REJECTED": "Declined"
+    },
+    "filters": {
+      "type": "Job type",
+      "types": {
+        "all": "All",
+        "FULL_TIME": "Permanent",
+        "REMOTE": "Remote",
+        "CONTRACT": "Contracts",
+        "INTERNSHIP": "Internships"
+      },
+      "country": "Country",
+      "tech": "Technology",
+      "techPlaceholder": "E.g. flutter",
+      "apply": "Filter"
+    },
+    "applyBox": {
+      "title": "Apply with your Zetsu profile",
+      "text": "Your reputation, answers and challenges are sent with your message.",
+      "button": "Apply"
+    },
+    "applied": {
+      "title": "Application sent",
+      "text": "The recruiter received your profile. You will be told when they reply.",
+      "follow": "Track my applications"
+    },
+    "match": {
+      "title": "Match with your profile",
+      "summary_one": "{{count}} of {{total}} technologies in your profile.",
+      "summary_other": "{{count}} of {{total}} technologies in your profile.",
+      "have": "in your profile",
+      "missing": "not in your profile",
+      "login": "Log in to compare this job with your skills.",
+      "noSkills": "Add your technologies to see the match:"
+    },
+    "apply": {
+      "title": "Apply at {{company}}",
+      "profile": "Profile sent to the recruiter",
+      "message": "Message to the recruiter",
+      "messageHint": "Why this job interests you, and a project you are proud of.",
+      "messageTooShort": "Write at least {{min}} characters to introduce your application.",
+      "cv": "Resume",
+      "cvHint": "PDF, 2 MB at most.",
+      "cvType": "The resume must be a PDF file.",
+      "cvSize": "The resume must be 2 MB at most.",
+      "submit": "Send my application",
+      "busy": "Sending",
+      "sent": "Application sent to {{company}}"
+    },
+    "new": {
+      "pageTitle": "Post a job",
+      "lead": "Describe the position. The Zetsu team checks every offer before publishing it, usually within 24 hours.",
+      "title": "Job title",
+      "company": "Company",
+      "website": "Company website",
+      "websiteHint": "An https:// address, it helps verify your company.",
+      "contract": "Contract type",
+      "remote": "Remote work possible",
+      "technologiesHint": "Separated by commas. Example: spring-boot, react, postgresql",
+      "salary": "Salary",
+      "salaryHint": "Giving a range brings more applications. Example: 450,000 to 600,000 FCFA per month",
+      "experience": "Expected experience",
+      "experiencePlaceholder": "E.g. 2 to 4 years of experience",
+      "description": "Job description",
+      "descriptionHint": "The company, the tasks and the profile you are looking for. Markdown accepted.",
+      "notice": "An offer must never ask for registration fees or promise quick money. Offers like this are rejected.",
+      "submit": "Send the offer for review",
+      "busy": "Sending",
+      "created": "Offer sent. It will be published after review by the team.",
+      "errors": {
+        "title": "The title must be between 10 and 120 characters.",
+        "company": "Enter the company name.",
+        "website": "Enter an address that starts with https://",
+        "technologies": "Enter at least one technology.",
+        "description": "Describe the position in at least 100 characters."
+      }
+    }
+  },
+  "applications": {
+    "pageTitle": "My applications",
+    "lead": "Your job applications and gig proposals, with their progress.",
+    "empty": "You have not applied yet. Jobs matching your stack are waiting for you.",
+    "browse": "See jobs",
+    "sent": "sent",
+    "kind": {
+      "JOB": "Job",
+      "MISSION": "Gig"
     }
   }
 }

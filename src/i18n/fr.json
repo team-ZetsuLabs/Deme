@@ -15,7 +15,8 @@
     "profile": "Mon profil",
     "settings": "Paramètres",
     "notifications": "Notifications",
-    "myAccount": "Mon compte"
+    "myAccount": "Mon compte",
+    "applications": "Mes candidatures"
   },
   "topbar": {
     "search": "Rechercher",
@@ -717,6 +718,116 @@
           ]
         }
       ]
+    }
+  },
+  "jobs": {
+    "pageTitle": "Emploi",
+    "title": "Offres pour développeurs",
+    "lead": "Des offres d'entreprises vérifiées par l'équipe avant publication.",
+    "publish": "Publier une offre",
+    "view": "Voir l'offre",
+    "viewLabel": "Voir l'offre : {{title}}",
+    "empty": "Aucune offre ne correspond à ces filtres pour le moment.",
+    "remote": "À distance",
+    "published": "Publiée",
+    "technologies": "Technologies",
+    "pendingNotice": "Cette offre est en attente de validation par l'équipe Zetsu. Elle n'est visible que par vous.",
+    "contract": {
+      "FULL_TIME": "CDI",
+      "CONTRACT": "Mission freelance",
+      "INTERNSHIP": "Stage"
+    },
+    "status": {
+      "SENT": "Envoyée",
+      "VIEWED": "Vue",
+      "SHORTLISTED": "Retenue",
+      "REJECTED": "Refusée"
+    },
+    "filters": {
+      "type": "Type de poste",
+      "types": {
+        "all": "Toutes",
+        "FULL_TIME": "CDI",
+        "REMOTE": "À distance",
+        "CONTRACT": "Missions",
+        "INTERNSHIP": "Stages"
+      },
+      "country": "Pays",
+      "tech": "Technologie",
+      "techPlaceholder": "Ex. : flutter",
+      "apply": "Filtrer"
+    },
+    "applyBox": {
+      "title": "Postuler avec votre profil Zetsu",
+      "text": "Votre réputation, vos réponses et vos défis sont transmis avec votre message.",
+      "button": "Postuler"
+    },
+    "applied": {
+      "title": "Candidature envoyée",
+      "text": "Le recruteur a reçu votre profil. Vous serez prévenu de sa réponse.",
+      "follow": "Suivre mes candidatures"
+    },
+    "match": {
+      "title": "Correspondance avec votre profil",
+      "summary_one": "{{count}} technologie sur {{total}} dans votre profil.",
+      "summary_other": "{{count}} technologies sur {{total}} dans votre profil.",
+      "have": "présente dans votre profil",
+      "missing": "absente de votre profil",
+      "login": "Connectez-vous pour comparer l'offre à vos compétences.",
+      "noSkills": "Ajoutez vos technologies pour voir la correspondance :"
+    },
+    "apply": {
+      "title": "Postuler chez {{company}}",
+      "profile": "Profil transmis au recruteur",
+      "message": "Message au recruteur",
+      "messageHint": "Pourquoi ce poste vous intéresse, et un projet dont vous êtes fier.",
+      "messageTooShort": "Écrivez au moins {{min}} caractères pour présenter votre candidature.",
+      "cv": "CV",
+      "cvHint": "PDF, 2 Mo au plus.",
+      "cvType": "Le CV doit être un fichier PDF.",
+      "cvSize": "Le CV doit faire 2 Mo au plus.",
+      "submit": "Envoyer ma candidature",
+      "busy": "Envoi en cours",
+      "sent": "Candidature envoyée à {{company}}"
+    },
+    "new": {
+      "pageTitle": "Publier une offre",
+      "lead": "Décrivez le poste. L'équipe Zetsu vérifie chaque offre avant de la publier, en général sous 24 heures.",
+      "title": "Intitulé du poste",
+      "company": "Entreprise",
+      "website": "Site de l'entreprise",
+      "websiteHint": "Adresse en https://, elle aide à vérifier votre entreprise.",
+      "contract": "Type de contrat",
+      "remote": "Télétravail possible",
+      "technologiesHint": "Séparées par des virgules. Exemple : spring-boot, react, postgresql",
+      "salary": "Rémunération",
+      "salaryHint": "Indiquer une fourchette donne plus de candidatures. Exemple : 450 000 à 600 000 FCFA par mois",
+      "experience": "Expérience attendue",
+      "experiencePlaceholder": "Ex. : 2 à 4 ans d'expérience",
+      "description": "Description du poste",
+      "descriptionHint": "L'entreprise, les missions et le profil recherché. Markdown accepté.",
+      "notice": "Une offre ne doit jamais demander de frais d'inscription ou promettre des gains rapides. Les offres de ce type sont refusées.",
+      "submit": "Envoyer l'offre pour validation",
+      "busy": "Envoi en cours",
+      "created": "Offre envoyée. Elle sera publiée après validation par l'équipe.",
+      "errors": {
+        "title": "L'intitulé doit faire entre 10 et 120 caractères.",
+        "company": "Indiquez le nom de l'entreprise.",
+        "website": "Entrez une adresse qui commence par https://",
+        "technologies": "Indiquez au moins une technologie.",
+        "description": "Décrivez le poste en 100 caractères au moins."
+      }
+    }
+  },
+  "applications": {
+    "pageTitle": "Mes candidatures",
+    "lead": "Vos candidatures aux offres et vos propositions de mission, avec leur avancement.",
+    "empty": "Vous n'avez pas encore postulé. Les offres qui correspondent à votre stack vous attendent.",
+    "browse": "Voir les offres",
+    "sent": "envoyée",
+    "kind": {
+      "JOB": "Offre",
+      "MISSION": "Mission"
     }
   }
 }

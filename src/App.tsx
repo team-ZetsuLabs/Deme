@@ -20,6 +20,10 @@ const WelcomePage = lazy(() => import('./pages/welcome/WelcomePage'));
 const ProfilePage = lazy(() => import('./pages/profile/ProfilePage'));
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'));
 const NotificationsPage = lazy(() => import('./pages/notifications/NotificationsPage'));
+const JobsPage = lazy(() => import('./pages/jobs/JobsPage'));
+const JobPage = lazy(() => import('./pages/job/JobPage'));
+const NewJobPage = lazy(() => import('./pages/job-new/NewJobPage'));
+const ApplicationsPage = lazy(() => import('./pages/applications/ApplicationsPage'));
 const LegalPage = lazy(() => import('./pages/legal/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/notfound/NotFoundPage'));
 
@@ -69,6 +73,24 @@ export function App() {
                       element={
                         <RequireAuth>
                           <NotificationsPage />
+                        </RequireAuth>
+                      }
+                    />
+                    <Route path="jobs" element={<JobsPage />} />
+                    <Route
+                      path="jobs/new"
+                      element={
+                        <RequireAuth>
+                          <NewJobPage />
+                        </RequireAuth>
+                      }
+                    />
+                    <Route path="jobs/:id" element={<JobPage />} />
+                    <Route
+                      path="applications"
+                      element={
+                        <RequireAuth>
+                          <ApplicationsPage />
                         </RequireAuth>
                       }
                     />

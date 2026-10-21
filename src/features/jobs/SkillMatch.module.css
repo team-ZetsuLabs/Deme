@@ -1,0 +1,33 @@
+.summary {
+  margin-bottom: var(--s2);
+  font-size: var(--fs-md);
+  color: var(--text-2);
+}
+
+.list {
+  list-style: none;
+}
+
+.list li {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: 3px 0;
+  font-size: var(--fs-md);
+}
+
+.tech {
+  font-family: var(--f-mono);
+}
+
+.ok {
+  color: var(--text);
+}
+
+.ok svg {
+  color: var(--green-text);
+}
+
+.no {
+  color: var(--text-3);
+}

@@ -1,0 +1,21 @@
+{
+  "id": 77,
+  "title": "Offre envoyée en mode mock",
+  "company": {
+    "name": "Entreprise de démonstration",
+    "logoUrl": null,
+    "website": null
+  },
+  "city": null,
+  "country": null,
+  "contractType": "FULL_TIME",
+  "remote": false,
+  "technologies": ["react"],
+  "salary": null,
+  "createdAt": "2026-10-21T16:10:00Z",
+  "myApplication": null,
+  "experience": null,
+  "status": "PENDING",
+  "postedById": 9,
+  "descriptionHtml": "<p>En mode mock, l'API renvoie toujours cette offre fixe.</p>"
+}

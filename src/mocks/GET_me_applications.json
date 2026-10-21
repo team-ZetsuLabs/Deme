@@ -1,0 +1,37 @@
+{
+  "items": [
+    {
+      "id": 87,
+      "targetType": "JOB",
+      "targetId": 2,
+      "title": "Développeur mobile Flutter",
+      "organisation": "AgriLien",
+      "status": "SHORTLISTED",
+      "sentAt": "2026-10-10T11:00:00Z",
+      "updatedAt": "2026-10-12T16:30:00Z"
+    },
+    {
+      "id": 86,
+      "targetType": "MISSION",
+      "targetId": 3,
+      "title": "Revue de code d’une API Django avant mise en production",
+      "organisation": "Grace Njeri",
+      "status": "VIEWED",
+      "sentAt": "2026-10-14T09:20:00Z",
+      "updatedAt": "2026-10-15T08:00:00Z"
+    },
+    {
+      "id": 85,
+      "targetType": "JOB",
+      "targetId": 3,
+      "title": "Ingénieur DevOps",
+      "organisation": "Teranga Cloud",
+      "status": "REJECTED",
+      "sentAt": "2026-10-02T10:00:00Z",
+      "updatedAt": "2026-10-08T15:00:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 3
+}
