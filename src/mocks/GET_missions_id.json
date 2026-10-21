@@ -1,0 +1,26 @@
+{
+  "id": 1,
+  "title": "Intégrer Wave dans une boutique WooCommerce",
+  "kind": "INTEGRATION",
+  "excerpt": "Ma boutique de tissus wax accepte Orange Money, il manque Wave. Il faut le plugin, les tests en bac à sable et la mise en production.",
+  "budget": {
+    "amount": 75000,
+    "currency": "XOF"
+  },
+  "delayDays": 5,
+  "technologies": ["wordpress", "php", "mobile-money"],
+  "author": {
+    "id": 12,
+    "name": "Mariama Sow",
+    "photoUrl": null,
+    "country": "SN",
+    "city": "Saint-Louis",
+    "reputation": 85
+  },
+  "createdAt": "2026-10-21T10:30:00Z",
+  "status": "OPEN",
+  "offerCount": 3,
+  "myOffer": null,
+  "descriptionHtml": "<p>Ma boutique en ligne de tissus wax tourne sous WordPress et WooCommerce. Les clients paient déjà par Orange Money, mais beaucoup me demandent Wave.</p><h3>Ce qui est attendu</h3><ul><li>Installer et configurer le moyen de paiement Wave</li><li>Tester les paiements en bac à sable, puis en production avec un petit montant</li><li>Vérifier que les commandes passent bien en « payée » après confirmation</li></ul><p>Je fournis les accès au compte marchand Wave et à l'hébergement.</p>",
+  "offers": null
+}

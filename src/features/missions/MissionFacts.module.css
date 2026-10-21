@@ -1,0 +1,33 @@
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+}
+
+.kind,
+.fact {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  min-height: 26px;
+  padding: 0 var(--s2);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+}
+
+.kind {
+  background: var(--green-wash);
+  color: var(--green-text);
+  font-weight: 600;
+}
+
+.fact {
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+}
+
+.fact svg {
+  color: var(--text-3);
+}

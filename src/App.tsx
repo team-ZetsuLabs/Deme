@@ -25,6 +25,9 @@ const JobsPage = lazy(() => import('./pages/jobs/JobsPage'));
 const JobPage = lazy(() => import('./pages/job/JobPage'));
 const NewJobPage = lazy(() => import('./pages/job-new/NewJobPage'));
 const ApplicationsPage = lazy(() => import('./pages/applications/ApplicationsPage'));
+const MissionsPage = lazy(() => import('./pages/missions/MissionsPage'));
+const MissionPage = lazy(() => import('./pages/mission/MissionPage'));
+const NewMissionPage = lazy(() => import('./pages/mission-new/NewMissionPage'));
 const LegalPage = lazy(() => import('./pages/legal/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/notfound/NotFoundPage'));
 
@@ -96,6 +99,16 @@ export function App() {
                           </RequireAuth>
                         }
                       />
+                      <Route path="missions" element={<MissionsPage />} />
+                      <Route
+                        path="missions/new"
+                        element={
+                          <RequireAuth>
+                            <NewMissionPage />
+                          </RequireAuth>
+                        }
+                      />
+                      <Route path="missions/:id" element={<MissionPage />} />
                       <Route path="rules" element={<LegalPage doc="rules" />} />
                       <Route path="terms" element={<LegalPage doc="terms" />} />
                       <Route path="privacy" element={<LegalPage doc="privacy" />} />

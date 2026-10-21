@@ -1,0 +1,26 @@
+{
+  "id": 99,
+  "title": "Mission publiée en mode mock",
+  "kind": "INTEGRATION",
+  "excerpt": "Ma boutique de tissus wax accepte Orange Money, il manque Wave. Il faut le plugin, les tests en bac à sable et la mise en production.",
+  "budget": {
+    "amount": 75000,
+    "currency": "XOF"
+  },
+  "delayDays": 5,
+  "technologies": ["wordpress", "php", "mobile-money"],
+  "author": {
+    "id": 9,
+    "name": "Aminata Ouédraogo",
+    "photoUrl": null,
+    "country": "BF",
+    "city": "Ouagadougou",
+    "reputation": 120
+  },
+  "createdAt": "2026-10-21T10:30:00Z",
+  "status": "OPEN",
+  "offerCount": 0,
+  "myOffer": null,
+  "descriptionHtml": "<p>En mode mock, l'API renvoie toujours cette mission fixe.</p>",
+  "offers": []
+}
