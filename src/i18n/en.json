@@ -247,5 +247,32 @@
     "title": "This page does not exist",
     "text": "The link may be incomplete, or the page was removed.",
     "back": "Back to questions"
+  },
+  "welcome": {
+    "pageTitle": "Welcome",
+    "title": "Welcome to Zetsu, {{name}}",
+    "lead": "Three details to suggest questions, jobs and gigs that fit you. You can change them later in your settings.",
+    "stack": {
+      "legend": "Your stack",
+      "hint": "Pick the technologies you use. They are used to suggest jobs, gigs and projects.",
+      "addLabel": "Add another technology",
+      "addPlaceholder": "E.g. svelte",
+      "add": "Add",
+      "selected_one": "{{count}} technology selected",
+      "selected_other": "{{count}} technologies selected",
+      "max": "15 technologies at most.",
+      "invalid": "Use lowercase letters, digits, hyphens or dots."
+    },
+    "country": {
+      "legend": "Your country",
+      "hint": "Used to highlight answers and jobs close to you."
+    },
+    "language": {
+      "legend": "Interface language",
+      "hint": "Member content stays in its author's language."
+    },
+    "submit": "Let's go",
+    "busy": "Saving",
+    "later": "Later"
   }
 }

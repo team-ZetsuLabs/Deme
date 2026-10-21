@@ -247,5 +247,32 @@
     "title": "Cette page n'existe pas",
     "text": "Le lien est peut-être incomplet, ou la page a été supprimée.",
     "back": "Retour aux questions"
+  },
+  "welcome": {
+    "pageTitle": "Bienvenue",
+    "title": "Bienvenue sur Zetsu, {{name}}",
+    "lead": "Trois informations pour vous proposer des questions, des offres et des missions qui vous ressemblent. Vous pourrez les changer plus tard dans vos paramètres.",
+    "stack": {
+      "legend": "Votre stack",
+      "hint": "Choisissez les technologies que vous utilisez. Elles servent à vous suggérer des offres, des missions et des projets.",
+      "addLabel": "Ajouter une autre technologie",
+      "addPlaceholder": "Ex. : svelte",
+      "add": "Ajouter",
+      "selected_one": "{{count}} technologie choisie",
+      "selected_other": "{{count}} technologies choisies",
+      "max": "15 technologies au maximum.",
+      "invalid": "Utilisez des lettres minuscules, des chiffres, des tirets ou des points."
+    },
+    "country": {
+      "legend": "Votre pays",
+      "hint": "Il sert à mettre en avant les réponses et les offres proches de vous."
+    },
+    "language": {
+      "legend": "Langue de l'interface",
+      "hint": "Le contenu des membres reste dans la langue de son auteur."
+    },
+    "submit": "C'est parti",
+    "busy": "Enregistrement",
+    "later": "Plus tard"
   }
 }

@@ -8,5 +8,6 @@
   "reputation": 120,
   "level": "MEMBER",
   "language": "fr",
+  "skills": ["spring-boot", "flutter", "docker", "mobile-money"],
   "onboarded": true
 }

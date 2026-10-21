@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { IconSprite } from './components/IconSprite';
 import { ToastProvider } from './components/ToastProvider';
+import { OnboardingGuard } from './features/auth/OnboardingGuard';
 import { RequireAuth } from './features/auth/RequireAuth';
 import { SessionProvider } from './features/auth/SessionProvider';
 import { AppLayout } from './layout/AppLayout';
@@ -13,6 +14,7 @@ const AuthPage = lazy(() => import('./pages/auth/AuthPage'));
 const QuestionsPage = lazy(() => import('./pages/questions/QuestionsPage'));
 const QuestionPage = lazy(() => import('./pages/question/QuestionPage'));
 const AskPage = lazy(() => import('./pages/ask/AskPage'));
+const WelcomePage = lazy(() => import('./pages/welcome/WelcomePage'));
 const NotFoundPage = lazy(() => import('./pages/notfound/NotFoundPage'));
 
 export function App() {
@@ -26,7 +28,14 @@ export function App() {
               <Routes>
                 <Route path="login" element={<AuthPage mode="login" />} />
                 <Route path="register" element={<AuthPage mode="register" />} />
-                <Route element={<AppLayout />}>
+                <Route path="welcome" element={<WelcomePage />} />
+                <Route
+                  element={
+                    <OnboardingGuard>
+                      <AppLayout />
+                    </OnboardingGuard>
+                  }
+                >
                   {/* La page d'accueil publique remplacera cette redirection. */}
                   <Route index element={<Navigate to="/questions" replace />} />
                   <Route path="questions" element={<QuestionsPage />} />

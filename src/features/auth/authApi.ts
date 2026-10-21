@@ -1,5 +1,5 @@
 import { api } from '../../api/api';
-import type { LoginRequest, Me, RegisterRequest } from '../../api/provisional-types';
+import type { LoginRequest, Me, MeUpdate, RegisterRequest } from '../../api/provisional-types';
 
 export type OAuthProvider = 'github' | 'google';
 
@@ -8,6 +8,7 @@ export const authApi = {
   login: (body: LoginRequest) => api.post<Me>('/auth/login', body),
   register: (body: RegisterRequest) => api.post<Me>('/auth/register', body),
   logout: () => api.post<void>('/auth/logout'),
+  updateMe: (body: MeUpdate) => api.put<Me>('/me', body),
 };
 
 /**

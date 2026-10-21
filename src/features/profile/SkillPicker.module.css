@@ -1,0 +1,52 @@
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+}
+
+.count {
+  margin: var(--s3) 0 var(--s4);
+  font-family: var(--f-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: var(--fs-md);
+  font-weight: 500;
+}
+
+.addRow {
+  display: flex;
+  gap: var(--s2);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--touch);
+  padding: 10px var(--s3);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  font-family: var(--f-mono);
+  font-size: var(--fs-md);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--green-text);
+  box-shadow: 0 0 0 3px var(--green-wash);
+}
+
+.input[aria-invalid='true'] {
+  border-color: var(--red);
+}
+
+.error {
+  margin-top: 6px;
+  font-size: var(--fs-sm);
+  color: var(--red);
+}
