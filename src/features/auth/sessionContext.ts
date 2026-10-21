@@ -10,6 +10,10 @@ export type SessionContextValue = {
   register: (body: RegisterRequest) => Promise<Me>;
   /** Met à jour le profil du membre connecté (PUT /me) et la session. */
   updateMe: (body: MeUpdate) => Promise<Me>;
+  /** Remplace le membre par la version renvoyée par le serveur (photo, comptes liés…). */
+  setUser: (me: Me) => Me;
+  /** Supprime le compte (AUTH-6) puis ferme la session. */
+  deleteAccount: () => Promise<void>;
   logout: () => Promise<void>;
 };
 

@@ -367,5 +367,66 @@
       "name": "Aide locale",
       "desc": "Répondre à des questions de son propre pays."
     }
+  },
+  "settings": {
+    "pageTitle": "Paramètres",
+    "save": "Enregistrer les modifications",
+    "saving": "Enregistrement",
+    "saved": "Modifications enregistrées",
+    "cancel": "Annuler",
+    "profile": {
+      "title": "Profil public",
+      "intro": "Ces informations apparaissent sur votre profil et à côté de vos réponses.",
+      "city": "Ville",
+      "bio": "Présentation",
+      "bioHint": "Ce que vous faites et ce qui vous intéresse.",
+      "bioTooLong": "La présentation doit faire 200 caractères au plus.",
+      "skills": "Technologies",
+      "recruiterVisible": "Visible par les recruteurs",
+      "recruiterHint": "Les entreprises peuvent consulter votre profil et vos réponses. Désactivé par défaut."
+    },
+    "photo": {
+      "change": "Changer la photo",
+      "remove": "Retirer",
+      "hint": "PNG, JPG ou WebP, 2 Mo au plus. Sans photo, vos initiales sont affichées.",
+      "badType": "Choisissez une image PNG, JPG ou WebP.",
+      "tooBig": "L'image doit faire 2 Mo au plus.",
+      "updated": "Photo mise à jour",
+      "removed": "Photo retirée, vos initiales sont affichées"
+    },
+    "accounts": {
+      "title": "Comptes connectés",
+      "intro": "Connectez-vous plus vite avec GitHub ou Google.",
+      "linked": "Connecté",
+      "notLinked": "Non connecté",
+      "link": "Connecter",
+      "unlink": "Déconnecter",
+      "linkLabel": "Connecter {{name}}",
+      "unlinkLabel": "Déconnecter {{name}}",
+      "unlinked": "Compte déconnecté",
+      "lastMethod": "C'est votre seul moyen de connexion : il ne peut pas être retiré.",
+      "mockOnly": "En mode mock, la connexion OAuth n'est pas disponible."
+    },
+    "appearance": {
+      "title": "Apparence et langue",
+      "intro": "Le mode clair est utilisé par défaut. Vos choix sont mémorisés.",
+      "theme": "Thème",
+      "themes": {
+        "light": "Clair",
+        "dark": "Sombre",
+        "system": "Comme le système"
+      }
+    },
+    "delete": {
+      "title": "Supprimer le compte",
+      "intro": "Votre réputation et vos candidatures seront effacées définitivement.",
+      "button": "Supprimer mon compte",
+      "explain": "Vos questions et réponses resteront visibles, signées « Utilisateur supprimé ». Votre réputation et vos candidatures seront effacées. Cette action est définitive.",
+      "word": "SUPPRIMER",
+      "confirmLabel": "Tapez {{word}} pour confirmer",
+      "mismatch": "Tapez {{word}} en majuscules pour confirmer.",
+      "confirm": "Supprimer définitivement",
+      "done": "Votre compte a été supprimé."
+    }
   }
 }

@@ -1,0 +1,33 @@
+.list {
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s3) 0;
+  border-top: 1px solid var(--line);
+}
+
+.row:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.info b {
+  display: block;
+  font-size: var(--fs-base-sm);
+  font-weight: 500;
+}
+
+.info span {
+  display: block;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}

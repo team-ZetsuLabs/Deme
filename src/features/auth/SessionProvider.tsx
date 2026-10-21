@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { LoginRequest, Me, MeUpdate, RegisterRequest } from '../../api/provisional-types';
+import { api } from '../../api/api';
 import { changeLanguage } from '../../i18n';
 import { authApi } from './authApi';
 import { SessionContext, type SessionStatus } from './sessionContext';
@@ -41,19 +42,34 @@ export function SessionProvider({ children }: SessionProviderProps) {
     (body: RegisterRequest) => authApi.register(body).then(signIn),
     [signIn],
   );
-  const updateMe = useCallback((body: MeUpdate) => authApi.updateMe(body).then(signIn), [signIn]);
+  const updateMe = useCallback(
+    (body: MeUpdate) =>
+      authApi.updateMe(body).then((me) =>
+        // En mode mock, la réponse est un fichier fixe : on applique plutôt la modification
+        // au membre en cours, pour que l'écran reste cohérent pendant le développement.
+        signIn(api.mode === 'mock' && user ? { ...user, ...body } : me),
+      ),
+    [signIn, user],
+  );
+  const signOutLocally = useCallback(() => {
+    setUser(null);
+    setStatus('anonymous');
+  }, []);
   const logout = useCallback(async () => {
     try {
       await authApi.logout();
     } finally {
-      setUser(null);
-      setStatus('anonymous');
+      signOutLocally();
     }
-  }, []);
+  }, [signOutLocally]);
+  const deleteAccount = useCallback(async () => {
+    await authApi.deleteAccount();
+    signOutLocally();
+  }, [signOutLocally]);
 
   const value = useMemo(
-    () => ({ status, user, login, register, updateMe, logout }),
-    [status, user, login, register, updateMe, logout],
+    () => ({ status, user, login, register, updateMe, setUser: signIn, logout, deleteAccount }),
+    [status, user, login, register, updateMe, signIn, logout, deleteAccount],
   );
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 }
