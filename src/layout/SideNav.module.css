@@ -25,6 +25,7 @@
   font-weight: 500;
   font-size: var(--fs-base-sm);
   transition:
+    transform var(--t-press) var(--ease-out),
     background-color var(--t-fast) ease-out,
     color var(--t-fast) ease-out;
 }
@@ -63,4 +64,8 @@
 
 .space[aria-current='page'] svg {
   color: var(--green-text);
+}
+
+.space:active {
+  transform: scale(var(--press-scale));
 }

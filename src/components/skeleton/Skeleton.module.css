@@ -1,0 +1,40 @@
+/* Reflet en translation (transform) : peu coûteux, même sur un téléphone d'entrée de gamme. */
+.sk {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  max-width: 100%;
+  overflow: hidden;
+  background: var(--skeleton);
+}
+
+.sk::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--skeleton-shine), transparent);
+  animation: shimmer var(--t-shimmer) ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.sm {
+  border-radius: var(--r-sm);
+}
+
+.md {
+  border-radius: var(--r-md);
+}
+
+.lg {
+  border-radius: var(--r-lg);
+}
+
+.full {
+  border-radius: 50%;
+}

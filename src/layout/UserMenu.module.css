@@ -13,6 +13,7 @@
   background: var(--surface);
   font-size: var(--fs-md);
   font-weight: 500;
+  transition: transform var(--t-press) var(--ease-out);
 }
 
 .chip:hover {
@@ -36,6 +37,8 @@
   border: 1px solid var(--line-strong);
   border-radius: var(--r-md);
   box-shadow: var(--shadow);
+  transform-origin: top right;
+  animation: menu-in var(--t-fast) var(--ease-out);
 }
 
 .head {
@@ -98,5 +101,16 @@
   }
   .item {
     min-height: var(--touch);
+  }
+}
+
+.chip:active {
+  transform: scale(var(--press-scale));
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
   }
 }

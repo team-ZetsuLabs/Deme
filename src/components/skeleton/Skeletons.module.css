@@ -1,0 +1,173 @@
+/* Mises en page des squelettes : elles reprennent celles des vrais écrans. */
+
+.stack {
+  display: grid;
+  gap: var(--s2);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.between {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.panel {
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+
+.padded {
+  padding: var(--s5);
+}
+
+/* Fil des questions : mêmes colonnes que QuestionRow */
+.question {
+  display: grid;
+  grid-template-columns: 56px 64px minmax(0, 1fr);
+  gap: var(--s4);
+  padding: var(--s4) var(--s5);
+  border-top: 1px solid var(--line);
+}
+
+.question:first-child,
+.job:first-child,
+.notif:first-child,
+.line:first-child,
+.compact:first-child {
+  border-top: none;
+}
+
+.statCol {
+  display: grid;
+  justify-items: center;
+  gap: var(--s1);
+}
+
+/* Offres : mêmes colonnes que JobRow */
+.job {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  gap: var(--s4);
+  padding: var(--s4) var(--s5);
+  border-top: 1px solid var(--line);
+}
+
+/* Notifications */
+.notif {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: var(--s3);
+  padding: var(--s4) var(--s5);
+  border-top: 1px solid var(--line);
+}
+
+/* Lignes simples (candidatures) */
+.line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s4) var(--s5);
+  border-top: 1px solid var(--line);
+}
+
+/* Aperçu de l'accueil */
+.compact {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: var(--s3);
+  padding: var(--s4);
+  border-top: 1px solid var(--line);
+}
+
+/* Détail d'une question ou d'une offre */
+.post {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: var(--s4);
+  padding: var(--s5) 0;
+}
+
+.voteCol {
+  display: grid;
+  justify-items: center;
+  gap: var(--s2);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  align-items: start;
+  gap: var(--s5);
+}
+
+/* Profil */
+.profileHead {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--s5);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--s2);
+  margin-top: var(--s5);
+}
+
+.gapTop {
+  margin-top: var(--s5);
+}
+
+@media (max-width: 1099px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .split > :last-child {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .padded {
+    padding: var(--s4);
+  }
+  .question {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: var(--s3);
+    padding: var(--s4);
+  }
+  .question > :nth-child(2) {
+    display: none;
+  }
+  .job {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: var(--s3);
+    padding: var(--s4);
+  }
+  .job > :last-child {
+    display: none;
+  }
+  .notif,
+  .line {
+    padding: var(--s4);
+  }
+  .post {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: var(--s3);
+  }
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

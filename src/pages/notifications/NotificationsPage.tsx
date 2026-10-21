@@ -13,7 +13,7 @@ import { notificationsApi } from '../../features/notifications/notificationsApi'
 import { useUnread } from '../../features/notifications/useUnread';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
-import { PageLoader } from '../../layout/PageLoader';
+import { NotificationRowsSkeleton } from '../../components/skeleton/NotificationRowsSkeleton';
 import styles from './NotificationsPage.module.css';
 
 /** Notifications dans l'application (NOT-1). Réservée aux membres connectés (voir la route). */
@@ -68,7 +68,7 @@ export default function NotificationsPage() {
       </div>
 
       <div className={styles.panel} aria-busy={query.loading}>
-        {query.loading && <PageLoader />}
+        {query.loading && <NotificationRowsSkeleton />}
         {!query.loading && query.error !== null && (
           <ErrorState error={query.error} onRetry={query.reload} />
         )}

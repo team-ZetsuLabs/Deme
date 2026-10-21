@@ -21,6 +21,7 @@
   background: var(--surface);
   color: var(--text-2);
   transition:
+    transform var(--t-press) var(--ease-out),
     border-color var(--t-fast) ease-out,
     color var(--t-fast) ease-out,
     background-color var(--t-fast) ease-out;
@@ -32,6 +33,7 @@
 }
 
 .vote[aria-pressed='true'] {
+  animation: vote-pop var(--t-base) var(--ease-out);
   background: var(--green);
   border-color: var(--green);
   color: var(--green-ink);
@@ -41,5 +43,15 @@
   .vote {
     width: var(--touch);
     min-height: var(--touch);
+  }
+}
+
+.vote:active:not(:disabled) {
+  transform: scale(var(--press-scale));
+}
+
+@keyframes vote-pop {
+  50% {
+    transform: scale(1.12);
   }
 }

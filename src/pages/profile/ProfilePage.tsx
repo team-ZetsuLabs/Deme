@@ -18,6 +18,7 @@ import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { countryName } from '../../i18n/countries';
 import { PageLoader } from '../../layout/PageLoader';
+import { ProfileSkeleton } from '../../components/skeleton/ProfileSkeleton';
 import NotFoundPage from '../notfound/NotFoundPage';
 import styles from './ProfilePage.module.css';
 
@@ -48,7 +49,7 @@ function ProfileView({ id }: { id: number }) {
   const p = query.data;
   usePageTitle(p?.name ?? t('profile.pageTitle'));
 
-  if (query.loading) return <PageLoader />;
+  if (query.loading) return <ProfileSkeleton />;
   if (query.error instanceof ApiError && query.error.status === 404) return <NotFoundPage />;
   if (query.error || !p) return <ErrorState error={query.error} onRetry={query.reload} />;
 

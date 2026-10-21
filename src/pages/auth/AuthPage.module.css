@@ -66,6 +66,7 @@
   font-weight: 500;
   color: var(--text-2);
   transition:
+    transform var(--t-press) var(--ease-out),
     background-color var(--t-fast) ease-out,
     color var(--t-fast) ease-out;
 }
@@ -133,4 +134,8 @@
   .tabs a {
     min-height: var(--touch);
   }
+}
+
+.tabs a:active {
+  transform: scale(var(--press-scale));
 }

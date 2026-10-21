@@ -17,6 +17,7 @@
   color: var(--text-2);
   white-space: nowrap;
   transition:
+    transform var(--t-press) var(--ease-out),
     background-color var(--t-fast) ease-out,
     color var(--t-fast) ease-out;
 }
@@ -41,4 +42,8 @@
     min-height: var(--touch);
     padding: 0 var(--s2);
   }
+}
+
+.seg button:active {
+  transform: scale(var(--press-scale));
 }

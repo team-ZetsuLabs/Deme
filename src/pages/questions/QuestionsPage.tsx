@@ -13,7 +13,7 @@ import { useQuestionFilters } from '../../features/questions/useQuestionFilters'
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { countryName } from '../../i18n/countries';
-import { PageLoader } from '../../layout/PageLoader';
+import { QuestionRowsSkeleton } from '../../components/skeleton/QuestionRowsSkeleton';
 import styles from './QuestionsPage.module.css';
 
 /** Fil des questions (QA-6), avec recherche (QA-7) et filtres de contexte (QA-2). */
@@ -87,7 +87,7 @@ export default function QuestionsPage() {
       )}
 
       <div className={styles.panel} aria-live="polite" aria-busy={query.loading}>
-        {query.loading && <PageLoader />}
+        {query.loading && <QuestionRowsSkeleton />}
         {!query.loading && query.error !== null && (
           <ErrorState error={query.error} onRetry={query.reload} />
         )}

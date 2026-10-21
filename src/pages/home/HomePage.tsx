@@ -1,6 +1,7 @@
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { buttonClass } from '../../components/buttonClass';
+import { StatsSkeleton } from '../../components/skeleton/StatsSkeleton';
 import { useSession } from '../../features/auth/useSession';
 import { OAuthButtons } from '../../features/auth/OAuthButtons';
 import { HomeHeader } from '../../features/home/HomeHeader';
@@ -34,7 +35,7 @@ export default function HomePage() {
   if (status === 'authenticated') return <Navigate to="/questions" replace />;
 
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} page-enter`}>
       <HomeHeader />
       <main id="main">
         <section className={styles.hero}>
@@ -56,9 +57,9 @@ export default function HomePage() {
           <SolvedPreview />
         </section>
 
-        {stats.data && (
+        {(stats.loading || stats.data) && (
           <div className={styles.section}>
-            <StatsStrip stats={stats.data} />
+            {stats.data ? <StatsStrip stats={stats.data} /> : <StatsSkeleton />}
           </div>
         )}
 

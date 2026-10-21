@@ -12,6 +12,7 @@
   white-space: nowrap;
   text-decoration: none;
   transition:
+    transform var(--t-press) var(--ease-out),
     background-color var(--t-fast) ease-out,
     border-color var(--t-fast) ease-out,
     color var(--t-fast) ease-out;
@@ -110,4 +111,8 @@
   .icon {
     width: var(--touch);
   }
+}
+
+.btn:active:not(:disabled):not([aria-busy='true']) {
+  transform: scale(var(--press-scale));
 }
