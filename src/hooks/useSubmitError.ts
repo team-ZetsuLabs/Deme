@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ApiError } from '../../api/api';
-import { errorMessage } from '../../api/errorMessage';
+import { ApiError } from '../api/api';
+import { errorMessage } from '../api/errorMessage';
 
 /**
  * Message d'erreur général d'un formulaire, affiché dans une alerte qui prend le focus.

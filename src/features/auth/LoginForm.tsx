@@ -4,10 +4,10 @@ import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
 import { describedBy } from '../../components/fieldIds';
 import { useValidatedForm, type Validators } from '../../hooks/useValidatedForm';
-import { fieldErrorText } from './fieldErrorText';
+import { fieldErrorText } from '../../hooks/fieldErrorText';
 import { PasswordInput } from './PasswordInput';
 import { useSession } from './useSession';
-import { useSubmitError } from './useSubmitError';
+import { useSubmitError } from '../../hooks/useSubmitError';
 import { validateEmail, validateLoginPassword } from './validation';
 import styles from './AuthForm.module.css';
 

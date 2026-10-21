@@ -1,0 +1,26 @@
+{
+  "id": 101,
+  "title": "Question publiée en mode mock",
+  "bodyHtml": "<p>En mode mock, l'API renvoie toujours cette réponse fixe.</p>",
+  "code": null,
+  "tags": ["mobile-money"],
+  "context": {
+    "country": "BF",
+    "operator": "ORANGE_MONEY",
+    "network": "UNSTABLE",
+    "techVersion": null
+  },
+  "author": {
+    "id": 9,
+    "name": "Aminata Ouédraogo",
+    "photoUrl": null,
+    "country": "BF",
+    "city": "Ouagadougou",
+    "reputation": 47
+  },
+  "createdAt": "2026-10-21T16:00:00Z",
+  "views": 1,
+  "votes": 0,
+  "voted": false,
+  "answers": []
+}

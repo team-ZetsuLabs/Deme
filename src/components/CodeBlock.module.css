@@ -1,0 +1,35 @@
+.code {
+  margin-top: var(--s3);
+  padding: var(--s3) var(--s4);
+  overflow-x: auto;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  font-family: var(--f-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.code code {
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: inherit;
+}
+
+.keyword {
+  color: var(--code-k);
+}
+
+.string {
+  color: var(--code-s);
+}
+
+.comment {
+  color: var(--code-c);
+}
+
+.number {
+  color: var(--gold-text);
+}

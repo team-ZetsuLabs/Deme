@@ -38,3 +38,94 @@ export type RegisterRequest = {
   /** Champ piège anti-robots : toujours vide pour un humain. */
   website: string;
 };
+
+/** Réponse paginée commune : ?page=0&size=20 */
+export type Page<T> = {
+  items: T[];
+  page: number;
+  size: number;
+  total: number;
+};
+
+/** Auteur affiché à côté d'un contenu. */
+export type Author = {
+  id: number;
+  name: string;
+  photoUrl: string | null;
+  country: string | null;
+  city: string | null;
+  reputation: number;
+};
+
+export type MobileMoneyOperator = 'ORANGE_MONEY' | 'WAVE' | 'MOOV' | 'MTN' | 'MPESA' | 'OTHER';
+export type NetworkQuality = 'GOOD' | 'UNSTABLE' | 'VERY_LOW';
+
+/** Contexte africain d'une question (QA-2), tous les champs sont facultatifs. */
+export type QuestionContext = {
+  country: string | null;
+  operator: MobileMoneyOperator | null;
+  network: NetworkQuality | null;
+  techVersion: string | null;
+};
+
+/** Élément de GET /api/v1/questions */
+export type QuestionSummary = {
+  id: number;
+  title: string;
+  excerpt: string; // texte brut, sans Markdown
+  tags: string[];
+  context: QuestionContext;
+  author: Author;
+  createdAt: string; // ISO 8601, UTC
+  votes: number;
+  answerCount: number;
+  solved: boolean;
+};
+
+export type Answer = {
+  id: number;
+  bodyHtml: string; // Markdown converti et nettoyé par le serveur
+  code: string | null; // texte brut
+  author: Author;
+  createdAt: string;
+  votes: number;
+  voted: boolean; // le membre connecté a voté
+  accepted: boolean;
+};
+
+/** GET /api/v1/questions/{id} */
+export type QuestionDetail = {
+  id: number;
+  title: string;
+  bodyHtml: string;
+  code: string | null;
+  tags: string[];
+  context: QuestionContext;
+  author: Author;
+  createdAt: string;
+  views: number;
+  votes: number;
+  voted: boolean;
+  answers: Answer[];
+};
+
+/** POST /api/v1/questions */
+export type QuestionRequest = {
+  title: string;
+  body: string; // Markdown
+  code: string | null;
+  tags: string[];
+  context: QuestionContext;
+};
+
+/** POST /api/v1/questions/{id}/answers */
+export type AnswerRequest = {
+  body: string;
+  code: string | null;
+};
+
+/** Réponse de PUT et DELETE /api/v1/votes/{question|answer}/{id} */
+export type VoteResult = {
+  votes: number;
+  voted: boolean;
+};

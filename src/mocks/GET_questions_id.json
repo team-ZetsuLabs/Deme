@@ -1,0 +1,78 @@
+{
+  "id": 1,
+  "title": "L'API Orange Money renvoie 401 alors que le token est généré",
+  "bodyHtml": "<p>Le token d'accès est bien récupéré, mais l'appel au endpoint de paiement échoue avec <code>401 Unauthorized</code>.</p><p>Faut-il préfixer le header <code>Authorization</code> par <code>Bearer</code> ? La documentation du bac à sable n'est pas claire sur ce point.</p>",
+  "code": "const res = await fetch(PAY_URL, {\n  method: \"POST\",\n  headers: { \"Authorization\": token },\n  body: JSON.stringify(payload)\n});",
+  "tags": ["mobile-money", "node.js", "api"],
+  "context": {
+    "country": "SN",
+    "operator": "ORANGE_MONEY",
+    "network": "UNSTABLE",
+    "techVersion": "Node.js 20"
+  },
+  "author": {
+    "id": 2,
+    "name": "Awa Kane",
+    "photoUrl": null,
+    "country": "SN",
+    "city": "Dakar",
+    "reputation": 875
+  },
+  "createdAt": "2026-10-21T08:14:00Z",
+  "views": 312,
+  "votes": 14,
+  "voted": false,
+  "answers": [
+    {
+      "id": 11,
+      "bodyHtml": "<p>Oui, le header doit être préfixé par <code>Bearer</code>. Attention aussi : le token expire au bout d'une heure, il faut le renouveler avant chaque lot d'appels.</p>",
+      "code": "headers: {\n  \"Authorization\": `Bearer ${token}`,\n  \"Content-Type\": \"application/json\"\n}  // renouveler le token avant expiration",
+      "author": {
+        "id": 3,
+        "name": "Ibrahim Sawadogo",
+        "photoUrl": null,
+        "country": "BF",
+        "city": "Ouagadougou",
+        "reputation": 790
+      },
+      "createdAt": "2026-10-21T09:02:00Z",
+      "votes": 9,
+      "voted": false,
+      "accepted": true
+    },
+    {
+      "id": 12,
+      "bodyHtml": "<p>Vérifiez aussi que vous utilisez bien l'URL de production et non celle du bac à sable : les tokens ne sont pas interchangeables entre les deux.</p>",
+      "code": null,
+      "author": {
+        "id": 10,
+        "name": "Mamadou Ndiaye",
+        "photoUrl": null,
+        "country": "SN",
+        "city": "Thiès",
+        "reputation": 365
+      },
+      "createdAt": "2026-10-21T09:25:00Z",
+      "votes": 3,
+      "voted": false,
+      "accepted": false
+    },
+    {
+      "id": 13,
+      "bodyHtml": "<p>J'avais le même souci : c'était un espace en trop avant le token dans ma variable d'environnement. Un <code>trim()</code> au chargement de la configuration l'a réglé.</p>",
+      "code": null,
+      "author": {
+        "id": 8,
+        "name": "Aïcha Ouattara",
+        "photoUrl": null,
+        "country": "BF",
+        "city": "Bobo-Dioulasso",
+        "reputation": 120
+      },
+      "createdAt": "2026-10-21T09:55:00Z",
+      "votes": 1,
+      "voted": false,
+      "accepted": false
+    }
+  ]
+}

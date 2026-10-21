@@ -5,12 +5,12 @@ import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
 import { describedBy } from '../../components/fieldIds';
 import { useValidatedForm, type Validators } from '../../hooks/useValidatedForm';
-import { countryOptions, OTHER_COUNTRY } from './countries';
-import { fieldErrorText } from './fieldErrorText';
+import { countryOptions, OTHER_COUNTRY } from '../../i18n/countries';
+import { fieldErrorText } from '../../hooks/fieldErrorText';
 import { PasswordInput } from './PasswordInput';
 import { StrengthMeter } from './StrengthMeter';
 import { useSession } from './useSession';
-import { useSubmitError } from './useSubmitError';
+import { useSubmitError } from '../../hooks/useSubmitError';
 import {
   NAME_MAX,
   passwordStrength,

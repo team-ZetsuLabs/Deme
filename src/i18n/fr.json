@@ -36,7 +36,13 @@
   },
   "common": {
     "loading": "Chargement en cours",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "pagination": {
+      "label": "Pagination",
+      "prev": "Page précédente",
+      "next": "Page suivante",
+      "status": "Page {{page}} sur {{pages}}"
+    }
   },
   "errors": {
     "NETWORK_ERROR": "Impossible de joindre le serveur. Vérifiez votre connexion.",
@@ -114,9 +120,128 @@
       "reputation": "+15 réputation"
     }
   },
+  "context": {
+    "label": "Contexte",
+    "operator": {
+      "ORANGE_MONEY": "Orange Money",
+      "WAVE": "Wave",
+      "MOOV": "Moov Money",
+      "MTN": "MTN Mobile Money",
+      "MPESA": "M-Pesa",
+      "OTHER": "Autre opérateur"
+    },
+    "network": {
+      "GOOD": "Réseau bon",
+      "UNSTABLE": "Réseau instable",
+      "VERY_LOW": "Réseau très faible"
+    }
+  },
   "questions": {
+    "pageTitle": "Aide",
     "title": "Questions récentes",
-    "lead": "Décrivez l'erreur. Des développeurs de Dakar à Nairobi l'ont peut-être déjà rencontrée."
+    "titleTag": "Questions sur {{tag}}",
+    "lead": "Décrivez l'erreur. Des développeurs de Dakar à Nairobi l'ont peut-être déjà rencontrée.",
+    "ask": {
+      "heading": "Quel bug vous bloque aujourd'hui ?",
+      "placeholder": "Ex. : l'API Orange Money renvoie 401 alors que mon token est valide",
+      "submit": "Poser la question"
+    },
+    "filters": {
+      "status": "Filtrer les questions",
+      "all": "Toutes",
+      "open": "Sans solution",
+      "solved": "Résolues",
+      "sort": "Trier les questions",
+      "recent": "Récentes",
+      "votes": "Les plus votées",
+      "country": "Pays",
+      "anyCountry": "Tous les pays",
+      "operator": "Opérateur",
+      "anyOperator": "Tous les opérateurs",
+      "tag": "Tag {{tag}}",
+      "search": "Recherche « {{q}} »",
+      "reset": "Retirer les filtres",
+      "results_one": "{{count}} résultat",
+      "results_other": "{{count}} résultats"
+    },
+    "row": {
+      "votes_one": "vote",
+      "votes_other": "votes",
+      "answers_one": "réponse",
+      "answers_other": "réponses",
+      "solved": "résolue"
+    },
+    "empty": "Aucune question ne correspond. Posez-la, quelqu'un a peut-être la réponse."
+  },
+  "question": {
+    "crumbs": "Fil d'Ariane",
+    "crumbQuestion": "Question",
+    "askQuestion": "Poser une question",
+    "asked": "Posée",
+    "askedBy": "Posée par",
+    "answered": "Répondu",
+    "views_one": "{{count}} vue",
+    "views_other": "{{count}} vues",
+    "answers_one": "{{count}} réponse",
+    "answers_other": "{{count}} réponses",
+    "sort": "Trier les réponses",
+    "sortVotes": "Les plus votées",
+    "sortRecent": "Les plus récentes",
+    "accepted": "Réponse acceptée",
+    "accept": "Accepter cette réponse",
+    "sameCountry": "Même pays que la question",
+    "noAnswers": "Pas encore de réponse. Si vous connaissez la solution, vous pouvez être le premier à aider.",
+    "points": "{{points}} points",
+    "vote": "Voter, {{count}} votes",
+    "unvote": "Retirer mon vote, {{count}} votes",
+    "voteOwn": "Vous ne pouvez pas voter pour votre propre contenu.",
+    "voteLevel": "Il faut 50 points de réputation (niveau Membre) pour voter.",
+    "yourAnswer": "Votre réponse",
+    "answerHint": "Markdown accepté. Une réponse acceptée rapporte 15 points.",
+    "answerCode": "Code",
+    "optional": "(facultatif)",
+    "publish": "Publier ma réponse",
+    "publishing": "Publication en cours",
+    "answerTooShort": "Écrivez au moins 30 caractères pour que la réponse soit utile.",
+    "loginToAnswerText": "Connectez-vous pour répondre et gagner de la réputation.",
+    "loginToAnswer": "Se connecter pour répondre",
+    "posted": "Réponse publiée"
+  },
+  "ask": {
+    "pageTitle": "Poser une question",
+    "title": "Poser une question",
+    "lead": "Une question claire reçoit une réponse plus vite. Décrivez le problème, ce que vous avez essayé et votre contexte.",
+    "optional": "(facultatif)",
+    "fields": {
+      "title": "Titre",
+      "titleHint": "Le problème en une phrase, avec le message d'erreur si possible.",
+      "body": "Détails",
+      "bodyHint": "Ce que vous essayez de faire et ce que vous avez déjà tenté. Markdown accepté.",
+      "bodyPlaceholder": "J'appelle l'API de paiement après avoir récupéré le token, et j'obtiens…",
+      "code": "Code concerné",
+      "tags": "Tags",
+      "tagsHint": "De 1 à 4, séparés par des virgules. Exemple : spring-boot, mobile-money",
+      "contextLegend": "Contexte africain",
+      "contextHint": "Facultatif, mais il aide les membres qui ont le même contexte à vous répondre.",
+      "country": "Pays",
+      "noCountry": "Non précisé",
+      "operator": "Opérateur mobile money",
+      "noOperator": "Aucun ou non concerné",
+      "network": "Qualité du réseau",
+      "noNetwork": "Non précisée",
+      "techVersion": "Version de la techno",
+      "techVersionPlaceholder": "Ex. : Spring Boot 3.3, Flutter 3.24"
+    },
+    "submit": "Publier la question",
+    "busy": "Publication en cours",
+    "cancel": "Annuler",
+    "errors": {
+      "titleLength": "Le titre doit faire entre 15 et 150 caractères.",
+      "bodyLength": "Ajoutez au moins 30 caractères : ce que vous avez essayé et le message d'erreur.",
+      "tagsCount": "Indiquez entre 1 et 4 tags.",
+      "tagFormat": "Un tag ne contient que des lettres minuscules, des chiffres, des tirets ou des points."
+    },
+    "posted": "Question publiée"
   },
   "notFound": {
     "title": "Cette page n'existe pas",
