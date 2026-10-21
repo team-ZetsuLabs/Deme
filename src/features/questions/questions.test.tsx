@@ -98,6 +98,10 @@ describe('QuestionPage, modification (QA-3)', () => {
       level: 'MEMBER',
       language: 'fr',
       skills: [],
+      bio: null,
+      recruiterVisible: false,
+      providers: [],
+      hasPassword: true,
       onboarded: true,
     });
     const update = vi.spyOn(questionsApi, 'updateAnswer').mockResolvedValue({

@@ -17,22 +17,64 @@ export type Me = {
   country: string | null; // code ISO 3166-1 alpha-2, ou "OTHER"
   city: string | null;
   photoUrl: string | null;
+  bio: string | null; // 200 caractères au plus (SET-1)
   reputation: number;
   level: Level;
   language: 'fr' | 'en';
   skills: string[]; // technologies déclarées, en minuscules (« spring-boot »)
+  recruiterVisible: boolean; // « Visible par les recruteurs », false par défaut (REP-5)
+  providers: OAuthProviderId[]; // comptes GitHub et Google liés (SET-4)
+  hasPassword: boolean; // false pour un compte créé uniquement par OAuth
   onboarded: boolean; // false tant que le parcours d'accueil (AUTH-5) n'est pas fait
 };
+
+export type OAuthProviderId = 'github' | 'google';
 
 /**
  * PUT /api/v1/me : champs à modifier, les autres restent inchangés.
  * Le parcours d'accueil envoie `onboarded: true` pour le clore.
  */
 export type MeUpdate = {
+  name?: string;
+  city?: string | null;
+  bio?: string | null;
   country?: string;
   language?: 'fr' | 'en';
   skills?: string[];
+  recruiterVisible?: boolean;
   onboarded?: boolean;
+};
+
+export type ActivityType = 'QUESTION' | 'ANSWER' | 'ACCEPTED_ANSWER' | 'CHALLENGE';
+
+/** Ligne de l'activité d'un profil, avec les points gagnés (REP-1). */
+export type ActivityItem = {
+  type: ActivityType;
+  title: string;
+  questionId: number | null;
+  points: number;
+  createdAt: string;
+};
+
+/** GET /api/v1/users/{id} : profil public (REP-5). */
+export type PublicProfile = {
+  id: number;
+  name: string;
+  photoUrl: string | null;
+  bio: string | null;
+  country: string | null;
+  city: string | null;
+  githubLogin: string | null;
+  joinedAt: string;
+  reputation: number;
+  level: Level;
+  /** Réputation à atteindre pour le niveau suivant, null au niveau Référent (seuils réglés côté serveur). */
+  nextLevelAt: number | null;
+  skills: string[];
+  recruiterVisible: boolean;
+  stats: { questions: number; answers: number; accepted: number };
+  badges: string[]; // identifiants des badges obtenus (REP-4, P1)
+  activity: ActivityItem[];
 };
 
 /** POST /api/v1/auth/login */

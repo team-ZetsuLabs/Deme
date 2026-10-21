@@ -11,7 +11,11 @@
     "jobs": "Jobs",
     "missions": "Gigs",
     "challenges": "Challenges",
-    "account": "Account"
+    "account": "Account",
+    "profile": "My profile",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "myAccount": "My account"
   },
   "topbar": {
     "search": "Search",
@@ -300,5 +304,68 @@
     "sent": "Report sent. Thank you for your vigilance.",
     "level": "You need 50 reputation points (Member level) to report.",
     "reasonRequired": "Choose a reason."
+  },
+  "profile": {
+    "pageTitle": "Profile",
+    "edit": "Edit profile",
+    "recruiterVisible": "Visible to recruiters",
+    "joined": "Member since {{date}}",
+    "sections": "Profile sections",
+    "tabs": {
+      "activity": "Activity",
+      "skills": "Skills",
+      "badges": "Badges"
+    },
+    "stats": {
+      "reputation": "reputation",
+      "answers": "answers",
+      "accepted": "accepted",
+      "questions": "questions"
+    },
+    "nextLevel": "{{points}} more points to reach {{level}}",
+    "progressLabel": "Progress to the next level",
+    "activity": {
+      "QUESTION": "Question",
+      "ANSWER": "Answer",
+      "ACCEPTED_ANSWER": "Accepted answer",
+      "CHALLENGE": "Challenge"
+    },
+    "empty": "No activity yet.",
+    "emptyMine": "You have not posted anything yet. Your first question earns 5 points.",
+    "skillsHint": "Declared technologies. Click one to see questions on that topic.",
+    "noSkills": "No technology declared yet.",
+    "badgeLocked": "Not earned yet."
+  },
+  "levels": {
+    "NEW": "Newcomer",
+    "MEMBER": "Member",
+    "CONTRIBUTOR": "Contributor",
+    "REFERENT": "Referent"
+  },
+  "badges": {
+    "FIRST_STEP": {
+      "name": "First step",
+      "desc": "Ask your first question."
+    },
+    "HELPER": {
+      "name": "Helper",
+      "desc": "Get 10 votes on your answers."
+    },
+    "SOLVER": {
+      "name": "Solver",
+      "desc": "Have 5 accepted answers."
+    },
+    "CHALLENGER": {
+      "name": "Challenger",
+      "desc": "Submit a challenge."
+    },
+    "POLYGLOT": {
+      "name": "Polyglot",
+      "desc": "Answer in 5 different tags."
+    },
+    "LOCAL_HELP": {
+      "name": "Local help",
+      "desc": "Answer questions from your own country."
+    }
   }
 }

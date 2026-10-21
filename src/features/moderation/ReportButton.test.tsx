@@ -21,6 +21,10 @@ const member: Me = {
   level: 'MEMBER',
   language: 'fr',
   skills: [],
+  bio: null,
+  recruiterVisible: false,
+  providers: [],
+  hasPassword: true,
   onboarded: true,
 };
 

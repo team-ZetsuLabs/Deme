@@ -9,6 +9,10 @@
   margin: 0 0 var(--s2) var(--s3);
 }
 
+.labelSpaced {
+  margin-top: var(--s5);
+}
+
 .space {
   width: 100%;
   display: flex;

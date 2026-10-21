@@ -14,4 +14,17 @@ export const NAV_ITEMS: NavItem[] = [
   { to: '/challenges', labelKey: 'nav.challenges', icon: 'trophy' },
 ];
 
+/** Onglet « Compte » de la barre mobile : connexion, ou profil une fois connecté. */
 export const ACCOUNT_ITEM: NavItem = { to: '/login', labelKey: 'nav.account', icon: 'user' };
+export const ACCOUNT_ITEM_SIGNED_IN: NavItem = {
+  to: '/users/me',
+  labelKey: 'nav.account',
+  icon: 'user',
+};
+
+/** Liens du compte, dans le menu latéral et le menu du membre. */
+export const ACCOUNT_LINKS: NavItem[] = [
+  { to: '/users/me', labelKey: 'nav.profile', icon: 'user' },
+  { to: '/notifications', labelKey: 'nav.notifications', icon: 'bell' },
+  { to: '/settings', labelKey: 'nav.settings', icon: 'gear' },
+];

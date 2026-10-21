@@ -20,6 +20,10 @@ const newMember: Me = {
   level: 'NEW',
   language: 'fr',
   skills: [],
+  bio: null,
+  recruiterVisible: false,
+  providers: [],
+  hasPassword: true,
   onboarded: false,
 };
 

@@ -5,9 +5,13 @@
   "country": "TG",
   "city": null,
   "photoUrl": null,
+  "bio": null,
   "reputation": 1,
   "level": "NEW",
   "language": "fr",
   "skills": [],
+  "recruiterVisible": false,
+  "providers": [],
+  "hasPassword": true,
   "onboarded": false
 }
