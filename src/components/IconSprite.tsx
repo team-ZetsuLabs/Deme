@@ -131,6 +131,10 @@ export function IconSprite() {
       <symbol id="i-flag" viewBox="0 0 16 16">
         <path {...round} strokeWidth={1.4} d="M3.5 14.5V2.5M3.5 3h8l-1.6 3 1.6 3h-8" />
       </symbol>
+      <symbol id="i-clock" viewBox="0 0 16 16">
+        <circle {...line} strokeWidth={1.4} cx="8" cy="8" r="6" />
+        <path {...round} strokeWidth={1.4} d="M8 4.8V8l2.2 1.4" />
+      </symbol>
     </svg>
   );
 }

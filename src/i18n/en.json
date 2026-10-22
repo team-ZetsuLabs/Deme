@@ -37,7 +37,11 @@
     "en": "English"
   },
   "network": {
-    "offline": "You are offline. Questions you already viewed are still readable."
+    "offline": "You are offline. Questions you already viewed are still readable.",
+    "loadingOffline": "You are offline. Loading will resume as soon as the connection is back.",
+    "loadingSlow": "Slow connection: loading is taking a little longer.",
+    "pageOffline": "This page could not be loaded because you are offline. It will reload as soon as the connection is back.",
+    "pageFailed": "This page could not be loaded. Check your connection and try again."
   },
   "common": {
     "loading": "Loading",

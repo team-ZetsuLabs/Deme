@@ -5,7 +5,7 @@ import { ErrorState } from '../../components/ErrorState';
 import { Icon } from '../../components/Icon';
 import { StateMessage } from '../../components/StateMessage';
 import { useApiQuery } from '../../hooks/useApiQuery';
-import { PageLoader } from '../../layout/PageLoader';
+import { CompactQuestionsSkeleton } from '../../components/skeleton/CompactQuestionsSkeleton';
 import { ContextChips } from '../questions/ContextChips';
 import { questionsApi } from '../questions/questionsApi';
 import styles from './SolvedPreview.module.css';
@@ -38,7 +38,7 @@ export function SolvedPreview() {
           {t('home.solved.title')}
         </h2>
       </div>
-      {query.loading && <PageLoader />}
+      {query.loading && <CompactQuestionsSkeleton />}
       {!query.loading && query.error !== null && (
         <ErrorState error={query.error} onRetry={query.reload} />
       )}

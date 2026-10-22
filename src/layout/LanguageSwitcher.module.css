@@ -18,6 +18,7 @@
   font-weight: 500;
   color: var(--text-2);
   transition:
+    transform var(--t-press) var(--ease-out),
     background-color var(--t-fast) ease-out,
     color var(--t-fast) ease-out;
 }
@@ -37,4 +38,8 @@
     min-height: calc(var(--touch) - 8px);
     min-width: calc(var(--touch) - 8px);
   }
+}
+
+.seg button:active {
+  transform: scale(var(--press-scale));
 }

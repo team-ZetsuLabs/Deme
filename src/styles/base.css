@@ -96,6 +96,19 @@ code {
   white-space: nowrap;
 }
 
+/* Entrée d'une page : léger glissement vers le haut, sans bloquer la lecture.
+   « backwards » : aucune transformation ne reste après l'animation (les éléments sticky marchent). */
+.page-enter {
+  animation: page-in var(--t-page) var(--ease-out) backwards;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -10,7 +10,7 @@ import { ApplicationStatusBadge } from '../../features/jobs/ApplicationStatusBad
 import { jobsApi } from '../../features/jobs/jobsApi';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
-import { PageLoader } from '../../layout/PageLoader';
+import { ListRowsSkeleton } from '../../components/skeleton/ListRowsSkeleton';
 import styles from './ApplicationsPage.module.css';
 
 /** Suivi de mes candidatures et propositions de mission (JOB-7). */
@@ -26,7 +26,7 @@ export default function ApplicationsPage() {
       <p className={styles.lead}>{t('applications.lead')}</p>
 
       <div className={styles.panel} aria-busy={query.loading}>
-        {query.loading && <PageLoader />}
+        {query.loading && <ListRowsSkeleton />}
         {!query.loading && query.error !== null && (
           <ErrorState error={query.error} onRetry={query.reload} />
         )}

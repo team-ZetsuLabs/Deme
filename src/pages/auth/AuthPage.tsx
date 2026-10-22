@@ -40,7 +40,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
   const onSignedIn = () => navigate(returnTo, { replace: true });
 
   return (
-    <div className={styles.auth}>
+    <div className={`${styles.auth} page-enter`}>
       <div className={styles.main}>
         <div className={styles.top}>
           <Logo />

@@ -24,7 +24,7 @@ import { ReportButton } from '../../features/moderation/ReportButton';
 import detail from '../../features/questions/QuestionDetail.module.css';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
-import { PageLoader } from '../../layout/PageLoader';
+import { QuestionDetailSkeleton } from '../../components/skeleton/QuestionDetailSkeleton';
 import NotFoundPage from '../notfound/NotFoundPage';
 import styles from './QuestionPage.module.css';
 
@@ -60,7 +60,7 @@ function QuestionView({ id }: { id: number }) {
 
   const answers = useMemo(() => (q ? sortAnswers(q.answers, sort) : []), [q, sort]);
 
-  if (query.loading) return <PageLoader />;
+  if (query.loading) return <QuestionDetailSkeleton />;
   if (query.error instanceof ApiError && query.error.status === 404) return <NotFoundPage />;
   if (query.error || !q) return <ErrorState error={query.error} onRetry={query.reload} />;
 

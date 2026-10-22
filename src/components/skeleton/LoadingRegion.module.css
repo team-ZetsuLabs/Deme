@@ -1,0 +1,39 @@
+.region {
+  width: 100%;
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  margin: var(--s3);
+  padding: var(--s2) var(--s3);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  font-size: var(--fs-md);
+  color: var(--text-2);
+  animation: notice-in var(--t-base) var(--ease-out);
+}
+
+.notice svg {
+  flex-shrink: 0;
+  color: var(--text-3);
+}
+
+.offline {
+  border-style: solid;
+  border-color: var(--gold);
+  color: var(--text);
+}
+
+.offline svg {
+  color: var(--gold-text);
+}
+
+@keyframes notice-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}

@@ -1,9 +1,26 @@
 .loader {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+}
+
+.lead {
+  margin: var(--s3) 0 var(--s5);
+}
+
+.panel {
+  display: grid;
   gap: var(--s2);
-  padding: var(--s7) var(--s5);
-  color: var(--text-3);
-  font-size: var(--fs-md);
+  padding: var(--s5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+
+.spaced {
+  margin-top: var(--s4);
+}
+
+@media (max-width: 767px) {
+  .panel {
+    padding: var(--s4);
+  }
 }

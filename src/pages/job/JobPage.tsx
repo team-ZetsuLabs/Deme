@@ -19,7 +19,7 @@ import { SkillMatch } from '../../features/jobs/SkillMatch';
 import { ReportButton } from '../../features/moderation/ReportButton';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
-import { PageLoader } from '../../layout/PageLoader';
+import { JobDetailSkeleton } from '../../components/skeleton/JobDetailSkeleton';
 import NotFoundPage from '../notfound/NotFoundPage';
 import styles from './JobPage.module.css';
 
@@ -41,7 +41,7 @@ function JobView({ id }: { id: number }) {
   const job = query.data;
   usePageTitle(job?.title ?? t('jobs.pageTitle'));
 
-  if (query.loading) return <PageLoader />;
+  if (query.loading) return <JobDetailSkeleton />;
   if (query.error instanceof ApiError && query.error.status === 404) return <NotFoundPage />;
   if (query.error || !job) return <ErrorState error={query.error} onRetry={query.reload} />;
 

@@ -13,7 +13,7 @@ import { useJobFilters } from '../../features/jobs/useJobFilters';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { countryOptions } from '../../i18n/countries';
-import { PageLoader } from '../../layout/PageLoader';
+import { JobRowsSkeleton } from '../../components/skeleton/JobRowsSkeleton';
 import styles from './JobsPage.module.css';
 
 const TYPES: JobTypeFilter[] = ['all', 'FULL_TIME', 'REMOTE', 'CONTRACT', 'INTERNSHIP'];
@@ -88,7 +88,7 @@ export default function JobsPage() {
       </div>
 
       <div className={styles.panel} aria-busy={query.loading}>
-        {query.loading && <PageLoader />}
+        {query.loading && <JobRowsSkeleton />}
         {!query.loading && query.error !== null && (
           <ErrorState error={query.error} onRetry={query.reload} />
         )}

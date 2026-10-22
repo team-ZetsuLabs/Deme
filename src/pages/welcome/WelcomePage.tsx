@@ -60,7 +60,7 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} page-enter`}>
       <header className={styles.top}>
         <Logo />
       </header>

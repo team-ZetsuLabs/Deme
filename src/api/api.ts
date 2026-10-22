@@ -50,7 +50,12 @@ export const API_BASE = '/api/v1';
 export const CSRF_COOKIE = 'XSRF-TOKEN';
 export const CSRF_HEADER = 'X-XSRF-TOKEN';
 
-const MOCK_DELAY_MS = 250;
+/**
+ * Délai simulé du mode mock, pour voir les squelettes de chargement comme sur un vrai réseau.
+ * 1 seconde par défaut, réglable avec VITE_MOCK_DELAY_MS ; nul dans les tests.
+ */
+const MOCK_DELAY_MS =
+  import.meta.env.MODE === 'test' ? 0 : Number(import.meta.env.VITE_MOCK_DELAY_MS ?? 1000);
 
 type MockModule = { default: unknown };
 type MockLoaders = Record<string, () => Promise<MockModule>>;

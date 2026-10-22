@@ -46,3 +46,11 @@
   color: var(--green-text);
   box-shadow: inset 0 2px 0 var(--green);
 }
+
+.tab svg {
+  transition: transform var(--t-press) var(--ease-out);
+}
+
+.tab:active svg {
+  transform: scale(0.9);
+}
