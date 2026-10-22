@@ -39,7 +39,61 @@
       "createdAt": "2026-10-21T09:02:00Z",
       "votes": 9,
       "voted": false,
-      "accepted": true
+      "accepted": true,
+      "comments": [
+        {
+          "id": 41,
+          "body": "C'était bien ça, merci ! Le préfixe Bearer manquait.",
+          "author": {
+            "id": 2,
+            "name": "Awa Kane",
+            "photoUrl": null,
+            "country": "SN",
+            "city": "Dakar",
+            "reputation": 875
+          },
+          "createdAt": "2026-10-21T09:30:00Z"
+        },
+        {
+          "id": 42,
+          "body": "Même souci avec MTN MoMo au Cameroun, la solution marche aussi.",
+          "author": {
+            "id": 6,
+            "name": "Brice Nkoulou",
+            "photoUrl": null,
+            "country": "CM",
+            "city": "Douala",
+            "reputation": 210
+          },
+          "createdAt": "2026-10-21T10:05:00Z"
+        },
+        {
+          "id": 43,
+          "body": "Attention au renouvellement : le token expire au bout d'une heure exactement.",
+          "author": {
+            "id": 5,
+            "name": "Fatou Diallo",
+            "photoUrl": null,
+            "country": "GN",
+            "city": "Conakry",
+            "reputation": 980
+          },
+          "createdAt": "2026-10-21T10:40:00Z"
+        },
+        {
+          "id": 44,
+          "body": "J'ajoute qu'il faut aussi le header Content-Type, sinon on a une 415.",
+          "author": {
+            "id": 7,
+            "name": "Moussa Traoré",
+            "photoUrl": null,
+            "country": "ML",
+            "city": "Bamako",
+            "reputation": 330
+          },
+          "createdAt": "2026-10-21T11:15:00Z"
+        }
+      ]
     },
     {
       "id": 12,
@@ -99,6 +153,34 @@
         "reason": "OFF_TOPIC",
         "appeal": "NONE"
       }
+    }
+  ],
+  "comments": [
+    {
+      "id": 31,
+      "body": "Tu es bien sur l'URL du bac à sable ou sur celle de production ? Les tokens ne sont pas les mêmes.",
+      "author": {
+        "id": 4,
+        "name": "Kwame Mensah",
+        "photoUrl": null,
+        "country": "GH",
+        "city": "Accra",
+        "reputation": 640
+      },
+      "createdAt": "2026-10-21T08:40:00Z"
+    },
+    {
+      "id": 32,
+      "body": "Bac à sable pour l'instant. Je mets la version de la doc dans la question.",
+      "author": {
+        "id": 2,
+        "name": "Awa Kane",
+        "photoUrl": null,
+        "country": "SN",
+        "city": "Dakar",
+        "reputation": 875
+      },
+      "createdAt": "2026-10-21T08:52:00Z"
     }
   ]
 }

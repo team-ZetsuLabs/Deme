@@ -4,6 +4,8 @@ export const TITLE_MAX = 150;
 export const BODY_MIN = 30;
 export const TAGS_MIN = 1;
 export const TAGS_MAX = 4;
+export const COMMENT_MIN = 10;
+export const COMMENT_MAX = 300;
 
 const TAG_PATTERN = /^[a-z0-9][a-z0-9.+#-]{0,34}$/;
 

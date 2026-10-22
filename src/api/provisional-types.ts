@@ -138,6 +138,14 @@ export type QuestionSummary = {
   solved: boolean;
 };
 
+/** Commentaire court en texte brut (QA-9), 10 à 300 caractères. */
+export type Comment = {
+  id: number;
+  body: string;
+  author: Author;
+  createdAt: string;
+};
+
 export type Answer = {
   id: number;
   body: string; // Markdown d'origine, pour que l'auteur puisse modifier sa réponse (QA-3)
@@ -149,6 +157,7 @@ export type Answer = {
   voted: boolean; // le membre connecté a voté
   accepted: boolean;
   hidden?: HiddenState | null;
+  comments?: Comment[]; // du plus ancien au plus récent
 };
 
 /** GET /api/v1/questions/{id} */
@@ -166,6 +175,7 @@ export type QuestionDetail = {
   voted: boolean;
   answers: Answer[];
   hidden?: HiddenState | null;
+  comments?: Comment[];
 };
 
 /** Information qui manque à une question, repérée par l'assistant (IA-1). */

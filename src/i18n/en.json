@@ -266,6 +266,17 @@
     "edited": "Answer updated",
     "cancel": "Cancel"
   },
+  "comments": {
+    "label": "Comments",
+    "add": "Add a comment",
+    "field": "Your comment",
+    "placeholder": "Ask for a detail, point something out…",
+    "submit": "Comment",
+    "busy": "Sending",
+    "tooShort": "Write at least {{min}} characters.",
+    "more_one": "Show {{count}} more comment",
+    "more_other": "Show {{count}} more comments"
+  },
   "ask": {
     "pageTitle": "Ask a question",
     "title": "Ask a question",

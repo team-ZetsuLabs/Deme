@@ -10,6 +10,7 @@ import { useToast } from '../../components/useToast';
 import { HiddenNotice } from '../moderation/HiddenNotice';
 import { AnswerForm } from './AnswerForm';
 import { AuthorCard } from './AuthorCard';
+import { CommentThread } from './CommentThread';
 import { questionsApi } from './questionsApi';
 import { VoteControl } from './VoteControl';
 import styles from './QuestionDetail.module.css';
@@ -140,6 +141,12 @@ export function AnswerItem({
             }
           />
         </div>
+        <CommentThread
+          target="answer"
+          targetId={a.id}
+          comments={a.comments ?? []}
+          onAdded={(comment) => onEdited({ ...a, comments: [...(a.comments ?? []), comment] })}
+        />
       </div>
     </article>
   );

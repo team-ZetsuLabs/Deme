@@ -1,0 +1,105 @@
+.thread {
+  margin-top: var(--s3);
+  padding-top: var(--s2);
+  border-top: 1px solid var(--line);
+}
+
+.list {
+  display: grid;
+}
+
+.comment {
+  padding: var(--s2) 0;
+  font-size: var(--fs-md);
+  line-height: var(--lh-base);
+  overflow-wrap: anywhere;
+}
+
+.comment + .comment {
+  border-top: 1px solid var(--line);
+}
+
+.body {
+  color: var(--text-2);
+  white-space: pre-line;
+}
+
+.meta {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.meta a {
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.more,
+.add {
+  min-height: var(--control-h-sm);
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-3);
+  font: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+.more {
+  display: block;
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.more:hover,
+.add:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.form {
+  margin-top: var(--s2);
+}
+
+.form textarea {
+  width: 100%;
+  font-size: var(--fs-md);
+}
+
+.formFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s2);
+  margin-top: var(--s2);
+}
+
+.count {
+  font-family: var(--f-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+
+.actions {
+  display: flex;
+  gap: var(--s2);
+}
+
+.error {
+  margin-top: var(--s1);
+  font-size: var(--fs-sm);
+  color: var(--red);
+}
+
+@media (max-width: 767px) {
+  .more,
+  .add {
+    min-height: var(--touch);
+  }
+  .meta {
+    white-space: normal;
+  }
+}

@@ -17,6 +17,7 @@ import { useSession } from '../../features/auth/useSession';
 import { AnswerForm } from '../../features/questions/AnswerForm';
 import { AnswerItem } from '../../features/questions/AnswerItem';
 import { AuthorCard } from '../../features/questions/AuthorCard';
+import { CommentThread } from '../../features/questions/CommentThread';
 import { ContextChips } from '../../features/questions/ContextChips';
 import { questionsApi } from '../../features/questions/questionsApi';
 import { VoteControl } from '../../features/questions/VoteControl';
@@ -178,6 +179,14 @@ function QuestionView({ id }: { id: number }) {
               </div>
               <AuthorCard author={q.author} label={t('question.askedBy')} />
             </div>
+            <CommentThread
+              target="question"
+              targetId={q.id}
+              comments={q.comments ?? []}
+              onAdded={(comment) =>
+                query.setData((c) => ({ ...c, comments: [...(c.comments ?? []), comment] }))
+              }
+            />
           </div>
         </div>
       </article>

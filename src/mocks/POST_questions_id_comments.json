@@ -1,0 +1,13 @@
+{
+  "id": 901,
+  "body": "Commentaire publié en mode mock : l'API renvoie toujours ce contenu fixe.",
+  "author": {
+    "id": 9,
+    "name": "Aminata Ouédraogo",
+    "photoUrl": null,
+    "country": "BF",
+    "city": "Ouagadougou",
+    "reputation": 120
+  },
+  "createdAt": "2026-10-22T12:00:00Z"
+}

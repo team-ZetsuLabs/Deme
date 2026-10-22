@@ -1,6 +1,7 @@
 import { api } from '../../api/api';
 import type {
   Answer,
+  Comment,
   AnswerRequest,
   Page,
   QuestionDetail,
@@ -51,6 +52,11 @@ export const questionsApi = {
     api.put<Answer>(`/answers/${answerId}`, body),
   accept: (questionId: number, answerId: number) =>
     api.post<void>(`/questions/${questionId}/accept/${answerId}`),
+  /** POST /questions/{id}/comments ou /answers/{id}/comments (QA-9). */
+  comment: (target: VoteTarget, id: number, body: string) =>
+    api.post<Comment>(`/${target === 'question' ? 'questions' : 'answers'}/${id}/comments`, {
+      body,
+    }),
   vote: (target: VoteTarget, id: number) => api.put<VoteResult>(`/votes/${target}/${id}`),
   unvote: (target: VoteTarget, id: number) => api.delete<VoteResult>(`/votes/${target}/${id}`),
 };
