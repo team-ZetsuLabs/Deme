@@ -833,5 +833,87 @@
       "JOB": "Offre",
       "MISSION": "Mission"
     }
+  },
+  "missions": {
+    "pageTitle": "Missions",
+    "title": "Missions entre pairs",
+    "lead": "Des coups de main courts entre développeurs : un dépannage, une intégration, une revue de code.",
+    "publish": "Publier une mission",
+    "empty": "Aucune mission ouverte ne correspond pour le moment. Publiez la vôtre.",
+    "budget": "Budget : {{amount}}",
+    "budgetOpen": "Budget à discuter",
+    "budgetLabel": "Budget indicatif",
+    "delay_one": "{{count}} jour",
+    "delay_other": "{{count}} jours",
+    "offerCount_one": "{{count}} proposition",
+    "offerCount_other": "{{count}} propositions",
+    "yours": "Vous avez publié cette mission. Les propositions reçues sont listées sur la page.",
+    "paymentNotice": "Zetsu ne gère aucun paiement. Mettez-vous d'accord directement, et ne payez jamais pour obtenir une mission.",
+    "kind": {
+      "FIX": "Dépannage",
+      "INTEGRATION": "Intégration",
+      "CODE_REVIEW": "Revue de code",
+      "OTHER": "Autre"
+    },
+    "kindHint": {
+      "FIX": "Un bug ou une panne à régler vite.",
+      "INTEGRATION": "Brancher une API, un paiement, un service.",
+      "CODE_REVIEW": "Un regard extérieur avant une mise en production.",
+      "OTHER": "Tout autre coup de main court."
+    },
+    "statusNotice": {
+      "IN_PROGRESS": "Cette mission est en cours : elle ne reçoit plus de propositions.",
+      "CLOSED": "Cette mission est terminée."
+    },
+    "filters": {
+      "kind": "Type de mission"
+    },
+    "offer": {
+      "button": "Se proposer",
+      "title": "Se proposer pour cette mission",
+      "lead": "Présentez-vous en quelques phrases. L'auteur voit aussi votre profil et votre réputation.",
+      "message": "Votre message",
+      "messageHint": "Comment vous comptez vous y prendre, et une expérience proche.",
+      "messageTooShort": "Écrivez au moins {{min}} caractères pour présenter votre proposition.",
+      "price": "Votre prix ({{currency}})",
+      "delay": "Votre délai (jours)",
+      "submit": "Envoyer ma proposition",
+      "sent": "Proposition envoyée. L'auteur de la mission sera prévenu.",
+      "sentText": "Vous vous êtes proposé pour cette mission."
+    },
+    "offers": {
+      "title_one": "{{count}} proposition reçue",
+      "title_other": "{{count}} propositions reçues",
+      "empty": "Aucune proposition pour le moment. Les membres seront prévenus si la mission correspond à leur stack.",
+      "noTerms": "Prix et délai non précisés",
+      "shortlist": "Retenir",
+      "reject": "Refuser",
+      "shortlisted": "Proposition retenue. Le membre est prévenu.",
+      "rejected": "Proposition refusée. Le membre est prévenu."
+    },
+    "new": {
+      "pageTitle": "Publier une mission",
+      "lead": "Décrivez le coup de main dont vous avez besoin. Les membres qui ont la bonne stack pourront se proposer.",
+      "kind": "Type de mission",
+      "title": "Titre",
+      "titlePlaceholder": "Ex. : intégrer Wave dans une boutique WooCommerce",
+      "description": "Description",
+      "descriptionHint": "Le contexte, ce qui est attendu et comment vous saurez que c'est terminé. Markdown accepté.",
+      "budget": "Budget indicatif",
+      "budgetHint": "Laissez vide si vous préférez en discuter.",
+      "currency": "Monnaie",
+      "delay": "Délai souhaité (jours)",
+      "delayHint": "Entre 1 et {{max}} jours.",
+      "notice": "Une mission est un service ponctuel. Pour monter une équipe dans la durée, utilisez plutôt un projet.",
+      "submit": "Publier la mission",
+      "busy": "Publication en cours",
+      "created": "Mission publiée",
+      "errors": {
+        "title": "Le titre doit faire entre 10 et 120 caractères.",
+        "description": "Décrivez la mission en 50 caractères au moins.",
+        "delay": "Indiquez un délai entre 1 et 90 jours.",
+        "budget": "Le budget doit être un montant positif."
+      }
+    }
   }
 }

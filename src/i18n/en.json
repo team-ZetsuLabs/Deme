@@ -833,5 +833,87 @@
       "JOB": "Job",
       "MISSION": "Gig"
     }
+  },
+  "missions": {
+    "pageTitle": "Gigs",
+    "title": "Gigs between peers",
+    "lead": "Short jobs between developers: a fix, an integration, a code review.",
+    "publish": "Post a gig",
+    "empty": "No open gig matches yet. Post yours.",
+    "budget": "Budget: {{amount}}",
+    "budgetOpen": "Budget to discuss",
+    "budgetLabel": "Indicative budget",
+    "delay_one": "{{count}} day",
+    "delay_other": "{{count}} days",
+    "offerCount_one": "{{count}} proposal",
+    "offerCount_other": "{{count}} proposals",
+    "yours": "You posted this gig. Proposals you receive are listed on the page.",
+    "paymentNotice": "Zetsu handles no payment. Agree directly with each other, and never pay to get a gig.",
+    "kind": {
+      "FIX": "Fix",
+      "INTEGRATION": "Integration",
+      "CODE_REVIEW": "Code review",
+      "OTHER": "Other"
+    },
+    "kindHint": {
+      "FIX": "A bug or an outage to fix quickly.",
+      "INTEGRATION": "Connect an API, a payment, a service.",
+      "CODE_REVIEW": "An outside look before going to production.",
+      "OTHER": "Any other short job."
+    },
+    "statusNotice": {
+      "IN_PROGRESS": "This gig is in progress: it no longer accepts proposals.",
+      "CLOSED": "This gig is closed."
+    },
+    "filters": {
+      "kind": "Gig type"
+    },
+    "offer": {
+      "button": "Make a proposal",
+      "title": "Propose yourself for this gig",
+      "lead": "Introduce yourself in a few sentences. The author also sees your profile and reputation.",
+      "message": "Your message",
+      "messageHint": "How you plan to do it, and a similar experience.",
+      "messageTooShort": "Write at least {{min}} characters to introduce your proposal.",
+      "price": "Your price ({{currency}})",
+      "delay": "Your timeline (days)",
+      "submit": "Send my proposal",
+      "sent": "Proposal sent. The gig author will be notified.",
+      "sentText": "You made a proposal for this gig."
+    },
+    "offers": {
+      "title_one": "{{count}} proposal received",
+      "title_other": "{{count}} proposals received",
+      "empty": "No proposal yet. Members will be notified if the gig matches their stack.",
+      "noTerms": "Price and timeline not given",
+      "shortlist": "Shortlist",
+      "reject": "Decline",
+      "shortlisted": "Proposal shortlisted. The member is notified.",
+      "rejected": "Proposal declined. The member is notified."
+    },
+    "new": {
+      "pageTitle": "Post a gig",
+      "lead": "Describe the help you need. Members with the right stack can make a proposal.",
+      "kind": "Gig type",
+      "title": "Title",
+      "titlePlaceholder": "E.g. add Wave to a WooCommerce shop",
+      "description": "Description",
+      "descriptionHint": "The context, what is expected and how you will know it is done. Markdown accepted.",
+      "budget": "Indicative budget",
+      "budgetHint": "Leave empty if you prefer to discuss it.",
+      "currency": "Currency",
+      "delay": "Desired timeline (days)",
+      "delayHint": "Between 1 and {{max}} days.",
+      "notice": "A gig is a one-off service. To build a long-term team, use a project instead.",
+      "submit": "Post the gig",
+      "busy": "Posting",
+      "created": "Gig posted",
+      "errors": {
+        "title": "The title must be between 10 and 120 characters.",
+        "description": "Describe the gig in at least 50 characters.",
+        "delay": "Enter a timeline between 1 and 90 days.",
+        "budget": "The budget must be a positive amount."
+      }
+    }
   }
 }

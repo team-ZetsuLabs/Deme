@@ -303,3 +303,64 @@ export type MyApplication = {
   sentAt: string;
   updatedAt: string;
 };
+
+/** Missions courtes entre pairs (JOB-5). */
+export type MissionKind = 'FIX' | 'INTEGRATION' | 'CODE_REVIEW' | 'OTHER';
+export type MissionStatus = 'OPEN' | 'IN_PROGRESS' | 'CLOSED';
+
+/** Montant indicatif : aucun paiement ne passe par Zetsu. */
+export type Money = { amount: number; currency: string }; // ISO 4217 : XOF, XAF, GHS, NGN, KES…
+
+/** Élément de GET /api/v1/missions */
+export type MissionSummary = {
+  id: number;
+  title: string;
+  kind: MissionKind;
+  excerpt: string;
+  budget: Money | null;
+  delayDays: number;
+  technologies: string[];
+  author: Author;
+  createdAt: string;
+  status: MissionStatus;
+  offerCount: number;
+  /** Statut de ma proposition, null si je ne me suis pas proposé. */
+  myOffer: ApplicationStatus | null;
+};
+
+/** Proposition d'un membre sur une mission, visible par l'auteur de la mission. */
+export type MissionOffer = {
+  id: number;
+  member: Author;
+  message: string;
+  price: Money | null;
+  delayDays: number | null;
+  status: ApplicationStatus;
+  createdAt: string;
+};
+
+/** GET /api/v1/missions/{id} : `offers` n'est rempli que pour l'auteur de la mission. */
+export type MissionDetail = MissionSummary & {
+  descriptionHtml: string;
+  offers: MissionOffer[] | null;
+};
+
+/** POST /api/v1/missions */
+export type MissionRequest = {
+  title: string;
+  kind: MissionKind;
+  description: string; // Markdown
+  budget: Money | null;
+  delayDays: number;
+  technologies: string[];
+};
+
+/** POST /api/v1/missions/{id}/offers : se proposer. Renvoie une MyApplication (JOB-7). */
+export type OfferRequest = {
+  message: string;
+  price: Money | null;
+  delayDays: number | null;
+};
+
+/** PATCH /api/v1/missions/{id}/offers/{offerId} : décision de l'auteur. */
+export type OfferDecision = { status: 'SHORTLISTED' | 'REJECTED' };

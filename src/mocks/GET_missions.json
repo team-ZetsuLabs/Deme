@@ -1,0 +1,124 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "title": "Intégrer Wave dans une boutique WooCommerce",
+      "kind": "INTEGRATION",
+      "excerpt": "Ma boutique de tissus wax accepte Orange Money, il manque Wave. Il faut le plugin, les tests en bac à sable et la mise en production.",
+      "budget": {
+        "amount": 75000,
+        "currency": "XOF"
+      },
+      "delayDays": 5,
+      "technologies": ["wordpress", "php", "mobile-money"],
+      "author": {
+        "id": 12,
+        "name": "Mariama Sow",
+        "photoUrl": null,
+        "country": "SN",
+        "city": "Saint-Louis",
+        "reputation": 85
+      },
+      "createdAt": "2026-10-21T10:30:00Z",
+      "status": "OPEN",
+      "offerCount": 3,
+      "myOffer": null
+    },
+    {
+      "id": 2,
+      "title": "Mon API Spring Boot plante en production après 2 heures",
+      "kind": "FIX",
+      "excerpt": "OutOfMemoryError au bout de deux heures sur un VPS de 2 Go. J'ai besoin de quelqu'un pour analyser un heap dump et corriger la fuite.",
+      "budget": {
+        "amount": 50000,
+        "currency": "XOF"
+      },
+      "delayDays": 2,
+      "technologies": ["spring-boot", "java"],
+      "author": {
+        "id": 13,
+        "name": "Jean-Baptiste Kaboré",
+        "photoUrl": null,
+        "country": "BF",
+        "city": "Ouagadougou",
+        "reputation": 240
+      },
+      "createdAt": "2026-10-21T07:15:00Z",
+      "status": "OPEN",
+      "offerCount": 1,
+      "myOffer": null
+    },
+    {
+      "id": 3,
+      "title": "Revue de code d'une API Django avant mise en production",
+      "kind": "CODE_REVIEW",
+      "excerpt": "API de réservation de bus Nairobi Mombasa, environ 4 000 lignes. Je cherche un regard sur la sécurité, les requêtes et les tests.",
+      "budget": {
+        "amount": 15000,
+        "currency": "KES"
+      },
+      "delayDays": 4,
+      "technologies": ["django", "python", "postgresql"],
+      "author": {
+        "id": 7,
+        "name": "Grace Njeri",
+        "photoUrl": null,
+        "country": "KE",
+        "city": "Nairobi",
+        "reputation": 640
+      },
+      "createdAt": "2026-10-20T12:00:00Z",
+      "status": "OPEN",
+      "offerCount": 4,
+      "myOffer": "VIEWED"
+    },
+    {
+      "id": 4,
+      "title": "Mode hors ligne pour une app Flutter de collecte agricole",
+      "kind": "INTEGRATION",
+      "excerpt": "Les agents saisissent des fiches dans des villages sans réseau. Il faut stocker localement et synchroniser au retour de la connexion.",
+      "budget": {
+        "amount": 1500,
+        "currency": "GHS"
+      },
+      "delayDays": 10,
+      "technologies": ["flutter", "sqlite", "hors-ligne"],
+      "author": {
+        "id": 4,
+        "name": "Kwame Asante",
+        "photoUrl": null,
+        "country": "GH",
+        "city": "Accra",
+        "reputation": 980
+      },
+      "createdAt": "2026-10-19T16:40:00Z",
+      "status": "OPEN",
+      "offerCount": 2,
+      "myOffer": null
+    },
+    {
+      "id": 5,
+      "title": "Configurer les sauvegardes PostgreSQL sur un VPS",
+      "kind": "OTHER",
+      "excerpt": "Sauvegarde quotidienne chiffrée vers un stockage externe, avec un test de restauration documenté. Serveur Ubuntu 24.04.",
+      "budget": null,
+      "delayDays": 3,
+      "technologies": ["postgresql", "linux", "devops"],
+      "author": {
+        "id": 5,
+        "name": "Fatou Diallo",
+        "photoUrl": null,
+        "country": "CI",
+        "city": "Abidjan",
+        "reputation": 455
+      },
+      "createdAt": "2026-10-18T09:20:00Z",
+      "status": "OPEN",
+      "offerCount": 0,
+      "myOffer": null
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 5
+}

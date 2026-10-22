@@ -1,0 +1,43 @@
+.title {
+  margin-top: var(--s3);
+}
+
+.author {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+  margin-top: var(--s3);
+  font-size: var(--fs-md);
+  color: var(--text-3);
+}
+
+.author a {
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.offers {
+  margin-top: var(--s5);
+  padding-top: var(--s2);
+  border-top: 1px solid var(--line);
+}
+
+.label {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.amount {
+  margin: 2px 0 var(--s2);
+  font-family: var(--f-mono);
+  font-size: var(--fs-xl);
+  font-weight: 500;
+  color: var(--gold-text);
+}
+
+.notice {
+  padding: 0 var(--s2);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
