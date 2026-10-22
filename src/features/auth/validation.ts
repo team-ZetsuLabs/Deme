@@ -27,6 +27,13 @@ export function validateNewPassword(value: string): string | null {
   return value.length >= PASSWORD_MIN && /\d/.test(value) ? null : 'auth.errors.passwordRule';
 }
 
+export function validateConfirmPassword(
+  value: string,
+  values: { password: string },
+): string | null {
+  return value && value === values.password ? null : 'auth.errors.passwordMismatch';
+}
+
 export function validateLoginPassword(value: string): string | null {
   return value ? null : 'auth.errors.passwordRequired';
 }

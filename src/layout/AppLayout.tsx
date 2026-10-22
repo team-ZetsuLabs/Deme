@@ -2,6 +2,7 @@ import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { BottomTabs } from './BottomTabs';
+import { EmailVerifyBanner } from './EmailVerifyBanner';
 import { OfflineBanner } from './OfflineBanner';
 import { SideNav } from './SideNav';
 import { Topbar } from './Topbar';
@@ -25,6 +26,7 @@ export function AppLayout() {
       </a>
       <Topbar />
       <OfflineBanner />
+      <EmailVerifyBanner />
       <div className={styles.layout}>
         <div className={styles.rail}>
           <SideNav />

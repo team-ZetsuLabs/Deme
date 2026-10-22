@@ -120,7 +120,8 @@
       "emailInvalid": "Enter a valid email address, for example name@domain.com.",
       "countryRequired": "Choose your country.",
       "passwordRule": "The password must be at least 8 characters long and include a digit.",
-      "passwordRequired": "Enter your password."
+      "passwordRequired": "Enter your password.",
+      "passwordMismatch": "The two passwords do not match."
     },
     "aside": {
       "label": "Platform preview",
@@ -133,6 +134,46 @@
       "answerBody": "The header must be prefixed with Bearer, and the token expires after one hour:",
       "reputation": "+15 reputation"
     }
+  },
+  "password": {
+    "backToLogin": "Back to sign in",
+    "forgot": {
+      "link": "Forgot your password?",
+      "pageTitle": "Forgot password",
+      "title": "Forgot your password",
+      "lead": "Enter your account email. We will send you a link to choose a new password, valid for one hour.",
+      "submit": "Send the link",
+      "busy": "Sending",
+      "sentTitle": "Check your inbox",
+      "sentText": "If a Zetsu account exists for {{email}}, a link has just been sent there. Remember to check your spam folder."
+    },
+    "reset": {
+      "pageTitle": "New password",
+      "title": "Choose a new password",
+      "lead": "It will replace the old one on all your devices.",
+      "new": "New password",
+      "confirm": "Confirm the password",
+      "submit": "Save the password",
+      "busy": "Saving",
+      "done": "Password changed. Sign in with the new one.",
+      "deadTitle": "This link is no longer valid",
+      "deadText": "The link has expired or was already used. Ask for a new one, it will be valid for one hour.",
+      "newLink": "Ask for a new link"
+    }
+  },
+  "verifyEmail": {
+    "pageTitle": "Email confirmation",
+    "checking": "Confirming your email",
+    "doneTitle": "Email confirmed",
+    "doneText": "Thank you, your email address is confirmed.",
+    "continue": "Go to questions",
+    "failedTitle": "Your email could not be confirmed",
+    "deadText": "The link has expired or was already used. Ask for a new verification email.",
+    "login": "Sign in to get a new link",
+    "resend": "Resend the email",
+    "resentShort": "Email sent",
+    "resent": "Verification email sent.",
+    "banner": "Confirm your address {{email}} with the link we sent you."
   },
   "context": {
     "label": "Context",

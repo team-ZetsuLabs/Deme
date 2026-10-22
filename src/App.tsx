@@ -15,6 +15,9 @@ import { ThemeProvider } from './theme/ThemeProvider';
 // Chaque page est chargée à la demande pour rester léger en 3G.
 const HomePage = lazy(() => import('./pages/home/HomePage'));
 const AuthPage = lazy(() => import('./pages/auth/AuthPage'));
+const ForgotPasswordPage = lazy(() => import('./pages/forgot-password/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('./pages/reset-password/ResetPasswordPage'));
+const VerifyEmailPage = lazy(() => import('./pages/verify-email/VerifyEmailPage'));
 const QuestionsPage = lazy(() => import('./pages/questions/QuestionsPage'));
 const QuestionPage = lazy(() => import('./pages/question/QuestionPage'));
 const AskPage = lazy(() => import('./pages/ask/AskPage'));
@@ -49,6 +52,9 @@ export function App() {
                       <Route index element={<HomePage />} />
                       <Route path="login" element={<AuthPage mode="login" />} />
                       <Route path="register" element={<AuthPage mode="register" />} />
+                      <Route path="forgot-password" element={<ForgotPasswordPage />} />
+                      <Route path="reset-password" element={<ResetPasswordPage />} />
+                      <Route path="verify-email" element={<VerifyEmailPage />} />
                       <Route path="welcome" element={<WelcomePage />} />
                       <Route
                         element={

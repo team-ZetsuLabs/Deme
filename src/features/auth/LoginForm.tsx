@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
@@ -73,7 +74,16 @@ export function LoginForm({ onSignedIn }: LoginFormProps) {
         />
       </Field>
 
-      <Field id={IDS.password} label={t('auth.fields.password')} error={passwordError}>
+      <Field
+        id={IDS.password}
+        label={t('auth.fields.password')}
+        error={passwordError}
+        labelAside={
+          <Link to="/forgot-password" className={styles.forgot}>
+            {t('password.forgot.link')}
+          </Link>
+        }
+      >
         <PasswordInput
           id={IDS.password}
           autoComplete="current-password"

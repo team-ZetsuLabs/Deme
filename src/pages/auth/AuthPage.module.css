@@ -99,6 +99,10 @@
   background: var(--line);
 }
 
+.spaced {
+  margin-top: var(--s5);
+}
+
 .switch {
   margin-top: var(--s5);
   font-size: var(--fs-md);

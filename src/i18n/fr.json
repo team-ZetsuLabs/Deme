@@ -120,7 +120,8 @@
       "emailInvalid": "Entrez une adresse email valide, par exemple nom@domaine.com.",
       "countryRequired": "Choisissez votre pays.",
       "passwordRule": "Le mot de passe doit faire au moins 8 caractères, avec au moins un chiffre.",
-      "passwordRequired": "Entrez votre mot de passe."
+      "passwordRequired": "Entrez votre mot de passe.",
+      "passwordMismatch": "Les deux mots de passe ne sont pas identiques."
     },
     "aside": {
       "label": "Aperçu de la plateforme",
@@ -133,6 +134,46 @@
       "answerBody": "Le header doit être préfixé par Bearer, et le token expire après une heure :",
       "reputation": "+15 réputation"
     }
+  },
+  "password": {
+    "backToLogin": "Retour à la connexion",
+    "forgot": {
+      "link": "Mot de passe oublié ?",
+      "pageTitle": "Mot de passe oublié",
+      "title": "Mot de passe oublié",
+      "lead": "Entrez l'adresse de votre compte. Nous vous enverrons un lien pour choisir un nouveau mot de passe, valable une heure.",
+      "submit": "Envoyer le lien",
+      "busy": "Envoi en cours",
+      "sentTitle": "Vérifiez votre boîte mail",
+      "sentText": "Si un compte Zetsu existe pour {{email}}, un lien vient d'y être envoyé. Pensez à regarder dans les courriers indésirables."
+    },
+    "reset": {
+      "pageTitle": "Nouveau mot de passe",
+      "title": "Choisissez un nouveau mot de passe",
+      "lead": "Il remplacera l’ancien sur tous vos appareils.",
+      "new": "Nouveau mot de passe",
+      "confirm": "Confirmez le mot de passe",
+      "submit": "Enregistrer le mot de passe",
+      "busy": "Enregistrement",
+      "done": "Mot de passe modifié. Connectez-vous avec le nouveau.",
+      "deadTitle": "Ce lien n'est plus valable",
+      "deadText": "Le lien a expiré ou a déjà servi. Demandez-en un nouveau, il sera valable une heure.",
+      "newLink": "Demander un nouveau lien"
+    }
+  },
+  "verifyEmail": {
+    "pageTitle": "Confirmation de l'adresse",
+    "checking": "Confirmation de votre adresse",
+    "doneTitle": "Adresse confirmée",
+    "doneText": "Merci, votre adresse email est confirmée.",
+    "continue": "Aller aux questions",
+    "failedTitle": "L'adresse n'a pas pu être confirmée",
+    "deadText": "Le lien a expiré ou a déjà servi. Demandez un nouvel email de vérification.",
+    "login": "Se connecter pour recevoir un nouveau lien",
+    "resend": "Renvoyer l'email",
+    "resentShort": "Email envoyé",
+    "resent": "Email de vérification envoyé.",
+    "banner": "Confirmez votre adresse {{email}} avec le lien que nous vous avons envoyé."
   },
   "context": {
     "label": "Contexte",

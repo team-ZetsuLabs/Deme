@@ -1,16 +1,12 @@
 import { Link, NavLink, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { buttonClass } from '../../components/buttonClass';
 import { LoginForm } from '../../features/auth/LoginForm';
 import { OAuthButtons } from '../../features/auth/OAuthButtons';
 import { RegisterForm } from '../../features/auth/RegisterForm';
 import { useSession } from '../../features/auth/useSession';
 import { usePageTitle } from '../../hooks/usePageTitle';
-import { LanguageSwitcher } from '../../layout/LanguageSwitcher';
-import { Logo } from '../../layout/Logo';
 import { PageLoader } from '../../layout/PageLoader';
-import { ThemeToggle } from '../../layout/ThemeToggle';
-import { AuthAside } from './AuthAside';
+import { AuthShell } from './AuthShell';
 import styles from './AuthPage.module.css';
 
 export type AuthPageProps = { mode: 'login' | 'register' };
@@ -40,53 +36,31 @@ export default function AuthPage({ mode }: AuthPageProps) {
   const onSignedIn = () => navigate(returnTo, { replace: true });
 
   return (
-    <div className={`${styles.auth} page-enter`}>
-      <div className={styles.main}>
-        <div className={styles.top}>
-          <Logo />
-          <div className={styles.topRight}>
-            <LanguageSwitcher />
-            <ThemeToggle />
-            <Link
-              to="/questions"
-              className={`${buttonClass({ variant: 'ghost' })} ${styles.browse}`}
-            >
-              {t('auth.browse')}
-            </Link>
-          </div>
-        </div>
+    <AuthShell title={t(`auth.${mode}.title`)} lead={t(`auth.${mode}.lead`)}>
+      <nav className={styles.tabs} aria-label={t('auth.tabs.label')}>
+        <NavLink to="/login" state={{ from: returnTo }} replace>
+          {t('auth.tabs.login')}
+        </NavLink>
+        <NavLink to="/register" state={{ from: returnTo }} replace>
+          {t('auth.tabs.register')}
+        </NavLink>
+      </nav>
 
-        <main id="main" className={styles.form}>
-          <h1 className={styles.title}>{t(`auth.${mode}.title`)}</h1>
-          <p className={styles.lead}>{t(`auth.${mode}.lead`)}</p>
+      <OAuthButtons mode={mode} onSignedIn={onSignedIn} />
+      <p className={styles.or}>{t('auth.or')}</p>
 
-          <nav className={styles.tabs} aria-label={t('auth.tabs.label')}>
-            <NavLink to="/login" state={{ from: returnTo }} replace>
-              {t('auth.tabs.login')}
-            </NavLink>
-            <NavLink to="/register" state={{ from: returnTo }} replace>
-              {t('auth.tabs.register')}
-            </NavLink>
-          </nav>
+      {isRegister ? (
+        <RegisterForm key="register" onSignedIn={onSignedIn} />
+      ) : (
+        <LoginForm key="login" onSignedIn={onSignedIn} />
+      )}
 
-          <OAuthButtons mode={mode} onSignedIn={onSignedIn} />
-          <p className={styles.or}>{t('auth.or')}</p>
-
-          {isRegister ? (
-            <RegisterForm key="register" onSignedIn={onSignedIn} />
-          ) : (
-            <LoginForm key="login" onSignedIn={onSignedIn} />
-          )}
-
-          <p className={styles.switch}>
-            {t(`auth.${mode}.switch`)}{' '}
-            <Link to={isRegister ? '/login' : '/register'} state={{ from: returnTo }} replace>
-              {t(`auth.${mode}.switchLink`)}
-            </Link>
-          </p>
-        </main>
-      </div>
-      <AuthAside />
-    </div>
+      <p className={styles.switch}>
+        {t(`auth.${mode}.switch`)}{' '}
+        <Link to={isRegister ? '/login' : '/register'} state={{ from: returnTo }} replace>
+          {t(`auth.${mode}.switchLink`)}
+        </Link>
+      </p>
+    </AuthShell>
   );
 }

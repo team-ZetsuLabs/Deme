@@ -26,6 +26,15 @@ export const authApi = {
   unlink: (provider: OAuthProvider) => api.delete<Me>(`/me/connections/${provider}`),
   /** Suppression du compte (AUTH-6) : contenus anonymisés, réputation et candidatures effacées. */
   deleteAccount: () => api.delete<void>('/me'),
+  /** Mot de passe oublié (AUTH-4) : 204 que l'adresse existe ou non. */
+  requestPasswordReset: (email: string) => api.post<void>('/auth/password-reset', { email }),
+  /** Nouveau mot de passe ; 400 RESET_TOKEN_INVALID ou RESET_TOKEN_EXPIRED si le lien est périmé. */
+  resetPassword: (token: string, password: string) =>
+    api.post<void>('/auth/password-reset/confirm', { token, password }),
+  /** Confirme l'adresse ; 400 VERIFY_TOKEN_INVALID ou VERIFY_TOKEN_EXPIRED. */
+  verifyEmail: (token: string) => api.post<void>('/auth/verify-email', { token }),
+  /** Renvoie l'email de vérification au membre connecté ; 429 TOO_MANY_ATTEMPTS au-delà de la limite. */
+  resendVerification: () => api.post<void>('/auth/verify-email/resend'),
 };
 
 /**

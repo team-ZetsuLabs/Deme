@@ -26,6 +26,8 @@ export type Me = {
   providers: OAuthProviderId[]; // comptes GitHub et Google liés (SET-4)
   hasPassword: boolean; // false pour un compte créé uniquement par OAuth
   onboarded: boolean; // false tant que le parcours d'accueil (AUTH-5) n'est pas fait
+  /** false tant que l'adresse n'est pas confirmée par le lien reçu (AUTH-4). Absent : considérée comme confirmée. */
+  emailVerified?: boolean;
 };
 
 export type OAuthProviderId = 'github' | 'google';
