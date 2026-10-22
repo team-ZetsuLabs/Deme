@@ -44,6 +44,8 @@ export const questionsApi = {
   create: (body: QuestionRequest) => api.post<QuestionDetail>('/questions', body),
   answer: (questionId: number, body: AnswerRequest) =>
     api.post<Answer>(`/questions/${questionId}/answers`, body),
+  updateAnswer: (answerId: number, body: AnswerRequest) =>
+    api.put<Answer>(`/answers/${answerId}`, body),
   accept: (questionId: number, answerId: number) =>
     api.post<void>(`/questions/${questionId}/accept/${answerId}`),
   vote: (target: VoteTarget, id: number) => api.put<VoteResult>(`/votes/${target}/${id}`),

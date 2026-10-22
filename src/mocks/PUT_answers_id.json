@@ -1,0 +1,18 @@
+{
+  "id": 11,
+  "body": "Réponse modifiée en mode mock.",
+  "bodyHtml": "<p>Réponse modifiée en mode mock.</p>",
+  "code": null,
+  "author": {
+    "id": 9,
+    "name": "Aminata Ouédraogo",
+    "photoUrl": null,
+    "country": "BF",
+    "city": "Ouagadougou",
+    "reputation": 42
+  },
+  "createdAt": "2026-10-21T16:05:00Z",
+  "votes": 0,
+  "voted": false,
+  "accepted": false
+}

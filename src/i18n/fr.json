@@ -205,7 +205,11 @@
     "answerTooShort": "Écrivez au moins 30 caractères pour que la réponse soit utile.",
     "loginToAnswerText": "Connectez-vous pour répondre et gagner de la réputation.",
     "loginToAnswer": "Se connecter pour répondre",
-    "posted": "Réponse publiée"
+    "posted": "Réponse publiée",
+    "edit": "Modifier",
+    "saveEdit": "Enregistrer la modification",
+    "edited": "Réponse modifiée",
+    "cancel": "Annuler"
   },
   "ask": {
     "pageTitle": "Poser une question",

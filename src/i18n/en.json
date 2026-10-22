@@ -205,7 +205,11 @@
     "answerTooShort": "Write at least 30 characters so the answer is useful.",
     "loginToAnswerText": "Log in to answer and earn reputation.",
     "loginToAnswer": "Log in to answer",
-    "posted": "Answer posted"
+    "posted": "Answer posted",
+    "edit": "Edit",
+    "saveEdit": "Save changes",
+    "edited": "Answer updated",
+    "cancel": "Cancel"
   },
   "ask": {
     "pageTitle": "Ask a question",
