@@ -4,7 +4,7 @@ name: CI
 
 on:
   pull_request:
-    # edited : relance quand GitHub rebascule une pull request empilée sur main.
+    # edited : relance aussi quand la base d'une pull request change.
     types: [opened, synchronize, reopened, edited]
   push:
     branches: [main]
@@ -22,15 +22,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Installer les dépendances
         run: npm ci
+
+      - name: Vérifier le format
+        run: npm run format:check
 
       - name: Vérifier les types
         run: npm run typecheck

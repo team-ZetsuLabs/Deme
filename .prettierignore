@@ -3,3 +3,4 @@ dev-dist
 docs
 package-lock.json
 src/api/api-types.ts
+CLAUDE.md
