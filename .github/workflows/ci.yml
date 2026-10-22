@@ -4,6 +4,8 @@ name: CI
 
 on:
   pull_request:
+    # edited : relance quand GitHub rebascule une pull request empilée sur main.
+    types: [opened, synchronize, reopened, edited]
   push:
     branches: [main]
 
