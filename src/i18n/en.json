@@ -17,7 +17,10 @@
     "search": "Search",
     "searchPlaceholder": "Search an error, a tag, a technology",
     "login": "Log in",
-    "register": "Sign up"
+    "register": "Sign up",
+    "account": "My account",
+    "points": "Reputation: {{points}} points",
+    "logout": "Log out"
   },
   "theme": {
     "toLight": "Switch to light mode",
@@ -38,7 +41,78 @@
   "errors": {
     "NETWORK_ERROR": "Cannot reach the server. Check your connection.",
     "MOCK_NOT_FOUND": "Sample data for this screen is not available yet.",
-    "UNKNOWN_ERROR": "Something went wrong. Try again in a moment."
+    "UNKNOWN_ERROR": "Something went wrong. Try again in a moment.",
+    "VALIDATION_ERROR": "Some fields need to be fixed.",
+    "INVALID_CREDENTIALS": "Wrong email or password.",
+    "EMAIL_ALREADY_USED": "This address cannot be used. If you already have an account, log in.",
+    "TOO_MANY_ATTEMPTS": "Too many attempts. Try again in 15 minutes.",
+    "ACCOUNT_SUSPENDED": "This account is suspended. Contact the Zetsu team if you think this is a mistake."
+  },
+  "auth": {
+    "browse": "Browse without an account",
+    "tabs": {
+      "label": "Log in or sign up",
+      "login": "Log in",
+      "register": "Sign up"
+    },
+    "login": {
+      "pageTitle": "Log in",
+      "title": "Welcome back",
+      "lead": "Log in to ask questions, vote and follow your reputation.",
+      "submit": "Log in",
+      "busy": "Logging in",
+      "switch": "No account yet?",
+      "switchLink": "Create an account"
+    },
+    "register": {
+      "pageTitle": "Create an account",
+      "title": "Join the community",
+      "lead": "A free account to ask questions, answer, take on challenges and be seen by recruiters.",
+      "submit": "Create my account",
+      "busy": "Creating your account",
+      "switch": "Already have an account?",
+      "switchLink": "Log in",
+      "legal": "By creating an account, you accept the <terms>terms of use</terms> and the <privacy>privacy policy</privacy>."
+    },
+    "oauth": {
+      "github": "Continue with GitHub",
+      "google": "Continue with Google",
+      "githubRegister": "Sign up with GitHub",
+      "googleRegister": "Sign up with Google"
+    },
+    "or": "or with your email address",
+    "fields": {
+      "name": "Full name",
+      "nameHint": "Shown on your profile and next to your answers.",
+      "email": "Email address",
+      "country": "Country",
+      "countryPlaceholder": "Choose a country",
+      "countryHint": "Used to suggest jobs and answers close to you.",
+      "countryOther": "Other country",
+      "password": "Password",
+      "passwordHint": "At least 8 characters, including a digit.",
+      "website": "Leave this field empty",
+      "show": "Show",
+      "hide": "Hide"
+    },
+    "errors": {
+      "nameLength": "Enter your name, between 3 and 40 characters.",
+      "emailInvalid": "Enter a valid email address, for example name@domain.com.",
+      "countryRequired": "Choose your country.",
+      "passwordRule": "The password must be at least 8 characters long and include a digit.",
+      "passwordRequired": "Enter your password."
+    },
+    "aside": {
+      "label": "Platform preview",
+      "title": "The bugs you run into, others have already solved.",
+      "sub": "Ask your question, get an answer validated by the community, earn reputation by helping in turn.",
+      "status": "question solved in 38 min",
+      "questionTitle": "The Orange Money API returns 401 even though the token is generated",
+      "questionBody": "My access token is retrieved, but the payment call fails.",
+      "accepted": "Accepted answer",
+      "answerBody": "The header must be prefixed with Bearer, and the token expires after one hour:",
+      "reputation": "+15 reputation"
+    }
   },
   "questions": {
     "title": "Recent questions",

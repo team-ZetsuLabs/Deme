@@ -1,0 +1,48 @@
+.alert {
+  margin-bottom: var(--s4);
+  padding: var(--s3);
+  border: 1px solid var(--red);
+  border-radius: var(--r-md);
+  background: var(--red-wash);
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.alert:focus {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+.actions {
+  margin-top: var(--s5);
+}
+
+.legal {
+  margin-top: var(--s4);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.legal a {
+  color: var(--text-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Champ piège : invisible pour un humain, rempli par les robots. */
+.trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.oauth {
+  display: grid;
+  gap: var(--s2);
+}
+
+.oauthBtn {
+  min-height: 46px;
+}

@@ -1,0 +1,12 @@
+{
+  "id": 57,
+  "name": "Koffi Mensah",
+  "email": "koffi.mensah@example.com",
+  "country": "TG",
+  "city": null,
+  "photoUrl": null,
+  "reputation": 1,
+  "level": "NEW",
+  "language": "fr",
+  "onboarded": false
+}

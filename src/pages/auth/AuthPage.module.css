@@ -1,0 +1,136 @@
+.auth {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  padding: var(--s5) var(--s7);
+  background: var(--surface);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.topRight {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.form {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  padding: var(--s7) 0;
+}
+
+.form:focus {
+  outline: none;
+}
+
+.title {
+  font-size: var(--fs-3xl);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+}
+
+.lead {
+  margin-top: var(--s2);
+  color: var(--text-2);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: var(--s5) 0;
+  padding: 3px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+
+.tabs a {
+  display: grid;
+  place-items: center;
+  min-height: 36px;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-md);
+  font-weight: 500;
+  color: var(--text-2);
+  transition:
+    background-color var(--t-fast) ease-out,
+    color var(--t-fast) ease-out;
+}
+
+.tabs a:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.tabs a[aria-current='page'] {
+  background: var(--surface-3);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+
+.or {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin: var(--s5) 0;
+  color: var(--text-3);
+  font-size: var(--fs-sm);
+}
+
+.or::before,
+.or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.switch {
+  margin-top: var(--s5);
+  font-size: var(--fs-md);
+  color: var(--text-2);
+}
+
+.switch a {
+  font-weight: 500;
+}
+
+@media (max-width: 959px) {
+  .auth {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .main {
+    padding: var(--s4) var(--s5);
+  }
+}
+
+@media (max-width: 767px) {
+  .main {
+    padding: var(--s3) var(--s4);
+  }
+  .browse {
+    display: none;
+  }
+  .form {
+    padding: var(--s6) 0;
+  }
+  .title {
+    font-size: var(--fs-2xl);
+  }
+  .tabs a {
+    min-height: var(--touch);
+  }
+}

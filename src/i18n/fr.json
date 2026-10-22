@@ -17,7 +17,10 @@
     "search": "Rechercher",
     "searchPlaceholder": "Rechercher une erreur, un tag, une techno",
     "login": "Se connecter",
-    "register": "Créer un compte"
+    "register": "Créer un compte",
+    "account": "Mon compte",
+    "points": "Réputation : {{points}} points",
+    "logout": "Se déconnecter"
   },
   "theme": {
     "toLight": "Passer en mode clair",
@@ -38,7 +41,78 @@
   "errors": {
     "NETWORK_ERROR": "Impossible de joindre le serveur. Vérifiez votre connexion.",
     "MOCK_NOT_FOUND": "Les données d'exemple de cet écran ne sont pas encore disponibles.",
-    "UNKNOWN_ERROR": "Une erreur est survenue. Réessayez dans un instant."
+    "UNKNOWN_ERROR": "Une erreur est survenue. Réessayez dans un instant.",
+    "VALIDATION_ERROR": "Certains champs sont à corriger.",
+    "INVALID_CREDENTIALS": "Email ou mot de passe incorrect.",
+    "EMAIL_ALREADY_USED": "Cette adresse ne peut pas être utilisée. Si vous avez déjà un compte, connectez-vous.",
+    "TOO_MANY_ATTEMPTS": "Trop de tentatives. Réessayez dans 15 minutes.",
+    "ACCOUNT_SUSPENDED": "Ce compte est suspendu. Contactez l'équipe Zetsu si vous pensez que c'est une erreur."
+  },
+  "auth": {
+    "browse": "Parcourir sans compte",
+    "tabs": {
+      "label": "Connexion ou inscription",
+      "login": "Connexion",
+      "register": "Inscription"
+    },
+    "login": {
+      "pageTitle": "Connexion",
+      "title": "Bon retour parmi nous",
+      "lead": "Connectez-vous pour poser vos questions, voter et suivre votre réputation.",
+      "submit": "Se connecter",
+      "busy": "Connexion en cours",
+      "switch": "Pas encore de compte ?",
+      "switchLink": "Créer un compte"
+    },
+    "register": {
+      "pageTitle": "Créer un compte",
+      "title": "Rejoignez la communauté",
+      "lead": "Un compte gratuit pour poser vos questions, répondre, relever les défis et être visible des recruteurs.",
+      "submit": "Créer mon compte",
+      "busy": "Création du compte",
+      "switch": "Déjà inscrit ?",
+      "switchLink": "Se connecter",
+      "legal": "En créant un compte, vous acceptez les <terms>conditions d'utilisation</terms> et la <privacy>politique de confidentialité</privacy>."
+    },
+    "oauth": {
+      "github": "Continuer avec GitHub",
+      "google": "Continuer avec Google",
+      "githubRegister": "S'inscrire avec GitHub",
+      "googleRegister": "S'inscrire avec Google"
+    },
+    "or": "ou avec votre adresse email",
+    "fields": {
+      "name": "Nom complet",
+      "nameHint": "Affiché sur votre profil et à côté de vos réponses.",
+      "email": "Adresse email",
+      "country": "Pays",
+      "countryPlaceholder": "Choisir un pays",
+      "countryHint": "Il sert à vous proposer des offres et des réponses proches de vous.",
+      "countryOther": "Autre pays",
+      "password": "Mot de passe",
+      "passwordHint": "8 caractères minimum, avec au moins un chiffre.",
+      "website": "Ne pas remplir ce champ",
+      "show": "Afficher",
+      "hide": "Masquer"
+    },
+    "errors": {
+      "nameLength": "Entrez votre nom, entre 3 et 40 caractères.",
+      "emailInvalid": "Entrez une adresse email valide, par exemple nom@domaine.com.",
+      "countryRequired": "Choisissez votre pays.",
+      "passwordRule": "Le mot de passe doit faire au moins 8 caractères, avec au moins un chiffre.",
+      "passwordRequired": "Entrez votre mot de passe."
+    },
+    "aside": {
+      "label": "Aperçu de la plateforme",
+      "title": "Les bugs que vous rencontrez, d'autres les ont déjà résolus.",
+      "sub": "Posez votre question, recevez une réponse validée par la communauté, gagnez de la réputation en aidant à votre tour.",
+      "status": "question résolue en 38 min",
+      "questionTitle": "L'API Orange Money renvoie 401 alors que le token est généré",
+      "questionBody": "Mon token d'accès est bien récupéré, mais l'appel de paiement échoue.",
+      "accepted": "Réponse acceptée",
+      "answerBody": "Le header doit être préfixé par Bearer, et le token expire après une heure :",
+      "reputation": "+15 réputation"
+    }
   },
   "questions": {
     "title": "Questions récentes",
