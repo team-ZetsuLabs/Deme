@@ -42,7 +42,8 @@
       "prev": "Previous page",
       "next": "Next page",
       "status": "Page {{page}} of {{pages}}"
-    }
+    },
+    "close": "Close"
   },
   "errors": {
     "NETWORK_ERROR": "Cannot reach the server. Check your connection.",
@@ -52,7 +53,8 @@
     "INVALID_CREDENTIALS": "Wrong email or password.",
     "EMAIL_ALREADY_USED": "This address cannot be used. If you already have an account, log in.",
     "TOO_MANY_ATTEMPTS": "Too many attempts. Try again in 15 minutes.",
-    "ACCOUNT_SUSPENDED": "This account is suspended. Contact the Zetsu team if you think this is a mistake."
+    "ACCOUNT_SUSPENDED": "This account is suspended. Contact the Zetsu team if you think this is a mistake.",
+    "ALREADY_REPORTED": "You already reported this content."
   },
   "auth": {
     "browse": "Browse without an account",
@@ -278,5 +280,25 @@
     "submit": "Let's go",
     "busy": "Saving",
     "later": "Later"
+  },
+  "report": {
+    "button": "Report",
+    "title": "Report this content",
+    "lead": "Reports are handled by community Referents. After 5 reports from different members, the content is hidden until they decide.",
+    "reasonLegend": "Reason",
+    "reasons": {
+      "SPAM": "Spam or advertising",
+      "OFFENSIVE": "Offensive language",
+      "OFF_TOPIC": "Off topic",
+      "IMPERSONATION": "Impersonation",
+      "FRAUD": "Fraudulent offer"
+    },
+    "comment": "Details",
+    "commentHint": "300 characters at most.",
+    "submit": "Send the report",
+    "busy": "Sending",
+    "sent": "Report sent. Thank you for your vigilance.",
+    "level": "You need 50 reputation points (Member level) to report.",
+    "reasonRequired": "Choose a reason."
   }
 }
