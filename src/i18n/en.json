@@ -258,7 +258,36 @@
       "tagsCount": "Enter between 1 and 4 tags.",
       "tagFormat": "A tag only contains lowercase letters, digits, hyphens or dots."
     },
-    "posted": "Question posted"
+    "posted": "Question posted",
+    "ai": {
+      "title": "Writing assistant",
+      "lead": "It suggests a clearer title, tags and the detected context, and points out what is missing. Nothing changes without your approval.",
+      "needText": "Write the title and a few details first (at least {{min}} characters) to start the assistant.",
+      "button": "Improve with AI",
+      "again": "Analyse again",
+      "busy": "Analysing",
+      "label": "AI-generated suggestions, please check them",
+      "nothing": "Your question is already clear, nothing to suggest.",
+      "titleSuggestion": "Clearer title",
+      "tagsSuggestion": "Tags",
+      "newTag": "new",
+      "contextSuggestion": "Detected context",
+      "missingTitle": "You may be missing",
+      "missing": {
+        "ERROR_MESSAGE": "The exact error message, copied as is.",
+        "TECH_VERSION": "The version of the technology or library.",
+        "CODE": "The piece of code that causes the problem.",
+        "STEPS_TRIED": "What you have already tried.",
+        "EXPECTED_RESULT": "The expected result and the one you got."
+      },
+      "apply": "Apply",
+      "ignore": "Ignore",
+      "appliedTitle": "Title replaced with the suggestion.",
+      "appliedTags": "Tags replaced with the suggestion.",
+      "appliedContext": "Context added to the question.",
+      "unavailable": "The assistant is not responding right now. You can still post your question.",
+      "rateLimited": "You have used the assistant 10 times this hour. You can still post your question."
+    }
   },
   "notFound": {
     "title": "This page does not exist",

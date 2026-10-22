@@ -13,6 +13,7 @@ import { useValidatedForm, type Validators } from '../../hooks/useValidatedForm'
 import { countryOptions, OTHER_COUNTRY } from '../../i18n/countries';
 import { fieldErrorText } from '../../hooks/fieldErrorText';
 import { useSubmitError } from '../../hooks/useSubmitError';
+import { AiAssist } from './AiAssist';
 import { NETWORKS, OPERATORS } from './context';
 import { questionsApi } from './questionsApi';
 import { parseTags, TITLE_MAX, validateBody, validateTags, validateTitle } from './validation';
@@ -54,6 +55,12 @@ export function AskForm({ initialTitle, defaultCountry, onPosted }: AskFormProps
   const [techVersion, setTechVersion] = useState('');
   const countries = useMemo(() => countryOptions(i18n.language), [i18n.language]);
   const { values, errors } = form;
+  const context = {
+    country: country || null,
+    operator: operator || null,
+    network: network || null,
+    techVersion: techVersion.trim() || null,
+  };
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -70,12 +77,7 @@ export function AskForm({ initialTitle, defaultCountry, onPosted }: AskFormProps
         body: values.body.trim(),
         code: code.trim() || null,
         tags: parseTags(values.tags),
-        context: {
-          country: country || null,
-          operator: operator || null,
-          network: network || null,
-          techVersion: techVersion.trim() || null,
-        },
+        context,
       });
       onPosted(question);
     } catch (error) {
@@ -154,6 +156,22 @@ export function AskForm({ initialTitle, defaultCountry, onPosted }: AskFormProps
           onChange={(e) => setCode(e.target.value)}
         />
       </Field>
+
+      <AiAssist
+        title={values.title}
+        body={values.body}
+        code={code}
+        tags={values.tags}
+        context={context}
+        onApplyTitle={(title) => form.setValue('title', title)}
+        onApplyTags={(tags) => form.setValue('tags', tags.join(', '))}
+        onApplyContext={(detected) => {
+          if (detected.country) setCountry(detected.country);
+          if (detected.operator) setOperator(detected.operator);
+          if (detected.network) setNetwork(detected.network);
+          if (detected.techVersion) setTechVersion(detected.techVersion);
+        }}
+      />
 
       <Field
         id={IDS.tags}

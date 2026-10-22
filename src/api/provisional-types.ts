@@ -166,6 +166,28 @@ export type QuestionDetail = {
   hidden?: HiddenState | null;
 };
 
+/** Information qui manque à une question, repérée par l'assistant (IA-1). */
+export type MissingInfo =
+  'ERROR_MESSAGE' | 'TECH_VERSION' | 'CODE' | 'STEPS_TRIED' | 'EXPECTED_RESULT';
+
+/**
+ * POST /api/v1/ai/question-assist (IA-1). Seul le texte de la question est envoyé :
+ * ni nom, ni email, ni identifiant. 429 AI_RATE_LIMITED (10 appels par heure),
+ * 503 AI_UNAVAILABLE si le fournisseur ne répond pas.
+ */
+export type QuestionAssistRequest = {
+  title: string;
+  body: string;
+  code: string | null;
+};
+
+export type QuestionAssist = {
+  title: string | null; // null si le titre est déjà clair
+  tags: { name: string; isNew: boolean }[]; // 1 à 4 ; isNew : le tag n'existe pas encore sur Zetsu
+  context: QuestionContext; // contexte africain détecté, null pour ce qui n'est pas détecté
+  missing: MissingInfo[];
+};
+
 /** POST /api/v1/questions */
 export type QuestionRequest = {
   title: string;

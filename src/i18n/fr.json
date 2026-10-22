@@ -258,7 +258,36 @@
       "tagsCount": "Indiquez entre 1 et 4 tags.",
       "tagFormat": "Un tag ne contient que des lettres minuscules, des chiffres, des tirets ou des points."
     },
-    "posted": "Question publiée"
+    "posted": "Question publiée",
+    "ai": {
+      "title": "Assistant de rédaction",
+      "lead": "Il propose un titre plus clair, des tags et le contexte détecté, et signale ce qui manque. Rien ne change sans votre accord.",
+      "needText": "Écrivez d'abord le titre et quelques détails ({{min}} caractères au moins) pour lancer l'assistant.",
+      "button": "Améliorer avec l'IA",
+      "again": "Analyser à nouveau",
+      "busy": "Analyse en cours",
+      "label": "Suggestions générées par l'IA, à vérifier",
+      "nothing": "Votre question est déjà claire, rien à suggérer.",
+      "titleSuggestion": "Titre plus clair",
+      "tagsSuggestion": "Tags",
+      "newTag": "nouveau",
+      "contextSuggestion": "Contexte détecté",
+      "missingTitle": "Il manque peut-être",
+      "missing": {
+        "ERROR_MESSAGE": "Le message d'erreur exact, copié tel quel.",
+        "TECH_VERSION": "La version de la technologie ou de la bibliothèque.",
+        "CODE": "Le morceau de code qui pose problème.",
+        "STEPS_TRIED": "Ce que vous avez déjà essayé.",
+        "EXPECTED_RESULT": "Le résultat attendu et celui obtenu."
+      },
+      "apply": "Appliquer",
+      "ignore": "Ignorer",
+      "appliedTitle": "Titre remplacé par la suggestion.",
+      "appliedTags": "Tags remplacés par la suggestion.",
+      "appliedContext": "Contexte ajouté à la question.",
+      "unavailable": "L'assistant ne répond pas pour le moment. Vous pouvez publier votre question normalement.",
+      "rateLimited": "Vous avez utilisé l'assistant 10 fois cette heure. Vous pouvez publier votre question normalement."
+    }
   },
   "notFound": {
     "title": "Cette page n'existe pas",
