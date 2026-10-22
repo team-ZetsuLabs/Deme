@@ -287,6 +287,14 @@
       "appliedContext": "Context added to the question.",
       "unavailable": "The assistant is not responding right now. You can still post your question.",
       "rateLimited": "You have used the assistant 10 times this hour. You can still post your question."
+    },
+    "similar": {
+      "title": "Similar questions",
+      "lead": "Your answer may already exist. Check before posting.",
+      "loading": "Looking for similar questions",
+      "empty": "No similar question: yours may be new.",
+      "error": "Similar questions are not available right now.",
+      "newTab": "(opens in a new tab)"
     }
   },
   "notFound": {

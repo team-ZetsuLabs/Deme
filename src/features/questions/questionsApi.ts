@@ -40,6 +40,9 @@ export const questionsApi = {
         size: PAGE_SIZE,
       },
     }),
+  /** Recherche plein texte courte, pour les questions similaires (QA-8). */
+  search: (q: string, size: number, signal?: AbortSignal) =>
+    api.get<Page<QuestionSummary>>('/questions', { query: { q, page: 0, size }, signal }),
   get: (id: number) => api.get<QuestionDetail>(`/questions/${id}`),
   create: (body: QuestionRequest) => api.post<QuestionDetail>('/questions', body),
   answer: (questionId: number, body: AnswerRequest) =>

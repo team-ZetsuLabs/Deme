@@ -14,6 +14,7 @@ import { countryOptions, OTHER_COUNTRY } from '../../i18n/countries';
 import { fieldErrorText } from '../../hooks/fieldErrorText';
 import { useSubmitError } from '../../hooks/useSubmitError';
 import { AiAssist } from './AiAssist';
+import { SimilarQuestions } from './SimilarQuestions';
 import { NETWORKS, OPERATORS } from './context';
 import { questionsApi } from './questionsApi';
 import { parseTags, TITLE_MAX, validateBody, validateTags, validateTitle } from './validation';
@@ -120,6 +121,8 @@ export function AskForm({ initialTitle, defaultCountry, onPosted }: AskFormProps
           aria-describedby={describedBy(IDS.title, true, titleError)}
         />
       </Field>
+
+      <SimilarQuestions title={values.title} />
 
       <Field
         id={IDS.body}

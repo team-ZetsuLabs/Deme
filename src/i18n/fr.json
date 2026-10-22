@@ -287,6 +287,14 @@
       "appliedContext": "Contexte ajouté à la question.",
       "unavailable": "L'assistant ne répond pas pour le moment. Vous pouvez publier votre question normalement.",
       "rateLimited": "Vous avez utilisé l'assistant 10 fois cette heure. Vous pouvez publier votre question normalement."
+    },
+    "similar": {
+      "title": "Questions similaires",
+      "lead": "Votre réponse existe peut-être déjà. Vérifiez avant de publier.",
+      "loading": "Recherche des questions similaires",
+      "empty": "Aucune question similaire : la vôtre est peut-être nouvelle.",
+      "error": "Les questions similaires ne sont pas disponibles pour le moment.",
+      "newTab": "(s'ouvre dans un nouvel onglet)"
     }
   },
   "notFound": {
