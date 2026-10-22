@@ -7,6 +7,7 @@ import { useSession } from '../features/auth/useSession';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { Logo } from './Logo';
 import { ThemeToggle } from './ThemeToggle';
+import { NotificationBell } from './NotificationBell';
 import { UserMenu } from './UserMenu';
 import styles from './Topbar.module.css';
 
@@ -60,8 +61,12 @@ export function Topbar() {
           </kbd>
         </form>
         <div className={styles.right}>
-          <LanguageSwitcher />
+          {/* Connecté, la langue se règle dans les paramètres : on gagne de la place sur mobile. */}
+          <div className={user ? styles.langSignedIn : undefined}>
+            <LanguageSwitcher />
+          </div>
           <ThemeToggle />
+          {user && <NotificationBell />}
           {user && <UserMenu user={user} />}
           {status === 'anonymous' && (
             <>

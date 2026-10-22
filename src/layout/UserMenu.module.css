@@ -89,7 +89,11 @@
   .chip {
     min-height: var(--touch);
   }
-  .name {
+  .chip {
+    padding-right: 5px;
+  }
+  .name,
+  .points {
     display: none;
   }
   .item {
