@@ -10,14 +10,17 @@ import '@fontsource/geist-mono/latin-500.css';
 import '@fontsource/geist-mono/latin-600.css';
 import './styles/tokens.css';
 import './styles/base.css';
-import './i18n';
+import { i18nReady } from './i18n';
 import { App } from './App';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Élément #root introuvable');
 
-createRoot(root).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+// Pour un visiteur anglophone, on attend le fichier anglais : pas de flash de texte français.
+void i18nReady.finally(() =>
+  createRoot(root).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  ),
 );

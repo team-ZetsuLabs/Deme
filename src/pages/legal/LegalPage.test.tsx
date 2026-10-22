@@ -1,7 +1,7 @@
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import i18n from '../../i18n';
+import i18n, { loadLanguage } from '../../i18n';
 import LegalPage from './LegalPage';
 
 beforeAll(async () => {
@@ -27,6 +27,7 @@ describe('LegalPage', () => {
   });
 
   it('a les mêmes sections en français et en anglais', async () => {
+    await loadLanguage('en');
     for (const doc of ['rules', 'terms', 'privacy'] as const) {
       const fr = i18n.getFixedT('fr')(`legal.${doc}.sections`, { returnObjects: true });
       const en = i18n.getFixedT('en')(`legal.${doc}.sections`, { returnObjects: true });
