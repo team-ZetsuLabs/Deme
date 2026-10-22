@@ -61,6 +61,16 @@ export const OTHER_COUNTRY = 'OTHER';
 
 export type CountryOption = { code: string; name: string };
 
+/** Nom du pays dans la langue de l'interface. Renvoie null pour « Autre » ou un code inconnu. */
+export function countryName(code: string | null, language: string): string | null {
+  if (!code || code === OTHER_COUNTRY) return null;
+  try {
+    return new Intl.DisplayNames([language], { type: 'region' }).of(code) ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export function countryOptions(language: string): CountryOption[] {
   const names = new Intl.DisplayNames([language], { type: 'region' });
   return AFRICAN_COUNTRIES.map((code) => ({ code, name: names.of(code) ?? code })).sort((a, b) =>

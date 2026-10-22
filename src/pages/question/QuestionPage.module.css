@@ -1,0 +1,137 @@
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+  margin-bottom: var(--s4);
+  font-size: var(--fs-md);
+  color: var(--text-3);
+}
+
+.crumbs a {
+  color: var(--text-2);
+}
+
+.crumbs span[aria-hidden] {
+  color: var(--line-strong);
+}
+
+.panel {
+  padding: 0 var(--s5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--s3) var(--s4);
+  padding-top: var(--s5);
+}
+
+.title {
+  flex: 1 1 320px;
+  min-width: 0;
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: var(--lh-tight);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2) var(--s4);
+  margin-top: var(--s3);
+  font-size: var(--fs-md);
+  color: var(--text-3);
+}
+
+.meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+}
+
+.context {
+  padding: var(--s3) 0 var(--s4);
+  border-bottom: 1px solid var(--line);
+}
+
+.context:empty {
+  padding: 0 0 var(--s4);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  font-family: var(--f-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+}
+
+.tag:hover {
+  border-color: var(--line-strong);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s3);
+  margin: var(--s5) 0 var(--s3);
+}
+
+.sectionTitle {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.answerBox {
+  margin-top: var(--s5);
+  padding: var(--s5);
+}
+
+.loginText {
+  margin: var(--s2) 0 var(--s4);
+  color: var(--text-3);
+}
+
+@media (max-width: 767px) {
+  .panel {
+    padding: 0 var(--s4);
+  }
+  .head {
+    padding-top: var(--s4);
+  }
+  .title {
+    font-size: var(--fs-xl);
+  }
+  .answerBox {
+    padding: var(--s4);
+  }
+  .tag {
+    min-height: 36px;
+  }
+}

@@ -1,0 +1,49 @@
+.region {
+  position: fixed;
+  left: 50%;
+  bottom: var(--s5);
+  z-index: var(--z-toast);
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 2 * var(--s4));
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: 10px var(--s4);
+  background: var(--text);
+  color: var(--bg);
+  border-radius: var(--r-md);
+  font-size: var(--fs-md);
+  font-weight: 500;
+  box-shadow: var(--shadow);
+  animation: rise var(--t-base) ease-out;
+}
+
+.toast::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .region {
+    bottom: calc(var(--tabbar-h) + var(--s3));
+  }
+}

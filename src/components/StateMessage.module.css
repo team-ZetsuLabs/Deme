@@ -1,0 +1,9 @@
+.box {
+  padding: var(--s7) var(--s5);
+  text-align: center;
+  color: var(--text-2);
+}
+
+.action {
+  margin-top: var(--s4);
+}

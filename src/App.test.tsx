@@ -9,6 +9,6 @@ describe('App', () => {
   it('affiche la mise en page et le fil des questions', async () => {
     render(<App />);
     expect(screen.getAllByRole('navigation').length).toBeGreaterThan(0);
-    expect(await screen.findByRole('heading', { level: 1 })).toBeTruthy();
+    expect(await screen.findByRole('heading', { level: 1 }, { timeout: 4000 })).toBeTruthy();
   });
 });

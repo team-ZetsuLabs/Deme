@@ -1,0 +1,17 @@
+{
+  "id": 501,
+  "bodyHtml": "<p>Réponse publiée en mode mock : l'API renvoie toujours ce contenu fixe.</p>",
+  "code": null,
+  "author": {
+    "id": 9,
+    "name": "Aminata Ouédraogo",
+    "photoUrl": null,
+    "country": "BF",
+    "city": "Ouagadougou",
+    "reputation": 42
+  },
+  "createdAt": "2026-10-21T16:05:00Z",
+  "votes": 0,
+  "voted": false,
+  "accepted": false
+}
