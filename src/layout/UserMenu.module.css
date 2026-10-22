@@ -72,6 +72,13 @@
 
 .item:hover {
   background: var(--surface-2);
+  text-decoration: none;
+}
+
+.sep {
+  margin: 6px 0;
+  border: none;
+  border-top: 1px solid var(--line);
 }
 
 .item svg {

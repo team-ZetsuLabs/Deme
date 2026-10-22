@@ -1,10 +1,11 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { Me } from '../api/provisional-types';
 import { Avatar } from '../components/Avatar';
 import { Icon } from '../components/Icon';
 import { useSession } from '../features/auth/useSession';
+import { ACCOUNT_LINKS } from './navItems';
 import styles from './UserMenu.module.css';
 
 export type UserMenuProps = { user: Me };
@@ -67,6 +68,18 @@ export function UserMenu({ user }: UserMenuProps) {
           <b>{user.name}</b>
           <span>{t('topbar.points', { points })}</span>
         </div>
+        {ACCOUNT_LINKS.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to === '/users/me' ? `/users/${user.id}` : item.to}
+            className={styles.item}
+            onClick={() => setOpen(false)}
+          >
+            <Icon name={item.icon} />
+            {t(item.labelKey)}
+          </Link>
+        ))}
+        <hr className={styles.sep} />
         <button type="button" className={styles.item} onClick={onLogout}>
           <Icon name="out" />
           {t('topbar.logout')}

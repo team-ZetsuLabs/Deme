@@ -11,7 +11,11 @@
     "jobs": "Emploi",
     "missions": "Missions",
     "challenges": "Défis",
-    "account": "Compte"
+    "account": "Compte",
+    "profile": "Mon profil",
+    "settings": "Paramètres",
+    "notifications": "Notifications",
+    "myAccount": "Mon compte"
   },
   "topbar": {
     "search": "Rechercher",
@@ -300,5 +304,68 @@
     "sent": "Signalement envoyé. Merci de votre vigilance.",
     "level": "Il faut 50 points de réputation (niveau Membre) pour signaler.",
     "reasonRequired": "Choisissez un motif."
+  },
+  "profile": {
+    "pageTitle": "Profil",
+    "edit": "Modifier le profil",
+    "recruiterVisible": "Visible par les recruteurs",
+    "joined": "Membre depuis {{date}}",
+    "sections": "Sections du profil",
+    "tabs": {
+      "activity": "Activité",
+      "skills": "Compétences",
+      "badges": "Badges"
+    },
+    "stats": {
+      "reputation": "réputation",
+      "answers": "réponses",
+      "accepted": "acceptées",
+      "questions": "questions"
+    },
+    "nextLevel": "Encore {{points}} points avant le niveau {{level}}",
+    "progressLabel": "Progression vers le niveau suivant",
+    "activity": {
+      "QUESTION": "Question",
+      "ANSWER": "Réponse",
+      "ACCEPTED_ANSWER": "Réponse acceptée",
+      "CHALLENGE": "Défi"
+    },
+    "empty": "Aucune activité pour le moment.",
+    "emptyMine": "Vous n'avez encore rien publié. Votre première question vous rapporte 5 points.",
+    "skillsHint": "Technologies déclarées. Un clic affiche les questions sur ce sujet.",
+    "noSkills": "Aucune technologie déclarée pour le moment.",
+    "badgeLocked": "Pas encore obtenu."
+  },
+  "levels": {
+    "NEW": "Nouveau",
+    "MEMBER": "Membre",
+    "CONTRIBUTOR": "Contributeur",
+    "REFERENT": "Référent"
+  },
+  "badges": {
+    "FIRST_STEP": {
+      "name": "Premier pas",
+      "desc": "Poser sa première question."
+    },
+    "HELPER": {
+      "name": "Entraide",
+      "desc": "Recevoir 10 votes sur ses réponses."
+    },
+    "SOLVER": {
+      "name": "Résolveur",
+      "desc": "Avoir 5 réponses acceptées."
+    },
+    "CHALLENGER": {
+      "name": "Challenger",
+      "desc": "Soumettre un défi."
+    },
+    "POLYGLOT": {
+      "name": "Polyglotte",
+      "desc": "Répondre dans 5 tags différents."
+    },
+    "LOCAL_HELP": {
+      "name": "Aide locale",
+      "desc": "Répondre à des questions de son propre pays."
+    }
   }
 }
