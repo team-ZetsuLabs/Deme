@@ -76,6 +76,29 @@
       "votes": 1,
       "voted": false,
       "accepted": false
+    },
+    {
+      "id": 14,
+      "body": "Chez nous, on a laissé tomber Orange Money pour l'API de Wave, beaucoup plus simple à intégrer. Je conseille de migrer.",
+      "bodyHtml": "<p>Chez nous, on a laissé tomber Orange Money pour l'API de Wave, beaucoup plus simple à intégrer. Je conseille de migrer.</p>",
+      "code": null,
+      "author": {
+        "id": 9,
+        "name": "Aminata Ouédraogo",
+        "photoUrl": null,
+        "country": "BF",
+        "city": "Ouagadougou",
+        "reputation": 120
+      },
+      "createdAt": "2026-10-21T10:20:00Z",
+      "votes": 0,
+      "voted": false,
+      "accepted": false,
+      "hidden": {
+        "by": "REFERENT",
+        "reason": "OFF_TOPIC",
+        "appeal": "NONE"
+      }
     }
   ]
 }

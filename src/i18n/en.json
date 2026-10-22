@@ -64,7 +64,8 @@
     "TOO_MANY_ATTEMPTS": "Too many attempts. Try again in 15 minutes.",
     "ACCOUNT_SUSPENDED": "This account is suspended. Contact the Zetsu team if you think this is a mistake.",
     "ALREADY_REPORTED": "You already reported this content.",
-    "ALREADY_SUBMITTED": "You already submitted a repository for this challenge."
+    "ALREADY_SUBMITTED": "You already submitted a repository for this challenge.",
+    "ALREADY_APPEALED": "You have already appealed this decision."
   },
   "auth": {
     "browse": "Browse without an account",
@@ -310,6 +311,25 @@
     "sent": "Report sent. Thank you for your vigilance.",
     "level": "You need 50 reputation points (Member level) to report.",
     "reasonRequired": "Choose a reason."
+  },
+  "hidden": {
+    "title": "Hidden content",
+    "byReports": "This content was hidden after 5 reports from different members, until a Referent reviews it.",
+    "byReferent": "A Referent hid this content.",
+    "byReferentReason": "A Referent hid this content for the reason “{{reason}}”.",
+    "onlyYou": "Only you can see it.",
+    "appeal": "Appeal the decision",
+    "rules": "Read the rules",
+    "pending": "Appeal sent: the Zetsu team is reviewing it.",
+    "rejected": "The team reviewed your appeal and upheld the decision.",
+    "dialogTitle": "Appeal the decision",
+    "dialogLead": "Your appeal is reviewed by the Zetsu team, not by the Referent who made the decision. Explain why this content follows the rules.",
+    "message": "Your explanation",
+    "messageHint": "Between {{min}} and {{max}} characters.",
+    "messageLength": "Please write at least {{min}} characters.",
+    "submit": "Send the appeal",
+    "busy": "Sending",
+    "sent": "Appeal sent. You will be notified of the decision."
   },
   "profile": {
     "pageTitle": "Profile",

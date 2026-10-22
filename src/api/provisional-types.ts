@@ -146,6 +146,7 @@ export type Answer = {
   votes: number;
   voted: boolean; // le membre connecté a voté
   accepted: boolean;
+  hidden?: HiddenState | null;
 };
 
 /** GET /api/v1/questions/{id} */
@@ -162,6 +163,7 @@ export type QuestionDetail = {
   votes: number;
   voted: boolean;
   answers: Answer[];
+  hidden?: HiddenState | null;
 };
 
 /** POST /api/v1/questions */
@@ -188,6 +190,23 @@ export type ReportRequest = {
   targetId: number;
   reason: ReportReason;
   comment: string | null;
+};
+
+/**
+ * Contenu masqué (MOD-2 et MOD-3). Le serveur n'envoie un contenu masqué qu'à son auteur,
+ * avec ce champ rempli ; pour tous les autres, le contenu n'apparaît pas.
+ */
+export type HiddenState = {
+  by: 'REPORTS' | 'REFERENT'; // 5 signalements (MOD-2) ou décision d'un Référent (MOD-3)
+  reason: ReportReason | null; // motif retenu, null pour un masquage automatique
+  appeal: 'NONE' | 'PENDING' | 'REJECTED'; // contestation devant l'équipe
+};
+
+/** POST /api/v1/appeals (MOD-3). 409 ALREADY_APPEALED si une contestation existe déjà. */
+export type AppealRequest = {
+  targetType: ReportTargetType;
+  targetId: number;
+  message: string; // 20 à 500 caractères
 };
 
 export type NotificationType =

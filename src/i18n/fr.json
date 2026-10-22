@@ -64,7 +64,8 @@
     "TOO_MANY_ATTEMPTS": "Trop de tentatives. Réessayez dans 15 minutes.",
     "ACCOUNT_SUSPENDED": "Ce compte est suspendu. Contactez l'équipe Zetsu si vous pensez que c'est une erreur.",
     "ALREADY_REPORTED": "Vous avez déjà signalé ce contenu.",
-    "ALREADY_SUBMITTED": "Vous avez déjà soumis un dépôt pour ce défi."
+    "ALREADY_SUBMITTED": "Vous avez déjà soumis un dépôt pour ce défi.",
+    "ALREADY_APPEALED": "Vous avez déjà contesté cette décision."
   },
   "auth": {
     "browse": "Parcourir sans compte",
@@ -310,6 +311,25 @@
     "sent": "Signalement envoyé. Merci de votre vigilance.",
     "level": "Il faut 50 points de réputation (niveau Membre) pour signaler.",
     "reasonRequired": "Choisissez un motif."
+  },
+  "hidden": {
+    "title": "Contenu masqué",
+    "byReports": "Ce contenu a été masqué après 5 signalements de membres différents, en attendant la décision d'un Référent.",
+    "byReferent": "Un Référent a masqué ce contenu.",
+    "byReferentReason": "Un Référent a masqué ce contenu pour le motif « {{reason}} ».",
+    "onlyYou": "Vous êtes seul à le voir.",
+    "appeal": "Contester la décision",
+    "rules": "Relire les règles",
+    "pending": "Contestation envoyée : l'équipe Zetsu l'examine.",
+    "rejected": "L'équipe a examiné votre contestation et maintenu la décision.",
+    "dialogTitle": "Contester la décision",
+    "dialogLead": "Votre contestation est examinée par l'équipe Zetsu, pas par le Référent qui a pris la décision. Expliquez pourquoi ce contenu respecte les règles.",
+    "message": "Votre explication",
+    "messageHint": "Entre {{min}} et {{max}} caractères.",
+    "messageLength": "Expliquez en {{min}} caractères au moins.",
+    "submit": "Envoyer la contestation",
+    "busy": "Envoi en cours",
+    "sent": "Contestation envoyée. Vous serez notifié de la décision."
   },
   "profile": {
     "pageTitle": "Profil",

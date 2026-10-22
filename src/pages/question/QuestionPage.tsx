@@ -20,6 +20,7 @@ import { AuthorCard } from '../../features/questions/AuthorCard';
 import { ContextChips } from '../../features/questions/ContextChips';
 import { questionsApi } from '../../features/questions/questionsApi';
 import { VoteControl } from '../../features/questions/VoteControl';
+import { HiddenNotice } from '../../features/moderation/HiddenNotice';
 import { ReportButton } from '../../features/moderation/ReportButton';
 import detail from '../../features/questions/QuestionDetail.module.css';
 import { useApiQuery } from '../../hooks/useApiQuery';
@@ -58,13 +59,24 @@ function QuestionView({ id }: { id: number }) {
   const q = query.data;
   usePageTitle(q?.title ?? t('question.crumbQuestion'));
 
-  const answers = useMemo(() => (q ? sortAnswers(q.answers, sort) : []), [q, sort]);
+  // Un contenu masqué n'est visible que par son auteur (MOD-2) : le serveur filtre déjà, on reste prudent.
+  const answers = useMemo(
+    () =>
+      q
+        ? sortAnswers(
+            q.answers.filter((a) => !a.hidden || a.author.id === user?.id),
+            sort,
+          )
+        : [],
+    [q, sort, user?.id],
+  );
 
   if (query.loading) return <QuestionDetailSkeleton />;
   if (query.error instanceof ApiError && query.error.status === 404) return <NotFoundPage />;
   if (query.error || !q) return <ErrorState error={query.error} onRetry={query.reload} />;
 
   const isAuthor = user?.id === q.author.id;
+  if (q.hidden && !isAuthor) return <NotFoundPage />;
 
   const updateAnswer = (answerId: number, change: Partial<Answer>) =>
     query.setData((current) => ({
@@ -141,6 +153,14 @@ function QuestionView({ id }: { id: number }) {
             />
           </div>
           <div className={detail.content}>
+            {q.hidden && (
+              <HiddenNotice
+                targetType="QUESTION"
+                targetId={q.id}
+                hidden={q.hidden}
+                onAppealed={(hidden) => query.setData((c) => ({ ...c, hidden }))}
+              />
+            )}
             <MemberContent html={q.bodyHtml} />
             {q.code && <CodeBlock code={q.code} />}
             <div className={detail.foot}>

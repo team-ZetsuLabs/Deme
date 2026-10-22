@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import i18n from '../../i18n';
 import { ToastProvider } from '../../components/ToastProvider';
 import { authApi } from '../auth/authApi';
+import { appealsApi } from '../moderation/appealsApi';
 import { SessionProvider } from '../auth/SessionProvider';
 import QuestionPage from '../../pages/question/QuestionPage';
 import { AskForm } from './AskForm';
@@ -165,5 +166,62 @@ describe('QuestionPage', () => {
     expect(document.getElementById('answer-12')?.textContent).toContain(
       'Même pays que la question',
     );
+  });
+});
+
+describe('QuestionPage, contenu masqué (MOD-2, MOD-3)', () => {
+  const page = () =>
+    wrap(
+      <Routes>
+        <Route path="/questions/:id" element={<QuestionPage />} />
+      </Routes>,
+      '/questions/1',
+    );
+
+  it('ne montre pas une réponse masquée aux autres membres', async () => {
+    page();
+    expect(await screen.findByRole('heading', { level: 1 })).toBeTruthy();
+    expect(document.getElementById('answer-14')).toBeNull();
+  });
+
+  it('la montre à son auteur avec un avis, et lui permet de contester', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue({
+      id: 9,
+      name: 'Aminata Ouédraogo',
+      email: 'aminata.ouedraogo@example.com',
+      country: 'BF',
+      city: 'Ouagadougou',
+      photoUrl: null,
+      reputation: 120,
+      level: 'MEMBER',
+      language: 'fr',
+      skills: [],
+      bio: null,
+      recruiterVisible: false,
+      providers: [],
+      hasPassword: true,
+      onboarded: true,
+    });
+    const create = vi.spyOn(appealsApi, 'create');
+    page();
+
+    const notice = await screen.findByRole('note');
+    expect(notice.textContent).toContain('Hors sujet');
+    expect(notice.textContent).toContain('Vous êtes seul à le voir.');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Contester la décision' }));
+    const textarea = screen.getByLabelText('Votre explication');
+    fireEvent.change(textarea, { target: { value: 'Trop court' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Envoyer la contestation' }));
+    expect(await screen.findByText(/20 caractères au moins/)).toBeTruthy();
+    expect(create).not.toHaveBeenCalled();
+
+    const message = "Ma réponse propose une autre solution de paiement, c'est une piste utile.";
+    fireEvent.change(textarea, { target: { value: message } });
+    fireEvent.click(screen.getByRole('button', { name: 'Envoyer la contestation' }));
+    await waitFor(() =>
+      expect(create).toHaveBeenCalledWith({ targetType: 'ANSWER', targetId: 14, message }),
+    );
+    expect(await screen.findByText(/l'équipe Zetsu l'examine/)).toBeTruthy();
   });
 });
