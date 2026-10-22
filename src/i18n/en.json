@@ -1,0 +1,52 @@
+{
+  "app": {
+    "name": "Zetsu",
+    "home": "Zetsu, home",
+    "skipToContent": "Skip to content"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "spaces": "Spaces",
+    "questions": "Help",
+    "jobs": "Jobs",
+    "missions": "Gigs",
+    "challenges": "Challenges",
+    "account": "Account"
+  },
+  "topbar": {
+    "search": "Search",
+    "searchPlaceholder": "Search an error, a tag, a technology",
+    "login": "Log in",
+    "register": "Sign up"
+  },
+  "theme": {
+    "toLight": "Switch to light mode",
+    "toDark": "Switch to dark mode"
+  },
+  "language": {
+    "label": "Interface language",
+    "fr": "Français",
+    "en": "English"
+  },
+  "network": {
+    "offline": "You are offline. Questions you already viewed are still readable."
+  },
+  "common": {
+    "loading": "Loading",
+    "retry": "Try again"
+  },
+  "errors": {
+    "NETWORK_ERROR": "Cannot reach the server. Check your connection.",
+    "MOCK_NOT_FOUND": "Sample data for this screen is not available yet.",
+    "UNKNOWN_ERROR": "Something went wrong. Try again in a moment."
+  },
+  "questions": {
+    "title": "Recent questions",
+    "lead": "Describe the error. Developers from Dakar to Nairobi may have already run into it."
+  },
+  "notFound": {
+    "title": "This page does not exist",
+    "text": "The link may be incomplete, or the page was removed.",
+    "back": "Back to questions"
+  }
+}
