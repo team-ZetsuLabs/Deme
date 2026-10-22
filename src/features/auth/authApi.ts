@@ -1,7 +1,13 @@
 import { api } from '../../api/api';
-import type { LoginRequest, Me, MeUpdate, RegisterRequest } from '../../api/provisional-types';
+import type {
+  LoginRequest,
+  Me,
+  MeUpdate,
+  OAuthProviderId,
+  RegisterRequest,
+} from '../../api/provisional-types';
 
-export type OAuthProvider = 'github' | 'google';
+export type OAuthProvider = OAuthProviderId;
 
 export const authApi = {
   me: () => api.get<Me>('/me'),
@@ -9,6 +15,17 @@ export const authApi = {
   register: (body: RegisterRequest) => api.post<Me>('/auth/register', body),
   logout: () => api.post<void>('/auth/logout'),
   updateMe: (body: MeUpdate) => api.put<Me>('/me', body),
+  /** Photo de profil (SET-1) : PNG, JPG ou WebP, 2 Mo au plus, type réel vérifié par le serveur. */
+  uploadPhoto: (file: File) => {
+    const form = new FormData();
+    form.append('photo', file);
+    return api.post<Me>('/me/photo', form);
+  },
+  deletePhoto: () => api.delete<Me>('/me/photo'),
+  /** Délier GitHub ou Google (SET-4). Refusé par le serveur si c'est le dernier moyen de connexion. */
+  unlink: (provider: OAuthProvider) => api.delete<Me>(`/me/connections/${provider}`),
+  /** Suppression du compte (AUTH-6) : contenus anonymisés, réputation et candidatures effacées. */
+  deleteAccount: () => api.delete<void>('/me'),
 };
 
 /**

@@ -1,0 +1,33 @@
+.fieldset {
+  padding: 0;
+  border: none;
+}
+
+.swatch {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  height: 44px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+}
+
+.light {
+  background: var(--swatch-light);
+}
+
+.light i {
+  background: var(--swatch-light-2);
+}
+
+.dark {
+  background: var(--swatch-dark);
+}
+
+.dark i {
+  background: var(--swatch-dark-2);
+}
+
+.system {
+  background: linear-gradient(90deg, var(--swatch-light) 50%, var(--swatch-dark) 50%);
+}

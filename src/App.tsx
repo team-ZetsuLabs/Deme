@@ -16,6 +16,7 @@ const QuestionPage = lazy(() => import('./pages/question/QuestionPage'));
 const AskPage = lazy(() => import('./pages/ask/AskPage'));
 const WelcomePage = lazy(() => import('./pages/welcome/WelcomePage'));
 const ProfilePage = lazy(() => import('./pages/profile/ProfilePage'));
+const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'));
 const NotFoundPage = lazy(() => import('./pages/notfound/NotFoundPage'));
 
 export function App() {
@@ -50,6 +51,14 @@ export function App() {
                   />
                   <Route path="questions/:id" element={<QuestionPage />} />
                   <Route path="users/:id" element={<ProfilePage />} />
+                  <Route
+                    path="settings"
+                    element={
+                      <RequireAuth>
+                        <SettingsPage />
+                      </RequireAuth>
+                    }
+                  />
                   <Route path="*" element={<NotFoundPage />} />
                 </Route>
               </Routes>

@@ -53,5 +53,11 @@ export function useValidatedForm<T extends Values>(initial: T, validators: Valid
     setErrors((e) => ({ ...e, ...next }));
   };
 
-  return { values, errors, setValue, onBlur, validateAll, setServerErrors };
+  /** Remet toutes les valeurs d'un coup et efface les erreurs (bouton Annuler). */
+  const reset = (next: T) => {
+    setValues(next);
+    setErrors({});
+  };
+
+  return { values, errors, setValue, onBlur, validateAll, setServerErrors, reset };
 }

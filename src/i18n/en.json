@@ -367,5 +367,66 @@
       "name": "Local help",
       "desc": "Answer questions from your own country."
     }
+  },
+  "settings": {
+    "pageTitle": "Settings",
+    "save": "Save changes",
+    "saving": "Saving",
+    "saved": "Changes saved",
+    "cancel": "Cancel",
+    "profile": {
+      "title": "Public profile",
+      "intro": "This information appears on your profile and next to your answers.",
+      "city": "City",
+      "bio": "About you",
+      "bioHint": "What you do and what you are interested in.",
+      "bioTooLong": "The description must be 200 characters at most.",
+      "skills": "Technologies",
+      "recruiterVisible": "Visible to recruiters",
+      "recruiterHint": "Companies can see your profile and your answers. Off by default."
+    },
+    "photo": {
+      "change": "Change photo",
+      "remove": "Remove",
+      "hint": "PNG, JPG or WebP, 2 MB at most. Without a photo, your initials are shown.",
+      "badType": "Choose a PNG, JPG or WebP image.",
+      "tooBig": "The image must be 2 MB at most.",
+      "updated": "Photo updated",
+      "removed": "Photo removed, your initials are shown"
+    },
+    "accounts": {
+      "title": "Connected accounts",
+      "intro": "Log in faster with GitHub or Google.",
+      "linked": "Connected",
+      "notLinked": "Not connected",
+      "link": "Connect",
+      "unlink": "Disconnect",
+      "linkLabel": "Connect {{name}}",
+      "unlinkLabel": "Disconnect {{name}}",
+      "unlinked": "Account disconnected",
+      "lastMethod": "This is your only way to log in: it cannot be removed.",
+      "mockOnly": "In mock mode, OAuth login is not available."
+    },
+    "appearance": {
+      "title": "Appearance and language",
+      "intro": "Light mode is used by default. Your choices are remembered.",
+      "theme": "Theme",
+      "themes": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "Same as system"
+      }
+    },
+    "delete": {
+      "title": "Delete account",
+      "intro": "Your reputation and applications will be erased for good.",
+      "button": "Delete my account",
+      "explain": "Your questions and answers will stay visible, signed “Deleted user”. Your reputation and applications will be erased. This cannot be undone.",
+      "word": "DELETE",
+      "confirmLabel": "Type {{word}} to confirm",
+      "mismatch": "Type {{word}} in capital letters to confirm.",
+      "confirm": "Delete for good",
+      "done": "Your account has been deleted."
+    }
   }
 }
