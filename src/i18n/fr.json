@@ -459,5 +459,96 @@
       "ACCEPTED": "acceptée",
       "REJECTED": "refusée"
     }
+  },
+  "home": {
+    "pageTitle": "Zetsu, l'entraide entre développeurs africains",
+    "title": "L'entraide entre développeurs africains",
+    "lead": "Posez vos questions avec votre contexte : pays, opérateur mobile money, qualité du réseau. Répondez, trouvez des missions entre pairs et faites reconnaître votre travail par une réputation vérifiable.",
+    "cta": {
+      "email": "Créer un compte avec un email",
+      "browse": "Parcourir les questions"
+    },
+    "solved": {
+      "title": "résolu récemment",
+      "empty": "Les premières questions résolues apparaîtront ici.",
+      "answers_one": "{{count}} réponse, résolue",
+      "answers_other": "{{count}} réponses, résolue",
+      "more": "Voir toutes les questions"
+    },
+    "stats": {
+      "questions": "questions posées",
+      "solved": "questions résolues",
+      "members": "membres",
+      "countries": "pays représentés"
+    },
+    "exchanges": {
+      "title": "Un seul profil pour quatre échanges",
+      "knowledge": {
+        "name": "Le savoir",
+        "text": "Des questions et des réponses sur les problèmes que rencontrent vraiment les développeurs du continent."
+      },
+      "missions": {
+        "name": "Les missions",
+        "text": "Des missions courtes entre pairs, un dépannage ou une revue de code, avec un budget indicatif."
+      },
+      "collaboration": {
+        "name": "La collaboration",
+        "text": "Des projets en équipe : publiez les rôles que vous cherchez, rejoignez ceux des autres."
+      },
+      "visibility": {
+        "name": "La visibilité",
+        "text": "Votre réputation et vos réponses forment un CV vivant, visible des recruteurs si vous le souhaitez."
+      }
+    },
+    "differences": {
+      "title": "Pensé pour le terrain",
+      "context": {
+        "title": "Le contexte africain sur chaque question",
+        "text": "Pays, opérateur (Orange Money, Wave, MTN, M-Pesa…) et qualité du réseau sont indiqués sur les questions et servent de filtres. Les réponses de membres du même pays sont mises en avant."
+      },
+      "light": {
+        "title": "Léger, même en 3G",
+        "text": "Des pages légères, la lecture hors ligne des questions déjà consultées et une application installable sur un téléphone Android."
+      },
+      "community": {
+        "title": "Modéré par la communauté",
+        "text": "La réputation ouvre des droits. Les membres de confiance, les Référents, traitent les signalements. L'équipe tranche en dernier recours."
+      }
+    },
+    "levels": {
+      "title": "La réputation se gagne en aidant",
+      "lead": "Chaque action est enregistrée et rapporte des points. Les niveaux ouvrent des droits de modération.",
+      "from": "dès {{points}} points",
+      "points": {
+        "QUESTION": {
+          "value": "+5",
+          "label": "pour une question posée"
+        },
+        "VOTE": {
+          "value": "+2",
+          "label": "pour un vote reçu"
+        },
+        "ACCEPTED": {
+          "value": "+15",
+          "label": "pour une réponse acceptée"
+        }
+      },
+      "rights": {
+        "NEW": "Poser, répondre, candidater.",
+        "MEMBER": "Voter et signaler.",
+        "CONTRIBUTOR": "Proposer des tags, voir les signalements.",
+        "REFERENT": "Masquer un contenu signalé, traiter la file, proposer les défis."
+      }
+    },
+    "final": {
+      "title": "Une question vous bloque ? D'autres ont peut-être déjà la réponse."
+    }
+  },
+  "footer": {
+    "label": "Liens du site",
+    "about": "Zetsu, par Zetsu Labs pour la CADev 2026.",
+    "rules": "Règles de la communauté",
+    "terms": "Conditions d'utilisation",
+    "privacy": "Confidentialité"
   }
 }

@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { IconSprite } from './components/IconSprite';
 import { ToastProvider } from './components/ToastProvider';
 import { OnboardingGuard } from './features/auth/OnboardingGuard';
@@ -11,6 +11,7 @@ import { PageLoader } from './layout/PageLoader';
 import { ThemeProvider } from './theme/ThemeProvider';
 
 // Chaque page est chargée à la demande pour rester léger en 3G.
+const HomePage = lazy(() => import('./pages/home/HomePage'));
 const AuthPage = lazy(() => import('./pages/auth/AuthPage'));
 const QuestionsPage = lazy(() => import('./pages/questions/QuestionsPage'));
 const QuestionPage = lazy(() => import('./pages/question/QuestionPage'));
@@ -31,6 +32,8 @@ export function App() {
             <BrowserRouter>
               <Suspense fallback={<PageLoader />}>
                 <Routes>
+                  {/* Accueil public ; un membre connecté est envoyé vers les questions. */}
+                  <Route index element={<HomePage />} />
                   <Route path="login" element={<AuthPage mode="login" />} />
                   <Route path="register" element={<AuthPage mode="register" />} />
                   <Route path="welcome" element={<WelcomePage />} />
@@ -41,8 +44,6 @@ export function App() {
                       </OnboardingGuard>
                     }
                   >
-                    {/* La page d'accueil publique remplacera cette redirection. */}
-                    <Route index element={<Navigate to="/questions" replace />} />
                     <Route path="questions" element={<QuestionsPage />} />
                     <Route
                       path="questions/ask"

@@ -459,5 +459,96 @@
       "ACCEPTED": "accepted",
       "REJECTED": "declined"
     }
+  },
+  "home": {
+    "pageTitle": "Zetsu, where African developers help each other",
+    "title": "Where African developers help each other",
+    "lead": "Ask questions with your context: country, mobile money operator, network quality. Answer, find gigs between peers and get your work recognised through a verifiable reputation.",
+    "cta": {
+      "email": "Sign up with an email",
+      "browse": "Browse questions"
+    },
+    "solved": {
+      "title": "recently solved",
+      "empty": "The first solved questions will show up here.",
+      "answers_one": "{{count}} answer, solved",
+      "answers_other": "{{count}} answers, solved",
+      "more": "See all questions"
+    },
+    "stats": {
+      "questions": "questions asked",
+      "solved": "questions solved",
+      "members": "members",
+      "countries": "countries"
+    },
+    "exchanges": {
+      "title": "One profile, four kinds of exchange",
+      "knowledge": {
+        "name": "Knowledge",
+        "text": "Questions and answers about the problems developers on the continent actually face."
+      },
+      "missions": {
+        "name": "Gigs",
+        "text": "Short gigs between peers, a fix or a code review, with an indicative budget."
+      },
+      "collaboration": {
+        "name": "Collaboration",
+        "text": "Team projects: post the roles you need, join other people’s projects."
+      },
+      "visibility": {
+        "name": "Visibility",
+        "text": "Your reputation and answers form a living resume, visible to recruiters if you choose."
+      }
+    },
+    "differences": {
+      "title": "Built for real conditions",
+      "context": {
+        "title": "African context on every question",
+        "text": "Country, operator (Orange Money, Wave, MTN, M-Pesa…) and network quality are shown on questions and work as filters. Answers from members in the same country are highlighted."
+      },
+      "light": {
+        "title": "Light, even on 3G",
+        "text": "Light pages, offline reading of questions you already viewed, and an app you can install on an Android phone."
+      },
+      "community": {
+        "title": "Moderated by the community",
+        "text": "Reputation unlocks rights. Trusted members, the Referents, handle reports. The team decides as a last resort."
+      }
+    },
+    "levels": {
+      "title": "Reputation is earned by helping",
+      "lead": "Every action is recorded and earns points. Levels unlock moderation rights.",
+      "from": "from {{points}} points",
+      "points": {
+        "QUESTION": {
+          "value": "+5",
+          "label": "for a question asked"
+        },
+        "VOTE": {
+          "value": "+2",
+          "label": "for a vote received"
+        },
+        "ACCEPTED": {
+          "value": "+15",
+          "label": "for an accepted answer"
+        }
+      },
+      "rights": {
+        "NEW": "Ask, answer, apply.",
+        "MEMBER": "Vote and report.",
+        "CONTRIBUTOR": "Suggest tags, see reports.",
+        "REFERENT": "Hide reported content, handle the queue, suggest challenges."
+      }
+    },
+    "final": {
+      "title": "Stuck on something? Someone may already have the answer."
+    }
+  },
+  "footer": {
+    "label": "Site links",
+    "about": "Zetsu, by Zetsu Labs for CADev 2026.",
+    "rules": "Community rules",
+    "terms": "Terms of use",
+    "privacy": "Privacy"
   }
 }
