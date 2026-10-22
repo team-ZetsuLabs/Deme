@@ -20,7 +20,19 @@ export type Me = {
   reputation: number;
   level: Level;
   language: 'fr' | 'en';
+  skills: string[]; // technologies déclarées, en minuscules (« spring-boot »)
   onboarded: boolean; // false tant que le parcours d'accueil (AUTH-5) n'est pas fait
+};
+
+/**
+ * PUT /api/v1/me : champs à modifier, les autres restent inchangés.
+ * Le parcours d'accueil envoie `onboarded: true` pour le clore.
+ */
+export type MeUpdate = {
+  country?: string;
+  language?: 'fr' | 'en';
+  skills?: string[];
+  onboarded?: boolean;
 };
 
 /** POST /api/v1/auth/login */

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
-import type { LoginRequest, Me, RegisterRequest } from '../../api/provisional-types';
+import type { LoginRequest, Me, MeUpdate, RegisterRequest } from '../../api/provisional-types';
 import { changeLanguage } from '../../i18n';
 import { authApi } from './authApi';
 import { SessionContext, type SessionStatus } from './sessionContext';
@@ -41,6 +41,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
     (body: RegisterRequest) => authApi.register(body).then(signIn),
     [signIn],
   );
+  const updateMe = useCallback((body: MeUpdate) => authApi.updateMe(body).then(signIn), [signIn]);
   const logout = useCallback(async () => {
     try {
       await authApi.logout();
@@ -51,8 +52,8 @@ export function SessionProvider({ children }: SessionProviderProps) {
   }, []);
 
   const value = useMemo(
-    () => ({ status, user, login, register, logout }),
-    [status, user, login, register, logout],
+    () => ({ status, user, login, register, updateMe, logout }),
+    [status, user, login, register, updateMe, logout],
   );
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 }
