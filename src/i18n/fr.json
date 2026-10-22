@@ -63,7 +63,8 @@
     "EMAIL_ALREADY_USED": "Cette adresse ne peut pas être utilisée. Si vous avez déjà un compte, connectez-vous.",
     "TOO_MANY_ATTEMPTS": "Trop de tentatives. Réessayez dans 15 minutes.",
     "ACCOUNT_SUSPENDED": "Ce compte est suspendu. Contactez l'équipe Zetsu si vous pensez que c'est une erreur.",
-    "ALREADY_REPORTED": "Vous avez déjà signalé ce contenu."
+    "ALREADY_REPORTED": "Vous avez déjà signalé ce contenu.",
+    "ALREADY_SUBMITTED": "Vous avez déjà soumis un dépôt pour ce défi."
   },
   "auth": {
     "browse": "Parcourir sans compte",
@@ -914,6 +915,51 @@
         "delay": "Indiquez un délai entre 1 et 90 jours.",
         "budget": "Le budget doit être un montant positif."
       }
+    }
+  },
+  "challenges": {
+    "pageTitle": "Défis",
+    "current": "Défi en cours",
+    "reward": "+{{points}} points pour un dépôt validé",
+    "none": "Pas de défi en cours pour le moment. Le prochain sera annoncé dans vos notifications.",
+    "closesIn": "Clôture dans",
+    "closesInFull": "Clôture dans {{days}} jours, {{hours}} heures et {{minutes}} minutes.",
+    "ended": "Ce défi est clôturé. Les dépôts sont en cours de notation.",
+    "units": {
+      "days_one": "jour",
+      "days_other": "jours",
+      "hours_one": "heure",
+      "hours_other": "heures",
+      "minutes_one": "minute",
+      "minutes_other": "minutes"
+    },
+    "submissions_one": "{{count}} dépôt pour le moment",
+    "submissions_other": "{{count}} dépôts pour le moment",
+    "submission": {
+      "PENDING": "Dépôt reçu, en attente de notation",
+      "REVIEWED": "Dépôt noté : {{score}}/100",
+      "REJECTED": "Dépôt refusé"
+    },
+    "submit": {
+      "button": "Soumettre mon dépôt",
+      "title": "Soumettre mon dépôt",
+      "label": "Lien du dépôt GitHub",
+      "hint": "Le dépôt doit être public, avec un README qui explique comment lancer le projet.",
+      "badUrl": "Entrez un lien de la forme https://github.com/compte/depot.",
+      "notice": "Un seul dépôt par défi. L'équipe le note sur 100 après la clôture.",
+      "submit": "Soumettre",
+      "sent": "Dépôt reçu. Il sera noté par l'équipe après la clôture."
+    },
+    "board": {
+      "title": "Classement",
+      "caption": "Classement du défi en cours",
+      "rank": "Rang",
+      "member": "Développeur",
+      "score": "Note",
+      "scoreValue": "{{score}}/100",
+      "pending": "À noter",
+      "you": "(vous)",
+      "empty": "Pas encore de dépôt. Soyez le premier à relever le défi."
     }
   }
 }

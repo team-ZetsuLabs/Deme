@@ -1,0 +1,50 @@
+.caption {
+  margin-bottom: var(--s2);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.clock {
+  display: flex;
+  gap: var(--s2);
+}
+
+.cell {
+  min-width: 68px;
+  padding: var(--s2) var(--s3);
+  text-align: center;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+
+.cell strong {
+  display: block;
+  font-family: var(--f-mono);
+  font-size: var(--fs-3xl);
+  font-weight: 500;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.cell span {
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+
+.ended {
+  padding: var(--s3);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-md);
+  font-weight: 600;
+}
+
+@media (max-width: 767px) {
+  .clock {
+    width: 100%;
+  }
+  .cell {
+    flex: 1;
+    min-width: 0;
+  }
+}

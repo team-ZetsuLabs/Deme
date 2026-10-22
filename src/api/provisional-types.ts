@@ -364,3 +364,37 @@ export type OfferRequest = {
 
 /** PATCH /api/v1/missions/{id}/offers/{offerId} : décision de l'auteur. */
 export type OfferDecision = { status: 'SHORTLISTED' | 'REJECTED' };
+
+/** Dépôt d'un membre sur un défi (CH-2), noté par l'équipe sur 100 (CH-3). */
+export type Submission = {
+  id: number;
+  repoUrl: string;
+  status: 'PENDING' | 'REVIEWED' | 'REJECTED';
+  score: number | null;
+  submittedAt: string;
+};
+
+/** GET /api/v1/challenges/current (CH-1). 404 NO_CURRENT_CHALLENGE s'il n'y a pas de défi en cours. */
+export type Challenge = {
+  id: number;
+  title: string;
+  summary: string;
+  /** Spécifications : une ligne par exigence, avec une étiquette courte facultative (« POST »). */
+  specs: { label: string | null; text: string }[];
+  startsAt: string;
+  endsAt: string; // le compte à rebours se calcule depuis cette date, pas depuis « dimanche prochain »
+  points: number; // points gagnés pour un dépôt validé (+20, section 8)
+  submissionCount: number;
+  mySubmission: Submission | null;
+};
+
+/** Élément de GET /api/v1/challenges/{id}/leaderboard */
+export type LeaderboardEntry = {
+  rank: number;
+  member: Author;
+  score: number | null; // null tant que l'équipe n'a pas noté
+  submittedAt: string;
+};
+
+/** POST /api/v1/challenges/{id}/submissions. 409 ALREADY_SUBMITTED : un dépôt par membre et par défi. */
+export type SubmissionRequest = { repoUrl: string };

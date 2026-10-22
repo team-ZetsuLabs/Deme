@@ -1,0 +1,28 @@
+{
+  "id": 4,
+  "title": "Simuler une API de paiement mobile",
+  "summary": "Construisez une API REST qui reproduit le parcours d'un paiement par mobile money, dans le langage de votre choix. Le code doit tourner avec une seule commande.",
+  "specs": [
+    {
+      "label": "POST",
+      "text": "Initier un paiement avec un numéro de téléphone et un montant"
+    },
+    {
+      "label": "POST",
+      "text": "Confirmer le paiement avec un code à usage unique"
+    },
+    {
+      "label": "GET",
+      "text": "Consulter l'historique des transactions d'un numéro"
+    },
+    {
+      "label": null,
+      "text": "Gérer un délai dépassé quand le client ne confirme pas"
+    }
+  ],
+  "startsAt": "2026-10-19T00:00:00Z",
+  "endsAt": "2026-11-10T23:59:00Z",
+  "points": 20,
+  "submissionCount": 14,
+  "mySubmission": null
+}
