@@ -1080,7 +1080,16 @@
       "scoreValue": "{{score}}/100",
       "pending": "To grade",
       "you": "(you)",
-      "empty": "No submission yet. Be the first to take on the challenge."
+      "empty": "No submission yet. Be the first to take on the challenge.",
+      "view": "Ranking type",
+      "members": "Members",
+      "countries": "Countries",
+      "country": "Country",
+      "points": "Points",
+      "countryCaption": "Country ranking for the current challenge",
+      "yourCountry": "(your country)",
+      "participants_one": "{{count}} participant",
+      "participants_other": "{{count}} participants"
     }
   }
 }

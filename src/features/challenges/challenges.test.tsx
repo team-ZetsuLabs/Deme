@@ -9,6 +9,7 @@ import ChallengesPage from '../../pages/challenges/ChallengesPage';
 import { authApi } from '../auth/authApi';
 import { SessionProvider } from '../auth/SessionProvider';
 import { challengesApi, validateRepoUrl } from './challengesApi';
+import { flagOf } from './flag';
 import { remainingUntil } from './remaining';
 
 const member: Me = {
@@ -109,5 +110,30 @@ describe('ChallengesPage', () => {
     );
     renderPage();
     expect(await screen.findByText(/Pas de défi en cours/)).toBeTruthy();
+  });
+});
+
+describe('classement par pays (CH-5)', () => {
+  it('donne le drapeau à partir du code du pays', () => {
+    expect(flagOf('SN')).toBe('\u{1F1F8}\u{1F1F3}');
+    expect(flagOf('OTHER')).toBe('');
+  });
+
+  it('bascule du classement des membres à celui des pays', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(member);
+    const countries = vi.spyOn(challengesApi, 'countryLeaderboard');
+    renderPage();
+    await screen.findByRole('table', { name: /Classement du défi/ });
+    expect(countries).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Pays' }));
+    const table = await screen.findByRole('table', {
+      name: 'Classement par pays du défi en cours',
+    });
+    const rows = table.querySelectorAll('tbody tr');
+    expect(rows[0].textContent).toContain('Sénégal');
+    expect(rows[0].textContent).toContain('4 participants');
+    // Le pays du membre connecté est repéré.
+    expect(table.textContent).toContain('Burkina Faso (votre pays)');
   });
 });

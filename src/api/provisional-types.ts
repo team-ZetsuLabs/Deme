@@ -449,5 +449,16 @@ export type LeaderboardEntry = {
   submittedAt: string;
 };
 
+/**
+ * Élément de GET /api/v1/challenges/{id}/leaderboard/countries (CH-5).
+ * Classé par le serveur : total des notes des dépôts évalués du pays.
+ */
+export type CountryLeaderboardEntry = {
+  rank: number;
+  country: string; // code ISO 3166-1 alpha-2
+  participants: number; // dépôts du pays, évalués ou non
+  points: number;
+};
+
 /** POST /api/v1/challenges/{id}/submissions. 409 ALREADY_SUBMITTED : un dépôt par membre et par défi. */
 export type SubmissionRequest = { repoUrl: string };

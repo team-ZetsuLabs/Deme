@@ -60,6 +60,22 @@
   color: var(--text-3);
 }
 
+.flag {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-full);
+  background: var(--surface-3);
+  font-family: var(--f-mono);
+  font-size: var(--fs-base);
+  line-height: 1;
+}
+
+.countryName {
+  font-weight: 500;
+}
+
 .pending {
   font-family: var(--f-sans);
   font-size: var(--fs-sm);

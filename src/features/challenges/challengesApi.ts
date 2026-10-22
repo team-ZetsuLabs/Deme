@@ -1,6 +1,7 @@
 import { api } from '../../api/api';
 import type {
   Challenge,
+  CountryLeaderboardEntry,
   LeaderboardEntry,
   Submission,
   SubmissionRequest,
@@ -9,6 +10,8 @@ import type {
 export const challengesApi = {
   current: () => api.get<Challenge>('/challenges/current'),
   leaderboard: (id: number) => api.get<LeaderboardEntry[]>(`/challenges/${id}/leaderboard`),
+  countryLeaderboard: (id: number) =>
+    api.get<CountryLeaderboardEntry[]>(`/challenges/${id}/leaderboard/countries`),
   submit: (id: number, body: SubmissionRequest) =>
     api.post<Submission>(`/challenges/${id}/submissions`, body),
 };

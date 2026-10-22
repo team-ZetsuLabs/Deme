@@ -1080,7 +1080,16 @@
       "scoreValue": "{{score}}/100",
       "pending": "À noter",
       "you": "(vous)",
-      "empty": "Pas encore de dépôt. Soyez le premier à relever le défi."
+      "empty": "Pas encore de dépôt. Soyez le premier à relever le défi.",
+      "view": "Type de classement",
+      "members": "Membres",
+      "countries": "Pays",
+      "country": "Pays",
+      "points": "Points",
+      "countryCaption": "Classement par pays du défi en cours",
+      "yourCountry": "(votre pays)",
+      "participants_one": "{{count}} participant",
+      "participants_other": "{{count}} participants"
     }
   }
 }

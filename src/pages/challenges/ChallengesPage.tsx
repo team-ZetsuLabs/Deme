@@ -13,13 +13,17 @@ import { useSession } from '../../features/auth/useSession';
 import { challengesApi } from '../../features/challenges/challengesApi';
 import { Countdown } from '../../features/challenges/Countdown';
 import { remainingUntil } from '../../features/challenges/remaining';
+import { CountryLeaderboard } from '../../features/challenges/CountryLeaderboard';
 import { Leaderboard } from '../../features/challenges/Leaderboard';
+import { Segmented } from '../../components/Segmented';
 import { SubmitDialog } from '../../features/challenges/SubmitDialog';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import styles from './ChallengesPage.module.css';
 
 /** Défi en cours (CH-1), dépôt d'un lien GitHub (CH-2) et classement. */
+type BoardView = 'members' | 'countries';
+
 export default function ChallengesPage() {
   const { t } = useTranslation();
   const { user } = useSession();
@@ -28,6 +32,7 @@ export default function ChallengesPage() {
   const location = useLocation();
   const [submitting, setSubmitting] = useState(false);
   const [boardKey, setBoardKey] = useState(0);
+  const [boardView, setBoardView] = useState<BoardView>('members');
   const query = useApiQuery(() => challengesApi.current(), []);
   const c = query.data;
   usePageTitle(t('challenges.pageTitle'));
@@ -104,9 +109,22 @@ export default function ChallengesPage() {
 
       <div className={styles.toolbar}>
         <h2 className={styles.sectionTitle}>{t('challenges.board.title')}</h2>
+        <Segmented<BoardView>
+          label={t('challenges.board.view')}
+          value={boardView}
+          onChange={setBoardView}
+          options={[
+            { value: 'members', label: t('challenges.board.members') },
+            { value: 'countries', label: t('challenges.board.countries') },
+          ]}
+        />
       </div>
       <section className={styles.panel} aria-label={t('challenges.board.title')}>
-        <Leaderboard challengeId={c.id} refreshKey={boardKey} />
+        {boardView === 'members' ? (
+          <Leaderboard challengeId={c.id} refreshKey={boardKey} />
+        ) : (
+          <CountryLeaderboard challengeId={c.id} refreshKey={boardKey} />
+        )}
       </section>
 
       {user && (
