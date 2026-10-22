@@ -65,7 +65,8 @@
     "ACCOUNT_SUSPENDED": "This account is suspended. Contact the Zetsu team if you think this is a mistake.",
     "ALREADY_REPORTED": "You already reported this content.",
     "ALREADY_SUBMITTED": "You already submitted a repository for this challenge.",
-    "ALREADY_APPEALED": "You have already appealed this decision."
+    "ALREADY_APPEALED": "You have already appealed this decision.",
+    "MAINTENANCE": "Zetsu is under maintenance. Please try again in a few minutes."
   },
   "auth": {
     "browse": "Browse without an account",
@@ -301,6 +302,17 @@
     "title": "This page does not exist",
     "text": "The link may be incomplete, or the page was removed.",
     "back": "Back to questions"
+  },
+  "errorPage": {
+    "code": "Error",
+    "codeOffline": "Offline",
+    "title": "This page could not be displayed",
+    "titleOffline": "No connection"
+  },
+  "maintenance": {
+    "code": "Maintenance",
+    "title": "Zetsu is under maintenance",
+    "text": "We are improving the platform and will be back in a few minutes. Your questions and answers are safe."
   },
   "welcome": {
     "pageTitle": "Welcome",

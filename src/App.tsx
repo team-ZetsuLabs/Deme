@@ -9,6 +9,7 @@ import { UnreadProvider } from './features/notifications/UnreadProvider';
 import { AppLayout } from './layout/AppLayout';
 import { PageLoader } from './layout/PageLoader';
 import { RouteErrorBoundary } from './layout/RouteErrorBoundary';
+import { MaintenanceGate } from './layout/MaintenanceGate';
 import { ThemeProvider } from './theme/ThemeProvider';
 
 // Chaque page est chargée à la demande pour rester léger en 3G.
@@ -40,85 +41,87 @@ export function App() {
           <UnreadProvider>
             <IconSprite />
             <BrowserRouter>
-              <RouteErrorBoundary>
-                <Suspense fallback={<PageLoader />}>
-                  <Routes>
-                    {/* Accueil public ; un membre connecté est envoyé vers les questions. */}
-                    <Route index element={<HomePage />} />
-                    <Route path="login" element={<AuthPage mode="login" />} />
-                    <Route path="register" element={<AuthPage mode="register" />} />
-                    <Route path="welcome" element={<WelcomePage />} />
-                    <Route
-                      element={
-                        <OnboardingGuard>
-                          <AppLayout />
-                        </OnboardingGuard>
-                      }
-                    >
-                      <Route path="questions" element={<QuestionsPage />} />
+              <MaintenanceGate>
+                <RouteErrorBoundary>
+                  <Suspense fallback={<PageLoader />}>
+                    <Routes>
+                      {/* Accueil public ; un membre connecté est envoyé vers les questions. */}
+                      <Route index element={<HomePage />} />
+                      <Route path="login" element={<AuthPage mode="login" />} />
+                      <Route path="register" element={<AuthPage mode="register" />} />
+                      <Route path="welcome" element={<WelcomePage />} />
                       <Route
-                        path="questions/ask"
                         element={
-                          <RequireAuth>
-                            <AskPage />
-                          </RequireAuth>
+                          <OnboardingGuard>
+                            <AppLayout />
+                          </OnboardingGuard>
                         }
-                      />
-                      <Route path="questions/:id" element={<QuestionPage />} />
-                      <Route path="users/:id" element={<ProfilePage />} />
-                      <Route
-                        path="settings"
-                        element={
-                          <RequireAuth>
-                            <SettingsPage />
-                          </RequireAuth>
-                        }
-                      />
-                      <Route
-                        path="notifications"
-                        element={
-                          <RequireAuth>
-                            <NotificationsPage />
-                          </RequireAuth>
-                        }
-                      />
-                      <Route path="jobs" element={<JobsPage />} />
-                      <Route
-                        path="jobs/new"
-                        element={
-                          <RequireAuth>
-                            <NewJobPage />
-                          </RequireAuth>
-                        }
-                      />
-                      <Route path="jobs/:id" element={<JobPage />} />
-                      <Route
-                        path="applications"
-                        element={
-                          <RequireAuth>
-                            <ApplicationsPage />
-                          </RequireAuth>
-                        }
-                      />
-                      <Route path="missions" element={<MissionsPage />} />
-                      <Route
-                        path="missions/new"
-                        element={
-                          <RequireAuth>
-                            <NewMissionPage />
-                          </RequireAuth>
-                        }
-                      />
-                      <Route path="missions/:id" element={<MissionPage />} />
-                      <Route path="challenges" element={<ChallengesPage />} />
-                      <Route path="rules" element={<LegalPage doc="rules" />} />
-                      <Route path="terms" element={<LegalPage doc="terms" />} />
-                      <Route path="privacy" element={<LegalPage doc="privacy" />} />
-                      <Route path="*" element={<NotFoundPage />} />
-                    </Route>
-                  </Routes>
-                </Suspense>
-              </RouteErrorBoundary>
+                      >
+                        <Route path="questions" element={<QuestionsPage />} />
+                        <Route
+                          path="questions/ask"
+                          element={
+                            <RequireAuth>
+                              <AskPage />
+                            </RequireAuth>
+                          }
+                        />
+                        <Route path="questions/:id" element={<QuestionPage />} />
+                        <Route path="users/:id" element={<ProfilePage />} />
+                        <Route
+                          path="settings"
+                          element={
+                            <RequireAuth>
+                              <SettingsPage />
+                            </RequireAuth>
+                          }
+                        />
+                        <Route
+                          path="notifications"
+                          element={
+                            <RequireAuth>
+                              <NotificationsPage />
+                            </RequireAuth>
+                          }
+                        />
+                        <Route path="jobs" element={<JobsPage />} />
+                        <Route
+                          path="jobs/new"
+                          element={
+                            <RequireAuth>
+                              <NewJobPage />
+                            </RequireAuth>
+                          }
+                        />
+                        <Route path="jobs/:id" element={<JobPage />} />
+                        <Route
+                          path="applications"
+                          element={
+                            <RequireAuth>
+                              <ApplicationsPage />
+                            </RequireAuth>
+                          }
+                        />
+                        <Route path="missions" element={<MissionsPage />} />
+                        <Route
+                          path="missions/new"
+                          element={
+                            <RequireAuth>
+                              <NewMissionPage />
+                            </RequireAuth>
+                          }
+                        />
+                        <Route path="missions/:id" element={<MissionPage />} />
+                        <Route path="challenges" element={<ChallengesPage />} />
+                        <Route path="rules" element={<LegalPage doc="rules" />} />
+                        <Route path="terms" element={<LegalPage doc="terms" />} />
+                        <Route path="privacy" element={<LegalPage doc="privacy" />} />
+                        <Route path="*" element={<NotFoundPage />} />
+                      </Route>
+                    </Routes>
+                  </Suspense>
+                </RouteErrorBoundary>
+              </MaintenanceGate>
             </BrowserRouter>
           </UnreadProvider>
         </ToastProvider>

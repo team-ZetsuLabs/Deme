@@ -12,6 +12,7 @@
   font-weight: 500;
   line-height: 1;
   color: var(--text-3);
+  overflow-wrap: anywhere;
 }
 
 .title {
@@ -22,10 +23,21 @@
 }
 
 .text {
-  margin-top: var(--s2);
+  max-width: 52ch;
+  margin: var(--s2) auto 0;
   color: var(--text-2);
 }
 
-.back {
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s2);
   margin-top: var(--s5);
+}
+
+@media (max-width: 767px) {
+  .code {
+    font-size: 40px;
+  }
 }

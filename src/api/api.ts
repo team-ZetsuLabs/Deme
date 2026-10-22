@@ -12,6 +12,8 @@
  * Le mode se règle avec VITE_API_MODE dans .env.local (mock par défaut).
  */
 
+import { reportMaintenance } from './maintenance';
+
 export type ApiMode = 'mock' | 'live';
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 export type QueryValue = string | number | boolean | null | undefined;
@@ -132,6 +134,7 @@ async function liveRequest<T>(method: HttpMethod, path: string, opts: RequestOpt
 
   const data: unknown = await res.json().catch(() => null);
   if (!res.ok) {
+    if (res.status === 503 && isErrorBody(data) && data.code === 'MAINTENANCE') reportMaintenance();
     throw new ApiError(
       res.status,
       isErrorBody(data) ? data : { code: 'UNKNOWN_ERROR', message: `HTTP ${res.status}` },

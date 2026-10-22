@@ -65,7 +65,8 @@
     "ACCOUNT_SUSPENDED": "Ce compte est suspendu. Contactez l'équipe Zetsu si vous pensez que c'est une erreur.",
     "ALREADY_REPORTED": "Vous avez déjà signalé ce contenu.",
     "ALREADY_SUBMITTED": "Vous avez déjà soumis un dépôt pour ce défi.",
-    "ALREADY_APPEALED": "Vous avez déjà contesté cette décision."
+    "ALREADY_APPEALED": "Vous avez déjà contesté cette décision.",
+    "MAINTENANCE": "Zetsu est en maintenance. Réessayez dans quelques minutes."
   },
   "auth": {
     "browse": "Parcourir sans compte",
@@ -301,6 +302,17 @@
     "title": "Cette page n'existe pas",
     "text": "Le lien est peut-être incomplet, ou la page a été supprimée.",
     "back": "Retour aux questions"
+  },
+  "errorPage": {
+    "code": "Erreur",
+    "codeOffline": "Hors ligne",
+    "title": "Cette page n'a pas pu s'afficher",
+    "titleOffline": "Pas de connexion"
+  },
+  "maintenance": {
+    "code": "Maintenance",
+    "title": "Zetsu est en maintenance",
+    "text": "Nous améliorons la plateforme et revenons dans quelques minutes. Vos questions et vos réponses sont conservées."
   },
   "welcome": {
     "pageTitle": "Bienvenue",
