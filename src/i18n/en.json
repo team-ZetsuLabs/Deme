@@ -550,5 +550,173 @@
     "rules": "Community rules",
     "terms": "Terms of use",
     "privacy": "Privacy"
+  },
+  "legal": {
+    "docsLabel": "Documents",
+    "tocLabel": "Contents",
+    "updated": "Last updated: October 21, 2026",
+    "contact": "A question about this document? Write to us:",
+    "rules": {
+      "title": "Community rules",
+      "intro": "Zetsu is made by developers, for developers. These rules keep the platform useful and respectful. Referents and the team rely on them to moderate.",
+      "sections": [
+        {
+          "title": "The spirit of Zetsu",
+          "paragraphs": [
+            "People come here to learn and to help. Every question deserves a serious answer, whatever the level of the person asking.",
+            "Criticise the code, never the person. A curt answer discourages more than it helps."
+          ]
+        },
+        {
+          "title": "Asking a good question",
+          "paragraphs": [
+            "A title that sums up the problem, the exact error message, what you already tried and a code sample reduced to the essentials.",
+            "Give your context when it matters: country, mobile money operator, network quality, technology version. It helps members in the same situation answer you.",
+            "Never post an API key, password, token or customer data, even inside a code sample."
+          ]
+        },
+        {
+          "title": "Answering",
+          "paragraphs": [
+            "Explain why the solution works, not just what to copy. Quote the documentation when you know it.",
+            "If you use an artificial intelligence tool, check and test the answer before posting it. You remain responsible for it."
+          ]
+        },
+        {
+          "title": "What is not allowed",
+          "paragraphs": [
+            "Insults, harassment, discriminatory language, impersonation and posting other people's personal data.",
+            "Spam, hidden advertising and fraudulent offers: registration fees, promises of quick money, asking for payment to apply.",
+            "Illegal content, and links to pirated or malicious software."
+          ]
+        },
+        {
+          "title": "Votes and reputation",
+          "paragraphs": [
+            "Vote for the quality of content, not for its author. Vote trading between accounts earns no points and can lead to suspension.",
+            "Points earned each day are capped. Content removed as spam takes 50 points from its author."
+          ]
+        },
+        {
+          "title": "Reports and moderation",
+          "paragraphs": [
+            "From the Member level, you can report content that breaks these rules. After 5 reports from different members, it is hidden until a decision is made. Its author can still see it.",
+            "Referents handle reports: they dismiss or hide the content. Every decision is recorded, and the author can appeal to the Zetsu team, which decides as a last resort.",
+            "In case of repeated abuse, the team can warn and then suspend an account."
+          ]
+        },
+        {
+          "title": "Jobs and gigs",
+          "paragraphs": [
+            "Company job offers are checked by the team before they are published. Never pay to apply for a job or to get a gig.",
+            "Money for a gig is exchanged outside Zetsu, between members. Report any suspicious request."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "title": "Terms of use",
+      "intro": "These terms apply to anyone who uses Zetsu. By creating an account, you accept them, along with the community rules.",
+      "sections": [
+        {
+          "title": "The service",
+          "paragraphs": [
+            "Zetsu is an exchange platform for developers: questions and answers, job offers, gigs between peers, projects, challenges and reputation. It is built by the Zetsu Labs team for CADev 2026."
+          ]
+        },
+        {
+          "title": "Your account",
+          "paragraphs": [
+            "Your account information must be accurate. One account belongs to one person.",
+            "You are responsible for what is done from your account. Keep your password to yourself and tell the team if you think someone else used it."
+          ]
+        },
+        {
+          "title": "Your content",
+          "paragraphs": [
+            "You remain the author of your questions, answers and projects. You allow Zetsu to display them, adapt them for mobile reading and keep them anonymously if you delete your account.",
+            "Only post content you have the right to share, with no third-party personal data and no secrets."
+          ]
+        },
+        {
+          "title": "Jobs and gigs",
+          "paragraphs": [
+            "Zetsu connects members and companies. Zetsu is not a party to any employment or gig contract, and handles no payment.",
+            "Offers are checked before publication, but stay alert and report any doubtful offer."
+          ]
+        },
+        {
+          "title": "Moderation and suspension",
+          "paragraphs": [
+            "Content that breaks the community rules can be hidden or removed. An account can be suspended in case of abuse. You can appeal a decision to the team."
+          ]
+        },
+        {
+          "title": "Availability",
+          "paragraphs": [
+            "The service is provided as is. We do our best to keep it available and to back up your data every day, without being able to guarantee permanent availability."
+          ]
+        },
+        {
+          "title": "Closing your account",
+          "paragraphs": [
+            "You can delete your account at any time from your settings. Your questions and answers stay visible, signed “Deleted user”. Your reputation and applications are erased."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Privacy",
+      "intro": "Here is the data Zetsu collects, what we do with it and how you stay in control.",
+      "sections": [
+        {
+          "title": "Data we collect",
+          "paragraphs": [
+            "Your account: name, email address, country, and if you add them, city, photo, description and technologies.",
+            "If you log in with GitHub or Google: your ID with that service, your email address and your public name. We never receive your password.",
+            "What you post: questions, answers, votes, reports, applications (message and resume if you attach one), projects and challenge submissions.",
+            "Technical data: a session cookie to keep you logged in, and security logs (login attempts, abuse limits)."
+          ]
+        },
+        {
+          "title": "Why we use it",
+          "paragraphs": [
+            "To run the service, suggest questions, jobs and gigs close to your profile, compute your reputation, moderate and protect the platform from abuse."
+          ]
+        },
+        {
+          "title": "What we do not do",
+          "paragraphs": [
+            "We do not sell your data and show no advertising. There is no advertising tracker on Zetsu.",
+            "Your theme and language are stored in your browser, not on our servers."
+          ]
+        },
+        {
+          "title": "Visibility to recruiters",
+          "paragraphs": [
+            "The “Visible to recruiters” option is off by default. Until you turn it on, companies do not see your profile in their searches. You can turn it off at any time."
+          ]
+        },
+        {
+          "title": "The writing assistant",
+          "paragraphs": [
+            "If you use the assistant to improve a question, the title, details and code of the question are sent to an artificial intelligence provider. Your name, email and ID are never sent."
+          ]
+        },
+        {
+          "title": "How long we keep data",
+          "paragraphs": [
+            "Your data is kept as long as your account exists. When you delete your account, your public content is anonymised, and your reputation and applications are erased. Security logs are kept for a limited time."
+          ]
+        },
+        {
+          "title": "Your rights",
+          "paragraphs": [
+            "You can view and correct your information in your settings, and delete your account at any time. For any other request to access, correct or object, write to the team.",
+            "Zetsu applies the Burkina Faso law on personal data protection. You can also contact the Commission de l’informatique et des libertés (CIL)."
+          ]
+        }
+      ]
+    }
   }
 }

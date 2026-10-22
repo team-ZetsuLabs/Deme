@@ -550,5 +550,173 @@
     "rules": "Règles de la communauté",
     "terms": "Conditions d'utilisation",
     "privacy": "Confidentialité"
+  },
+  "legal": {
+    "docsLabel": "Documents",
+    "tocLabel": "Sommaire",
+    "updated": "Dernière mise à jour : 21 octobre 2026",
+    "contact": "Une question sur ce document ? Écrivez-nous :",
+    "rules": {
+      "title": "Règles de la communauté",
+      "intro": "Zetsu est fait par les développeurs, pour les développeurs. Ces règles gardent la plateforme utile et respectueuse. Les Référents et l'équipe s'appuient sur elles pour modérer.",
+      "sections": [
+        {
+          "title": "L'esprit de Zetsu",
+          "paragraphs": [
+            "On vient ici pour apprendre et pour aider. Chaque question mérite une réponse sérieuse, quel que soit le niveau de la personne qui la pose.",
+            "Critiquez le code, jamais la personne. Une réponse sèche décourage plus qu’elle n’aide."
+          ]
+        },
+        {
+          "title": "Poser une bonne question",
+          "paragraphs": [
+            "Un titre qui résume le problème, le message d'erreur exact, ce que vous avez déjà essayé et un extrait de code réduit à l'essentiel.",
+            "Indiquez votre contexte quand il compte : pays, opérateur mobile money, qualité du réseau, version de la techno. Il aide les membres qui vivent la même situation à vous répondre.",
+            "Ne publiez jamais de clé d'API, de mot de passe, de jeton ni de données de vos clients, même dans un extrait de code."
+          ]
+        },
+        {
+          "title": "Répondre",
+          "paragraphs": [
+            "Expliquez pourquoi la solution fonctionne, pas seulement quoi copier. Citez la documentation quand vous la connaissez.",
+            "Si vous vous aidez d'un outil d'intelligence artificielle, vérifiez et testez la réponse avant de la publier. Vous en restez responsable."
+          ]
+        },
+        {
+          "title": "Ce qui est interdit",
+          "paragraphs": [
+            "Les insultes, le harcèlement, les propos discriminatoires, l'usurpation d'identité et la publication de données personnelles d'autrui.",
+            "Le spam, la publicité déguisée et les offres frauduleuses : frais d’inscription, promesses de gains rapides, demande de paiement pour postuler.",
+            "Les contenus illégaux, et les liens vers des logiciels piratés ou malveillants."
+          ]
+        },
+        {
+          "title": "Votes et réputation",
+          "paragraphs": [
+            "Votez pour la qualité d’un contenu, pas pour son auteur. Les échanges de votes entre comptes ne rapportent pas de points et peuvent entraîner une suspension.",
+            "Les points gagnés chaque jour sont plafonnés. Un contenu supprimé pour spam retire 50 points à son auteur."
+          ]
+        },
+        {
+          "title": "Signalements et modération",
+          "paragraphs": [
+            "À partir du niveau Membre, vous pouvez signaler un contenu qui enfreint ces règles. Après 5 signalements de membres différents, il est masqué en attendant une décision. Son auteur le voit toujours.",
+            "Les Référents traitent les signalements : ils ignorent ou masquent le contenu. Chaque décision est enregistrée, et l'auteur peut la contester auprès de l'équipe Zetsu, qui tranche en dernier recours.",
+            "En cas d'abus répétés, l'équipe peut avertir puis suspendre un compte."
+          ]
+        },
+        {
+          "title": "Emploi et missions",
+          "paragraphs": [
+            "Les offres d'entreprise sont validées par l'équipe avant publication. Ne payez jamais pour postuler à une offre ou obtenir une mission.",
+            "Les échanges d'argent pour une mission se font en dehors de Zetsu, entre les membres. Signalez toute demande suspecte."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "intro": "Ces conditions s'appliquent à toute personne qui utilise Zetsu. En créant un compte, vous les acceptez, ainsi que les règles de la communauté.",
+      "sections": [
+        {
+          "title": "Le service",
+          "paragraphs": [
+            "Zetsu est une plateforme d'échange entre développeurs : questions et réponses, offres d'emploi, missions entre pairs, projets, défis et réputation. Elle est développée par l'équipe Zetsu Labs dans le cadre de la CADev 2026."
+          ]
+        },
+        {
+          "title": "Votre compte",
+          "paragraphs": [
+            "Les informations de votre compte doivent être exactes. Un compte correspond à une seule personne.",
+            "Vous êtes responsable de ce qui est fait depuis votre compte. Gardez votre mot de passe pour vous et prévenez l'équipe si vous pensez qu'il a été utilisé par quelqu'un d'autre."
+          ]
+        },
+        {
+          "title": "Vos contenus",
+          "paragraphs": [
+            "Vous restez auteur de vos questions, réponses et projets. Vous autorisez Zetsu à les afficher, à les adapter pour la lecture sur mobile et à les conserver de façon anonyme si vous supprimez votre compte.",
+            "Vous ne publiez que des contenus que vous avez le droit de partager, sans données personnelles de tiers ni secrets."
+          ]
+        },
+        {
+          "title": "Emploi et missions",
+          "paragraphs": [
+            "Zetsu met en relation des membres et des entreprises. Zetsu n'est partie à aucun contrat de travail ou de mission, et ne gère aucun paiement.",
+            "Les offres sont vérifiées avant publication, mais restez vigilant et signalez toute offre douteuse."
+          ]
+        },
+        {
+          "title": "Modération et suspension",
+          "paragraphs": [
+            "Un contenu contraire aux règles de la communauté peut être masqué ou supprimé. Un compte peut être suspendu en cas d'abus. Vous pouvez contester une décision auprès de l'équipe."
+          ]
+        },
+        {
+          "title": "Disponibilité",
+          "paragraphs": [
+            "Le service est fourni tel quel. Nous faisons notre possible pour qu'il reste disponible et que vos données soient sauvegardées chaque jour, sans pouvoir garantir une disponibilité permanente."
+          ]
+        },
+        {
+          "title": "Fin de votre compte",
+          "paragraphs": [
+            "Vous pouvez supprimer votre compte à tout moment depuis vos paramètres. Vos questions et réponses restent visibles, signées « Utilisateur supprimé ». Votre réputation et vos candidatures sont effacées."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Confidentialité",
+      "intro": "Voici les données que Zetsu collecte, ce que nous en faisons et comment vous gardez la main dessus.",
+      "sections": [
+        {
+          "title": "Les données collectées",
+          "paragraphs": [
+            "Votre compte : nom, adresse email, pays, et si vous les ajoutez, ville, photo, présentation et technologies.",
+            "Si vous vous connectez avec GitHub ou Google : votre identifiant chez ce service, votre adresse email et votre nom public. Nous ne recevons jamais votre mot de passe.",
+            "Ce que vous publiez : questions, réponses, votes, signalements, candidatures (message et CV si vous en joignez un), projets et dépôts de défis.",
+            "Des données techniques : un cookie de session pour vous garder connecté, et des journaux de sécurité (tentatives de connexion, limitation des abus)."
+          ]
+        },
+        {
+          "title": "Pourquoi nous les utilisons",
+          "paragraphs": [
+            "Pour faire fonctionner le service, vous proposer des questions, offres et missions proches de votre profil, calculer votre réputation, modérer et protéger la plateforme contre les abus."
+          ]
+        },
+        {
+          "title": "Ce que nous ne faisons pas",
+          "paragraphs": [
+            "Nous ne vendons pas vos données et n'affichons pas de publicité. Il n'y a pas de traceur publicitaire sur Zetsu.",
+            "Votre thème et votre langue sont mémorisés dans votre navigateur, pas sur nos serveurs."
+          ]
+        },
+        {
+          "title": "Visibilité pour les recruteurs",
+          "paragraphs": [
+            "L'option « Visible par les recruteurs » est désactivée par défaut. Tant que vous ne l'activez pas, les entreprises ne voient pas votre profil dans leurs recherches. Vous pouvez la retirer à tout moment."
+          ]
+        },
+        {
+          "title": "L'assistant de rédaction",
+          "paragraphs": [
+            "Si vous utilisez l'assistant pour améliorer une question, le titre, les détails et le code de la question sont envoyés à un fournisseur d'intelligence artificielle. Votre nom, votre email et votre identifiant ne sont jamais transmis."
+          ]
+        },
+        {
+          "title": "Durée de conservation",
+          "paragraphs": [
+            "Vos données sont conservées tant que votre compte existe. À la suppression du compte, vos contenus publics sont anonymisés, et votre réputation et vos candidatures sont effacées. Les journaux de sécurité sont conservés pour une durée limitée."
+          ]
+        },
+        {
+          "title": "Vos droits",
+          "paragraphs": [
+            "Vous pouvez consulter et corriger vos informations dans vos paramètres, et supprimer votre compte à tout moment. Pour toute autre demande d'accès, de correction ou d'opposition, écrivez à l'équipe.",
+            "Zetsu applique la loi burkinabè sur la protection des données personnelles. Vous pouvez aussi saisir la Commission de l’informatique et des libertés (CIL)."
+          ]
+        }
+      ]
+    }
   }
 }

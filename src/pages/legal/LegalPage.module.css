@@ -1,0 +1,123 @@
+.page {
+  max-width: 760px;
+  padding: var(--s5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+
+.docs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1);
+  margin-bottom: var(--s5);
+  padding-bottom: var(--s3);
+  border-bottom: 1px solid var(--line);
+}
+
+.docs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h);
+  padding: 0 var(--s3);
+  border-radius: var(--r-md);
+  color: var(--text-2);
+  font-size: var(--fs-md);
+  font-weight: 500;
+}
+
+.docs a:hover {
+  background: var(--surface-2);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.docs a[aria-current='page'] {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.title {
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: var(--lh-tight);
+}
+
+.intro {
+  max-width: 64ch;
+  margin-top: var(--s3);
+  color: var(--text-2);
+}
+
+.updated {
+  margin-top: var(--s2);
+  font-family: var(--f-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.toc {
+  margin: var(--s5) 0;
+  padding: var(--s4);
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+}
+
+.toc ol {
+  display: grid;
+  gap: var(--s1);
+  padding-left: var(--s5);
+  font-size: var(--fs-md);
+}
+
+.toc a {
+  display: inline-block;
+  padding: 2px 0;
+  color: var(--text-2);
+}
+
+.section {
+  padding-top: var(--s4);
+  scroll-margin-top: calc(var(--topbar-h) + var(--s4));
+}
+
+.section h2 {
+  margin-bottom: var(--s2);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.number {
+  font-family: var(--f-mono);
+  color: var(--green-text);
+}
+
+.section p {
+  max-width: 68ch;
+  color: var(--text-2);
+}
+
+.section p + p {
+  margin-top: var(--s2);
+}
+
+.contact {
+  margin-top: var(--s6);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--line);
+  color: var(--text-2);
+}
+
+@media (max-width: 767px) {
+  .page {
+    padding: var(--s4);
+  }
+  .title {
+    font-size: var(--fs-xl);
+  }
+  .toc a {
+    padding: var(--s2) 0;
+  }
+}

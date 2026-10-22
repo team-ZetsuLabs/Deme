@@ -20,6 +20,7 @@ const WelcomePage = lazy(() => import('./pages/welcome/WelcomePage'));
 const ProfilePage = lazy(() => import('./pages/profile/ProfilePage'));
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'));
 const NotificationsPage = lazy(() => import('./pages/notifications/NotificationsPage'));
+const LegalPage = lazy(() => import('./pages/legal/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/notfound/NotFoundPage'));
 
 export function App() {
@@ -71,6 +72,9 @@ export function App() {
                         </RequireAuth>
                       }
                     />
+                    <Route path="rules" element={<LegalPage doc="rules" />} />
+                    <Route path="terms" element={<LegalPage doc="terms" />} />
+                    <Route path="privacy" element={<LegalPage doc="privacy" />} />
                     <Route path="*" element={<NotFoundPage />} />
                   </Route>
                 </Routes>
