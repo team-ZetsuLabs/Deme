@@ -1,0 +1,21 @@
+{
+  "id": 1,
+  "title": "Développeur full-stack Spring Boot et React",
+  "company": {
+    "name": "Sahel Paiements",
+    "logoUrl": null,
+    "website": "https://sahel-paiements.example"
+  },
+  "city": "Ouagadougou",
+  "country": "BF",
+  "contractType": "FULL_TIME",
+  "remote": false,
+  "technologies": ["spring-boot", "react", "postgresql", "docker"],
+  "salary": "450 000 à 650 000 FCFA par mois",
+  "createdAt": "2026-10-20T09:00:00Z",
+  "myApplication": null,
+  "experience": "2 à 4 ans d'expérience",
+  "status": "PUBLISHED",
+  "postedById": 31,
+  "descriptionHtml": "<h3>L'entreprise</h3><p>Sahel Paiements développe une solution d'encaissement pour les commerçants du Burkina Faso et du Niger, connectée à Orange Money, Moov Money et aux banques locales.</p><h3>Vos missions</h3><ul><li>Développer les API de paiement et de rapprochement bancaire en Spring Boot</li><li>Construire le tableau de bord marchand en React</li><li>Participer aux revues de code et à l'astreinte mensuelle</li></ul><h3>Profil recherché</h3><ul><li>Bonne maîtrise de Spring Boot et de JPA</li><li>Expérience avec React ou un framework équivalent</li><li>Notions de Docker et d'intégration continue</li></ul>"
+}

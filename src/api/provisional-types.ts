@@ -239,3 +239,67 @@ export type PublicStats = {
   /** Seuils de réputation en vigueur (abaissés pour la démo, section 8 du cahier). */
   levels: { MEMBER: number; CONTRIBUTOR: number; REFERENT: number };
 };
+
+export type ContractType = 'FULL_TIME' | 'CONTRACT' | 'INTERNSHIP';
+
+/** Statut de validation d'une offre par l'équipe (JOB-4). */
+export type JobStatus = 'PENDING' | 'PUBLISHED' | 'REJECTED' | 'CLOSED';
+
+/** Suivi d'une candidature ou d'une proposition de mission (JOB-7). */
+export type ApplicationStatus = 'SENT' | 'VIEWED' | 'SHORTLISTED' | 'REJECTED';
+
+export type Company = {
+  name: string;
+  logoUrl: string | null;
+  website: string | null; // https uniquement, vérifié par le serveur
+};
+
+/** Élément de GET /api/v1/jobs (JOB-1). */
+export type JobSummary = {
+  id: number;
+  title: string;
+  company: Company;
+  city: string | null;
+  country: string | null;
+  contractType: ContractType;
+  remote: boolean;
+  technologies: string[];
+  salary: string | null; // texte libre : « 450 000 à 600 000 FCFA par mois »
+  createdAt: string;
+  /** Statut de ma candidature, null si je n'ai pas postulé ou si je ne suis pas connecté. */
+  myApplication: ApplicationStatus | null;
+};
+
+/** GET /api/v1/jobs/{id} (JOB-2). */
+export type JobDetail = JobSummary & {
+  experience: string | null; // « 2 à 4 ans d'expérience »
+  descriptionHtml: string; // Markdown de l'entreprise, nettoyé par le serveur
+  status: JobStatus;
+  postedById: number; // membre qui a publié l'offre (pour le signalement)
+};
+
+/** POST /api/v1/jobs (JOB-4) : l'offre est créée « En attente » jusqu'à validation. */
+export type JobRequest = {
+  title: string;
+  company: { name: string; website: string | null };
+  city: string | null;
+  country: string | null;
+  contractType: ContractType;
+  remote: boolean;
+  technologies: string[];
+  salary: string | null;
+  experience: string | null;
+  description: string; // Markdown
+};
+
+/** Élément de GET /api/v1/me/applications (JOB-7) : candidatures et propositions de mission. */
+export type MyApplication = {
+  id: number;
+  targetType: 'JOB' | 'MISSION';
+  targetId: number;
+  title: string;
+  organisation: string; // entreprise de l'offre, ou auteur de la mission
+  status: ApplicationStatus;
+  sentAt: string;
+  updatedAt: string;
+};

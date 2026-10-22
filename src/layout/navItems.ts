@@ -26,5 +26,6 @@ export const ACCOUNT_ITEM_SIGNED_IN: NavItem = {
 export const ACCOUNT_LINKS: NavItem[] = [
   { to: '/users/me', labelKey: 'nav.profile', icon: 'user' },
   { to: '/notifications', labelKey: 'nav.notifications', icon: 'bell' },
+  { to: '/applications', labelKey: 'nav.applications', icon: 'jobs' },
   { to: '/settings', labelKey: 'nav.settings', icon: 'gear' },
 ];
