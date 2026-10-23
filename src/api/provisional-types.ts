@@ -75,10 +75,11 @@ export type NotificationType =
   | 'MISSION_MATCH'
   | 'NEW_CHALLENGE'
   | 'APPLICATION_DECISION'
-  | 'PROJECT_REQUEST_DECISION';
+  | 'PROJECT_REQUEST_DECISION'
+  | 'COMMUNITY_PROPOSAL_DECISION';
 
 export type NotificationTargetType =
-  'QUESTION' | 'JOB' | 'MISSION' | 'CHALLENGE' | 'PROJECT' | 'APPLICATION';
+  'QUESTION' | 'JOB' | 'MISSION' | 'CHALLENGE' | 'PROJECT' | 'APPLICATION' | 'COMMUNITY_PROPOSAL';
 
 /** Élément de GET /api/v1/notifications (NOT-1). */
 export type AppNotification = {
@@ -307,3 +308,27 @@ export type CommunityDetail = CommunitySummary & {
 
 /** Réponse de POST et DELETE /api/v1/communities/{slug}/members */
 export type MembershipResult = { joined: boolean; memberCount: number };
+
+/**
+ * POST /api/v1/community-proposals (COM-2) : un Référent propose une communauté.
+ * 403 LEVEL_TOO_LOW sous le niveau Référent, 409 COMMUNITY_EXISTS si le nom ou le tag existe déjà.
+ */
+export type CommunityProposalRequest = {
+  name: string; // 3 à 40 caractères
+  kind: CommunityKind;
+  countryCode: string | null; // obligatoire pour une communauté de pays
+  tag: string | null; // obligatoire pour une communauté de techno
+  description: string; // 30 à 200 caractères, texte brut
+  rules: string[]; // 0 à 5 règles, 200 caractères chacune
+};
+
+/** Élément de GET /api/v1/users/me/community-proposals : l'équipe valide ou refuse avec un motif. */
+export type CommunityProposal = {
+  id: number;
+  name: string;
+  kind: CommunityKind;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  rejectionReason: string | null; // rempli si refusée
+  slug: string | null; // rempli si acceptée : adresse de la communauté créée
+  createdAt: string;
+};

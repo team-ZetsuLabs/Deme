@@ -33,5 +33,7 @@ export function notificationLink(type: NotificationTargetType, id: number): stri
       return '/challenges';
     case 'APPLICATION':
       return '/applications';
+    case 'COMMUNITY_PROPOSAL':
+      return '/communities/new';
   }
 }

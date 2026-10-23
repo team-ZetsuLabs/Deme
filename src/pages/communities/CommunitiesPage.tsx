@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { CommunitySummary, MembershipResult } from '../../api/types';
 import { Button } from '../../components/Button';
+import { buttonClass } from '../../components/buttonClass';
 import { ErrorState } from '../../components/ErrorState';
 import { Pagination } from '../../components/Pagination';
 import { Segmented } from '../../components/Segmented';
@@ -48,8 +49,17 @@ export default function CommunitiesPage() {
   return (
     <>
       <div className={styles.head}>
-        <h1 className={styles.title}>{t('communities.title')}</h1>
-        <p className={styles.lead}>{t('communities.lead')}</p>
+        <div>
+          <h1 className={styles.title}>{t('communities.title')}</h1>
+          <p className={styles.lead}>{t('communities.lead')}</p>
+        </div>
+        {user?.level === 'REFERENT' ? (
+          <Link to="/communities/new" className={buttonClass({ variant: 'secondary' })}>
+            {t('communities.propose.button')}
+          </Link>
+        ) : (
+          <p className={styles.note}>{t('communities.propose.note')}</p>
+        )}
       </div>
 
       {user && <MyCommunities version={mineVersion} />}

@@ -1,0 +1,29 @@
+[
+  {
+    "id": 28,
+    "name": "Laravel",
+    "kind": "TECH",
+    "status": "PENDING",
+    "rejectionReason": null,
+    "slug": null,
+    "createdAt": "2026-10-22T16:40:00Z"
+  },
+  {
+    "id": 21,
+    "name": "Mali",
+    "kind": "COUNTRY",
+    "status": "APPROVED",
+    "rejectionReason": null,
+    "slug": "mali",
+    "createdAt": "2026-10-15T09:10:00Z"
+  },
+  {
+    "id": 17,
+    "name": "Développeurs PHP",
+    "kind": "TECH",
+    "status": "REJECTED",
+    "rejectionReason": "Elle ferait doublon avec la future communauté Laravel : proposez plutôt de l'élargir.",
+    "slug": null,
+    "createdAt": "2026-10-10T11:25:00Z"
+  }
+]

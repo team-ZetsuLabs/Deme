@@ -1,5 +1,16 @@
 .head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--s3);
   margin-bottom: var(--s4);
+}
+
+.note {
+  max-width: 32ch;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
 }
 
 .title {

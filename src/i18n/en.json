@@ -88,7 +88,8 @@
     "TAG_REQUIRED": "Add at least one tag.",
     "INVALID_TAG": "A tag only contains lowercase letters, digits, hyphens or dots.",
     "INVALID_COUNTRY": "This country is not recognised.",
-    "INTERNAL_ERROR": "Something went wrong on our side. Please try again in a moment."
+    "INTERNAL_ERROR": "Something went wrong on our side. Please try again in a moment.",
+    "COMMUNITY_EXISTS": "A community with this name or tag already exists or is already proposed."
   },
   "auth": {
     "browse": "Browse without an account",
@@ -609,7 +610,8 @@
       "MISSION_MATCH": "A gig matches your profile",
       "NEW_CHALLENGE": "New challenge of the week",
       "APPLICATION_DECISION": "Your application was {{decision}}",
-      "PROJECT_REQUEST_DECISION": "Your request to join the project was {{decision}}"
+      "PROJECT_REQUEST_DECISION": "Your request to join the project was {{decision}}",
+      "COMMUNITY_PROPOSAL_DECISION": "The community proposal was {{decision}}"
     },
     "decisions": {
       "VIEWED": "viewed",
@@ -1169,6 +1171,43 @@
     "nobody": "Nobody yet.",
     "noRules": "No specific rule: the general rules are enough.",
     "generalRules": "The general Zetsu rules also apply.",
-    "rulesLink": "Read the rules"
+    "rulesLink": "Read the rules",
+    "propose": {
+      "button": "Propose a community",
+      "note": "Referents (1,500 points) can propose a community, then reviewed by the team.",
+      "pageTitle": "Propose a community",
+      "lead": "Your proposal is reviewed by the Zetsu team, like a job offer. First check that a similar community does not already exist.",
+      "referentsOnly": "Only Referents (1,500 reputation points) can propose a community. Meanwhile, join the existing ones and help their members.",
+      "back": "See communities",
+      "kind": "Community type",
+      "name": "Name",
+      "namePlaceholderTech": "e.g. Laravel",
+      "namePlaceholderCountry": "e.g. Mali",
+      "tag": "Question tag",
+      "tagHint": "Questions with this tag will appear in the community.",
+      "description": "Description",
+      "descriptionHint": "Who it is for, and what it is about. 30 to 200 characters.",
+      "rules": "Specific rules",
+      "rulesHint": "One rule per line, 5 at most. The general Zetsu rules already apply.",
+      "submit": "Send the proposal",
+      "busy": "Sending",
+      "sent": "Proposal sent. The team will answer with a notification.",
+      "mine": "Your proposals",
+      "none": "You have not proposed anything yet.",
+      "reason": "Reason: {{reason}}",
+      "status": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "errors": {
+        "name": "The name must be between 3 and 40 characters.",
+        "country": "Choose the country.",
+        "tag": "A lowercase tag, with digits, hyphens or dots (35 characters at most).",
+        "description": "The description must be between 30 and 200 characters.",
+        "rulesCount": "5 rules at most.",
+        "ruleLength": "Each rule is 200 characters at most."
+      }
+    }
   }
 }

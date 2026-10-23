@@ -6,6 +6,7 @@ import { mockKey } from '../../api/api';
 import { ToastProvider } from '../../components/ToastProvider';
 import CommunitiesPage from '../../pages/communities/CommunitiesPage';
 import CommunityPage from '../../pages/community/CommunityPage';
+import NewCommunityPage from '../../pages/community-new/NewCommunityPage';
 import { demoMe } from '../../test/fixtures';
 import { authApi } from '../auth/authApi';
 import { SessionProvider } from '../auth/SessionProvider';
@@ -18,6 +19,7 @@ const renderAt = (path: string) =>
         <ToastProvider>
           <Routes>
             <Route path="/communities" element={<CommunitiesPage />} />
+            <Route path="/communities/new" element={<NewCommunityPage />} />
             <Route path="/communities/:slug" element={<CommunityPage />} />
             <Route path="/login" element={<p>Page de connexion</p>} />
           </Routes>
@@ -109,5 +111,90 @@ describe('Communautés, visiteur sans compte', () => {
     await screen.findByRole('link', { name: 'Sénégal' });
     expect(screen.queryByRole('button', { name: /^Quitter la communauté/ })).toBeNull();
     expect(screen.getByRole('button', { name: 'Rejoindre la communauté Sénégal' })).toBeTruthy();
+  });
+});
+
+describe('Propositions de communauté (COM-2)', () => {
+  const type = (label: RegExp, value: string) =>
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+
+  it('réserve la proposition aux Référents et explique pourquoi aux autres', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe());
+    renderAt('/communities');
+    expect(await screen.findByText(/Les Référents \(1 500 points\) peuvent proposer/)).toBeTruthy();
+    expect(screen.queryByRole('link', { name: 'Proposer une communauté' })).toBeNull();
+    cleanup();
+
+    renderAt('/communities/new');
+    expect(await screen.findByText(/Seuls les Référents/)).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Envoyer la proposition' })).toBeNull();
+  });
+
+  it('montre au Référent ses propositions et leur statut', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe({ level: 'REFERENT', reputation: 1642 }));
+    renderAt('/communities/new');
+    const list = await screen.findByRole('region', { name: 'Vos propositions' });
+    expect(await within(list).findByText('Laravel')).toBeTruthy();
+    expect(within(list).getByText('En attente')).toBeTruthy();
+    expect(within(list).getByRole('link', { name: 'Mali' }).getAttribute('href')).toBe(
+      '/communities/mali',
+    );
+    expect(within(list).getByText(/Motif : Elle ferait doublon/)).toBeTruthy();
+  });
+
+  it('valide puis envoie une proposition de techno', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe({ level: 'REFERENT', reputation: 1642 }));
+    const propose = vi.spyOn(communitiesApi, 'propose').mockResolvedValue({
+      id: 40,
+      name: 'Laravel Afrique',
+      kind: 'TECH',
+      status: 'PENDING',
+      rejectionReason: null,
+      slug: null,
+      createdAt: '2026-10-23T12:00:00Z',
+    });
+    renderAt('/communities/new');
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Envoyer la proposition' }));
+    expect(await screen.findByText('Le nom doit faire entre 3 et 40 caractères.')).toBeTruthy();
+    expect(propose).not.toHaveBeenCalled();
+
+    type(/^Nom/, 'Laravel Afrique');
+    type(/^Tag des questions/, 'laravel');
+    type(
+      /^Description/,
+      'Applications PHP avec Laravel : paiements mobiles, files et hébergement local.',
+    );
+    type(/^Règles propres/, 'Précisez la version de Laravel.\n\nPas de code piraté.');
+    fireEvent.click(screen.getByRole('button', { name: 'Envoyer la proposition' }));
+
+    await waitFor(() =>
+      expect(propose).toHaveBeenCalledWith({
+        name: 'Laravel Afrique',
+        kind: 'TECH',
+        countryCode: null,
+        tag: 'laravel',
+        description:
+          'Applications PHP avec Laravel : paiements mobiles, files et hébergement local.',
+        rules: ['Précisez la version de Laravel.', 'Pas de code piraté.'],
+      }),
+    );
+    const list = screen.getByRole('region', { name: 'Vos propositions' });
+    expect(await within(list).findByText('Laravel Afrique')).toBeTruthy();
+  });
+
+  it('exige un pays pour une communauté de pays', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe({ level: 'REFERENT', reputation: 1642 }));
+    const propose = vi.spyOn(communitiesApi, 'propose');
+    renderAt('/communities/new');
+    fireEvent.click(await screen.findByLabelText('Communauté de pays'));
+    type(/^Nom/, 'Mali');
+    type(
+      /^Description/,
+      'Développeurs de Bamako, Sikasso et Mopti : Orange Money, Moov et freelance.',
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Envoyer la proposition' }));
+    expect(await screen.findByText('Choisissez le pays.')).toBeTruthy();
+    expect(propose).not.toHaveBeenCalled();
   });
 });

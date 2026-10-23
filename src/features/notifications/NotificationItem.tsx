@@ -13,6 +13,7 @@ const SYSTEM_ICONS: Partial<Record<AppNotification['type'], IconName>> = {
   NEW_CHALLENGE: 'trophy',
   APPLICATION_DECISION: 'jobs',
   PROJECT_REQUEST_DECISION: 'user',
+  COMMUNITY_PROPOSAL_DECISION: 'users',
 };
 
 export type NotificationItemProps = {

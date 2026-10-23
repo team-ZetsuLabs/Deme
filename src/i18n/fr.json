@@ -88,7 +88,8 @@
     "TAG_REQUIRED": "Indiquez au moins un tag.",
     "INVALID_TAG": "Un tag ne contient que des lettres minuscules, des chiffres, des tirets ou des points.",
     "INVALID_COUNTRY": "Ce pays n'est pas reconnu.",
-    "INTERNAL_ERROR": "Une erreur est survenue de notre côté. Réessayez dans un instant."
+    "INTERNAL_ERROR": "Une erreur est survenue de notre côté. Réessayez dans un instant.",
+    "COMMUNITY_EXISTS": "Une communauté de ce nom ou de ce tag existe déjà, ou est déjà proposée."
   },
   "auth": {
     "browse": "Parcourir sans compte",
@@ -609,7 +610,8 @@
       "MISSION_MATCH": "Une mission correspond à votre profil",
       "NEW_CHALLENGE": "Nouveau défi de la semaine",
       "APPLICATION_DECISION": "Votre candidature est {{decision}}",
-      "PROJECT_REQUEST_DECISION": "Votre demande pour rejoindre le projet est {{decision}}"
+      "PROJECT_REQUEST_DECISION": "Votre demande pour rejoindre le projet est {{decision}}",
+      "COMMUNITY_PROPOSAL_DECISION": "La proposition de communauté est {{decision}}"
     },
     "decisions": {
       "VIEWED": "vue",
@@ -1169,6 +1171,43 @@
     "nobody": "Personne pour le moment.",
     "noRules": "Pas de règle particulière : les règles générales suffisent.",
     "generalRules": "Les règles générales de Zetsu s'appliquent aussi.",
-    "rulesLink": "Relire les règles"
+    "rulesLink": "Relire les règles",
+    "propose": {
+      "button": "Proposer une communauté",
+      "note": "Les Référents (1 500 points) peuvent proposer une communauté, validée ensuite par l'équipe.",
+      "pageTitle": "Proposer une communauté",
+      "lead": "Votre proposition est examinée par l'équipe Zetsu, comme une offre d'emploi. Vérifiez d'abord qu'une communauté proche n'existe pas déjà.",
+      "referentsOnly": "Seuls les Référents (1 500 points de réputation) peuvent proposer une communauté. En attendant, rejoignez celles qui existent et aidez leurs membres.",
+      "back": "Voir les communautés",
+      "kind": "Type de communauté",
+      "name": "Nom",
+      "namePlaceholderTech": "Ex. : Laravel",
+      "namePlaceholderCountry": "Ex. : Mali",
+      "tag": "Tag des questions",
+      "tagHint": "Les questions qui portent ce tag apparaîtront dans la communauté.",
+      "description": "Description",
+      "descriptionHint": "Pour qui, et pour parler de quoi. 30 à 200 caractères.",
+      "rules": "Règles propres",
+      "rulesHint": "Une règle par ligne, 5 au maximum. Les règles générales de Zetsu s’appliquent déjà.",
+      "submit": "Envoyer la proposition",
+      "busy": "Envoi en cours",
+      "sent": "Proposition envoyée. L'équipe vous répondra par une notification.",
+      "mine": "Vos propositions",
+      "none": "Vous n'avez encore rien proposé.",
+      "reason": "Motif : {{reason}}",
+      "status": {
+        "PENDING": "En attente",
+        "APPROVED": "Acceptée",
+        "REJECTED": "Refusée"
+      },
+      "errors": {
+        "name": "Le nom doit faire entre 3 et 40 caractères.",
+        "country": "Choisissez le pays.",
+        "tag": "Un tag en minuscules, avec chiffres, tirets ou points (35 caractères au plus).",
+        "description": "La description doit faire entre 30 et 200 caractères.",
+        "rulesCount": "5 règles au maximum.",
+        "ruleLength": "Chaque règle fait 200 caractères au plus."
+      }
+    }
   }
 }

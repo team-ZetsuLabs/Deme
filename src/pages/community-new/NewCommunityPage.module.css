@@ -1,0 +1,89 @@
+.panel {
+  max-width: 760px;
+  padding: var(--s5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+
+.panel + .panel {
+  margin-top: var(--s4);
+}
+
+.list:focus {
+  outline: none;
+}
+
+.title {
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: var(--lh-tight);
+}
+
+.lead {
+  max-width: 62ch;
+  margin: var(--s2) 0 var(--s5);
+  color: var(--text-2);
+}
+
+.subTitle {
+  margin-bottom: var(--s3);
+  font-size: var(--fs-base);
+  font-weight: 600;
+}
+
+.muted {
+  font-size: var(--fs-md);
+  color: var(--text-3);
+}
+
+.proposals {
+  display: grid;
+}
+
+.proposal {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding: var(--s3) 0;
+  border-top: 1px solid var(--line);
+}
+
+.proposal:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.proposalBody {
+  min-width: 0;
+  font-size: var(--fs-md);
+}
+
+.proposalBody a {
+  color: var(--text);
+}
+
+.proposalBody small {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.reason {
+  margin-top: var(--s1);
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 767px) {
+  .panel {
+    padding: var(--s4);
+  }
+  .title {
+    font-size: var(--fs-xl);
+  }
+}
