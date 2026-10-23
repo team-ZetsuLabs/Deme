@@ -8,6 +8,15 @@
   align-items: start;
 }
 
+/* Menu latéral fixe : il reste visible pendant que la page défile. */
+.rail {
+  position: sticky;
+  top: calc(var(--topbar-h) + var(--s5));
+  max-height: calc(100dvh - var(--topbar-h) - var(--s5) * 2);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 .main {
   min-width: 0;
 }

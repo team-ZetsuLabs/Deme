@@ -31,7 +31,7 @@ export function SideNav() {
   );
 
   return (
-    <nav className={styles.rail} aria-label={t('nav.label')}>
+    <nav aria-label={t('nav.label')}>
       <p className={styles.label}>{t('nav.spaces')}</p>
       {NAV_ITEMS.map(link)}
       {user && (
