@@ -16,7 +16,9 @@
     "settings": "Settings",
     "notifications": "Notifications",
     "myAccount": "My account",
-    "applications": "My applications"
+    "applications": "My applications",
+    "communities": "Communities",
+    "communitiesShort": "Groups"
   },
   "topbar": {
     "search": "Search",
@@ -1120,5 +1122,53 @@
       "participants_one": "{{count}} participant",
       "participants_other": "{{count}} participants"
     }
+  },
+  "communities": {
+    "pageTitle": "Communities",
+    "title": "Communities",
+    "lead": "Meet the developers of your country and your stack: their questions, their Referents, their rules.",
+    "mine": "My communities",
+    "mineEmpty": "You have not joined any community yet. Start with your country or your main stack.",
+    "mineError": "Your communities are not available right now.",
+    "filters": {
+      "kind": "Community type",
+      "kinds": {
+        "all": "All",
+        "COUNTRY": "Countries",
+        "TECH": "Stacks"
+      },
+      "search": "Search a community",
+      "searchPlaceholder": "Senegal, Flutter, mobile money…",
+      "apply": "Search"
+    },
+    "kinds": {
+      "COUNTRY": "Country community",
+      "TECH": "Stack community"
+    },
+    "members_one": "{{formatted}} member",
+    "members_other": "{{formatted}} members",
+    "questions_one": "{{formatted}} question",
+    "questions_other": "{{formatted}} questions",
+    "join": "Join",
+    "member": "Member",
+    "joinLabel": "Join the {{name}} community",
+    "leaveLabel": "Leave the {{name}} community",
+    "joinedToast": "Welcome to the {{name}} community.",
+    "left": "You left the {{name}} community.",
+    "empty": "No community matches. The team opens new ones regularly.",
+    "ask": "Ask a question here",
+    "sections": "Community sections",
+    "tabs": {
+      "questions": "Questions",
+      "members": "Members",
+      "rules": "Rules"
+    },
+    "noQuestions": "No question in this community yet. Ask the first one.",
+    "referents": "Referents",
+    "topMembers": "Most helpful this month",
+    "nobody": "Nobody yet.",
+    "noRules": "No specific rule: the general rules are enough.",
+    "generalRules": "The general Zetsu rules also apply.",
+    "rulesLink": "Read the rules"
   }
 }

@@ -32,16 +32,26 @@ const IDS: Record<keyof AskValues, string> = {
 
 export type AskFormProps = {
   initialTitle: string;
+  /** Étiquettes préremplies (depuis une communauté de techno). */
+  initialTags?: string;
   defaultCountry: string | null;
   onPosted: (question: QuestionDetail) => void;
 };
 
 /** Poser une question (QA-1) avec son contexte africain (QA-2). */
-export function AskForm({ initialTitle, defaultCountry, onPosted }: AskFormProps) {
+export function AskForm({
+  initialTitle,
+  initialTags = '',
+  defaultCountry,
+  onPosted,
+}: AskFormProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
-  const form = useValidatedForm<AskValues>({ title: initialTitle, body: '', tags: '' }, VALIDATORS);
+  const form = useValidatedForm<AskValues>(
+    { title: initialTitle, body: '', tags: initialTags },
+    VALIDATORS,
+  );
   const submitError = useSubmitError(form.setServerErrors);
   const [code, setCode] = useState('');
   const [country, setCountry] = useState(

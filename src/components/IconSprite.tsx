@@ -55,6 +55,14 @@ export function IconSprite() {
         <circle {...line} cx="9" cy="6" r="3" />
         <path {...round} d="M3 15.5c.8-2.8 3.2-4.5 6-4.5s5.2 1.7 6 4.5" />
       </symbol>
+      <symbol id="i-users" viewBox="0 0 18 18">
+        <circle {...line} cx="6.5" cy="6.5" r="2.5" />
+        <circle {...line} cx="12.5" cy="7.5" r="2" />
+        <path
+          {...round}
+          d="M1.8 15c.6-2.5 2.5-4 4.7-4s4.1 1.5 4.7 4M11.5 11.2c2 0 3.8 1.3 4.4 3.3"
+        />
+      </symbol>
       <symbol id="i-bell" viewBox="0 0 18 18">
         <path
           {...line}

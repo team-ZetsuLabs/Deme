@@ -16,9 +16,14 @@ export function BottomTabs() {
   return (
     <nav className={styles.tabs} aria-label={t('nav.label')}>
       {[...NAV_ITEMS, account].map((item) => (
-        <NavLink key={item.labelKey} to={item.to} className={styles.tab}>
+        <NavLink
+          key={item.labelKey}
+          to={item.to}
+          className={styles.tab}
+          aria-label={item.shortLabelKey ? t(item.labelKey) : undefined}
+        >
           <Icon name={item.icon} size={20} />
-          <span>{t(item.labelKey)}</span>
+          <span>{t(item.shortLabelKey ?? item.labelKey)}</span>
         </NavLink>
       ))}
     </nav>

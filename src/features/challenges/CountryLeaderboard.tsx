@@ -6,7 +6,7 @@ import { useApiQuery } from '../../hooks/useApiQuery';
 import { countryName } from '../../i18n/countries';
 import { useSession } from '../auth/useSession';
 import { challengesApi } from './challengesApi';
-import { flagOf } from './flag';
+import { flagOf } from '../../i18n/flag';
 import styles from './Leaderboard.module.css';
 
 export type CountryLeaderboardProps = {

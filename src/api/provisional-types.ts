@@ -280,3 +280,30 @@ export type CountryLeaderboardEntry = {
 
 /** POST /api/v1/challenges/{id}/submissions. 409 ALREADY_SUBMITTED : un dépôt par membre et par défi. */
 export type SubmissionRequest = { repoUrl: string };
+
+/** Communautés par pays ou par technologie (COM-1, idée de l'équipe hors cahier). */
+export type CommunityKind = 'COUNTRY' | 'TECH';
+
+/** Élément de GET /api/v1/communities et de GET /api/v1/users/me/communities. */
+export type CommunitySummary = {
+  slug: string; // « senegal », « flutter » : sert d'adresse /communities/{slug}
+  name: string;
+  kind: CommunityKind;
+  countryCode: string | null; // rempli pour une communauté de pays
+  tag: string | null; // rempli pour une communauté de techno : étiquette de ses questions
+  description: string; // texte brut, 200 caractères au plus
+  memberCount: number;
+  questionCount: number;
+  joined: boolean; // le membre connecté en fait partie (false sans session)
+};
+
+/** GET /api/v1/communities/{slug} */
+export type CommunityDetail = CommunitySummary & {
+  rules: string[]; // règles propres à la communauté, texte brut, en plus des règles générales
+  referents: AuthorSummary[]; // Référents qui veillent sur la communauté
+  topMembers: AuthorSummary[]; // membres les plus utiles ce mois-ci
+  createdAt: string;
+};
+
+/** Réponse de POST et DELETE /api/v1/communities/{slug}/members */
+export type MembershipResult = { joined: boolean; memberCount: number };

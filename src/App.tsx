@@ -19,6 +19,8 @@ const ForgotPasswordPage = lazy(() => import('./pages/forgot-password/ForgotPass
 const ResetPasswordPage = lazy(() => import('./pages/reset-password/ResetPasswordPage'));
 const VerifyEmailPage = lazy(() => import('./pages/verify-email/VerifyEmailPage'));
 const QuestionsPage = lazy(() => import('./pages/questions/QuestionsPage'));
+const CommunitiesPage = lazy(() => import('./pages/communities/CommunitiesPage'));
+const CommunityPage = lazy(() => import('./pages/community/CommunityPage'));
 const QuestionPage = lazy(() => import('./pages/question/QuestionPage'));
 const AskPage = lazy(() => import('./pages/ask/AskPage'));
 const WelcomePage = lazy(() => import('./pages/welcome/WelcomePage'));
@@ -119,6 +121,8 @@ export function App() {
                         />
                         <Route path="missions/:id" element={<MissionPage />} />
                         <Route path="challenges" element={<ChallengesPage />} />
+                        <Route path="communities" element={<CommunitiesPage />} />
+                        <Route path="communities/:slug" element={<CommunityPage />} />
                         <Route path="rules" element={<LegalPage doc="rules" />} />
                         <Route path="terms" element={<LegalPage doc="terms" />} />
                         <Route path="privacy" element={<LegalPage doc="privacy" />} />

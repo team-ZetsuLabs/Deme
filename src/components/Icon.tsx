@@ -20,7 +20,8 @@ export type IconName =
   | 'star'
   | 'offline'
   | 'flag'
-  | 'clock';
+  | 'clock'
+  | 'users';
 
 export type IconProps = {
   name: IconName;

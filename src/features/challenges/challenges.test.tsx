@@ -9,7 +9,7 @@ import ChallengesPage from '../../pages/challenges/ChallengesPage';
 import { authApi } from '../auth/authApi';
 import { SessionProvider } from '../auth/SessionProvider';
 import { challengesApi, validateRepoUrl } from './challengesApi';
-import { flagOf } from './flag';
+import { flagOf } from '../../i18n/flag';
 import { remainingUntil } from './remaining';
 import { demoMe } from '../../test/fixtures';
 

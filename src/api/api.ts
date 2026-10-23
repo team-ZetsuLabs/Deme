@@ -3,7 +3,7 @@
  *
  * - Mode `mock` : lit les exemples de src/mocks (copie des mocks du back-end).
  *   Nom du fichier : MÉTHODE_chemin, les identifiants numériques devenant `id`
- *   et le pseudo de /users/{username} devenant `username`.
+ *   le pseudo de /users/{username} devenant `username` et /communities/{slug} `slug`.
  *   GET /questions        -> GET_questions.json
  *   GET /questions/12     -> GET_questions_id.json
  *   POST /questions/12/answers -> POST_questions_id_answers.json
@@ -65,13 +65,20 @@ type MockLoaders = Record<string, () => Promise<MockModule>>;
 
 const defaultMocks = import.meta.glob<MockModule>('../mocks/*.json') as MockLoaders;
 
+/** Segments identifiés par un texte et non un nombre : /users/{username}, /communities/{slug}. */
+const SLUG_SEGMENTS: Record<string, string> = { users: 'username', communities: 'slug' };
+
 export function mockKey(method: HttpMethod, path: string): string {
   const segments = path
     .split('?')[0]
     .split('/')
     .filter(Boolean)
     .map((s, i, all) =>
-      /^\d+$/.test(s) ? 'id' : all[i - 1] === 'users' && s !== 'me' ? 'username' : s,
+      /^\d+$/.test(s)
+        ? 'id'
+        : s !== 'me' && SLUG_SEGMENTS[all[i - 1]]
+          ? SLUG_SEGMENTS[all[i - 1]]
+          : s,
     );
   return [method, ...segments].join('_');
 }

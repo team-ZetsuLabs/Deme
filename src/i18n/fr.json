@@ -16,7 +16,9 @@
     "settings": "Paramètres",
     "notifications": "Notifications",
     "myAccount": "Mon compte",
-    "applications": "Mes candidatures"
+    "applications": "Mes candidatures",
+    "communities": "Communautés",
+    "communitiesShort": "Groupes"
   },
   "topbar": {
     "search": "Rechercher",
@@ -1120,5 +1122,53 @@
       "participants_one": "{{count}} participant",
       "participants_other": "{{count}} participants"
     }
+  },
+  "communities": {
+    "pageTitle": "Communautés",
+    "title": "Communautés",
+    "lead": "Retrouvez les développeurs de votre pays et de votre techno : leurs questions, leurs Référents, leurs règles.",
+    "mine": "Mes communautés",
+    "mineEmpty": "Vous n'avez rejoint aucune communauté. Commencez par votre pays ou votre techno principale.",
+    "mineError": "Vos communautés ne sont pas disponibles pour le moment.",
+    "filters": {
+      "kind": "Type de communauté",
+      "kinds": {
+        "all": "Toutes",
+        "COUNTRY": "Pays",
+        "TECH": "Technos"
+      },
+      "search": "Chercher une communauté",
+      "searchPlaceholder": "Sénégal, Flutter, mobile money…",
+      "apply": "Chercher"
+    },
+    "kinds": {
+      "COUNTRY": "Communauté de pays",
+      "TECH": "Communauté de techno"
+    },
+    "members_one": "{{formatted}} membre",
+    "members_other": "{{formatted}} membres",
+    "questions_one": "{{formatted}} question",
+    "questions_other": "{{formatted}} questions",
+    "join": "Rejoindre",
+    "member": "Membre",
+    "joinLabel": "Rejoindre la communauté {{name}}",
+    "leaveLabel": "Quitter la communauté {{name}}",
+    "joinedToast": "Bienvenue dans la communauté {{name}}.",
+    "left": "Vous avez quitté la communauté {{name}}.",
+    "empty": "Aucune communauté ne correspond. L'équipe en ouvre de nouvelles régulièrement.",
+    "ask": "Poser une question ici",
+    "sections": "Sections de la communauté",
+    "tabs": {
+      "questions": "Questions",
+      "members": "Membres",
+      "rules": "Règles"
+    },
+    "noQuestions": "Pas encore de question dans cette communauté. Posez la première.",
+    "referents": "Référents",
+    "topMembers": "Les plus utiles ce mois-ci",
+    "nobody": "Personne pour le moment.",
+    "noRules": "Pas de règle particulière : les règles générales suffisent.",
+    "generalRules": "Les règles générales de Zetsu s'appliquent aussi.",
+    "rulesLink": "Relire les règles"
   }
 }

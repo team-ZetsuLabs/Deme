@@ -1,0 +1,95 @@
+{
+  "items": [
+    {
+      "slug": "senegal",
+      "name": "Sénégal",
+      "kind": "COUNTRY",
+      "countryCode": "SN",
+      "tag": null,
+      "description": "Développeurs de Dakar, Thiès, Saint-Louis et d'ailleurs : Wave, Orange Money, freelance et premiers emplois.",
+      "memberCount": 1284,
+      "questionCount": 412,
+      "joined": true
+    },
+    {
+      "slug": "mobile-money",
+      "name": "Mobile money",
+      "kind": "TECH",
+      "countryCode": null,
+      "tag": "mobile-money",
+      "description": "Intégrer Orange Money, Wave, MTN MoMo, M-Pesa ou Moov Money : callbacks, sandbox, réconciliation.",
+      "memberCount": 2310,
+      "questionCount": 688,
+      "joined": true
+    },
+    {
+      "slug": "kenya",
+      "name": "Kenya",
+      "kind": "COUNTRY",
+      "countryCode": "KE",
+      "tag": null,
+      "description": "Nairobi, Mombasa, Kisumu : M-Pesa Daraja, startups et entraide entre devs kényans.",
+      "memberCount": 976,
+      "questionCount": 301,
+      "joined": false
+    },
+    {
+      "slug": "flutter",
+      "name": "Flutter",
+      "kind": "TECH",
+      "countryCode": null,
+      "tag": "flutter",
+      "description": "Applications mobiles légères pour les réseaux instables : hors ligne, taille des APK, performances.",
+      "memberCount": 1542,
+      "questionCount": 527,
+      "joined": false
+    },
+    {
+      "slug": "cote-divoire",
+      "name": "Côte d'Ivoire",
+      "kind": "COUNTRY",
+      "countryCode": "CI",
+      "tag": null,
+      "description": "Abidjan, Bouaké, Yamoussoukro : paiements, e-commerce et missions entre développeurs ivoiriens.",
+      "memberCount": 853,
+      "questionCount": 244,
+      "joined": false
+    },
+    {
+      "slug": "spring-boot",
+      "name": "Spring Boot",
+      "kind": "TECH",
+      "countryCode": null,
+      "tag": "spring-boot",
+      "description": "API Java, sécurité, déploiement et bonnes pratiques côté serveur.",
+      "memberCount": 698,
+      "questionCount": 233,
+      "joined": false
+    },
+    {
+      "slug": "burkina-faso",
+      "name": "Burkina Faso",
+      "kind": "COUNTRY",
+      "countryCode": "BF",
+      "tag": null,
+      "description": "Ouagadougou et Bobo-Dioulasso : sites qui tiennent en 3G, Orange Money et Moov Money.",
+      "memberCount": 512,
+      "questionCount": 167,
+      "joined": false
+    },
+    {
+      "slug": "react",
+      "name": "React",
+      "kind": "TECH",
+      "countryCode": null,
+      "tag": "react",
+      "description": "Interfaces rapides en 3G : découpage du code, PWA, accessibilité.",
+      "memberCount": 1105,
+      "questionCount": 389,
+      "joined": false
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 8
+}

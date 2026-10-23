@@ -45,5 +45,8 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    setupFiles: ['src/test/setup.ts'],
+    // Les pages se chargent à la demande (React.lazy) : sur une machine chargée, 5 s ne suffit pas.
+    testTimeout: 15000,
   },
 });

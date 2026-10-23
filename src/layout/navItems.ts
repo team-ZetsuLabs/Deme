@@ -3,6 +3,8 @@ import type { IconName } from '../components/Icon';
 export type NavItem = {
   to: string;
   labelKey: string;
+  /** Libellé court pour la barre d'onglets mobile, si le libellé normal est trop long. */
+  shortLabelKey?: string;
   icon: IconName;
 };
 
@@ -12,6 +14,12 @@ export const NAV_ITEMS: NavItem[] = [
   { to: '/jobs', labelKey: 'nav.jobs', icon: 'jobs' },
   { to: '/missions', labelKey: 'nav.missions', icon: 'mission' },
   { to: '/challenges', labelKey: 'nav.challenges', icon: 'trophy' },
+  {
+    to: '/communities',
+    labelKey: 'nav.communities',
+    shortLabelKey: 'nav.communitiesShort',
+    icon: 'users',
+  },
 ];
 
 /** Onglet « Compte » de la barre mobile : connexion, ou profil une fois connecté. */

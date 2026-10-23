@@ -21,7 +21,8 @@ export default function AskPage() {
       <p className={styles.lead}>{t('ask.lead')}</p>
       <AskForm
         initialTitle={params.get('title') ?? ''}
-        defaultCountry={user?.countryCode ?? null}
+        initialTags={params.get('tag') ?? ''}
+        defaultCountry={params.get('country') ?? user?.countryCode ?? null}
         onPosted={(question) => {
           toast(t('ask.posted'));
           navigate(`/questions/${question.id}`, { replace: true });
