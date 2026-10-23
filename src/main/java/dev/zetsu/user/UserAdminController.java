@@ -2,7 +2,6 @@ package dev.zetsu.user;
 
 import dev.zetsu.auth.ZetsuPrincipal;
 import dev.zetsu.common.ApiError;
-import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.user.UserAdminDtos.AdminUser;
 import dev.zetsu.user.UserAdminDtos.RoleChangeRequest;
@@ -29,6 +28,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "admin", description = "Back office de l'équipe (Modérateur, Administrateur)")
 public class UserAdminController {
 
+    private final UserAdminService userAdminService;
+
+    public UserAdminController(UserAdminService userAdminService) {
+        this.userAdminService = userAdminService;
+    }
+
     @GetMapping
     @Operation(summary = "Rechercher des comptes",
             description = "q cherche dans le pseudo, le nom et l'email. Les plus récents d'abord.")
@@ -40,7 +45,7 @@ public class UserAdminController {
                                         @RequestParam(required = false) Role role,
                                         @RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "20") int size) {
-        throw ApiException.notImplemented();
+        return userAdminService.list(q, status, role, page, size);
     }
 
     @PostMapping("/{id}/suspend")
@@ -56,7 +61,7 @@ public class UserAdminController {
     @ApiResponse(responseCode = "409", description = "USER_NOT_ACTIVE", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public AdminUser suspend(@PathVariable Long id, @Valid @RequestBody SuspendRequest req,
                              @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return userAdminService.suspend(id, req.reason(), me);
     }
 
     @PostMapping("/{id}/reactivate")
@@ -67,7 +72,7 @@ public class UserAdminController {
     @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "409", description = "USER_NOT_SUSPENDED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public AdminUser reactivate(@PathVariable Long id, @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return userAdminService.reactivate(id);
     }
 
     @PutMapping("/{id}/role")
@@ -82,6 +87,6 @@ public class UserAdminController {
     @ApiResponse(responseCode = "409", description = "USER_NOT_ACTIVE", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public AdminUser changeRole(@PathVariable Long id, @Valid @RequestBody RoleChangeRequest req,
                                 @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return userAdminService.changeRole(id, req.role(), me);
     }
 }

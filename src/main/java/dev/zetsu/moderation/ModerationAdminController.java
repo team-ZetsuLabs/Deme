@@ -2,7 +2,6 @@ package dev.zetsu.moderation;
 
 import dev.zetsu.auth.ZetsuPrincipal;
 import dev.zetsu.common.ApiError;
-import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.moderation.ModerationDtos.CaseDecisionRequest;
 import dev.zetsu.moderation.ModerationDtos.ModerationCase;
@@ -27,6 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "admin", description = "Back office de l'équipe (Modérateur, Administrateur)")
 public class ModerationAdminController {
 
+    private final ModerationService moderationService;
+
+    public ModerationAdminController(ModerationService moderationService) {
+        this.moderationService = moderationService;
+    }
+
     @GetMapping
     @Operation(summary = "Signalements et contestations",
             description = "Sans filtre : les dossiers « APPEALED » d'abord, puis ceux sans décision, les plus "
@@ -38,7 +43,7 @@ public class ModerationAdminController {
                                              @RequestParam(required = false) ReportTargetType targetType,
                                              @RequestParam(defaultValue = "0") int page,
                                              @RequestParam(defaultValue = "20") int size) {
-        throw ApiException.notImplemented();
+        return moderationService.teamList(status, targetType, page, size);
     }
 
     @PostMapping("/{id}/decision")
@@ -50,10 +55,10 @@ public class ModerationAdminController {
     @ApiResponse(responseCode = "200", description = "Dossier à jour")
     @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR, NOTE_REQUIRED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
-    @ApiResponse(responseCode = "403", description = "FORBIDDEN", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "403", description = "FORBIDDEN, CANNOT_SUSPEND_STAFF", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "404", description = "CASE_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public ModerationCase decide(@PathVariable Long id, @Valid @RequestBody CaseDecisionRequest req,
                                  @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return moderationService.teamDecide(id, req, me);
     }
 }

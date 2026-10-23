@@ -1,7 +1,6 @@
 package dev.zetsu.tag;
 
 import dev.zetsu.common.ApiError;
-import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.tag.TagDtos.AdminTag;
 import dev.zetsu.tag.TagDtos.TagMergeRequest;
@@ -29,6 +28,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "admin", description = "Back office de l'équipe (Modérateur, Administrateur)")
 public class TagAdminController {
 
+    private final TagAdminService tagAdminService;
+
+    public TagAdminController(TagAdminService tagAdminService) {
+        this.tagAdminService = tagAdminService;
+    }
+
     @GetMapping
     @Operation(summary = "Étiquettes et leurs usages",
             description = "q filtre par début de nom. unused=true ne garde que les étiquettes que plus rien n'utilise. "
@@ -40,7 +45,7 @@ public class TagAdminController {
                                        @RequestParam(defaultValue = "false") boolean unused,
                                        @RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "50") int size) {
-        throw ApiException.notImplemented();
+        return tagAdminService.list(q, unused, page, size);
     }
 
     @PostMapping
@@ -52,7 +57,7 @@ public class TagAdminController {
     @ApiResponse(responseCode = "403", description = "FORBIDDEN", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "409", description = "TAG_EXISTS", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public AdminTag create(@Valid @RequestBody TagRequest req) {
-        throw ApiException.notImplemented();
+        return tagAdminService.create(req.name());
     }
 
     @PostMapping("/{name}/merge")
@@ -65,7 +70,7 @@ public class TagAdminController {
     @ApiResponse(responseCode = "403", description = "FORBIDDEN", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "404", description = "TAG_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public AdminTag merge(@PathVariable String name, @Valid @RequestBody TagMergeRequest req) {
-        throw ApiException.notImplemented();
+        return tagAdminService.merge(name, req.into());
     }
 
     @DeleteMapping("/{name}")
@@ -77,6 +82,6 @@ public class TagAdminController {
     @ApiResponse(responseCode = "404", description = "TAG_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "409", description = "TAG_IN_USE", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public void delete(@PathVariable String name) {
-        throw ApiException.notImplemented();
+        tagAdminService.delete(name);
     }
 }

@@ -18,9 +18,11 @@ import dev.zetsu.notification.NotificationTargetType;
 import dev.zetsu.notification.NotificationType;
 import dev.zetsu.reputation.Level;
 import dev.zetsu.reputation.ReputationService;
+import dev.zetsu.user.Role;
 import dev.zetsu.user.User;
 import dev.zetsu.user.UserDtos.AuthorSummary;
 import dev.zetsu.user.UserRepository;
+import dev.zetsu.user.UserStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -136,6 +138,53 @@ public class ModerationService {
                 targets.setHidden(c.getTargetType(), c.getTargetId(), false);
                 notifyAuthor(c, target, NotificationType.CONTENT_RESTORED);
             }
+        }
+        return toDtos(List.of(c)).get(0);
+    }
+
+    @Transactional(readOnly = true)
+    public PageResponse<ModerationDtos.ModerationCase> teamList(CaseStatus status, ReportTargetType type, int page,
+                                                                int size) {
+        Page<ModerationCase> result = cases.findForTeam(status, type, CaseStatus.APPEALED, QUEUE,
+                Paging.of(page, size));
+        return new PageResponse<>(toDtos(result.getContent()), result.getNumber(), result.getSize(),
+                result.getTotalElements());
+    }
+
+    /**
+     * Décision de l'équipe (MOD-4), qui peut revenir sur celle d'un Référent et trancher une contestation :
+     * RESTORE l'accepte, HIDE la rejette. WARN et SUSPEND masquent aussi le contenu.
+     */
+    @Transactional
+    public ModerationDtos.ModerationCase teamDecide(Long id, CaseDecisionRequest req, ZetsuPrincipal me) {
+        String note = blankToNull(req.note());
+        ModerationAction action = req.action();
+        if (note == null && action != ModerationAction.DISMISS && action != ModerationAction.RESTORE) {
+            throw ApiException.badRequest("NOTE_REQUIRED", "Le motif est obligatoire pour cette décision");
+        }
+        ModerationCase c = cases.lockById(id).orElseThrow(ModerationService::caseNotFound);
+        ModerationTargets.Target target = targets.find(c.getTargetType(), c.getTargetId()).orElseThrow();
+        User author = users.findById(c.getTargetAuthorId()).orElseThrow();
+        if (action == ModerationAction.SUSPEND && (author.getRole() == Role.MODERATOR || author.getRole() == Role.ADMIN)) {
+            throw ApiException.forbidden("CANNOT_SUSPEND_STAFF", "Impossible de suspendre un membre de l'équipe");
+        }
+        boolean wasHidden = target.hidden();
+        boolean hide = action == ModerationAction.HIDE || action == ModerationAction.WARN
+                || action == ModerationAction.SUSPEND;
+        CaseStatus newStatus = hide ? CaseStatus.HIDDEN
+                : action == ModerationAction.RESTORE ? CaseStatus.RESTORED : CaseStatus.DISMISSED;
+        c.decide(action, note, me.id(), true, newStatus);
+        if (hide != wasHidden) {
+            targets.setHidden(c.getTargetType(), c.getTargetId(), hide);
+            notifyAuthor(c, target, hide ? NotificationType.CONTENT_HIDDEN : NotificationType.CONTENT_RESTORED);
+        }
+        if (action == ModerationAction.WARN) {
+            notifications.notify(author.getId(), NotificationType.ACCOUNT_WARNED, null,
+                    new NotificationTarget(NotificationTargetType.USER, author.getId(), author.getUsername(), null),
+                    null);
+        }
+        if (action == ModerationAction.SUSPEND && author.getStatus() == UserStatus.ACTIVE) {
+            author.suspend(note);
         }
         return toDtos(List.of(c)).get(0);
     }

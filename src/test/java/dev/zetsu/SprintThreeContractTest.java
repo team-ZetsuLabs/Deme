@@ -80,9 +80,9 @@ class SprintThreeContractTest extends IntegrationTest {
         Member rimvie = register("Rimvie");
         jdbc.update("update users set role = 'MODERATOR' where id = ?", rimvie.id());
         Member moderator = login(rimvie);
-        for (String path : new String[]{"/api/v1/admin/cases", "/api/v1/admin/users", "/api/v1/admin/tags",
-                "/api/v1/admin/challenges"}) {
-            mvc.perform(get(path).session(moderator.session())).andExpect(status().isNotImplemented());
+        for (String path : new String[]{"/api/v1/admin/cases", "/api/v1/admin/users", "/api/v1/admin/tags"}) {
+            mvc.perform(get(path).session(moderator.session())).andExpect(status().isOk());
         }
+        mvc.perform(get("/api/v1/admin/challenges").session(moderator.session())).andExpect(status().isNotImplemented());
     }
 }

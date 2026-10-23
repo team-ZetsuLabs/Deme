@@ -68,6 +68,10 @@ public class User {
     @Column(nullable = false, length = 20)
     private UserStatus status = UserStatus.ACTIVE;
 
+    /** Motif de la suspension en cours (MOD-4), null si le compte n'est pas suspendu. */
+    @Column(name = "suspension_reason", length = 500)
+    private String suspensionReason;
+
     @Column(nullable = false, length = 2)
     private String language = "fr";
 
@@ -187,6 +191,21 @@ public class User {
 
     public void setStatus(UserStatus status) {
         this.status = status;
+    }
+
+    /** Effet immédiat : ActiveAccountFilter ferme ses sessions ouvertes à la requête suivante. */
+    public void suspend(String reason) {
+        this.status = UserStatus.SUSPENDED;
+        this.suspensionReason = reason;
+    }
+
+    public void reactivate() {
+        this.status = UserStatus.ACTIVE;
+        this.suspensionReason = null;
+    }
+
+    public String getSuspensionReason() {
+        return suspensionReason;
     }
 
     public String getLanguage() {

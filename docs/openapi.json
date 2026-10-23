@@ -3657,7 +3657,7 @@
             }
           },
           "403" : {
-            "description" : "FORBIDDEN",
+            "description" : "FORBIDDEN, CANNOT_SUSPEND_STAFF",
             "content" : {
               "application/json" : {
                 "schema" : {

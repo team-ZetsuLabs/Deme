@@ -63,7 +63,7 @@ public class SecurityConfig {
                         // Jeton brut (sans masquage BREACH) : la valeur du cookie est celle à renvoyer.
                         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
                 .addFilterAfter(new CsrfCookieFilter(), CsrfFilter.class)
-                .addFilterBefore(new ActiveAccountFilter(users), AuthorizationFilter.class)
+                .addFilterBefore(new ActiveAccountFilter(users, contextRepository), AuthorizationFilter.class)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers("/api/v1/docs", "/api/v1/docs/**", "/api/v1/swagger-ui/**",
                                 "/api/v1/openapi.json", "/api/v1/openapi.json/**").permitAll()

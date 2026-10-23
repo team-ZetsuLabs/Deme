@@ -44,6 +44,22 @@ public interface ModerationCaseRepository extends JpaRepository<ModerationCase, 
                                    @Param("targetType") ReportTargetType targetType,
                                    @Param("viewerId") Long viewerId, Pageable pageable);
 
+    /**
+     * Back office (MOD-4). Sans statut : les contestations d'abord, puis les dossiers sans décision, les plus
+     * signalés d'abord.
+     */
+    @Query("""
+            select c from ModerationCase c
+            where (:status is null and (c.status = :appealed or (c.decidedAt is null and c.status in (:queue)))
+                   or c.status = :status)
+              and (:targetType is null or c.targetType = :targetType)
+            order by case when c.status = :appealed then 0 else 1 end, c.reportCount desc, c.firstReportedAt asc,
+                     c.id asc""")
+    Page<ModerationCase> findForTeam(@Param("status") CaseStatus status,
+                                     @Param("targetType") ReportTargetType targetType,
+                                     @Param("appealed") CaseStatus appealed,
+                                     @Param("queue") Collection<CaseStatus> queue, Pageable pageable);
+
     Page<ModerationCase> findByTargetAuthorIdAndStatusInOrderByUpdatedAtDescIdDesc(
             Long authorId, Collection<CaseStatus> statuses, Pageable pageable);
 
