@@ -54,11 +54,46 @@ public class OAuthUserService extends DefaultOAuth2UserService {
         if ("github".equals(provider)) {
             profile = profile.withVerifiedEmail(githubVerifiedEmail(request.getAccessToken().getTokenValue()));
         }
-        User user = findOrCreate(provider, profile);
+        return resolve(provider, profile);
+    }
+
+    /** Liaison demandée depuis les paramètres (SET-4), sinon connexion ou inscription (AUTH-2). */
+    @Transactional
+    public ZetsuPrincipal resolve(String provider, ExternalProfile profile) {
+        Optional<OAuthLinking.Intent> intent = OAuthLinking.consume(provider);
+        User user = intent.isPresent() ? link(intent.get().userId(), provider, profile) : findOrCreate(provider, profile);
         if (user.getStatus() != UserStatus.ACTIVE) {
             throw new OAuth2AuthenticationException(new OAuth2Error("account_suspended", "Ce compte est suspendu", null));
         }
         return ZetsuPrincipal.of(user).withoutPassword();
+    }
+
+    /**
+     * Rattache le compte externe au membre. Refusé s'il appartient déjà à un autre membre (il faudrait fusionner
+     * deux profils), ou si le membre a déjà un autre compte chez ce fournisseur.
+     */
+    @Transactional
+    public User link(Long userId, String provider, ExternalProfile profile) {
+        Optional<OAuthAccount> existing = accounts.findWithUser(provider, profile.id());
+        if (existing.isPresent()) {
+            if (existing.get().getUser().getId().equals(userId)) {
+                return existing.get().getUser();
+            }
+            throw linkError("ALREADY_LINKED_ELSEWHERE", "Ce compte est déjà lié à un autre membre");
+        }
+        if (accounts.findAllOf(userId).stream().anyMatch(a -> a.getProvider().equals(provider))) {
+            throw linkError("ALREADY_LINKED", "Un autre compte de ce fournisseur est déjà lié");
+        }
+        User user = users.findById(userId).orElseThrow(() -> linkError("USER_NOT_FOUND", "Membre introuvable"));
+        accounts.save(new OAuthAccount(user, provider, profile.id()));
+        if (user.getAvatarUrl() == null) {
+            user.setAvatarUrl(profile.avatarUrl());
+        }
+        return user;
+    }
+
+    private static OAuth2AuthenticationException linkError(String code, String message) {
+        return new OAuth2AuthenticationException(new OAuth2Error(code, message, null));
     }
 
     @Transactional

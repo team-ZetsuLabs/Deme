@@ -2,6 +2,7 @@ package dev.zetsu.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.zetsu.auth.ActiveAccountFilter;
+import dev.zetsu.auth.OAuthLinking;
 import dev.zetsu.auth.AuthController;
 import dev.zetsu.auth.EmailUserDetailsService;
 import dev.zetsu.auth.OAuthUserService;
@@ -23,9 +24,11 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
@@ -105,10 +108,29 @@ public class SecurityConfig {
                     .authorizationEndpoint(ae -> ae.baseUri(AuthController.OAUTH_AUTHORIZATION_BASE))
                     .redirectionEndpoint(re -> re.baseUri("/api/v1/auth/oauth2/callback/*"))
                     .userInfoEndpoint(ui -> ui.userService(oauthUserService))
-                    .defaultSuccessUrl(props.frontUrl(), true)
-                    .failureUrl(props.frontUrl() + (props.frontUrl().endsWith("/") ? "" : "/") + "login?error=oauth"));
+                    // Après une liaison (SET-4), retour aux paramètres ; sinon à l'accueil ou à la connexion.
+                    .successHandler((req, res, auth) -> res.sendRedirect(
+                            req.getAttribute(OAuthLinking.LINKING_ATTRIBUTE) instanceof String provider
+                                    ? front(props, "settings?linked=" + provider) : props.frontUrl()))
+                    .failureHandler((req, res, ex) -> res.sendRedirect(
+                            req.getAttribute(OAuthLinking.LINKING_ATTRIBUTE) != null
+                                    ? front(props, "settings?linkError=" + linkErrorCode(ex))
+                                    : front(props, "login?error=oauth"))));
         }
         return http.build();
+    }
+
+    private static String front(ZetsuProperties props, String path) {
+        return props.frontUrl() + (props.frontUrl().endsWith("/") ? "" : "/") + path;
+    }
+
+    /** Code d'erreur traduisible par le front ; jamais le message brut d'une exception dans l'adresse. */
+    private static String linkErrorCode(AuthenticationException ex) {
+        if (ex instanceof OAuth2AuthenticationException oauth
+                && oauth.getError().getErrorCode().matches("^[A-Z_]{1,40}$")) {
+            return oauth.getError().getErrorCode();
+        }
+        return "LINK_FAILED";
     }
 
     @Bean

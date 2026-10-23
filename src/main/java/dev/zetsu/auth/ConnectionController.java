@@ -3,12 +3,12 @@ package dev.zetsu.auth;
 import dev.zetsu.auth.AuthDtos.Connections;
 import dev.zetsu.auth.AuthDtos.LinkStart;
 import dev.zetsu.common.ApiError;
-import dev.zetsu.common.ApiException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,18 +17,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Contrat du sprint 3 (SET-4) : lier ou délier GitHub et Google depuis les paramètres. */
+/** Comptes connectés (SET-4) : lier ou délier GitHub et Google depuis les paramètres. */
 @RestController
 @RequestMapping("/api/v1/users/me/connections")
 @Tag(name = "users", description = "Profils des membres")
 public class ConnectionController {
+
+    private final ConnectionService connectionService;
+
+    public ConnectionController(ConnectionService connectionService) {
+        this.connectionService = connectionService;
+    }
 
     @GetMapping
     @Operation(summary = "Mes comptes connectés", description = "Un élément par fournisseur activé sur ce serveur.")
     @ApiResponse(responseCode = "200", description = "Les comptes")
     @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Connections list(@AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return connectionService.list(me.id());
     }
 
     @PostMapping("/{provider}")
@@ -41,8 +47,9 @@ public class ConnectionController {
     @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "404", description = "PROVIDER_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "409", description = "ALREADY_LINKED", content = @Content(schema = @Schema(implementation = ApiError.class)))
-    public LinkStart link(@PathVariable String provider, @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+    public LinkStart link(@PathVariable String provider, @AuthenticationPrincipal ZetsuPrincipal me,
+                          HttpServletRequest request) {
+        return connectionService.startLink(provider, me.id(), request.getSession());
     }
 
     @DeleteMapping("/{provider}")
@@ -53,6 +60,6 @@ public class ConnectionController {
     @ApiResponse(responseCode = "404", description = "PROVIDER_NOT_FOUND, NOT_LINKED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "409", description = "LAST_LOGIN_METHOD", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Connections unlink(@PathVariable String provider, @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return connectionService.unlink(provider, me.id());
     }
 }

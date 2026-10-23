@@ -44,6 +44,14 @@ public class OAuthAccount {
         this.providerUserId = providerUserId;
     }
 
+    public String getProvider() {
+        return provider;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
     public User getUser() {
         return user;
     }
