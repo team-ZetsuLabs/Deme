@@ -7,8 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Contrat du sprint 2 publié avant le code : les points d'entrée existent, ceux qui ne sont pas encore codés
- * répondent 501, et les règles d'accès sont en place.
+ * Contrat du sprint 2 : tous les points d'entrée sont publiés et codés,
+ * avec leurs règles d'accès.
  */
 class SprintTwoContractTest extends IntegrationTest {
 
@@ -35,12 +35,12 @@ class SprintTwoContractTest extends IntegrationTest {
     }
 
     @Test
-    void lesListesSontPubliques() throws Exception {
+    void lesListesSontPubliquesEtLeCompteurRepond() throws Exception {
         mvc.perform(get("/api/v1/jobs")).andExpect(status().isOk());
         mvc.perform(get("/api/v1/missions")).andExpect(status().isOk());
         mvc.perform(get("/api/v1/notifications/unread-count").session(register("Awa").session()))
-                .andExpect(status().isNotImplemented())
-                .andExpect(jsonPath("$.code").value("NOT_IMPLEMENTED"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count").value(0));
     }
 
     @Test

@@ -19,6 +19,9 @@ import dev.zetsu.user.Role;
 import dev.zetsu.user.User;
 import dev.zetsu.user.UserDtos.AuthorSummary;
 import dev.zetsu.user.UserRepository;
+import dev.zetsu.notification.NotificationService;
+import dev.zetsu.notification.NotificationTargetType;
+import dev.zetsu.notification.NotificationType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,9 +43,11 @@ public class JobService {
     private final TagService tags;
     private final MarkdownRenderer markdown;
     private final ReputationService reputation;
+    private final NotificationService notifications;
 
     public JobService(JobRepository jobs, JobSearch search, ApplicationRepository applications, UserRepository users,
-                      TagService tags, MarkdownRenderer markdown, ReputationService reputation) {
+                      TagService tags, MarkdownRenderer markdown, ReputationService reputation,
+                      NotificationService notifications) {
         this.jobs = jobs;
         this.search = search;
         this.applications = applications;
@@ -50,6 +55,7 @@ public class JobService {
         this.tags = tags;
         this.markdown = markdown;
         this.reputation = reputation;
+        this.notifications = notifications;
     }
 
     @Transactional(readOnly = true)
@@ -124,6 +130,14 @@ public class JobService {
         }
         job.review(req.decision() == ReviewDecision.APPROVE ? JobStatus.PUBLISHED : JobStatus.REJECTED,
                 req.decision() == ReviewDecision.REJECT ? reason : null, me.id());
+        // Décision de l'équipe : le recruteur ne voit pas qui l'a prise (acteur null).
+        var target = NotificationService.target(NotificationTargetType.JOB, job.getId(), job.getTitle());
+        Long recruiterId = job.getRecruiter().getId();
+        notifications.notify(recruiterId, NotificationType.JOB_REVIEWED, null, target, job.getStatus().name());
+        if (job.getStatus() == JobStatus.PUBLISHED) {
+            notifications.notifyStackMatch(NotificationType.JOB_MATCH, null, recruiterId,
+                    job.getTechnologies().stream().map(Tag::getId).toList(), target);
+        }
         return toDetail(job, me);
     }
 

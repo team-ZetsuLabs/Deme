@@ -16,6 +16,9 @@ import dev.zetsu.user.AccountDeleted;
 import dev.zetsu.user.User;
 import dev.zetsu.user.UserRepository;
 import dev.zetsu.user.UserService;
+import dev.zetsu.notification.NotificationService;
+import dev.zetsu.notification.NotificationTargetType;
+import dev.zetsu.notification.NotificationType;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -40,10 +43,11 @@ public class ApplicationService {
     private final UserService userService;
     private final CvStorage cvStorage;
     private final MissionService missionService;
+    private final NotificationService notifications;
 
     public ApplicationService(ApplicationRepository applications, JobService jobService, JobRepository jobs,
                               UserRepository users, UserService userService, CvStorage cvStorage,
-                              MissionService missionService) {
+                              MissionService missionService, NotificationService notifications) {
         this.applications = applications;
         this.jobService = jobService;
         this.jobs = jobs;
@@ -51,6 +55,7 @@ public class ApplicationService {
         this.userService = userService;
         this.cvStorage = cvStorage;
         this.missionService = missionService;
+        this.notifications = notifications;
     }
 
     /** JOB-3 : le profil Zetsu part avec la candidature ; le CV est facultatif. */
@@ -71,6 +76,8 @@ public class ApplicationService {
         try {
             Application a = applications.saveAndFlush(
                     Application.forJob(users.getReferenceById(me.id()), job, message, cvFile));
+            notifications.notify(job.getRecruiter().getId(), NotificationType.APPLICATION_RECEIVED, me.id(),
+                    NotificationService.target(NotificationTargetType.JOB, job.getId(), job.getTitle()), null);
             return toMine(a);
         } catch (RuntimeException e) {
             if (cvFile != null) {
@@ -98,6 +105,9 @@ public class ApplicationService {
         try {
             Application a = applications.saveAndFlush(Application.forMission(users.getReferenceById(me.id()), mission,
                     message, budget == null ? null : budget.amount(), budget == null ? null : budget.currency()));
+            notifications.notify(mission.getAuthor().getId(), NotificationType.APPLICATION_RECEIVED, me.id(),
+                    NotificationService.target(NotificationTargetType.MISSION, mission.getId(), mission.getTitle()),
+                    null);
             return toMine(a);
         } catch (DataIntegrityViolationException e) {
             throw alreadyProposed();
@@ -149,6 +159,9 @@ public class ApplicationService {
         if (a.getMission() != null && decision == ApplicationStatus.SHORTLISTED) {
             a.getMission().start();
         }
+        notifications.notify(a.getCandidate().getId(), NotificationType.APPLICATION_DECIDED, me.id(),
+                NotificationService.target(NotificationTargetType.APPLICATION, a.getId(), target(a).title()),
+                decision.name());
         return toReceived(a);
     }
 

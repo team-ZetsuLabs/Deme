@@ -19,6 +19,8 @@ import dev.zetsu.vote.Vote;
 import dev.zetsu.vote.VoteRepository;
 import dev.zetsu.vote.VoteTarget;
 import org.springframework.data.domain.Page;
+import dev.zetsu.notification.NotificationService;
+import dev.zetsu.notification.NotificationType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +38,11 @@ public class AnswerService {
     private final VoteRepository votes;
     private final ReputationService reputation;
     private final MarkdownRenderer markdown;
+    private final NotificationService notifications;
 
     public AnswerService(AnswerRepository answers, QuestionRepository questions, QuestionService questionService,
                          UserRepository users, VoteRepository votes, ReputationService reputation,
-                         MarkdownRenderer markdown) {
+                         MarkdownRenderer markdown, NotificationService notifications) {
         this.answers = answers;
         this.questions = questions;
         this.questionService = questionService;
@@ -47,6 +50,7 @@ public class AnswerService {
         this.votes = votes;
         this.reputation = reputation;
         this.markdown = markdown;
+        this.notifications = notifications;
     }
 
     @Transactional(readOnly = true)
@@ -65,6 +69,8 @@ public class AnswerService {
         a.setCode(blankToNull(req.code()));
         answers.saveAndFlush(a);
         questions.addAnswerCount(q.getId(), 1);
+        notifications.notify(q.getAuthor().getId(), NotificationType.ANSWER_POSTED, me.id(),
+                NotificationService.answer(a.getId(), q.getTitle(), q.getId()), null);
         return toView(a, q, null, me);
     }
 
@@ -112,6 +118,8 @@ public class AnswerService {
         }
         if (nextAuthor != null && !nextAuthor.equals(questionAuthorId)) {
             reputation.grant(nextAuthor, ReputationReason.ANSWER_ACCEPTED, questionId, next.getId(), questionAuthorId);
+            notifications.notify(nextAuthor, NotificationType.ANSWER_ACCEPTED, me.id(),
+                    NotificationService.answer(next.getId(), q.getTitle(), questionId), null);
         }
         // Bonus de l'auteur de la question : acquis tant qu'une réponse d'un autre membre est acceptée.
         boolean bonusBefore = previousAuthor != null && !previousAuthor.equals(questionAuthorId);

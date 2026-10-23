@@ -47,7 +47,9 @@ Après un changement de contrat, on régénère `docs/openapi.json` et on le pou
 
 ## Contrat du sprint 2
 
-Tout est dans Swagger UI. Ce qui n'est pas encore codé répond `501 NOT_IMPLEMENTED` : les fronts utilisent les mocks.
+Tout est dans Swagger UI et codé. Un point d'entrée publié avant d'être codé répond `501 NOT_IMPLEMENTED` : les fronts utilisent alors les mocks.
+
+Notifications (NOT-1) envoyées : réponse à ma question, réponse acceptée, vote reçu (une fois par votant et par contenu), offre ou mission qui correspond à ma stack, candidature reçue, décision sur une candidature, offre validée ou refusée. Jamais à celui qui agit lui-même.
 
 | Domaine | Points d'entrée |
 | --- | --- |
@@ -55,7 +57,7 @@ Tout est dans Swagger UI. Ce qui n'est pas encore codé répond `501 NOT_IMPLEME
 | candidatures (codé) | `POST /jobs/{id}/applications` (multipart : message, CV PDF de 2 Mo), `GET /jobs/{id}/applications`, `POST /missions/{id}/applications`, `GET /missions/{id}/applications`, `PATCH /applications/{id}` (retenir, refuser ; retenir une proposition met la mission en cours), `GET /applications/{id}/cv`, `GET /users/me/applications` (suivi JOB-7) |
 | `mission` (codé) | `GET /missions`, `GET /missions/{id}`, `POST /missions`, `PUT /missions/{id}`, `POST /missions/{id}/close` |
 | `admin` (codé) | `GET /admin/jobs`, `POST /admin/jobs/{id}/decision` (validation des offres, rôles Modérateur et Administrateur) |
-| `notification` | `GET /notifications`, `GET /notifications/unread-count`, `POST /notifications/read` |
+| `notification` (codé) | `GET /notifications`, `GET /notifications/unread-count`, `POST /notifications/read` |
 
 Les CV sont rangés dans `UPLOADS_DIR` (par défaut `data/uploads`, ignoré par Git), jamais servis directement : seul `GET /applications/{id}/cv` les rend, au candidat, au recruteur et à l'équipe.
 

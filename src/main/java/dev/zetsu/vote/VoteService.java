@@ -14,6 +14,9 @@ import dev.zetsu.reputation.ReputationService;
 import dev.zetsu.user.UserRepository;
 import dev.zetsu.vote.VoteDtos.VoteResult;
 import org.springframework.dao.DataIntegrityViolationException;
+import dev.zetsu.notification.NotificationService;
+import dev.zetsu.notification.NotificationTargetType;
+import dev.zetsu.notification.NotificationType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,10 +37,11 @@ public class VoteService {
     private final AnswerRepository answers;
     private final ReputationService reputation;
     private final UserRepository users;
+    private final NotificationService notifications;
 
     public VoteService(VoteRepository votes, QuestionService questionService, QuestionRepository questions,
                        AnswerService answerService, AnswerRepository answers, ReputationService reputation,
-                       UserRepository users) {
+                       UserRepository users, NotificationService notifications) {
         this.votes = votes;
         this.questionService = questionService;
         this.questions = questions;
@@ -45,9 +49,11 @@ public class VoteService {
         this.answers = answers;
         this.reputation = reputation;
         this.users = users;
+        this.notifications = notifications;
     }
 
-    private record Target(VoteTarget type, Long id, Long authorId, Long questionId, Long answerId) {
+    /** {@code title} : titre de la question, repris dans la notification de vote (NOT-1). */
+    private record Target(VoteTarget type, Long id, Long authorId, Long questionId, Long answerId, String title) {
     }
 
     @Transactional
@@ -72,12 +78,13 @@ public class VoteService {
 
     private Target question(Long id) {
         Question q = questionService.load(id);
-        return new Target(VoteTarget.QUESTION, q.getId(), q.getAuthor().getId(), q.getId(), null);
+        return new Target(VoteTarget.QUESTION, q.getId(), q.getAuthor().getId(), q.getId(), null, q.getTitle());
     }
 
     private Target answer(Long id) {
         Answer a = answerService.load(id);
-        return new Target(VoteTarget.ANSWER, a.getId(), a.getAuthor().getId(), a.getQuestionId(), a.getId());
+        String title = questions.findById(a.getQuestionId()).map(Question::getTitle).orElse("");
+        return new Target(VoteTarget.ANSWER, a.getId(), a.getAuthor().getId(), a.getQuestionId(), a.getId(), title);
     }
 
     private VoteResult vote(Target t, int value, ZetsuPrincipal me) {
@@ -124,6 +131,10 @@ public class VoteService {
         addScore(t, value);
         if (value > 0) {
             reputation.grant(t.authorId(), upvoteReason(t), t.questionId(), t.answerId(), voterId);
+            notifications.notifyOnce(t.authorId(), NotificationType.VOTE_RECEIVED, voterId,
+                    t.type() == VoteTarget.QUESTION
+                            ? NotificationService.target(NotificationTargetType.QUESTION, t.id(), t.title())
+                            : NotificationService.answer(t.id(), t.title(), t.questionId()));
         }
     }
 

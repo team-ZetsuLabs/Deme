@@ -18,6 +18,9 @@ import dev.zetsu.user.AccountDeleted;
 import dev.zetsu.user.User;
 import dev.zetsu.user.UserDtos.AuthorSummary;
 import dev.zetsu.user.UserRepository;
+import dev.zetsu.notification.NotificationService;
+import dev.zetsu.notification.NotificationTargetType;
+import dev.zetsu.notification.NotificationType;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,10 +43,11 @@ public class MissionService {
     private final TagService tags;
     private final MarkdownRenderer markdown;
     private final ReputationService reputation;
+    private final NotificationService notifications;
 
     public MissionService(MissionRepository missions, MissionSearch search, ApplicationRepository applications,
                           UserRepository users, TagService tags, MarkdownRenderer markdown,
-                          ReputationService reputation) {
+                          ReputationService reputation, NotificationService notifications) {
         this.missions = missions;
         this.search = search;
         this.applications = applications;
@@ -51,6 +55,7 @@ public class MissionService {
         this.tags = tags;
         this.markdown = markdown;
         this.reputation = reputation;
+        this.notifications = notifications;
     }
 
     @Transactional(readOnly = true)
@@ -82,6 +87,9 @@ public class MissionService {
         Mission m = new Mission(users.getReferenceById(me.id()));
         apply(m, req);
         missions.saveAndFlush(m);
+        notifications.notifyStackMatch(NotificationType.MISSION_MATCH, me.id(), me.id(),
+                m.getTechnologies().stream().map(Tag::getId).toList(),
+                NotificationService.target(NotificationTargetType.MISSION, m.getId(), m.getTitle()));
         return toDetail(load(m.getId()), me);
     }
 
