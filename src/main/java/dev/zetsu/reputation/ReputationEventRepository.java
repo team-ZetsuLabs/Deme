@@ -3,6 +3,7 @@ package dev.zetsu.reputation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,6 +13,11 @@ import java.util.Collection;
 public interface ReputationEventRepository extends JpaRepository<ReputationEvent, Long> {
 
     Page<ReputationEvent> findByUserIdOrderByCreatedAtDescIdDesc(Long userId, Pageable pageable);
+
+    /** AUTH-6 : la réputation d'un compte supprimé est effacée. */
+    @Modifying
+    @Query(value = "delete from reputation_events where user_id = :userId", nativeQuery = true)
+    void deleteByUserId(@Param("userId") Long userId);
 
     /** Solde des points accordés pour une même cause : c'est ce qu'une annulation doit retirer. */
     @Query(value = """

@@ -86,11 +86,14 @@ public final class UserDtos {
             String avatarUrl,
             String countryCode,
             @Schema(requiredMode = REQUIRED) int reputation,
-            @Schema(requiredMode = REQUIRED) Level level) {
+            @Schema(requiredMode = REQUIRED) Level level,
+            @Schema(requiredMode = REQUIRED, description = "Compte supprimé (AUTH-6) : afficher « Utilisateur supprimé » "
+                    + "traduit, sans lien vers le profil")
+            boolean deleted) {
 
         public static AuthorSummary from(User u, Level level) {
             return new AuthorSummary(u.getUsername(), u.getDisplayName(), u.getAvatarUrl(), u.getCountryCode(),
-                    u.getReputation(), level);
+                    u.getReputation(), level, u.isDeleted());
         }
     }
 
@@ -108,6 +111,14 @@ public final class UserDtos {
             @Size(max = MAX_TECHNOLOGIES, message = MAX_TECHNOLOGIES + " technologies maximum")
             @Schema(description = "Stack du membre. Absent ou null : inchangée. Liste vide : effacée.")
             List<String> technologies) {
+    }
+
+    /** AUTH-6 : le membre recopie son pseudo pour confirmer. */
+    @Schema(name = "DeleteAccountRequest")
+    public record DeleteAccountRequest(
+            @NotBlank(message = "Obligatoire")
+            @Schema(requiredMode = REQUIRED, description = "Pseudo du membre connecté, recopié", example = "aminata_diallo")
+            String confirmation) {
     }
 
     /** Parcours d'accueil (AUTH-5) : stack, pays et langue. Peut être renvoyé pour corriger ses choix. */

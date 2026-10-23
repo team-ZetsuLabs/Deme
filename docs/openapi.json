@@ -76,6 +76,47 @@
             }
           }
         }
+      },
+      "delete" : {
+        "tags" : [ "users" ],
+        "summary" : "Supprimer son compte",
+        "description" : "Le membre recopie son pseudo pour confirmer (AUTH-6). Ses questions et réponses restent, signées « Utilisateur supprimé » ; réputation, comptes liés et données personnelles sont effacés. La session est fermée.",
+        "operationId" : "delete",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/DeleteAccountRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Compte supprimé, session fermée"
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, CONFIRMATION_MISMATCH",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/v1/users/me/onboarding" : {
@@ -1515,9 +1556,13 @@
           "level" : {
             "type" : "string",
             "enum" : [ "NEWCOMER", "MEMBER", "CONTRIBUTOR", "REFERENT" ]
+          },
+          "deleted" : {
+            "type" : "boolean",
+            "description" : "Compte supprimé (AUTH-6) : afficher « Utilisateur supprimé » traduit, sans lien vers le profil"
           }
         },
-        "required" : [ "displayName", "level", "reputation", "username" ]
+        "required" : [ "deleted", "displayName", "level", "reputation", "username" ]
       },
       "QuestionContext" : {
         "type" : "object",
@@ -2048,16 +2093,28 @@
       "CsrfToken" : {
         "type" : "object",
         "properties" : {
+          "headerName" : {
+            "type" : "string"
+          },
           "parameterName" : {
             "type" : "string"
           },
           "token" : {
             "type" : "string"
-          },
-          "headerName" : {
-            "type" : "string"
           }
         }
+      },
+      "DeleteAccountRequest" : {
+        "type" : "object",
+        "properties" : {
+          "confirmation" : {
+            "type" : "string",
+            "description" : "Pseudo du membre connecté, recopié",
+            "example" : "aminata_diallo",
+            "minLength" : 1
+          }
+        },
+        "required" : [ "confirmation" ]
       }
     },
     "securitySchemes" : {

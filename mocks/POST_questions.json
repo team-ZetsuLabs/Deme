@@ -19,7 +19,8 @@
     "avatarUrl": null,
     "countryCode": "SN",
     "reputation": 342,
-    "level": "MEMBER"
+    "level": "MEMBER",
+    "deleted": false
   },
   "score": 0,
   "answerCount": 0,

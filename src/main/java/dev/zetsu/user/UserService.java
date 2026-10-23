@@ -1,12 +1,15 @@
 package dev.zetsu.user;
 
 import dev.zetsu.answer.AnswerRepository;
+import dev.zetsu.auth.OAuthAccountRepository;
 import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.question.QuestionRepository;
 import dev.zetsu.reputation.ReputationDtos.ReputationEntry;
+import dev.zetsu.reputation.ReputationEventRepository;
 import dev.zetsu.reputation.ReputationService;
 import dev.zetsu.tag.TagService;
+import dev.zetsu.user.UserDtos.DeleteAccountRequest;
 import dev.zetsu.user.UserDtos.Me;
 import dev.zetsu.user.UserDtos.OnboardingRequest;
 import dev.zetsu.user.UserDtos.PublicProfile;
@@ -24,14 +27,19 @@ public class UserService {
     private final AnswerRepository answers;
     private final ReputationService reputation;
     private final TagService tags;
+    private final OAuthAccountRepository oauthAccounts;
+    private final ReputationEventRepository reputationEvents;
 
     public UserService(UserRepository users, QuestionRepository questions, AnswerRepository answers,
-                       ReputationService reputation, TagService tags) {
+                       ReputationService reputation, TagService tags, OAuthAccountRepository oauthAccounts,
+                       ReputationEventRepository reputationEvents) {
         this.users = users;
         this.questions = questions;
         this.answers = answers;
         this.reputation = reputation;
         this.tags = tags;
+        this.oauthAccounts = oauthAccounts;
+        this.reputationEvents = reputationEvents;
     }
 
     @Transactional(readOnly = true)
@@ -80,13 +88,29 @@ public class UserService {
         return toMe(u);
     }
 
+    /**
+     * AUTH-6 : contenus gardés sous « Utilisateur supprimé », réputation et comptes OAuth effacés. Les votes
+     * restent pour ne pas changer les scores des autres. Les candidatures (JOB-3) seront effacées ici aussi.
+     */
+    @Transactional
+    public void delete(Long id, DeleteAccountRequest req) {
+        User u = users.findById(id).orElseThrow(UserService::notFound);
+        if (!u.getUsername().equalsIgnoreCase(req.confirmation().trim())) {
+            throw ApiException.badRequest("CONFIRMATION_MISMATCH", "Recopiez votre pseudo pour confirmer");
+        }
+        oauthAccounts.deleteByUserId(id);
+        reputationEvents.deleteByUserId(id);
+        u.anonymize();
+    }
+
     @Transactional(readOnly = true)
     public PageResponse<ReputationEntry> reputationHistory(String username, int page, int size) {
         return reputation.history(byUsername(username).getId(), page, size);
     }
 
     private User byUsername(String username) {
-        return users.findByUsernameIgnoreCase(username).orElseThrow(UserService::notFound);
+        return users.findByUsernameIgnoreCase(username).filter(u -> !u.isDeleted())
+                .orElseThrow(UserService::notFound);
     }
 
     private static ApiException notFound() {

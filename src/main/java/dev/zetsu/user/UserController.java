@@ -4,6 +4,7 @@ import dev.zetsu.auth.ZetsuPrincipal;
 import dev.zetsu.common.ApiError;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.reputation.ReputationDtos.ReputationEntry;
+import dev.zetsu.user.UserDtos.DeleteAccountRequest;
 import dev.zetsu.user.UserDtos.Me;
 import dev.zetsu.user.UserDtos.OnboardingRequest;
 import dev.zetsu.user.UserDtos.PublicProfile;
@@ -13,14 +14,20 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -70,5 +77,20 @@ public class UserController {
     @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Me onboarding(@Valid @RequestBody OnboardingRequest req, @AuthenticationPrincipal ZetsuPrincipal me) {
         return userService.completeOnboarding(me.id(), req);
+    }
+
+    @DeleteMapping("/me")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Supprimer son compte",
+            description = "Le membre recopie son pseudo pour confirmer (AUTH-6). Ses questions et réponses restent, "
+                    + "signées « Utilisateur supprimé » ; réputation, comptes liés et données personnelles sont effacés. "
+                    + "La session est fermée.")
+    @ApiResponse(responseCode = "204", description = "Compte supprimé, session fermée")
+    @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR, CONFIRMATION_MISMATCH", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    public void delete(@Valid @RequestBody DeleteAccountRequest req, @AuthenticationPrincipal ZetsuPrincipal me,
+                       HttpServletRequest request, HttpServletResponse response) {
+        userService.delete(me.id(), req);
+        new SecurityContextLogoutHandler().logout(request, response, null);
     }
 }

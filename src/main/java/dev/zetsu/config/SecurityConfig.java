@@ -1,10 +1,12 @@
 package dev.zetsu.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.zetsu.auth.ActiveAccountFilter;
 import dev.zetsu.auth.AuthController;
 import dev.zetsu.auth.EmailUserDetailsService;
 import dev.zetsu.auth.OAuthUserService;
 import dev.zetsu.common.ApiError;
+import dev.zetsu.user.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +27,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
@@ -52,7 +55,7 @@ public class SecurityConfig {
     SecurityFilterChain api(HttpSecurity http, ZetsuProperties props, ObjectMapper mapper,
                             CsrfTokenRepository csrfRepository, SecurityContextRepository contextRepository,
                             ObjectProvider<ClientRegistrationRepository> oauthClients,
-                            OAuthUserService oauthUserService) throws Exception {
+                            OAuthUserService oauthUserService, UserRepository users) throws Exception {
         http
                 .securityContext(c -> c.securityContextRepository(contextRepository))
                 .csrf(c -> c
@@ -60,6 +63,7 @@ public class SecurityConfig {
                         // Jeton brut (sans masquage BREACH) : la valeur du cookie est celle à renvoyer.
                         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
                 .addFilterAfter(new CsrfCookieFilter(), CsrfFilter.class)
+                .addFilterBefore(new ActiveAccountFilter(users), AuthorizationFilter.class)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers("/api/v1/docs", "/api/v1/docs/**", "/api/v1/swagger-ui/**",
                                 "/api/v1/openapi.json", "/api/v1/openapi.json/**").permitAll()

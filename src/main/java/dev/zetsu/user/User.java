@@ -23,6 +23,8 @@ import java.util.List;
 @Table(name = "users")
 public class User {
 
+    public static final String DELETED_NAME = "Utilisateur supprimé";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -80,6 +82,9 @@ public class User {
 
     @Column(name = "onboarded_at")
     private Instant onboardedAt;
+
+    @Column(name = "deleted_at")
+    private Instant deletedAt;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
@@ -215,6 +220,32 @@ public class User {
 
     public void setOnboardedAt(Instant onboardedAt) {
         this.onboardedAt = onboardedAt;
+    }
+
+    public boolean isDeleted() {
+        return status == UserStatus.DELETED;
+    }
+
+    /**
+     * AUTH-6 : la ligne reste pour que les questions et réponses gardent leur auteur, mais plus rien ne permet
+     * de retrouver la personne. Le pseudo contient un tiret, ce que {@link UsernameGenerator} ne produit jamais.
+     */
+    public void anonymize() {
+        username = "deleted-" + id;
+        displayName = DELETED_NAME;
+        email = null;
+        passwordHash = null;
+        emailVerified = false;
+        avatarUrl = null;
+        bio = null;
+        countryCode = null;
+        city = null;
+        role = Role.MEMBER;
+        status = UserStatus.DELETED;
+        visibleToRecruiters = false;
+        reputation = 0;
+        technologies.clear();
+        deletedAt = Instant.now();
     }
 
     public Instant getCreatedAt() {

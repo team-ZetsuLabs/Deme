@@ -17,6 +17,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByUsernameIgnoreCase(String username);
 
+    @Query("select u.status from User u where u.id = :id")
+    Optional<UserStatus> findStatus(@Param("id") Long id);
+
     @Modifying(flushAutomatically = true)
     @Query(value = "update users set reputation = reputation + :delta where id = :id", nativeQuery = true)
     void addReputation(@Param("id") Long id, @Param("delta") int delta);

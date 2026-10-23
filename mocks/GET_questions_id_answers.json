@@ -11,7 +11,8 @@
         "avatarUrl": "https://avatars.githubusercontent.com/u/1024",
         "countryCode": "GH",
         "reputation": 1587,
-        "level": "REFERENT"
+        "level": "REFERENT",
+        "deleted": false
       },
       "score": 9,
       "accepted": true,
@@ -32,7 +33,8 @@
         "avatarUrl": null,
         "countryCode": "KE",
         "reputation": 896,
-        "level": "CONTRIBUTOR"
+        "level": "CONTRIBUTOR",
+        "deleted": false
       },
       "score": 2,
       "accepted": false,
