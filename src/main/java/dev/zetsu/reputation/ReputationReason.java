@@ -1,13 +1,15 @@
 package dev.zetsu.reputation;
 
-/** Barème de réputation. Une annulation enregistre l'opposé du montant d'origine. */
+/** Barème de la section 8 du cahier. Une annulation enregistre l'opposé de ce qui avait été accordé. */
 public enum ReputationReason {
-    QUESTION_UPVOTED(5),
-    QUESTION_DOWNVOTED(-2),
-    ANSWER_UPVOTED(10),
-    ANSWER_DOWNVOTED(-2),
+    QUESTION_ASKED(5),
+    QUESTION_UPVOTED(2),
+    ANSWER_UPVOTED(2),
     ANSWER_ACCEPTED(15),
-    ACCEPTED_AN_ANSWER(2);
+    ACCEPTED_AN_ANSWER(2),
+    CHALLENGE_VALIDATED(20),
+    PROJECT_COMPLETED(10),
+    SPAM_REMOVED(-50);
 
     private final int points;
 
@@ -17,5 +19,10 @@ public enum ReputationReason {
 
     public int points() {
         return points;
+    }
+
+    /** Gains soumis au plafond quotidien (REP-3). */
+    boolean capped() {
+        return this == QUESTION_ASKED || this == QUESTION_UPVOTED || this == ANSWER_UPVOTED;
     }
 }

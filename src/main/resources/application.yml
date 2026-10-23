@@ -46,6 +46,14 @@ server:
 zetsu:
   front-url: ${FRONT_URL:/}
   cookie-secure: ${COOKIE_SECURE:true}
+  # Section 8 du cahier des charges. Seuils abaissés par le profil « demo ».
+  reputation:
+    member-threshold: 50
+    contributor-threshold: 500
+    referent-threshold: 1500
+    daily-cap: 200
+    rewarded-questions-per-day: 3
+    rewarded-votes-per-pair-per-day: 3
 
 springdoc:
   api-docs:

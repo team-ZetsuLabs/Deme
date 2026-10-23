@@ -348,7 +348,7 @@
       "get" : {
         "tags" : [ "questions" ],
         "summary" : "Liste et recherche des questions",
-        "description" : "Recherche plein texte en français et en anglais avec q (syntaxe web : \"phrase exacte\", -exclu, OR).",
+        "description" : "Recherche plein texte en français et en anglais sur titre, détails et étiquettes avec q (syntaxe web : \"phrase exacte\", -exclu, OR). Pagination par 20.",
         "operationId" : "list",
         "parameters" : [ {
           "name" : "q",
@@ -380,7 +380,15 @@
           "required" : false,
           "schema" : {
             "type" : "string",
-            "enum" : [ "ORANGE_MONEY", "MTN_MOMO", "MPESA", "WAVE", "MOOV_MONEY", "AIRTEL_MONEY", "FREE_MONEY", "OTHER" ]
+            "enum" : [ "ORANGE_MONEY", "WAVE", "MOOV_MONEY", "MTN_MOMO", "MPESA", "OTHER" ]
+          }
+        }, {
+          "name" : "network",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "GOOD", "UNSTABLE", "VERY_POOR" ]
           }
         }, {
           "name" : "author",
@@ -391,13 +399,23 @@
             "type" : "string"
           }
         }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Toutes, sans solution, résolues",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "ALL",
+            "enum" : [ "ALL", "UNSOLVED", "SOLVED" ]
+          }
+        }, {
           "name" : "sort",
           "in" : "query",
           "required" : false,
           "schema" : {
             "type" : "string",
             "default" : "RELEVANCE",
-            "enum" : [ "RELEVANCE", "RECENT", "SCORE", "UNANSWERED" ]
+            "enum" : [ "RELEVANCE", "RECENT", "VOTES" ]
           }
         }, {
           "name" : "page",
@@ -556,7 +574,7 @@
             }
           },
           "403" : {
-            "description" : "CANNOT_VOTE_OWN_CONTENT",
+            "description" : "CANNOT_VOTE_OWN_CONTENT, LEVEL_TOO_LOW",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -611,6 +629,16 @@
           }
         } ],
         "responses" : {
+          "200" : {
+            "description" : "Vote retiré",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VoteResult"
+                }
+              }
+            }
+          },
           "404" : {
             "description" : "QUESTION_NOT_FOUND, VOTE_NOT_FOUND",
             "content" : {
@@ -795,7 +823,7 @@
             }
           },
           "409" : {
-            "description" : "EMAIL_TAKEN, USERNAME_TAKEN",
+            "description" : "EMAIL_TAKEN",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -821,6 +849,7 @@
       "post" : {
         "tags" : [ "auth" ],
         "summary" : "Connexion par email et mot de passe",
+        "description" : "5 essais ratés sur un même email bloquent ce compte pendant 15 minutes (AUTH-3).",
         "operationId" : "login",
         "requestBody" : {
           "content" : {
@@ -853,8 +882,18 @@
               }
             }
           },
+          "403" : {
+            "description" : "ACCOUNT_SUSPENDED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
           "429" : {
-            "description" : "RATE_LIMITED",
+            "description" : "LOGIN_LOCKED, RATE_LIMITED",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -923,7 +962,7 @@
             }
           },
           "403" : {
-            "description" : "CANNOT_VOTE_OWN_CONTENT",
+            "description" : "CANNOT_VOTE_OWN_CONTENT, LEVEL_TOO_LOW",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -978,6 +1017,16 @@
           }
         } ],
         "responses" : {
+          "200" : {
+            "description" : "Vote retiré",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/VoteResult"
+                }
+              }
+            }
+          },
           "404" : {
             "description" : "ANSWER_NOT_FOUND, VOTE_NOT_FOUND",
             "content" : {
@@ -1233,7 +1282,7 @@
           },
           "bio" : {
             "type" : "string",
-            "maxLength" : 1000,
+            "maxLength" : 200,
             "minLength" : 0
           },
           "countryCode" : {
@@ -1243,9 +1292,17 @@
             "type" : "string",
             "maxLength" : 80,
             "minLength" : 0
+          },
+          "language" : {
+            "type" : "string",
+            "enum" : [ "fr", "en" ],
+            "pattern" : "^(fr|en)$"
+          },
+          "visibleToRecruiters" : {
+            "type" : "boolean"
           }
         },
-        "required" : [ "displayName" ]
+        "required" : [ "displayName", "language", "visibleToRecruiters" ]
       },
       "ApiError" : {
         "properties" : {
@@ -1279,7 +1336,7 @@
           },
           "username" : {
             "type" : "string",
-            "example" : "aminata_dev"
+            "example" : "aminata_diallo"
           },
           "displayName" : {
             "type" : "string",
@@ -1303,20 +1360,32 @@
             "type" : "string",
             "example" : "Dakar"
           },
+          "language" : {
+            "type" : "string",
+            "enum" : [ "fr", "en" ]
+          },
+          "visibleToRecruiters" : {
+            "type" : "boolean",
+            "description" : "Profil visible par les recruteurs (désactivé par défaut)"
+          },
           "role" : {
             "type" : "string",
-            "enum" : [ "MEMBER", "REFERENT", "ADMIN" ]
+            "enum" : [ "MEMBER", "RECRUITER", "MODERATOR", "ADMIN" ]
           },
           "reputation" : {
             "type" : "integer",
             "format" : "int32"
+          },
+          "level" : {
+            "type" : "string",
+            "enum" : [ "NEWCOMER", "MEMBER", "CONTRIBUTOR", "REFERENT" ]
           },
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
           }
         },
-        "required" : [ "createdAt", "displayName", "id", "reputation", "role", "username" ]
+        "required" : [ "createdAt", "displayName", "id", "language", "level", "reputation", "role", "username", "visibleToRecruiters" ]
       },
       "AcceptAnswerRequest" : {
         "type" : "object",
@@ -1346,9 +1415,13 @@
           "reputation" : {
             "type" : "integer",
             "format" : "int32"
+          },
+          "level" : {
+            "type" : "string",
+            "enum" : [ "NEWCOMER", "MEMBER", "CONTRIBUTOR", "REFERENT" ]
           }
         },
-        "required" : [ "displayName", "reputation", "username" ]
+        "required" : [ "displayName", "level", "reputation", "username" ]
       },
       "QuestionContext" : {
         "type" : "object",
@@ -1360,11 +1433,18 @@
           },
           "mobileMoneyOperator" : {
             "type" : "string",
-            "enum" : [ "ORANGE_MONEY", "MTN_MOMO", "MPESA", "WAVE", "MOOV_MONEY", "AIRTEL_MONEY", "FREE_MONEY", "OTHER" ]
+            "enum" : [ "ORANGE_MONEY", "WAVE", "MOOV_MONEY", "MTN_MOMO", "MPESA", "OTHER" ]
           },
           "networkQuality" : {
             "type" : "string",
-            "enum" : [ "MOBILE_2G", "MOBILE_3G", "MOBILE_4G", "MOBILE_5G", "FIXED_LINE", "UNSTABLE" ]
+            "enum" : [ "GOOD", "UNSTABLE", "VERY_POOR" ]
+          },
+          "techVersion" : {
+            "type" : "string",
+            "description" : "Version de la techno concernée",
+            "example" : "Spring Boot 3.3",
+            "maxLength" : 60,
+            "minLength" : 0
           }
         }
       },
@@ -1385,6 +1465,10 @@
           "bodyHtml" : {
             "type" : "string",
             "description" : "HTML nettoyé côté serveur, à afficher avec MemberContent"
+          },
+          "code" : {
+            "type" : "string",
+            "description" : "Code en texte brut, à afficher échappé puis colorer côté client"
           },
           "tags" : {
             "type" : "array",
@@ -1432,7 +1516,7 @@
       },
       "QuestionRequest" : {
         "type" : "object",
-        "description" : "Création ou modification complète d'une question",
+        "description" : "Création ou modification complète d'une question (QA-1)",
         "properties" : {
           "title" : {
             "type" : "string",
@@ -1446,13 +1530,19 @@
             "maxLength" : 30000,
             "minLength" : 30
           },
+          "code" : {
+            "type" : "string",
+            "description" : "Code facultatif, en texte brut",
+            "maxLength" : 20000,
+            "minLength" : 0
+          },
           "tags" : {
             "type" : "array",
             "example" : [ "mobile-money", "spring-boot" ],
             "items" : {
               "type" : "string"
             },
-            "maxItems" : 5,
+            "maxItems" : 4,
             "minItems" : 1
           },
           "context" : {
@@ -1469,6 +1559,12 @@
             "description" : "Markdown. Le HTML brut est ignoré.",
             "maxLength" : 30000,
             "minLength" : 20
+          },
+          "code" : {
+            "type" : "string",
+            "description" : "Code facultatif, en texte brut",
+            "maxLength" : 20000,
+            "minLength" : 0
           }
         },
         "required" : [ "body" ]
@@ -1491,6 +1587,10 @@
             "type" : "string",
             "description" : "HTML nettoyé côté serveur, à afficher avec MemberContent"
           },
+          "code" : {
+            "type" : "string",
+            "description" : "Code en texte brut, à afficher échappé puis colorer côté client"
+          },
           "author" : {
             "$ref" : "#/components/schemas/AuthorSummary"
           },
@@ -1500,6 +1600,10 @@
           },
           "accepted" : {
             "type" : "boolean"
+          },
+          "sameContext" : {
+            "type" : "boolean",
+            "description" : "Vrai si l'auteur de la réponse est du même pays que la question (QA-10)"
           },
           "myVote" : {
             "type" : "integer",
@@ -1517,7 +1621,7 @@
             "format" : "date-time"
           }
         },
-        "required" : [ "accepted", "author", "bodyHtml", "bodyMarkdown", "canEdit", "createdAt", "id", "questionId", "score", "updatedAt" ]
+        "required" : [ "accepted", "author", "bodyHtml", "bodyMarkdown", "canEdit", "createdAt", "id", "questionId", "sameContext", "score", "updatedAt" ]
       },
       "VoteRequest" : {
         "type" : "object",
@@ -1550,6 +1654,12 @@
       "RegisterRequest" : {
         "type" : "object",
         "properties" : {
+          "displayName" : {
+            "type" : "string",
+            "example" : "Kofi Mensah",
+            "maxLength" : 80,
+            "minLength" : 0
+          },
           "email" : {
             "type" : "string",
             "format" : "email",
@@ -1557,26 +1667,19 @@
             "maxLength" : 254,
             "minLength" : 0
           },
+          "countryCode" : {
+            "type" : "string",
+            "example" : "GH",
+            "minLength" : 1
+          },
           "password" : {
             "type" : "string",
-            "example" : "un-mot-de-passe-long",
-            "maxLength" : 72,
-            "minLength" : 10
-          },
-          "username" : {
-            "type" : "string",
-            "example" : "kofi_dev",
+            "example" : "accra2026",
             "minLength" : 1,
-            "pattern" : "^[A-Za-z0-9_]{3,30}$"
-          },
-          "displayName" : {
-            "type" : "string",
-            "example" : "Kofi Mensah",
-            "maxLength" : 80,
-            "minLength" : 0
+            "pattern" : "^(?=.*\\d).{8,72}$"
           }
         },
-        "required" : [ "displayName", "email", "password", "username" ]
+        "required" : [ "countryCode", "displayName", "email", "password" ]
       },
       "LoginRequest" : {
         "type" : "object",
@@ -1615,11 +1718,18 @@
           },
           "role" : {
             "type" : "string",
-            "enum" : [ "MEMBER", "REFERENT", "ADMIN" ]
+            "enum" : [ "MEMBER", "RECRUITER", "MODERATOR", "ADMIN" ]
           },
           "reputation" : {
             "type" : "integer",
             "format" : "int32"
+          },
+          "level" : {
+            "type" : "string",
+            "enum" : [ "NEWCOMER", "MEMBER", "CONTRIBUTOR", "REFERENT" ]
+          },
+          "visibleToRecruiters" : {
+            "type" : "boolean"
           },
           "questionCount" : {
             "type" : "integer",
@@ -1634,7 +1744,7 @@
             "format" : "date-time"
           }
         },
-        "required" : [ "answerCount", "createdAt", "displayName", "questionCount", "reputation", "role", "username" ]
+        "required" : [ "answerCount", "createdAt", "displayName", "level", "questionCount", "reputation", "role", "username", "visibleToRecruiters" ]
       },
       "PageResponseReputationEntry" : {
         "type" : "object",
@@ -1673,7 +1783,7 @@
           },
           "reason" : {
             "type" : "string",
-            "enum" : [ "QUESTION_UPVOTED", "QUESTION_DOWNVOTED", "ANSWER_UPVOTED", "ANSWER_DOWNVOTED", "ANSWER_ACCEPTED", "ACCEPTED_AN_ANSWER" ]
+            "enum" : [ "QUESTION_ASKED", "QUESTION_UPVOTED", "ANSWER_UPVOTED", "ANSWER_ACCEPTED", "ACCEPTED_AN_ANSWER", "CHALLENGE_VALIDATED", "PROJECT_COMPLETED", "SPAM_REMOVED" ]
           },
           "questionId" : {
             "type" : "integer",
@@ -1768,7 +1878,8 @@
             "format" : "int32"
           },
           "hasAcceptedAnswer" : {
-            "type" : "boolean"
+            "type" : "boolean",
+            "description" : "Vrai si une réponse est acceptée (question résolue)"
           },
           "createdAt" : {
             "type" : "string",
@@ -1834,10 +1945,10 @@
       "CsrfToken" : {
         "type" : "object",
         "properties" : {
-          "token" : {
+          "parameterName" : {
             "type" : "string"
           },
-          "parameterName" : {
+          "token" : {
             "type" : "string"
           },
           "headerName" : {

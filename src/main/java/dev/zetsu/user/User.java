@@ -34,7 +34,10 @@ public class User {
     @Column(name = "avatar_url", length = 500)
     private String avatarUrl;
 
-    @Column(length = 1000)
+    @Column(name = "email_verified", nullable = false)
+    private boolean emailVerified;
+
+    @Column(length = 200)
     private String bio;
 
     @Column(name = "country_code", length = 2)
@@ -46,6 +49,16 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private Role role = Role.MEMBER;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private UserStatus status = UserStatus.ACTIVE;
+
+    @Column(nullable = false, length = 2)
+    private String language = "fr";
+
+    @Column(name = "visible_to_recruiters", nullable = false)
+    private boolean visibleToRecruiters;
 
     @Column(nullable = false)
     private int reputation;
@@ -131,6 +144,38 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public boolean isVisibleToRecruiters() {
+        return visibleToRecruiters;
+    }
+
+    public void setVisibleToRecruiters(boolean visibleToRecruiters) {
+        this.visibleToRecruiters = visibleToRecruiters;
     }
 
     public int getReputation() {

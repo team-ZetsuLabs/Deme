@@ -1,11 +1,8 @@
 package dev.zetsu.question;
 
-/** Réseau dont disposent les utilisateurs visés par la question, ou l'auteur lui-même. */
+/** Qualité du réseau dans le contexte de la question (QA-2) : bonne, instable, très faible. */
 public enum NetworkQuality {
-    MOBILE_2G,
-    MOBILE_3G,
-    MOBILE_4G,
-    MOBILE_5G,
-    FIXED_LINE,
-    UNSTABLE
+    GOOD,
+    UNSTABLE,
+    VERY_POOR
 }

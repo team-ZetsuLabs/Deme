@@ -36,18 +36,24 @@ public class ReputationEvent {
     @Column(name = "answer_id")
     private Long answerId;
 
+    /** Membre qui a provoqué le gain (votant, auteur de la question qui accepte…), s'il y en a un. */
+    @Column(name = "source_user_id")
+    private Long sourceUserId;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 
     protected ReputationEvent() {
     }
 
-    public ReputationEvent(Long userId, int delta, ReputationReason reason, Long questionId, Long answerId) {
+    public ReputationEvent(Long userId, int delta, ReputationReason reason, Long questionId, Long answerId,
+                           Long sourceUserId) {
         this.userId = userId;
         this.delta = delta;
         this.reason = reason;
         this.questionId = questionId;
         this.answerId = answerId;
+        this.sourceUserId = sourceUserId;
     }
 
     public int getDelta() {

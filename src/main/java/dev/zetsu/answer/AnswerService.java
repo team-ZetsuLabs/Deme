@@ -54,7 +54,7 @@ public class AnswerService {
         Question q = questionService.load(questionId);
         Page<Answer> result = answers.findForQuestion(questionId, q.getAcceptedAnswerId(), Paging.of(page, size));
         Map<Long, Integer> myVotes = myVotes(result.getContent(), me);
-        return PageResponse.of(result, a -> toView(a, q.getAcceptedAnswerId(), myVotes.get(a.getId()), me));
+        return PageResponse.of(result, a -> toView(a, q, myVotes.get(a.getId()), me));
     }
 
     @Transactional
@@ -62,9 +62,10 @@ public class AnswerService {
         Question q = questionService.load(questionId);
         Answer a = new Answer(q.getId(), users.getReferenceById(me.id()));
         a.setBody(req.body(), markdown.toSafeHtml(req.body()));
+        a.setCode(blankToNull(req.code()));
         answers.saveAndFlush(a);
         questions.addAnswerCount(q.getId(), 1);
-        return toView(a, q.getAcceptedAnswerId(), null, me);
+        return toView(a, q, null, me);
     }
 
     @Transactional
@@ -74,12 +75,13 @@ public class AnswerService {
             throw ApiException.forbidden("NOT_ANSWER_AUTHOR", "Seul l'auteur peut modifier cette réponse");
         }
         a.setBody(req.body(), markdown.toSafeHtml(req.body()));
+        a.setCode(blankToNull(req.code()));
         a.touch();
         answers.saveAndFlush(a);
-        Long acceptedId = questions.findById(a.getQuestionId()).map(Question::getAcceptedAnswerId).orElse(null);
+        Question q = questionService.load(a.getQuestionId());
         Integer myVote = votes.findByVoterIdAndTargetTypeAndTargetId(me.id(), VoteTarget.ANSWER, a.getId())
                 .map(Vote::getValue).orElse(null);
-        return toView(a, acceptedId, myVote, me);
+        return toView(a, q, myVote, me);
     }
 
     /** L'auteur de la question choisit la réponse qui l'a aidé. {@code answerId} null retire l'acceptation. */
@@ -104,19 +106,20 @@ public class AnswerService {
 
         Long previousAuthor = previous == null ? null : previous.getAuthor().getId();
         Long nextAuthor = next == null ? null : next.getAuthor().getId();
-        if (previousAuthor != null && !previousAuthor.equals(questionAuthorId)) {
-            reputation.revoke(previousAuthor, ReputationReason.ANSWER_ACCEPTED, questionId, previous.getId());
+        if (previousAuthor != null) {
+            reputation.revoke(previousAuthor, ReputationReason.ANSWER_ACCEPTED, questionId, previous.getId(),
+                    questionAuthorId);
         }
         if (nextAuthor != null && !nextAuthor.equals(questionAuthorId)) {
-            reputation.grant(nextAuthor, ReputationReason.ANSWER_ACCEPTED, questionId, next.getId());
+            reputation.grant(nextAuthor, ReputationReason.ANSWER_ACCEPTED, questionId, next.getId(), questionAuthorId);
         }
-        // Bonus de l'auteur de la question : tant qu'une réponse d'un autre membre est acceptée.
+        // Bonus de l'auteur de la question : acquis tant qu'une réponse d'un autre membre est acceptée.
         boolean bonusBefore = previousAuthor != null && !previousAuthor.equals(questionAuthorId);
         boolean bonusAfter = nextAuthor != null && !nextAuthor.equals(questionAuthorId);
         if (bonusBefore && !bonusAfter) {
-            reputation.revoke(questionAuthorId, ReputationReason.ACCEPTED_AN_ANSWER, questionId, previous.getId());
+            reputation.revoke(questionAuthorId, ReputationReason.ACCEPTED_AN_ANSWER, questionId, null, null);
         } else if (!bonusBefore && bonusAfter) {
-            reputation.grant(questionAuthorId, ReputationReason.ACCEPTED_AN_ANSWER, questionId, next.getId());
+            reputation.grant(questionAuthorId, ReputationReason.ACCEPTED_AN_ANSWER, questionId, null, null);
         }
 
         q.setAcceptedAnswerId(next == null ? null : next.getId());
@@ -146,9 +149,16 @@ public class AnswerService {
                 .collect(Collectors.toMap(Vote::getTargetId, Vote::getValue));
     }
 
-    private static AnswerView toView(Answer a, Long acceptedId, Integer myVote, ZetsuPrincipal me) {
-        return new AnswerView(a.getId(), a.getQuestionId(), a.getBodyMarkdown(), a.getBodyHtml(),
-                AuthorSummary.from(a.getAuthor()), a.getScore(), a.getId().equals(acceptedId), myVote,
-                canEdit(a, me), a.getCreatedAt(), a.getUpdatedAt());
+    private static String blankToNull(String s) {
+        return s == null || s.isBlank() ? null : s;
+    }
+
+    private AnswerView toView(Answer a, Question q, Integer myVote, ZetsuPrincipal me) {
+        String authorCountry = a.getAuthor().getCountryCode();
+        boolean sameContext = authorCountry != null && authorCountry.equals(q.getCountryCode());
+        return new AnswerView(a.getId(), a.getQuestionId(), a.getBodyMarkdown(), a.getBodyHtml(), a.getCode(),
+                AuthorSummary.from(a.getAuthor(), reputation.levelOf(a.getAuthor().getReputation())), a.getScore(),
+                a.getId().equals(q.getAcceptedAnswerId()), sameContext, myVote, canEdit(a, me), a.getCreatedAt(),
+                a.getUpdatedAt());
     }
 }

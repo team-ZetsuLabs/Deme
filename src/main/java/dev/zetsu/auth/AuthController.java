@@ -44,16 +44,19 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final SessionLogin sessionLogin;
     private final RateLimiter rateLimiter;
+    private final LoginAttempts loginAttempts;
     private final ObjectProvider<ClientRegistrationRepository> registrations;
 
     public AuthController(AuthService authService, UserService userService,
                           AuthenticationManager authenticationManager, SessionLogin sessionLogin,
-                          RateLimiter rateLimiter, ObjectProvider<ClientRegistrationRepository> registrations) {
+                          RateLimiter rateLimiter, LoginAttempts loginAttempts,
+                          ObjectProvider<ClientRegistrationRepository> registrations) {
         this.authService = authService;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.sessionLogin = sessionLogin;
         this.rateLimiter = rateLimiter;
+        this.loginAttempts = loginAttempts;
         this.registrations = registrations;
     }
 
@@ -82,32 +85,40 @@ public class AuthController {
     @Operation(summary = "Inscription par email (secours d'OAuth)", description = "Connecte le membre dans la foulée.")
     @ApiResponse(responseCode = "201", description = "Compte créé et session ouverte")
     @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR", content = @Content(schema = @Schema(implementation = ApiError.class)))
-    @ApiResponse(responseCode = "409", description = "EMAIL_TAKEN, USERNAME_TAKEN", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "409", description = "EMAIL_TAKEN", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "429", description = "RATE_LIMITED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Me register(@Valid @RequestBody AuthDtos.RegisterRequest req,
                        HttpServletRequest request, HttpServletResponse response) {
         rateLimiter.check(RateLimiter.Rule.REGISTER, request.getRemoteAddr());
         var user = authService.register(req);
         sessionLogin.open(ZetsuPrincipal.of(user), request, response);
-        return Me.from(user);
+        return userService.toMe(user);
     }
 
     @PostMapping("/login")
-    @Operation(summary = "Connexion par email et mot de passe")
+    @Operation(summary = "Connexion par email et mot de passe",
+            description = "5 essais ratés sur un même email bloquent ce compte pendant 15 minutes (AUTH-3).")
     @ApiResponse(responseCode = "200", description = "Session ouverte")
     @ApiResponse(responseCode = "401", description = "INVALID_CREDENTIALS", content = @Content(schema = @Schema(implementation = ApiError.class)))
-    @ApiResponse(responseCode = "429", description = "RATE_LIMITED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "403", description = "ACCOUNT_SUSPENDED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "429", description = "LOGIN_LOCKED, RATE_LIMITED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Me login(@Valid @RequestBody AuthDtos.LoginRequest req,
                     HttpServletRequest request, HttpServletResponse response) {
         rateLimiter.check(RateLimiter.Rule.LOGIN, request.getRemoteAddr());
-        rateLimiter.check(RateLimiter.Rule.LOGIN, "email:" + req.email().trim().toLowerCase());
+        String email = req.email().trim();
+        loginAttempts.checkNotLocked(email);
         ZetsuPrincipal principal;
         try {
             var auth = authenticationManager.authenticate(
-                    UsernamePasswordAuthenticationToken.unauthenticated(req.email().trim(), req.password()));
+                    UsernamePasswordAuthenticationToken.unauthenticated(email, req.password()));
             principal = (ZetsuPrincipal) auth.getPrincipal();
         } catch (AuthenticationException e) {
+            loginAttempts.failed(email);
             throw new ApiException(HttpStatus.UNAUTHORIZED, "INVALID_CREDENTIALS", "Email ou mot de passe incorrect");
+        }
+        loginAttempts.succeeded(email);
+        if (!principal.active()) {
+            throw ApiException.forbidden("ACCOUNT_SUSPENDED", "Ce compte est suspendu");
         }
         sessionLogin.open(principal, request, response);
         return userService.me(principal.id());

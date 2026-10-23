@@ -8,24 +8,24 @@
       "createdAt": "2026-10-19T16:02:00Z"
     },
     {
-      "delta": 10,
+      "delta": 2,
       "reason": "ANSWER_UPVOTED",
       "questionId": 101,
       "answerId": 512,
       "createdAt": "2026-10-19T15:51:00Z"
     },
     {
-      "delta": 5,
+      "delta": 2,
       "reason": "QUESTION_UPVOTED",
       "questionId": 77,
       "answerId": null,
       "createdAt": "2026-10-17T08:14:00Z"
     },
     {
-      "delta": -2,
-      "reason": "ANSWER_DOWNVOTED",
+      "delta": 5,
+      "reason": "QUESTION_ASKED",
       "questionId": 63,
-      "answerId": 401,
+      "answerId": null,
       "createdAt": "2026-10-12T19:30:00Z"
     }
   ],

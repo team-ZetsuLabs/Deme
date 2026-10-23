@@ -7,23 +7,28 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Liste et recherche plein texte des questions (PostgreSQL {@code tsvector}, français et anglais).
+ * Fil et recherche plein texte des questions (QA-6, QA-7) : titre, détails et étiquettes, en français et en anglais.
  * Renvoie seulement les identifiants de la page ; les questions sont ensuite chargées par JPA.
  */
 @Repository
 public class QuestionSearch {
 
+    /** Filtres du fil (QA-6) : Toutes, Sans solution (aucune réponse acceptée), Résolues. */
+    public enum Status {
+        ALL,
+        UNSOLVED,
+        SOLVED
+    }
+
+    /** Tri du fil (QA-6) : récentes ou votées. RELEVANCE, par défaut, vaut RECENT sans texte recherché. */
     public enum Sort {
-        /** Les plus pertinentes d'abord (par défaut quand {@code q} est fourni, sinon équivaut à RECENT). */
         RELEVANCE,
         RECENT,
-        SCORE,
-        /** Seulement les questions sans réponse, les plus récentes d'abord. */
-        UNANSWERED
+        VOTES
     }
 
     public record Criteria(String text, String tag, String countryCode, MobileMoneyOperator operator,
-                           String authorUsername, Sort sort) {
+                           NetworkQuality network, String authorUsername, Status status, Sort sort) {
     }
 
     public record Result(List<Long> ids, long total) {
@@ -60,21 +65,27 @@ public class QuestionSearch {
             where.append(" and q.mobile_money_operator = :operator");
             params.addValue("operator", c.operator().name());
         }
+        if (c.network() != null) {
+            where.append(" and q.network_quality = :network");
+            params.addValue("network", c.network().name());
+        }
         if (c.authorUsername() != null) {
             where.append(" and q.author_id = (select id from users where lower(username) = lower(:author))");
             params.addValue("author", c.authorUsername());
         }
-        Sort sort = c.sort() == null ? Sort.RELEVANCE : c.sort();
-        if (sort == Sort.UNANSWERED) {
-            where.append(" and q.answer_count = 0");
+        if (c.status() == Status.UNSOLVED) {
+            where.append(" and q.accepted_answer_id is null");
+        } else if (c.status() == Status.SOLVED) {
+            where.append(" and q.accepted_answer_id is not null");
         }
+        Sort sort = c.sort() == null ? Sort.RELEVANCE : c.sort();
 
         String orderBy = switch (sort) {
             case RELEVANCE -> hasText
                     ? " order by ts_rank(q.search_vector, " + TSQUERY + ") desc, q.created_at desc, q.id desc"
                     : " order by q.created_at desc, q.id desc";
-            case SCORE -> " order by q.score desc, q.created_at desc, q.id desc";
-            case RECENT, UNANSWERED -> " order by q.created_at desc, q.id desc";
+            case VOTES -> " order by q.score desc, q.created_at desc, q.id desc";
+            case RECENT -> " order by q.created_at desc, q.id desc";
         };
 
         Long total = jdbc.queryForObject("select count(*) from questions q" + where, params, Long.class);

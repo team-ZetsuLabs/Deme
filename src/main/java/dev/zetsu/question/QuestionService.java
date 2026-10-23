@@ -9,6 +9,8 @@ import dev.zetsu.question.QuestionDtos.QuestionContext;
 import dev.zetsu.question.QuestionDtos.QuestionDetail;
 import dev.zetsu.question.QuestionDtos.QuestionRequest;
 import dev.zetsu.question.QuestionDtos.QuestionSummary;
+import dev.zetsu.reputation.ReputationReason;
+import dev.zetsu.reputation.ReputationService;
 import dev.zetsu.tag.Tag;
 import dev.zetsu.tag.TagService;
 import dev.zetsu.user.Role;
@@ -39,15 +41,18 @@ public class QuestionService {
     private final VoteRepository votes;
     private final TagService tagService;
     private final MarkdownRenderer markdown;
+    private final ReputationService reputation;
 
     public QuestionService(QuestionRepository questions, QuestionSearch search, UserRepository users,
-                           VoteRepository votes, TagService tagService, MarkdownRenderer markdown) {
+                           VoteRepository votes, TagService tagService, MarkdownRenderer markdown,
+                           ReputationService reputation) {
         this.questions = questions;
         this.search = search;
         this.users = users;
         this.votes = votes;
         this.tagService = tagService;
         this.markdown = markdown;
+        this.reputation = reputation;
     }
 
     @Transactional(readOnly = true)
@@ -75,6 +80,7 @@ public class QuestionService {
         Question q = new Question(author);
         apply(q, req);
         questions.saveAndFlush(q);
+        reputation.grant(me.id(), ReputationReason.QUESTION_ASKED, q.getId(), null, null);
         return toDetail(load(q.getId()), me);
     }
 
@@ -98,11 +104,21 @@ public class QuestionService {
     private void apply(Question q, QuestionRequest req) {
         q.setTitle(req.title().trim());
         q.setBody(req.body(), markdown.toSafeHtml(req.body()));
+        q.setCode(blankToNull(req.code()));
         q.setTags(tagService.resolve(req.tags()));
         QuestionContext ctx = req.context();
         q.setCountryCode(ctx == null ? null : ctx.countryCode());
         q.setMobileMoneyOperator(ctx == null ? null : ctx.mobileMoneyOperator());
         q.setNetworkQuality(ctx == null ? null : ctx.networkQuality());
+        q.setTechVersion(ctx == null ? null : blankToNull(ctx.techVersion()));
+    }
+
+    private static String blankToNull(String s) {
+        return s == null || s.isBlank() ? null : s;
+    }
+
+    private AuthorSummary author(User u) {
+        return AuthorSummary.from(u, reputation.levelOf(u.getReputation()));
     }
 
     static boolean canEdit(Question q, ZetsuPrincipal me) {
@@ -117,7 +133,7 @@ public class QuestionService {
         String text = Jsoup.parse(q.getBodyHtml()).text();
         String excerpt = text.length() <= EXCERPT_LENGTH ? text : text.substring(0, EXCERPT_LENGTH).trim() + "…";
         return new QuestionSummary(q.getId(), q.getTitle(), excerpt, tagNames(q), QuestionContext.from(q),
-                AuthorSummary.from(q.getAuthor()), q.getScore(), q.getAnswerCount(), q.getAcceptedAnswerId() != null,
+                author(q.getAuthor()), q.getScore(), q.getAnswerCount(), q.getAcceptedAnswerId() != null,
                 q.getCreatedAt());
     }
 
@@ -126,8 +142,9 @@ public class QuestionService {
                 .findByVoterIdAndTargetTypeAndTargetId(me.id(), VoteTarget.QUESTION, q.getId())
                 .map(Vote::getValue)
                 .orElse(null);
-        return new QuestionDetail(q.getId(), q.getTitle(), q.getBodyMarkdown(), q.getBodyHtml(), tagNames(q),
-                QuestionContext.from(q), AuthorSummary.from(q.getAuthor()), q.getScore(), q.getAnswerCount(),
+        return new QuestionDetail(q.getId(), q.getTitle(), q.getBodyMarkdown(), q.getBodyHtml(), q.getCode(),
+                tagNames(q),
+                QuestionContext.from(q), author(q.getAuthor()), q.getScore(), q.getAnswerCount(),
                 q.getAcceptedAnswerId(), myVote, canEdit(q, me), q.getCreatedAt(), q.getUpdatedAt());
     }
 }

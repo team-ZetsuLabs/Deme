@@ -8,10 +8,12 @@
     "displayName": "Aminata Diallo",
     "avatarUrl": null,
     "countryCode": "SN",
-    "reputation": 342
+    "reputation": 342,
+    "level": "MEMBER"
   },
   "score": 0,
   "accepted": false,
+  "sameContext": true,
   "myVote": null,
   "canEdit": true,
   "createdAt": "2026-10-21T10:20:00Z",

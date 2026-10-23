@@ -18,19 +18,22 @@ public final class QuestionDtos {
     private QuestionDtos() {
     }
 
-    /** Contexte africain de la question : ce qui distingue Zetsu. Tous les champs sont facultatifs. */
+    /** Contexte africain de la question (QA-2) : facultatif mais encouragé, affiché et filtrable. */
     @Schema(name = "QuestionContext")
     public record QuestionContext(
             @CountryCode @Schema(example = "CI", description = "Code pays ISO 3166-1 alpha-2") String countryCode,
             MobileMoneyOperator mobileMoneyOperator,
-            NetworkQuality networkQuality) {
+            NetworkQuality networkQuality,
+            @Size(max = 60, message = "60 caractères maximum")
+            @Schema(example = "Spring Boot 3.3", description = "Version de la techno concernée") String techVersion) {
 
         static QuestionContext from(Question q) {
-            return new QuestionContext(q.getCountryCode(), q.getMobileMoneyOperator(), q.getNetworkQuality());
+            return new QuestionContext(q.getCountryCode(), q.getMobileMoneyOperator(), q.getNetworkQuality(),
+                    q.getTechVersion());
         }
     }
 
-    @Schema(name = "QuestionRequest", description = "Création ou modification complète d'une question")
+    @Schema(name = "QuestionRequest", description = "Création ou modification complète d'une question (QA-1)")
     public record QuestionRequest(
             @NotBlank(message = "Obligatoire") @Size(min = 15, max = 150, message = "Entre 15 et 150 caractères")
             @Schema(requiredMode = REQUIRED, example = "Comment vérifier un paiement Orange Money côté serveur ?")
@@ -40,7 +43,10 @@ public final class QuestionDtos {
             @Schema(requiredMode = REQUIRED, description = "Markdown. Le HTML brut est ignoré.")
             String body,
 
-            @NotNull(message = "Obligatoire") @Size(min = 1, max = 5, message = "Entre 1 et 5 étiquettes")
+            @Size(max = 20000, message = "20000 caractères maximum")
+            @Schema(description = "Code facultatif, en texte brut") String code,
+
+            @NotNull(message = "Obligatoire") @Size(min = 1, max = 4, message = "Entre 1 et 4 étiquettes")
             @Schema(requiredMode = REQUIRED, example = "[\"mobile-money\", \"spring-boot\"]")
             List<String> tags,
 
@@ -58,7 +64,8 @@ public final class QuestionDtos {
             @Schema(requiredMode = REQUIRED) AuthorSummary author,
             @Schema(requiredMode = REQUIRED) int score,
             @Schema(requiredMode = REQUIRED) int answerCount,
-            @Schema(requiredMode = REQUIRED) boolean hasAcceptedAnswer,
+            @Schema(requiredMode = REQUIRED, description = "Vrai si une réponse est acceptée (question résolue)")
+            boolean hasAcceptedAnswer,
             @Schema(requiredMode = REQUIRED) Instant createdAt) {
     }
 
@@ -70,6 +77,7 @@ public final class QuestionDtos {
             String bodyMarkdown,
             @Schema(requiredMode = REQUIRED, description = "HTML nettoyé côté serveur, à afficher avec MemberContent")
             String bodyHtml,
+            @Schema(description = "Code en texte brut, à afficher échappé puis colorer côté client") String code,
             @Schema(requiredMode = REQUIRED) List<String> tags,
             @Schema(requiredMode = REQUIRED) QuestionContext context,
             @Schema(requiredMode = REQUIRED) AuthorSummary author,

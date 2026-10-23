@@ -10,10 +10,12 @@
         "displayName": "Kwame Asante",
         "avatarUrl": "https://avatars.githubusercontent.com/u/1024",
         "countryCode": "GH",
-        "reputation": 1287
+        "reputation": 1587,
+        "level": "REFERENT"
       },
       "score": 9,
       "accepted": true,
+      "sameContext": false,
       "myVote": 1,
       "canEdit": false,
       "createdAt": "2026-10-19T15:30:00Z",
@@ -29,10 +31,12 @@
         "displayName": "Njeri Wanjiku",
         "avatarUrl": null,
         "countryCode": "KE",
-        "reputation": 896
+        "reputation": 896,
+        "level": "CONTRIBUTOR"
       },
       "score": 2,
       "accepted": false,
+      "sameContext": false,
       "myVote": null,
       "canEdit": false,
       "createdAt": "2026-10-20T07:48:00Z",

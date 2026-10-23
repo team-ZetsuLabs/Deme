@@ -34,6 +34,10 @@ public class Answer {
     @Column(name = "body_html", nullable = false, columnDefinition = "text")
     private String bodyHtml;
 
+    /** Code facultatif, stocké en texte brut et coloré côté client. */
+    @Column(columnDefinition = "text")
+    private String code;
+
     @Column(nullable = false, insertable = false, updatable = false)
     private int score;
 
@@ -78,6 +82,14 @@ public class Answer {
     public void setBody(String markdown, String safeHtml) {
         this.bodyMarkdown = markdown;
         this.bodyHtml = safeHtml;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public int getScore() {

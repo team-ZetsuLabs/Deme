@@ -1,0 +1,6 @@
+# Démo en ligne : seuils de niveaux abaissés pour que les privilèges soient visibles (section 8).
+zetsu:
+  reputation:
+    member-threshold: 5
+    contributor-threshold: 25
+    referent-threshold: 60

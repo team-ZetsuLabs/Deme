@@ -1,5 +1,6 @@
 package dev.zetsu.auth;
 
+import dev.zetsu.common.CountryCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -15,21 +16,22 @@ public final class AuthDtos {
     private AuthDtos() {
     }
 
+    /** AUTH-1 : nom, email, pays, mot de passe de 8 caractères minimum avec un chiffre. */
     @Schema(name = "RegisterRequest")
     public record RegisterRequest(
+            @NotBlank(message = "Obligatoire") @Size(max = 80, message = "80 caractères maximum")
+            @Schema(requiredMode = REQUIRED, example = "Kofi Mensah") String displayName,
+
             @NotBlank(message = "Obligatoire") @Email(message = "Email invalide")
             @Size(max = 254, message = "254 caractères maximum")
             @Schema(requiredMode = REQUIRED, example = "kofi.mensah@exemple.gh") String email,
 
-            @NotBlank(message = "Obligatoire") @Size(min = 10, max = 72, message = "Entre 10 et 72 caractères")
-            @Schema(requiredMode = REQUIRED, example = "un-mot-de-passe-long") String password,
+            @NotBlank(message = "Obligatoire") @CountryCode
+            @Schema(requiredMode = REQUIRED, example = "GH") String countryCode,
 
             @NotBlank(message = "Obligatoire")
-            @Pattern(regexp = "^[A-Za-z0-9_]{3,30}$", message = "3 à 30 lettres, chiffres ou _")
-            @Schema(requiredMode = REQUIRED, example = "kofi_dev") String username,
-
-            @NotBlank(message = "Obligatoire") @Size(max = 80, message = "80 caractères maximum")
-            @Schema(requiredMode = REQUIRED, example = "Kofi Mensah") String displayName) {
+            @Pattern(regexp = "^(?=.*\\d).{8,72}$", message = "8 caractères minimum, dont un chiffre")
+            @Schema(requiredMode = REQUIRED, example = "accra2026") String password) {
     }
 
     @Schema(name = "LoginRequest")

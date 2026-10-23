@@ -44,7 +44,8 @@ public class QuestionController {
 
     @GetMapping
     @Operation(summary = "Liste et recherche des questions",
-            description = "Recherche plein texte en français et en anglais avec q (syntaxe web : \"phrase exacte\", -exclu, OR).")
+            description = "Recherche plein texte en français et en anglais sur titre, détails et étiquettes avec q "
+                    + "(syntaxe web : \"phrase exacte\", -exclu, OR). Pagination par 20.")
     @ApiResponse(responseCode = "200", description = "Page de questions")
     @ApiResponse(responseCode = "400", description = "INVALID_PAGE, INVALID_PAGE_SIZE, INVALID_PARAMETER, INVALID_COUNTRY",
             content = @Content(schema = @Schema(implementation = ApiError.class)))
@@ -53,7 +54,10 @@ public class QuestionController {
             @Parameter(description = "Nom d'étiquette exact") @RequestParam(required = false) String tag,
             @Parameter(description = "Code pays ISO, ex. SN") @RequestParam(required = false) String country,
             @RequestParam(required = false) MobileMoneyOperator operator,
+            @RequestParam(required = false) NetworkQuality network,
             @Parameter(description = "Pseudo de l'auteur") @RequestParam(required = false) String author,
+            @Parameter(description = "Toutes, sans solution, résolues")
+            @RequestParam(defaultValue = "ALL") QuestionSearch.Status status,
             @RequestParam(defaultValue = "RELEVANCE") QuestionSearch.Sort sort,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
@@ -62,7 +66,7 @@ public class QuestionController {
         }
         String text = q == null ? null : q.length() > 200 ? q.substring(0, 200) : q;
         var criteria = new QuestionSearch.Criteria(text, tag == null ? null : TagService.normalize(tag),
-                country, operator, author, sort);
+                country, operator, network, author, status, sort);
         return questionService.list(criteria, page, size);
     }
 

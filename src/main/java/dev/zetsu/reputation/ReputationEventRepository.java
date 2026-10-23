@@ -3,8 +3,45 @@ package dev.zetsu.reputation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.time.Instant;
+import java.util.Collection;
 
 public interface ReputationEventRepository extends JpaRepository<ReputationEvent, Long> {
 
     Page<ReputationEvent> findByUserIdOrderByCreatedAtDescIdDesc(Long userId, Pageable pageable);
+
+    /** Solde des points accordés pour une même cause : c'est ce qu'une annulation doit retirer. */
+    @Query(value = """
+            select coalesce(sum(delta), 0) from reputation_events
+            where user_id = :userId and reason = :reason
+              and question_id is not distinct from cast(:questionId as bigint)
+              and answer_id is not distinct from cast(:answerId as bigint)
+              and source_user_id is not distinct from cast(:sourceUserId as bigint)
+            """, nativeQuery = true)
+    int net(@Param("userId") Long userId, @Param("reason") String reason, @Param("questionId") Long questionId,
+            @Param("answerId") Long answerId, @Param("sourceUserId") Long sourceUserId);
+
+    @Query(value = """
+            select coalesce(sum(delta), 0) from reputation_events
+            where user_id = :userId and delta > 0 and reason in (:reasons) and created_at >= :since
+            """, nativeQuery = true)
+    int gainedSince(@Param("userId") Long userId, @Param("reasons") Collection<String> reasons,
+                    @Param("since") Instant since);
+
+    @Query(value = """
+            select count(*) from reputation_events
+            where user_id = :userId and delta > 0 and reason = :reason and created_at >= :since
+            """, nativeQuery = true)
+    int rewardsSince(@Param("userId") Long userId, @Param("reason") String reason, @Param("since") Instant since);
+
+    @Query(value = """
+            select count(*) from reputation_events
+            where user_id = :userId and source_user_id = :sourceUserId and delta > 0
+              and reason in (:reasons) and created_at >= :since
+            """, nativeQuery = true)
+    int rewardsFromSince(@Param("userId") Long userId, @Param("sourceUserId") Long sourceUserId,
+                         @Param("reasons") Collection<String> reasons, @Param("since") Instant since);
 }

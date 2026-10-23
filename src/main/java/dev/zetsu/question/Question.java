@@ -46,6 +46,10 @@ public class Question {
     @Column(name = "body_html", nullable = false, columnDefinition = "text")
     private String bodyHtml;
 
+    /** Code facultatif, stocké en texte brut et coloré côté client (QA-1). */
+    @Column(columnDefinition = "text")
+    private String code;
+
     @Column(name = "country_code", length = 2)
     private String countryCode;
 
@@ -56,6 +60,13 @@ public class Question {
     @Enumerated(EnumType.STRING)
     @Column(name = "network_quality", length = 20)
     private NetworkQuality networkQuality;
+
+    @Column(name = "tech_version", length = 60)
+    private String techVersion;
+
+    /** Copie des noms d'étiquettes pour la recherche plein texte (QA-7). */
+    @Column(name = "tags_text", nullable = false, length = 200)
+    private String tagsText = "";
 
     @Column(nullable = false, insertable = false, updatable = false)
     private int score;
@@ -166,6 +177,23 @@ public class Question {
     public void setTags(Set<Tag> tags) {
         this.tags.clear();
         this.tags.addAll(tags);
+        this.tagsText = String.join(" ", tags.stream().map(Tag::getName).sorted().toList());
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getTechVersion() {
+        return techVersion;
+    }
+
+    public void setTechVersion(String techVersion) {
+        this.techVersion = techVersion;
     }
 
     public Instant getCreatedAt() {

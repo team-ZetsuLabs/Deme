@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Service
 public class TagService {
 
-    public static final int MAX_TAGS = 5;
+    public static final int MAX_TAGS = 4;
     private static final Pattern NAME = Pattern.compile("^[a-z0-9][a-z0-9.+#-]{0,29}$");
 
     private final TagRepository tags;

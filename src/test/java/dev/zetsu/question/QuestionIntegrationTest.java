@@ -33,7 +33,9 @@ class QuestionIntegrationTest extends IntegrationTest {
                 .andExpect(jsonPath("$.tags").value(hasItem("mobile-money")))
                 .andExpect(jsonPath("$.context.countryCode").value("SN"))
                 .andExpect(jsonPath("$.context.mobileMoneyOperator").value("ORANGE_MONEY"))
-                .andExpect(jsonPath("$.context.networkQuality").value("MOBILE_3G"))
+                .andExpect(jsonPath("$.context.networkQuality").value("UNSTABLE"))
+                .andExpect(jsonPath("$.context.techVersion").value("Spring Boot 3.3"))
+                .andExpect(jsonPath("$.author.level").value("NEWCOMER"))
                 .andExpect(jsonPath("$.author.username").value(fatou.username()))
                 .andExpect(jsonPath("$.myVote").doesNotExist())
                 .andExpect(jsonPath("$.canEdit").value(false));
@@ -130,5 +132,48 @@ class QuestionIntegrationTest extends IntegrationTest {
         mvc.perform(post("/api/v1/questions").with(csrf()).contentType(MediaType.APPLICATION_JSON).content("{}"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value("UNAUTHENTICATED"));
+    }
+
+    @Test
+    void codeStockeEnTexteBrutEtCinqEtiquettesRefusees() throws Exception {
+        Member fatou = register("Fatou");
+        String code = "if (amount < 100) { System.out.println(\"<b>montant</b>\"); }";
+        var created = mvc.perform(post("/api/v1/questions").with(csrf()).session(fatou.session())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body(Map.of("title", "Montant minimum refusé par l'API Wave", "body", BODY,
+                                "code", code, "tags", List.of("wave")))))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.code").value(code))
+                .andReturn();
+        long id = read(created).get("id").asLong();
+        mvc.perform(get("/api/v1/questions/{id}", id)).andExpect(jsonPath("$.code").value(code));
+
+        mvc.perform(post("/api/v1/questions").with(csrf()).session(fatou.session())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body(Map.of("title", "Montant minimum refusé par l'API Wave", "body", BODY,
+                                "tags", List.of("a", "b", "c", "d", "e")))))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fields.tags").value("Entre 1 et 4 étiquettes"));
+    }
+
+    @Test
+    void rechercheSurLesEtiquettesEtFiltreSansSolution() throws Exception {
+        Member ama = register("Ama");
+        long id = askQuestion(ama, "Intégration USSD qui coupe au bout de 20 secondes",
+                "Ma session USSD se ferme toujours avant la fin du menu, sur tous les opérateurs testés au Togo.",
+                "TG", List.of("africastalking"));
+
+        // Le mot n'apparaît que dans l'étiquette.
+        mvc.perform(get("/api/v1/questions").param("q", "africastalking"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[0].id").value(id));
+
+        mvc.perform(get("/api/v1/questions").param("country", "TG").param("status", "UNSOLVED"))
+                .andExpect(jsonPath("$.total").value(1));
+        mvc.perform(get("/api/v1/questions").param("country", "TG").param("status", "SOLVED"))
+                .andExpect(jsonPath("$.total").value(0));
+        mvc.perform(get("/api/v1/questions").param("country", "TG").param("network", "UNSTABLE")
+                        .param("sort", "VOTES"))
+                .andExpect(jsonPath("$.total").value(1));
     }
 }

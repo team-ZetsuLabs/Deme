@@ -12,14 +12,15 @@
       "context": {
         "countryCode": "SN",
         "mobileMoneyOperator": "ORANGE_MONEY",
-        "networkQuality": "MOBILE_4G"
+        "networkQuality": "GOOD"
       },
       "author": {
         "username": "aminata_dev",
         "displayName": "Aminata Diallo",
         "avatarUrl": null,
         "countryCode": "SN",
-        "reputation": 342
+        "reputation": 342,
+        "level": "MEMBER"
       },
       "score": 7,
       "answerCount": 2,
@@ -38,14 +39,15 @@
       "context": {
         "countryCode": "BF",
         "mobileMoneyOperator": null,
-        "networkQuality": "MOBILE_3G"
+        "networkQuality": "UNSTABLE"
       },
       "author": {
         "username": "ibrahim_t",
         "displayName": "Ibrahim Traoré",
         "avatarUrl": null,
         "countryCode": "BF",
-        "reputation": 58
+        "reputation": 58,
+        "level": "MEMBER"
       },
       "score": 12,
       "answerCount": 0,
@@ -64,14 +66,15 @@
       "context": {
         "countryCode": "KE",
         "mobileMoneyOperator": "MPESA",
-        "networkQuality": "MOBILE_4G"
+        "networkQuality": "GOOD"
       },
       "author": {
         "username": "njeri_w",
         "displayName": "Njeri Wanjiku",
         "avatarUrl": null,
         "countryCode": "KE",
-        "reputation": 896
+        "reputation": 896,
+        "level": "CONTRIBUTOR"
       },
       "score": 21,
       "answerCount": 3,

@@ -8,8 +8,10 @@ import dev.zetsu.common.ApiException;
 import dev.zetsu.question.Question;
 import dev.zetsu.question.QuestionRepository;
 import dev.zetsu.question.QuestionService;
+import dev.zetsu.reputation.Level;
 import dev.zetsu.reputation.ReputationReason;
 import dev.zetsu.reputation.ReputationService;
+import dev.zetsu.user.UserRepository;
 import dev.zetsu.vote.VoteDtos.VoteResult;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -18,8 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 /**
- * Un vote par membre et par contenu. Revoter la même valeur renvoie 409 ; voter l'inverse remplace le vote.
- * Chaque changement met à jour le score du contenu et la réputation de son auteur.
+ * QA-4 : un vote par membre et par contenu, annulable, jamais sur ses propres contenus, à partir du niveau
+ * Membre. Revoter la même valeur renvoie 409 ; voter l'inverse remplace le vote. Seul un vote positif rapporte
+ * des points à l'auteur (section 8) ; un vote négatif ne baisse que le score du contenu.
  */
 @Service
 public class VoteService {
@@ -30,15 +33,18 @@ public class VoteService {
     private final AnswerService answerService;
     private final AnswerRepository answers;
     private final ReputationService reputation;
+    private final UserRepository users;
 
     public VoteService(VoteRepository votes, QuestionService questionService, QuestionRepository questions,
-                       AnswerService answerService, AnswerRepository answers, ReputationService reputation) {
+                       AnswerService answerService, AnswerRepository answers, ReputationService reputation,
+                       UserRepository users) {
         this.votes = votes;
         this.questionService = questionService;
         this.questions = questions;
         this.answerService = answerService;
         this.answers = answers;
         this.reputation = reputation;
+        this.users = users;
     }
 
     private record Target(VoteTarget type, Long id, Long authorId, Long questionId, Long answerId) {
@@ -81,13 +87,17 @@ public class VoteService {
         if (t.authorId().equals(me.id())) {
             throw ApiException.forbidden("CANNOT_VOTE_OWN_CONTENT", "Vous ne pouvez pas voter pour votre propre contenu");
         }
+        int myReputation = users.findById(me.id()).map(u -> u.getReputation()).orElse(0);
+        if (!reputation.levelOf(myReputation).atLeast(Level.MEMBER)) {
+            throw ApiException.forbidden("LEVEL_TOO_LOW", "Il faut atteindre le niveau Membre pour voter");
+        }
         Optional<Vote> existing = votes.findByVoterIdAndTargetTypeAndTargetId(me.id(), t.type(), t.id());
         if (existing.isPresent()) {
             Vote vote = existing.get();
             if (vote.getValue() == value) {
                 throw ApiException.conflict("ALREADY_VOTED", "Vous avez déjà voté");
             }
-            undoEffects(t, vote.getValue());
+            undoEffects(t, vote.getValue(), me.id());
             vote.setValue(value);
             votes.saveAndFlush(vote);
         } else {
@@ -97,27 +107,31 @@ public class VoteService {
                 throw ApiException.conflict("ALREADY_VOTED", "Vous avez déjà voté");
             }
         }
-        applyEffects(t, value);
+        applyEffects(t, value, me.id());
         return new VoteResult(currentScore(t), value);
     }
 
     private VoteResult unvote(Target t, ZetsuPrincipal me) {
         Vote vote = votes.findByVoterIdAndTargetTypeAndTargetId(me.id(), t.type(), t.id())
                 .orElseThrow(() -> ApiException.notFound("VOTE_NOT_FOUND", "Aucun vote à retirer"));
-        undoEffects(t, vote.getValue());
+        undoEffects(t, vote.getValue(), me.id());
         votes.delete(vote);
         votes.flush();
         return new VoteResult(currentScore(t), null);
     }
 
-    private void applyEffects(Target t, int value) {
+    private void applyEffects(Target t, int value, Long voterId) {
         addScore(t, value);
-        reputation.grant(t.authorId(), reason(t, value), t.questionId(), t.answerId());
+        if (value > 0) {
+            reputation.grant(t.authorId(), upvoteReason(t), t.questionId(), t.answerId(), voterId);
+        }
     }
 
-    private void undoEffects(Target t, int value) {
+    private void undoEffects(Target t, int value, Long voterId) {
         addScore(t, -value);
-        reputation.revoke(t.authorId(), reason(t, value), t.questionId(), t.answerId());
+        if (value > 0) {
+            reputation.revoke(t.authorId(), upvoteReason(t), t.questionId(), t.answerId(), voterId);
+        }
     }
 
     private void addScore(Target t, int delta) {
@@ -132,10 +146,7 @@ public class VoteService {
         return t.type() == VoteTarget.QUESTION ? questions.currentScore(t.id()) : answers.currentScore(t.id());
     }
 
-    private static ReputationReason reason(Target t, int value) {
-        if (t.type() == VoteTarget.QUESTION) {
-            return value > 0 ? ReputationReason.QUESTION_UPVOTED : ReputationReason.QUESTION_DOWNVOTED;
-        }
-        return value > 0 ? ReputationReason.ANSWER_UPVOTED : ReputationReason.ANSWER_DOWNVOTED;
+    private static ReputationReason upvoteReason(Target t) {
+        return t.type() == VoteTarget.QUESTION ? ReputationReason.QUESTION_UPVOTED : ReputationReason.ANSWER_UPVOTED;
     }
 }

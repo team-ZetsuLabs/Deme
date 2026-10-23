@@ -2,6 +2,7 @@ package dev.zetsu;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.zetsu.auth.LoginAttempts;
 import dev.zetsu.common.RateLimiter;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Testcontainers(disabledWithoutDocker = true)
 public abstract class IntegrationTest {
 
+    protected static final String PASSWORD = "dakar2026";
     private static final AtomicInteger SEQ = new AtomicInteger();
 
     @Autowired
@@ -40,34 +43,57 @@ public abstract class IntegrationTest {
     protected ObjectMapper json;
 
     @Autowired
+    protected JdbcTemplate jdbc;
+
+    @Autowired
     private RateLimiter rateLimiter;
 
+    @Autowired
+    private LoginAttempts loginAttempts;
+
     @BeforeEach
-    void resetRateLimiter() {
+    void resetLimits() {
         rateLimiter.reset();
         rateLimiter.setEnabled(false);
+        loginAttempts.reset();
     }
 
-    protected record Member(String username, String email, MockHttpSession session) {
+    protected record Member(long id, String username, String email, MockHttpSession session) {
     }
 
     protected Member register(String firstName) throws Exception {
+        return register(firstName, "SN");
+    }
+
+    protected Member register(String firstName, String country) throws Exception {
         int n = SEQ.incrementAndGet();
-        String username = firstName.toLowerCase() + "_" + n;
-        String email = username + "@exemple.sn";
+        String email = firstName.toLowerCase() + "." + n + "@exemple.sn";
         MvcResult result = mvc.perform(post("/api/v1/auth/register").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(body(Map.of("email", email, "password", "mot-de-passe-solide",
-                                "username", username, "displayName", firstName + " Ndiaye"))))
+                        .content(body(Map.of("displayName", firstName + " Ndiaye " + n, "email", email,
+                                "countryCode", country, "password", PASSWORD))))
                 .andExpect(status().isCreated())
                 .andReturn();
-        return new Member(username, email, (MockHttpSession) result.getRequest().getSession(false));
+        JsonNode me = read(result);
+        return new Member(me.get("id").asLong(), me.get("username").asText(), email,
+                (MockHttpSession) result.getRequest().getSession(false));
+    }
+
+    /** Donne de la réputation directement en base, pour atteindre un niveau sans dérouler tout un scénario. */
+    protected Member withReputation(Member member, int reputation) {
+        jdbc.update("update users set reputation = ? where id = ?", reputation, member.id());
+        return member;
     }
 
     protected long askQuestion(Member author, String title, String body, String country) throws Exception {
-        Map<String, Object> req = Map.of("title", title, "body", body, "tags", List.of("mobile-money", "java"),
+        return askQuestion(author, title, body, country, List.of("mobile-money", "java"));
+    }
+
+    protected long askQuestion(Member author, String title, String body, String country, List<String> tags)
+            throws Exception {
+        Map<String, Object> req = Map.of("title", title, "body", body, "tags", tags,
                 "context", Map.of("countryCode", country, "mobileMoneyOperator", "ORANGE_MONEY",
-                        "networkQuality", "MOBILE_3G"));
+                        "networkQuality", "UNSTABLE", "techVersion", "Spring Boot 3.3"));
         MvcResult result = mvc.perform(post("/api/v1/questions").with(csrf()).session(author.session())
                         .contentType(MediaType.APPLICATION_JSON).content(body(req)))
                 .andExpect(status().isCreated())

@@ -30,7 +30,11 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Me me(Long id) {
-        return Me.from(users.findById(id).orElseThrow(UserService::notFound));
+        return toMe(users.findById(id).orElseThrow(UserService::notFound));
+    }
+
+    public Me toMe(User u) {
+        return Me.from(u, reputation.levelOf(u.getReputation()));
     }
 
     @Transactional(readOnly = true)
@@ -38,6 +42,7 @@ public class UserService {
         User u = byUsername(username);
         return new PublicProfile(u.getUsername(), u.getDisplayName(), u.getAvatarUrl(), u.getBio(),
                 u.getCountryCode(), u.getCity(), u.getRole(), u.getReputation(),
+                reputation.levelOf(u.getReputation()), u.isVisibleToRecruiters(),
                 questions.countByAuthorId(u.getId()), answers.countByAuthorId(u.getId()), u.getCreatedAt());
     }
 
@@ -48,7 +53,9 @@ public class UserService {
         u.setBio(blankToNull(req.bio()));
         u.setCountryCode(blankToNull(req.countryCode()));
         u.setCity(blankToNull(req.city()));
-        return Me.from(u);
+        u.setLanguage(req.language());
+        u.setVisibleToRecruiters(req.visibleToRecruiters());
+        return toMe(u);
     }
 
     @Transactional(readOnly = true)

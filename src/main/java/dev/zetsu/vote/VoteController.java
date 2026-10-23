@@ -44,6 +44,7 @@ public class VoteController {
 
     @DeleteMapping("/questions/{questionId}/votes")
     @Operation(summary = "Retirer son vote sur une question")
+    @ApiResponse(responseCode = "200", description = "Vote retiré")
     @ApiResponse(responseCode = "404", description = "QUESTION_NOT_FOUND, VOTE_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public VoteResult unvoteQuestion(@PathVariable Long questionId, @AuthenticationPrincipal ZetsuPrincipal me) {
         return voteService.unvoteQuestion(questionId, me);
@@ -60,6 +61,7 @@ public class VoteController {
 
     @DeleteMapping("/answers/{answerId}/votes")
     @Operation(summary = "Retirer son vote sur une réponse")
+    @ApiResponse(responseCode = "200", description = "Vote retiré")
     @ApiResponse(responseCode = "404", description = "ANSWER_NOT_FOUND, VOTE_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public VoteResult unvoteAnswer(@PathVariable Long answerId, @AuthenticationPrincipal ZetsuPrincipal me) {
         return voteService.unvoteAnswer(answerId, me);
@@ -71,7 +73,7 @@ public class VoteController {
             @ApiResponse(responseCode = "200", description = "Vote enregistré"),
             @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR, INVALID_VOTE", content = @Content(schema = @Schema(implementation = ApiError.class))),
             @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class))),
-            @ApiResponse(responseCode = "403", description = "CANNOT_VOTE_OWN_CONTENT", content = @Content(schema = @Schema(implementation = ApiError.class))),
+            @ApiResponse(responseCode = "403", description = "CANNOT_VOTE_OWN_CONTENT, LEVEL_TOO_LOW", content = @Content(schema = @Schema(implementation = ApiError.class))),
             @ApiResponse(responseCode = "404", description = "QUESTION_NOT_FOUND, ANSWER_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class))),
             @ApiResponse(responseCode = "409", description = "ALREADY_VOTED", content = @Content(schema = @Schema(implementation = ApiError.class))),
             @ApiResponse(responseCode = "429", description = "RATE_LIMITED", content = @Content(schema = @Schema(implementation = ApiError.class)))

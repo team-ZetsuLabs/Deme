@@ -11,14 +11,15 @@
   "context": {
     "countryCode": "SN",
     "mobileMoneyOperator": "ORANGE_MONEY",
-    "networkQuality": "MOBILE_4G"
+    "networkQuality": "GOOD"
   },
   "author": {
     "username": "aminata_dev",
     "displayName": "Aminata Diallo",
     "avatarUrl": null,
     "countryCode": "SN",
-    "reputation": 342
+    "reputation": 342,
+    "level": "MEMBER"
   },
   "score": 0,
   "answerCount": 0,
