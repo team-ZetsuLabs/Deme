@@ -37,4 +37,10 @@ public class ApiException extends RuntimeException {
     public static ApiException badRequest(String code, String message) {
         return new ApiException(HttpStatus.BAD_REQUEST, code, message);
     }
+
+    /** Point d'entrée publié dans le contrat mais pas encore codé : les fronts utilisent les mocks en attendant. */
+    public static ApiException notImplemented() {
+        return new ApiException(HttpStatus.NOT_IMPLEMENTED, "NOT_IMPLEMENTED",
+                "Point d'entrée publié dans le contrat, pas encore disponible");
+    }
 }

@@ -15,6 +15,7 @@ import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.customizers.OpenApiCustomizer;
+import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,6 +41,22 @@ public class OpenApiConfig {
                 .addSecurityItem(new SecurityRequirement().addList("session"));
     }
 
+    /**
+     * Identifiants d'opération stables, de la forme {@code questionList} ou {@code jobAdminDecide} : sans cela,
+     * springdoc numérote les méthodes homonymes ({@code update_2}) et la numérotation change à chaque nouveau
+     * contrôleur, ce qui casse les types générés côté front.
+     */
+    @Bean
+    OperationCustomizer stableOperationIds() {
+        return (operation, handler) -> {
+            String controller = handler.getBeanType().getSimpleName().replaceFirst("Controller$", "");
+            String method = handler.getMethod().getName();
+            operation.setOperationId(Character.toLowerCase(controller.charAt(0)) + controller.substring(1)
+                    + Character.toUpperCase(method.charAt(0)) + method.substring(1));
+            return operation;
+        };
+    }
+
     /** La déconnexion est gérée par un filtre Spring Security : on la documente à la main. */
     @Bean
     OpenApiCustomizer logoutEndpoint() {
@@ -50,7 +67,7 @@ public class OpenApiConfig {
             Operation logout = new Operation()
                     .addTagsItem("auth")
                     .summary("Déconnexion")
-                    .operationId("logout")
+                    .operationId("authLogout")
                     .responses(new ApiResponses()
                             .addApiResponse("204", new ApiResponse().description("Session fermée"))
                             .addApiResponse("403", new ApiResponse().description("CSRF_INVALID").content(error)));

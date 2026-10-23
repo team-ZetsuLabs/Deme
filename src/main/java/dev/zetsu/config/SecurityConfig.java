@@ -69,9 +69,13 @@ public class SecurityConfig {
                                 "/api/v1/openapi.json", "/api/v1/openapi.json/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/auth/me").authenticated()
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasAnyRole("MODERATOR", "ADMIN")
+                        // Lectures privées sous des chemins par ailleurs publics : à déclarer avant les permitAll.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/me/**", "/api/v1/jobs/mine",
+                                "/api/v1/jobs/*/applications", "/api/v1/missions/*/applications").authenticated()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/questions/**", "/api/v1/answers/**", "/api/v1/users/**",
-                                "/api/v1/tags/**").permitAll()
+                                "/api/v1/tags/**", "/api/v1/jobs/**", "/api/v1/missions/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().denyAll())

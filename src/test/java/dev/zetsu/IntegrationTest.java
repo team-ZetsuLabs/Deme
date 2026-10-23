@@ -79,6 +79,17 @@ public abstract class IntegrationTest {
                 (MockHttpSession) result.getRequest().getSession(false));
     }
 
+    /** Nouvelle session, par exemple pour prendre en compte un rôle changé en base (il est lu à la connexion). */
+    protected Member login(Member member) throws Exception {
+        MvcResult result = mvc.perform(post("/api/v1/auth/login").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body(Map.of("email", member.email(), "password", PASSWORD))))
+                .andExpect(status().isOk())
+                .andReturn();
+        return new Member(member.id(), member.username(), member.email(),
+                (MockHttpSession) result.getRequest().getSession(false));
+    }
+
     /** Donne de la réputation directement en base, pour atteindre un niveau sans dérouler tout un scénario. */
     protected Member withReputation(Member member, int reputation) {
         jdbc.update("update users set reputation = ? where id = ?", reputation, member.id());

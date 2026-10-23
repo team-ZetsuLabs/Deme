@@ -45,6 +45,20 @@ Après un changement de contrat, on régénère `docs/openapi.json` et on le pou
 | `tag` | `GET /tags` |
 | `reputation` | barème dans `ReputationReason`, historique par membre |
 
+## Contrat du sprint 2 (publié, pas encore codé)
+
+Ces points d'entrée sont dans Swagger UI et répondent `501 NOT_IMPLEMENTED` tant qu'ils ne sont pas codés : les fronts utilisent les mocks.
+
+| Domaine | Points d'entrée |
+| --- | --- |
+| `job` | `GET /jobs` (filtres type, pays, technologie ; correspondance avec la stack), `GET /jobs/mine`, `GET /jobs/{id}`, `POST /jobs` (rôle Recruteur, offre en attente), `PUT /jobs/{id}`, `POST /jobs/{id}/close` |
+| candidatures | `POST /jobs/{id}/applications` (multipart : message, CV PDF de 2 Mo), `GET /jobs/{id}/applications`, `POST /missions/{id}/applications`, `GET /missions/{id}/applications`, `PATCH /applications/{id}` (retenir, refuser), `GET /applications/{id}/cv`, `GET /users/me/applications` (suivi JOB-7) |
+| `mission` | `GET /missions`, `GET /missions/{id}`, `POST /missions`, `PUT /missions/{id}`, `POST /missions/{id}/close` |
+| `admin` | `GET /admin/jobs`, `POST /admin/jobs/{id}/decision` (validation des offres, rôles Modérateur et Administrateur) |
+| `notification` | `GET /notifications`, `GET /notifications/unread-count`, `POST /notifications/read` |
+
+Les `operationId` sont stables, de la forme `<domaine><Méthode>` (`questionList`, `jobApply`, `jobAdminDecide`).
+
 Un exemple de réponse par point d'entrée se trouve dans `mocks/` (`GET_questions.json`, `GET_questions_id.json`…), plus quelques erreurs types (`ERROR_*.json`).
 
 ## Session et CSRF, côté front

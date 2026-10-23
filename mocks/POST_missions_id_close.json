@@ -1,0 +1,33 @@
+{
+  "id": 14,
+  "title": "Brancher Wave sur ma boutique WooCommerce",
+  "descriptionMarkdown": "Ma boutique tourne sous WooCommerce sur un hébergement mutualisé. Je veux proposer Wave au paiement, avec la confirmation automatique de la commande quand le paiement est validé.\n\nLe réseau de mes clients est souvent instable : il faut gérer le cas où ils ferment la page avant le retour.",
+  "descriptionHtml": "<p>Ma boutique tourne sous WooCommerce sur un hébergement mutualisé. Je veux proposer Wave au paiement, avec la confirmation automatique de la commande quand le paiement est validé.</p>\n<p>Le réseau de mes clients est souvent instable : il faut gérer le cas où ils ferment la page avant le retour.</p>\n",
+  "kind": "INTEGRATION",
+  "budget": {
+    "amount": 75000,
+    "currency": "XOF"
+  },
+  "durationDays": 3,
+  "technologies": [
+    "woocommerce",
+    "php",
+    "wave"
+  ],
+  "countryCode": "CI",
+  "author": {
+    "username": "yao_kouassi",
+    "displayName": "Yao Kouassi",
+    "avatarUrl": null,
+    "countryCode": "CI",
+    "reputation": 64,
+    "level": "MEMBER",
+    "deleted": false
+  },
+  "status": "CLOSED",
+  "applicationCount": 2,
+  "myApplication": null,
+  "canEdit": true,
+  "createdAt": "2026-10-22T18:20:00Z",
+  "updatedAt": "2026-10-26T12:00:00Z"
+}

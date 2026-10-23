@@ -19,8 +19,23 @@
     "name" : "votes",
     "description" : "Votes +1 / -1 sur les questions et les réponses"
   }, {
+    "name" : "admin",
+    "description" : "Back office de l'équipe (Modérateur, Administrateur)"
+  }, {
     "name" : "auth",
     "description" : "Inscription, connexion par email ou OAuth, session"
+  }, {
+    "name" : "notifications",
+    "description" : "Notifications dans l'application"
+  }, {
+    "name" : "applications",
+    "description" : "Candidatures aux offres et propositions sur les missions"
+  }, {
+    "name" : "jobs",
+    "description" : "Offres d'emploi, validées par l'équipe avant publication"
+  }, {
+    "name" : "missions",
+    "description" : "Missions courtes entre pairs : dépannage, intégration, revue de code"
   }, {
     "name" : "users",
     "description" : "Profils des membres"
@@ -33,7 +48,7 @@
       "put" : {
         "tags" : [ "users" ],
         "summary" : "Modifier son profil",
-        "operationId" : "update",
+        "operationId" : "userUpdate",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -81,7 +96,7 @@
         "tags" : [ "users" ],
         "summary" : "Supprimer son compte",
         "description" : "Le membre recopie son pseudo pour confirmer (AUTH-6). Ses questions et réponses restent, signées « Utilisateur supprimé » ; réputation, comptes liés et données personnelles sont effacés. La session est fermée.",
-        "operationId" : "delete",
+        "operationId" : "userDelete",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -124,7 +139,7 @@
         "tags" : [ "users" ],
         "summary" : "Terminer le parcours d'accueil",
         "description" : "Stack (1 à 10 technologies, partagées avec les étiquettes), pays et langue (AUTH-5). Passe onboardingCompleted à vrai ; peut être rappelé pour corriger ses choix.",
-        "operationId" : "onboarding",
+        "operationId" : "userOnboarding",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -173,7 +188,7 @@
       "put" : {
         "tags" : [ "answers" ],
         "summary" : "Accepter une réponse (auteur de la question seulement)",
-        "operationId" : "accept",
+        "operationId" : "answerAccept",
         "parameters" : [ {
           "name" : "questionId",
           "in" : "path",
@@ -239,7 +254,7 @@
       "delete" : {
         "tags" : [ "answers" ],
         "summary" : "Retirer l'acceptation (auteur de la question seulement)",
-        "operationId" : "unaccept",
+        "operationId" : "answerUnaccept",
         "parameters" : [ {
           "name" : "questionId",
           "in" : "path",
@@ -277,7 +292,7 @@
       "get" : {
         "tags" : [ "questions" ],
         "summary" : "Détail d'une question",
-        "operationId" : "get",
+        "operationId" : "questionGet",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -313,7 +328,7 @@
       "put" : {
         "tags" : [ "questions" ],
         "summary" : "Modifier sa question",
-        "operationId" : "update_1",
+        "operationId" : "questionUpdate",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -377,11 +392,242 @@
         }
       }
     },
+    "/api/v1/missions/{id}" : {
+      "get" : {
+        "tags" : [ "missions" ],
+        "summary" : "Détail d'une mission",
+        "operationId" : "missionGet",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "La mission",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MissionDetail"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "MISSION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "missions" ],
+        "summary" : "Modifier sa mission",
+        "description" : "Seulement tant qu'elle est ouverte.",
+        "operationId" : "missionUpdate",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MissionRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Mission modifiée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MissionDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_MISSION_AUTHOR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "MISSION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "MISSION_NOT_OPEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jobs/{id}" : {
+      "get" : {
+        "tags" : [ "jobs" ],
+        "summary" : "Détail d'une offre (JOB-2)",
+        "description" : "Une offre en attente ou refusée n'est visible que par son recruteur et l'équipe.",
+        "operationId" : "jobGet",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "L'offre",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/JobDetail"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "JOB_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "jobs" ],
+        "summary" : "Modifier son offre",
+        "description" : "Renvoie l'offre « PENDING » pour une nouvelle validation.",
+        "operationId" : "jobUpdate",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/JobRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Offre modifiée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/JobDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG, TAG_REQUIRED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_JOB_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "JOB_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "JOB_CLOSED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/answers/{answerId}" : {
       "put" : {
         "tags" : [ "answers" ],
         "summary" : "Modifier sa réponse",
-        "operationId" : "update_2",
+        "operationId" : "answerUpdate",
         "parameters" : [ {
           "name" : "answerId",
           "in" : "path",
@@ -440,7 +686,7 @@
         "tags" : [ "questions" ],
         "summary" : "Liste et recherche des questions",
         "description" : "Recherche plein texte en français et en anglais sur titre, détails et étiquettes avec q (syntaxe web : \"phrase exacte\", -exclu, OR). Pagination par 20.",
-        "operationId" : "list",
+        "operationId" : "questionList",
         "parameters" : [ {
           "name" : "q",
           "in" : "query",
@@ -553,7 +799,7 @@
       "post" : {
         "tags" : [ "questions" ],
         "summary" : "Poser une question",
-        "operationId" : "create",
+        "operationId" : "questionCreate",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -613,7 +859,7 @@
         "tags" : [ "votes" ],
         "summary" : "Voter pour une question",
         "description" : "Voter l'inverse de son vote actuel le remplace.",
-        "operationId" : "voteQuestion",
+        "operationId" : "voteVoteQuestion",
         "parameters" : [ {
           "name" : "questionId",
           "in" : "path",
@@ -709,7 +955,7 @@
       "delete" : {
         "tags" : [ "votes" ],
         "summary" : "Retirer son vote sur une question",
-        "operationId" : "unvoteQuestion",
+        "operationId" : "voteUnvoteQuestion",
         "parameters" : [ {
           "name" : "questionId",
           "in" : "path",
@@ -748,7 +994,7 @@
         "tags" : [ "answers" ],
         "summary" : "Réponses d'une question",
         "description" : "Réponse acceptée en tête, puis par score.",
-        "operationId" : "list_1",
+        "operationId" : "answerList",
         "parameters" : [ {
           "name" : "questionId",
           "in" : "path",
@@ -802,7 +1048,7 @@
       "post" : {
         "tags" : [ "answers" ],
         "summary" : "Répondre à une question",
-        "operationId" : "create_1",
+        "operationId" : "answerCreate",
         "parameters" : [ {
           "name" : "questionId",
           "in" : "path",
@@ -876,12 +1122,823 @@
         }
       }
     },
+    "/api/v1/notifications/read" : {
+      "post" : {
+        "tags" : [ "notifications" ],
+        "summary" : "Marquer comme lues",
+        "description" : "Sans ids : « Tout marquer comme lu ». Renvoie le compteur à jour.",
+        "operationId" : "notificationMarkRead",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MarkReadRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Compteur de non-lues après l'opération",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnreadCount"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/missions" : {
+      "get" : {
+        "tags" : [ "missions" ],
+        "summary" : "Liste des missions",
+        "description" : "Par défaut les missions ouvertes, plus récentes d'abord.",
+        "operationId" : "missionList",
+        "parameters" : [ {
+          "name" : "kind",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "TROUBLESHOOTING", "INTEGRATION", "CODE_REVIEW", "OTHER" ]
+          }
+        }, {
+          "name" : "country",
+          "in" : "query",
+          "description" : "Code pays ISO, ex. CI",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "technology",
+          "in" : "query",
+          "description" : "Nom de technologie exact",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "author",
+          "in" : "query",
+          "description" : "Pseudo de l'auteur",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "OPEN",
+            "enum" : [ "OPEN", "IN_PROGRESS", "CLOSED" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de missions",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseMissionSummary"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "INVALID_PAGE, INVALID_PAGE_SIZE, INVALID_PARAMETER, INVALID_COUNTRY",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "missions" ],
+        "summary" : "Publier une mission (JOB-5)",
+        "description" : "Ouvert à tout membre connecté, publiée tout de suite.",
+        "operationId" : "missionCreate",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MissionRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Mission publiée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MissionDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/missions/{id}/close" : {
+      "post" : {
+        "tags" : [ "missions" ],
+        "summary" : "Clore sa mission",
+        "description" : "Terminée ou abandonnée ; plus aucune proposition acceptée.",
+        "operationId" : "missionClose",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Mission close",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MissionDetail"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_MISSION_AUTHOR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "MISSION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/missions/{id}/applications" : {
+      "get" : {
+        "tags" : [ "missions" ],
+        "summary" : "Propositions reçues sur sa mission",
+        "description" : "Les propositions encore « SENT » passent « VIEWED » quand l'auteur les liste (JOB-7).",
+        "operationId" : "missionApplications",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "SENT", "VIEWED", "SHORTLISTED", "REJECTED" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de propositions, plus récentes d'abord",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseReceivedApplication"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_MISSION_AUTHOR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "MISSION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "missions" ],
+        "summary" : "Se proposer sur une mission",
+        "description" : "Une seule proposition par membre et par mission.",
+        "operationId" : "missionApply",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MissionApplicationRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Proposition envoyée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MyApplication"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "CANNOT_APPLY_OWN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "MISSION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "ALREADY_APPLIED, MISSION_NOT_OPEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jobs" : {
+      "get" : {
+        "tags" : [ "jobs" ],
+        "summary" : "Liste des offres publiées (JOB-1)",
+        "description" : "Plus récentes d'abord. Avec une session, chaque offre porte sa correspondance avec la stack du membre.",
+        "operationId" : "jobList",
+        "parameters" : [ {
+          "name" : "type",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "PERMANENT", "REMOTE", "CONTRACT", "INTERNSHIP" ]
+          }
+        }, {
+          "name" : "country",
+          "in" : "query",
+          "description" : "Code pays ISO, ex. SN",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "technology",
+          "in" : "query",
+          "description" : "Nom de technologie exact, ex. spring-boot",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page d'offres",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseJobSummary"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "INVALID_PAGE, INVALID_PAGE_SIZE, INVALID_PARAMETER, INVALID_COUNTRY",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "jobs" ],
+        "summary" : "Publier une offre (JOB-4)",
+        "description" : "Réservé au rôle Recruteur, attribué par l'équipe. L'offre est créée « PENDING ».",
+        "operationId" : "jobCreate",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/JobRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Offre créée, en attente de validation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/JobDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG, TAG_REQUIRED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "RECRUITER_ONLY",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jobs/{id}/close" : {
+      "post" : {
+        "tags" : [ "jobs" ],
+        "summary" : "Clore son offre",
+        "description" : "Elle disparaît de la liste ; les candidatures restent consultables.",
+        "operationId" : "jobClose",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Offre close",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/JobDetail"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_JOB_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "JOB_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jobs/{id}/applications" : {
+      "get" : {
+        "tags" : [ "jobs" ],
+        "summary" : "Candidatures reçues sur son offre",
+        "description" : "Les candidatures encore « SENT » passent « VIEWED » quand le recruteur les liste (JOB-7).",
+        "operationId" : "jobApplications",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "SENT", "VIEWED", "SHORTLISTED", "REJECTED" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de candidatures, plus récentes d'abord",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseReceivedApplication"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_JOB_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "JOB_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "jobs" ],
+        "summary" : "Postuler à une offre (JOB-3)",
+        "description" : "Formulaire multipart : message (40 à 2000 caractères) et CV PDF facultatif de 2 Mo maximum. Le profil Zetsu du membre est transmis au recruteur. Une seule candidature par offre.",
+        "operationId" : "jobApply",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "message" : {
+                    "type" : "string",
+                    "description" : "40 à 2000 caractères"
+                  },
+                  "cv" : {
+                    "type" : "string",
+                    "format" : "binary",
+                    "description" : "CV au format PDF, 2 Mo maximum"
+                  }
+                },
+                "required" : [ "message" ]
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Candidature envoyée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MyApplication"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, CV_NOT_PDF, CV_TOO_LARGE",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "CANNOT_APPLY_OWN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "JOB_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "ALREADY_APPLIED, JOB_CLOSED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/register" : {
       "post" : {
         "tags" : [ "auth" ],
         "summary" : "Inscription par email (secours d'OAuth)",
         "description" : "Connecte le membre dans la foulée.",
-        "operationId" : "register",
+        "operationId" : "authRegister",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -941,7 +1998,7 @@
         "tags" : [ "auth" ],
         "summary" : "Connexion par email et mot de passe",
         "description" : "5 essais ratés sur un même email bloquent ce compte pendant 15 minutes (AUTH-3).",
-        "operationId" : "login",
+        "operationId" : "authLogin",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -1001,7 +2058,7 @@
         "tags" : [ "votes" ],
         "summary" : "Voter pour une réponse",
         "description" : "Voter l'inverse de son vote actuel le remplace.",
-        "operationId" : "voteAnswer",
+        "operationId" : "voteVoteAnswer",
         "parameters" : [ {
           "name" : "answerId",
           "in" : "path",
@@ -1097,7 +2154,7 @@
       "delete" : {
         "tags" : [ "votes" ],
         "summary" : "Retirer son vote sur une réponse",
-        "operationId" : "unvoteAnswer",
+        "operationId" : "voteUnvoteAnswer",
         "parameters" : [ {
           "name" : "answerId",
           "in" : "path",
@@ -1131,11 +2188,179 @@
         }
       }
     },
+    "/api/v1/admin/jobs/{id}/decision" : {
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Valider ou refuser une offre",
+        "description" : "Le motif est obligatoire pour un refus. Le recruteur est notifié (JOB_REVIEWED).",
+        "operationId" : "jobAdminDecide",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/JobReviewRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Offre publiée ou refusée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/JobDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, REASON_REQUIRED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "JOB_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "JOB_NOT_PENDING",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/applications/{id}" : {
+      "patch" : {
+        "tags" : [ "applications" ],
+        "summary" : "Retenir ou refuser une candidature reçue",
+        "description" : "Par le recruteur de l'offre ou l'auteur de la mission. Le candidat est notifié. Retenir une proposition passe la mission « IN_PROGRESS ».",
+        "operationId" : "applicationDecide",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ApplicationDecisionRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Candidature à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ReceivedApplication"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_STATUS",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_TARGET_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "APPLICATION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/users/{username}" : {
       "get" : {
         "tags" : [ "users" ],
         "summary" : "Profil public d'un membre",
-        "operationId" : "profile",
+        "operationId" : "userProfile",
         "parameters" : [ {
           "name" : "username",
           "in" : "path",
@@ -1172,7 +2397,7 @@
       "get" : {
         "tags" : [ "users" ],
         "summary" : "Historique de réputation d'un membre",
-        "operationId" : "reputation",
+        "operationId" : "userReputation",
         "parameters" : [ {
           "name" : "username",
           "in" : "path",
@@ -1223,11 +2448,76 @@
         }
       }
     },
+    "/api/v1/users/me/applications" : {
+      "get" : {
+        "tags" : [ "applications" ],
+        "summary" : "Mes candidatures et propositions (JOB-7)",
+        "description" : "Statut : envoyée, vue, retenue, refusée.",
+        "operationId" : "applicationMine",
+        "parameters" : [ {
+          "name" : "type",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "JOB", "MISSION" ]
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "SENT", "VIEWED", "SHORTLISTED", "REJECTED" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page, plus récentes d'abord",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseMyApplication"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/tags" : {
       "get" : {
         "tags" : [ "tags" ],
         "summary" : "Étiquettes les plus utilisées, filtrables par début de nom (autocomplétion)",
-        "operationId" : "list_2",
+        "operationId" : "tagList",
         "parameters" : [ {
           "name" : "q",
           "in" : "query",
@@ -1262,11 +2552,146 @@
         }
       }
     },
+    "/api/v1/notifications" : {
+      "get" : {
+        "tags" : [ "notifications" ],
+        "summary" : "Mes notifications",
+        "description" : "Plus récentes d'abord. Lire la liste ne les marque pas comme lues.",
+        "operationId" : "notificationList",
+        "parameters" : [ {
+          "name" : "unreadOnly",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de notifications",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseNotification"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/unread-count" : {
+      "get" : {
+        "tags" : [ "notifications" ],
+        "summary" : "Nombre de non-lues",
+        "description" : "Réponse minuscule, à interroger toutes les 60 s au plus (réseau 3G).",
+        "operationId" : "notificationUnreadCount",
+        "responses" : {
+          "200" : {
+            "description" : "Le compteur",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnreadCount"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/jobs/mine" : {
+      "get" : {
+        "tags" : [ "jobs" ],
+        "summary" : "Offres publiées par le recruteur connecté, tous statuts confondus",
+        "operationId" : "jobMine",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page d'offres, plus récentes d'abord",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseJobSummary"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/providers" : {
       "get" : {
         "tags" : [ "auth" ],
         "summary" : "Fournisseurs OAuth activés sur ce serveur",
-        "operationId" : "providers",
+        "operationId" : "authProviders",
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -1285,7 +2710,7 @@
       "get" : {
         "tags" : [ "auth" ],
         "summary" : "Membre connecté",
-        "operationId" : "me",
+        "operationId" : "authMe",
         "responses" : {
           "200" : {
             "description" : "Membre connecté",
@@ -1315,7 +2740,7 @@
         "tags" : [ "auth" ],
         "summary" : "Jeton CSRF courant",
         "description" : "Pose aussi le cookie XSRF-TOKEN. À appeler au démarrage du front.",
-        "operationId" : "csrf",
+        "operationId" : "authCsrf",
         "parameters" : [ {
           "name" : "token",
           "in" : "query",
@@ -1338,11 +2763,134 @@
         }
       }
     },
+    "/api/v1/applications/{id}/cv" : {
+      "get" : {
+        "tags" : [ "applications" ],
+        "summary" : "Télécharger le CV joint",
+        "description" : "Par le candidat ou le recruteur de l'offre. Réponse application/pdf, en pièce jointe.",
+        "operationId" : "applicationCv",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Le PDF",
+            "content" : {
+              "application/pdf" : { }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "APPLICATION_NOT_FOUND, CV_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/jobs" : {
+      "get" : {
+        "tags" : [ "admin" ],
+        "summary" : "Offres à valider (JOB-4)",
+        "description" : "Par défaut les offres « PENDING », les plus anciennes d'abord.",
+        "operationId" : "jobAdminList",
+        "parameters" : [ {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "PENDING",
+            "enum" : [ "PENDING", "PUBLISHED", "REJECTED", "CLOSED" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page d'offres",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseJobDetail"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/logout" : {
       "post" : {
         "tags" : [ "auth" ],
         "summary" : "Déconnexion",
-        "operationId" : "logout",
+        "operationId" : "authLogout",
         "responses" : {
           "204" : {
             "description" : "Session fermée"
@@ -1692,6 +3240,323 @@
         },
         "required" : [ "body", "tags", "title" ]
       },
+      "Budget" : {
+        "type" : "object",
+        "properties" : {
+          "amount" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 75000
+          },
+          "currency" : {
+            "type" : "string",
+            "description" : "Code ISO 4217 : XOF, XAF, GHS, NGN, KES, MAD, EUR…",
+            "example" : "XOF",
+            "pattern" : "^[A-Z]{3}$"
+          }
+        },
+        "required" : [ "amount", "currency" ]
+      },
+      "MissionRequest" : {
+        "type" : "object",
+        "description" : "Création ou modification complète d'une mission entre pairs (JOB-5)",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "example" : "Brancher Wave sur ma boutique WooCommerce",
+            "maxLength" : 120,
+            "minLength" : 10
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Markdown. Le HTML brut est ignoré.",
+            "maxLength" : 10000,
+            "minLength" : 30
+          },
+          "kind" : {
+            "type" : "string",
+            "enum" : [ "TROUBLESHOOTING", "INTEGRATION", "CODE_REVIEW", "OTHER" ]
+          },
+          "budget" : {
+            "$ref" : "#/components/schemas/Budget"
+          },
+          "durationDays" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Délai souhaité, en jours",
+            "example" : 3,
+            "maximum" : 90,
+            "minimum" : 1
+          },
+          "technologies" : {
+            "type" : "array",
+            "example" : [ "woocommerce", "php", "wave" ],
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 0
+          },
+          "countryCode" : {
+            "type" : "string",
+            "example" : "CI"
+          }
+        },
+        "required" : [ "budget", "description", "durationDays", "kind", "title" ]
+      },
+      "MissionDetail" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "descriptionMarkdown" : {
+            "type" : "string",
+            "description" : "Markdown d'origine, pour pré-remplir le formulaire d'édition"
+          },
+          "descriptionHtml" : {
+            "type" : "string",
+            "description" : "HTML nettoyé côté serveur, à afficher avec MemberContent"
+          },
+          "kind" : {
+            "type" : "string",
+            "enum" : [ "TROUBLESHOOTING", "INTEGRATION", "CODE_REVIEW", "OTHER" ]
+          },
+          "budget" : {
+            "$ref" : "#/components/schemas/Budget"
+          },
+          "durationDays" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "technologies" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "countryCode" : {
+            "type" : "string"
+          },
+          "author" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "OPEN", "IN_PROGRESS", "CLOSED" ]
+          },
+          "applicationCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "myApplication" : {
+            "$ref" : "#/components/schemas/MyApplicationRef",
+            "description" : "Null si le membre connecté ne s'est pas proposé"
+          },
+          "canEdit" : {
+            "type" : "boolean",
+            "description" : "Vrai si le membre connecté est l'auteur"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "applicationCount", "author", "budget", "canEdit", "createdAt", "descriptionHtml", "descriptionMarkdown", "durationDays", "id", "kind", "status", "technologies", "title", "updatedAt" ]
+      },
+      "MyApplicationRef" : {
+        "type" : "object",
+        "description" : "Candidature du membre connecté sur cette cible",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "SENT", "VIEWED", "SHORTLISTED", "REJECTED" ]
+          }
+        },
+        "required" : [ "id", "status" ]
+      },
+      "JobRequest" : {
+        "type" : "object",
+        "description" : "Création ou modification complète d'une offre (JOB-4). Toute modification renvoie l'offre en attente de validation.",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "example" : "Développeur back-end Java, paiements mobiles",
+            "maxLength" : 120,
+            "minLength" : 10
+          },
+          "companyName" : {
+            "type" : "string",
+            "example" : "Kora Pay",
+            "maxLength" : 80,
+            "minLength" : 2
+          },
+          "companyWebsite" : {
+            "type" : "string",
+            "example" : "https://korapay.example",
+            "maxLength" : 200,
+            "minLength" : 0,
+            "pattern" : "^https://.+"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "PERMANENT", "REMOTE", "CONTRACT", "INTERNSHIP" ]
+          },
+          "countryCode" : {
+            "type" : "string",
+            "description" : "Facultatif pour une offre à distance",
+            "example" : "SN"
+          },
+          "city" : {
+            "type" : "string",
+            "example" : "Dakar",
+            "maxLength" : 80,
+            "minLength" : 0
+          },
+          "technologies" : {
+            "type" : "array",
+            "example" : [ "java", "spring-boot", "postgresql" ],
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 1
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Markdown. Le HTML brut est ignoré.",
+            "maxLength" : 20000,
+            "minLength" : 100
+          },
+          "compensation" : {
+            "type" : "string",
+            "example" : "600 000 à 900 000 XOF par mois",
+            "maxLength" : 120,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "companyName", "description", "technologies", "title", "type" ]
+      },
+      "JobDetail" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "companyName" : {
+            "type" : "string"
+          },
+          "companyWebsite" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "PERMANENT", "REMOTE", "CONTRACT", "INTERNSHIP" ]
+          },
+          "countryCode" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string"
+          },
+          "technologies" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "descriptionMarkdown" : {
+            "type" : "string",
+            "description" : "Markdown d'origine, pour pré-remplir le formulaire d'édition"
+          },
+          "descriptionHtml" : {
+            "type" : "string",
+            "description" : "HTML nettoyé côté serveur, à afficher avec MemberContent"
+          },
+          "compensation" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "PUBLISHED", "REJECTED", "CLOSED" ]
+          },
+          "rejectionReason" : {
+            "type" : "string",
+            "description" : "Motif du refus par l'équipe, visible par le recruteur et l'équipe seulement"
+          },
+          "recruiter" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "match" : {
+            "$ref" : "#/components/schemas/StackMatch",
+            "description" : "Null sans session ou sans stack"
+          },
+          "myApplication" : {
+            "$ref" : "#/components/schemas/MyApplicationRef",
+            "description" : "Null si le membre connecté n'a pas postulé"
+          },
+          "applicationCount" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Nombre de candidatures, visible par le recruteur et l'équipe seulement"
+          },
+          "canEdit" : {
+            "type" : "boolean",
+            "description" : "Vrai si le membre connecté peut modifier ou clore l'offre"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "canEdit", "companyName", "createdAt", "descriptionHtml", "descriptionMarkdown", "id", "recruiter", "status", "technologies", "title", "type", "updatedAt" ]
+      },
+      "StackMatch" : {
+        "type" : "object",
+        "properties" : {
+          "matched" : {
+            "type" : "array",
+            "example" : [ "java", "postgresql" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "missing" : {
+            "type" : "array",
+            "example" : [ "spring-boot" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "percent" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Part des technologies demandées, de 0 à 100",
+            "example" : 67
+          }
+        },
+        "required" : [ "matched", "missing", "percent" ]
+      },
       "AnswerRequest" : {
         "type" : "object",
         "properties" : {
@@ -1792,6 +3657,107 @@
         },
         "required" : [ "score" ]
       },
+      "MarkReadRequest" : {
+        "type" : "object",
+        "properties" : {
+          "ids" : {
+            "type" : "array",
+            "description" : "Notifications à marquer comme lues ; absent ou null : toutes (« Tout marquer comme lu »)",
+            "example" : [ 41, 42 ],
+            "items" : {
+              "type" : "integer",
+              "format" : "int64"
+            },
+            "maxItems" : 100,
+            "minItems" : 0
+          }
+        }
+      },
+      "UnreadCount" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3
+          }
+        },
+        "required" : [ "count" ]
+      },
+      "MissionApplicationRequest" : {
+        "type" : "object",
+        "description" : "Se proposer sur une mission",
+        "properties" : {
+          "message" : {
+            "type" : "string",
+            "example" : "J'ai intégré Wave et Orange Money pour deux boutiques à Abidjan, je peux livrer en 3 jours.",
+            "maxLength" : 2000,
+            "minLength" : 40
+          },
+          "proposedBudget" : {
+            "$ref" : "#/components/schemas/Budget",
+            "description" : "Montant proposé, si différent du budget indicatif"
+          }
+        },
+        "required" : [ "message" ]
+      },
+      "ApplicationTarget" : {
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "enum" : [ "JOB", "MISSION" ]
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "companyName" : {
+            "type" : "string",
+            "description" : "Entreprise pour une offre, null pour une mission"
+          }
+        },
+        "required" : [ "id", "title", "type" ]
+      },
+      "MyApplication" : {
+        "type" : "object",
+        "description" : "Candidature ou proposition envoyée par le membre connecté (JOB-7)",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "target" : {
+            "$ref" : "#/components/schemas/ApplicationTarget"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "SENT", "VIEWED", "SHORTLISTED", "REJECTED" ]
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "hasCv" : {
+            "type" : "boolean"
+          },
+          "proposedBudget" : {
+            "$ref" : "#/components/schemas/Budget"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "Dernier changement de statut"
+          }
+        },
+        "required" : [ "createdAt", "hasCv", "id", "message", "status", "target", "updatedAt" ]
+      },
       "RegisterRequest" : {
         "type" : "object",
         "properties" : {
@@ -1835,6 +3801,35 @@
           }
         },
         "required" : [ "email", "password" ]
+      },
+      "JobReviewRequest" : {
+        "type" : "object",
+        "description" : "Décision de l'équipe sur une offre en attente (JOB-4)",
+        "properties" : {
+          "decision" : {
+            "type" : "string",
+            "enum" : [ "APPROVE", "REJECT" ]
+          },
+          "reason" : {
+            "type" : "string",
+            "description" : "Obligatoire pour un refus, montré au recruteur",
+            "example" : "Rémunération à préciser avant publication",
+            "maxLength" : 500,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "decision" ]
+      },
+      "ApplicationDecisionRequest" : {
+        "type" : "object",
+        "description" : "Retenir ou refuser une candidature reçue",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "enum" : [ "SHORTLISTED", "REJECTED" ]
+          }
+        },
+        "required" : [ "status" ]
       },
       "PublicProfile" : {
         "type" : "object",
@@ -1894,6 +3889,46 @@
         },
         "required" : [ "answerCount", "createdAt", "displayName", "level", "questionCount", "reputation", "role", "technologies", "username", "visibleToRecruiters" ]
       },
+      "ReceivedApplication" : {
+        "type" : "object",
+        "description" : "Candidature ou proposition reçue par le recruteur ou l'auteur de la mission",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "target" : {
+            "$ref" : "#/components/schemas/ApplicationTarget"
+          },
+          "candidate" : {
+            "$ref" : "#/components/schemas/PublicProfile",
+            "description" : "Profil Zetsu du candidat, transmis par sa candidature"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "hasCv" : {
+            "type" : "boolean",
+            "description" : "Vrai si un CV est joint : GET /applications/{id}/cv"
+          },
+          "proposedBudget" : {
+            "$ref" : "#/components/schemas/Budget"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "SENT", "VIEWED", "SHORTLISTED", "REJECTED" ]
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "candidate", "createdAt", "hasCv", "id", "message", "status", "target", "updatedAt" ]
+      },
       "PageResponseReputationEntry" : {
         "type" : "object",
         "properties" : {
@@ -1947,6 +3982,33 @@
           }
         },
         "required" : [ "createdAt", "delta", "reason" ]
+      },
+      "PageResponseMyApplication" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MyApplication"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
       },
       "TagCount" : {
         "type" : "object",
@@ -2063,6 +4125,269 @@
         },
         "required" : [ "items", "page", "size", "total" ]
       },
+      "Notification" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "ANSWER_POSTED", "ANSWER_ACCEPTED", "VOTE_RECEIVED", "JOB_MATCH", "MISSION_MATCH", "APPLICATION_RECEIVED", "APPLICATION_DECIDED", "JOB_REVIEWED", "CHALLENGE_STARTED", "PROJECT_REQUEST_DECIDED" ]
+          },
+          "read" : {
+            "type" : "boolean"
+          },
+          "actor" : {
+            "$ref" : "#/components/schemas/AuthorSummary",
+            "description" : "Membre à l'origine de l'événement ; null pour un événement de la plateforme"
+          },
+          "target" : {
+            "$ref" : "#/components/schemas/NotificationTarget"
+          },
+          "outcome" : {
+            "type" : "string",
+            "description" : "Statut décidé, pour APPLICATION_DECIDED (SHORTLISTED, REJECTED) et JOB_REVIEWED (PUBLISHED, REJECTED)",
+            "example" : "SHORTLISTED"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "createdAt", "id", "read", "target", "type" ]
+      },
+      "NotificationTarget" : {
+        "type" : "object",
+        "description" : "Contenu concerné, pour construire le lien côté front",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "APPLICATION", "CHALLENGE", "PROJECT" ]
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "Titre de la question, de l'offre, de la mission, du défi…"
+          },
+          "questionId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Question parente quand la cible est une réponse"
+          }
+        },
+        "required" : [ "id", "title", "type" ]
+      },
+      "PageResponseNotification" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Notification"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "MissionSummary" : {
+        "type" : "object",
+        "description" : "Mission telle qu'affichée dans une liste",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "kind" : {
+            "type" : "string",
+            "enum" : [ "TROUBLESHOOTING", "INTEGRATION", "CODE_REVIEW", "OTHER" ]
+          },
+          "budget" : {
+            "$ref" : "#/components/schemas/Budget"
+          },
+          "durationDays" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "technologies" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "countryCode" : {
+            "type" : "string"
+          },
+          "author" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "OPEN", "IN_PROGRESS", "CLOSED" ]
+          },
+          "applicationCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "applicationCount", "author", "budget", "createdAt", "durationDays", "id", "kind", "status", "technologies", "title" ]
+      },
+      "PageResponseMissionSummary" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MissionSummary"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "PageResponseReceivedApplication" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ReceivedApplication"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "JobSummary" : {
+        "type" : "object",
+        "description" : "Offre telle qu'affichée dans une liste",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "companyName" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "PERMANENT", "REMOTE", "CONTRACT", "INTERNSHIP" ]
+          },
+          "countryCode" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string"
+          },
+          "technologies" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "compensation" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "PUBLISHED", "REJECTED", "CLOSED" ]
+          },
+          "matchPercent" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Correspondance avec la stack du membre connecté, de 0 à 100 ; null sans session ou sans stack"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "companyName", "createdAt", "id", "status", "technologies", "title", "type" ]
+      },
+      "PageResponseJobSummary" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/JobSummary"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
       "AuthProvider" : {
         "type" : "object",
         "properties" : {
@@ -2093,16 +4418,43 @@
       "CsrfToken" : {
         "type" : "object",
         "properties" : {
-          "headerName" : {
-            "type" : "string"
-          },
           "parameterName" : {
             "type" : "string"
           },
           "token" : {
             "type" : "string"
+          },
+          "headerName" : {
+            "type" : "string"
           }
         }
+      },
+      "PageResponseJobDetail" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/JobDetail"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
       },
       "DeleteAccountRequest" : {
         "type" : "object",
