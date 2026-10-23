@@ -5,9 +5,13 @@ import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.common.Paging;
 import dev.zetsu.job.ApplicationDtos.ApplicationTarget;
+import dev.zetsu.job.ApplicationDtos.MissionApplicationRequest;
 import dev.zetsu.job.ApplicationDtos.MyApplication;
 import dev.zetsu.job.ApplicationDtos.ReceivedApplication;
+import dev.zetsu.mission.Mission;
 import dev.zetsu.mission.MissionDtos.Budget;
+import dev.zetsu.mission.MissionService;
+import dev.zetsu.mission.MissionStatus;
 import dev.zetsu.user.AccountDeleted;
 import dev.zetsu.user.User;
 import dev.zetsu.user.UserRepository;
@@ -35,15 +39,18 @@ public class ApplicationService {
     private final UserRepository users;
     private final UserService userService;
     private final CvStorage cvStorage;
+    private final MissionService missionService;
 
     public ApplicationService(ApplicationRepository applications, JobService jobService, JobRepository jobs,
-                              UserRepository users, UserService userService, CvStorage cvStorage) {
+                              UserRepository users, UserService userService, CvStorage cvStorage,
+                              MissionService missionService) {
         this.applications = applications;
         this.jobService = jobService;
         this.jobs = jobs;
         this.users = users;
         this.userService = userService;
         this.cvStorage = cvStorage;
+        this.missionService = missionService;
     }
 
     /** JOB-3 : le profil Zetsu part avec la candidature ; le CV est facultatif. */
@@ -73,6 +80,46 @@ public class ApplicationService {
         }
     }
 
+    /** JOB-5 : se proposer sur une mission ouverte, avec un montant si l'on ne prend pas le budget indicatif. */
+    @Transactional
+    public MyApplication applyToMission(Long missionId, MissionApplicationRequest req, ZetsuPrincipal me) {
+        Mission mission = missionService.load(missionId);
+        if (MissionService.isAuthor(mission, me)) {
+            throw ApiException.forbidden("CANNOT_APPLY_OWN", "Impossible de se proposer sur sa propre mission");
+        }
+        if (mission.getStatus() != MissionStatus.OPEN) {
+            throw MissionService.notOpen();
+        }
+        String message = checkMessage(req.message());
+        if (applications.existsByMissionIdAndCandidateId(missionId, me.id())) {
+            throw alreadyProposed();
+        }
+        Budget budget = req.proposedBudget();
+        try {
+            Application a = applications.saveAndFlush(Application.forMission(users.getReferenceById(me.id()), mission,
+                    message, budget == null ? null : budget.amount(), budget == null ? null : budget.currency()));
+            return toMine(a);
+        } catch (DataIntegrityViolationException e) {
+            throw alreadyProposed();
+        }
+    }
+
+    /** JOB-7 : ce que l'auteur liste passe « vue ». L'équipe peut consulter sans changer le statut. */
+    @Transactional
+    public PageResponse<ReceivedApplication> receivedForMission(Long missionId, ApplicationStatus status, int page,
+                                                                int size, ZetsuPrincipal me) {
+        Mission mission = missionService.load(missionId);
+        boolean author = MissionService.isAuthor(mission, me);
+        if (!author && !JobService.isStaff(me)) {
+            throw ApiException.forbidden("NOT_MISSION_AUTHOR", "Seul l'auteur de la mission peut voir les propositions");
+        }
+        var found = applications.findReceivedForMission(missionId, status, Paging.of(page, size));
+        if (author) {
+            found.forEach(Application::markViewed);
+        }
+        return PageResponse.of(found, this::toReceived);
+    }
+
     /** JOB-7 : ce que le recruteur liste passe « vue ». L'équipe peut consulter sans changer le statut. */
     @Transactional
     public PageResponse<ReceivedApplication> receivedForJob(Long jobId, ApplicationStatus status, int page, int size,
@@ -99,6 +146,9 @@ public class ApplicationService {
             throw ApiException.badRequest("INVALID_STATUS", "Statut attendu : SHORTLISTED ou REJECTED");
         }
         a.setStatus(decision);
+        if (a.getMission() != null && decision == ApplicationStatus.SHORTLISTED) {
+            a.getMission().start();
+        }
         return toReceived(a);
     }
 
@@ -149,7 +199,7 @@ public class ApplicationService {
     }
 
     private static boolean isTargetOwner(Application a, ZetsuPrincipal me) {
-        return a.getJob() != null && JobService.isOwner(a.getJob(), me);
+        return a.getJob() != null ? JobService.isOwner(a.getJob(), me) : MissionService.isAuthor(a.getMission(), me);
     }
 
     private static String checkMessage(String raw) {
@@ -167,8 +217,16 @@ public class ApplicationService {
         return ApiException.conflict("ALREADY_APPLIED", "Vous avez déjà postulé à cette offre");
     }
 
+    private static ApiException alreadyProposed() {
+        return ApiException.conflict("ALREADY_APPLIED", "Vous vous êtes déjà proposé sur cette mission");
+    }
+
     private static ApplicationTarget target(Application a) {
         Job j = a.getJob();
+        if (j == null) {
+            Mission m = a.getMission();
+            return new ApplicationTarget(ApplicationTargetType.MISSION, m.getId(), m.getTitle(), null);
+        }
         return new ApplicationTarget(ApplicationTargetType.JOB, j.getId(), j.getTitle(), j.getCompanyName());
     }
 

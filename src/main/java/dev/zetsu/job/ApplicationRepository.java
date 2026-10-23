@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,15 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     long countByJobId(Long jobId);
 
-    @EntityGraph(attributePaths = {"candidate", "job"})
+    boolean existsByMissionIdAndCandidateId(Long missionId, Long candidateId);
+
+    Optional<Application> findByMissionIdAndCandidateId(Long missionId, Long candidateId);
+
+    /** Nombre de propositions par mission, pour une page entière en une requête. */
+    @Query("select a.mission.id, count(a) from Application a where a.mission.id in :missionIds group by a.mission.id")
+    List<Object[]> countByMissions(@Param("missionIds") Collection<Long> missionIds);
+
+    @EntityGraph(attributePaths = {"candidate", "job", "mission"})
     @Query("select a from Application a where a.id = :id")
     Optional<Application> findDetailed(@Param("id") Long id);
 
@@ -30,11 +39,18 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     Page<Application> findReceivedForJob(@Param("jobId") Long jobId, @Param("status") ApplicationStatus status,
                                          Pageable pageable);
 
-    @EntityGraph(attributePaths = {"job"})
+    @EntityGraph(attributePaths = {"candidate"})
+    @Query("""
+            select a from Application a where a.mission.id = :missionId and (:status is null or a.status = :status)
+            order by a.createdAt desc, a.id desc""")
+    Page<Application> findReceivedForMission(@Param("missionId") Long missionId,
+                                             @Param("status") ApplicationStatus status, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"job", "mission"})
     @Query("""
             select a from Application a where a.candidate.id = :candidateId
               and (:status is null or a.status = :status)
-              and ((:jobs = true and a.job is not null) or (:missions = true and a.missionId is not null))
+              and ((:jobs = true and a.job is not null) or (:missions = true and a.mission is not null))
             order by a.createdAt desc, a.id desc""")
     Page<Application> findSentBy(@Param("candidateId") Long candidateId, @Param("status") ApplicationStatus status,
                                  @Param("jobs") boolean jobs, @Param("missions") boolean missions, Pageable pageable);

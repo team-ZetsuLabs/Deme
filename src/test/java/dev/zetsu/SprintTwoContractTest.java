@@ -37,7 +37,8 @@ class SprintTwoContractTest extends IntegrationTest {
     @Test
     void lesListesSontPubliques() throws Exception {
         mvc.perform(get("/api/v1/jobs")).andExpect(status().isOk());
-        mvc.perform(get("/api/v1/missions/7"))
+        mvc.perform(get("/api/v1/missions")).andExpect(status().isOk());
+        mvc.perform(get("/api/v1/notifications/unread-count").session(register("Awa").session()))
                 .andExpect(status().isNotImplemented())
                 .andExpect(jsonPath("$.code").value("NOT_IMPLEMENTED"));
     }

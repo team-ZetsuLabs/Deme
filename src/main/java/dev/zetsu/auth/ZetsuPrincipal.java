@@ -49,6 +49,11 @@ public final class ZetsuPrincipal implements UserDetails, OAuth2User {
         return role;
     }
 
+    /** Équipe Zetsu : back office, validation des offres, accès en lecture à tout contenu. */
+    public boolean staff() {
+        return role == Role.MODERATOR || role == Role.ADMIN;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));

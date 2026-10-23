@@ -151,7 +151,7 @@ public class JobService {
     }
 
     static boolean isStaff(ZetsuPrincipal me) {
-        return me != null && (me.role() == Role.MODERATOR || me.role() == Role.ADMIN);
+        return me != null && me.staff();
     }
 
     private void apply(Job job, JobRequest req) {

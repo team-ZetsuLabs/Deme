@@ -52,8 +52,8 @@ Tout est dans Swagger UI. Ce qui n'est pas encore codé répond `501 NOT_IMPLEME
 | Domaine | Points d'entrée |
 | --- | --- |
 | `job` (codé) | `GET /jobs` (filtres type, pays, technologie ; correspondance avec la stack), `GET /jobs/mine`, `GET /jobs/{id}`, `POST /jobs` (rôle Recruteur, offre en attente), `PUT /jobs/{id}`, `POST /jobs/{id}/close` |
-| candidatures (codé pour les offres) | `POST /jobs/{id}/applications` (multipart : message, CV PDF de 2 Mo), `GET /jobs/{id}/applications`, `PATCH /applications/{id}` (retenir, refuser), `GET /applications/{id}/cv`, `GET /users/me/applications` (suivi JOB-7) ; à venir avec les missions : `POST` et `GET /missions/{id}/applications` |
-| `mission` | `GET /missions`, `GET /missions/{id}`, `POST /missions`, `PUT /missions/{id}`, `POST /missions/{id}/close` |
+| candidatures (codé) | `POST /jobs/{id}/applications` (multipart : message, CV PDF de 2 Mo), `GET /jobs/{id}/applications`, `POST /missions/{id}/applications`, `GET /missions/{id}/applications`, `PATCH /applications/{id}` (retenir, refuser ; retenir une proposition met la mission en cours), `GET /applications/{id}/cv`, `GET /users/me/applications` (suivi JOB-7) |
+| `mission` (codé) | `GET /missions`, `GET /missions/{id}`, `POST /missions`, `PUT /missions/{id}`, `POST /missions/{id}/close` |
 | `admin` (codé) | `GET /admin/jobs`, `POST /admin/jobs/{id}/decision` (validation des offres, rôles Modérateur et Administrateur) |
 | `notification` | `GET /notifications`, `GET /notifications/unread-count`, `POST /notifications/read` |
 

@@ -1,5 +1,6 @@
 package dev.zetsu.job;
 
+import dev.zetsu.mission.Mission;
 import dev.zetsu.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,8 +33,9 @@ public class Application {
     @JoinColumn(name = "job_id")
     private Job job;
 
-    @Column(name = "mission_id")
-    private Long missionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mission_id")
+    private Mission mission;
 
     @Column(nullable = false, length = 2000)
     private String message;
@@ -70,6 +72,17 @@ public class Application {
         return a;
     }
 
+    public static Application forMission(User candidate, Mission mission, String message, Long proposedAmount,
+                                         String proposedCurrency) {
+        Application a = new Application();
+        a.candidate = candidate;
+        a.mission = mission;
+        a.message = message;
+        a.proposedAmount = proposedAmount;
+        a.proposedCurrency = proposedCurrency;
+        return a;
+    }
+
     /** JOB-7 : « vue » dès que le destinataire l'a sous les yeux, sans revenir en arrière après une décision. */
     public void markViewed() {
         if (status == ApplicationStatus.SENT) {
@@ -94,8 +107,8 @@ public class Application {
         return job;
     }
 
-    public Long getMissionId() {
-        return missionId;
+    public Mission getMission() {
+        return mission;
     }
 
     public String getMessage() {
