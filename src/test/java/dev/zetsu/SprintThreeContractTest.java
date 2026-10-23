@@ -49,12 +49,13 @@ class SprintThreeContractTest extends IntegrationTest {
     }
 
     @Test
-    void lesDefisSontPublicsEtRepondent501() throws Exception {
-        mvc.perform(get("/api/v1/challenges/current"))
+    void lesDefisSontPublics() throws Exception {
+        mvc.perform(get("/api/v1/challenges/999999/leaderboard"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("CHALLENGE_NOT_FOUND"));
+        mvc.perform(get("/api/v1/users/awa/avatar/photo.webp"))
                 .andExpect(status().isNotImplemented())
                 .andExpect(jsonPath("$.code").value("NOT_IMPLEMENTED"));
-        mvc.perform(get("/api/v1/challenges/4/leaderboard")).andExpect(status().isNotImplemented());
-        mvc.perform(get("/api/v1/users/awa/avatar/photo.webp")).andExpect(status().isNotImplemented());
     }
 
     @Test
@@ -80,9 +81,9 @@ class SprintThreeContractTest extends IntegrationTest {
         Member rimvie = register("Rimvie");
         jdbc.update("update users set role = 'MODERATOR' where id = ?", rimvie.id());
         Member moderator = login(rimvie);
-        for (String path : new String[]{"/api/v1/admin/cases", "/api/v1/admin/users", "/api/v1/admin/tags"}) {
+        for (String path : new String[]{"/api/v1/admin/cases", "/api/v1/admin/users", "/api/v1/admin/tags",
+                "/api/v1/admin/challenges"}) {
             mvc.perform(get(path).session(moderator.session())).andExpect(status().isOk());
         }
-        mvc.perform(get("/api/v1/admin/challenges").session(moderator.session())).andExpect(status().isNotImplemented());
     }
 }

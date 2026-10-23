@@ -6,8 +6,8 @@ import dev.zetsu.challenge.ChallengeDtos.LeaderboardEntry;
 import dev.zetsu.challenge.ChallengeDtos.MySubmission;
 import dev.zetsu.challenge.ChallengeDtos.SubmissionRequest;
 import dev.zetsu.common.ApiError;
-import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
+import dev.zetsu.common.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,11 +25,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Contrat du sprint 3 : défis (CH-1 à CH-3). Lecture publique, dépôt avec une session. */
+/** Défis (CH-1 à CH-3). Lecture publique, dépôt avec une session. */
 @RestController
 @RequestMapping("/api/v1/challenges")
 @Tag(name = "challenges", description = "Défis, dépôts et classement")
 public class ChallengeController {
+
+    private final ChallengeService challengeService;
+    private final RateLimiter rateLimiter;
+
+    public ChallengeController(ChallengeService challengeService, RateLimiter rateLimiter) {
+        this.challengeService = challengeService;
+        this.rateLimiter = rateLimiter;
+    }
 
     @GetMapping("/current")
     @Operation(summary = "Défi en cours (CH-1)",
@@ -37,7 +45,7 @@ public class ChallengeController {
     @ApiResponse(responseCode = "200", description = "Le défi")
     @ApiResponse(responseCode = "404", description = "NO_CURRENT_CHALLENGE", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Challenge current(@AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return challengeService.current(me);
     }
 
     @GetMapping("/{id}")
@@ -45,7 +53,7 @@ public class ChallengeController {
     @ApiResponse(responseCode = "200", description = "Le défi")
     @ApiResponse(responseCode = "404", description = "CHALLENGE_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Challenge get(@PathVariable Long id, @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return challengeService.get(id, me);
     }
 
     @PostMapping("/{id}/submissions")
@@ -61,7 +69,8 @@ public class ChallengeController {
     @ApiResponse(responseCode = "429", description = "RATE_LIMITED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public MySubmission submit(@PathVariable Long id, @Valid @RequestBody SubmissionRequest req,
                                @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        rateLimiter.check(RateLimiter.Rule.PUBLISH, "user:" + me.id());
+        return challengeService.submit(id, req, me);
     }
 
     @GetMapping("/{id}/leaderboard")
@@ -73,6 +82,6 @@ public class ChallengeController {
     public PageResponse<LeaderboardEntry> leaderboard(@PathVariable Long id,
                                                       @RequestParam(defaultValue = "0") int page,
                                                       @RequestParam(defaultValue = "20") int size) {
-        throw ApiException.notImplemented();
+        return challengeService.leaderboard(id, page, size);
     }
 }

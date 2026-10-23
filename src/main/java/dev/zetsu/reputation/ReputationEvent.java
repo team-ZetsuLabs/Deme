@@ -40,6 +40,10 @@ public class ReputationEvent {
     @Column(name = "source_user_id")
     private Long sourceUserId;
 
+    /** Dépôt de défi validé (CH-3), pour CHALLENGE_VALIDATED. */
+    @Column(name = "submission_id")
+    private Long submissionId;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 
@@ -54,6 +58,12 @@ public class ReputationEvent {
         this.questionId = questionId;
         this.answerId = answerId;
         this.sourceUserId = sourceUserId;
+    }
+
+    public static ReputationEvent forSubmission(Long userId, int delta, ReputationReason reason, Long submissionId) {
+        ReputationEvent e = new ReputationEvent(userId, delta, reason, null, null, null);
+        e.submissionId = submissionId;
+        return e;
     }
 
     public int getDelta() {

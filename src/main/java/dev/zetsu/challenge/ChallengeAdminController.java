@@ -6,7 +6,6 @@ import dev.zetsu.challenge.ChallengeDtos.Challenge;
 import dev.zetsu.challenge.ChallengeDtos.ChallengeRequest;
 import dev.zetsu.challenge.ChallengeDtos.SubmissionReviewRequest;
 import dev.zetsu.common.ApiError;
-import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,6 +31,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "admin", description = "Back office de l'équipe (Modérateur, Administrateur)")
 public class ChallengeAdminController {
 
+    private final ChallengeService challengeService;
+
+    public ChallengeAdminController(ChallengeService challengeService) {
+        this.challengeService = challengeService;
+    }
+
     @GetMapping("/challenges")
     @Operation(summary = "Tous les défis", description = "Les plus récents d'abord, « UPCOMING » compris.")
     @ApiResponse(responseCode = "200", description = "Page de défis")
@@ -40,7 +45,7 @@ public class ChallengeAdminController {
     public PageResponse<Challenge> list(@RequestParam(required = false) ChallengeStatus status,
                                         @RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "20") int size) {
-        throw ApiException.notImplemented();
+        return challengeService.teamList(status, page, size);
     }
 
     @PostMapping("/challenges")
@@ -54,7 +59,7 @@ public class ChallengeAdminController {
     @ApiResponse(responseCode = "403", description = "FORBIDDEN", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "409", description = "CHALLENGE_OVERLAP", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Challenge create(@Valid @RequestBody ChallengeRequest req, @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return challengeService.create(req, me);
     }
 
     @PutMapping("/challenges/{id}")
@@ -68,7 +73,7 @@ public class ChallengeAdminController {
     @ApiResponse(responseCode = "404", description = "CHALLENGE_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "409", description = "CHALLENGE_OVERLAP, CHALLENGE_STARTED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Challenge update(@PathVariable Long id, @Valid @RequestBody ChallengeRequest req) {
-        throw ApiException.notImplemented();
+        return challengeService.update(id, req);
     }
 
     @GetMapping("/challenges/{id}/submissions")
@@ -81,7 +86,7 @@ public class ChallengeAdminController {
                                                      @RequestParam(defaultValue = "PENDING") SubmissionStatus status,
                                                      @RequestParam(defaultValue = "0") int page,
                                                      @RequestParam(defaultValue = "20") int size) {
-        throw ApiException.notImplemented();
+        return challengeService.submissionsFor(id, status, page, size);
     }
 
     @PostMapping("/submissions/{id}/review")
@@ -96,6 +101,6 @@ public class ChallengeAdminController {
     @ApiResponse(responseCode = "404", description = "SUBMISSION_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public AdminSubmission review(@PathVariable Long id, @Valid @RequestBody SubmissionReviewRequest req,
                                   @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return challengeService.review(id, req, me);
     }
 }

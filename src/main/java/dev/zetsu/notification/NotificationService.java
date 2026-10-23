@@ -97,6 +97,19 @@ public class NotificationService {
                 .addValue("excluded", excludedUserId));
     }
 
+    /** CHALLENGE_STARTED : tous les membres actifs, en une seule requête. */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void notifyAllActive(NotificationType type, NotificationTarget target) {
+        jdbc.update("""
+                insert into notifications (recipient_id, type, target_type, target_id, target_title)
+                select u.id, :type, :targetType, :targetId, :title from users u where u.status = 'ACTIVE'
+                """, new MapSqlParameterSource()
+                .addValue("type", type.name())
+                .addValue("targetType", target.type().name())
+                .addValue("targetId", target.id())
+                .addValue("title", title(target)));
+    }
+
     @Transactional(readOnly = true)
     public PageResponse<NotificationDtos.Notification> list(Long recipientId, boolean unreadOnly, int page, int size) {
         return PageResponse.of(notifications.findFor(recipientId, unreadOnly, Paging.of(page, size)), this::toDto);

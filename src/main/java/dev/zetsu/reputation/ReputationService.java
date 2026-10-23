@@ -74,6 +74,30 @@ public class ReputationService {
         }
     }
 
+    /**
+     * CH-3 : +20 pour un dépôt validé, une seule fois par dépôt ; une note corrigée ensuite ne change rien.
+     * Pas de plafond quotidien : ce gain dépend d'une décision de l'équipe.
+     */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void grantForSubmission(Long userId, Long submissionId) {
+        ReputationReason reason = ReputationReason.CHALLENGE_VALIDATED;
+        if (events.netForSubmission(userId, reason.name(), submissionId) == 0) {
+            events.saveAndFlush(ReputationEvent.forSubmission(userId, reason.points(), reason, submissionId));
+            users.addReputation(userId, reason.points());
+        }
+    }
+
+    /** Un dépôt validé puis refusé perd ce qu'il avait rapporté. */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void revokeForSubmission(Long userId, Long submissionId) {
+        ReputationReason reason = ReputationReason.CHALLENGE_VALIDATED;
+        int net = events.netForSubmission(userId, reason.name(), submissionId);
+        if (net != 0) {
+            events.saveAndFlush(ReputationEvent.forSubmission(userId, -net, reason, submissionId));
+            users.addReputation(userId, -net);
+        }
+    }
+
     public Level levelOf(int reputation) {
         return props.levelOf(reputation);
     }
