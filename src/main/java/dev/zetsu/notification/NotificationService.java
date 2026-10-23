@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
@@ -83,8 +85,9 @@ public class NotificationService {
             return;
         }
         jdbc.update("""
-                insert into notifications (recipient_id, type, actor_id, target_type, target_id, target_title)
-                select distinct ut.user_id, :type, :actor, :targetType, :targetId, :title
+                insert into notifications (recipient_id, type, actor_id, target_type, target_id, target_title,
+                                           created_at)
+                select distinct ut.user_id, :type, :actor, :targetType, :targetId, :title, cast(:now as timestamptz)
                 from user_technologies ut join users u on u.id = ut.user_id
                 where ut.tag_id in (:tags) and ut.user_id <> :excluded and u.status = 'ACTIVE'
                 """, new MapSqlParameterSource()
@@ -94,20 +97,31 @@ public class NotificationService {
                 .addValue("targetId", target.id())
                 .addValue("title", title(target))
                 .addValue("tags", tagIds)
-                .addValue("excluded", excludedUserId));
+                .addValue("excluded", excludedUserId)
+                .addValue("now", now()));
     }
 
     /** CHALLENGE_STARTED : tous les membres actifs, en une seule requête. */
     @Transactional(propagation = Propagation.MANDATORY)
     public void notifyAllActive(NotificationType type, NotificationTarget target) {
         jdbc.update("""
-                insert into notifications (recipient_id, type, target_type, target_id, target_title)
-                select u.id, :type, :targetType, :targetId, :title from users u where u.status = 'ACTIVE'
+                insert into notifications (recipient_id, type, target_type, target_id, target_title, created_at)
+                select u.id, :type, :targetType, :targetId, :title, cast(:now as timestamptz)
+                from users u where u.status = 'ACTIVE'
                 """, new MapSqlParameterSource()
                 .addValue("type", type.name())
                 .addValue("targetType", target.type().name())
                 .addValue("targetId", target.id())
-                .addValue("title", title(target)));
+                .addValue("title", title(target))
+                .addValue("now", now()));
+    }
+
+    /**
+     * Heure de l'application, comme celle des notifications créées par JPA : avec now() de PostgreSQL, un petit
+     * écart entre les deux horloges suffisait à mal ordonner la liste (« plus récentes d'abord »).
+     */
+    private static Timestamp now() {
+        return Timestamp.from(Instant.now());
     }
 
     @Transactional(readOnly = true)
