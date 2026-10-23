@@ -208,5 +208,17 @@
     "light": "Light",
     "dark": "Dark",
     "language": "Language"
+  },
+  "errors": {
+    "notFound": {
+      "title": "Page not found",
+      "message": "The requested address does not exist in the back office."
+    },
+    "crash": {
+      "title": "Something went wrong",
+      "message": "This screen could not be displayed. Reload the page; if the problem continues, tell the team."
+    },
+    "reload": "Reload the page",
+    "backHome": "Back to reports"
   }
 }

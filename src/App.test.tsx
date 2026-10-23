@@ -15,3 +15,9 @@ test("redirige l'accueil vers les signalements", async () => {
     await screen.findByRole('heading', { name: 'Signalements et contestations' }),
   ).toBeInTheDocument()
 })
+
+test('une adresse inconnue affiche la page introuvable', async () => {
+  window.history.pushState({}, '', `${import.meta.env.BASE_URL}nimporte-quoi`)
+  render(<App />)
+  expect(await screen.findByRole('heading', { name: 'Page introuvable' })).toBeInTheDocument()
+})

@@ -208,5 +208,17 @@
     "light": "Clair",
     "dark": "Sombre",
     "language": "Langue"
+  },
+  "errors": {
+    "notFound": {
+      "title": "Page introuvable",
+      "message": "L'adresse demandée n'existe pas dans le back office."
+    },
+    "crash": {
+      "title": "Une erreur est survenue",
+      "message": "Cet écran n'a pas pu s'afficher. Rechargez la page ; si le problème continue, prévenez l'équipe."
+    },
+    "reload": "Recharger la page",
+    "backHome": "Retour aux signalements"
   }
 }
