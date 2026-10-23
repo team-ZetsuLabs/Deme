@@ -219,6 +219,17 @@
       "message": "Cet écran n'a pas pu s'afficher. Rechargez la page ; si le problème continue, prévenez l'équipe."
     },
     "reload": "Recharger la page",
-    "backHome": "Retour aux signalements"
+    "backHome": "Retour aux signalements",
+    "codes": {
+      "NETWORK_ERROR": "Connexion impossible. Vérifiez votre réseau et réessayez.",
+      "LOGIN_LOCKED": "Trop d'essais ratés. Réessayez dans 15 minutes.",
+      "ACCOUNT_SUSPENDED": "Ce compte est suspendu.",
+      "LEVEL_TOO_LOW": "Votre niveau de réputation ne permet pas cette action.",
+      "HTTP_401": "Votre session a expiré. Reconnectez-vous.",
+      "HTTP_403": "Vous n'avez pas le droit de faire cela.",
+      "HTTP_404": "Élément introuvable.",
+      "HTTP_429": "Trop de demandes. Patientez un instant.",
+      "MOCK_NOT_FOUND": "Exemple de réponse manquant dans src/mocks."
+    }
   }
 }
