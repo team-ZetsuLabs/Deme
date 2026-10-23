@@ -1,0 +1,12 @@
+{
+  "app": { "title": "Zetsu, back office" },
+  "home": {
+    "title": "Back office Zetsu",
+    "intro": "Modération et administration de la plateforme."
+  },
+  "common": {
+    "loading": "Chargement…",
+    "error": "Une erreur est survenue.",
+    "empty": "Rien à afficher."
+  }
+}

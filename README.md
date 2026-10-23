@@ -1,16 +1,18 @@
-# React + Vite
+# Zetsu, back office
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Back office de Zetsu (modération et administration), servi sous `/admin`.
+React 18, Vite, TypeScript. Les règles de l'équipe sont dans `CLAUDE.md`.
 
-Currently, two official plugins are available:
+## Lancer en local
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```
+cp .env.example .env.local
+npm install
+npm run dev
+```
 
-## React Compiler
+Le site est sur http://localhost:3200/admin/. Le proxy de Vite renvoie `/api` vers `localhost:8080`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Scripts
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+`dev`, `build`, `typecheck`, `lint`, `test`, `format`, `format:check`, `gen:api`.

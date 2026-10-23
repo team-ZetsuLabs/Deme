@@ -1,0 +1,8 @@
+{
+  "app": { "title": "Zetsu, back office" },
+  "home": {
+    "title": "Zetsu back office",
+    "intro": "Moderation and administration of the platform."
+  },
+  "common": { "loading": "Loading…", "error": "Something went wrong.", "empty": "Nothing to show." }
+}
