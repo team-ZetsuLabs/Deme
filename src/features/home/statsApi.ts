@@ -1,5 +1,5 @@
 import { api } from '../../api/api';
-import type { PublicStats } from '../../api/provisional-types';
+import type { PublicStats } from '../../api/types';
 
 export const statsApi = {
   get: () => api.get<PublicStats>('/stats'),

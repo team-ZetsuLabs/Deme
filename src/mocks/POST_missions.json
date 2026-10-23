@@ -10,12 +10,12 @@
   "delayDays": 5,
   "technologies": ["wordpress", "php", "mobile-money"],
   "author": {
-    "id": 9,
-    "name": "Aminata Ouédraogo",
-    "photoUrl": null,
-    "country": "BF",
-    "city": "Ouagadougou",
-    "reputation": 120
+    "username": "aminata_dev",
+    "displayName": "Aminata Diallo",
+    "avatarUrl": null,
+    "countryCode": "SN",
+    "reputation": 342,
+    "level": "MEMBER"
   },
   "createdAt": "2026-10-21T10:30:00Z",
   "status": "OPEN",

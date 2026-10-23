@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Answer } from '../../api/provisional-types';
+import type { Answer } from '../../api/types';
 import { Button } from '../../components/Button';
 import { CodeBlock } from '../../components/CodeBlock';
 import { Icon } from '../../components/Icon';
@@ -19,13 +19,9 @@ export type AnswerItemProps = {
   answer: Answer;
   /** Le membre connecté est l'auteur de la question : il peut accepter (QA-5). */
   canAccept: boolean;
-  /** Le membre connecté est l'auteur de la réponse : il peut la modifier (QA-3). */
-  isOwn: boolean;
-  /** L'auteur de la réponse vient du même pays que la question (QA-10). */
-  sameCountry: boolean;
   accepting: boolean;
   onAccept: () => void;
-  onVote: (votes: number, voted: boolean) => void;
+  onVote: (score: number, myVote: number | null) => void;
   onEdited: (answer: Answer) => void;
   /** Actions en plus, à droite des boutons (signalement). */
   extraActions?: ReactNode;
@@ -34,8 +30,6 @@ export type AnswerItemProps = {
 export function AnswerItem({
   answer: a,
   canAccept,
-  isOwn,
-  sameCountry,
   accepting,
   onAccept,
   onVote,
@@ -63,9 +57,9 @@ export function AnswerItem({
         <VoteControl
           target="answer"
           id={a.id}
-          authorId={a.author.id}
-          votes={a.votes}
-          voted={a.voted}
+          authorUsername={a.author.username}
+          score={a.score}
+          myVote={a.myVote}
           onChange={onVote}
         />
         {a.accepted && (
@@ -75,7 +69,7 @@ export function AnswerItem({
         )}
       </div>
       <div className={styles.content}>
-        {(a.accepted || sameCountry) && (
+        {(a.accepted || a.sameContext) && (
           <div className={styles.badges}>
             {a.accepted && (
               <span className={styles.acceptedLabel}>
@@ -83,7 +77,7 @@ export function AnswerItem({
                 {t('question.accepted')}
               </span>
             )}
-            {sameCountry && (
+            {a.sameContext && (
               <span className={styles.sameContext}>
                 <Icon name="pin" size={13} />
                 {t('question.sameCountry')}
@@ -92,7 +86,7 @@ export function AnswerItem({
           </div>
         )}
 
-        {a.hidden && isOwn && (
+        {a.hidden && a.canEdit && (
           <HiddenNotice
             targetType="ANSWER"
             targetId={a.id}
@@ -104,7 +98,7 @@ export function AnswerItem({
         {editing ? (
           <AnswerForm
             idPrefix={`edit-${a.id}`}
-            initialBody={a.body}
+            initialBody={a.bodyMarkdown}
             initialCode={a.code}
             submitLabel={t('question.saveEdit')}
             onSubmit={saveEdit}
@@ -125,7 +119,7 @@ export function AnswerItem({
                 {t('question.accept')}
               </Button>
             )}
-            {isOwn && !editing && (
+            {a.canEdit && !editing && (
               <Button size="sm" variant="ghost" onClick={() => setEditing(true)}>
                 {t('question.edit')}
               </Button>

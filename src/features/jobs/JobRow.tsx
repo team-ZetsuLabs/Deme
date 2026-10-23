@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { JobSummary } from '../../api/provisional-types';
+import type { JobSummary } from '../../api/types';
 import { Avatar } from '../../components/Avatar';
 import { buttonClass } from '../../components/buttonClass';
 import { RelativeTime } from '../../components/RelativeTime';

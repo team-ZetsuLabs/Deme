@@ -2,7 +2,7 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import i18n from '../../i18n';
-import type { Me } from '../../api/provisional-types';
+import type { Me } from '../../api/types';
 import { ToastProvider } from '../../components/ToastProvider';
 import { authApi } from '../../features/auth/authApi';
 import { SessionProvider } from '../../features/auth/SessionProvider';
@@ -11,24 +11,9 @@ import { notificationsApi } from '../../features/notifications/notificationsApi'
 import { UnreadProvider } from '../../features/notifications/UnreadProvider';
 import { NotificationBell } from '../../layout/NotificationBell';
 import NotificationsPage from './NotificationsPage';
+import { demoMe } from '../../test/fixtures';
 
-const member: Me = {
-  id: 9,
-  name: 'Aminata Ouédraogo',
-  email: 'aminata.ouedraogo@example.com',
-  country: 'BF',
-  city: 'Ouagadougou',
-  photoUrl: null,
-  bio: null,
-  reputation: 120,
-  level: 'MEMBER',
-  language: 'fr',
-  skills: [],
-  recruiterVisible: false,
-  providers: [],
-  hasPassword: true,
-  onboarded: true,
-};
+const member: Me = demoMe();
 
 const renderPage = () =>
   render(

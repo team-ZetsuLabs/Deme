@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { LoginRequest, Me, MeUpdate, RegisterRequest } from '../../api/provisional-types';
+import type { LoginRequest, Me, MeUpdate, RegisterRequest } from '../../api/types';
 
 export type SessionStatus = 'loading' | 'anonymous' | 'authenticated';
 

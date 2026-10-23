@@ -1,15 +1,15 @@
 import { useTranslation } from 'react-i18next';
-import type { Level, PublicStats } from '../../api/provisional-types';
+import type { Level, PublicStats } from '../../api/types';
 import styles from './LevelLadder.module.css';
 
-const STEPS: Level[] = ['NEW', 'MEMBER', 'CONTRIBUTOR', 'REFERENT'];
+const STEPS: Level[] = ['NEWCOMER', 'MEMBER', 'CONTRIBUTOR', 'REFERENT'];
 
 export type LevelLadderProps = { levels: PublicStats['levels'] };
 
 /** Les quatre niveaux et leurs droits (section 8) : le « par les devs » rendu visible. */
 export function LevelLadder({ levels }: LevelLadderProps) {
   const { t, i18n } = useTranslation();
-  const threshold = (level: Level) => (level === 'NEW' ? 0 : levels[level]);
+  const threshold = (level: Level) => (level === 'NEWCOMER' ? 0 : levels[level]);
   return (
     <ol className={styles.ladder}>
       {STEPS.map((level) => (

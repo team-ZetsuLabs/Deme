@@ -10,12 +10,12 @@
   "delayDays": 5,
   "technologies": ["wordpress", "php", "mobile-money"],
   "author": {
-    "id": 12,
-    "name": "Mariama Sow",
-    "photoUrl": null,
-    "country": "SN",
-    "city": "Saint-Louis",
-    "reputation": 85
+    "username": "mariama_s",
+    "displayName": "Mariama Sow",
+    "avatarUrl": null,
+    "countryCode": "SN",
+    "reputation": 85,
+    "level": "MEMBER"
   },
   "createdAt": "2026-10-21T10:30:00Z",
   "status": "OPEN",

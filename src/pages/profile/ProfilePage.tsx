@@ -24,50 +24,49 @@ import styles from './ProfilePage.module.css';
 
 type ProfileTab = 'activity' | 'skills' | 'badges';
 
-/** /users/:id, et /users/me pour son propre profil. */
+/** /users/:username, et /users/me pour son propre profil. */
 export default function ProfilePage() {
-  const { id: rawId } = useParams();
+  const { username } = useParams();
   const { status, user } = useSession();
-  if (rawId === 'me') {
+  if (username === 'me') {
     if (status === 'loading') return <PageLoader />;
     return user ? (
-      <Navigate to={`/users/${user.id}`} replace />
+      <Navigate to={`/users/${user.username}`} replace />
     ) : (
       <Navigate to="/login" replace state={{ from: '/users/me' }} />
     );
   }
-  const id = Number(rawId);
-  return Number.isInteger(id) && id > 0 ? <ProfileView id={id} /> : <NotFoundPage />;
+  return username ? <ProfileView username={username} /> : <NotFoundPage />;
 }
 
 /** Profil public (REP-5) : un CV vivant, construit par l'entraide. */
-function ProfileView({ id }: { id: number }) {
+function ProfileView({ username }: { username: string }) {
   const { t, i18n } = useTranslation();
   const { user } = useSession();
   const [tab, setTab] = useState<ProfileTab>('activity');
-  const query = useApiQuery(() => usersApi.get(id), [id]);
+  const query = useApiQuery(() => usersApi.get(username), [username]);
   const p = query.data;
-  usePageTitle(p?.name ?? t('profile.pageTitle'));
+  usePageTitle(p?.displayName ?? t('profile.pageTitle'));
 
   if (query.loading) return <ProfileSkeleton />;
   if (query.error instanceof ApiError && query.error.status === 404) return <NotFoundPage />;
   if (query.error || !p) return <ErrorState error={query.error} onRetry={query.reload} />;
 
-  const isMe = user?.id === p.id;
-  const country = countryName(p.country, i18n.language);
+  const isMe = user?.username === p.username;
+  const country = countryName(p.countryCode ?? null, i18n.language);
   const place = [p.city, country].filter(Boolean).join(', ');
   const joined = new Intl.DateTimeFormat(i18n.language, { month: 'long', year: 'numeric' }).format(
-    new Date(p.joinedAt),
+    new Date(p.createdAt),
   );
   const fmt = (n: number) => n.toLocaleString(i18n.language);
 
   return (
     <section className={styles.panel}>
       <div className={styles.head}>
-        <Avatar name={p.name} photoUrl={p.photoUrl} size={88} />
+        <Avatar name={p.displayName} photoUrl={p.avatarUrl ?? null} size={88} />
         <div className={styles.identity}>
-          <h1 className={styles.name}>{p.name}</h1>
-          {p.githubLogin && <p className={styles.handle}>@{p.githubLogin}</p>}
+          <h1 className={styles.name}>{p.displayName}</h1>
+          <p className={styles.handle}>@{p.username}</p>
           {p.bio && <p className={styles.bio}>{p.bio}</p>}
           <ul className={styles.meta}>
             {place && (
@@ -80,17 +79,6 @@ function ProfileView({ id }: { id: number }) {
               <Icon name="cal" size={14} />
               {t('profile.joined', { date: joined })}
             </li>
-            {p.githubLogin && (
-              <li>
-                <Icon name="github" size={14} />
-                <a
-                  href={`https://github.com/${encodeURIComponent(p.githubLogin)}`}
-                  rel="noopener noreferrer nofollow"
-                >
-                  github.com/{p.githubLogin}
-                </a>
-              </li>
-            )}
           </ul>
         </div>
         <div className={styles.headActions}>
@@ -99,9 +87,9 @@ function ProfileView({ id }: { id: number }) {
               {t('profile.edit')}
             </Link>
           ) : (
-            <ReportButton targetType="PROFILE" targetId={p.id} authorId={p.id} />
+            <ReportButton targetType="PROFILE" targetId={p.username} authorUsername={p.username} />
           )}
-          {p.recruiterVisible && (
+          {p.visibleToRecruiters && (
             <span className={styles.recruiter}>
               <Icon name="check" size={14} />
               {t('profile.recruiterVisible')}
@@ -117,15 +105,17 @@ function ProfileView({ id }: { id: number }) {
         </div>
         <div>
           <dt>{t('profile.stats.answers')}</dt>
-          <dd>{fmt(p.stats.answers)}</dd>
+          <dd>{fmt(p.answerCount)}</dd>
         </div>
-        <div>
-          <dt>{t('profile.stats.accepted')}</dt>
-          <dd>{fmt(p.stats.accepted)}</dd>
-        </div>
+        {p.acceptedCount != null && (
+          <div>
+            <dt>{t('profile.stats.accepted')}</dt>
+            <dd>{fmt(p.acceptedCount)}</dd>
+          </div>
+        )}
         <div>
           <dt>{t('profile.stats.questions')}</dt>
-          <dd>{fmt(p.stats.questions)}</dd>
+          <dd>{fmt(p.questionCount)}</dd>
         </div>
       </dl>
 
@@ -141,24 +131,26 @@ function ProfileView({ id }: { id: number }) {
           { key: 'badges', label: t('profile.tabs.badges') },
         ]}
       >
-        {tab === 'activity' &&
-          (p.activity.length ? (
-            <ActivityList items={p.activity} />
-          ) : (
-            <StateMessage
-              action={
-                isMe && (
-                  <Link to="/questions/ask" className={buttonClass({ variant: 'primary' })}>
-                    {t('question.askQuestion')}
-                  </Link>
-                )
-              }
-            >
-              {isMe ? t('profile.emptyMine') : t('profile.empty')}
-            </StateMessage>
-          ))}
+        {tab === 'activity' && (
+          <ActivityList
+            username={p.username}
+            empty={
+              <StateMessage
+                action={
+                  isMe && (
+                    <Link to="/questions/ask" className={buttonClass({ variant: 'primary' })}>
+                      {t('question.askQuestion')}
+                    </Link>
+                  )
+                }
+              >
+                {isMe ? t('profile.emptyMine') : t('profile.empty')}
+              </StateMessage>
+            }
+          />
+        )}
         {tab === 'skills' &&
-          (p.skills.length ? (
+          (p.skills?.length ? (
             <>
               <p className={styles.skillsHint}>{t('profile.skillsHint')}</p>
               <ul className={styles.skills}>
@@ -177,7 +169,7 @@ function ProfileView({ id }: { id: number }) {
           ) : (
             <StateMessage>{t('profile.noSkills')}</StateMessage>
           ))}
-        {tab === 'badges' && <BadgeGrid earned={p.badges} />}
+        {tab === 'badges' && <BadgeGrid earned={p.badges ?? []} />}
       </Tabs>
     </section>
   );

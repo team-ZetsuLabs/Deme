@@ -2,7 +2,7 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import i18n from '../../i18n';
-import type { Me } from '../../api/provisional-types';
+import type { Me } from '../../api/types';
 import { ApiError } from '../../api/api';
 import { ToastProvider } from '../../components/ToastProvider';
 import ChallengesPage from '../../pages/challenges/ChallengesPage';
@@ -11,24 +11,9 @@ import { SessionProvider } from '../auth/SessionProvider';
 import { challengesApi, validateRepoUrl } from './challengesApi';
 import { flagOf } from './flag';
 import { remainingUntil } from './remaining';
+import { demoMe } from '../../test/fixtures';
 
-const member: Me = {
-  id: 9,
-  name: 'Aminata Ouédraogo',
-  email: 'aminata.ouedraogo@example.com',
-  country: 'BF',
-  city: 'Ouagadougou',
-  photoUrl: null,
-  bio: null,
-  reputation: 120,
-  level: 'MEMBER',
-  language: 'fr',
-  skills: [],
-  recruiterVisible: false,
-  providers: [],
-  hasPassword: true,
-  onboarded: true,
-};
+const member: Me = demoMe();
 
 const renderPage = () =>
   render(
@@ -134,6 +119,6 @@ describe('classement par pays (CH-5)', () => {
     expect(rows[0].textContent).toContain('Sénégal');
     expect(rows[0].textContent).toContain('4 participants');
     // Le pays du membre connecté est repéré.
-    expect(table.textContent).toContain('Burkina Faso (votre pays)');
+    expect(table.textContent).toContain('Sénégal (votre pays)');
   });
 });

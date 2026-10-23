@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Me } from '../../api/provisional-types';
+import type { Me } from '../../api/types';
 import { api } from '../../api/api';
 import { errorMessage } from '../../api/errorMessage';
 import { Button } from '../../components/Button';
 import { buttonClass } from '../../components/buttonClass';
 import { Icon } from '../../components/Icon';
 import { useToast } from '../../components/useToast';
-import { authApi, oauthUrl, type OAuthProvider } from '../auth/authApi';
+import { authApi, type OAuthProvider } from '../auth/authApi';
+import { useOAuthProviders } from '../auth/useOAuthProviders';
 import { useSession } from '../auth/useSession';
 import styles from './ConnectedAccounts.module.css';
 import settings from './Settings.module.css';
@@ -25,6 +26,8 @@ export function ConnectedAccounts({ user }: ConnectedAccountsProps) {
   const { setUser } = useSession();
   const toast = useToast();
   const [pending, setPending] = useState<OAuthProvider | null>(null);
+  const { urls } = useOAuthProviders();
+  const providers = user.providers ?? [];
 
   const unlink = async (provider: OAuthProvider) => {
     setPending(provider);
@@ -46,9 +49,9 @@ export function ConnectedAccounts({ user }: ConnectedAccountsProps) {
       <p className={settings.intro}>{t('settings.accounts.intro')}</p>
       <ul className={styles.list}>
         {PROVIDERS.map(({ id, name }) => {
-          const linked = user.providers.includes(id);
+          const linked = providers.includes(id);
           // Délier le dernier moyen de connexion bloquerait le compte : le serveur le refuse aussi.
-          const lastMethod = linked && !user.hasPassword && user.providers.length === 1;
+          const lastMethod = linked && user.hasPassword === false && providers.length === 1;
           return (
             <li key={id} className={styles.row}>
               <Icon name={id} size={22} />
@@ -69,9 +72,9 @@ export function ConnectedAccounts({ user }: ConnectedAccountsProps) {
                 >
                   {t('settings.accounts.unlink')}
                 </Button>
-              ) : (
+              ) : urls[id] ? (
                 <a
-                  href={oauthUrl(id)}
+                  href={urls[id]}
                   className={buttonClass({ size: 'sm' })}
                   aria-label={t('settings.accounts.linkLabel', { name })}
                   onClick={(e) => {
@@ -84,6 +87,8 @@ export function ConnectedAccounts({ user }: ConnectedAccountsProps) {
                 >
                   {t('settings.accounts.link')}
                 </a>
+              ) : (
+                <span className={styles.unavailable}>{t('settings.accounts.unavailable')}</span>
               )}
             </li>
           );

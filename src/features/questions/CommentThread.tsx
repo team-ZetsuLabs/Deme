@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { Comment } from '../../api/provisional-types';
+import type { Comment } from '../../api/types';
 import { errorMessage } from '../../api/errorMessage';
 import { Button } from '../../components/Button';
 import { RelativeTime } from '../../components/RelativeTime';
@@ -80,7 +80,7 @@ export function CommentThread({ target, targetId, comments, onAdded }: CommentTh
             <li key={c.id} className={styles.comment}>
               <span className={styles.body}>{c.body}</span>{' '}
               <span className={styles.meta}>
-                <Link to={`/users/${c.author.id}`}>{c.author.name}</Link>
+                <Link to={`/users/${c.author.username}`}>{c.author.displayName}</Link>
                 <span aria-hidden="true"> · </span>
                 <RelativeTime iso={c.createdAt} />
               </span>

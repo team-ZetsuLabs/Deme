@@ -1,11 +1,5 @@
 import { api } from '../../api/api';
-import type {
-  JobDetail,
-  JobRequest,
-  JobSummary,
-  MyApplication,
-  Page,
-} from '../../api/provisional-types';
+import type { JobDetail, JobRequest, JobSummary, MyApplication, Page } from '../../api/types';
 
 export const JOBS_PAGE_SIZE = 20;
 

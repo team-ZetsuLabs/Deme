@@ -65,20 +65,34 @@ describe('RegisterForm', () => {
 
     await waitFor(() => expect(onSignedIn).toHaveBeenCalled());
     expect(register).toHaveBeenCalledWith({
-      name: 'Koffi Mensah',
+      displayName: 'Koffi Mensah',
       email: 'koffi.mensah@example.com',
-      country: 'TG',
+      countryCode: 'TG',
       password: 'lome2026',
-      website: '',
     });
+  });
+
+  it("n'envoie rien quand le champ piège est rempli (robot)", async () => {
+    const register = vi.spyOn(authApi, 'register');
+    wrap(<RegisterForm onSignedIn={vi.fn()} />);
+    type(/^Nom complet/, 'Koffi Mensah');
+    type(/^Adresse email/, 'koffi.mensah@example.com');
+    type(/^Pays/, 'TG');
+    type(/^Mot de passe/, 'lome2026');
+    fireEvent.change(document.getElementById('register-website') as HTMLInputElement, {
+      target: { value: 'https://spam.example' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Créer mon compte' }));
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(register).not.toHaveBeenCalled();
   });
 
   it('affiche les erreurs de champ renvoyées par le serveur', async () => {
     vi.spyOn(authApi, 'register').mockRejectedValue(
       new ApiError(409, {
-        code: 'EMAIL_ALREADY_USED',
+        code: 'EMAIL_TAKEN',
         message: 'Email déjà utilisé',
-        fields: { email: 'Adresse indisponible' },
+        fields: { email: 'Adresse indisponible', displayName: 'Nom refusé' },
       }),
     );
     wrap(<RegisterForm onSignedIn={vi.fn()} />);
@@ -91,6 +105,8 @@ describe('RegisterForm', () => {
     expect(await screen.findByRole('alert')).toBeTruthy();
     expect(screen.getByRole('alert').textContent).toMatch(/ne peut pas être utilisée/);
     expect(screen.getByText('Adresse indisponible')).toBeTruthy();
+    // Le champ displayName du contrat s'affiche sous « Nom complet ».
+    expect(screen.getByText('Nom refusé')).toBeTruthy();
   });
 
   it("affiche un nom piégé comme du texte, sans l'exécuter", () => {

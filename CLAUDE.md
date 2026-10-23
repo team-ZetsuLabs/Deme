@@ -53,7 +53,7 @@ package.json        scripts : dev, build, typecheck, lint, test, format, format:
 public/             favicon, theme-init.js (thème appliqué avant l'affichage, sans script inline)
 src/
   api/              api.ts (bascule mock ou live, CSRF, erreurs), api-types.ts (généré, ne pas modifier),
-                    provisional-types.ts (temporaire, en attendant le contrat publié)
+                    types.ts (noms lisibles des types générés), provisional-types.ts (sprints pas encore publiés)
   components/       composants communs : Button, Avatar, Dialog, Field, MemberContent, CodeBlock…
   components/skeleton/  squelettes de chargement (un par type d'écran)
   features/         logique par domaine : auth, questions, jobs, missions, profile, settings,
@@ -83,9 +83,9 @@ Le back-end (avec `mocks/`), le back office, l'infrastructure (`infra/`) et les 
 
 - `strict` désactivé au départ, mais `noImplicitAny` et `strictNullChecks` activés. On pourra durcir plus tard s'il reste du temps.
 - **Trois choses toujours typées** : les réponses de l'API (types générés), les props des composants de `src/components/`, et `api.ts`. Le reste peut être typé au minimum.
-- Les types de l'API viennent **uniquement** de `src/api/api-types.ts`, généré par `npm run gen:api` (openapi-typescript sur le Swagger du back-end). On ne recopie jamais un type d'API à la main.
-- Exception temporaire : tant que le contrat n'est pas publié, les types attendus par le site sont dans `src/api/provisional-types.ts`. Ce fichier disparaît dès que `gen:api` fonctionne.
-- Quand Salif publie un changement de contrat, il prévient le site web, qui relance `npm run gen:api` dans ce dépôt. Si un écran casse, la CI le dit avant la fusion.
+- Les types de l'API viennent **uniquement** de `src/api/api-types.ts`, généré par `npm run gen:api` (openapi-typescript sur `docs/openapi.json`, copie du contrat du back-end). On ne recopie jamais un type d'API à la main. Les composants importent les noms lisibles de `src/api/types.ts` (`QuestionDetail`, `Me`…), qui ne font que nommer les types générés.
+- Exception temporaire : les domaines dont le contrat n'est pas encore publié (emploi, missions, défis, notifications, modération, IA) gardent leurs types dans `src/api/provisional-types.ts`. Les champs attendus mais absents du contrat publié sont ajoutés en facultatif dans `types.ts` (« Extras ») et proposés au back-end.
+- Quand Salif publie un changement de contrat, on recopie son `docs/openapi.json` et ses `mocks/` dans ce dépôt, puis on relance `npm run gen:api`. Si un écran casse, la vérification des types le dit avant la fusion.
 - `any` est interdit (règle ESLint) ; si on ne sait vraiment pas, `unknown` puis une vérification. `// @ts-ignore` est interdit ; `// @ts-expect-error` est toléré avec une phrase qui explique pourquoi.
 - Props en `type` (pas `interface`), nommées `<Composant>Props` : `type QuestionCardProps = { question: Question }`.
 
@@ -98,7 +98,7 @@ Côté back-end, le code est rangé **par domaine**, pas par couche : `auth`, `u
 ## Le contrat d'API (la règle qui évite que le back-end bloque tout le monde)
 
 1. Salif publie dans Swagger UI les points d'entrée du sprint suivant **avant** de les coder : chemin, méthode, JSON d'entrée, JSON de sortie, erreurs possibles.
-2. Pour chaque point d'entrée, un fichier d'exemple est ajouté dans `mocks/` du dépôt back-end (par exemple `mocks/GET_questions.json`). Le site web le recopie dans `src/mocks/` et régénère ses types dans `src/api/api-types.ts` (`npm run gen:api`).
+2. Pour chaque point d'entrée, un fichier d'exemple est ajouté dans `mocks/` du dépôt back-end (par exemple `mocks/GET_questions.json`). Le site web le recopie dans `src/mocks/`, recopie `docs/openapi.json` et régénère ses types dans `src/api/api-types.ts` (`npm run gen:api`).
 3. Le site web et le back office codent sur ces exemples. `src/api/api.ts` bascule entre les exemples et la vraie API avec une variable d'environnement Vite (`VITE_API_MODE=mock` ou `live`, dans `.env.local`). En mode mock, les réponses arrivent après un délai simulé (`VITE_MOCK_DELAY_MS`, 1 seconde par défaut).
 4. Une fois publié, un contrat ne change plus sans prévenir les deux fronts. Un champ ajouté, ça va. Un champ renommé ou retiré, il faut leur accord.
 

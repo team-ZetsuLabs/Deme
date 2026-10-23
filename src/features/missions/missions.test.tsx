@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import i18n from '../../i18n';
-import type { Me, MissionDetail } from '../../api/provisional-types';
+import type { Me, MissionDetail } from '../../api/types';
 import { ToastProvider } from '../../components/ToastProvider';
 import MissionPage from '../../pages/mission/MissionPage';
 import { authApi } from '../auth/authApi';
@@ -11,24 +11,9 @@ import { SessionProvider } from '../auth/SessionProvider';
 import { MissionForm } from './MissionForm';
 import { missionsApi } from './missionsApi';
 import { formatMoney } from './money';
+import { author, demoMe } from '../../test/fixtures';
 
-const member: Me = {
-  id: 9,
-  name: 'Aminata Ouédraogo',
-  email: 'aminata.ouedraogo@example.com',
-  country: 'BF',
-  city: 'Ouagadougou',
-  photoUrl: null,
-  bio: null,
-  reputation: 120,
-  level: 'MEMBER',
-  language: 'fr',
-  skills: ['php', 'mobile-money'],
-  recruiterVisible: false,
-  providers: [],
-  hasPassword: true,
-  onboarded: true,
-};
+const member: Me = demoMe({ skills: ['php', 'mobile-money'] });
 
 const wrap = (ui: ReactNode, path = '/') =>
   render(
@@ -102,14 +87,7 @@ describe('MissionPage (JOB-5)', () => {
       budget: { amount: 75000, currency: 'XOF' },
       delayDays: 5,
       technologies: ['php'],
-      author: {
-        id: 9,
-        name: 'Aminata Ouédraogo',
-        photoUrl: null,
-        country: 'BF',
-        city: null,
-        reputation: 120,
-      },
+      author: author(),
       createdAt: '2026-10-21T10:30:00Z',
       status: 'OPEN',
       offerCount: 1,
@@ -118,14 +96,12 @@ describe('MissionPage (JOB-5)', () => {
       offers: [
         {
           id: 301,
-          member: {
-            id: 6,
-            name: 'Moussa Traoré',
-            photoUrl: null,
-            country: 'ML',
-            city: 'Bamako',
+          member: author({
+            username: 'moussa_t',
+            displayName: 'Moussa Traoré',
+            countryCode: 'ML',
             reputation: 310,
-          },
+          }),
           message: 'Je peux commencer demain.',
           price: { amount: 70000, currency: 'XOF' },
           delayDays: 4,

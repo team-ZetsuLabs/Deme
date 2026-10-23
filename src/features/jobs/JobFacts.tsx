@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import type { JobSummary } from '../../api/provisional-types';
+import type { JobSummary } from '../../api/types';
 import { Icon } from '../../components/Icon';
 import { countryName } from '../../i18n/countries';
 import styles from './JobFacts.module.css';

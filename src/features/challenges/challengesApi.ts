@@ -5,7 +5,7 @@ import type {
   LeaderboardEntry,
   Submission,
   SubmissionRequest,
-} from '../../api/provisional-types';
+} from '../../api/types';
 
 export const challengesApi = {
   current: () => api.get<Challenge>('/challenges/current'),

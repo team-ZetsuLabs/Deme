@@ -29,7 +29,7 @@ export default function WelcomePage() {
   const toast = useToast();
   const returnTo = useReturnTo();
   const [skills, setSkills] = useState<string[]>(user?.skills ?? []);
-  const [country, setCountry] = useState(user?.country ?? '');
+  const [country, setCountry] = useState(user?.countryCode ?? '');
   const [busy, setBusy] = useState<'save' | 'later' | null>(null);
   const countries = useMemo(() => countryOptions(i18n.language), [i18n.language]);
   const language = (i18n.resolvedLanguage ?? 'fr') as Language;
@@ -37,14 +37,14 @@ export default function WelcomePage() {
 
   if (status === 'loading') return <PageLoader />;
   if (!user) return <Navigate to="/login" replace />;
-  if (user.onboarded) return <Navigate to={returnTo} replace />;
+  if (user.onboarded !== false) return <Navigate to={returnTo} replace />;
 
   const save = async (mode: 'save' | 'later') => {
     setBusy(mode);
     try {
       await updateMe(
         mode === 'save'
-          ? { skills, country: country || undefined, language, onboarded: true }
+          ? { skills, countryCode: country || undefined, language, onboarded: true }
           : { language, onboarded: true },
       );
       navigate(returnTo, { replace: true });
@@ -65,7 +65,9 @@ export default function WelcomePage() {
         <Logo />
       </header>
       <main id="main" className={styles.main}>
-        <h1 className={styles.title}>{t('welcome.title', { name: user.name.split(' ')[0] })}</h1>
+        <h1 className={styles.title}>
+          {t('welcome.title', { name: user.displayName.split(' ')[0] })}
+        </h1>
         <p className={styles.lead}>{t('welcome.lead')}</p>
 
         <form onSubmit={onSubmit} noValidate>

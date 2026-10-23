@@ -1,186 +1,27 @@
 {
-  "id": 1,
-  "title": "L'API Orange Money renvoie 401 alors que le token est généré",
-  "bodyHtml": "<p>Le token d'accès est bien récupéré, mais l'appel au endpoint de paiement échoue avec <code>401 Unauthorized</code>.</p><p>Faut-il préfixer le header <code>Authorization</code> par <code>Bearer</code> ? La documentation du bac à sable n'est pas claire sur ce point.</p>",
-  "code": "const res = await fetch(PAY_URL, {\n  method: \"POST\",\n  headers: { \"Authorization\": token },\n  body: JSON.stringify(payload)\n});",
-  "tags": ["mobile-money", "node.js", "api"],
+  "id": 101,
+  "title": "Comment vérifier une notification de paiement Orange Money côté serveur ?",
+  "bodyMarkdown": "Je reçois bien la notification de paiement Orange Money sur mon webhook, mais je ne sais pas comment être sûre qu'elle vient vraiment d'Orange.\n\n```java\n@PostMapping(\"/webhooks/orange\")\npublic void notify(@RequestBody Map<String, Object> body) {\n    // comment vérifier ?\n}\n```\n\nFaut-il rappeler l'API de statut à chaque fois ?",
+  "bodyHtml": "<p>Je reçois bien la notification de paiement Orange Money sur mon webhook, mais je ne sais pas comment être sûre qu'elle vient vraiment d'Orange.</p>\n<pre><code class=\"language-java\">@PostMapping(&quot;/webhooks/orange&quot;)\npublic void notify(@RequestBody Map&lt;String, Object&gt; body) {\n    // comment vérifier ?\n}\n</code></pre>\n<p>Faut-il rappeler l'API de statut à chaque fois ?</p>\n",
+  "tags": ["orange-money", "spring-boot", "webhook"],
   "context": {
-    "country": "SN",
-    "operator": "ORANGE_MONEY",
-    "network": "UNSTABLE",
-    "techVersion": "Node.js 20"
+    "countryCode": "SN",
+    "mobileMoneyOperator": "ORANGE_MONEY",
+    "networkQuality": "GOOD"
   },
   "author": {
-    "id": 2,
-    "name": "Awa Kane",
-    "photoUrl": null,
-    "country": "SN",
-    "city": "Dakar",
-    "reputation": 875
+    "username": "aminata_dev",
+    "displayName": "Aminata Diallo",
+    "avatarUrl": null,
+    "countryCode": "SN",
+    "reputation": 342,
+    "level": "MEMBER"
   },
-  "createdAt": "2026-10-21T08:14:00Z",
-  "views": 312,
-  "votes": 14,
-  "voted": false,
-  "answers": [
-    {
-      "id": 11,
-      "body": "Oui, le header doit être préfixé par `Bearer`. Attention aussi : le token expire au bout d'une heure, il faut le renouveler avant chaque lot d'appels.",
-      "bodyHtml": "<p>Oui, le header doit être préfixé par <code>Bearer</code>. Attention aussi : le token expire au bout d'une heure, il faut le renouveler avant chaque lot d'appels.</p>",
-      "code": "headers: {\n  \"Authorization\": `Bearer ${token}`,\n  \"Content-Type\": \"application/json\"\n}  // renouveler le token avant expiration",
-      "author": {
-        "id": 3,
-        "name": "Ibrahim Sawadogo",
-        "photoUrl": null,
-        "country": "BF",
-        "city": "Ouagadougou",
-        "reputation": 790
-      },
-      "createdAt": "2026-10-21T09:02:00Z",
-      "votes": 9,
-      "voted": false,
-      "accepted": true,
-      "comments": [
-        {
-          "id": 41,
-          "body": "C'était bien ça, merci ! Le préfixe Bearer manquait.",
-          "author": {
-            "id": 2,
-            "name": "Awa Kane",
-            "photoUrl": null,
-            "country": "SN",
-            "city": "Dakar",
-            "reputation": 875
-          },
-          "createdAt": "2026-10-21T09:30:00Z"
-        },
-        {
-          "id": 42,
-          "body": "Même souci avec MTN MoMo au Cameroun, la solution marche aussi.",
-          "author": {
-            "id": 6,
-            "name": "Brice Nkoulou",
-            "photoUrl": null,
-            "country": "CM",
-            "city": "Douala",
-            "reputation": 210
-          },
-          "createdAt": "2026-10-21T10:05:00Z"
-        },
-        {
-          "id": 43,
-          "body": "Attention au renouvellement : le token expire au bout d'une heure exactement.",
-          "author": {
-            "id": 5,
-            "name": "Fatou Diallo",
-            "photoUrl": null,
-            "country": "GN",
-            "city": "Conakry",
-            "reputation": 980
-          },
-          "createdAt": "2026-10-21T10:40:00Z"
-        },
-        {
-          "id": 44,
-          "body": "J'ajoute qu'il faut aussi le header Content-Type, sinon on a une 415.",
-          "author": {
-            "id": 7,
-            "name": "Moussa Traoré",
-            "photoUrl": null,
-            "country": "ML",
-            "city": "Bamako",
-            "reputation": 330
-          },
-          "createdAt": "2026-10-21T11:15:00Z"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "body": "Vérifiez aussi que vous utilisez bien l'URL de production et non celle du bac à sable : les tokens ne sont pas interchangeables entre les deux.",
-      "bodyHtml": "<p>Vérifiez aussi que vous utilisez bien l'URL de production et non celle du bac à sable : les tokens ne sont pas interchangeables entre les deux.</p>",
-      "code": null,
-      "author": {
-        "id": 10,
-        "name": "Mamadou Ndiaye",
-        "photoUrl": null,
-        "country": "SN",
-        "city": "Thiès",
-        "reputation": 365
-      },
-      "createdAt": "2026-10-21T09:25:00Z",
-      "votes": 3,
-      "voted": false,
-      "accepted": false
-    },
-    {
-      "id": 13,
-      "body": "J'avais le même souci : c'était un espace en trop avant le token dans ma variable d'environnement. Un `trim()` au chargement de la configuration l'a réglé.",
-      "bodyHtml": "<p>J'avais le même souci : c'était un espace en trop avant le token dans ma variable d'environnement. Un <code>trim()</code> au chargement de la configuration l'a réglé.</p>",
-      "code": null,
-      "author": {
-        "id": 8,
-        "name": "Aïcha Ouattara",
-        "photoUrl": null,
-        "country": "BF",
-        "city": "Bobo-Dioulasso",
-        "reputation": 120
-      },
-      "createdAt": "2026-10-21T09:55:00Z",
-      "votes": 1,
-      "voted": false,
-      "accepted": false
-    },
-    {
-      "id": 14,
-      "body": "Chez nous, on a laissé tomber Orange Money pour l'API de Wave, beaucoup plus simple à intégrer. Je conseille de migrer.",
-      "bodyHtml": "<p>Chez nous, on a laissé tomber Orange Money pour l'API de Wave, beaucoup plus simple à intégrer. Je conseille de migrer.</p>",
-      "code": null,
-      "author": {
-        "id": 9,
-        "name": "Aminata Ouédraogo",
-        "photoUrl": null,
-        "country": "BF",
-        "city": "Ouagadougou",
-        "reputation": 120
-      },
-      "createdAt": "2026-10-21T10:20:00Z",
-      "votes": 0,
-      "voted": false,
-      "accepted": false,
-      "hidden": {
-        "by": "REFERENT",
-        "reason": "OFF_TOPIC",
-        "appeal": "NONE"
-      }
-    }
-  ],
-  "comments": [
-    {
-      "id": 31,
-      "body": "Tu es bien sur l'URL du bac à sable ou sur celle de production ? Les tokens ne sont pas les mêmes.",
-      "author": {
-        "id": 4,
-        "name": "Kwame Mensah",
-        "photoUrl": null,
-        "country": "GH",
-        "city": "Accra",
-        "reputation": 640
-      },
-      "createdAt": "2026-10-21T08:40:00Z"
-    },
-    {
-      "id": 32,
-      "body": "Bac à sable pour l'instant. Je mets la version de la doc dans la question.",
-      "author": {
-        "id": 2,
-        "name": "Awa Kane",
-        "photoUrl": null,
-        "country": "SN",
-        "city": "Dakar",
-        "reputation": 875
-      },
-      "createdAt": "2026-10-21T08:52:00Z"
-    }
-  ]
+  "score": 7,
+  "answerCount": 2,
+  "acceptedAnswerId": 512,
+  "myVote": 1,
+  "canEdit": false,
+  "createdAt": "2026-10-19T14:05:00Z",
+  "updatedAt": "2026-10-19T14:12:00Z"
 }

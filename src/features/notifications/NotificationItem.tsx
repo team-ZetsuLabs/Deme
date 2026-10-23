@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { AppNotification } from '../../api/provisional-types';
+import type { AppNotification } from '../../api/types';
 import { Avatar } from '../../components/Avatar';
 import { Icon, type IconName } from '../../components/Icon';
 import { RelativeTime } from '../../components/RelativeTime';
@@ -23,14 +23,14 @@ export type NotificationItemProps = {
 export function NotificationItem({ notification: n, onOpen }: NotificationItemProps) {
   const { t } = useTranslation();
   const text = t(`notifications.types.${n.type}`, {
-    actor: n.actor?.name ?? '',
+    actor: n.actor?.displayName ?? '',
     decision: n.decision ? t(`notifications.decisions.${n.decision}`) : '',
   });
 
   return (
     <li className={n.read ? styles.item : `${styles.item} ${styles.unread}`}>
       {n.actor ? (
-        <Avatar name={n.actor.name} photoUrl={n.actor.photoUrl} size={36} />
+        <Avatar name={n.actor.displayName} photoUrl={n.actor.avatarUrl ?? null} size={36} />
       ) : (
         <span className={styles.system} aria-hidden="true">
           <Icon name={SYSTEM_ICONS[n.type] ?? 'bell'} size={18} />

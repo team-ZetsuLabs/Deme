@@ -71,7 +71,23 @@ describe('mode live', () => {
     expect(init.headers[CSRF_HEADER]).toBeUndefined();
   });
 
+  it("demande le jeton CSRF au serveur quand le cookie manque, puis l'envoie", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse(200, { headerName: 'X-XSRF-TOKEN', token: 'jeton-456' }))
+      .mockResolvedValueOnce(jsonResponse(201, { id: 1 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await createApi('live').post('/questions', { title: 'Titre' });
+
+    expect(fetchMock.mock.calls[0][0]).toBe('/api/v1/auth/csrf');
+    const [url, init] = fetchMock.mock.calls[1];
+    expect(url).toBe('/api/v1/questions');
+    expect((init as RequestInit).headers).toMatchObject({ 'X-XSRF-TOKEN': 'jeton-456' });
+  });
+
   it("transforme une réponse d'erreur en ApiError avec son code", async () => {
+    document.cookie = 'XSRF-TOKEN=jeton-123';
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue(

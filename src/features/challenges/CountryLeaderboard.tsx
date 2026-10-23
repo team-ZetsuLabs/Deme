@@ -41,7 +41,7 @@ export function CountryLeaderboard({ challengeId, refreshKey }: CountryLeaderboa
       </thead>
       <tbody>
         {query.data.map((entry) => {
-          const mine = !!user?.country && user.country === entry.country;
+          const mine = !!user?.countryCode && user.countryCode === entry.country;
           const name = countryName(entry.country, i18n.language) ?? entry.country;
           return (
             <tr key={entry.country} className={mine ? styles.me : undefined}>

@@ -9,7 +9,9 @@ import styles from './BottomTabs.module.css';
 export function BottomTabs() {
   const { t } = useTranslation();
   const { user } = useSession();
-  const account = user ? { ...ACCOUNT_ITEM_SIGNED_IN, to: `/users/${user.id}` } : ACCOUNT_ITEM;
+  const account = user
+    ? { ...ACCOUNT_ITEM_SIGNED_IN, to: `/users/${user.username}` }
+    : ACCOUNT_ITEM;
 
   return (
     <nav className={styles.tabs} aria-label={t('nav.label')}>

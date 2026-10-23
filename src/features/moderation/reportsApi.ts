@@ -1,5 +1,5 @@
 import { api } from '../../api/api';
-import type { ReportReason, ReportRequest, ReportTargetType } from '../../api/provisional-types';
+import type { ReportReason, ReportRequest, ReportTargetType } from '../../api/types';
 
 export const reportsApi = {
   create: (body: ReportRequest) => api.post<void>('/reports', body),

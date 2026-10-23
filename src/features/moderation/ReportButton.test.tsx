@@ -2,38 +2,23 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import i18n from '../../i18n';
-import type { Me } from '../../api/provisional-types';
+import type { Me } from '../../api/types';
 import { ApiError } from '../../api/api';
 import { ToastProvider } from '../../components/ToastProvider';
 import { authApi } from '../auth/authApi';
 import { SessionProvider } from '../auth/SessionProvider';
 import { ReportButton } from './ReportButton';
 import { reportsApi } from './reportsApi';
+import { demoMe } from '../../test/fixtures';
 
-const member: Me = {
-  id: 9,
-  name: 'Aminata Ouédraogo',
-  email: 'aminata.ouedraogo@example.com',
-  country: 'BF',
-  city: 'Ouagadougou',
-  photoUrl: null,
-  reputation: 120,
-  level: 'MEMBER',
-  language: 'fr',
-  skills: [],
-  bio: null,
-  recruiterVisible: false,
-  providers: [],
-  hasPassword: true,
-  onboarded: true,
-};
+const member: Me = demoMe();
 
-const renderButton = (authorId = 2) =>
+const renderButton = (authorUsername = 'kwame_codes') =>
   render(
     <MemoryRouter>
       <SessionProvider>
         <ToastProvider>
-          <ReportButton targetType="ANSWER" targetId={12} authorId={authorId} />
+          <ReportButton targetType="ANSWER" targetId={12} authorUsername={authorUsername} />
         </ToastProvider>
       </SessionProvider>
     </MemoryRouter>,
@@ -92,12 +77,12 @@ describe('ReportButton (MOD-1)', () => {
 
   it("n'apparaît pas sur son propre contenu", async () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(member);
-    renderButton(9);
+    renderButton('aminata_dev');
     await waitFor(() => expect(screen.queryByRole('button', { name: 'Signaler' })).toBeNull());
   });
 
   it('refuse un membre sous le niveau Membre, avec une explication', async () => {
-    vi.spyOn(authApi, 'me').mockResolvedValue({ ...member, reputation: 12, level: 'NEW' });
+    vi.spyOn(authApi, 'me').mockResolvedValue({ ...member, reputation: 12, level: 'NEWCOMER' });
     const create = vi.spyOn(reportsApi, 'create');
     renderButton();
     fireEvent.click(await screen.findByRole('button', { name: 'Signaler' }));

@@ -1,26 +1,27 @@
 {
-  "id": 101,
-  "title": "Question publiée en mode mock",
-  "bodyHtml": "<p>En mode mock, l'API renvoie toujours cette réponse fixe.</p>",
-  "code": null,
-  "tags": ["mobile-money"],
+  "id": 135,
+  "title": "Comment vérifier une notification de paiement Orange Money côté serveur ?",
+  "bodyMarkdown": "Je reçois bien la notification de paiement Orange Money sur mon webhook, mais je ne sais pas comment être sûre qu'elle vient vraiment d'Orange.\n\n```java\n@PostMapping(\"/webhooks/orange\")\npublic void notify(@RequestBody Map<String, Object> body) {\n    // comment vérifier ?\n}\n```\n\nFaut-il rappeler l'API de statut à chaque fois ?",
+  "bodyHtml": "<p>Je reçois bien la notification de paiement Orange Money sur mon webhook, mais je ne sais pas comment être sûre qu'elle vient vraiment d'Orange.</p>\n<pre><code class=\"language-java\">@PostMapping(&quot;/webhooks/orange&quot;)\npublic void notify(@RequestBody Map&lt;String, Object&gt; body) {\n    // comment vérifier ?\n}\n</code></pre>\n<p>Faut-il rappeler l'API de statut à chaque fois ?</p>\n",
+  "tags": ["orange-money", "spring-boot", "webhook"],
   "context": {
-    "country": "BF",
-    "operator": "ORANGE_MONEY",
-    "network": "UNSTABLE",
-    "techVersion": null
+    "countryCode": "SN",
+    "mobileMoneyOperator": "ORANGE_MONEY",
+    "networkQuality": "GOOD"
   },
   "author": {
-    "id": 9,
-    "name": "Aminata Ouédraogo",
-    "photoUrl": null,
-    "country": "BF",
-    "city": "Ouagadougou",
-    "reputation": 47
+    "username": "aminata_dev",
+    "displayName": "Aminata Diallo",
+    "avatarUrl": null,
+    "countryCode": "SN",
+    "reputation": 342,
+    "level": "MEMBER"
   },
-  "createdAt": "2026-10-21T16:00:00Z",
-  "views": 1,
-  "votes": 0,
-  "voted": false,
-  "answers": []
+  "score": 0,
+  "answerCount": 0,
+  "acceptedAnswerId": null,
+  "myVote": null,
+  "canEdit": true,
+  "createdAt": "2026-10-21T10:15:00Z",
+  "updatedAt": "2026-10-21T10:15:00Z"
 }

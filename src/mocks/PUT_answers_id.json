@@ -1,18 +1,21 @@
 {
-  "id": 11,
-  "body": "Réponse modifiée en mode mock.",
-  "bodyHtml": "<p>Réponse modifiée en mode mock.</p>",
-  "code": null,
+  "id": 518,
+  "questionId": 101,
+  "bodyMarkdown": "Ajoute aussi une liste blanche des IP d'Orange sur ton reverse proxy, en plus de la vérification du statut.",
+  "bodyHtml": "<p>Ajoute aussi une liste blanche des IP d'Orange sur ton reverse proxy, en plus de la vérification du statut.</p>\n",
   "author": {
-    "id": 9,
-    "name": "Aminata Ouédraogo",
-    "photoUrl": null,
-    "country": "BF",
-    "city": "Ouagadougou",
-    "reputation": 42
+    "username": "aminata_dev",
+    "displayName": "Aminata Diallo",
+    "avatarUrl": null,
+    "countryCode": "SN",
+    "reputation": 342,
+    "level": "MEMBER"
   },
-  "createdAt": "2026-10-21T16:05:00Z",
-  "votes": 0,
-  "voted": false,
-  "accepted": false
+  "score": 2,
+  "accepted": false,
+  "sameContext": true,
+  "myVote": null,
+  "canEdit": true,
+  "createdAt": "2026-10-20T07:48:00Z",
+  "updatedAt": "2026-10-21T10:25:00Z"
 }

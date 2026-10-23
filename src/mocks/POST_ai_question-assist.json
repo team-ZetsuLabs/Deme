@@ -1,15 +1,27 @@
 {
   "title": "Le callback Wave n'arrive jamais en production avec Spring Boot, alors qu'il marche en local",
   "tags": [
-    { "name": "wave", "isNew": false },
-    { "name": "spring-boot", "isNew": false },
-    { "name": "mobile-money", "isNew": false },
-    { "name": "wave-checkout", "isNew": true }
+    {
+      "name": "wave",
+      "isNew": false
+    },
+    {
+      "name": "spring-boot",
+      "isNew": false
+    },
+    {
+      "name": "mobile-money",
+      "isNew": false
+    },
+    {
+      "name": "wave-checkout",
+      "isNew": true
+    }
   ],
   "context": {
-    "country": "SN",
-    "operator": "WAVE",
-    "network": null,
+    "countryCode": "SN",
+    "mobileMoneyOperator": "WAVE",
+    "networkQuality": null,
     "techVersion": "Spring Boot 3.2"
   },
   "missing": ["ERROR_MESSAGE", "STEPS_TRIED"]

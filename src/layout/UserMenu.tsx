@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { Me } from '../api/provisional-types';
+import type { Me } from '../api/types';
 import { Avatar } from '../components/Avatar';
 import { Icon } from '../components/Icon';
 import { useSession } from '../features/auth/useSession';
@@ -57,21 +57,21 @@ export function UserMenu({ user }: UserMenuProps) {
         aria-label={t('topbar.account')}
         onClick={() => setOpen((o) => !o)}
       >
-        <Avatar name={user.name} photoUrl={user.photoUrl} size={30} />
-        <span className={styles.name}>{user.name.split(' ')[0]}</span>
+        <Avatar name={user.displayName} photoUrl={user.avatarUrl ?? null} size={30} />
+        <span className={styles.name}>{user.displayName.split(' ')[0]}</span>
         <span className={styles.points} aria-hidden="true">
           {points}
         </span>
       </button>
       <div id={menuId} className={styles.menu} hidden={!open}>
         <div className={styles.head}>
-          <b>{user.name}</b>
+          <b>{user.displayName}</b>
           <span>{t('topbar.points', { points })}</span>
         </div>
         {ACCOUNT_LINKS.map((item) => (
           <Link
             key={item.to}
-            to={item.to === '/users/me' ? `/users/${user.id}` : item.to}
+            to={item.to === '/users/me' ? `/users/${user.username}` : item.to}
             className={styles.item}
             onClick={() => setOpen(false)}
           >

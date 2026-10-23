@@ -1,17 +1,16 @@
 {
   "id": 57,
-  "name": "Koffi Mensah",
-  "email": "koffi.mensah@example.com",
-  "country": "TG",
-  "city": null,
-  "photoUrl": null,
+  "username": "aminata_dev",
+  "displayName": "Aminata Diallo",
+  "email": "aminata.diallo@exemple.sn",
+  "avatarUrl": null,
   "bio": null,
-  "reputation": 1,
-  "level": "NEW",
+  "countryCode": "SN",
+  "city": null,
   "language": "fr",
-  "skills": [],
-  "recruiterVisible": false,
-  "providers": [],
-  "hasPassword": true,
-  "onboarded": false
+  "visibleToRecruiters": false,
+  "role": "MEMBER",
+  "reputation": 0,
+  "level": "NEWCOMER",
+  "createdAt": "2026-10-21T10:02:13Z"
 }

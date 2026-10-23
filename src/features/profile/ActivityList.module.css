@@ -47,6 +47,10 @@
   color: var(--gold-text);
 }
 
+.minus {
+  color: var(--red);
+}
+
 @media (max-width: 767px) {
   .item {
     grid-template-columns: minmax(0, 1fr) auto;

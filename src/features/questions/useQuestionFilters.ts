@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import type { QuestionFilters, QuestionSort, QuestionStatus } from './questionsApi';
 
 const STATUSES: QuestionStatus[] = ['all', 'open', 'solved'];
-const SORTS: QuestionSort[] = ['recent', 'votes'];
+const SORTS: QuestionSort[] = ['relevance', 'recent', 'votes'];
 
 /** Les filtres du fil vivent dans l'adresse : une recherche se partage par un lien. */
 export function useQuestionFilters() {
@@ -13,13 +13,15 @@ export function useQuestionFilters() {
     const status = params.get('status') as QuestionStatus;
     const sort = params.get('sort') as QuestionSort;
     const page = Number(params.get('page') ?? '1');
+    const q = params.get('q');
     return {
       status: STATUSES.includes(status) ? status : 'all',
-      sort: SORTS.includes(sort) ? sort : 'recent',
+      // Avec une recherche, le tri par défaut est la pertinence ; sans recherche, les plus récentes.
+      sort: SORTS.includes(sort) && (sort !== 'relevance' || q) ? sort : q ? 'relevance' : 'recent',
       tag: params.get('tag'),
       country: params.get('country'),
       operator: params.get('operator'),
-      q: params.get('q'),
+      q,
       // Dans l'adresse, la première page est 1 ; l'API compte à partir de 0.
       page: Number.isInteger(page) && page > 0 ? page - 1 : 0,
     };
@@ -36,7 +38,7 @@ export function useQuestionFilters() {
             value === null ||
             value === '' ||
             (key === 'status' && value === 'all') ||
-            (key === 'sort' && value === 'recent') ||
+            (key === 'sort' && (value === 'recent' || value === 'relevance')) ||
             (key === 'page' && value === 0);
           if (isDefault) next.delete(key);
           else next.set(key, key === 'page' ? String(Number(value) + 1) : String(value));

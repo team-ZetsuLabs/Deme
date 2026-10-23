@@ -2,7 +2,7 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import i18n from '../../i18n';
-import type { Me } from '../../api/provisional-types';
+import type { Me } from '../../api/types';
 import { ApiError } from '../../api/api';
 import { ToastProvider } from '../../components/ToastProvider';
 import { authApi } from '../../features/auth/authApi';

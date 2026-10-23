@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { MissionDetail, MissionKind } from '../../api/provisional-types';
+import type { MissionDetail, MissionKind } from '../../api/types';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
 import { describedBy } from '../../components/fieldIds';

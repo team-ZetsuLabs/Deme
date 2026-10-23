@@ -9,7 +9,7 @@ import type {
   OfferDecision,
   OfferRequest,
   Page,
-} from '../../api/provisional-types';
+} from '../../api/types';
 
 export const MISSIONS_PAGE_SIZE = 20;
 

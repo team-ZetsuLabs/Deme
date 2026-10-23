@@ -34,6 +34,9 @@ export function FeedFilters({ filters, update }: FeedFiltersProps) {
         value={filters.sort}
         onChange={(sort) => update({ sort })}
         options={[
+          ...(filters.q
+            ? [{ value: 'relevance' as const, label: t('questions.filters.relevance') }]
+            : []),
           { value: 'recent', label: t('questions.filters.recent') },
           { value: 'votes', label: t('questions.filters.votes') },
         ]}

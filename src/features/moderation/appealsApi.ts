@@ -1,5 +1,5 @@
 import { api } from '../../api/api';
-import type { AppealRequest } from '../../api/provisional-types';
+import type { AppealRequest } from '../../api/types';
 
 export const appealsApi = {
   create: (body: AppealRequest) => api.post<void>('/appeals', body),

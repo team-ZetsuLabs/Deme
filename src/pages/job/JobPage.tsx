@@ -99,7 +99,7 @@ function JobView({ id }: { id: number }) {
         </ul>
 
         <div className={styles.report}>
-          <ReportButton targetType="JOB" targetId={job.id} authorId={job.postedById} />
+          <ReportButton targetType="JOB" targetId={job.id} authorUsername={job.postedBy} />
         </div>
       </article>
 
@@ -133,7 +133,7 @@ function JobView({ id }: { id: number }) {
         <section className={styles.box}>
           <h2 className={styles.boxTitle}>{t('jobs.match.title')}</h2>
           {user ? (
-            user.skills.length ? (
+            user.skills?.length ? (
               <SkillMatch required={job.technologies} mine={user.skills} />
             ) : (
               <p className={styles.boxText}>

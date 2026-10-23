@@ -2,12 +2,12 @@
   {
     "rank": 1,
     "member": {
-      "id": 4,
-      "name": "Kwame Asante",
-      "photoUrl": null,
-      "country": "GH",
-      "city": "Accra",
-      "reputation": 980
+      "username": "kwame_a",
+      "displayName": "Kwame Asante",
+      "avatarUrl": null,
+      "countryCode": "GH",
+      "reputation": 980,
+      "level": "CONTRIBUTOR"
     },
     "score": 92,
     "submittedAt": "2026-10-20T10:00:00Z"
@@ -15,12 +15,12 @@
   {
     "rank": 2,
     "member": {
-      "id": 2,
-      "name": "Awa Kane",
-      "photoUrl": null,
-      "country": "SN",
-      "city": "Dakar",
-      "reputation": 875
+      "username": "awa_k",
+      "displayName": "Awa Kane",
+      "avatarUrl": null,
+      "countryCode": "SN",
+      "reputation": 875,
+      "level": "CONTRIBUTOR"
     },
     "score": 88,
     "submittedAt": "2026-10-20T14:30:00Z"
@@ -28,12 +28,12 @@
   {
     "rank": 3,
     "member": {
-      "id": 3,
-      "name": "Ibrahim Sawadogo",
-      "photoUrl": null,
-      "country": "BF",
-      "city": "Ouagadougou",
-      "reputation": 790
+      "username": "ibrahim_s",
+      "displayName": "Ibrahim Sawadogo",
+      "avatarUrl": null,
+      "countryCode": "BF",
+      "reputation": 790,
+      "level": "CONTRIBUTOR"
     },
     "score": 81,
     "submittedAt": "2026-10-21T08:15:00Z"
@@ -41,12 +41,12 @@
   {
     "rank": 4,
     "member": {
-      "id": 7,
-      "name": "Grace Njeri",
-      "photoUrl": null,
-      "country": "KE",
-      "city": "Nairobi",
-      "reputation": 640
+      "username": "grace_n",
+      "displayName": "Grace Njeri",
+      "avatarUrl": null,
+      "countryCode": "KE",
+      "reputation": 640,
+      "level": "CONTRIBUTOR"
     },
     "score": 77,
     "submittedAt": "2026-10-21T09:40:00Z"
@@ -54,12 +54,12 @@
   {
     "rank": 5,
     "member": {
-      "id": 15,
-      "name": "Chinedu Okafor",
-      "photoUrl": null,
-      "country": "NG",
-      "city": "Lagos",
-      "reputation": 410
+      "username": "chinedu_o",
+      "displayName": "Chinedu Okafor",
+      "avatarUrl": null,
+      "countryCode": "NG",
+      "reputation": 410,
+      "level": "MEMBER"
     },
     "score": null,
     "submittedAt": "2026-10-21T15:05:00Z"

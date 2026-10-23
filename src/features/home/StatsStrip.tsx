@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import type { PublicStats } from '../../api/provisional-types';
+import type { PublicStats } from '../../api/types';
 import styles from './StatsStrip.module.css';
 
 export type StatsStripProps = { stats: PublicStats };

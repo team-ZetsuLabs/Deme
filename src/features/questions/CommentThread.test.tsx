@@ -6,11 +6,14 @@ import { ToastProvider } from '../../components/ToastProvider';
 import QuestionPage from '../../pages/question/QuestionPage';
 import { authApi } from '../auth/authApi';
 import { SessionProvider } from '../auth/SessionProvider';
+import type { Answer, Comment, Page } from '../../api/types';
+import answersMock from '../../mocks/GET_questions_id_answers.json';
+import { author, demoMe } from '../../test/fixtures';
 import { questionsApi } from './questionsApi';
 
 const renderQuestion = () =>
   render(
-    <MemoryRouter initialEntries={['/questions/1']}>
+    <MemoryRouter initialEntries={['/questions/101']}>
       <SessionProvider>
         <ToastProvider>
           <Routes>
@@ -22,24 +25,27 @@ const renderQuestion = () =>
     </MemoryRouter>,
   );
 
-const signIn = () =>
-  vi.spyOn(authApi, 'me').mockResolvedValue({
-    id: 9,
-    name: 'Aminata Ouédraogo',
-    email: 'aminata.ouedraogo@example.com',
-    country: 'BF',
-    city: 'Ouagadougou',
-    photoUrl: null,
-    bio: null,
-    reputation: 120,
-    level: 'MEMBER',
-    language: 'fr',
-    skills: [],
-    recruiterVisible: false,
-    providers: [],
-    hasPassword: true,
-    onboarded: true,
-  });
+const signIn = () => vi.spyOn(authApi, 'me').mockResolvedValue(demoMe());
+
+const COMMENTS: Comment[] = [
+  'Merci, la vérification du statut était bien la bonne piste.',
+  'Même souci avec MTN MoMo au Cameroun, la solution marche aussi.',
+  'Attention, le jeton expire au bout d’une heure exactement.',
+  'Il faut aussi le header Content-Type, sinon on obtient une 415.',
+].map((body, i) => ({
+  id: 40 + i,
+  body,
+  author: author({ username: `membre_${i}`, displayName: `Membre ${i}` }),
+  createdAt: `2026-10-21T1${i}:00:00Z`,
+}));
+
+const withComments = (): Page<Answer> => {
+  const page = structuredClone(answersMock) as Page<Answer>;
+  return {
+    ...page,
+    items: page.items.map((a) => (a.id === 512 ? { ...a, comments: COMMENTS } : a)),
+  };
+};
 
 beforeAll(async () => {
   await i18n.changeLanguage('fr');
@@ -52,9 +58,10 @@ afterEach(() => {
 
 describe('Commentaires (QA-9)', () => {
   it('montre 3 commentaires et déplie les autres', async () => {
+    vi.spyOn(questionsApi, 'answers').mockResolvedValue(withComments());
     renderQuestion();
     await screen.findByRole('heading', { level: 1 });
-    const answer = document.getElementById('answer-11') as HTMLElement;
+    const answer = document.getElementById('answer-512') as HTMLElement;
     const list = within(answer).getByRole('list', { name: 'Commentaires' });
     expect(within(list).getAllByRole('listitem')).toHaveLength(3);
 
@@ -74,14 +81,7 @@ describe('Commentaires (QA-9)', () => {
     const comment = vi.spyOn(questionsApi, 'comment').mockResolvedValue({
       id: 990,
       body: 'Quelle version du SDK Orange Money utilises-tu ?',
-      author: {
-        id: 9,
-        name: 'Aminata Ouédraogo',
-        photoUrl: null,
-        country: 'BF',
-        city: 'Ouagadougou',
-        reputation: 120,
-      },
+      author: author(),
       createdAt: '2026-10-22T12:00:00Z',
     });
     renderQuestion();
@@ -102,7 +102,7 @@ describe('Commentaires (QA-9)', () => {
     await waitFor(() =>
       expect(comment).toHaveBeenCalledWith(
         'question',
-        1,
+        101,
         'Quelle version du SDK Orange Money utilises-tu ?',
       ),
     );
@@ -117,14 +117,7 @@ describe('Commentaires (QA-9)', () => {
     vi.spyOn(questionsApi, 'comment').mockResolvedValue({
       id: 991,
       body: '<img src=x onerror=alert(1)> regarde ça',
-      author: {
-        id: 9,
-        name: 'Aminata Ouédraogo',
-        photoUrl: null,
-        country: 'BF',
-        city: 'Ouagadougou',
-        reputation: 120,
-      },
+      author: author(),
       createdAt: '2026-10-22T12:00:00Z',
     });
     renderQuestion();

@@ -16,7 +16,7 @@ export function SideNav() {
     <NavLink
       key={item.to}
       // /users/me redirige vers /users/:id : on pointe directement vers le bon profil.
-      to={item.to === '/users/me' && user ? `/users/${user.id}` : item.to}
+      to={item.to === '/users/me' && user ? `/users/${user.username}` : item.to}
       className={styles.space}
     >
       <Icon name={item.icon} size={18} />

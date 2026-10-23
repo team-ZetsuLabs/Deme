@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import type { ApplicationStatus } from '../../api/provisional-types';
+import type { ApplicationStatus } from '../../api/types';
 import { Icon } from '../../components/Icon';
 import styles from './ApplicationStatusBadge.module.css';
 

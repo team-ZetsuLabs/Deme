@@ -49,7 +49,9 @@ describe('Questions similaires (QA-8)', () => {
     typeTitle('Orange Money renvoie 401');
     typeTitle('Orange Money renvoie 401 en production');
 
-    const link = await screen.findByRole('link', { name: /L'API Orange Money renvoie 401/ });
+    const link = await screen.findByRole('link', {
+      name: /notification de paiement Orange Money/,
+    });
     expect(search).toHaveBeenCalledTimes(1);
     expect(search).toHaveBeenCalledWith(
       'Orange Money renvoie 401 en production',

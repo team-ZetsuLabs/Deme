@@ -45,7 +45,7 @@ function MissionView({ id }: { id: number }) {
   if (query.error instanceof ApiError && query.error.status === 404) return <NotFoundPage />;
   if (query.error || !m) return <ErrorState error={query.error} onRetry={query.reload} />;
 
-  const isAuthor = user?.id === m.author.id;
+  const isAuthor = user?.username === m.author.username;
   const open = m.status === 'OPEN';
 
   const onOffer = () => {
@@ -74,8 +74,8 @@ function MissionView({ id }: { id: number }) {
         <MissionFacts mission={m} />
         <h1 className={`${styles.title} ${own.title}`}>{m.title}</h1>
         <p className={own.author}>
-          <Avatar name={m.author.name} photoUrl={m.author.photoUrl} size={28} />
-          <Link to={`/users/${m.author.id}`}>{m.author.name}</Link>
+          <Avatar name={m.author.displayName} photoUrl={m.author.avatarUrl ?? null} size={28} />
+          <Link to={`/users/${m.author.username}`}>{m.author.displayName}</Link>
           <span aria-hidden="true">·</span>
           <RelativeTime iso={m.createdAt} />
         </p>
@@ -108,7 +108,7 @@ function MissionView({ id }: { id: number }) {
         )}
 
         <div className={styles.report}>
-          <ReportButton targetType="MISSION" targetId={m.id} authorId={m.author.id} />
+          <ReportButton targetType="MISSION" targetId={m.id} authorUsername={m.author.username} />
         </div>
       </article>
 

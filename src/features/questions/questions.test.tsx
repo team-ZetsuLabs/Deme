@@ -6,6 +6,9 @@ import i18n from '../../i18n';
 import { ToastProvider } from '../../components/ToastProvider';
 import { authApi } from '../auth/authApi';
 import { appealsApi } from '../moderation/appealsApi';
+import type { Answer, Page } from '../../api/types';
+import answersMock from '../../mocks/GET_questions_id_answers.json';
+import { author, demoMe } from '../../test/fixtures';
 import { SessionProvider } from '../auth/SessionProvider';
 import QuestionPage from '../../pages/question/QuestionPage';
 import { AskForm } from './AskForm';
@@ -73,7 +76,12 @@ describe('AskForm', () => {
       body: "Le token est récupéré mais l'appel de paiement échoue toujours.",
       code: null,
       tags: ['mobile-money', 'node.js'],
-      context: { country: 'BF', operator: 'ORANGE_MONEY', network: 'UNSTABLE', techVersion: null },
+      context: {
+        countryCode: 'BF',
+        mobileMoneyOperator: 'ORANGE_MONEY',
+        networkQuality: 'UNSTABLE',
+        techVersion: null,
+      },
     });
   });
 
@@ -86,124 +94,126 @@ describe('AskForm', () => {
   });
 });
 
-describe('QuestionPage, modification (QA-3)', () => {
-  it("permet à l'auteur, et à lui seul, de modifier sa réponse", async () => {
-    vi.spyOn(authApi, 'me').mockResolvedValue({
-      id: 10,
-      name: 'Mamadou Ndiaye',
-      email: 'mamadou.ndiaye@example.com',
-      country: 'SN',
-      city: 'Thiès',
-      photoUrl: null,
-      reputation: 365,
-      level: 'MEMBER',
-      language: 'fr',
-      skills: [],
-      bio: null,
-      recruiterVisible: false,
-      providers: [],
-      hasPassword: true,
-      onboarded: true,
-    });
-    const update = vi.spyOn(questionsApi, 'updateAnswer').mockResolvedValue({
-      id: 12,
-      body: 'Utilisez bien l’URL de production, les tokens du bac à sable ne marchent pas.',
-      bodyHtml:
-        '<p>Utilisez bien l’URL de production, les tokens du bac à sable ne marchent pas.</p>',
-      code: null,
-      author: {
-        id: 10,
-        name: 'Mamadou Ndiaye',
-        photoUrl: null,
-        country: 'SN',
-        city: 'Thiès',
-        reputation: 365,
-      },
-      createdAt: '2026-10-21T09:25:00Z',
-      votes: 3,
-      voted: false,
-      accepted: false,
-    });
-    wrap(
-      <Routes>
-        <Route path="/questions/:id" element={<QuestionPage />} />
-      </Routes>,
-      '/questions/1',
-    );
+/** Réponses de l'exemple officiel (question 101 : 512 acceptée, 518 de Njeri), modifiables par test. */
+const answersPage = (change: (answers: Answer[]) => Answer[]): Page<Answer> => {
+  const page = structuredClone(answersMock) as Page<Answer>;
+  return { ...page, items: change(page.items) };
+};
 
-    // Un seul bouton Modifier : celui de la réponse de Mamadou.
-    const edit = await screen.findByRole('button', { name: 'Modifier' });
-    expect(screen.getAllByRole('button', { name: 'Modifier' })).toHaveLength(1);
-    fireEvent.click(edit);
-
-    const textarea = screen.getByLabelText(/^Votre réponse/, { selector: '#edit-12-body' });
-    expect((textarea as HTMLTextAreaElement).value).toContain('URL de production');
-    fireEvent.change(textarea, {
-      target: {
-        value: 'Utilisez bien l’URL de production, les tokens du bac à sable ne marchent pas.',
-      },
-    });
-    fireEvent.click(screen.getByRole('button', { name: 'Enregistrer la modification' }));
-
-    await waitFor(() => expect(update).toHaveBeenCalledWith(12, expect.any(Object)));
-    expect(await screen.findByText(/les tokens du bac à sable ne marchent pas/)).toBeTruthy();
-  });
-});
+const renderQuestion = () =>
+  wrap(
+    <Routes>
+      <Route path="/questions/:id" element={<QuestionPage />} />
+    </Routes>,
+    '/questions/101',
+  );
 
 describe('QuestionPage', () => {
-  it('affiche la question, la réponse acceptée en tête et le même pays', async () => {
-    wrap(
-      <Routes>
-        <Route path="/questions/:id" element={<QuestionPage />} />
-      </Routes>,
-      '/questions/1',
-    );
+  it('affiche la question et ses réponses, la réponse acceptée en tête', async () => {
+    renderQuestion();
     expect(await screen.findByRole('heading', { level: 1 })).toBeTruthy();
     const answers = document.querySelectorAll('article[id^="answer-"]');
-    expect(answers[0].id).toBe('answer-11');
+    expect(answers).toHaveLength(2);
+    expect(answers[0].id).toBe('answer-512');
     expect(answers[0].textContent).toContain('Réponse acceptée');
-    // Mamadou Ndiaye vient du Sénégal, comme la question (QA-10).
-    expect(document.getElementById('answer-12')?.textContent).toContain(
+  });
+
+  it("signale une réponse du même contexte, d'après le serveur (QA-10)", async () => {
+    vi.spyOn(questionsApi, 'answers').mockResolvedValue(
+      answersPage((items) => items.map((a) => (a.id === 518 ? { ...a, sameContext: true } : a))),
+    );
+    renderQuestion();
+    await screen.findByRole('heading', { level: 1 });
+    expect(document.getElementById('answer-518')?.textContent).toContain(
+      'Même pays que la question',
+    );
+    expect(document.getElementById('answer-512')?.textContent).not.toContain(
       'Même pays que la question',
     );
   });
 });
 
-describe('QuestionPage, contenu masqué (MOD-2, MOD-3)', () => {
-  const page = () =>
-    wrap(
-      <Routes>
-        <Route path="/questions/:id" element={<QuestionPage />} />
-      </Routes>,
-      '/questions/1',
+describe('QuestionPage, modification (QA-3)', () => {
+  it('ne propose de modifier que les réponses que le serveur déclare modifiables', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe({ username: 'njeri_w' }));
+    vi.spyOn(questionsApi, 'answers').mockResolvedValue(
+      answersPage((items) => items.map((a) => ({ ...a, canEdit: a.id === 518 }))),
     );
+    const body =
+      'Ajoute une liste blanche des IP d’Orange sur le reverse proxy, et vérifie le statut.';
+    const update = vi.spyOn(questionsApi, 'updateAnswer').mockResolvedValue({
+      ...(answersMock.items[1] as Answer),
+      bodyMarkdown: body,
+      bodyHtml: `<p>${body}</p>`,
+      canEdit: true,
+    });
+    renderQuestion();
+
+    const edit = await screen.findByRole('button', { name: 'Modifier' });
+    expect(screen.getAllByRole('button', { name: 'Modifier' })).toHaveLength(1);
+    fireEvent.click(edit);
+
+    const textarea = screen.getByLabelText(/^Votre réponse/, { selector: '#edit-518-body' });
+    expect((textarea as HTMLTextAreaElement).value).toContain('liste blanche des IP');
+    fireEvent.change(textarea, { target: { value: body } });
+    fireEvent.click(screen.getByRole('button', { name: 'Enregistrer la modification' }));
+
+    await waitFor(() => expect(update).toHaveBeenCalledWith(518, expect.any(Object)));
+    expect(await screen.findByText(/et vérifie le statut/)).toBeTruthy();
+  });
+});
+
+describe('QuestionPage, vote (QA-4)', () => {
+  it('envoie un vote positif et affiche le score renvoyé', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe({ username: 'koffi_m' }));
+    const vote = vi.spyOn(questionsApi, 'vote').mockResolvedValue({ score: 3, myVote: 1 });
+    renderQuestion();
+    await screen.findByRole('heading', { level: 1 });
+    const answer = document.getElementById('answer-518') as HTMLElement;
+    fireEvent.click(answer.querySelector('button[aria-pressed]') as HTMLButtonElement);
+    await waitFor(() => expect(vote).toHaveBeenCalledWith('answer', 518));
+    expect(answer.querySelector('button[aria-pressed="true"]')).toBeTruthy();
+  });
+
+  it('refuse de voter pour son propre contenu sans appeler le serveur', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe({ username: 'njeri_w' }));
+    const vote = vi.spyOn(questionsApi, 'vote');
+    renderQuestion();
+    await screen.findByRole('heading', { level: 1 });
+    const answer = document.getElementById('answer-518') as HTMLElement;
+    fireEvent.click(answer.querySelector('button[aria-pressed]') as HTMLButtonElement);
+    expect(
+      await screen.findByText('Vous ne pouvez pas voter pour votre propre contenu.'),
+    ).toBeTruthy();
+    expect(vote).not.toHaveBeenCalled();
+  });
+});
+
+describe('QuestionPage, contenu masqué (MOD-2, MOD-3)', () => {
+  const hiddenAnswer = (canEdit: boolean) =>
+    answersPage((items) => [
+      ...items,
+      {
+        ...items[1],
+        id: 530,
+        author: author(),
+        canEdit,
+        hidden: { by: 'REFERENT' as const, reason: 'OFF_TOPIC' as const, appeal: 'NONE' as const },
+      },
+    ]);
 
   it('ne montre pas une réponse masquée aux autres membres', async () => {
-    page();
+    vi.spyOn(questionsApi, 'answers').mockResolvedValue(hiddenAnswer(false));
+    renderQuestion();
     expect(await screen.findByRole('heading', { level: 1 })).toBeTruthy();
-    expect(document.getElementById('answer-14')).toBeNull();
+    expect(document.getElementById('answer-530')).toBeNull();
   });
 
   it('la montre à son auteur avec un avis, et lui permet de contester', async () => {
-    vi.spyOn(authApi, 'me').mockResolvedValue({
-      id: 9,
-      name: 'Aminata Ouédraogo',
-      email: 'aminata.ouedraogo@example.com',
-      country: 'BF',
-      city: 'Ouagadougou',
-      photoUrl: null,
-      reputation: 120,
-      level: 'MEMBER',
-      language: 'fr',
-      skills: [],
-      bio: null,
-      recruiterVisible: false,
-      providers: [],
-      hasPassword: true,
-      onboarded: true,
-    });
+    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe());
+    vi.spyOn(questionsApi, 'answers').mockResolvedValue(hiddenAnswer(true));
     const create = vi.spyOn(appealsApi, 'create');
-    page();
+    renderQuestion();
 
     const notice = await screen.findByRole('note');
     expect(notice.textContent).toContain('Hors sujet');
@@ -220,7 +230,7 @@ describe('QuestionPage, contenu masqué (MOD-2, MOD-3)', () => {
     fireEvent.change(textarea, { target: { value: message } });
     fireEvent.click(screen.getByRole('button', { name: 'Envoyer la contestation' }));
     await waitFor(() =>
-      expect(create).toHaveBeenCalledWith({ targetType: 'ANSWER', targetId: 14, message }),
+      expect(create).toHaveBeenCalledWith({ targetType: 'ANSWER', targetId: 530, message }),
     );
     expect(await screen.findByText(/l'équipe Zetsu l'examine/)).toBeTruthy();
   });

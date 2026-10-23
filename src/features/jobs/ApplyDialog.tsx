@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Me, MyApplication } from '../../api/provisional-types';
+import type { Me, MyApplication } from '../../api/types';
 import { errorMessage } from '../../api/errorMessage';
 import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
@@ -72,12 +72,12 @@ export function ApplyDialog({ open, jobId, company, user, onClose, onApplied }: 
     <Dialog open={open} title={t('jobs.apply.title', { company })} onClose={close}>
       <p className={styles.label}>{t('jobs.apply.profile')}</p>
       <div className={styles.applicant}>
-        <Avatar name={user.name} photoUrl={user.photoUrl} size={44} />
+        <Avatar name={user.displayName} photoUrl={user.avatarUrl ?? null} size={44} />
         <div>
-          <b>{user.name}</b>
+          <b>{user.displayName}</b>
           <span>
             {t('question.points', { points: user.reputation.toLocaleString(i18n.language) })}
-            {user.skills.length > 0 && `, ${user.skills.join(', ')}`}
+            {!!user.skills?.length && `, ${user.skills.join(', ')}`}
           </span>
         </div>
       </div>

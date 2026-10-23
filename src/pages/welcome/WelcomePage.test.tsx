@@ -2,30 +2,25 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import i18n from '../../i18n';
-import type { Me } from '../../api/provisional-types';
+import type { Me } from '../../api/types';
 import { ToastProvider } from '../../components/ToastProvider';
 import { authApi } from '../../features/auth/authApi';
 import { OnboardingGuard } from '../../features/auth/OnboardingGuard';
 import { SessionProvider } from '../../features/auth/SessionProvider';
 import WelcomePage from './WelcomePage';
+import { demoMe } from '../../test/fixtures';
 
-const newMember: Me = {
+const newMember: Me = demoMe({
   id: 57,
-  name: 'Koffi Mensah',
+  username: 'koffi_m',
+  displayName: 'Koffi Mensah',
   email: 'koffi.mensah@example.com',
-  country: 'TG',
+  countryCode: 'TG',
   city: null,
-  photoUrl: null,
   reputation: 1,
-  level: 'NEW',
-  language: 'fr',
-  skills: [],
-  bio: null,
-  recruiterVisible: false,
-  providers: [],
-  hasPassword: true,
+  level: 'NEWCOMER',
   onboarded: false,
-};
+});
 
 const renderAt = (path: string) =>
   render(
@@ -62,7 +57,7 @@ describe("parcours d'accueil (AUTH-5)", () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(newMember);
     const updateMe = vi
       .spyOn(authApi, 'updateMe')
-      .mockImplementation(async (body) => ({ ...newMember, ...body }) as Me);
+      .mockImplementation(async (me, body) => ({ ...me, ...body }) as Me);
 
     renderAt('/questions');
 
@@ -73,9 +68,9 @@ describe("parcours d'accueil (AUTH-5)", () => {
 
     expect(await screen.findByRole('heading', { name: 'Fil des questions' })).toBeTruthy();
     await waitFor(() =>
-      expect(updateMe).toHaveBeenCalledWith({
+      expect(updateMe).toHaveBeenCalledWith(expect.objectContaining({ username: 'koffi_m' }), {
         skills: ['flutter', 'mobile-money'],
-        country: 'TG',
+        countryCode: 'TG',
         language: 'fr',
         onboarded: true,
       }),

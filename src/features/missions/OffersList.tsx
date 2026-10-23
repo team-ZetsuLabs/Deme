@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { MissionOffer } from '../../api/provisional-types';
+import type { MissionOffer } from '../../api/types';
 import { errorMessage } from '../../api/errorMessage';
 import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
@@ -46,9 +46,9 @@ export function OffersList({ missionId, offers, onChange }: OffersListProps) {
         return (
           <li key={o.id} className={styles.item}>
             <div className={styles.head}>
-              <Avatar name={o.member.name} photoUrl={o.member.photoUrl} size={36} />
+              <Avatar name={o.member.displayName} photoUrl={o.member.avatarUrl ?? null} size={36} />
               <div className={styles.who}>
-                <Link to={`/users/${o.member.id}`}>{o.member.name}</Link>
+                <Link to={`/users/${o.member.username}`}>{o.member.displayName}</Link>
                 <small>
                   {t('question.points', {
                     points: o.member.reputation.toLocaleString(i18n.language),

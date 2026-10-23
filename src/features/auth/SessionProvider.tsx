@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
-import type { LoginRequest, Me, MeUpdate, RegisterRequest } from '../../api/provisional-types';
+import type { LoginRequest, Me, MeUpdate, RegisterRequest } from '../../api/types';
 import { api } from '../../api/api';
 import { changeLanguage } from '../../i18n';
 import { authApi } from './authApi';
@@ -7,7 +7,7 @@ import { SessionContext, type SessionStatus } from './sessionContext';
 
 type SessionProviderProps = { children: ReactNode };
 
-/** Session par cookie HttpOnly : le front ne voit jamais de jeton, il demande /me. */
+/** Session par cookie HttpOnly : le front ne voit jamais de jeton, il demande /auth/me. */
 export function SessionProvider({ children }: SessionProviderProps) {
   const [user, setUser] = useState<Me | null>(null);
   const [status, setStatus] = useState<SessionStatus>('loading');
@@ -38,17 +38,24 @@ export function SessionProvider({ children }: SessionProviderProps) {
   }, []);
 
   const login = useCallback((body: LoginRequest) => authApi.login(body).then(signIn), [signIn]);
+  // Un compte qui vient d'être créé passe par le parcours d'accueil (AUTH-5).
   const register = useCallback(
-    (body: RegisterRequest) => authApi.register(body).then(signIn),
+    (body: RegisterRequest) =>
+      authApi.register(body).then((me) => signIn({ ...me, onboarded: me.onboarded ?? false })),
     [signIn],
   );
   const updateMe = useCallback(
-    (body: MeUpdate) =>
-      authApi.updateMe(body).then((me) =>
-        // En mode mock, la réponse est un fichier fixe : on applique plutôt la modification
-        // au membre en cours, pour que l'écran reste cohérent pendant le développement.
-        signIn(api.mode === 'mock' && user ? { ...user, ...body } : me),
-      ),
+    async (body: MeUpdate) => {
+      if (!user) throw new Error('updateMe sans membre connecté');
+      const me = await authApi.updateMe(user, body);
+      // Les Extras (stack, parcours d'accueil) ne sont pas encore renvoyés par le serveur : on
+      // les garde. En mode mock, la réponse est un fichier fixe : on applique toute la modification.
+      const extras = {
+        skills: body.skills ?? user.skills,
+        onboarded: body.onboarded ?? user.onboarded,
+      };
+      return signIn(api.mode === 'mock' ? { ...user, ...body } : { ...user, ...me, ...extras });
+    },
     [signIn, user],
   );
   const signOutLocally = useCallback(() => {

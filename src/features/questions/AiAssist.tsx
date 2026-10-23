@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { QuestionAssist, QuestionContext } from '../../api/provisional-types';
+import type { QuestionAssist, QuestionContext } from '../../api/types';
 import { ApiError } from '../../api/api';
 import { Button } from '../../components/Button';
 import { Skeleton } from '../../components/skeleton/Skeleton';
@@ -30,23 +30,23 @@ type Section = 'title' | 'tags' | 'context';
 function contextChanges(detected: QuestionContext, current: QuestionContext) {
   const changes: Partial<QuestionContext> = {};
   if (
-    detected.country &&
-    detected.country !== current.country &&
-    (AFRICAN_COUNTRIES as readonly string[]).includes(detected.country)
+    detected.countryCode &&
+    detected.countryCode !== current.countryCode &&
+    (AFRICAN_COUNTRIES as readonly string[]).includes(detected.countryCode)
   )
-    changes.country = detected.country;
+    changes.countryCode = detected.countryCode;
   if (
-    detected.operator &&
-    detected.operator !== current.operator &&
-    OPERATORS.includes(detected.operator)
+    detected.mobileMoneyOperator &&
+    detected.mobileMoneyOperator !== current.mobileMoneyOperator &&
+    OPERATORS.includes(detected.mobileMoneyOperator)
   )
-    changes.operator = detected.operator;
+    changes.mobileMoneyOperator = detected.mobileMoneyOperator;
   if (
-    detected.network &&
-    detected.network !== current.network &&
-    NETWORKS.includes(detected.network)
+    detected.networkQuality &&
+    detected.networkQuality !== current.networkQuality &&
+    NETWORKS.includes(detected.networkQuality)
   )
-    changes.network = detected.network;
+    changes.networkQuality = detected.networkQuality;
   const version = detected.techVersion?.trim().slice(0, 60);
   if (version && version !== current.techVersion) changes.techVersion = version;
   return changes;
@@ -232,9 +232,9 @@ export function AiAssist({
               <h3 className={styles.itemTitle}>{t('ask.ai.contextSuggestion')}</h3>
               <ContextChips
                 context={{
-                  country: changes.country ?? null,
-                  operator: changes.operator ?? null,
-                  network: changes.network ?? null,
+                  countryCode: changes.countryCode ?? null,
+                  mobileMoneyOperator: changes.mobileMoneyOperator ?? null,
+                  networkQuality: changes.networkQuality ?? null,
                   techVersion: changes.techVersion ?? null,
                 }}
               />

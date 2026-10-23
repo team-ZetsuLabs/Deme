@@ -1,12 +1,12 @@
 {
   "id": 301,
   "member": {
-    "id": 6,
-    "name": "Moussa Traoré",
-    "photoUrl": null,
-    "country": "ML",
-    "city": "Bamako",
-    "reputation": 310
+    "username": "moussa_t",
+    "displayName": "Moussa Traoré",
+    "avatarUrl": null,
+    "countryCode": "ML",
+    "reputation": 310,
+    "level": "MEMBER"
   },
   "message": "J'ai intégré Wave et Orange Money sur trois boutiques WooCommerce à Bamako. Je peux commencer demain.",
   "price": {

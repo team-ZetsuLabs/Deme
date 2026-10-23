@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { AppNotification } from '../../api/provisional-types';
+import type { AppNotification } from '../../api/types';
 import { errorMessage } from '../../api/errorMessage';
 import { Button } from '../../components/Button';
 import { ErrorState } from '../../components/ErrorState';

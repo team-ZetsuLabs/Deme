@@ -16,6 +16,6 @@
   "myApplication": null,
   "experience": null,
   "status": "PENDING",
-  "postedById": 9,
+  "postedBy": "awa_k",
   "descriptionHtml": "<p>En mode mock, l'API renvoie toujours cette offre fixe.</p>"
 }

@@ -12,12 +12,12 @@
       "delayDays": 5,
       "technologies": ["wordpress", "php", "mobile-money"],
       "author": {
-        "id": 12,
-        "name": "Mariama Sow",
-        "photoUrl": null,
-        "country": "SN",
-        "city": "Saint-Louis",
-        "reputation": 85
+        "username": "mariama_s",
+        "displayName": "Mariama Sow",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 85,
+        "level": "MEMBER"
       },
       "createdAt": "2026-10-21T10:30:00Z",
       "status": "OPEN",
@@ -36,12 +36,12 @@
       "delayDays": 2,
       "technologies": ["spring-boot", "java"],
       "author": {
-        "id": 13,
-        "name": "Jean-Baptiste Kaboré",
-        "photoUrl": null,
-        "country": "BF",
-        "city": "Ouagadougou",
-        "reputation": 240
+        "username": "jeanbaptiste_k",
+        "displayName": "Jean-Baptiste Kaboré",
+        "avatarUrl": null,
+        "countryCode": "BF",
+        "reputation": 240,
+        "level": "MEMBER"
       },
       "createdAt": "2026-10-21T07:15:00Z",
       "status": "OPEN",
@@ -60,12 +60,12 @@
       "delayDays": 4,
       "technologies": ["django", "python", "postgresql"],
       "author": {
-        "id": 7,
-        "name": "Grace Njeri",
-        "photoUrl": null,
-        "country": "KE",
-        "city": "Nairobi",
-        "reputation": 640
+        "username": "grace_n",
+        "displayName": "Grace Njeri",
+        "avatarUrl": null,
+        "countryCode": "KE",
+        "reputation": 640,
+        "level": "CONTRIBUTOR"
       },
       "createdAt": "2026-10-20T12:00:00Z",
       "status": "OPEN",
@@ -84,12 +84,12 @@
       "delayDays": 10,
       "technologies": ["flutter", "sqlite", "hors-ligne"],
       "author": {
-        "id": 4,
-        "name": "Kwame Asante",
-        "photoUrl": null,
-        "country": "GH",
-        "city": "Accra",
-        "reputation": 980
+        "username": "kwame_a",
+        "displayName": "Kwame Asante",
+        "avatarUrl": null,
+        "countryCode": "GH",
+        "reputation": 980,
+        "level": "CONTRIBUTOR"
       },
       "createdAt": "2026-10-19T16:40:00Z",
       "status": "OPEN",
@@ -105,12 +105,12 @@
       "delayDays": 3,
       "technologies": ["postgresql", "linux", "devops"],
       "author": {
-        "id": 5,
-        "name": "Fatou Diallo",
-        "photoUrl": null,
-        "country": "CI",
-        "city": "Abidjan",
-        "reputation": 455
+        "username": "fatou_d",
+        "displayName": "Fatou Diallo",
+        "avatarUrl": null,
+        "countryCode": "CI",
+        "reputation": 455,
+        "level": "MEMBER"
       },
       "createdAt": "2026-10-18T09:20:00Z",
       "status": "OPEN",

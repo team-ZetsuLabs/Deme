@@ -4,7 +4,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import i18n from '../../i18n';
 import { ApiError } from '../../api/api';
-import type { Me } from '../../api/provisional-types';
+import type { Me } from '../../api/types';
 import { ToastProvider } from '../../components/ToastProvider';
 import { ThemeProvider } from '../../theme/ThemeProvider';
 import { EmailVerifyBanner } from '../../layout/EmailVerifyBanner';
@@ -13,25 +13,9 @@ import ResetPasswordPage from '../../pages/reset-password/ResetPasswordPage';
 import VerifyEmailPage from '../../pages/verify-email/VerifyEmailPage';
 import { authApi } from './authApi';
 import { SessionProvider } from './SessionProvider';
+import { demoMe } from '../../test/fixtures';
 
-const ME: Me = {
-  id: 9,
-  name: 'Aminata Ouédraogo',
-  email: 'aminata.ouedraogo@example.com',
-  country: 'BF',
-  city: 'Ouagadougou',
-  photoUrl: null,
-  bio: null,
-  reputation: 120,
-  level: 'MEMBER',
-  language: 'fr',
-  skills: [],
-  recruiterVisible: false,
-  providers: [],
-  hasPassword: true,
-  onboarded: true,
-  emailVerified: false,
-};
+const ME: Me = demoMe({ emailVerified: false });
 
 const renderAt = (path: string, element: ReactNode, route: string) =>
   render(

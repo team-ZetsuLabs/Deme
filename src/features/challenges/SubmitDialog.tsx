@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Submission } from '../../api/provisional-types';
+import type { Submission } from '../../api/types';
 import { errorMessage } from '../../api/errorMessage';
 import { Button } from '../../components/Button';
 import { Dialog } from '../../components/Dialog';

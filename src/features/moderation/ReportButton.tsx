@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { ReportReason, ReportTargetType } from '../../api/provisional-types';
+import type { ReportReason, ReportTargetType } from '../../api/types';
 import { errorMessage } from '../../api/errorMessage';
 import { Button } from '../../components/Button';
 import { Dialog } from '../../components/Dialog';
@@ -14,16 +14,17 @@ import styles from './ReportButton.module.css';
 
 export type ReportButtonProps = {
   targetType: ReportTargetType;
-  targetId: number;
+  /** Identifiant du contenu, ou pseudo pour un profil. */
+  targetId: number | string;
   /** Auteur du contenu : on ne signale pas son propre contenu. */
-  authorId: number;
+  authorUsername: string;
 };
 
 /**
  * Signaler un contenu (MOD-1), à partir du niveau Membre (section 8 du cahier).
  * Le masquage après 5 signalements (MOD-2) est fait par le serveur.
  */
-export function ReportButton({ targetType, targetId, authorId }: ReportButtonProps) {
+export function ReportButton({ targetType, targetId, authorUsername }: ReportButtonProps) {
   const { t } = useTranslation();
   const { user } = useSession();
   const toast = useToast();
@@ -36,14 +37,14 @@ export function ReportButton({ targetType, targetId, authorId }: ReportButtonPro
   const [busy, setBusy] = useState(false);
   const idPrefix = `report-${targetType.toLowerCase()}-${targetId}`;
 
-  if (user?.id === authorId) return null;
+  if (user?.username === authorUsername) return null;
 
   const onOpen = () => {
     if (!user) {
       navigate('/login', { state: { from: location.pathname } });
       return;
     }
-    if (user.level === 'NEW') {
+    if (user.level === 'NEWCOMER') {
       toast(t('report.level'));
       return;
     }

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { MissionSummary } from '../../api/provisional-types';
+import type { MissionSummary } from '../../api/types';
 import { Avatar } from '../../components/Avatar';
 import { RelativeTime } from '../../components/RelativeTime';
 import { ApplicationStatusBadge } from '../jobs/ApplicationStatusBadge';
@@ -26,8 +26,8 @@ export function MissionRow({ mission: m }: MissionRowProps) {
             ))}
           </ul>
           <div className={styles.who}>
-            <Avatar name={m.author.name} photoUrl={m.author.photoUrl} size={24} />
-            <span className={styles.author}>{m.author.name}</span>
+            <Avatar name={m.author.displayName} photoUrl={m.author.avatarUrl ?? null} size={24} />
+            <span className={styles.author}>{m.author.displayName}</span>
             <RelativeTime iso={m.createdAt} />
           </div>
         </div>

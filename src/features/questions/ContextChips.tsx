@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import type { QuestionContext } from '../../api/provisional-types';
+import type { QuestionContext } from '../../api/types';
 import { Icon } from '../../components/Icon';
 import { countryName } from '../../i18n/countries';
 import styles from './ContextChips.module.css';
@@ -9,11 +9,17 @@ export type ContextChipsProps = { context: QuestionContext };
 /** Contexte africain d'une question (QA-2) : pays, opérateur, réseau, version. */
 export function ContextChips({ context }: ContextChipsProps) {
   const { t, i18n } = useTranslation();
-  const country = countryName(context.country, i18n.language);
+  const country = countryName(context.countryCode ?? null, i18n.language);
   const chips = [
     country && { key: 'country', label: country, icon: true },
-    context.operator && { key: 'operator', label: t(`context.operator.${context.operator}`) },
-    context.network && { key: 'network', label: t(`context.network.${context.network}`) },
+    context.mobileMoneyOperator && {
+      key: 'operator',
+      label: t(`context.operator.${context.mobileMoneyOperator}`),
+    },
+    context.networkQuality && {
+      key: 'network',
+      label: t(`context.network.${context.networkQuality}`),
+    },
     context.techVersion && { key: 'version', label: context.techVersion, mono: true },
   ].filter(Boolean) as { key: string; label: string; icon?: boolean; mono?: boolean }[];
 

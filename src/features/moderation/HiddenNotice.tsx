@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { HiddenState, ReportTargetType } from '../../api/provisional-types';
+import type { HiddenState, ReportTargetType } from '../../api/types';
 import { errorMessage } from '../../api/errorMessage';
 import { Button } from '../../components/Button';
 import { Dialog } from '../../components/Dialog';

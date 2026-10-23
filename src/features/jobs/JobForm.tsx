@@ -1,6 +1,6 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ContractType, JobDetail } from '../../api/provisional-types';
+import type { ContractType, JobDetail } from '../../api/types';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
 import { describedBy } from '../../components/fieldIds';

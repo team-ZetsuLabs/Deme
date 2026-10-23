@@ -2,7 +2,8 @@
  * Client de l'API Zetsu. Seul fichier autorisé à appeler `fetch`.
  *
  * - Mode `mock` : lit les exemples de src/mocks (copie des mocks du back-end).
- *   Nom du fichier : MÉTHODE_chemin, les identifiants numériques devenant `id`.
+ *   Nom du fichier : MÉTHODE_chemin, les identifiants numériques devenant `id`
+ *   et le pseudo de /users/{username} devenant `username`.
  *   GET /questions        -> GET_questions.json
  *   GET /questions/12     -> GET_questions_id.json
  *   POST /questions/12/answers -> POST_questions_id_answers.json
@@ -48,7 +49,7 @@ export type RequestOptions = {
 
 export const API_BASE = '/api/v1';
 
-// Convention Spring Security (CookieCsrfTokenRepository), à confirmer avec le back-end.
+// Convention Spring Security (CookieCsrfTokenRepository), confirmée par le contrat.
 export const CSRF_COOKIE = 'XSRF-TOKEN';
 export const CSRF_HEADER = 'X-XSRF-TOKEN';
 
@@ -69,7 +70,9 @@ export function mockKey(method: HttpMethod, path: string): string {
     .split('?')[0]
     .split('/')
     .filter(Boolean)
-    .map((s) => (/^\d+$/.test(s) ? 'id' : s));
+    .map((s, i, all) =>
+      /^\d+$/.test(s) ? 'id' : all[i - 1] === 'users' && s !== 'me' ? 'username' : s,
+    );
   return [method, ...segments].join('_');
 }
 
@@ -100,6 +103,18 @@ function isErrorBody(value: unknown): value is ApiErrorBody {
   );
 }
 
+/** GET /auth/csrf pose le cookie XSRF-TOKEN quand il manque encore (première visite). */
+async function fetchCsrfToken(): Promise<string | null> {
+  try {
+    const res = await fetch(`${API_BASE}/auth/csrf`, { credentials: 'same-origin' });
+    const data: unknown = await res.json().catch(() => null);
+    const token = (data as { token?: unknown } | null)?.token;
+    return readCookie(CSRF_COOKIE) ?? (typeof token === 'string' ? token : null);
+  } catch {
+    return null;
+  }
+}
+
 async function liveRequest<T>(method: HttpMethod, path: string, opts: RequestOptions): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json' };
   let body: BodyInit | undefined;
@@ -112,7 +127,8 @@ async function liveRequest<T>(method: HttpMethod, path: string, opts: RequestOpt
   }
 
   if (method !== 'GET') {
-    const token = readCookie(CSRF_COOKIE);
+    // Le jeton change à la connexion : on relit le cookie à chaque requête.
+    const token = readCookie(CSRF_COOKIE) ?? (await fetchCsrfToken());
     if (token) headers[CSRF_HEADER] = token;
   }
 

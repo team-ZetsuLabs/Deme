@@ -60,13 +60,33 @@
     "UNKNOWN_ERROR": "Une erreur est survenue. Réessayez dans un instant.",
     "VALIDATION_ERROR": "Certains champs sont à corriger.",
     "INVALID_CREDENTIALS": "Email ou mot de passe incorrect.",
-    "EMAIL_ALREADY_USED": "Cette adresse ne peut pas être utilisée. Si vous avez déjà un compte, connectez-vous.",
     "TOO_MANY_ATTEMPTS": "Trop de tentatives. Réessayez dans 15 minutes.",
     "ACCOUNT_SUSPENDED": "Ce compte est suspendu. Contactez l'équipe Zetsu si vous pensez que c'est une erreur.",
     "ALREADY_REPORTED": "Vous avez déjà signalé ce contenu.",
     "ALREADY_SUBMITTED": "Vous avez déjà soumis un dépôt pour ce défi.",
     "ALREADY_APPEALED": "Vous avez déjà contesté cette décision.",
-    "MAINTENANCE": "Zetsu est en maintenance. Réessayez dans quelques minutes."
+    "MAINTENANCE": "Zetsu est en maintenance. Réessayez dans quelques minutes.",
+    "EMAIL_TAKEN": "Cette adresse ne peut pas être utilisée. Si vous avez déjà un compte, connectez-vous.",
+    "LOGIN_LOCKED": "Trop d'essais ratés. La connexion est bloquée pendant 15 minutes.",
+    "RATE_LIMITED": "Trop d'actions en peu de temps. Patientez un instant avant de réessayer.",
+    "UNAUTHENTICATED": "Connectez-vous pour continuer.",
+    "FORBIDDEN": "Vous n'avez pas le droit de faire cette action.",
+    "CSRF_INVALID": "Votre session a expiré. Rechargez la page et réessayez.",
+    "LEVEL_TOO_LOW": "Votre niveau ne permet pas encore cette action.",
+    "ALREADY_VOTED": "Vous avez déjà voté pour ce contenu.",
+    "CANNOT_VOTE_OWN_CONTENT": "Vous ne pouvez pas voter pour votre propre contenu.",
+    "VOTE_NOT_FOUND": "Vous n'aviez pas voté pour ce contenu.",
+    "QUESTION_NOT_FOUND": "Cette question n'existe pas ou a été supprimée.",
+    "ANSWER_NOT_FOUND": "Cette réponse n'existe pas ou a été supprimée.",
+    "ANSWER_NOT_IN_QUESTION": "Cette réponse n'appartient pas à la question.",
+    "USER_NOT_FOUND": "Ce membre n'existe pas.",
+    "NOT_QUESTION_AUTHOR": "Seul l'auteur de la question peut faire cette action.",
+    "NOT_ANSWER_AUTHOR": "Seul l'auteur de la réponse peut la modifier.",
+    "TOO_MANY_TAGS": "Indiquez 4 tags au maximum.",
+    "TAG_REQUIRED": "Indiquez au moins un tag.",
+    "INVALID_TAG": "Un tag ne contient que des lettres minuscules, des chiffres, des tirets ou des points.",
+    "INVALID_COUNTRY": "Ce pays n'est pas reconnu.",
+    "INTERNAL_ERROR": "Une erreur est survenue de notre côté. Réessayez dans un instant."
   },
   "auth": {
     "browse": "Parcourir sans compte",
@@ -180,15 +200,15 @@
     "operator": {
       "ORANGE_MONEY": "Orange Money",
       "WAVE": "Wave",
-      "MOOV": "Moov Money",
-      "MTN": "MTN Mobile Money",
+      "MOOV_MONEY": "Moov Money",
+      "MTN_MOMO": "MTN Mobile Money",
       "MPESA": "M-Pesa",
       "OTHER": "Autre opérateur"
     },
     "network": {
       "GOOD": "Réseau bon",
       "UNSTABLE": "Réseau instable",
-      "VERY_LOW": "Réseau très faible"
+      "VERY_POOR": "Réseau très faible"
     }
   },
   "questions": {
@@ -217,7 +237,8 @@
       "search": "Recherche « {{q}} »",
       "reset": "Retirer les filtres",
       "results_one": "{{count}} résultat",
-      "results_other": "{{count}} résultats"
+      "results_other": "{{count}} résultats",
+      "relevance": "Pertinence"
     },
     "row": {
       "votes_one": "vote",
@@ -451,20 +472,27 @@
     },
     "nextLevel": "Encore {{points}} points avant le niveau {{level}}",
     "progressLabel": "Progression vers le niveau suivant",
-    "activity": {
-      "QUESTION": "Question",
-      "ANSWER": "Réponse",
-      "ACCEPTED_ANSWER": "Réponse acceptée",
-      "CHALLENGE": "Défi"
-    },
     "empty": "Aucune activité pour le moment.",
     "emptyMine": "Vous n'avez encore rien publié. Votre première question vous rapporte 5 points.",
     "skillsHint": "Technologies déclarées. Un clic affiche les questions sur ce sujet.",
     "noSkills": "Aucune technologie déclarée pour le moment.",
-    "badgeLocked": "Pas encore obtenu."
+    "badgeLocked": "Pas encore obtenu.",
+    "reputation": {
+      "QUESTION_ASKED": "Question posée",
+      "QUESTION_UPVOTED": "Vote sur une question",
+      "ANSWER_UPVOTED": "Vote sur une réponse",
+      "ANSWER_ACCEPTED": "Réponse acceptée",
+      "ACCEPTED_AN_ANSWER": "A accepté une réponse",
+      "CHALLENGE_VALIDATED": "Défi validé",
+      "PROJECT_COMPLETED": "Projet clôturé",
+      "SPAM_REMOVED": "Contenu retiré pour spam",
+      "seeQuestion": "Voir la question",
+      "seeAnswer": "Voir la réponse",
+      "noLink": "Contribution à la communauté"
+    }
   },
   "levels": {
-    "NEW": "Nouveau",
+    "NEWCOMER": "Nouveau",
     "MEMBER": "Membre",
     "CONTRIBUTOR": "Contributeur",
     "REFERENT": "Référent"
@@ -532,7 +560,8 @@
       "unlinkLabel": "Déconnecter {{name}}",
       "unlinked": "Compte déconnecté",
       "lastMethod": "C'est votre seul moyen de connexion : il ne peut pas être retiré.",
-      "mockOnly": "En mode mock, la connexion OAuth n'est pas disponible."
+      "mockOnly": "En mode mock, la connexion OAuth n'est pas disponible.",
+      "unavailable": "Pas encore proposé"
     },
     "appearance": {
       "title": "Apparence et langue",
@@ -661,7 +690,7 @@
         }
       },
       "rights": {
-        "NEW": "Poser, répondre, candidater.",
+        "NEWCOMER": "Poser, répondre, candidater.",
         "MEMBER": "Voter et signaler.",
         "CONTRIBUTOR": "Proposer des tags, voir les signalements.",
         "REFERENT": "Masquer un contenu signalé, traiter la file, proposer les défis."

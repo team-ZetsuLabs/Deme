@@ -5,6 +5,7 @@ import { ErrorState } from '../../components/ErrorState';
 import { Icon } from '../../components/Icon';
 import { StateMessage } from '../../components/StateMessage';
 import { useApiQuery } from '../../hooks/useApiQuery';
+import { countryName } from '../../i18n/countries';
 import { CompactQuestionsSkeleton } from '../../components/skeleton/CompactQuestionsSkeleton';
 import { ContextChips } from '../questions/ContextChips';
 import { questionsApi } from '../questions/questionsApi';
@@ -14,7 +15,7 @@ const PREVIEW_COUNT = 3;
 
 /** Trois vraies questions résolues : la plateforme montrée par son contenu, pas par un slogan. */
 export function SolvedPreview() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const query = useApiQuery(
     () =>
       questionsApi.list({
@@ -28,7 +29,7 @@ export function SolvedPreview() {
       }),
     [],
   );
-  const items = query.data?.items.filter((q) => q.solved).slice(0, PREVIEW_COUNT) ?? [];
+  const items = query.data?.items.filter((q) => q.hasAcceptedAnswer).slice(0, PREVIEW_COUNT) ?? [];
 
   return (
     <section className={styles.box} aria-labelledby="home-solved-title">
@@ -49,7 +50,7 @@ export function SolvedPreview() {
         <ul className={styles.list}>
           {items.map((q) => (
             <li key={q.id} className={styles.item}>
-              <Avatar name={q.author.name} photoUrl={q.author.photoUrl} size={32} />
+              <Avatar name={q.author.displayName} photoUrl={q.author.avatarUrl ?? null} size={32} />
               <div className={styles.body}>
                 <h3>
                   <Link to={`/questions/${q.id}`}>{q.title}</Link>
@@ -61,8 +62,9 @@ export function SolvedPreview() {
                     {t('home.solved.answers', { count: q.answerCount })}
                   </span>
                   <span>
-                    {q.author.name}
-                    {q.author.city && `, ${q.author.city}`}
+                    {q.author.displayName}
+                    {countryName(q.author.countryCode ?? null, i18n.language) &&
+                      `, ${countryName(q.author.countryCode ?? null, i18n.language)}`}
                   </span>
                 </p>
               </div>

@@ -43,20 +43,22 @@ export function Leaderboard({ challengeId, refreshKey }: LeaderboardProps) {
       </thead>
       <tbody>
         {query.data.map((entry) => {
-          const mine = user?.id === entry.member.id;
-          const place = [entry.member.city, countryName(entry.member.country, i18n.language)]
-            .filter(Boolean)
-            .join(', ');
+          const mine = user?.username === entry.member.username;
+          const place = countryName(entry.member.countryCode ?? null, i18n.language);
           return (
-            <tr key={entry.member.id} className={mine ? styles.me : undefined}>
+            <tr key={entry.member.username} className={mine ? styles.me : undefined}>
               <td className={entry.rank === 1 ? `${styles.rank} ${styles.first}` : styles.rank}>
                 {entry.score === null ? '–' : `#${entry.rank}`}
               </td>
               <td>
                 <span className={styles.person}>
-                  <Avatar name={entry.member.name} photoUrl={entry.member.photoUrl} size={32} />
+                  <Avatar
+                    name={entry.member.displayName}
+                    photoUrl={entry.member.avatarUrl ?? null}
+                    size={32}
+                  />
                   <span>
-                    <Link to={`/users/${entry.member.id}`}>{entry.member.name}</Link>
+                    <Link to={`/users/${entry.member.username}`}>{entry.member.displayName}</Link>
                     {mine && ` ${t('challenges.board.you')}`}
                     {place && <small>{place}</small>}
                   </span>

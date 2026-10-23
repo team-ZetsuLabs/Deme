@@ -48,7 +48,10 @@ export function RegisterForm({ onSignedIn }: RegisterFormProps) {
     { name: '', email: '', country: '', password: '' },
     VALIDATORS,
   );
-  const submitError = useSubmitError(form.setServerErrors);
+  // Le contrat nomme les champs displayName et countryCode.
+  const submitError = useSubmitError(({ displayName, countryCode, ...rest }) =>
+    form.setServerErrors({ ...rest, name: displayName, country: countryCode }),
+  );
   const { values, errors } = form;
   const countries = useMemo(() => countryOptions(i18n.language), [i18n.language]);
 
@@ -60,14 +63,15 @@ export function RegisterForm({ onSignedIn }: RegisterFormProps) {
       document.getElementById(IDS[invalid[0]])?.focus();
       return;
     }
+    // Champ piège rempli : un robot. On ne crée rien et on ne lui dit rien.
+    if (website) return;
     setBusy(true);
     try {
       await register({
-        name: values.name.trim(),
+        displayName: values.name.trim(),
         email: values.email.trim(),
-        country: values.country,
+        countryCode: values.country,
         password: values.password,
-        website,
       });
       onSignedIn();
     } catch (error) {

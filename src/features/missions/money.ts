@@ -1,4 +1,4 @@
-import type { Money } from '../../api/provisional-types';
+import type { Money } from '../../api/types';
 
 /** Monnaies proposées pour un budget indicatif, la première par défaut. */
 export const CURRENCIES = ['XOF', 'XAF', 'GHS', 'NGN', 'KES', 'MAD', 'EUR'];

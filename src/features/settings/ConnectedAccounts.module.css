@@ -31,3 +31,8 @@
   font-size: var(--fs-sm);
   color: var(--text-3);
 }
+
+.unavailable {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}

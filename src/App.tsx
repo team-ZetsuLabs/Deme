@@ -73,7 +73,7 @@ export function App() {
                           }
                         />
                         <Route path="questions/:id" element={<QuestionPage />} />
-                        <Route path="users/:id" element={<ProfilePage />} />
+                        <Route path="users/:username" element={<ProfilePage />} />
                         <Route
                           path="settings"
                           element={

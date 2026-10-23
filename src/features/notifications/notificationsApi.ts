@@ -5,7 +5,7 @@ import type {
   NotificationTargetType,
   Page,
   UnreadCount,
-} from '../../api/provisional-types';
+} from '../../api/types';
 
 export const NOTIFICATIONS_PAGE_SIZE = 20;
 

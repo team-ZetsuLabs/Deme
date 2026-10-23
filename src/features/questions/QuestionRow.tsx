@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { QuestionSummary } from '../../api/provisional-types';
+import type { QuestionSummary } from '../../api/types';
 import { Avatar } from '../../components/Avatar';
 import { RelativeTime } from '../../components/RelativeTime';
 import { Tag } from '../../components/Tag';
@@ -15,7 +15,7 @@ export type QuestionRowProps = {
 
 export function QuestionRow({ question: q, activeTag, onTag }: QuestionRowProps) {
   const { t } = useTranslation();
-  const answersClass = q.solved
+  const answersClass = q.hasAcceptedAnswer
     ? `${styles.answers} ${styles.solved}`
     : q.answerCount
       ? styles.answers
@@ -24,14 +24,14 @@ export function QuestionRow({ question: q, activeTag, onTag }: QuestionRowProps)
   return (
     <article className={styles.row}>
       <div className={styles.stat}>
-        <strong>{q.votes}</strong>
-        <span>{t('questions.row.votes', { count: q.votes })}</span>
+        <strong>{q.score}</strong>
+        <span>{t('questions.row.votes', { count: q.score })}</span>
       </div>
       <div className={`${styles.stat} ${styles.answersCol}`}>
         <div className={answersClass}>
           <strong>{q.answerCount}</strong>
           <span>
-            {q.solved
+            {q.hasAcceptedAnswer
               ? t('questions.row.solved')
               : t('questions.row.answers', { count: q.answerCount })}
           </span>
@@ -52,8 +52,8 @@ export function QuestionRow({ question: q, activeTag, onTag }: QuestionRowProps)
             ))}
           </div>
           <div className={styles.who}>
-            <Avatar name={q.author.name} photoUrl={q.author.photoUrl} size={24} />
-            <span className={styles.author}>{q.author.name}</span>
+            <Avatar name={q.author.displayName} photoUrl={q.author.avatarUrl ?? null} size={24} />
+            <span className={styles.author}>{q.author.displayName}</span>
             <RelativeTime iso={q.createdAt} />
           </div>
         </div>

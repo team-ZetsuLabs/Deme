@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { QuestionSummary } from '../../api/provisional-types';
+import type { QuestionSummary } from '../../api/types';
 import { useOnlineStatus } from '../../hooks/useOnlineStatus';
 import { questionsApi } from './questionsApi';
 import { TITLE_MIN } from './validation';

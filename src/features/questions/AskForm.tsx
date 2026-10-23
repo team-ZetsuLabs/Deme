@@ -1,11 +1,7 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type {
-  MobileMoneyOperator,
-  NetworkQuality,
-  QuestionDetail,
-} from '../../api/provisional-types';
+import type { MobileMoneyOperator, NetworkQuality, QuestionDetail } from '../../api/types';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
 import { describedBy } from '../../components/fieldIds';
@@ -57,9 +53,9 @@ export function AskForm({ initialTitle, defaultCountry, onPosted }: AskFormProps
   const countries = useMemo(() => countryOptions(i18n.language), [i18n.language]);
   const { values, errors } = form;
   const context = {
-    country: country || null,
-    operator: operator || null,
-    network: network || null,
+    countryCode: country || null,
+    mobileMoneyOperator: operator || null,
+    networkQuality: network || null,
     techVersion: techVersion.trim() || null,
   };
 
@@ -169,9 +165,9 @@ export function AskForm({ initialTitle, defaultCountry, onPosted }: AskFormProps
         onApplyTitle={(title) => form.setValue('title', title)}
         onApplyTags={(tags) => form.setValue('tags', tags.join(', '))}
         onApplyContext={(detected) => {
-          if (detected.country) setCountry(detected.country);
-          if (detected.operator) setOperator(detected.operator);
-          if (detected.network) setNetwork(detected.network);
+          if (detected.countryCode) setCountry(detected.countryCode);
+          if (detected.mobileMoneyOperator) setOperator(detected.mobileMoneyOperator);
+          if (detected.networkQuality) setNetwork(detected.networkQuality);
           if (detected.techVersion) setTechVersion(detected.techVersion);
         }}
       />

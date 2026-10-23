@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import type { MissionSummary } from '../../api/provisional-types';
+import type { MissionSummary } from '../../api/types';
 import { Icon } from '../../components/Icon';
 import { formatMoney } from './money';
 import styles from './MissionFacts.module.css';

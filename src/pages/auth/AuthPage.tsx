@@ -47,7 +47,6 @@ export default function AuthPage({ mode }: AuthPageProps) {
       </nav>
 
       <OAuthButtons mode={mode} onSignedIn={onSignedIn} />
-      <p className={styles.or}>{t('auth.or')}</p>
 
       {isRegister ? (
         <RegisterForm key="register" onSignedIn={onSignedIn} />

@@ -60,13 +60,33 @@
     "UNKNOWN_ERROR": "Something went wrong. Try again in a moment.",
     "VALIDATION_ERROR": "Some fields need to be fixed.",
     "INVALID_CREDENTIALS": "Wrong email or password.",
-    "EMAIL_ALREADY_USED": "This address cannot be used. If you already have an account, log in.",
     "TOO_MANY_ATTEMPTS": "Too many attempts. Try again in 15 minutes.",
     "ACCOUNT_SUSPENDED": "This account is suspended. Contact the Zetsu team if you think this is a mistake.",
     "ALREADY_REPORTED": "You already reported this content.",
     "ALREADY_SUBMITTED": "You already submitted a repository for this challenge.",
     "ALREADY_APPEALED": "You have already appealed this decision.",
-    "MAINTENANCE": "Zetsu is under maintenance. Please try again in a few minutes."
+    "MAINTENANCE": "Zetsu is under maintenance. Please try again in a few minutes.",
+    "EMAIL_TAKEN": "This address cannot be used. If you already have an account, sign in.",
+    "LOGIN_LOCKED": "Too many failed attempts. Sign-in is blocked for 15 minutes.",
+    "RATE_LIMITED": "Too many actions in a short time. Please wait a moment and try again.",
+    "UNAUTHENTICATED": "Sign in to continue.",
+    "FORBIDDEN": "You are not allowed to do this.",
+    "CSRF_INVALID": "Your session has expired. Reload the page and try again.",
+    "LEVEL_TOO_LOW": "Your level does not allow this action yet.",
+    "ALREADY_VOTED": "You have already voted for this content.",
+    "CANNOT_VOTE_OWN_CONTENT": "You cannot vote for your own content.",
+    "VOTE_NOT_FOUND": "You had not voted for this content.",
+    "QUESTION_NOT_FOUND": "This question does not exist or was deleted.",
+    "ANSWER_NOT_FOUND": "This answer does not exist or was deleted.",
+    "ANSWER_NOT_IN_QUESTION": "This answer does not belong to the question.",
+    "USER_NOT_FOUND": "This member does not exist.",
+    "NOT_QUESTION_AUTHOR": "Only the author of the question can do this.",
+    "NOT_ANSWER_AUTHOR": "Only the author of the answer can edit it.",
+    "TOO_MANY_TAGS": "Use 4 tags at most.",
+    "TAG_REQUIRED": "Add at least one tag.",
+    "INVALID_TAG": "A tag only contains lowercase letters, digits, hyphens or dots.",
+    "INVALID_COUNTRY": "This country is not recognised.",
+    "INTERNAL_ERROR": "Something went wrong on our side. Please try again in a moment."
   },
   "auth": {
     "browse": "Browse without an account",
@@ -180,15 +200,15 @@
     "operator": {
       "ORANGE_MONEY": "Orange Money",
       "WAVE": "Wave",
-      "MOOV": "Moov Money",
-      "MTN": "MTN Mobile Money",
+      "MOOV_MONEY": "Moov Money",
+      "MTN_MOMO": "MTN Mobile Money",
       "MPESA": "M-Pesa",
       "OTHER": "Other operator"
     },
     "network": {
       "GOOD": "Good network",
       "UNSTABLE": "Unstable network",
-      "VERY_LOW": "Very weak network"
+      "VERY_POOR": "Very weak network"
     }
   },
   "questions": {
@@ -217,7 +237,8 @@
       "search": "Search “{{q}}”",
       "reset": "Clear filters",
       "results_one": "{{count}} result",
-      "results_other": "{{count}} results"
+      "results_other": "{{count}} results",
+      "relevance": "Relevance"
     },
     "row": {
       "votes_one": "vote",
@@ -451,20 +472,27 @@
     },
     "nextLevel": "{{points}} more points to reach {{level}}",
     "progressLabel": "Progress to the next level",
-    "activity": {
-      "QUESTION": "Question",
-      "ANSWER": "Answer",
-      "ACCEPTED_ANSWER": "Accepted answer",
-      "CHALLENGE": "Challenge"
-    },
     "empty": "No activity yet.",
     "emptyMine": "You have not posted anything yet. Your first question earns 5 points.",
     "skillsHint": "Declared technologies. Click one to see questions on that topic.",
     "noSkills": "No technology declared yet.",
-    "badgeLocked": "Not earned yet."
+    "badgeLocked": "Not earned yet.",
+    "reputation": {
+      "QUESTION_ASKED": "Question asked",
+      "QUESTION_UPVOTED": "Upvote on a question",
+      "ANSWER_UPVOTED": "Upvote on an answer",
+      "ANSWER_ACCEPTED": "Answer accepted",
+      "ACCEPTED_AN_ANSWER": "Accepted an answer",
+      "CHALLENGE_VALIDATED": "Challenge validated",
+      "PROJECT_COMPLETED": "Project completed",
+      "SPAM_REMOVED": "Content removed as spam",
+      "seeQuestion": "See the question",
+      "seeAnswer": "See the answer",
+      "noLink": "Community contribution"
+    }
   },
   "levels": {
-    "NEW": "Newcomer",
+    "NEWCOMER": "Newcomer",
     "MEMBER": "Member",
     "CONTRIBUTOR": "Contributor",
     "REFERENT": "Referent"
@@ -532,7 +560,8 @@
       "unlinkLabel": "Disconnect {{name}}",
       "unlinked": "Account disconnected",
       "lastMethod": "This is your only way to log in: it cannot be removed.",
-      "mockOnly": "In mock mode, OAuth login is not available."
+      "mockOnly": "In mock mode, OAuth login is not available.",
+      "unavailable": "Not available yet"
     },
     "appearance": {
       "title": "Appearance and language",
@@ -661,7 +690,7 @@
         }
       },
       "rights": {
-        "NEW": "Ask, answer, apply.",
+        "NEWCOMER": "Ask, answer, apply.",
         "MEMBER": "Vote and report.",
         "CONTRIBUTOR": "Suggest tags, see reports.",
         "REFERENT": "Hide reported content, handle the queue, suggest challenges."

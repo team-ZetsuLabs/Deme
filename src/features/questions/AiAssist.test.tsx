@@ -82,7 +82,12 @@ describe('Assistant de rédaction (IA-1)', () => {
     vi.spyOn(aiApi, 'assistQuestion').mockResolvedValue({
       title: '<img src=x onerror=alert(1)> Titre piégé',
       tags: [],
-      context: { country: null, operator: null, network: null, techVersion: null },
+      context: {
+        countryCode: null,
+        mobileMoneyOperator: null,
+        networkQuality: null,
+        techVersion: null,
+      },
       missing: [],
     });
     renderForm();

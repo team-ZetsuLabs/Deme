@@ -48,7 +48,7 @@ export function useValidatedForm<T extends Values>(initial: T, validators: Valid
   const setServerErrors = (fields: Record<string, string>) => {
     const next: FieldErrors<T> = {};
     for (const [name, text] of Object.entries(fields)) {
-      if (name in values) next[name as keyof T] = { text };
+      if (text && name in values) next[name as keyof T] = { text };
     }
     setErrors((e) => ({ ...e, ...next }));
   };

@@ -1,19 +1,22 @@
 import { api } from '../../api/api';
 import type {
   Answer,
-  Comment,
   AnswerRequest,
+  Comment,
   Page,
   QuestionDetail,
   QuestionRequest,
   QuestionSummary,
   VoteResult,
-} from '../../api/provisional-types';
+} from '../../api/types';
 
 export const PAGE_SIZE = 20;
+/** Réponses chargées avec la question : le serveur en accepte 50 au plus par page. */
+export const ANSWERS_PAGE_SIZE = 50;
 
+/** Valeurs de l'adresse (?status=open), traduites vers celles du contrat dans list(). */
 export type QuestionStatus = 'all' | 'open' | 'solved';
-export type QuestionSort = 'recent' | 'votes';
+export type QuestionSort = 'relevance' | 'recent' | 'votes';
 
 export type QuestionFilters = {
   status: QuestionStatus;
@@ -27,12 +30,18 @@ export type QuestionFilters = {
 
 export type VoteTarget = 'question' | 'answer';
 
+const STATUS = { all: 'ALL', open: 'UNSOLVED', solved: 'SOLVED' } as const;
+const SORT = { relevance: 'RELEVANCE', recent: 'RECENT', votes: 'VOTES' } as const;
+
+const votePath = (target: VoteTarget, id: number) =>
+  `/${target === 'question' ? 'questions' : 'answers'}/${id}/votes`;
+
 export const questionsApi = {
   list: (f: QuestionFilters) =>
     api.get<Page<QuestionSummary>>('/questions', {
       query: {
-        status: f.status === 'all' ? undefined : f.status,
-        sort: f.sort,
+        status: f.status === 'all' ? undefined : STATUS[f.status],
+        sort: SORT[f.sort],
         tag: f.tag,
         country: f.country,
         operator: f.operator,
@@ -43,20 +52,31 @@ export const questionsApi = {
     }),
   /** Recherche plein texte courte, pour les questions similaires (QA-8). */
   search: (q: string, size: number, signal?: AbortSignal) =>
-    api.get<Page<QuestionSummary>>('/questions', { query: { q, page: 0, size }, signal }),
+    api.get<Page<QuestionSummary>>('/questions', {
+      query: { q, sort: SORT.relevance, page: 0, size },
+      signal,
+    }),
   get: (id: number) => api.get<QuestionDetail>(`/questions/${id}`),
+  /** Réponses, réponse acceptée en tête puis par score : l'ordre vient du serveur. */
+  answers: (questionId: number) =>
+    api.get<Page<Answer>>(`/questions/${questionId}/answers`, {
+      query: { page: 0, size: ANSWERS_PAGE_SIZE },
+    }),
   create: (body: QuestionRequest) => api.post<QuestionDetail>('/questions', body),
   answer: (questionId: number, body: AnswerRequest) =>
     api.post<Answer>(`/questions/${questionId}/answers`, body),
   updateAnswer: (answerId: number, body: AnswerRequest) =>
     api.put<Answer>(`/answers/${answerId}`, body),
+  /** L'auteur de la question accepte une réponse (QA-5) ; renvoie la question à jour. */
   accept: (questionId: number, answerId: number) =>
-    api.post<void>(`/questions/${questionId}/accept/${answerId}`),
-  /** POST /questions/{id}/comments ou /answers/{id}/comments (QA-9). */
+    api.put<QuestionDetail>(`/questions/${questionId}/accepted-answer`, { answerId }),
+  /** POST /questions/{id}/comments ou /answers/{id}/comments (QA-9, pas encore dans le contrat). */
   comment: (target: VoteTarget, id: number, body: string) =>
     api.post<Comment>(`/${target === 'question' ? 'questions' : 'answers'}/${id}/comments`, {
       body,
     }),
-  vote: (target: VoteTarget, id: number) => api.put<VoteResult>(`/votes/${target}/${id}`),
-  unvote: (target: VoteTarget, id: number) => api.delete<VoteResult>(`/votes/${target}/${id}`),
+  /** Vote positif (QA-4). Le contrat accepte aussi -1 ; le cahier ne demande que « voter pour ». */
+  vote: (target: VoteTarget, id: number) =>
+    api.post<VoteResult>(votePath(target, id), { value: 1 }),
+  unvote: (target: VoteTarget, id: number) => api.delete<VoteResult>(votePath(target, id)),
 };

@@ -1,199 +1,76 @@
 {
   "items": [
     {
-      "id": 1,
-      "title": "L'API Orange Money renvoie 401 alors que le token est généré",
-      "excerpt": "Le token d'accès est bien récupéré, mais l'appel au endpoint de paiement échoue avec 401 Unauthorized. Faut-il préfixer le header Authorization par Bearer ?",
-      "tags": ["mobile-money", "node.js", "api"],
+      "id": 101,
+      "title": "Comment vérifier une notification de paiement Orange Money côté serveur ?",
+      "excerpt": "Je reçois bien la notification de paiement Orange Money sur mon webhook, mais je ne sais pas comment être sûre qu'elle vient vraiment d'Orange. @PostMapping(\"/webhooks/orange\") public void notify(…",
+      "tags": ["orange-money", "spring-boot", "webhook"],
       "context": {
-        "country": "SN",
-        "operator": "ORANGE_MONEY",
-        "network": "UNSTABLE",
-        "techVersion": "Node.js 20"
+        "countryCode": "SN",
+        "mobileMoneyOperator": "ORANGE_MONEY",
+        "networkQuality": "GOOD"
       },
       "author": {
-        "id": 2,
-        "name": "Awa Kane",
-        "photoUrl": null,
-        "country": "SN",
-        "city": "Dakar",
-        "reputation": 875
+        "username": "aminata_dev",
+        "displayName": "Aminata Diallo",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 342,
+        "level": "MEMBER"
       },
-      "createdAt": "2026-10-21T08:14:00Z",
-      "votes": 14,
-      "answerCount": 3,
-      "solved": true
-    },
-    {
-      "id": 2,
-      "title": "LazyInitializationException sur une relation @OneToMany avec Spring Boot",
-      "excerpt": "Quand le contrôleur renvoie l'entité, j'obtiens could not initialize proxy - no Session. Est-ce qu'un DTO règle vraiment le problème ?",
-      "tags": ["spring-boot", "jpa"],
-      "context": {
-        "country": "BF",
-        "operator": null,
-        "network": "GOOD",
-        "techVersion": "Spring Boot 3.3"
-      },
-      "author": {
-        "id": 3,
-        "name": "Ibrahim Sawadogo",
-        "photoUrl": null,
-        "country": "BF",
-        "city": "Ouagadougou",
-        "reputation": 790
-      },
-      "createdAt": "2026-10-21T06:02:00Z",
-      "votes": 9,
-      "answerCount": 3,
-      "solved": false
-    },
-    {
-      "id": 3,
-      "title": "Garder une app Flutter utilisable quand la connexion coupe",
-      "excerpt": "Mes utilisateurs perdent souvent le réseau. Je cherche une façon simple de mettre les données en cache avec sqflite et de synchroniser au retour de la connexion.",
-      "tags": ["flutter", "hors-ligne", "sqlite"],
-      "context": {
-        "country": "GH",
-        "operator": null,
-        "network": "VERY_LOW",
-        "techVersion": "Flutter 3.24"
-      },
-      "author": {
-        "id": 4,
-        "name": "Kwame Asante",
-        "photoUrl": null,
-        "country": "GH",
-        "city": "Accra",
-        "reputation": 980
-      },
-      "createdAt": "2026-10-20T15:40:00Z",
-      "votes": 21,
+      "score": 7,
       "answerCount": 2,
-      "solved": true
+      "hasAcceptedAnswer": true,
+      "createdAt": "2026-10-19T14:05:00Z"
     },
     {
-      "id": 4,
-      "title": "PostgreSQL dans Docker perd ses données au redémarrage",
-      "excerpt": "Toutes mes tables disparaissent après docker compose down. Je pense qu'il manque un volume, mais je ne vois pas où le déclarer.",
-      "tags": ["docker", "postgresql"],
+      "id": 98,
+      "title": "Mon app React met 12 secondes à charger en 3G à Ouagadougou",
+      "excerpt": "Le bundle fait 1,8 Mo et les utilisateurs abandonnent avant l'affichage. J'ai déjà activé la compression gzip sur Nginx, que puis-je faire de plus ?",
+      "tags": ["performance", "react", "vite"],
       "context": {
-        "country": "CI",
-        "operator": null,
-        "network": null,
-        "techVersion": "PostgreSQL 16"
+        "countryCode": "BF",
+        "mobileMoneyOperator": null,
+        "networkQuality": "UNSTABLE"
       },
       "author": {
-        "id": 5,
-        "name": "Fatou Diallo",
-        "photoUrl": null,
-        "country": "CI",
-        "city": "Abidjan",
-        "reputation": 455
+        "username": "ibrahim_t",
+        "displayName": "Ibrahim Traoré",
+        "avatarUrl": null,
+        "countryCode": "BF",
+        "reputation": 58,
+        "level": "MEMBER"
       },
-      "createdAt": "2026-10-20T11:25:00Z",
-      "votes": 6,
+      "score": 12,
       "answerCount": 0,
-      "solved": false
+      "hasAcceptedAnswer": false,
+      "createdAt": "2026-10-18T09:40:00Z"
     },
     {
-      "id": 5,
-      "title": "Gérer Wave et Moov Money dans la même application Laravel",
-      "excerpt": "Comment structurer le code pour ajouter un nouvel opérateur sans dupliquer toute la logique de paiement ?",
-      "tags": ["laravel", "mobile-money"],
+      "id": 94,
+      "title": "STK Push M-Pesa : le callback n'arrive jamais en production",
+      "excerpt": "En sandbox Daraja tout fonctionne. En production, le client valide le paiement sur son téléphone mais mon callback n'est jamais appelé.",
+      "tags": ["daraja", "mpesa", "nodejs"],
       "context": {
-        "country": "ML",
-        "operator": "WAVE",
-        "network": "UNSTABLE",
-        "techVersion": "Laravel 11"
+        "countryCode": "KE",
+        "mobileMoneyOperator": "MPESA",
+        "networkQuality": "GOOD"
       },
       "author": {
-        "id": 6,
-        "name": "Moussa Traoré",
-        "photoUrl": null,
-        "country": "ML",
-        "city": "Bamako",
-        "reputation": 310
+        "username": "njeri_w",
+        "displayName": "Njeri Wanjiku",
+        "avatarUrl": null,
+        "countryCode": "KE",
+        "reputation": 896,
+        "level": "CONTRIBUTOR"
       },
-      "createdAt": "2026-10-19T09:10:00Z",
-      "votes": 17,
-      "answerCount": 2,
-      "solved": false
-    },
-    {
-      "id": 6,
-      "title": "Webhook M-Pesa STK Push jamais reçu en local",
-      "excerpt": "Le paiement passe sur le téléphone mais mon callback ne reçoit rien. J'utilise ngrok, l'URL est bien en HTTPS. Est-ce que Safaricom bloque certains domaines ?",
-      "tags": ["mpesa", "webhook", "django"],
-      "context": {
-        "country": "KE",
-        "operator": "MPESA",
-        "network": "GOOD",
-        "techVersion": "Django 5.0"
-      },
-      "author": {
-        "id": 7,
-        "name": "Grace Njeri",
-        "photoUrl": null,
-        "country": "KE",
-        "city": "Nairobi",
-        "reputation": 640
-      },
-      "createdAt": "2026-10-18T17:55:00Z",
-      "votes": 11,
-      "answerCount": 1,
-      "solved": true
-    },
-    {
-      "id": 7,
-      "title": "Réduire le poids d'une page React pour la 3G",
-      "excerpt": "Ma page d'accueil fait 1,8 Mo et met 12 secondes à s'afficher sur un réseau lent. Par où commencer : images, polices ou découpage du JavaScript ?",
-      "tags": ["react", "performance", "vite"],
-      "context": {
-        "country": "CM",
-        "operator": null,
-        "network": "VERY_LOW",
-        "techVersion": "React 18"
-      },
-      "author": {
-        "id": 8,
-        "name": "Aïcha Ouattara",
-        "photoUrl": null,
-        "country": "BF",
-        "city": "Bobo-Dioulasso",
-        "reputation": 120
-      },
-      "createdAt": "2026-10-18T07:30:00Z",
-      "votes": 8,
-      "answerCount": 4,
-      "solved": false
-    },
-    {
-      "id": 8,
-      "title": "MTN MoMo API : différence entre le sandbox et la production pour X-Target-Environment",
-      "excerpt": "En sandbox tout marche avec la valeur sandbox. En production, quelle valeur mettre pour le Cameroun ? La documentation parle de mtncameroon mais j'ai une erreur 500.",
-      "tags": ["mtn-momo", "api", "php"],
-      "context": {
-        "country": "CM",
-        "operator": "MTN",
-        "network": "UNSTABLE",
-        "techVersion": "PHP 8.3"
-      },
-      "author": {
-        "id": 11,
-        "name": "Paul Nkeng",
-        "photoUrl": null,
-        "country": "CM",
-        "city": "Douala",
-        "reputation": 215
-      },
-      "createdAt": "2026-10-17T13:05:00Z",
-      "votes": 5,
-      "answerCount": 1,
-      "solved": false
+      "score": 21,
+      "answerCount": 3,
+      "hasAcceptedAnswer": true,
+      "createdAt": "2026-10-16T17:22:00Z"
     }
   ],
   "page": 0,
   "size": 20,
-  "total": 8
+  "total": 134
 }

@@ -1,6 +1,6 @@
 import { useRef, useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Me } from '../../api/provisional-types';
+import type { Me } from '../../api/types';
 import { errorMessage } from '../../api/errorMessage';
 import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
@@ -53,13 +53,13 @@ export function PhotoField({ user }: PhotoFieldProps) {
 
   return (
     <div className={styles.row}>
-      <Avatar name={user.name} photoUrl={user.photoUrl} size={72} />
+      <Avatar name={user.displayName} photoUrl={user.avatarUrl ?? null} size={72} />
       <div>
         <div className={styles.actions}>
           <Button size="sm" busy={busy} onClick={() => inputRef.current?.click()}>
             {t('settings.photo.change')}
           </Button>
-          {user.photoUrl && (
+          {user.avatarUrl && (
             <Button size="sm" variant="ghost" disabled={busy} onClick={onRemove}>
               {t('settings.photo.remove')}
             </Button>

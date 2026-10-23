@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Me } from '../../api/provisional-types';
+import type { Me } from '../../api/types';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
 import { describedBy } from '../../components/fieldIds';
@@ -36,18 +36,21 @@ export function ProfileSection({ user }: ProfileSectionProps) {
   const { t } = useTranslation();
   const { updateMe } = useSession();
   const toast = useToast();
-  const initial = { name: user.name, city: user.city ?? '', bio: user.bio ?? '' };
+  const initial = { name: user.displayName, city: user.city ?? '', bio: user.bio ?? '' };
   const form = useValidatedForm<ProfileValues>(initial, VALIDATORS);
-  const submitError = useSubmitError(form.setServerErrors);
-  const [skills, setSkills] = useState(user.skills);
-  const [recruiterVisible, setRecruiterVisible] = useState(user.recruiterVisible);
+  // Le contrat nomme le champ du nom displayName.
+  const submitError = useSubmitError(({ displayName, ...rest }) =>
+    form.setServerErrors({ ...rest, name: displayName }),
+  );
+  const [skills, setSkills] = useState(user.skills ?? []);
+  const [recruiterVisible, setRecruiterVisible] = useState(user.visibleToRecruiters);
   const [busy, setBusy] = useState(false);
   const { values, errors } = form;
 
   const reset = () => {
     form.reset(initial);
-    setSkills(user.skills);
-    setRecruiterVisible(user.recruiterVisible);
+    setSkills(user.skills ?? []);
+    setRecruiterVisible(user.visibleToRecruiters);
     submitError.clear();
   };
 
@@ -62,11 +65,11 @@ export function ProfileSection({ user }: ProfileSectionProps) {
     setBusy(true);
     try {
       await updateMe({
-        name: values.name.trim(),
+        displayName: values.name.trim(),
         city: values.city.trim() || null,
         bio: values.bio.trim() || null,
         skills,
-        recruiterVisible,
+        visibleToRecruiters: recruiterVisible,
       });
       toast(t('settings.saved'));
     } catch (error) {

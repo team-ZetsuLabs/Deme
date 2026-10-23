@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import i18n from '../../i18n';
-import type { Me } from '../../api/provisional-types';
+import type { Me } from '../../api/types';
 import { safeUrl } from '../../components/safeUrl';
 import { ToastProvider } from '../../components/ToastProvider';
 import JobPage from '../../pages/job/JobPage';
@@ -12,24 +12,12 @@ import { SessionProvider } from '../auth/SessionProvider';
 import { JobForm } from './JobForm';
 import { jobsApi } from './jobsApi';
 import { cvError, validateWebsite } from './validation';
+import { demoMe } from '../../test/fixtures';
 
-const member: Me = {
-  id: 9,
-  name: 'Aminata Ouédraogo',
-  email: 'aminata.ouedraogo@example.com',
-  country: 'BF',
-  city: 'Ouagadougou',
-  photoUrl: null,
-  bio: null,
-  reputation: 120,
-  level: 'MEMBER',
-  language: 'fr',
+const member: Me = demoMe({
   skills: ['spring-boot', 'docker', 'flutter'],
-  recruiterVisible: true,
-  providers: [],
-  hasPassword: true,
-  onboarded: true,
-};
+  visibleToRecruiters: true,
+});
 
 const wrap = (ui: ReactNode, path = '/') =>
   render(

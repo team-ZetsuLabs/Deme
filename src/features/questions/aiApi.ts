@@ -1,5 +1,5 @@
 import { api, ApiError } from '../../api/api';
-import type { QuestionAssist, QuestionAssistRequest } from '../../api/provisional-types';
+import type { QuestionAssist, QuestionAssistRequest } from '../../api/types';
 
 /** Sans réponse dans ce délai, l'assistant s'efface et le formulaire reste utilisable (IA-1). */
 export const AI_TIMEOUT_MS = 8000;

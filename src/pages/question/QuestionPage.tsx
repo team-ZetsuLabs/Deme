@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { Answer } from '../../api/provisional-types';
+import type { Answer, QuestionDetail } from '../../api/types';
 import { ApiError } from '../../api/api';
 import { errorMessage } from '../../api/errorMessage';
 import { buttonClass } from '../../components/buttonClass';
@@ -38,7 +38,7 @@ function sortAnswers(answers: Answer[], sort: AnswerSort): Answer[] {
     (a, b) =>
       Number(b.accepted) - Number(a.accepted) ||
       (sort === 'votes'
-        ? b.votes - a.votes
+        ? b.score - a.score
         : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
   );
 }
@@ -56,28 +56,38 @@ function QuestionView({ id }: { id: number }) {
   const location = useLocation();
   const [sort, setSort] = useState<AnswerSort>('votes');
   const [acceptingId, setAcceptingId] = useState<number | null>(null);
-  const query = useApiQuery(() => questionsApi.get(id), [id]);
-  const q = query.data;
+  // La question et ses réponses sont deux appels du contrat, lancés ensemble.
+  const query = useApiQuery(
+    () =>
+      Promise.all([questionsApi.get(id), questionsApi.answers(id)]).then(([question, page]) => ({
+        question,
+        answers: page.items,
+      })),
+    [id],
+  );
+  const q = query.data?.question;
   usePageTitle(q?.title ?? t('question.crumbQuestion'));
 
   // Un contenu masqué n'est visible que par son auteur (MOD-2) : le serveur filtre déjà, on reste prudent.
   const answers = useMemo(
     () =>
-      q
-        ? sortAnswers(
-            q.answers.filter((a) => !a.hidden || a.author.id === user?.id),
-            sort,
-          )
-        : [],
-    [q, sort, user?.id],
+      sortAnswers(
+        (query.data?.answers ?? []).filter((a) => !a.hidden || a.canEdit),
+        sort,
+      ),
+    [query.data, sort],
   );
 
   if (query.loading) return <QuestionDetailSkeleton />;
   if (query.error instanceof ApiError && query.error.status === 404) return <NotFoundPage />;
   if (query.error || !q) return <ErrorState error={query.error} onRetry={query.reload} />;
 
-  const isAuthor = user?.id === q.author.id;
+  const isAuthor = !!user && user.username === q.author.username;
   if (q.hidden && !isAuthor) return <NotFoundPage />;
+  const answerCount = query.data?.answers.length ?? 0;
+
+  const setQuestion = (update: (question: QuestionDetail) => QuestionDetail) =>
+    query.setData((current) => ({ ...current, question: update(current.question) }));
 
   const updateAnswer = (answerId: number, change: Partial<Answer>) =>
     query.setData((current) => ({
@@ -88,9 +98,9 @@ function QuestionView({ id }: { id: number }) {
   const onAccept = async (answer: Answer) => {
     setAcceptingId(answer.id);
     try {
-      await questionsApi.accept(q.id, answer.id);
+      const updated = await questionsApi.accept(q.id, answer.id);
       query.setData((current) => ({
-        ...current,
+        question: { ...current.question, ...updated },
         answers: current.answers.map((a) => ({ ...a, accepted: a.id === answer.id })),
       }));
       toast(t('question.accepted'));
@@ -135,8 +145,7 @@ function QuestionView({ id }: { id: number }) {
           <span>
             <Icon name="cal" size={14} /> {t('question.asked')} <RelativeTime iso={q.createdAt} />
           </span>
-          <span>{t('question.views', { count: q.views })}</span>
-          <span>{t('question.answers', { count: q.answers.length })}</span>
+          <span>{t('question.answers', { count: answerCount })}</span>
         </div>
         <div className={styles.context}>
           <ContextChips context={q.context} />
@@ -147,10 +156,10 @@ function QuestionView({ id }: { id: number }) {
             <VoteControl
               target="question"
               id={q.id}
-              authorId={q.author.id}
-              votes={q.votes}
-              voted={q.voted}
-              onChange={(votes, voted) => query.setData((c) => ({ ...c, votes, voted }))}
+              authorUsername={q.author.username}
+              score={q.score}
+              myVote={q.myVote}
+              onChange={(score, myVote) => setQuestion((c) => ({ ...c, score, myVote }))}
             />
           </div>
           <div className={detail.content}>
@@ -159,7 +168,7 @@ function QuestionView({ id }: { id: number }) {
                 targetType="QUESTION"
                 targetId={q.id}
                 hidden={q.hidden}
-                onAppealed={(hidden) => query.setData((c) => ({ ...c, hidden }))}
+                onAppealed={(hidden) => setQuestion((c) => ({ ...c, hidden }))}
               />
             )}
             <MemberContent html={q.bodyHtml} />
@@ -175,7 +184,11 @@ function QuestionView({ id }: { id: number }) {
                     </li>
                   ))}
                 </ul>
-                <ReportButton targetType="QUESTION" targetId={q.id} authorId={q.author.id} />
+                <ReportButton
+                  targetType="QUESTION"
+                  targetId={q.id}
+                  authorUsername={q.author.username}
+                />
               </div>
               <AuthorCard author={q.author} label={t('question.askedBy')} />
             </div>
@@ -184,7 +197,7 @@ function QuestionView({ id }: { id: number }) {
               targetId={q.id}
               comments={q.comments ?? []}
               onAdded={(comment) =>
-                query.setData((c) => ({ ...c, comments: [...(c.comments ?? []), comment] }))
+                setQuestion((c) => ({ ...c, comments: [...(c.comments ?? []), comment] }))
               }
             />
           </div>
@@ -192,10 +205,8 @@ function QuestionView({ id }: { id: number }) {
       </article>
 
       <div className={styles.toolbar}>
-        <h2 className={styles.sectionTitle}>
-          {t('question.answers', { count: q.answers.length })}
-        </h2>
-        {q.answers.length > 1 && (
+        <h2 className={styles.sectionTitle}>{t('question.answers', { count: answerCount })}</h2>
+        {answerCount > 1 && (
           <Segmented<AnswerSort>
             label={t('question.sort')}
             value={sort}
@@ -208,10 +219,7 @@ function QuestionView({ id }: { id: number }) {
         )}
       </div>
 
-      <section
-        className={styles.panel}
-        aria-label={t('question.answers', { count: q.answers.length })}
-      >
+      <section className={styles.panel} aria-label={t('question.answers', { count: answerCount })}>
         {answers.length === 0 ? (
           <StateMessage>{t('question.noAnswers')}</StateMessage>
         ) : (
@@ -220,14 +228,16 @@ function QuestionView({ id }: { id: number }) {
               key={a.id}
               answer={a}
               canAccept={isAuthor}
-              isOwn={user?.id === a.author.id}
-              sameCountry={!!q.context.country && a.author.country === q.context.country}
               accepting={acceptingId === a.id}
               onAccept={() => onAccept(a)}
-              onVote={(votes, voted) => updateAnswer(a.id, { votes, voted })}
+              onVote={(score, myVote) => updateAnswer(a.id, { score, myVote })}
               onEdited={(updated) => updateAnswer(a.id, updated)}
               extraActions={
-                <ReportButton targetType="ANSWER" targetId={a.id} authorId={a.author.id} />
+                <ReportButton
+                  targetType="ANSWER"
+                  targetId={a.id}
+                  authorUsername={a.author.username}
+                />
               }
             />
           ))

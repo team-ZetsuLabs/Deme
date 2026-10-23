@@ -53,9 +53,11 @@ export function SimilarQuestions({ title }: SimilarQuestionsProps) {
                   {q.title}
                   <span className="sr-only"> {t('ask.similar.newTab')}</span>
                 </Link>
-                <span className={q.solved ? `${styles.meta} ${styles.solved}` : styles.meta}>
-                  {q.solved && <Icon name="check" size={12} />}
-                  {q.solved
+                <span
+                  className={q.hasAcceptedAnswer ? `${styles.meta} ${styles.solved}` : styles.meta}
+                >
+                  {q.hasAcceptedAnswer && <Icon name="check" size={12} />}
+                  {q.hasAcceptedAnswer
                     ? t('questions.row.solved')
                     : t('question.answers', { count: q.answerCount })}
                 </span>

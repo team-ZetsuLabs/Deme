@@ -82,23 +82,6 @@
   box-shadow: inset 0 0 0 1px var(--line-strong);
 }
 
-.or {
-  display: flex;
-  align-items: center;
-  gap: var(--s3);
-  margin: var(--s5) 0;
-  color: var(--text-3);
-  font-size: var(--fs-sm);
-}
-
-.or::before,
-.or::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--line);
-}
-
 .spaced {
   margin-top: var(--s5);
 }
