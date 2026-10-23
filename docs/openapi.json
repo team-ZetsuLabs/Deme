@@ -2730,14 +2730,6 @@
         "summary" : "Jeton CSRF courant",
         "description" : "Pose aussi le cookie XSRF-TOKEN. À appeler au démarrage du front.",
         "operationId" : "authCsrf",
-        "parameters" : [ {
-          "name" : "token",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/components/schemas/CsrfToken"
-          }
-        } ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -4424,17 +4416,17 @@
       },
       "CsrfToken" : {
         "type" : "object",
+        "description" : "À renvoyer dans l'en-tête headerName sur chaque POST, PUT, PATCH, DELETE. Le même jeton est aussi posé dans le cookie XSRF-TOKEN.",
         "properties" : {
           "headerName" : {
-            "type" : "string"
+            "type" : "string",
+            "example" : "X-XSRF-TOKEN"
           },
           "token" : {
             "type" : "string"
-          },
-          "parameterName" : {
-            "type" : "string"
           }
-        }
+        },
+        "required" : [ "headerName", "token" ]
       },
       "PageResponseJobDetail" : {
         "type" : "object",

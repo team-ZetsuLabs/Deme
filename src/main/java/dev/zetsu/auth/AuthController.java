@@ -6,6 +6,7 @@ import dev.zetsu.common.RateLimiter;
 import dev.zetsu.user.UserDtos.Me;
 import dev.zetsu.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -62,7 +63,7 @@ public class AuthController {
 
     @GetMapping("/csrf")
     @Operation(summary = "Jeton CSRF courant", description = "Pose aussi le cookie XSRF-TOKEN. À appeler au démarrage du front.")
-    public AuthDtos.CsrfTokenResponse csrf(CsrfToken token) {
+    public AuthDtos.CsrfTokenResponse csrf(@Parameter(hidden = true) CsrfToken token) {
         return new AuthDtos.CsrfTokenResponse(token.getHeaderName(), token.getToken());
     }
 
