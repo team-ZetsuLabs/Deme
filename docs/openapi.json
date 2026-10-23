@@ -16,14 +16,20 @@
     "name" : "answers",
     "description" : "Réponses aux questions et réponse acceptée"
   }, {
-    "name" : "votes",
-    "description" : "Votes +1 / -1 sur les questions et les réponses"
+    "name" : "moderation",
+    "description" : "Signalements et file des Référents"
   }, {
     "name" : "admin",
     "description" : "Back office de l'équipe (Modérateur, Administrateur)"
   }, {
+    "name" : "votes",
+    "description" : "Votes +1 / -1 sur les questions et les réponses"
+  }, {
     "name" : "auth",
     "description" : "Inscription, connexion par email ou OAuth, session"
+  }, {
+    "name" : "challenges",
+    "description" : "Défis, dépôts et classement"
   }, {
     "name" : "notifications",
     "description" : "Notifications dans l'application"
@@ -167,6 +173,94 @@
               "application/json" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/avatar" : {
+      "put" : {
+        "tags" : [ "users" ],
+        "summary" : "Changer sa photo de profil (SET-1)",
+        "description" : "Formulaire multipart, champ photo : PNG, JPG ou WebP de 2 Mo maximum, vérifié par son contenu et pas par son nom. Stockée hors du dossier public sous un nom régénéré ; avatarUrl change à chaque nouvelle photo, on peut donc la garder en cache.",
+        "operationId" : "userUpdateAvatar",
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AvatarForm"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Profil à jour, avatarUrl pointe vers la nouvelle photo",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "PHOTO_REQUIRED, PHOTO_TYPE, PHOTO_TOO_LARGE, FILE_TOO_LARGE (plus de 5 Mo)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "users" ],
+        "summary" : "Retirer sa photo de profil",
+        "description" : "Le front affiche alors les initiales.",
+        "operationId" : "userDeleteAvatar",
+        "responses" : {
+          "200" : {
+            "description" : "Profil à jour, avatarUrl à null",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Me"
                 }
               }
             }
@@ -681,6 +775,388 @@
         }
       }
     },
+    "/api/v1/admin/users/{id}/role" : {
+      "put" : {
+        "tags" : [ "admin" ],
+        "summary" : "Changer le rôle d'un compte",
+        "description" : "Administrateur seulement. Pris en compte à la prochaine requête du membre. Un Administrateur ne peut pas retirer son propre rôle.",
+        "operationId" : "userAdminChangeRole",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RoleChangeRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Rôle changé",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminUser"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN, CANNOT_CHANGE_OWN_ROLE",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "USER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "USER_NOT_ACTIVE",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/challenges/{id}" : {
+      "put" : {
+        "tags" : [ "admin" ],
+        "summary" : "Modifier un défi",
+        "description" : "Tout est modifiable avant le début ; une fois commencé, seuls l'énoncé, les spécifications et la date de fin (repoussée) changent.",
+        "operationId" : "challengeAdminUpdate",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ChallengeRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Défi à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Challenge"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG, INVALID_PERIOD",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "CHALLENGE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "CHALLENGE_OVERLAP, CHALLENGE_STARTED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/connections/{provider}" : {
+      "post" : {
+        "tags" : [ "users" ],
+        "summary" : "Commencer la liaison d'un compte",
+        "description" : "Note dans la session que la prochaine connexion OAuth doit être liée au membre connecté, puis renvoie l'adresse vers laquelle naviguer. Au retour, le serveur renvoie vers FRONT_URL/settings?linked=github, ou ?linkError=ALREADY_LINKED_ELSEWHERE si ce compte GitHub ou Google appartient déjà à un autre membre.",
+        "operationId" : "connectionLink",
+        "parameters" : [ {
+          "name" : "provider",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Adresse d'autorisation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LinkStart"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROVIDER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "ALREADY_LINKED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "users" ],
+        "summary" : "Délier un compte",
+        "description" : "Refusé si c'est le dernier moyen de connexion (pas de mot de passe, aucun autre compte lié).",
+        "operationId" : "connectionUnlink",
+        "parameters" : [ {
+          "name" : "provider",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Comptes à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Connections"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROVIDER_NOT_FOUND, NOT_LINKED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "LAST_LOGIN_METHOD",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reports" : {
+      "post" : {
+        "tags" : [ "moderation" ],
+        "summary" : "Signaler un contenu (MOD-1)",
+        "description" : "À partir du niveau Membre. Un signalement par membre et par contenu. Au 5e signalement de comptes distincts, le contenu est masqué pour tous sauf son auteur (MOD-2) ; le seuil est dans la configuration.",
+        "operationId" : "moderationReport",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ReportRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Signalement enregistré",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ReportReceipt"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "LEVEL_TOO_LOW, CANNOT_REPORT_OWN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "TARGET_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "ALREADY_REPORTED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/questions" : {
       "get" : {
         "tags" : [ "questions" ],
@@ -1160,6 +1636,184 @@
           },
           "401" : {
             "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/moderation/cases/{id}/decision" : {
+      "post" : {
+        "tags" : [ "moderation" ],
+        "summary" : "Ignorer ou masquer un contenu signalé (MOD-3)",
+        "description" : "Réservé aux Référents, et seulement DISMISS ou HIDE (le motif est obligatoire pour HIDE). La décision est enregistrée et l'auteur est notifié ; il peut la contester devant l'équipe.",
+        "operationId" : "moderationDecide",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CaseDecisionRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Dossier à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ModerationCase"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, NOTE_REQUIRED, ACTION_NOT_ALLOWED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "LEVEL_TOO_LOW, CANNOT_MODERATE_OWN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "CASE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "CASE_ALREADY_DECIDED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/moderation/cases/{id}/appeal" : {
+      "post" : {
+        "tags" : [ "moderation" ],
+        "summary" : "Contester le masquage de son contenu",
+        "description" : "Par l'auteur du contenu, une seule fois par dossier. Le dossier passe « APPEALED » et arrive dans le back office de l'équipe.",
+        "operationId" : "moderationAppeal",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AppealRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Contestation enregistrée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MyModeratedContent"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "CASE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "CASE_NOT_HIDDEN, ALREADY_APPEALED",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1922,6 +2576,95 @@
         }
       }
     },
+    "/api/v1/challenges/{id}/submissions" : {
+      "post" : {
+        "tags" : [ "challenges" ],
+        "summary" : "Déposer son dépôt GitHub (CH-2)",
+        "description" : "Un dépôt par membre et par défi, tant que le défi est « OPEN ». Seul le format de l'adresse est vérifié ; l'équipe ouvre le dépôt en notant.",
+        "operationId" : "challengeSubmit",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SubmissionRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Dépôt enregistré",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MySubmission"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "CHALLENGE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "ALREADY_SUBMITTED, CHALLENGE_NOT_OPEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/register" : {
       "post" : {
         "tags" : [ "auth" ],
@@ -2177,6 +2920,462 @@
         }
       }
     },
+    "/api/v1/admin/users/{id}/suspend" : {
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Suspendre un compte",
+        "description" : "Appliqué côté serveur : connexion refusée (ACCOUNT_SUSPENDED) et sessions ouvertes fermées à la requête suivante. Ses contenus restent visibles. Impossible sur soi-même ou sur un membre de l'équipe.",
+        "operationId" : "userAdminSuspend",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SuspendRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Compte suspendu",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminUser"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN, CANNOT_SUSPEND_STAFF",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "USER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "USER_NOT_ACTIVE",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/users/{id}/reactivate" : {
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Réactiver un compte suspendu",
+        "operationId" : "userAdminReactivate",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Compte actif",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminUser"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "USER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "USER_NOT_SUSPENDED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/tags" : {
+      "get" : {
+        "tags" : [ "admin" ],
+        "summary" : "Étiquettes et leurs usages",
+        "description" : "q filtre par début de nom. unused=true ne garde que les étiquettes que plus rien n'utilise. Par ordre alphabétique.",
+        "operationId" : "tagAdminList",
+        "parameters" : [ {
+          "name" : "q",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "unused",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 50
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page d'étiquettes",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseAdminTag"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Créer une étiquette",
+        "description" : "Le nom est mis en minuscules.",
+        "operationId" : "tagAdminCreate",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TagRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Étiquette créée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminTag"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "TAG_EXISTS",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/tags/{name}/merge" : {
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Fusionner une étiquette dans une autre",
+        "description" : "Questions, offres, missions et stacks passent sur l'étiquette cible, sans doublon ; l'étiquette fusionnée disparaît. Renvoie l'étiquette cible.",
+        "operationId" : "tagAdminMerge",
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TagMergeRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Étiquette cible, usages à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminTag"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, SAME_TAG",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "TAG_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/submissions/{id}/review" : {
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Noter un dépôt (CH-3)",
+        "description" : "Note sur 100 et validation. Un dépôt validé rapporte +20 de réputation (CHALLENGE_VALIDATED), une seule fois ; une note corrigée plus tard ne change pas les points, un passage de VALIDATED à REJECTED les retire. Le membre est notifié.",
+        "operationId" : "challengeAdminReview",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SubmissionReviewRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Dépôt noté",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminSubmission"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "SUBMISSION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/admin/jobs/{id}/decision" : {
       "post" : {
         "tags" : [ "admin" ],
@@ -2255,6 +3454,220 @@
           },
           "409" : {
             "description" : "JOB_NOT_PENDING",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/challenges" : {
+      "get" : {
+        "tags" : [ "admin" ],
+        "summary" : "Tous les défis",
+        "description" : "Les plus récents d'abord, « UPCOMING » compris.",
+        "operationId" : "challengeAdminList",
+        "parameters" : [ {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "UPCOMING", "OPEN", "CLOSED" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de défis",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseChallenge"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Créer un défi",
+        "description" : "endsAt après startsAt. Deux défis ne peuvent pas se chevaucher. Au début du défi, les membres sont notifiés (CHALLENGE_STARTED).",
+        "operationId" : "challengeAdminCreate",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ChallengeRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Défi créé",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Challenge"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG, INVALID_PERIOD",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "CHALLENGE_OVERLAP",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/cases/{id}/decision" : {
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Trancher un dossier",
+        "description" : "Toutes les actions : ignorer, masquer, rétablir (contestation acceptée), avertir ou suspendre l'auteur (le contenu est aussi masqué). Le motif est obligatoire sauf pour DISMISS et RESTORE. Peut revenir sur la décision d'un Référent. L'annulation pendant 6 secondes se fait côté front, avant l'envoi.",
+        "operationId" : "moderationAdminDecide",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CaseDecisionRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Dossier à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ModerationCase"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, NOTE_REQUIRED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "CASE_NOT_FOUND",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -2426,6 +3839,128 @@
           },
           "404" : {
             "description" : "USER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{username}/avatar/{file}" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "summary" : "Photo de profil d'un membre",
+        "description" : "Ne pas construire cette adresse : utiliser avatarUrl. Réponse image/png, image/jpeg ou image/webp, en cache un an (le nom change avec la photo).",
+        "operationId" : "userAvatar",
+        "parameters" : [ {
+          "name" : "username",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "file",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "L'image",
+            "content" : {
+              "image/png" : { },
+              "image/jpeg" : { },
+              "image/webp" : { }
+            }
+          },
+          "404" : {
+            "description" : "AVATAR_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/moderation" : {
+      "get" : {
+        "tags" : [ "moderation" ],
+        "summary" : "Mes contenus masqués",
+        "description" : "Contenus du membre connecté masqués, contestés ou rétablis, avec la décision et la possibilité de contester. Les plus récents d'abord.",
+        "operationId" : "moderationMine",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de contenus",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseMyModeratedContent"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/connections" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "summary" : "Mes comptes connectés",
+        "description" : "Un élément par fournisseur activé sur ce serveur.",
+        "operationId" : "connectionList",
+        "responses" : {
+          "200" : {
+            "description" : "Les comptes",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Connections"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -2628,6 +4163,73 @@
         }
       }
     },
+    "/api/v1/moderation/cases" : {
+      "get" : {
+        "tags" : [ "moderation" ],
+        "summary" : "File des signalements (MOD-3)",
+        "description" : "À partir du niveau Contributeur (lecture) ; seul un Référent peut décider. Les dossiers sans décision (« OPEN », ou « HIDDEN » après un masquage automatique), les plus signalés d'abord. Un membre ne voit jamais les dossiers de ses propres contenus.",
+        "operationId" : "moderationQueue",
+        "parameters" : [ {
+          "name" : "targetType",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de dossiers",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseModerationCase"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "LEVEL_TOO_LOW",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/jobs/mine" : {
       "get" : {
         "tags" : [ "jobs" ],
@@ -2665,6 +4267,132 @@
           },
           "401" : {
             "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/challenges/{id}" : {
+      "get" : {
+        "tags" : [ "challenges" ],
+        "summary" : "Un défi",
+        "description" : "Les défis « UPCOMING » ne sont visibles que dans le back office.",
+        "operationId" : "challengeGet",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Le défi",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Challenge"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "CHALLENGE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/challenges/{id}/leaderboard" : {
+      "get" : {
+        "tags" : [ "challenges" ],
+        "summary" : "Classement d'un défi (CH-1)",
+        "description" : "Dépôts validés seulement, meilleure note d'abord, puis le dépôt le plus ancien. Vide tant que rien n'est noté.",
+        "operationId" : "challengeLeaderboard",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page du classement",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseLeaderboardEntry"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "CHALLENGE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/challenges/current" : {
+      "get" : {
+        "tags" : [ "challenges" ],
+        "summary" : "Défi en cours (CH-1)",
+        "description" : "Le défi « OPEN » ; à défaut, le dernier défi « CLOSED », pour garder son classement visible.",
+        "operationId" : "challengeCurrent",
+        "responses" : {
+          "200" : {
+            "description" : "Le défi",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Challenge"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "NO_CURRENT_CHALLENGE",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -2799,6 +4527,88 @@
         }
       }
     },
+    "/api/v1/admin/users" : {
+      "get" : {
+        "tags" : [ "admin" ],
+        "summary" : "Rechercher des comptes",
+        "description" : "q cherche dans le pseudo, le nom et l'email. Les plus récents d'abord.",
+        "operationId" : "userAdminList",
+        "parameters" : [ {
+          "name" : "q",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "ACTIVE", "SUSPENDED", "DELETED" ]
+          }
+        }, {
+          "name" : "role",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "MEMBER", "RECRUITER", "MODERATOR", "ADMIN" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de comptes",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseAdminUser"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/admin/jobs" : {
       "get" : {
         "tags" : [ "admin" ],
@@ -2856,6 +4666,227 @@
           },
           "403" : {
             "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/challenges/{id}/submissions" : {
+      "get" : {
+        "tags" : [ "admin" ],
+        "summary" : "Dépôts d'un défi",
+        "description" : "Par défaut ceux à noter (« PENDING »), les plus anciens d'abord.",
+        "operationId" : "challengeAdminSubmissions",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "PENDING",
+            "enum" : [ "PENDING", "VALIDATED", "REJECTED" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de dépôts",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseAdminSubmission"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "CHALLENGE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/cases" : {
+      "get" : {
+        "tags" : [ "admin" ],
+        "summary" : "Signalements et contestations",
+        "description" : "Sans filtre : les dossiers « APPEALED » d'abord, puis ceux sans décision, les plus signalés d'abord.",
+        "operationId" : "moderationAdminList",
+        "parameters" : [ {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "OPEN", "DISMISSED", "HIDDEN", "APPEALED", "RESTORED" ]
+          }
+        }, {
+          "name" : "targetType",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de dossiers",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseModerationCase"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/tags/{name}" : {
+      "delete" : {
+        "tags" : [ "admin" ],
+        "summary" : "Supprimer une étiquette inutilisée",
+        "operationId" : "tagAdminDelete",
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Étiquette supprimée"
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "TAG_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "TAG_IN_USE",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -3052,6 +5083,18 @@
           }
         },
         "required" : [ "countryCode", "language", "technologies" ]
+      },
+      "AvatarForm" : {
+        "type" : "object",
+        "description" : "Formulaire multipart de photo de profil (SET-1)",
+        "properties" : {
+          "photo" : {
+            "type" : "string",
+            "format" : "binary",
+            "description" : "PNG, JPG ou WebP, 2 Mo maximum"
+          }
+        },
+        "required" : [ "photo" ]
       },
       "AcceptAnswerRequest" : {
         "type" : "object",
@@ -3610,6 +5653,276 @@
         },
         "required" : [ "accepted", "author", "bodyHtml", "bodyMarkdown", "canEdit", "createdAt", "id", "questionId", "sameContext", "score", "updatedAt" ]
       },
+      "RoleChangeRequest" : {
+        "type" : "object",
+        "description" : "Changement de rôle, par un Administrateur seulement",
+        "properties" : {
+          "role" : {
+            "type" : "string",
+            "enum" : [ "MEMBER", "RECRUITER", "MODERATOR", "ADMIN" ]
+          }
+        },
+        "required" : [ "role" ]
+      },
+      "AdminUser" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "username" : {
+            "type" : "string",
+            "example" : "kofi_mensah"
+          },
+          "displayName" : {
+            "type" : "string",
+            "example" : "Kofi Mensah"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "Null pour un compte supprimé (AUTH-6)",
+            "example" : "kofi@exemple.gh"
+          },
+          "avatarUrl" : {
+            "type" : "string"
+          },
+          "countryCode" : {
+            "type" : "string",
+            "example" : "GH"
+          },
+          "role" : {
+            "type" : "string",
+            "enum" : [ "MEMBER", "RECRUITER", "MODERATOR", "ADMIN" ]
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "ACTIVE", "SUSPENDED", "DELETED" ]
+          },
+          "reputation" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "level" : {
+            "type" : "string",
+            "enum" : [ "NEWCOMER", "MEMBER", "CONTRIBUTOR", "REFERENT" ]
+          },
+          "hiddenContentCount" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Contenus de ce membre actuellement masqués",
+            "example" : 0
+          },
+          "warningCount" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Avertissements reçus de l'équipe",
+            "example" : 0
+          },
+          "suspensionReason" : {
+            "type" : "string",
+            "description" : "Motif de la suspension en cours"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "createdAt", "displayName", "hiddenContentCount", "id", "level", "reputation", "role", "status", "username", "warningCount" ]
+      },
+      "ChallengeRequest" : {
+        "type" : "object",
+        "description" : "Création ou modification d'un défi par l'équipe",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "example" : "Un menu USSD de paiement de facture",
+            "maxLength" : 120,
+            "minLength" : 10
+          },
+          "statement" : {
+            "type" : "string",
+            "description" : "Markdown",
+            "maxLength" : 10000,
+            "minLength" : 50
+          },
+          "specifications" : {
+            "type" : "string",
+            "description" : "Markdown",
+            "maxLength" : 20000,
+            "minLength" : 50
+          },
+          "technologies" : {
+            "type" : "array",
+            "example" : [ "ussd", "node.js" ],
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 5,
+            "minItems" : 0
+          },
+          "startsAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "endsAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "endsAt", "specifications", "startsAt", "statement", "technologies", "title" ]
+      },
+      "Challenge" : {
+        "type" : "object",
+        "description" : "Un défi (CH-1)",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string",
+            "example" : "Un menu USSD de paiement de facture"
+          },
+          "statementMarkdown" : {
+            "type" : "string",
+            "description" : "Énoncé, Markdown d'origine"
+          },
+          "statementHtml" : {
+            "type" : "string",
+            "description" : "Énoncé en HTML nettoyé, à afficher avec MemberContent"
+          },
+          "specificationsMarkdown" : {
+            "type" : "string",
+            "description" : "Spécifications, Markdown d'origine"
+          },
+          "specificationsHtml" : {
+            "type" : "string",
+            "description" : "Spécifications en HTML nettoyé"
+          },
+          "technologies" : {
+            "type" : "array",
+            "example" : [ "ussd", "node.js" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "UPCOMING", "OPEN", "CLOSED" ]
+          },
+          "startsAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "endsAt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "Fin des dépôts, base du compte à rebours"
+          },
+          "serverTime" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "Heure du serveur à la réponse : le compte à rebours se cale dessus plutôt que sur l'horloge du téléphone"
+          },
+          "submissionCount" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 37
+          },
+          "mySubmission" : {
+            "$ref" : "#/components/schemas/MySubmission",
+            "description" : "Null sans session ou sans dépôt"
+          }
+        },
+        "required" : [ "endsAt", "id", "serverTime", "specificationsHtml", "specificationsMarkdown", "startsAt", "statementHtml", "statementMarkdown", "status", "submissionCount", "technologies", "title" ]
+      },
+      "MySubmission" : {
+        "type" : "object",
+        "description" : "Dépôt du membre connecté sur ce défi",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "repositoryUrl" : {
+            "type" : "string",
+            "example" : "https://github.com/awa-kone/zetsu-defi-ussd"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "VALIDATED", "REJECTED" ]
+          },
+          "score" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Note sur 100, null tant que l'équipe n'a pas noté",
+            "example" : 84
+          },
+          "feedback" : {
+            "type" : "string",
+            "description" : "Retour de l'équipe"
+          },
+          "submittedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "id", "repositoryUrl", "status", "submittedAt" ]
+      },
+      "LinkStart" : {
+        "type" : "object",
+        "description" : "Adresse vers laquelle naviguer (pas de fetch) pour lier le compte",
+        "properties" : {
+          "authorizationUrl" : {
+            "type" : "string",
+            "example" : "/api/v1/auth/oauth2/authorization/github"
+          }
+        },
+        "required" : [ "authorizationUrl" ]
+      },
+      "ReportRequest" : {
+        "type" : "object",
+        "description" : "Signaler un contenu (MOD-1), à partir du niveau Membre",
+        "properties" : {
+          "targetType" : {
+            "type" : "string",
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER" ]
+          },
+          "targetId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 42
+          },
+          "reason" : {
+            "type" : "string",
+            "enum" : [ "SPAM", "OFFENSIVE", "OFF_TOPIC", "IMPERSONATION", "FRAUDULENT_JOB" ]
+          },
+          "comment" : {
+            "type" : "string",
+            "description" : "Précision facultative, lue par le Référent",
+            "example" : "Même lien de paiement publié sous six questions différentes",
+            "maxLength" : 500,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "reason", "targetId", "targetType" ]
+      },
+      "ReportReceipt" : {
+        "type" : "object",
+        "description" : "Accusé de réception d'un signalement",
+        "properties" : {
+          "caseId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "hidden" : {
+            "type" : "boolean",
+            "description" : "Vrai si ce signalement a déclenché le masquage automatique (MOD-2)"
+          }
+        },
+        "required" : [ "caseId", "hidden" ]
+      },
       "VoteRequest" : {
         "type" : "object",
         "properties" : {
@@ -3664,6 +5977,191 @@
           }
         },
         "required" : [ "count" ]
+      },
+      "CaseDecisionRequest" : {
+        "type" : "object",
+        "description" : "Décision sur un dossier",
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "enum" : [ "DISMISS", "HIDE", "RESTORE", "WARN", "SUSPEND" ]
+          },
+          "note" : {
+            "type" : "string",
+            "description" : "Motif montré à l'auteur ; obligatoire pour masquer, avertir ou suspendre",
+            "example" : "Publicité répétée pour un service de paiement",
+            "maxLength" : 500,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "action" ]
+      },
+      "ModerationCase" : {
+        "type" : "object",
+        "description" : "Tous les signalements d'un même contenu",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "target" : {
+            "$ref" : "#/components/schemas/ModerationTarget"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "OPEN", "DISMISSED", "HIDDEN", "APPEALED", "RESTORED" ]
+          },
+          "reportCount" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Signalements de comptes distincts",
+            "example" : 4
+          },
+          "reasons" : {
+            "type" : "array",
+            "description" : "Motifs, du plus fréquent au moins fréquent",
+            "items" : {
+              "$ref" : "#/components/schemas/ReasonCount"
+            }
+          },
+          "comments" : {
+            "type" : "array",
+            "description" : "Commentaires des signalants, plus récents d'abord, 5 au plus",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "decision" : {
+            "$ref" : "#/components/schemas/ModerationDecision",
+            "description" : "Null tant que personne n'a décidé"
+          },
+          "appeal" : {
+            "type" : "string",
+            "description" : "Texte de la contestation de l'auteur, visible par l'équipe"
+          },
+          "firstReportedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "comments", "firstReportedAt", "id", "reasons", "reportCount", "status", "target", "updatedAt" ]
+      },
+      "ModerationDecision" : {
+        "type" : "object",
+        "description" : "Dernière décision prise sur un dossier",
+        "properties" : {
+          "action" : {
+            "type" : "string",
+            "enum" : [ "DISMISS", "HIDE", "RESTORE", "WARN", "SUSPEND" ]
+          },
+          "note" : {
+            "type" : "string",
+            "description" : "Motif donné à l'auteur"
+          },
+          "byTeam" : {
+            "type" : "boolean",
+            "description" : "Vrai si la décision vient de l'équipe plutôt que d'un Référent ; le nom de la personne n'est jamais montré à l'auteur"
+          },
+          "decidedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "action", "byTeam", "decidedAt" ]
+      },
+      "ModerationTarget" : {
+        "type" : "object",
+        "description" : "Contenu signalé, pour construire le lien et l'aperçu côté front",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER" ]
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "Titre de la question, de l'offre, de la mission ; début de la réponse ; pseudo pour un profil"
+          },
+          "excerpt" : {
+            "type" : "string",
+            "description" : "Début du texte signalé, 300 caractères au plus, en texte brut"
+          },
+          "questionId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Question parente quand la cible est une réponse"
+          },
+          "author" : {
+            "$ref" : "#/components/schemas/AuthorSummary",
+            "description" : "Auteur du contenu, ou le membre lui-même pour un profil"
+          }
+        },
+        "required" : [ "author", "id", "title", "type" ]
+      },
+      "ReasonCount" : {
+        "type" : "object",
+        "properties" : {
+          "reason" : {
+            "type" : "string",
+            "enum" : [ "SPAM", "OFFENSIVE", "OFF_TOPIC", "IMPERSONATION", "FRAUDULENT_JOB" ]
+          },
+          "count" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3
+          }
+        },
+        "required" : [ "count", "reason" ]
+      },
+      "AppealRequest" : {
+        "type" : "object",
+        "description" : "L'auteur conteste le masquage de son contenu devant l'équipe (MOD-3)",
+        "properties" : {
+          "message" : {
+            "type" : "string",
+            "example" : "Le lien pointe vers la documentation officielle de l'API Wave, pas vers une offre commerciale.",
+            "maxLength" : 1000,
+            "minLength" : 20
+          }
+        },
+        "required" : [ "message" ]
+      },
+      "MyModeratedContent" : {
+        "type" : "object",
+        "description" : "Un contenu du membre connecté masqué ou en cours d'examen",
+        "properties" : {
+          "caseId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "target" : {
+            "$ref" : "#/components/schemas/ModerationTarget"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "OPEN", "DISMISSED", "HIDDEN", "APPEALED", "RESTORED" ]
+          },
+          "decision" : {
+            "$ref" : "#/components/schemas/ModerationDecision",
+            "description" : "Null pour un masquage automatique (MOD-2)"
+          },
+          "canAppeal" : {
+            "type" : "boolean",
+            "description" : "Vrai si le membre peut encore contester"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "canAppeal", "caseId", "status", "target", "updatedAt" ]
       },
       "MissionApplicationRequest" : {
         "type" : "object",
@@ -3757,6 +6255,27 @@
         },
         "required" : [ "message" ]
       },
+      "SubmissionRequest" : {
+        "type" : "object",
+        "description" : "Dépôt d'un lien GitHub public (CH-2)",
+        "properties" : {
+          "repositoryUrl" : {
+            "type" : "string",
+            "example" : "https://github.com/awa-kone/zetsu-defi-ussd",
+            "maxLength" : 200,
+            "minLength" : 0,
+            "pattern" : "^https://github\\.com/[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})/[A-Za-z0-9._-]{1,100}/?$"
+          },
+          "comment" : {
+            "type" : "string",
+            "description" : "Mot pour l'équipe, facultatif",
+            "example" : "Testé avec le simulateur Africa's Talking",
+            "maxLength" : 500,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "repositoryUrl" ]
+      },
       "RegisterRequest" : {
         "type" : "object",
         "properties" : {
@@ -3800,6 +6319,145 @@
           }
         },
         "required" : [ "email", "password" ]
+      },
+      "SuspendRequest" : {
+        "type" : "object",
+        "description" : "Suspension d'un compte : ses sessions ouvertes sont fermées",
+        "properties" : {
+          "reason" : {
+            "type" : "string",
+            "example" : "Offres frauduleuses répétées malgré un avertissement",
+            "maxLength" : 500,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "reason" ]
+      },
+      "TagRequest" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "Lettres minuscules, chiffres et . + # -",
+            "example" : "orange-money",
+            "maxLength" : 30,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "name" ]
+      },
+      "AdminTag" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "mobile-money"
+          },
+          "questionCount" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 42
+          },
+          "jobCount" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 3
+          },
+          "missionCount" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 5
+          },
+          "memberCount" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Membres qui l'ont dans leur stack",
+            "example" : 17
+          }
+        },
+        "required" : [ "jobCount", "memberCount", "missionCount", "name", "questionCount" ]
+      },
+      "TagMergeRequest" : {
+        "type" : "object",
+        "properties" : {
+          "into" : {
+            "type" : "string",
+            "description" : "Étiquette qui reste",
+            "example" : "mobile-money",
+            "minLength" : 1
+          }
+        },
+        "required" : [ "into" ]
+      },
+      "SubmissionReviewRequest" : {
+        "type" : "object",
+        "description" : "Note de l'équipe sur un dépôt (CH-3)",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "enum" : [ "VALIDATED", "REJECTED" ]
+          },
+          "score" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 84,
+            "maximum" : 100,
+            "minimum" : 0
+          },
+          "feedback" : {
+            "type" : "string",
+            "description" : "Retour montré au membre",
+            "example" : "Parcours clair et gestion du délai de session USSD, il manque des tests sur les montants.",
+            "maxLength" : 1000,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "score", "status" ]
+      },
+      "AdminSubmission" : {
+        "type" : "object",
+        "description" : "Un dépôt vu par l'équipe, pour la notation (CH-3)",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "challengeId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "member" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "repositoryUrl" : {
+            "type" : "string",
+            "example" : "https://github.com/awa-kone/zetsu-defi-ussd"
+          },
+          "comment" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "VALIDATED", "REJECTED" ]
+          },
+          "score" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 84
+          },
+          "feedback" : {
+            "type" : "string"
+          },
+          "submittedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "reviewedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "challengeId", "id", "member", "repositoryUrl", "status", "submittedAt" ]
       },
       "JobReviewRequest" : {
         "type" : "object",
@@ -3982,6 +6640,72 @@
         },
         "required" : [ "createdAt", "delta", "reason" ]
       },
+      "PageResponseMyModeratedContent" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MyModeratedContent"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "ConnectedAccount" : {
+        "type" : "object",
+        "properties" : {
+          "provider" : {
+            "type" : "string",
+            "enum" : [ "github", "google" ]
+          },
+          "linked" : {
+            "type" : "boolean"
+          },
+          "linkedAt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "Null si non lié"
+          },
+          "canUnlink" : {
+            "type" : "boolean",
+            "description" : "Faux si c'est le dernier moyen de connexion du compte"
+          }
+        },
+        "required" : [ "canUnlink", "linked", "provider" ]
+      },
+      "Connections" : {
+        "type" : "object",
+        "properties" : {
+          "accounts" : {
+            "type" : "array",
+            "description" : "Un élément par fournisseur activé",
+            "items" : {
+              "$ref" : "#/components/schemas/ConnectedAccount"
+            }
+          },
+          "hasPassword" : {
+            "type" : "boolean",
+            "description" : "Le compte a un mot de passe (inscription par email)"
+          }
+        },
+        "required" : [ "accounts", "hasPassword" ]
+      },
       "PageResponseMyApplication" : {
         "type" : "object",
         "properties" : {
@@ -4133,7 +6857,7 @@
           },
           "type" : {
             "type" : "string",
-            "enum" : [ "ANSWER_POSTED", "ANSWER_ACCEPTED", "VOTE_RECEIVED", "JOB_MATCH", "MISSION_MATCH", "APPLICATION_RECEIVED", "APPLICATION_DECIDED", "JOB_REVIEWED", "CHALLENGE_STARTED", "PROJECT_REQUEST_DECIDED" ]
+            "enum" : [ "ANSWER_POSTED", "ANSWER_ACCEPTED", "VOTE_RECEIVED", "JOB_MATCH", "MISSION_MATCH", "APPLICATION_RECEIVED", "APPLICATION_DECIDED", "JOB_REVIEWED", "CHALLENGE_STARTED", "PROJECT_REQUEST_DECIDED", "CONTENT_HIDDEN", "CONTENT_RESTORED", "ACCOUNT_WARNED", "SUBMISSION_REVIEWED" ]
           },
           "read" : {
             "type" : "boolean"
@@ -4147,7 +6871,7 @@
           },
           "outcome" : {
             "type" : "string",
-            "description" : "Statut décidé, pour APPLICATION_DECIDED (SHORTLISTED, REJECTED) et JOB_REVIEWED (PUBLISHED, REJECTED)",
+            "description" : "Statut décidé, pour APPLICATION_DECIDED (SHORTLISTED, REJECTED) et JOB_REVIEWED (PUBLISHED, REJECTED), SUBMISSION_REVIEWED (VALIDATED, REJECTED)",
             "example" : "SHORTLISTED"
           },
           "createdAt" : {
@@ -4163,7 +6887,7 @@
         "properties" : {
           "type" : {
             "type" : "string",
-            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "APPLICATION", "CHALLENGE", "PROJECT" ]
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "APPLICATION", "CHALLENGE", "PROJECT", "USER" ]
           },
           "id" : {
             "type" : "integer",
@@ -4188,6 +6912,33 @@
             "type" : "array",
             "items" : {
               "$ref" : "#/components/schemas/Notification"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "PageResponseModerationCase" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ModerationCase"
             }
           },
           "page" : {
@@ -4387,6 +7138,57 @@
         },
         "required" : [ "items", "page", "size", "total" ]
       },
+      "LeaderboardEntry" : {
+        "type" : "object",
+        "properties" : {
+          "rank" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Rang ; deux notes égales partagent le même rang",
+            "example" : 1
+          },
+          "member" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "score" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 92
+          },
+          "submittedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "member", "rank", "score", "submittedAt" ]
+      },
+      "PageResponseLeaderboardEntry" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/LeaderboardEntry"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
       "AuthProvider" : {
         "type" : "object",
         "properties" : {
@@ -4428,6 +7230,60 @@
         },
         "required" : [ "headerName", "token" ]
       },
+      "PageResponseAdminUser" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AdminUser"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "PageResponseAdminTag" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AdminTag"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
       "PageResponseJobDetail" : {
         "type" : "object",
         "properties" : {
@@ -4435,6 +7291,60 @@
             "type" : "array",
             "items" : {
               "$ref" : "#/components/schemas/JobDetail"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "PageResponseChallenge" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Challenge"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "PageResponseAdminSubmission" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AdminSubmission"
             }
           },
           "page" : {

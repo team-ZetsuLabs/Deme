@@ -1,0 +1,3 @@
+{
+  "authorizationUrl": "/api/v1/auth/oauth2/authorization/google"
+}

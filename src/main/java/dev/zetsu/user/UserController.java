@@ -2,14 +2,17 @@ package dev.zetsu.user;
 
 import dev.zetsu.auth.ZetsuPrincipal;
 import dev.zetsu.common.ApiError;
+import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.reputation.ReputationDtos.ReputationEntry;
+import dev.zetsu.user.UserDtos.AvatarForm;
 import dev.zetsu.user.UserDtos.DeleteAccountRequest;
 import dev.zetsu.user.UserDtos.Me;
 import dev.zetsu.user.UserDtos.OnboardingRequest;
 import dev.zetsu.user.UserDtos.PublicProfile;
 import dev.zetsu.user.UserDtos.UpdateProfileRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,7 +20,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,8 +33,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -77,6 +85,41 @@ public class UserController {
     @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Me onboarding(@Valid @RequestBody OnboardingRequest req, @AuthenticationPrincipal ZetsuPrincipal me) {
         return userService.completeOnboarding(me.id(), req);
+    }
+
+    @PutMapping(value = "/me/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Changer sa photo de profil (SET-1)",
+            description = "Formulaire multipart, champ photo : PNG, JPG ou WebP de 2 Mo maximum, vérifié par son "
+                    + "contenu et pas par son nom. Stockée hors du dossier public sous un nom régénéré ; avatarUrl "
+                    + "change à chaque nouvelle photo, on peut donc la garder en cache.")
+    @ApiResponse(responseCode = "200", description = "Profil à jour, avatarUrl pointe vers la nouvelle photo")
+    @ApiResponse(responseCode = "400", description = "PHOTO_REQUIRED, PHOTO_TYPE, PHOTO_TOO_LARGE, FILE_TOO_LARGE (plus de 5 Mo)", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "429", description = "RATE_LIMITED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(
+            mediaType = MediaType.MULTIPART_FORM_DATA_VALUE, schema = @Schema(implementation = AvatarForm.class)))
+    public Me updateAvatar(@Parameter(hidden = true) @RequestPart(required = false) MultipartFile photo,
+                           @AuthenticationPrincipal ZetsuPrincipal me) {
+        throw ApiException.notImplemented();
+    }
+
+    @DeleteMapping("/me/avatar")
+    @Operation(summary = "Retirer sa photo de profil", description = "Le front affiche alors les initiales.")
+    @ApiResponse(responseCode = "200", description = "Profil à jour, avatarUrl à null")
+    @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    public Me deleteAvatar(@AuthenticationPrincipal ZetsuPrincipal me) {
+        throw ApiException.notImplemented();
+    }
+
+    @GetMapping("/{username}/avatar/{file}")
+    @Operation(summary = "Photo de profil d'un membre",
+            description = "Ne pas construire cette adresse : utiliser avatarUrl. Réponse image/png, image/jpeg ou "
+                    + "image/webp, en cache un an (le nom change avec la photo).")
+    @ApiResponse(responseCode = "200", description = "L'image", content = {
+            @Content(mediaType = "image/png"), @Content(mediaType = "image/jpeg"), @Content(mediaType = "image/webp")})
+    @ApiResponse(responseCode = "404", description = "AVATAR_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    public ResponseEntity<Resource> avatar(@PathVariable String username, @PathVariable String file) {
+        throw ApiException.notImplemented();
     }
 
     @DeleteMapping("/me")

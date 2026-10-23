@@ -7,5 +7,7 @@ public enum NotificationTargetType {
     MISSION,
     APPLICATION,
     CHALLENGE,
-    PROJECT
+    PROJECT,
+    /** Un profil, pour un avertissement ou un profil masqué. */
+    USER
 }

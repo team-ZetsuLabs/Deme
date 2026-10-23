@@ -21,5 +21,13 @@ public enum NotificationType {
     /** Un nouveau défi a commencé. */
     CHALLENGE_STARTED,
     /** Décision sur ma demande pour rejoindre un projet (P1). */
-    PROJECT_REQUEST_DECIDED
+    PROJECT_REQUEST_DECIDED,
+    /** Mon contenu a été masqué, automatiquement ou par décision (MOD-2, MOD-3). */
+    CONTENT_HIDDEN,
+    /** Ma contestation a été acceptée : mon contenu est de nouveau visible. */
+    CONTENT_RESTORED,
+    /** L'équipe m'a adressé un avertissement (MOD-4). */
+    ACCOUNT_WARNED,
+    /** Mon dépôt de défi a été noté (CH-3). */
+    SUBMISSION_REVIEWED
 }

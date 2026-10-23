@@ -32,7 +32,8 @@ public final class NotificationDtos {
             AuthorSummary actor,
             @Schema(requiredMode = REQUIRED) NotificationTarget target,
             @Schema(description = "Statut décidé, pour APPLICATION_DECIDED (SHORTLISTED, REJECTED) "
-                    + "et JOB_REVIEWED (PUBLISHED, REJECTED)", example = "SHORTLISTED")
+                    + "et JOB_REVIEWED (PUBLISHED, REJECTED), SUBMISSION_REVIEWED (VALIDATED, REJECTED)",
+                    example = "SHORTLISTED")
             String outcome,
             @Schema(requiredMode = REQUIRED) Instant createdAt) {
     }

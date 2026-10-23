@@ -61,6 +61,19 @@ Notifications (NOT-1) envoyées : réponse à ma question, réponse acceptée, v
 
 Les CV sont rangés dans `UPLOADS_DIR` (par défaut `data/uploads`, ignoré par Git), jamais servis directement : seul `GET /applications/{id}/cv` les rend, au candidat, au recruteur et à l'équipe.
 
+## Contrat du sprint 3 (publié, pas encore codé)
+
+Ces points d'entrée sont dans Swagger UI et répondent `501 NOT_IMPLEMENTED` tant qu'ils ne sont pas codés : les fronts utilisent les mocks.
+
+| Domaine | Points d'entrée |
+| --- | --- |
+| `moderation` | `POST /reports` (MOD-1, niveau Membre ; masquage automatique au 5e signalement, MOD-2), `GET /moderation/cases` (file, niveau Contributeur), `POST /moderation/cases/{id}/decision` (ignorer ou masquer, Référent, MOD-3), `POST /moderation/cases/{id}/appeal` (contestation par l'auteur), `GET /users/me/moderation` (mes contenus masqués) |
+| `admin` (MOD-4) | `GET /admin/cases`, `POST /admin/cases/{id}/decision` (ignorer, masquer, rétablir, avertir, suspendre) ; `GET /admin/users`, `POST /admin/users/{id}/suspend`, `POST /admin/users/{id}/reactivate`, `PUT /admin/users/{id}/role` (Administrateur) ; `GET` et `POST /admin/tags`, `POST /admin/tags/{name}/merge`, `DELETE /admin/tags/{name}` ; `GET` et `POST /admin/challenges`, `PUT /admin/challenges/{id}`, `GET /admin/challenges/{id}/submissions`, `POST /admin/submissions/{id}/review` (note sur 100, CH-3) |
+| `challenge` | `GET /challenges/current` (CH-1, avec `serverTime` pour le compte à rebours), `GET /challenges/{id}`, `POST /challenges/{id}/submissions` (lien GitHub public, un par membre, CH-2), `GET /challenges/{id}/leaderboard` |
+| `user` | `PUT /users/me/avatar` (multipart, champ `photo` : PNG, JPG ou WebP de 2 Mo, SET-1), `DELETE /users/me/avatar`, `GET /users/{username}/avatar/{file}` (adresse donnée par `avatarUrl`) ; `GET /users/me/connections`, `POST` et `DELETE /users/me/connections/{provider}` (lier ou délier GitHub et Google, SET-4) |
+
+Nouveaux types de notification : `CONTENT_HIDDEN`, `CONTENT_RESTORED`, `ACCOUNT_WARNED`, `SUBMISSION_REVIEWED`, et la cible `USER`.
+
 Les `operationId` sont stables, de la forme `<domaine><Méthode>` (`questionList`, `jobApply`, `jobAdminDecide`).
 
 Un exemple de réponse par point d'entrée se trouve dans `mocks/` (`GET_questions.json`, `GET_questions_id.json`…), plus quelques erreurs types (`ERROR_*.json`).

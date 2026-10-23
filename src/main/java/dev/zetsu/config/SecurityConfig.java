@@ -75,7 +75,8 @@ public class SecurityConfig {
                                 "/api/v1/jobs/*/applications", "/api/v1/missions/*/applications").authenticated()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/questions/**", "/api/v1/answers/**", "/api/v1/users/**",
-                                "/api/v1/tags/**", "/api/v1/jobs/**", "/api/v1/missions/**").permitAll()
+                                "/api/v1/tags/**", "/api/v1/jobs/**", "/api/v1/missions/**",
+                                "/api/v1/challenges/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().denyAll())

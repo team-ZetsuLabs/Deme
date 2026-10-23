@@ -1,0 +1,35 @@
+{
+  "items": [
+    {
+      "name": "mobile-money",
+      "questionCount": 42,
+      "jobCount": 3,
+      "missionCount": 5,
+      "memberCount": 17
+    },
+    {
+      "name": "momo",
+      "questionCount": 4,
+      "jobCount": 0,
+      "missionCount": 1,
+      "memberCount": 2
+    },
+    {
+      "name": "orange-money",
+      "questionCount": 19,
+      "jobCount": 1,
+      "missionCount": 2,
+      "memberCount": 6
+    },
+    {
+      "name": "ussd",
+      "questionCount": 11,
+      "jobCount": 0,
+      "missionCount": 3,
+      "memberCount": 4
+    }
+  ],
+  "page": 0,
+  "size": 50,
+  "total": 4
+}

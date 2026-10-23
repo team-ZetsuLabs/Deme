@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.time.Instant;
 import java.util.List;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
@@ -32,6 +33,28 @@ public final class AuthDtos {
             @NotBlank(message = "Obligatoire")
             @Pattern(regexp = "^(?=.*\\d).{8,72}$", message = "8 caractères minimum, dont un chiffre")
             @Schema(requiredMode = REQUIRED, example = "accra2026") String password) {
+    }
+
+    /** SET-4 : un fournisseur OAuth activé sur ce serveur, lié ou non au compte du membre. */
+    @Schema(name = "ConnectedAccount")
+    public record ConnectedAccount(
+            @Schema(requiredMode = REQUIRED, allowableValues = {"github", "google"}) String provider,
+            @Schema(requiredMode = REQUIRED) boolean linked,
+            @Schema(description = "Null si non lié") Instant linkedAt,
+            @Schema(requiredMode = REQUIRED, description = "Faux si c'est le dernier moyen de connexion du compte")
+            boolean canUnlink) {
+    }
+
+    @Schema(name = "Connections")
+    public record Connections(
+            @Schema(requiredMode = REQUIRED, description = "Un élément par fournisseur activé") List<ConnectedAccount> accounts,
+            @Schema(requiredMode = REQUIRED, description = "Le compte a un mot de passe (inscription par email)")
+            boolean hasPassword) {
+    }
+
+    @Schema(name = "LinkStart", description = "Adresse vers laquelle naviguer (pas de fetch) pour lier le compte")
+    public record LinkStart(
+            @Schema(requiredMode = REQUIRED, example = "/api/v1/auth/oauth2/authorization/github") String authorizationUrl) {
     }
 
     @Schema(name = "LoginRequest")

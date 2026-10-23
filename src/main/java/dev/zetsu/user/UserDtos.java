@@ -113,6 +113,13 @@ public final class UserDtos {
             List<String> technologies) {
     }
 
+    /** Documentation seulement : le fichier est lu par UserController.updateAvatar. */
+    @Schema(name = "AvatarForm", description = "Formulaire multipart de photo de profil (SET-1)")
+    public record AvatarForm(
+            @Schema(requiredMode = REQUIRED, type = "string", format = "binary",
+                    description = "PNG, JPG ou WebP, 2 Mo maximum") String photo) {
+    }
+
     /** AUTH-6 : le membre recopie son pseudo pour confirmer. */
     @Schema(name = "DeleteAccountRequest")
     public record DeleteAccountRequest(
