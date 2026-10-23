@@ -56,7 +56,57 @@
             }
           },
           "400" : {
-            "description" : "VALIDATION_ERROR",
+            "description" : "VALIDATION_ERROR, INVALID_TAG",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/onboarding" : {
+      "put" : {
+        "tags" : [ "users" ],
+        "summary" : "Terminer le parcours d'accueil",
+        "description" : "Stack (1 à 10 technologies, partagées avec les étiquettes), pays et langue (AUTH-5). Passe onboardingCompleted à vrai ; peut être rappelé pour corriger ses choix.",
+        "operationId" : "onboarding",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/OnboardingRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Profil à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG, TAG_REQUIRED",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1300,6 +1350,15 @@
           },
           "visibleToRecruiters" : {
             "type" : "boolean"
+          },
+          "technologies" : {
+            "type" : "array",
+            "description" : "Stack du membre. Absent ou null : inchangée. Liste vide : effacée.",
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 0
           }
         },
         "required" : [ "displayName", "language", "visibleToRecruiters" ]
@@ -1380,12 +1439,49 @@
             "type" : "string",
             "enum" : [ "NEWCOMER", "MEMBER", "CONTRIBUTOR", "REFERENT" ]
           },
+          "technologies" : {
+            "type" : "array",
+            "description" : "Stack du membre, dans l'ordre qu'il a choisi",
+            "example" : [ "java", "spring-boot", "postgresql" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "onboardingCompleted" : {
+            "type" : "boolean",
+            "description" : "Faux tant que le parcours d'accueil n'est pas terminé (AUTH-5)"
+          },
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
           }
         },
-        "required" : [ "createdAt", "displayName", "id", "language", "level", "reputation", "role", "username", "visibleToRecruiters" ]
+        "required" : [ "createdAt", "displayName", "id", "language", "level", "onboardingCompleted", "reputation", "role", "technologies", "username", "visibleToRecruiters" ]
+      },
+      "OnboardingRequest" : {
+        "type" : "object",
+        "properties" : {
+          "technologies" : {
+            "type" : "array",
+            "example" : [ "java", "spring-boot", "postgresql" ],
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 0
+          },
+          "countryCode" : {
+            "type" : "string",
+            "example" : "SN",
+            "minLength" : 1
+          },
+          "language" : {
+            "type" : "string",
+            "enum" : [ "fr", "en" ],
+            "pattern" : "^(fr|en)$"
+          }
+        },
+        "required" : [ "countryCode", "language", "technologies" ]
       },
       "AcceptAnswerRequest" : {
         "type" : "object",
@@ -1731,6 +1827,13 @@
           "visibleToRecruiters" : {
             "type" : "boolean"
           },
+          "technologies" : {
+            "type" : "array",
+            "example" : [ "java", "spring-boot", "postgresql" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
           "questionCount" : {
             "type" : "integer",
             "format" : "int64"
@@ -1744,7 +1847,7 @@
             "format" : "date-time"
           }
         },
-        "required" : [ "answerCount", "createdAt", "displayName", "level", "questionCount", "reputation", "role", "username", "visibleToRecruiters" ]
+        "required" : [ "answerCount", "createdAt", "displayName", "level", "questionCount", "reputation", "role", "technologies", "username", "visibleToRecruiters" ]
       },
       "PageResponseReputationEntry" : {
         "type" : "object",

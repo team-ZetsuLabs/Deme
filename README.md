@@ -38,7 +38,7 @@ Après un changement de contrat, on régénère `docs/openapi.json` et on le pou
 | Domaine | Points d'entrée |
 | --- | --- |
 | `auth` | `GET /auth/csrf`, `GET /auth/providers`, `POST /auth/register`, `POST /auth/login`, `POST /auth/logout`, `GET /auth/me`, OAuth GitHub et Google |
-| `user` | `GET /users/{username}`, `GET /users/{username}/reputation`, `PUT /users/me` |
+| `user` | `GET /users/{username}`, `GET /users/{username}/reputation`, `PUT /users/me`, `PUT /users/me/onboarding` (accueil : stack, pays, langue) |
 | `question` | `GET /questions` (recherche plein texte sur titre, détails et étiquettes ; filtres pays, opérateur, réseau, étiquette, auteur, sans solution ; tri), `POST /questions`, `GET /questions/{id}`, `PUT /questions/{id}` |
 | `answer` | `GET /questions/{id}/answers`, `POST /questions/{id}/answers`, `PUT /answers/{id}`, `PUT` et `DELETE /questions/{id}/accepted-answer` |
 | `vote` | `POST` et `DELETE /questions/{id}/votes`, `POST` et `DELETE /answers/{id}/votes` |

@@ -26,9 +26,15 @@ public class TagService {
         this.tags = tags;
     }
 
-    /** Normalise les étiquettes saisies et crée celles qui n'existent pas encore. L'ordre est conservé. */
+    /** Étiquettes d'une question : de 1 à {@link #MAX_TAGS}. */
     @Transactional(propagation = Propagation.MANDATORY)
     public Set<Tag> resolve(List<String> rawNames) {
+        return resolve(rawNames, 1, MAX_TAGS);
+    }
+
+    /** Normalise les étiquettes saisies et crée celles qui n'existent pas encore. L'ordre est conservé. */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public Set<Tag> resolve(List<String> rawNames, int min, int max) {
         Set<String> names = new LinkedHashSet<>();
         for (String raw : rawNames == null ? List.<String>of() : rawNames) {
             String name = normalize(raw);
@@ -39,11 +45,11 @@ public class TagService {
                 names.add(name);
             }
         }
-        if (names.isEmpty()) {
+        if (names.size() < min) {
             throw ApiException.badRequest("TAG_REQUIRED", "Au moins une étiquette est obligatoire");
         }
-        if (names.size() > MAX_TAGS) {
-            throw ApiException.badRequest("TOO_MANY_TAGS", MAX_TAGS + " étiquettes maximum");
+        if (names.size() > max) {
+            throw ApiException.badRequest("TOO_MANY_TAGS", max + " étiquettes maximum");
         }
         Map<String, Tag> existing = tags.findByNameIn(names).stream()
                 .collect(Collectors.toMap(Tag::getName, Function.identity()));

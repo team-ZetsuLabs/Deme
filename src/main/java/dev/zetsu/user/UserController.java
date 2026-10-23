@@ -5,6 +5,7 @@ import dev.zetsu.common.ApiError;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.reputation.ReputationDtos.ReputationEntry;
 import dev.zetsu.user.UserDtos.Me;
+import dev.zetsu.user.UserDtos.OnboardingRequest;
 import dev.zetsu.user.UserDtos.PublicProfile;
 import dev.zetsu.user.UserDtos.UpdateProfileRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,9 +55,20 @@ public class UserController {
     @PutMapping("/me")
     @Operation(summary = "Modifier son profil")
     @ApiResponse(responseCode = "200", description = "Profil à jour")
-    @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR, INVALID_TAG", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Me update(@Valid @RequestBody UpdateProfileRequest req, @AuthenticationPrincipal ZetsuPrincipal me) {
         return userService.update(me.id(), req);
+    }
+
+    @PutMapping("/me/onboarding")
+    @Operation(summary = "Terminer le parcours d'accueil",
+            description = "Stack (1 à 10 technologies, partagées avec les étiquettes), pays et langue (AUTH-5). "
+                    + "Passe onboardingCompleted à vrai ; peut être rappelé pour corriger ses choix.")
+    @ApiResponse(responseCode = "200", description = "Profil à jour")
+    @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR, INVALID_TAG, TAG_REQUIRED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    public Me onboarding(@Valid @RequestBody OnboardingRequest req, @AuthenticationPrincipal ZetsuPrincipal me) {
+        return userService.completeOnboarding(me.id(), req);
     }
 }

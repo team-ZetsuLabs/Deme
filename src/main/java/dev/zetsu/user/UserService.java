@@ -6,11 +6,15 @@ import dev.zetsu.common.PageResponse;
 import dev.zetsu.question.QuestionRepository;
 import dev.zetsu.reputation.ReputationDtos.ReputationEntry;
 import dev.zetsu.reputation.ReputationService;
+import dev.zetsu.tag.TagService;
 import dev.zetsu.user.UserDtos.Me;
+import dev.zetsu.user.UserDtos.OnboardingRequest;
 import dev.zetsu.user.UserDtos.PublicProfile;
 import dev.zetsu.user.UserDtos.UpdateProfileRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
 
 @Service
 public class UserService {
@@ -19,13 +23,15 @@ public class UserService {
     private final QuestionRepository questions;
     private final AnswerRepository answers;
     private final ReputationService reputation;
+    private final TagService tags;
 
     public UserService(UserRepository users, QuestionRepository questions, AnswerRepository answers,
-                       ReputationService reputation) {
+                       ReputationService reputation, TagService tags) {
         this.users = users;
         this.questions = questions;
         this.answers = answers;
         this.reputation = reputation;
+        this.tags = tags;
     }
 
     @Transactional(readOnly = true)
@@ -42,7 +48,7 @@ public class UserService {
         User u = byUsername(username);
         return new PublicProfile(u.getUsername(), u.getDisplayName(), u.getAvatarUrl(), u.getBio(),
                 u.getCountryCode(), u.getCity(), u.getRole(), u.getReputation(),
-                reputation.levelOf(u.getReputation()), u.isVisibleToRecruiters(),
+                reputation.levelOf(u.getReputation()), u.isVisibleToRecruiters(), UserDtos.technologyNames(u),
                 questions.countByAuthorId(u.getId()), answers.countByAuthorId(u.getId()), u.getCreatedAt());
     }
 
@@ -55,6 +61,22 @@ public class UserService {
         u.setCity(blankToNull(req.city()));
         u.setLanguage(req.language());
         u.setVisibleToRecruiters(req.visibleToRecruiters());
+        if (req.technologies() != null) {
+            u.setTechnologies(tags.resolve(req.technologies(), 0, UserDtos.MAX_TECHNOLOGIES));
+        }
+        return toMe(u);
+    }
+
+    /** AUTH-5 : la première fois marque l'accueil comme terminé ; ensuite, simple mise à jour des trois réglages. */
+    @Transactional
+    public Me completeOnboarding(Long id, OnboardingRequest req) {
+        User u = users.findById(id).orElseThrow(UserService::notFound);
+        u.setTechnologies(tags.resolve(req.technologies(), 1, UserDtos.MAX_TECHNOLOGIES));
+        u.setCountryCode(req.countryCode().trim());
+        u.setLanguage(req.language());
+        if (u.getOnboardedAt() == null) {
+            u.setOnboardedAt(Instant.now());
+        }
         return toMe(u);
     }
 

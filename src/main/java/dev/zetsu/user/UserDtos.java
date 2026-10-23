@@ -2,17 +2,22 @@ package dev.zetsu.user;
 
 import dev.zetsu.common.CountryCode;
 import dev.zetsu.reputation.Level;
+import dev.zetsu.tag.Tag;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
+import java.util.List;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 public final class UserDtos {
+
+    public static final int MAX_TECHNOLOGIES = 10;
 
     private UserDtos() {
     }
@@ -34,13 +39,23 @@ public final class UserDtos {
             @Schema(requiredMode = REQUIRED) Role role,
             @Schema(requiredMode = REQUIRED) int reputation,
             @Schema(requiredMode = REQUIRED) Level level,
+            @Schema(requiredMode = REQUIRED, description = "Stack du membre, dans l'ordre qu'il a choisi",
+                    example = "[\"java\", \"spring-boot\", \"postgresql\"]")
+            List<String> technologies,
+            @Schema(requiredMode = REQUIRED, description = "Faux tant que le parcours d'accueil n'est pas terminé (AUTH-5)")
+            boolean onboardingCompleted,
             @Schema(requiredMode = REQUIRED) Instant createdAt) {
 
         public static Me from(User u, Level level) {
             return new Me(u.getId(), u.getUsername(), u.getDisplayName(), u.getEmail(), u.getAvatarUrl(),
                     u.getBio(), u.getCountryCode(), u.getCity(), u.getLanguage(), u.isVisibleToRecruiters(),
-                    u.getRole(), u.getReputation(), level, u.getCreatedAt());
+                    u.getRole(), u.getReputation(), level, technologyNames(u), u.getOnboardedAt() != null,
+                    u.getCreatedAt());
         }
+    }
+
+    static List<String> technologyNames(User u) {
+        return u.getTechnologies().stream().map(Tag::getName).toList();
     }
 
     /** Profil public d'un membre. */
@@ -56,6 +71,8 @@ public final class UserDtos {
             @Schema(requiredMode = REQUIRED) int reputation,
             @Schema(requiredMode = REQUIRED) Level level,
             @Schema(requiredMode = REQUIRED) boolean visibleToRecruiters,
+            @Schema(requiredMode = REQUIRED, example = "[\"java\", \"spring-boot\", \"postgresql\"]")
+            List<String> technologies,
             @Schema(requiredMode = REQUIRED) long questionCount,
             @Schema(requiredMode = REQUIRED) long answerCount,
             @Schema(requiredMode = REQUIRED) Instant createdAt) {
@@ -87,6 +104,22 @@ public final class UserDtos {
             @Size(max = 80, message = "80 caractères maximum") String city,
             @NotNull(message = "Obligatoire") @Pattern(regexp = "^(fr|en)$", message = "fr ou en")
             @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en"}) String language,
-            @NotNull(message = "Obligatoire") @Schema(requiredMode = REQUIRED) Boolean visibleToRecruiters) {
+            @NotNull(message = "Obligatoire") @Schema(requiredMode = REQUIRED) Boolean visibleToRecruiters,
+            @Size(max = MAX_TECHNOLOGIES, message = MAX_TECHNOLOGIES + " technologies maximum")
+            @Schema(description = "Stack du membre. Absent ou null : inchangée. Liste vide : effacée.")
+            List<String> technologies) {
+    }
+
+    /** Parcours d'accueil (AUTH-5) : stack, pays et langue. Peut être renvoyé pour corriger ses choix. */
+    @Schema(name = "OnboardingRequest")
+    public record OnboardingRequest(
+            @NotEmpty(message = "Obligatoire")
+            @Size(max = MAX_TECHNOLOGIES, message = MAX_TECHNOLOGIES + " technologies maximum")
+            @Schema(requiredMode = REQUIRED, example = "[\"java\", \"spring-boot\", \"postgresql\"]")
+            List<String> technologies,
+            @NotBlank(message = "Obligatoire") @CountryCode
+            @Schema(requiredMode = REQUIRED, example = "SN") String countryCode,
+            @NotNull(message = "Obligatoire") @Pattern(regexp = "^(fr|en)$", message = "fr ou en")
+            @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en"}) String language) {
     }
 }

@@ -1,5 +1,6 @@
 package dev.zetsu.user;
 
+import dev.zetsu.tag.Tag;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -7,9 +8,16 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -62,6 +70,16 @@ public class User {
 
     @Column(nullable = false)
     private int reputation;
+
+    @ManyToMany
+    @JoinTable(name = "user_technologies",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @OrderColumn(name = "position")
+    private List<Tag> technologies = new ArrayList<>();
+
+    @Column(name = "onboarded_at")
+    private Instant onboardedAt;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
@@ -180,6 +198,23 @@ public class User {
 
     public int getReputation() {
         return reputation;
+    }
+
+    public List<Tag> getTechnologies() {
+        return technologies;
+    }
+
+    public void setTechnologies(Collection<Tag> technologies) {
+        this.technologies.clear();
+        this.technologies.addAll(technologies);
+    }
+
+    public Instant getOnboardedAt() {
+        return onboardedAt;
+    }
+
+    public void setOnboardedAt(Instant onboardedAt) {
+        this.onboardedAt = onboardedAt;
     }
 
     public Instant getCreatedAt() {

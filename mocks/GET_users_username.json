@@ -9,6 +9,11 @@
   "reputation": 1587,
   "level": "REFERENT",
   "visibleToRecruiters": false,
+  "technologies": [
+    "kotlin",
+    "spring-boot",
+    "mtn-momo"
+  ],
   "questionCount": 14,
   "answerCount": 96,
   "createdAt": "2026-08-02T11:00:00Z"
