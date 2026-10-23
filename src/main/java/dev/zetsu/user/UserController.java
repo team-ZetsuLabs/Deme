@@ -2,8 +2,8 @@ package dev.zetsu.user;
 
 import dev.zetsu.auth.ZetsuPrincipal;
 import dev.zetsu.common.ApiError;
-import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
+import dev.zetsu.common.RateLimiter;
 import dev.zetsu.reputation.ReputationDtos.ReputationEntry;
 import dev.zetsu.user.UserDtos.AvatarForm;
 import dev.zetsu.user.UserDtos.DeleteAccountRequest;
@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.core.io.Resource;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,15 +39,21 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Duration;
+
 @RestController
 @RequestMapping("/api/v1/users")
 @Tag(name = "users", description = "Profils des membres")
 public class UserController {
 
     private final UserService userService;
+    private final AvatarService avatarService;
+    private final RateLimiter rateLimiter;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AvatarService avatarService, RateLimiter rateLimiter) {
         this.userService = userService;
+        this.avatarService = avatarService;
+        this.rateLimiter = rateLimiter;
     }
 
     @GetMapping("/{username}")
@@ -100,7 +107,8 @@ public class UserController {
             mediaType = MediaType.MULTIPART_FORM_DATA_VALUE, schema = @Schema(implementation = AvatarForm.class)))
     public Me updateAvatar(@Parameter(hidden = true) @RequestPart(required = false) MultipartFile photo,
                            @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        rateLimiter.check(RateLimiter.Rule.PUBLISH, "user:" + me.id());
+        return avatarService.update(me.id(), photo);
     }
 
     @DeleteMapping("/me/avatar")
@@ -108,7 +116,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "Profil à jour, avatarUrl à null")
     @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public Me deleteAvatar(@AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return avatarService.delete(me.id());
     }
 
     @GetMapping("/{username}/avatar/{file}")
@@ -119,7 +127,11 @@ public class UserController {
             @Content(mediaType = "image/png"), @Content(mediaType = "image/jpeg"), @Content(mediaType = "image/webp")})
     @ApiResponse(responseCode = "404", description = "AVATAR_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public ResponseEntity<Resource> avatar(@PathVariable String username, @PathVariable String file) {
-        throw ApiException.notImplemented();
+        AvatarService.Image image = avatarService.load(username, file);
+        return ResponseEntity.ok()
+                .contentType(image.type())
+                .cacheControl(CacheControl.maxAge(Duration.ofDays(365)).cachePublic().immutable())
+                .body(image.file());
     }
 
     @DeleteMapping("/me")

@@ -71,12 +71,14 @@ Back office (codé) : l'équipe peut revenir sur la décision d'un Référent. P
 
 Défis (codés) : un seul défi à la fois, l'équipe ne peut pas en créer deux sur la même période. Un défi qui n'a pas commencé n'est visible que dans le back office. Au début du défi, tous les membres actifs reçoivent `CHALLENGE_STARTED` (vérification chaque minute). Un dépôt validé rapporte +20 une seule fois ; une note corrigée ne change pas les points, et un dépôt refusé après coup les perd. Dans le classement, deux notes égales partagent le même rang.
 
+Photo de profil (codée) : le format est lu dans les premiers octets du fichier, jamais dans son nom. Les fichiers sont rangés dans `UPLOADS_DIR/avatars` sous un nom régénéré. Une photo n'est servie que tant qu'elle est celle du profil : l'ancienne est effacée quand on en met une nouvelle, quand on la retire, ou quand le compte est supprimé.
+
 | Domaine | Points d'entrée |
 | --- | --- |
 | `moderation` (codé) | `POST /reports` (MOD-1, niveau Membre ; masquage automatique au 5e signalement, MOD-2), `GET /moderation/cases` (file, niveau Contributeur), `POST /moderation/cases/{id}/decision` (ignorer ou masquer, Référent, MOD-3), `POST /moderation/cases/{id}/appeal` (contestation par l'auteur), `GET /users/me/moderation` (mes contenus masqués) |
 | `admin` (MOD-4, codé) | `GET /admin/cases`, `POST /admin/cases/{id}/decision` (ignorer, masquer, rétablir, avertir, suspendre) ; `GET /admin/users`, `POST /admin/users/{id}/suspend`, `POST /admin/users/{id}/reactivate`, `PUT /admin/users/{id}/role` (Administrateur) ; `GET` et `POST /admin/tags`, `POST /admin/tags/{name}/merge`, `DELETE /admin/tags/{name}` ; `GET` et `POST /admin/challenges`, `PUT /admin/challenges/{id}`, `GET /admin/challenges/{id}/submissions`, `POST /admin/submissions/{id}/review` (note sur 100, CH-3) |
 | `challenge` (codé) | `GET /challenges/current` (CH-1, avec `serverTime` pour le compte à rebours), `GET /challenges/{id}`, `POST /challenges/{id}/submissions` (lien GitHub public, un par membre, CH-2), `GET /challenges/{id}/leaderboard` |
-| `user` | `PUT /users/me/avatar` (multipart, champ `photo` : PNG, JPG ou WebP de 2 Mo, SET-1), `DELETE /users/me/avatar`, `GET /users/{username}/avatar/{file}` (adresse donnée par `avatarUrl`) ; `GET /users/me/connections`, `POST` et `DELETE /users/me/connections/{provider}` (lier ou délier GitHub et Google, SET-4) |
+| `user` (photo codée) | `PUT /users/me/avatar` (multipart, champ `photo` : PNG, JPG ou WebP de 2 Mo, SET-1), `DELETE /users/me/avatar`, `GET /users/{username}/avatar/{file}` (adresse donnée par `avatarUrl`) ; `GET /users/me/connections`, `POST` et `DELETE /users/me/connections/{provider}` (lier ou délier GitHub et Google, SET-4) |
 
 Nouveaux types de notification : `CONTENT_HIDDEN`, `CONTENT_RESTORED`, `ACCOUNT_WARNED`, `SUBMISSION_REVIEWED`, et la cible `USER`.
 

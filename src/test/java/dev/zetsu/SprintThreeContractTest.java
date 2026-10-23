@@ -54,8 +54,8 @@ class SprintThreeContractTest extends IntegrationTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("CHALLENGE_NOT_FOUND"));
         mvc.perform(get("/api/v1/users/awa/avatar/photo.webp"))
-                .andExpect(status().isNotImplemented())
-                .andExpect(jsonPath("$.code").value("NOT_IMPLEMENTED"));
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("AVATAR_NOT_FOUND"));
     }
 
     @Test
