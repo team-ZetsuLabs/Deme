@@ -14,6 +14,8 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.LinkedHashMap;
@@ -26,7 +28,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ApiException.class)
     ResponseEntity<ApiError> handleApi(ApiException e) {
-        return ResponseEntity.status(e.status()).body(ApiError.of(e.code(), e.getMessage()));
+        return ResponseEntity.status(e.status()).body(new ApiError(e.code(), e.getMessage(), e.fields()));
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    ResponseEntity<ApiError> handleMissingPart(MissingServletRequestPartException e) {
+        return ResponseEntity.badRequest().body(new ApiError("VALIDATION_ERROR", "Certains champs sont invalides",
+                Map.of(e.getRequestPartName(), "Obligatoire")));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    ResponseEntity<ApiError> handleTooLarge(MaxUploadSizeExceededException e) {
+        return ResponseEntity.badRequest().body(ApiError.of("FILE_TOO_LARGE", "Fichier trop volumineux"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

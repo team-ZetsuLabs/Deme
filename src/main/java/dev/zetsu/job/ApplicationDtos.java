@@ -18,6 +18,15 @@ public final class ApplicationDtos {
     private ApplicationDtos() {
     }
 
+    /** Documentation seulement : le formulaire est lu champ par champ (voir JobController.apply). */
+    @Schema(name = "JobApplicationForm", description = "Formulaire multipart de candidature à une offre (JOB-3)")
+    public record JobApplicationForm(
+            @Schema(requiredMode = REQUIRED, minLength = 40, maxLength = 2000,
+                    example = "Je construis des intégrations Orange Money depuis deux ans chez un agrégateur à Thiès.")
+            String message,
+            @Schema(type = "string", format = "binary", description = "CV au format PDF, 2 Mo maximum") String cv) {
+    }
+
     @Schema(name = "MissionApplicationRequest", description = "Se proposer sur une mission")
     public record MissionApplicationRequest(
             @NotBlank(message = "Obligatoire") @Size(min = 40, max = 2000, message = "Entre 40 et 2000 caractères")

@@ -2,7 +2,6 @@ package dev.zetsu.job;
 
 import dev.zetsu.auth.ZetsuPrincipal;
 import dev.zetsu.common.ApiError;
-import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.job.JobDtos.JobDetail;
 import dev.zetsu.job.JobDtos.JobReviewRequest;
@@ -27,6 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "admin", description = "Back office de l'équipe (Modérateur, Administrateur)")
 public class JobAdminController {
 
+    private final JobService jobService;
+
+    public JobAdminController(JobService jobService) {
+        this.jobService = jobService;
+    }
+
     @GetMapping
     @Operation(summary = "Offres à valider (JOB-4)", description = "Par défaut les offres « PENDING », les plus anciennes d'abord.")
     @ApiResponse(responseCode = "200", description = "Page d'offres")
@@ -34,8 +39,9 @@ public class JobAdminController {
     @ApiResponse(responseCode = "403", description = "FORBIDDEN", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public PageResponse<JobDetail> list(@RequestParam(defaultValue = "PENDING") JobStatus status,
                                         @RequestParam(defaultValue = "0") int page,
-                                        @RequestParam(defaultValue = "20") int size) {
-        throw ApiException.notImplemented();
+                                        @RequestParam(defaultValue = "20") int size,
+                                        @AuthenticationPrincipal ZetsuPrincipal me) {
+        return jobService.reviewQueue(status, page, size, me);
     }
 
     @PostMapping("/{id}/decision")
@@ -49,6 +55,6 @@ public class JobAdminController {
     @ApiResponse(responseCode = "409", description = "JOB_NOT_PENDING", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public JobDetail decide(@PathVariable Long id, @Valid @RequestBody JobReviewRequest req,
                             @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return jobService.decide(id, req, me);
     }
 }

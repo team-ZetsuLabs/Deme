@@ -3,12 +3,16 @@ package dev.zetsu.job;
 import dev.zetsu.auth.ZetsuPrincipal;
 import dev.zetsu.common.ApiError;
 import dev.zetsu.common.ApiException;
+import dev.zetsu.common.CountryCode;
 import dev.zetsu.common.PageResponse;
+import dev.zetsu.common.RateLimiter;
+import dev.zetsu.job.ApplicationDtos.JobApplicationForm;
 import dev.zetsu.job.ApplicationDtos.ReceivedApplication;
 import dev.zetsu.job.ApplicationDtos.MyApplication;
 import dev.zetsu.job.JobDtos.JobDetail;
 import dev.zetsu.job.JobDtos.JobRequest;
 import dev.zetsu.job.JobDtos.JobSummary;
+import dev.zetsu.tag.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,11 +35,21 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-/** Contrat du sprint 2 (JOB-1 à JOB-4) : publié avant le code, les fronts travaillent sur les mocks. */
+/** Offres d'emploi (JOB-1 à JOB-4) et candidatures (JOB-3). */
 @RestController
 @RequestMapping("/api/v1/jobs")
 @Tag(name = "jobs", description = "Offres d'emploi, validées par l'équipe avant publication")
 public class JobController {
+
+    private final JobService jobService;
+    private final ApplicationService applicationService;
+    private final RateLimiter rateLimiter;
+
+    public JobController(JobService jobService, ApplicationService applicationService, RateLimiter rateLimiter) {
+        this.jobService = jobService;
+        this.applicationService = applicationService;
+        this.rateLimiter = rateLimiter;
+    }
 
     @GetMapping
     @Operation(summary = "Liste des offres publiées (JOB-1)",
@@ -50,7 +64,12 @@ public class JobController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        if (country != null && !CountryCode.ISO_CODES.contains(country)) {
+            throw ApiException.badRequest("INVALID_COUNTRY", "Code pays inconnu");
+        }
+        var criteria = JobSearch.Criteria.published(type, country,
+                technology == null ? null : TagService.normalize(technology));
+        return jobService.list(criteria, page, size, me);
     }
 
     @GetMapping("/mine")
@@ -60,7 +79,7 @@ public class JobController {
     public PageResponse<JobSummary> mine(@RequestParam(defaultValue = "0") int page,
                                          @RequestParam(defaultValue = "20") int size,
                                          @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return jobService.listForOwner(me.id(), page, size);
     }
 
     @GetMapping("/{id}")
@@ -69,7 +88,7 @@ public class JobController {
     @ApiResponse(responseCode = "200", description = "L'offre")
     @ApiResponse(responseCode = "404", description = "JOB_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public JobDetail get(@PathVariable Long id, @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return jobService.get(id, me);
     }
 
     @PostMapping
@@ -82,7 +101,8 @@ public class JobController {
     @ApiResponse(responseCode = "403", description = "RECRUITER_ONLY", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "429", description = "RATE_LIMITED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public JobDetail create(@Valid @RequestBody JobRequest req, @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        rateLimiter.check(RateLimiter.Rule.PUBLISH, "user:" + me.id());
+        return jobService.create(req, me);
     }
 
     @PutMapping("/{id}")
@@ -94,7 +114,7 @@ public class JobController {
     @ApiResponse(responseCode = "409", description = "JOB_CLOSED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public JobDetail update(@PathVariable Long id, @Valid @RequestBody JobRequest req,
                             @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return jobService.update(id, req, me);
     }
 
     @PostMapping("/{id}/close")
@@ -103,7 +123,7 @@ public class JobController {
     @ApiResponse(responseCode = "403", description = "NOT_JOB_OWNER", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "404", description = "JOB_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public JobDetail close(@PathVariable Long id, @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return jobService.close(id, me);
     }
 
     @PostMapping(value = "/{id}/applications", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -112,18 +132,21 @@ public class JobController {
             description = "Formulaire multipart : message (40 à 2000 caractères) et CV PDF facultatif de 2 Mo maximum. "
                     + "Le profil Zetsu du membre est transmis au recruteur. Une seule candidature par offre.")
     @ApiResponse(responseCode = "201", description = "Candidature envoyée")
-    @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR, CV_NOT_PDF, CV_TOO_LARGE", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR, CV_NOT_PDF, CV_TOO_LARGE, FILE_TOO_LARGE (plus de 5 Mo)", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "403", description = "CANNOT_APPLY_OWN", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "404", description = "JOB_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "409", description = "ALREADY_APPLIED, JOB_CLOSED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "429", description = "RATE_LIMITED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(
+            mediaType = MediaType.MULTIPART_FORM_DATA_VALUE, schema = @Schema(implementation = JobApplicationForm.class)))
     public MyApplication apply(@PathVariable Long id,
-                               @Parameter(description = "40 à 2000 caractères") @RequestPart String message,
-                               @Parameter(description = "CV au format PDF, 2 Mo maximum")
-                               @RequestPart(required = false) MultipartFile cv,
+                               // Champ texte lu comme paramètre : décodé en UTF-8, contrairement à @RequestPart String.
+                               @Parameter(hidden = true) @RequestParam(required = false) String message,
+                               @Parameter(hidden = true) @RequestPart(required = false) MultipartFile cv,
                                @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        rateLimiter.check(RateLimiter.Rule.PUBLISH, "user:" + me.id());
+        return applicationService.applyToJob(id, message, cv, me);
     }
 
     @GetMapping("/{id}/applications")
@@ -138,6 +161,6 @@ public class JobController {
                                                           @RequestParam(defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "20") int size,
                                                           @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return applicationService.receivedForJob(id, status, page, size, me);
     }
 }

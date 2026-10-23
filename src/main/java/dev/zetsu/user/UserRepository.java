@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -16,6 +17,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmailIgnoreCase(String email);
 
     boolean existsByUsernameIgnoreCase(String username);
+
+    @Query("select t.name from User u join u.technologies t where u.id = :id")
+    List<String> technologyNames(@Param("id") Long id);
 
     @Query("select u.status from User u where u.id = :id")
     Optional<UserStatus> findStatus(@Param("id") Long id);

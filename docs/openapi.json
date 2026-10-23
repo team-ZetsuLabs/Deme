@@ -1842,22 +1842,11 @@
           "content" : {
             "multipart/form-data" : {
               "schema" : {
-                "type" : "object",
-                "properties" : {
-                  "message" : {
-                    "type" : "string",
-                    "description" : "40 à 2000 caractères"
-                  },
-                  "cv" : {
-                    "type" : "string",
-                    "format" : "binary",
-                    "description" : "CV au format PDF, 2 Mo maximum"
-                  }
-                },
-                "required" : [ "message" ]
+                "$ref" : "#/components/schemas/JobApplicationForm"
               }
             }
-          }
+          },
+          "required" : true
         },
         "responses" : {
           "201" : {
@@ -1871,7 +1860,7 @@
             }
           },
           "400" : {
-            "description" : "VALIDATION_ERROR, CV_NOT_PDF, CV_TOO_LARGE",
+            "description" : "VALIDATION_ERROR, CV_NOT_PDF, CV_TOO_LARGE, FILE_TOO_LARGE (plus de 5 Mo)",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -3758,6 +3747,24 @@
         },
         "required" : [ "createdAt", "hasCv", "id", "message", "status", "target", "updatedAt" ]
       },
+      "JobApplicationForm" : {
+        "type" : "object",
+        "description" : "Formulaire multipart de candidature à une offre (JOB-3)",
+        "properties" : {
+          "message" : {
+            "type" : "string",
+            "example" : "Je construis des intégrations Orange Money depuis deux ans chez un agrégateur à Thiès.",
+            "maxLength" : 2000,
+            "minLength" : 40
+          },
+          "cv" : {
+            "type" : "string",
+            "format" : "binary",
+            "description" : "CV au format PDF, 2 Mo maximum"
+          }
+        },
+        "required" : [ "message" ]
+      },
       "RegisterRequest" : {
         "type" : "object",
         "properties" : {
@@ -4418,13 +4425,13 @@
       "CsrfToken" : {
         "type" : "object",
         "properties" : {
-          "parameterName" : {
+          "headerName" : {
             "type" : "string"
           },
           "token" : {
             "type" : "string"
           },
-          "headerName" : {
+          "parameterName" : {
             "type" : "string"
           }
         }

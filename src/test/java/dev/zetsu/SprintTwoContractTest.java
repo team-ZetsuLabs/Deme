@@ -7,8 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Contrat du sprint 2 publié avant le code : les points d'entrée existent, répondent 501 tant qu'ils ne sont pas
- * codés, et les règles d'accès sont déjà en place.
+ * Contrat du sprint 2 publié avant le code : les points d'entrée existent, ceux qui ne sont pas encore codés
+ * répondent 501, et les règles d'accès sont en place.
  */
 class SprintTwoContractTest extends IntegrationTest {
 
@@ -35,11 +35,11 @@ class SprintTwoContractTest extends IntegrationTest {
     }
 
     @Test
-    void lesListesSontPubliquesEtRepondent501() throws Exception {
-        mvc.perform(get("/api/v1/jobs"))
+    void lesListesSontPubliques() throws Exception {
+        mvc.perform(get("/api/v1/jobs")).andExpect(status().isOk());
+        mvc.perform(get("/api/v1/missions/7"))
                 .andExpect(status().isNotImplemented())
                 .andExpect(jsonPath("$.code").value("NOT_IMPLEMENTED"));
-        mvc.perform(get("/api/v1/missions/7")).andExpect(status().isNotImplemented());
     }
 
     @Test
@@ -61,6 +61,6 @@ class SprintTwoContractTest extends IntegrationTest {
         Member rimvie = register("Rimvie");
         jdbc.update("update users set role = 'MODERATOR' where id = ?", rimvie.id());
         Member moderator = login(rimvie);
-        mvc.perform(get("/api/v1/admin/jobs").session(moderator.session())).andExpect(status().isNotImplemented());
+        mvc.perform(get("/api/v1/admin/jobs").session(moderator.session())).andExpect(status().isOk());
     }
 }

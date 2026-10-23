@@ -2,16 +2,34 @@ package dev.zetsu.common;
 
 import org.springframework.http.HttpStatus;
 
+import java.util.Map;
+
 /** Erreur métier traduite telle quelle en réponse {@link ApiError}. */
 public class ApiException extends RuntimeException {
 
     private final HttpStatus status;
     private final String code;
+    private final Map<String, String> fields;
 
     public ApiException(HttpStatus status, String code, String message) {
+        this(status, code, message, null);
+    }
+
+    private ApiException(HttpStatus status, String code, String message, Map<String, String> fields) {
         super(message);
         this.status = status;
         this.code = code;
+        this.fields = fields;
+    }
+
+    /** Même forme qu'une erreur de validation des DTO, pour un champ vérifié à la main (formulaire multipart). */
+    public static ApiException invalidField(String field, String message) {
+        return new ApiException(HttpStatus.BAD_REQUEST, "VALIDATION_ERROR", "Certains champs sont invalides",
+                Map.of(field, message));
+    }
+
+    public Map<String, String> fields() {
+        return fields;
     }
 
     public HttpStatus status() {

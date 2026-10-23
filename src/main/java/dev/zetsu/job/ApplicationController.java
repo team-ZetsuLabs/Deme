@@ -2,7 +2,6 @@ package dev.zetsu.job;
 
 import dev.zetsu.auth.ZetsuPrincipal;
 import dev.zetsu.common.ApiError;
-import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.job.ApplicationDtos.ApplicationDecisionRequest;
 import dev.zetsu.job.ApplicationDtos.MyApplication;
@@ -14,6 +13,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +32,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "applications", description = "Candidatures aux offres et propositions sur les missions")
 public class ApplicationController {
 
+    private final ApplicationService applicationService;
+
+    public ApplicationController(ApplicationService applicationService) {
+        this.applicationService = applicationService;
+    }
+
     @GetMapping("/users/me/applications")
     @Operation(summary = "Mes candidatures et propositions (JOB-7)", description = "Statut : envoyée, vue, retenue, refusée.")
     @ApiResponse(responseCode = "200", description = "Page, plus récentes d'abord")
@@ -39,7 +47,7 @@ public class ApplicationController {
                                             @RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "20") int size,
                                             @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return applicationService.sentBy(me, type, status, page, size);
     }
 
     @PatchMapping("/applications/{id}")
@@ -53,7 +61,7 @@ public class ApplicationController {
     @ApiResponse(responseCode = "404", description = "APPLICATION_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public ReceivedApplication decide(@PathVariable Long id, @Valid @RequestBody ApplicationDecisionRequest req,
                                       @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return applicationService.decide(id, req.status(), me);
     }
 
     @GetMapping("/applications/{id}/cv")
@@ -64,6 +72,12 @@ public class ApplicationController {
     @ApiResponse(responseCode = "403", description = "FORBIDDEN", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "404", description = "APPLICATION_NOT_FOUND, CV_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public ResponseEntity<Resource> cv(@PathVariable Long id, @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        var download = applicationService.cv(id, me);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.attachment().filename(download.filename()).build().toString())
+                .header(HttpHeaders.CACHE_CONTROL, "private, no-store")
+                .body(download.file());
     }
 }

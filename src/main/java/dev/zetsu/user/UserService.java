@@ -14,6 +14,7 @@ import dev.zetsu.user.UserDtos.Me;
 import dev.zetsu.user.UserDtos.OnboardingRequest;
 import dev.zetsu.user.UserDtos.PublicProfile;
 import dev.zetsu.user.UserDtos.UpdateProfileRequest;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,10 +30,11 @@ public class UserService {
     private final TagService tags;
     private final OAuthAccountRepository oauthAccounts;
     private final ReputationEventRepository reputationEvents;
+    private final ApplicationEventPublisher events;
 
     public UserService(UserRepository users, QuestionRepository questions, AnswerRepository answers,
                        ReputationService reputation, TagService tags, OAuthAccountRepository oauthAccounts,
-                       ReputationEventRepository reputationEvents) {
+                       ReputationEventRepository reputationEvents, ApplicationEventPublisher events) {
         this.users = users;
         this.questions = questions;
         this.answers = answers;
@@ -40,6 +42,7 @@ public class UserService {
         this.tags = tags;
         this.oauthAccounts = oauthAccounts;
         this.reputationEvents = reputationEvents;
+        this.events = events;
     }
 
     @Transactional(readOnly = true)
@@ -53,7 +56,11 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public PublicProfile profile(String username) {
-        User u = byUsername(username);
+        return profile(byUsername(username));
+    }
+
+    /** Profil public d'un membre déjà chargé, par exemple celui d'un candidat (JOB-3). */
+    public PublicProfile profile(User u) {
         return new PublicProfile(u.getUsername(), u.getDisplayName(), u.getAvatarUrl(), u.getBio(),
                 u.getCountryCode(), u.getCity(), u.getRole(), u.getReputation(),
                 reputation.levelOf(u.getReputation()), u.isVisibleToRecruiters(), UserDtos.technologyNames(u),
@@ -90,7 +97,7 @@ public class UserService {
 
     /**
      * AUTH-6 : contenus gardés sous « Utilisateur supprimé », réputation et comptes OAuth effacés. Les votes
-     * restent pour ne pas changer les scores des autres. Les candidatures (JOB-3) seront effacées ici aussi.
+     * restent pour ne pas changer les scores des autres. Les autres domaines réagissent à {@link AccountDeleted}.
      */
     @Transactional
     public void delete(Long id, DeleteAccountRequest req) {
@@ -100,6 +107,7 @@ public class UserService {
         }
         oauthAccounts.deleteByUserId(id);
         reputationEvents.deleteByUserId(id);
+        events.publishEvent(new AccountDeleted(id));
         u.anonymize();
     }
 

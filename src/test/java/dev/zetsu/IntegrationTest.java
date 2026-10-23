@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Import(TestcontainersConfig.class)
 @ActiveProfiles("local")
+@TestPropertySource(properties = "zetsu.uploads-dir=target/test-uploads")
 @Testcontainers(disabledWithoutDocker = true)
 public abstract class IntegrationTest {
 
@@ -88,6 +90,12 @@ public abstract class IntegrationTest {
                 .andReturn();
         return new Member(member.id(), member.username(), member.email(),
                 (MockHttpSession) result.getRequest().getSession(false));
+    }
+
+    /** Change le rôle en base (ce que fera le back office) puis rouvre une session qui le porte. */
+    protected Member withRole(Member member, String role) throws Exception {
+        jdbc.update("update users set role = ? where id = ?", role, member.id());
+        return login(member);
     }
 
     /** Donne de la réputation directement en base, pour atteindre un niveau sans dérouler tout un scénario. */
