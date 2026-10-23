@@ -1,0 +1,65 @@
+{
+  "lead": "One challenge per week, Monday to Sunday.",
+  "create": "Create a challenge",
+  "col": {
+    "challenge": "Challenge",
+    "status": "Status",
+    "period": "Period",
+    "submissions": "Submissions",
+    "points": "Points",
+    "participant": "Participant",
+    "repo": "Repository",
+    "received": "Received",
+    "evaluation": "Evaluation"
+  },
+  "status": {
+    "ongoing": "Ongoing",
+    "upcoming": "Upcoming",
+    "finished": "Finished"
+  },
+  "period": "{{from}} to {{to}}",
+  "submissionsTitle": "Submissions for the current challenge",
+  "scoreLabel": "Score out of 100",
+  "validate": "Validate",
+  "reject": "Reject",
+  "scoreError": "Enter a score between 0 and 100",
+  "graded": "{{name}} receives +20 points",
+  "rejectedToast": "Submission rejected",
+  "submission": {
+    "toGrade": "To grade",
+    "validated": "Validated",
+    "rejected": "Rejected"
+  },
+  "note": {
+    "empty": "Empty repository",
+    "offBrief": "Does not meet the brief"
+  },
+  "newTitle": "New challenge",
+  "newLead": "The preview updates as you type.",
+  "defaultEndpoint1": "Start an action",
+  "defaultEndpoint2": "View the results",
+  "errors": {
+    "title": "The title must be at least 10 characters.",
+    "description": "Describe the challenge in at least 40 characters.",
+    "date": "The end date must be after the start date."
+  },
+  "scheduled": "Challenge scheduled",
+  "previewTitle": "Challenge title",
+  "previewDescription": "The brief will appear here.",
+  "field": {
+    "title": "Title",
+    "description": "Brief",
+    "endpoints": "Expected endpoints",
+    "method": "Method {{n}}",
+    "endpointDescription": "Description {{n}}",
+    "removeEndpoint": "Remove endpoint {{n}}",
+    "addEndpoint": "Add an endpoint",
+    "start": "Start",
+    "end": "End",
+    "points": "Reputation points"
+  },
+  "scheduling": "Scheduling",
+  "schedule": "Schedule the challenge",
+  "preview": "Preview for members",
+  "previewMeta": "From {{from}} to {{to}}, +{{points}} points"
+}

@@ -1,0 +1,23 @@
+{
+  "notFound": {
+    "title": "Page not found",
+    "message": "The requested address does not exist in the back office."
+  },
+  "crash": {
+    "title": "Something went wrong",
+    "message": "This screen could not be displayed. Reload the page; if the problem continues, tell the team."
+  },
+  "reload": "Reload the page",
+  "backHome": "Back to the dashboard",
+  "codes": {
+    "NETWORK_ERROR": "Unable to connect. Check your network and try again.",
+    "LOGIN_LOCKED": "Too many failed attempts. Try again in 15 minutes.",
+    "ACCOUNT_SUSPENDED": "This account is suspended.",
+    "LEVEL_TOO_LOW": "Your reputation level does not allow this action.",
+    "HTTP_401": "Your session has expired. Sign in again.",
+    "HTTP_403": "You are not allowed to do this.",
+    "HTTP_404": "Item not found.",
+    "HTTP_429": "Too many requests. Please wait a moment.",
+    "MOCK_NOT_FOUND": "Sample response missing in src/mocks."
+  }
+}

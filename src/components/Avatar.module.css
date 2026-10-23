@@ -1,28 +1,13 @@
-.avatar {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: var(--touch-target);
-  height: var(--touch-target);
+.av {
+  flex-shrink: 0;
+  display: inline-grid;
+  place-items: center;
   border-radius: 50%;
-  color: var(--color-on-avatar);
-  font-weight: 700;
-  font-size: var(--font-size-small);
+  color: var(--on-color);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px var(--line);
 }
 
-.color1 {
-  background: var(--color-avatar-1);
-}
-.color2 {
-  background: var(--color-avatar-2);
-}
-.color3 {
-  background: var(--color-avatar-3);
-}
-.color4 {
-  background: var(--color-avatar-4);
-}
-.color5 {
-  background: var(--color-avatar-5);
+.sq {
+  border-radius: var(--r-sm);
 }

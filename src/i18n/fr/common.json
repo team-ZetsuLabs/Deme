@@ -1,0 +1,9 @@
+{
+  "loading": "Chargement…",
+  "error": "Une erreur est survenue.",
+  "empty": "Rien à afficher.",
+  "retry": "Réessayer",
+  "cancel": "Annuler",
+  "close": "Fermer",
+  "undo": "Annuler"
+}

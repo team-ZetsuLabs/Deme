@@ -1,9 +1,25 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import en from './en.json'
-import fr from './fr.json'
 
 const STORAGE_KEY = 'zetsu-bo-lang'
+
+type Messages = Record<string, unknown>
+
+/** Chaque fichier de src/i18n/<langue>/<espace>.json devient la clé de premier niveau <espace>. */
+function load(files: Record<string, Messages>): Messages {
+  const out: Messages = {}
+  for (const [path, messages] of Object.entries(files)) {
+    const name = path
+      .split('/')
+      .pop()
+      ?.replace(/\.json$/, '')
+    if (name) out[name] = messages
+  }
+  return out
+}
+
+const fr = load(import.meta.glob<Messages>('./fr/*.json', { eager: true, import: 'default' }))
+const en = load(import.meta.glob<Messages>('./en/*.json', { eager: true, import: 'default' }))
 
 function readStoredLanguage(): 'fr' | 'en' {
   try {

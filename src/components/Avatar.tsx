@@ -1,26 +1,39 @@
+import type { CSSProperties } from 'react'
 import styles from './Avatar.module.css'
 
 export type AvatarProps = {
   name: string
+  size?: number
+  square?: boolean
 }
 
+const PALETTE_SIZE = 8
+
 export function initialsOf(name: string): string {
-  const parts = name.trim().split(/\s+/).filter(Boolean)
-  if (parts.length === 0) return '?'
-  const first = parts[0][0]
-  const last = parts.length > 1 ? parts[parts.length - 1][0] : ''
-  return (first + last).toUpperCase()
+  return name
+    .split(/[\s_-]+/)
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
 }
 
 function colorIndexOf(name: string): number {
-  let hash = 0
-  for (const char of name) hash = (hash * 31 + char.charCodeAt(0)) % 5
-  return hash + 1
+  let hash = 7
+  for (const char of name) hash = (hash * 31 + char.charCodeAt(0)) >>> 0
+  return (hash % PALETTE_SIZE) + 1
 }
 
-export default function Avatar({ name }: AvatarProps) {
+export default function Avatar({ name, size = 28, square = false }: AvatarProps) {
+  const style = {
+    width: size,
+    height: size,
+    fontSize: Math.max(10, Math.round(size * 0.38)),
+    background: `var(--av-${colorIndexOf(name)})`,
+  } as CSSProperties
   return (
-    <span className={`${styles.avatar} ${styles[`color${colorIndexOf(name)}`]}`} aria-hidden="true">
+    <span className={`${styles.av} ${square ? styles.sq : ''}`} style={style} aria-hidden="true">
       {initialsOf(name)}
     </span>
   )

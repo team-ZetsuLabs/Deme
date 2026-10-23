@@ -1,0 +1,34 @@
+{
+  "lead": "Toutes les questions publiées sur la plateforme.",
+  "all": "Toutes",
+  "filterLabel": "Filtrer par statut",
+  "filter": {
+    "published": "Publiées",
+    "hidden": "Masquées",
+    "closed": "Fermées"
+  },
+  "col": {
+    "question": "Question",
+    "author": "Auteur",
+    "tags": "Tags",
+    "answers": "Réponses",
+    "flags": "Signal.",
+    "status": "Statut",
+    "actions": "Actions"
+  },
+  "publishedOn": "Publiée le {{date}}",
+  "status": {
+    "published": "Publiée",
+    "hidden": "Masquée",
+    "closed": "Fermée"
+  },
+  "republish": "Republier",
+  "hide": "Masquer",
+  "reopen": "Rouvrir",
+  "close": "Fermer",
+  "toast": {
+    "published": "Question republiée",
+    "hidden": "Question masquée",
+    "closed": "Question fermée aux nouvelles réponses"
+  }
+}

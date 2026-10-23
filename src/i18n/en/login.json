@@ -1,0 +1,19 @@
+{
+  "title": "Administration sign-in",
+  "lead": "Access reserved for the moderation team and administrators.",
+  "email": "Email address",
+  "password": "Password",
+  "continue": "Continue",
+  "checking": "Checking",
+  "emailError": "Enter a valid email address.",
+  "passwordError": "Enter your password.",
+  "otpTitle": "Two-step verification",
+  "otpLead": "Open your authenticator app and enter the code it shows.",
+  "otp": "Verification code",
+  "otpHint": "The 6-digit code from your authenticator app.",
+  "otpError": "The code has 6 digits.",
+  "verify": "Verify and sign in",
+  "back": "Back to the previous step",
+  "welcome": "Welcome, {{name}}",
+  "demoNote": "Demo: real verification will be connected to the API."
+}

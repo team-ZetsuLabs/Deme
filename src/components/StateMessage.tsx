@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import Button from './Button'
-import styles from './StateMessage.module.css'
+import { EmptyState } from './Panel'
 
 export type StateMessageProps = {
   kind: 'loading' | 'error' | 'empty'
@@ -12,12 +12,14 @@ export default function StateMessage({ kind, message, onRetry }: StateMessagePro
   const { t } = useTranslation()
   const text = message ?? t(`common.${kind}`)
   return (
-    <div
-      className={`${styles.state} ${kind === 'error' ? styles.error : ''}`}
-      role={kind === 'error' ? 'alert' : 'status'}
-    >
-      <p>{text}</p>
-      {kind === 'error' && onRetry && <Button onClick={onRetry}>{t('common.retry')}</Button>}
+    <div role={kind === 'error' ? 'alert' : 'status'}>
+      <EmptyState title={text}>
+        {kind === 'error' && onRetry && (
+          <Button style={{ marginTop: 12 }} onClick={onRetry}>
+            {t('common.retry')}
+          </Button>
+        )}
+      </EmptyState>
     </div>
   )
 }

@@ -1,0 +1,135 @@
+{
+  "roles": {
+    "member": "Member",
+    "moderator": "Moderator"
+  },
+  "durations": {
+    "1d": "1 day",
+    "7d": "7 days",
+    "30d": "30 days",
+    "permanent": "Permanent"
+  },
+  "status": {
+    "active": "Active",
+    "flagged": "Flagged",
+    "suspended": "Suspended"
+  },
+  "warnings_one": "{{count}} warning",
+  "warnings_other": "{{count}} warnings",
+  "points_one": "{{count}} reputation point",
+  "points_other": "{{count}} reputation points",
+  "suspend": {
+    "title": "Suspend the account",
+    "lead": "{{name}} will not be able to post or sign in for the chosen duration.",
+    "duration": "Duration",
+    "reason": "Reason",
+    "hint": "The reason is sent to the user and kept in the audit log.",
+    "reasonError": "Give a reason of at least {{count}} characters.",
+    "submit": "Suspend",
+    "action": "Suspend",
+    "done": "{{name}} is suspended ({{duration}})"
+  },
+  "summary_one": "{{count}} account, including {{suspended}} suspended and {{flagged}} flagged.",
+  "summary_other": "{{count}} accounts, including {{suspended}} suspended and {{flagged}} flagged.",
+  "exportCsv": "Export as CSV",
+  "exported_one": "{{count}} row exported",
+  "exported_other": "{{count}} rows exported",
+  "search": "Search",
+  "searchPlaceholder": "Name or email",
+  "allRoles": "All roles",
+  "allStatuses": "All statuses",
+  "bulk": {
+    "label": "Bulk actions",
+    "title": "Suspend the accounts",
+    "text_one": "Suspend {{count}} account for 7 days? Each user will be notified by email.",
+    "text_other": "Suspend {{count}} accounts for 7 days? Each user will be notified by email.",
+    "selected_one": "{{count}} account selected",
+    "selected_other": "{{count}} accounts selected",
+    "export": "Export the selection",
+    "suspend": "Suspend for 7 days",
+    "clear": "Clear selection",
+    "done_one": "{{count}} account suspended",
+    "done_other": "{{count}} accounts suspended"
+  },
+  "selectPage": "Select the accounts on this page",
+  "select": "Select {{name}}",
+  "unknownCountry": "Unknown",
+  "col": {
+    "user": "User",
+    "country": "Country",
+    "role": "Role",
+    "reputation": "Reputation",
+    "joined": "Joined",
+    "status": "Status"
+  },
+  "view": "View",
+  "range": "{{from}} to {{to}} of {{total}}",
+  "previous": "Previous",
+  "next": "Next",
+  "noneTitle": "No account matches",
+  "noneHint": "Change the search or the filters.",
+  "reset": "Reset the filters",
+  "sanction": {
+    "aggressive": "Warning: aggressive tone in an answer",
+    "promo": "Warning: repeated promotional links",
+    "suspension": "30-day suspension: repeated spam"
+  },
+  "roleChange": {
+    "title": "Change the role",
+    "text": "Change {{name}} to the role “{{role}}”? The change is immediate.",
+    "ok": "Change the role",
+    "done": "{{name}} is now {{role}}"
+  },
+  "delete": {
+    "title": "Delete the account",
+    "text": "Permanently delete the account of {{name}}? Their content will remain visible as “Deleted user”.",
+    "ok": "Delete the account",
+    "done": "Account of {{name}} deleted"
+  },
+  "reactivated": "{{name}} is active again",
+  "reactivate": "Reactivate the account",
+  "profile": {
+    "line": "{{email}}, {{country}}, joined on {{date}} via {{provider}}",
+    "public": "Public profile"
+  },
+  "stat": {
+    "reputation": "reputation",
+    "questions": "questions",
+    "answers": "answers",
+    "warnings": "warnings"
+  },
+  "tabs": {
+    "label": "Account history",
+    "activity": "Activity",
+    "sanctions": "Sanctions ({{count}})",
+    "logins": "Sign-ins"
+  },
+  "published": "Published",
+  "noQuestions": "No question published recently.",
+  "answersTotal_one": "{{count}} answer in total.",
+  "answersTotal_other": "{{count}} answers in total.",
+  "by": "by {{name}}",
+  "noSanctions": "No sanction on this account.",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "login": {
+    "today": "Sign-in via {{provider}}, Chrome on Android, IP 102.180.xx.xx ({{country}})",
+    "yesterday": "Sign-in via {{provider}}, Firefox on Windows, IP 102.180.xx.xx",
+    "password": "Password changed"
+  },
+  "manage": {
+    "title": "Account management",
+    "roleHint": "A moderator can handle reports and hide content.",
+    "recruiters": "Visible to recruiters",
+    "recruitersHint": "User's choice, read-only.",
+    "reset": "Reset the password",
+    "resetHint": "Sends a link by email.",
+    "resetDone": "Reset link sent",
+    "send": "Send",
+    "delete": "Delete the account",
+    "deleteHint": "Their content will be anonymised."
+  },
+  "yes": "Yes",
+  "no": "No",
+  "backToList": "Back to the list of users"
+}

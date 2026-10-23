@@ -1,0 +1,65 @@
+{
+  "lead": "Un défi par semaine, du lundi au dimanche.",
+  "create": "Créer un défi",
+  "col": {
+    "challenge": "Défi",
+    "status": "Statut",
+    "period": "Période",
+    "submissions": "Soumissions",
+    "points": "Points",
+    "participant": "Participant",
+    "repo": "Dépôt",
+    "received": "Reçu",
+    "evaluation": "Évaluation"
+  },
+  "status": {
+    "ongoing": "En cours",
+    "upcoming": "À venir",
+    "finished": "Terminé"
+  },
+  "period": "{{from}} au {{to}}",
+  "submissionsTitle": "Soumissions du défi en cours",
+  "scoreLabel": "Note sur 100",
+  "validate": "Valider",
+  "reject": "Refuser",
+  "scoreError": "Entrez une note entre 0 et 100",
+  "graded": "{{name}} reçoit +20 points",
+  "rejectedToast": "Soumission refusée",
+  "submission": {
+    "toGrade": "À évaluer",
+    "validated": "Validé",
+    "rejected": "Refusé"
+  },
+  "note": {
+    "empty": "Dépôt vide",
+    "offBrief": "Ne répond pas à l'énoncé"
+  },
+  "newTitle": "Nouveau défi",
+  "newLead": "L'aperçu se met à jour pendant la saisie.",
+  "defaultEndpoint1": "Initier une action",
+  "defaultEndpoint2": "Consulter les résultats",
+  "errors": {
+    "title": "Le titre doit faire au moins 10 caractères.",
+    "description": "Décrivez le défi en au moins 40 caractères.",
+    "date": "La date de fin doit être après la date de début."
+  },
+  "scheduled": "Défi programmé",
+  "previewTitle": "Titre du défi",
+  "previewDescription": "L'énoncé apparaîtra ici.",
+  "field": {
+    "title": "Titre",
+    "description": "Énoncé",
+    "endpoints": "Endpoints attendus",
+    "method": "Méthode {{n}}",
+    "endpointDescription": "Description {{n}}",
+    "removeEndpoint": "Retirer l'endpoint {{n}}",
+    "addEndpoint": "Ajouter un endpoint",
+    "start": "Début",
+    "end": "Fin",
+    "points": "Points de réputation"
+  },
+  "scheduling": "Programmation",
+  "schedule": "Programmer le défi",
+  "preview": "Aperçu pour les membres",
+  "previewMeta": "Du {{from}} au {{to}}, +{{points}} points"
+}

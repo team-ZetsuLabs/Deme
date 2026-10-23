@@ -1,0 +1,70 @@
+{
+  "pending_one": "{{count}} report pending.",
+  "pending_other": "{{count}} reports pending.",
+  "autoHideRule": "Content reported {{count}} times is hidden automatically.",
+  "allReasons": "All",
+  "filterByReason": "Filter by reason",
+  "queue": "Report queue",
+  "count_one": "{{count}} report",
+  "count_other": "{{count}} reports",
+  "reasonBy": "{{reason}}, by {{name}}",
+  "types": {
+    "answer": "Answer",
+    "question": "Question",
+    "profile": "Profile",
+    "offer": "Offer"
+  },
+  "reason": {
+    "spam": "Spam",
+    "offensive": "Offensive content",
+    "offTopic": "Off topic",
+    "impersonation": "Impersonation",
+    "fraudulentOffer": "Fraudulent offer"
+  },
+  "detailTitle": {
+    "answer": "Answer reported for “{{reason}}”",
+    "question": "Question reported for “{{reason}}”",
+    "profile": "Profile reported for “{{reason}}”",
+    "offer": "Offer reported for “{{reason}}”"
+  },
+  "context": {
+    "answerTo": "Answer to “{{title}}”",
+    "questionIn": "Question posted in {{tag}}",
+    "profileIntro": "Profile introduction",
+    "offer": "Offer “{{title}}”"
+  },
+  "author": "Author",
+  "accountStatus": "Account status",
+  "history": "History",
+  "noWarning": "No warning",
+  "joined": "Joined on",
+  "reportedBy": "Reported by",
+  "action": {
+    "ignore": "Ignore the report",
+    "hide": "Hide the content",
+    "warn": "Warn the author",
+    "suspend": "Suspend the author"
+  },
+  "toast": {
+    "reportIgnored": "Report ignored.",
+    "contentHidden": "Content hidden.",
+    "warningSent": "Warning sent.",
+    "accountSuspended": "Account suspended."
+  },
+  "remaining_one": "{{count}} left to handle.",
+  "remaining_other": "{{count}} left to handle.",
+  "queueEmpty": "Queue empty.",
+  "emptyAll": "No reports pending",
+  "emptyAllHint": "The moderation queue is empty. Good work.",
+  "emptyReason": "No reports for the reason “{{reason}}”",
+  "warn": {
+    "title": "Warn the author",
+    "lead": "{{name}} will receive this message by email and in their notifications.",
+    "message": "Message sent to the author",
+    "template": "Hello {{name}}, your {{type}} was reported for “{{reason}}”. Please read the community rules again.",
+    "hideToo": "Also hide the content",
+    "hideHint": "It stays visible to its author.",
+    "submit": "Send the warning",
+    "error": "Explain the rule that was broken in at least {{count}} characters."
+  }
+}

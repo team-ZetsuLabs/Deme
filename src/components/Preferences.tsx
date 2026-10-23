@@ -1,38 +1,39 @@
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '../hooks/useTheme'
-import type { Theme } from '../hooks/useTheme'
-import SegmentedControl from './SegmentedControl'
-import styles from './Preferences.module.css'
+import Button from './Button'
+import Icon from './Icon'
+import Segmented from './Segmented'
 
 type Language = 'fr' | 'en'
 
-export default function Preferences() {
-  const { t, i18n } = useTranslation()
+export function ThemeToggle() {
+  const { t } = useTranslation()
   const { theme, setTheme } = useTheme()
-  const language: Language = i18n.language.startsWith('en') ? 'en' : 'fr'
-
+  const dark = theme === 'dark'
   return (
-    <div className={styles.preferences}>
-      <SegmentedControl<Theme>
-        compact
-        label={t('prefs.theme')}
-        value={theme}
-        onChange={setTheme}
-        options={[
-          { value: 'light', label: t('prefs.light') },
-          { value: 'dark', label: t('prefs.dark') },
-        ]}
-      />
-      <SegmentedControl<Language>
-        compact
-        label={t('prefs.language')}
-        value={language}
-        onChange={(next) => i18n.changeLanguage(next)}
-        options={[
-          { value: 'fr', label: 'Français' },
-          { value: 'en', label: 'English' },
-        ]}
-      />
-    </div>
+    <Button
+      variant="ghost"
+      size="icon"
+      aria-label={dark ? t('prefs.toLight') : t('prefs.toDark')}
+      onClick={() => setTheme(dark ? 'light' : 'dark')}
+    >
+      <Icon name={dark ? 'sun' : 'moon'} size={18} />
+    </Button>
+  )
+}
+
+export function LanguageSwitch() {
+  const { t, i18n } = useTranslation()
+  const language: Language = i18n.language.startsWith('en') ? 'en' : 'fr'
+  return (
+    <Segmented<Language>
+      label={t('prefs.language')}
+      value={language}
+      onChange={(next) => i18n.changeLanguage(next)}
+      options={[
+        { value: 'fr', label: 'FR' },
+        { value: 'en', label: 'EN' },
+      ]}
+    />
   )
 }

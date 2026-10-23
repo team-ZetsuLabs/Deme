@@ -1,0 +1,19 @@
+{
+  "title": "Connexion à l'administration",
+  "lead": "Accès réservé à l'équipe de modération et aux administrateurs.",
+  "email": "Adresse email",
+  "password": "Mot de passe",
+  "continue": "Continuer",
+  "checking": "Vérification",
+  "emailError": "Entrez une adresse email valide.",
+  "passwordError": "Entrez votre mot de passe.",
+  "otpTitle": "Vérification en deux étapes",
+  "otpLead": "Ouvrez votre application d'authentification et saisissez le code affiché.",
+  "otp": "Code de vérification",
+  "otpHint": "Le code à 6 chiffres de votre application d'authentification.",
+  "otpError": "Le code contient 6 chiffres.",
+  "verify": "Vérifier et se connecter",
+  "back": "Revenir à l'étape précédente",
+  "welcome": "Bienvenue, {{name}}",
+  "demoNote": "Démonstration : la vérification réelle sera branchée sur l'API."
+}

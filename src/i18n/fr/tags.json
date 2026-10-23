@@ -1,0 +1,28 @@
+{
+  "lead": "Renommez, fusionnez les doublons et gérez les synonymes pour garder une recherche propre.",
+  "newTag": "Nouveau tag",
+  "hint": "Minuscules, chiffres et tirets.",
+  "placeholder": "ex. : kotlin",
+  "create": "Créer le tag",
+  "invalid": "Utilisez 2 à 24 caractères : minuscules, chiffres et tirets.",
+  "exists": "Le tag « {{name}} » existe déjà, ou c'est un synonyme.",
+  "created": "Tag « {{name}} » créé",
+  "col": {
+    "tag": "Tag",
+    "questions": "Questions",
+    "synonyms": "Synonymes",
+    "created": "Créé",
+    "actions": "Actions"
+  },
+  "none": "Aucun",
+  "merge": "Fusionner",
+  "delete": "Supprimer",
+  "deleteDisabled": "Un tag utilisé ne peut pas être supprimé : fusionnez-le",
+  "deleteTitle": "Supprimer le tag",
+  "deleteText": "Supprimer « {{name}} » ? Il n'est utilisé par aucune question.",
+  "deleted": "Tag supprimé",
+  "mergeTitle": "Fusionner le tag",
+  "mergeLead": "Les questions de « {{name}} » seront déplacées, et « {{name}} » deviendra un synonyme.",
+  "mergeInto": "Fusionner dans",
+  "merged": "« {{from}} » fusionné dans « {{into}} »"
+}

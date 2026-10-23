@@ -1,0 +1,28 @@
+{
+  "lead": "Rename, merge duplicates and manage synonyms to keep search clean.",
+  "newTag": "New tag",
+  "hint": "Lowercase letters, digits and hyphens.",
+  "placeholder": "e.g. kotlin",
+  "create": "Create the tag",
+  "invalid": "Use 2 to 24 characters: lowercase letters, digits and hyphens.",
+  "exists": "The tag “{{name}}” already exists, or it is a synonym.",
+  "created": "Tag “{{name}}” created",
+  "col": {
+    "tag": "Tag",
+    "questions": "Questions",
+    "synonyms": "Synonyms",
+    "created": "Created",
+    "actions": "Actions"
+  },
+  "none": "None",
+  "merge": "Merge",
+  "delete": "Delete",
+  "deleteDisabled": "A tag in use cannot be deleted: merge it instead",
+  "deleteTitle": "Delete the tag",
+  "deleteText": "Delete “{{name}}”? No question uses it.",
+  "deleted": "Tag deleted",
+  "mergeTitle": "Merge the tag",
+  "mergeLead": "The questions of “{{name}}” will be moved, and “{{name}}” will become a synonym.",
+  "mergeInto": "Merge into",
+  "merged": "“{{from}}” merged into “{{into}}”"
+}
