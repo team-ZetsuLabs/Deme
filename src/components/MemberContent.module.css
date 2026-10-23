@@ -1,0 +1,29 @@
+.content {
+  overflow-wrap: anywhere;
+}
+
+.content p,
+.content ul,
+.content ol,
+.content pre,
+.content blockquote {
+  margin: 0 0 var(--space-3);
+}
+
+.content pre {
+  overflow-x: auto;
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  background: var(--color-surface-muted);
+}
+
+.content code {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+}
+
+.content blockquote {
+  padding-left: var(--space-3);
+  border-left: 3px solid var(--color-border);
+  color: var(--color-text-muted);
+}
