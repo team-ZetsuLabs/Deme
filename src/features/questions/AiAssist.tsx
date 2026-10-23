@@ -163,9 +163,9 @@ export function AiAssist({
           <Skeleton height={14} />
           <Skeleton width="70%" height={14} />
           <div className={styles.skRow}>
-            <Skeleton width={64} height={24} radius="full" />
-            <Skeleton width={84} height={24} radius="full" />
-            <Skeleton width={72} height={24} radius="full" />
+            <Skeleton width={64} height={24} radius="sm" />
+            <Skeleton width={84} height={24} radius="sm" />
+            <Skeleton width={72} height={24} radius="sm" />
           </div>
         </div>
       )}

@@ -7,7 +7,7 @@
   min-width: 17px;
   height: 17px;
   padding: 0 var(--s1);
-  border-radius: 9px;
+  border-radius: var(--r-sm);
   background: var(--green);
   color: var(--green-ink);
   font-family: var(--f-mono);

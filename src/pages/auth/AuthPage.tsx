@@ -1,4 +1,4 @@
-import { Link, NavLink, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoginForm } from '../../features/auth/LoginForm';
 import { OAuthButtons } from '../../features/auth/OAuthButtons';
@@ -53,13 +53,6 @@ export default function AuthPage({ mode }: AuthPageProps) {
       ) : (
         <LoginForm key="login" onSignedIn={onSignedIn} />
       )}
-
-      <p className={styles.switch}>
-        {t(`auth.${mode}.switch`)}{' '}
-        <Link to={isRegister ? '/login' : '/register'} state={{ from: returnTo }} replace>
-          {t(`auth.${mode}.switchLink`)}
-        </Link>
-      </p>
     </AuthShell>
   );
 }

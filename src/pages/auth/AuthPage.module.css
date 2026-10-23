@@ -1,13 +1,17 @@
 .auth {
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  overflow: hidden;
 }
 
 .main {
   display: flex;
   flex-direction: column;
-  padding: var(--s5) var(--s7);
+  min-height: 0;
+  padding: var(--s4) var(--s7);
+  overflow-y: auto;
   background: var(--surface);
 }
 
@@ -26,9 +30,9 @@
 
 .form {
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   margin: auto;
-  padding: var(--s7) 0;
+  padding: var(--s5) 0;
 }
 
 .form:focus {
@@ -50,7 +54,7 @@
 .tabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin: var(--s5) 0;
+  margin: var(--s4) 0;
   padding: 3px;
   background: var(--surface);
   border: 1px solid var(--line);
@@ -94,6 +98,13 @@
 
 .switch a {
   font-weight: 500;
+}
+
+/* Écran court : l'introduction cède sa place au formulaire. */
+@media (max-height: 820px) {
+  .lead {
+    display: none;
+  }
 }
 
 @media (max-width: 959px) {

@@ -99,10 +99,10 @@
   --s6: 32px;
   --s7: 48px;
 
-  /* Rayons */
-  --r-sm: 6px;
-  --r-md: 10px;
-  --r-lg: 14px;
+  /* Rayons : angles nets, à peine adoucis. */
+  --r-sm: 2px;
+  --r-md: 4px;
+  --r-lg: 6px;
   --r-full: 999px;
 
   /* Typographie */

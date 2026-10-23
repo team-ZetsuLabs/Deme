@@ -43,8 +43,8 @@ export function OAuthButtons({ mode, onSignedIn }: OAuthButtonsProps) {
   if (loading) {
     return (
       <div className={styles.oauth} aria-hidden="true">
-        <Skeleton height={46} radius="md" />
-        <Skeleton height={46} radius="md" />
+        <Skeleton height={44} radius="md" />
+        <Skeleton height={44} radius="md" />
       </div>
     );
   }
@@ -59,6 +59,7 @@ export function OAuthButtons({ mode, onSignedIn }: OAuthButtonsProps) {
             href={urls[id]}
             className={`${buttonClass({ variant, block: true })} ${styles.oauthBtn}`}
             aria-busy={pending === id || undefined}
+            aria-label={t(`auth.oauth.${id}${mode === 'register' ? 'Register' : ''}`)}
             onClick={(e) => onClick(e, id)}
           >
             {pending === id ? (
@@ -66,7 +67,7 @@ export function OAuthButtons({ mode, onSignedIn }: OAuthButtonsProps) {
             ) : (
               <Icon name={id} size={18} />
             )}
-            {t(`auth.oauth.${id}${mode === 'register' ? 'Register' : ''}`)}
+            {id === 'github' ? 'GitHub' : 'Google'}
           </a>
         ))}
       </div>

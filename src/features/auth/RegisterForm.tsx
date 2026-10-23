@@ -93,80 +93,74 @@ export function RegisterForm({ onSignedIn }: RegisterFormProps) {
         </div>
       )}
 
-      <Field
-        id={IDS.name}
-        label={t('auth.fields.name')}
-        hint={t('auth.fields.nameHint')}
-        error={nameError}
-      >
-        <input
-          id={IDS.name}
-          autoComplete="name"
-          maxLength={NAME_MAX}
-          value={values.name}
-          onChange={(e) => form.setValue('name', e.target.value)}
-          onBlur={() => form.onBlur('name')}
-          aria-invalid={!!nameError}
-          aria-describedby={describedBy(IDS.name, true, nameError)}
-        />
-      </Field>
+      <div className={styles.row}>
+        <Field id={IDS.name} label={t('auth.fields.name')} error={nameError}>
+          <input
+            id={IDS.name}
+            autoComplete="name"
+            maxLength={NAME_MAX}
+            value={values.name}
+            onChange={(e) => form.setValue('name', e.target.value)}
+            onBlur={() => form.onBlur('name')}
+            aria-invalid={!!nameError}
+            aria-describedby={describedBy(IDS.name, false, nameError)}
+          />
+        </Field>
 
-      <Field id={IDS.email} label={t('auth.fields.email')} error={emailError}>
-        <input
-          id={IDS.email}
-          type="email"
-          inputMode="email"
-          autoComplete="email"
-          value={values.email}
-          onChange={(e) => form.setValue('email', e.target.value)}
-          onBlur={() => form.onBlur('email')}
-          aria-invalid={!!emailError}
-          aria-describedby={describedBy(IDS.email, false, emailError)}
-        />
-      </Field>
+        <Field id={IDS.country} label={t('auth.fields.country')} error={countryError}>
+          <select
+            id={IDS.country}
+            autoComplete="country"
+            value={values.country}
+            onChange={(e) => form.setValue('country', e.target.value)}
+            onBlur={() => form.onBlur('country')}
+            aria-invalid={!!countryError}
+            aria-describedby={describedBy(IDS.country, false, countryError)}
+          >
+            <option value="">{t('auth.fields.countryPlaceholder')}</option>
+            {countries.map((c) => (
+              <option key={c.code} value={c.code}>
+                {c.name}
+              </option>
+            ))}
+            <option value={OTHER_COUNTRY}>{t('auth.fields.countryOther')}</option>
+          </select>
+        </Field>
+      </div>
 
-      <Field
-        id={IDS.country}
-        label={t('auth.fields.country')}
-        hint={t('auth.fields.countryHint')}
-        error={countryError}
-      >
-        <select
-          id={IDS.country}
-          autoComplete="country"
-          value={values.country}
-          onChange={(e) => form.setValue('country', e.target.value)}
-          onBlur={() => form.onBlur('country')}
-          aria-invalid={!!countryError}
-          aria-describedby={describedBy(IDS.country, true, countryError)}
-        >
-          <option value="">{t('auth.fields.countryPlaceholder')}</option>
-          {countries.map((c) => (
-            <option key={c.code} value={c.code}>
-              {c.name}
-            </option>
-          ))}
-          <option value={OTHER_COUNTRY}>{t('auth.fields.countryOther')}</option>
-        </select>
-      </Field>
+      <div className={styles.row}>
+        <Field id={IDS.email} label={t('auth.fields.email')} error={emailError}>
+          <input
+            id={IDS.email}
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            value={values.email}
+            onChange={(e) => form.setValue('email', e.target.value)}
+            onBlur={() => form.onBlur('email')}
+            aria-invalid={!!emailError}
+            aria-describedby={describedBy(IDS.email, false, emailError)}
+          />
+        </Field>
 
-      <Field
-        id={IDS.password}
-        label={t('auth.fields.password')}
-        hint={t('auth.fields.passwordHint')}
-        error={passwordError}
-      >
-        <PasswordInput
+        <Field
           id={IDS.password}
-          autoComplete="new-password"
-          value={values.password}
-          onChange={(e) => form.setValue('password', e.target.value)}
-          onBlur={() => form.onBlur('password')}
-          aria-invalid={!!passwordError}
-          aria-describedby={describedBy(IDS.password, true, passwordError)}
-        />
-        <StrengthMeter level={passwordStrength(values.password)} />
-      </Field>
+          label={t('auth.fields.password')}
+          hint={t('auth.fields.passwordHint')}
+          error={passwordError}
+        >
+          <PasswordInput
+            id={IDS.password}
+            autoComplete="new-password"
+            value={values.password}
+            onChange={(e) => form.setValue('password', e.target.value)}
+            onBlur={() => form.onBlur('password')}
+            aria-invalid={!!passwordError}
+            aria-describedby={describedBy(IDS.password, true, passwordError)}
+          />
+          <StrengthMeter level={passwordStrength(values.password)} />
+        </Field>
+      </div>
 
       <div className={styles.trap} aria-hidden="true">
         <label htmlFor="register-website">{t('auth.fields.website')}</label>

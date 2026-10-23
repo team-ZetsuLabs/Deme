@@ -54,7 +54,7 @@
   height: 20px;
   margin-left: auto;
   padding: 0 6px;
-  border-radius: 10px;
+  border-radius: var(--r-sm);
   background: var(--green);
   color: var(--green-ink);
   font-family: var(--f-mono);

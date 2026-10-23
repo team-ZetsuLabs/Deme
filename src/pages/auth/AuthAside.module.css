@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-height: 0;
+  overflow: hidden;
   padding: var(--s7);
   border-left: 1px solid var(--line);
   background-color: var(--bg);
@@ -123,17 +125,6 @@
 
 @media (max-width: 959px) {
   .side {
-    padding: var(--s6) var(--s5);
-    border-left: none;
-    border-top: 1px solid var(--line);
-  }
-}
-
-@media (max-width: 767px) {
-  .side {
-    padding: var(--s6) var(--s4);
-  }
-  .title {
-    font-size: var(--fs-xl);
+    display: none;
   }
 }
