@@ -12,7 +12,10 @@ import java.lang.annotation.Target;
 import java.util.Locale;
 import java.util.Set;
 
-/** Code pays ISO 3166-1 alpha-2 en majuscules ({@code SN}, {@code CI}, {@code CM}…). Null accepté. */
+/**
+ * Code pays ISO 3166-1 alpha-2 en majuscules ({@code SN}, {@code CI}, {@code CM}…). Null ou vide accepté : l'obligation
+ * relève de {@code @NotBlank}, sinon les deux messages se disputent le champ dans la réponse.
+ */
 @Target({ElementType.FIELD, ElementType.RECORD_COMPONENT, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = CountryCode.Validator.class)
@@ -29,7 +32,7 @@ public @interface CountryCode {
     class Validator implements ConstraintValidator<CountryCode, String> {
         @Override
         public boolean isValid(String value, ConstraintValidatorContext context) {
-            return value == null || ISO_CODES.contains(value);
+            return value == null || value.isBlank() || ISO_CODES.contains(value);
         }
     }
 }

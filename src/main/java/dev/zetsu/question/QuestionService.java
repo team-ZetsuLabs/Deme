@@ -107,7 +107,7 @@ public class QuestionService {
         q.setCode(blankToNull(req.code()));
         q.setTags(tagService.resolve(req.tags()));
         QuestionContext ctx = req.context();
-        q.setCountryCode(ctx == null ? null : ctx.countryCode());
+        q.setCountryCode(ctx == null ? null : blankToNull(ctx.countryCode()));
         q.setMobileMoneyOperator(ctx == null ? null : ctx.mobileMoneyOperator());
         q.setNetworkQuality(ctx == null ? null : ctx.networkQuality());
         q.setTechVersion(ctx == null ? null : blankToNull(ctx.techVersion()));
