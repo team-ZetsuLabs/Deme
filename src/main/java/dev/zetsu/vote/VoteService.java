@@ -58,31 +58,31 @@ public class VoteService {
 
     @Transactional
     public VoteResult voteQuestion(Long questionId, int value, ZetsuPrincipal me) {
-        return vote(question(questionId), value, me);
+        return vote(question(questionId, me), value, me);
     }
 
     @Transactional
     public VoteResult unvoteQuestion(Long questionId, ZetsuPrincipal me) {
-        return unvote(question(questionId), me);
+        return unvote(question(questionId, me), me);
     }
 
     @Transactional
     public VoteResult voteAnswer(Long answerId, int value, ZetsuPrincipal me) {
-        return vote(answer(answerId), value, me);
+        return vote(answer(answerId, me), value, me);
     }
 
     @Transactional
     public VoteResult unvoteAnswer(Long answerId, ZetsuPrincipal me) {
-        return unvote(answer(answerId), me);
+        return unvote(answer(answerId, me), me);
     }
 
-    private Target question(Long id) {
-        Question q = questionService.load(id);
+    private Target question(Long id, ZetsuPrincipal me) {
+        Question q = questionService.loadVisible(id, me);
         return new Target(VoteTarget.QUESTION, q.getId(), q.getAuthor().getId(), q.getId(), null, q.getTitle());
     }
 
-    private Target answer(Long id) {
-        Answer a = answerService.load(id);
+    private Target answer(Long id, ZetsuPrincipal me) {
+        Answer a = answerService.loadVisible(id, me);
         String title = questions.findById(a.getQuestionId()).map(Question::getTitle).orElse("");
         return new Target(VoteTarget.ANSWER, a.getId(), a.getAuthor().getId(), a.getQuestionId(), a.getId(), title);
     }

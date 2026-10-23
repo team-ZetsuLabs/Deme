@@ -44,7 +44,8 @@ public class QuestionSearch {
     }
 
     public Result search(Criteria c, int page, int size) {
-        StringBuilder where = new StringBuilder(" where true");
+        // Une question masquée (MOD-2) reste lisible par son auteur sur sa page, pas dans le fil.
+        StringBuilder where = new StringBuilder(" where not q.hidden");
         MapSqlParameterSource params = new MapSqlParameterSource();
         boolean hasText = c.text() != null && !c.text().isBlank();
 

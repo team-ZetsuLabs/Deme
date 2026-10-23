@@ -2,8 +2,8 @@ package dev.zetsu.moderation;
 
 import dev.zetsu.auth.ZetsuPrincipal;
 import dev.zetsu.common.ApiError;
-import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
+import dev.zetsu.common.RateLimiter;
 import dev.zetsu.moderation.ModerationDtos.AppealRequest;
 import dev.zetsu.moderation.ModerationDtos.CaseDecisionRequest;
 import dev.zetsu.moderation.ModerationDtos.ModerationCase;
@@ -28,13 +28,21 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Contrat du sprint 3 : modération par la communauté (MOD-1 à MOD-3). Les niveaux sont ceux de la section 8 :
+ * Modération par la communauté (MOD-1 à MOD-3). Les niveaux sont ceux de la section 8 :
  * signaler à partir de Membre, voir la file à partir de Contributeur, décider à partir de Référent.
  */
 @RestController
 @RequestMapping("/api/v1")
 @Tag(name = "moderation", description = "Signalements et file des Référents")
 public class ModerationController {
+
+    private final ModerationService moderationService;
+    private final RateLimiter rateLimiter;
+
+    public ModerationController(ModerationService moderationService, RateLimiter rateLimiter) {
+        this.moderationService = moderationService;
+        this.rateLimiter = rateLimiter;
+    }
 
     @PostMapping("/reports")
     @ResponseStatus(HttpStatus.CREATED)
@@ -50,7 +58,8 @@ public class ModerationController {
     @ApiResponse(responseCode = "409", description = "ALREADY_REPORTED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "429", description = "RATE_LIMITED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public ReportReceipt report(@Valid @RequestBody ReportRequest req, @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        rateLimiter.check(RateLimiter.Rule.REPORT, "user:" + me.id());
+        return moderationService.report(req, me);
     }
 
     @GetMapping("/moderation/cases")
@@ -65,7 +74,7 @@ public class ModerationController {
                                               @RequestParam(defaultValue = "0") int page,
                                               @RequestParam(defaultValue = "20") int size,
                                               @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return moderationService.queue(targetType, page, size, me);
     }
 
     @PostMapping("/moderation/cases/{id}/decision")
@@ -80,7 +89,7 @@ public class ModerationController {
     @ApiResponse(responseCode = "409", description = "CASE_ALREADY_DECIDED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public ModerationCase decide(@PathVariable Long id, @Valid @RequestBody CaseDecisionRequest req,
                                  @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return moderationService.decide(id, req, me);
     }
 
     @PostMapping("/moderation/cases/{id}/appeal")
@@ -95,7 +104,7 @@ public class ModerationController {
     @ApiResponse(responseCode = "409", description = "CASE_NOT_HIDDEN, ALREADY_APPEALED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public MyModeratedContent appeal(@PathVariable Long id, @Valid @RequestBody AppealRequest req,
                                      @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return moderationService.appeal(id, req, me);
     }
 
     @GetMapping("/users/me/moderation")
@@ -107,6 +116,6 @@ public class ModerationController {
     public PageResponse<MyModeratedContent> mine(@RequestParam(defaultValue = "0") int page,
                                                  @RequestParam(defaultValue = "20") int size,
                                                  @AuthenticationPrincipal ZetsuPrincipal me) {
-        throw ApiException.notImplemented();
+        return moderationService.mine(page, size, me);
     }
 }

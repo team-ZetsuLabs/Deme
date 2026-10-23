@@ -15,11 +15,12 @@ public class JobSearch {
      * @param recruiterId null pour tous les recruteurs
      * @param oldestFirst file de validation (JOB-4) ; sinon les plus récentes d'abord
      */
+    /** @param includeHidden vrai pour les listes du recruteur et de l'équipe, qui voient les offres masquées (MOD-2) */
     public record Criteria(JobStatus status, Long recruiterId, JobType type, String countryCode, String technology,
-                           boolean oldestFirst) {
+                           boolean oldestFirst, boolean includeHidden) {
 
         public static Criteria published(JobType type, String countryCode, String technology) {
-            return new Criteria(JobStatus.PUBLISHED, null, type, countryCode, technology, false);
+            return new Criteria(JobStatus.PUBLISHED, null, type, countryCode, technology, false, false);
         }
     }
 
@@ -33,7 +34,7 @@ public class JobSearch {
     }
 
     public Result search(Criteria c, int page, int size) {
-        StringBuilder where = new StringBuilder(" where true");
+        StringBuilder where = new StringBuilder(c.includeHidden() ? " where true" : " where not j.hidden");
         MapSqlParameterSource params = new MapSqlParameterSource();
         if (c.status() != null) {
             where.append(" and j.status = :status");

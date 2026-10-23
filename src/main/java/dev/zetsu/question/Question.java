@@ -33,6 +33,10 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /** Masqué par la modération (MOD-2, MOD-3) : écrit seulement par ModerationService. */
+    @Column(nullable = false, insertable = false, updatable = false)
+    private boolean hidden;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "author_id")
     private User author;
@@ -202,5 +206,9 @@ public class Question {
 
     public Instant getUpdatedAt() {
         return updatedAt;
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 }

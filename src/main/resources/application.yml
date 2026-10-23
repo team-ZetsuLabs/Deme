@@ -61,6 +61,9 @@ zetsu:
     daily-cap: 200
     rewarded-questions-per-day: 3
     rewarded-votes-per-pair-per-day: 3
+  # Section 7 : masquage automatique après 5 signalements de comptes distincts (MOD-2).
+  moderation:
+    auto-hide-threshold: 5
 
 springdoc:
   api-docs:

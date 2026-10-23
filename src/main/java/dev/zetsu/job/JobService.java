@@ -69,14 +69,14 @@ public class JobService {
     @Transactional(readOnly = true)
     public PageResponse<JobSummary> listForOwner(Long recruiterId, int page, int size) {
         Paging.of(page, size);
-        var criteria = new JobSearch.Criteria(null, recruiterId, null, null, null, false);
+        var criteria = new JobSearch.Criteria(null, recruiterId, null, null, null, false, true);
         return page(search.search(criteria, page, size), page, size, j -> toSummary(j, Set.of()));
     }
 
     @Transactional(readOnly = true)
     public PageResponse<JobDetail> reviewQueue(JobStatus status, int page, int size, ZetsuPrincipal me) {
         Paging.of(page, size);
-        var criteria = new JobSearch.Criteria(status, null, null, null, null, status == JobStatus.PENDING);
+        var criteria = new JobSearch.Criteria(status, null, null, null, null, status == JobStatus.PENDING, true);
         return page(search.search(criteria, page, size), page, size, j -> toDetail(j, me));
     }
 
@@ -141,11 +141,11 @@ public class JobService {
         return toDetail(job, me);
     }
 
-    /** Une offre en attente ou refusée n'existe que pour son recruteur et l'équipe : 404 pour les autres. */
+    /** Une offre en attente, refusée ou masquée n'existe que pour son recruteur et l'équipe : 404 pour les autres. */
     Job loadVisible(Long id, ZetsuPrincipal me) {
         Job job = jobs.findDetailed(id).orElseThrow(JobService::notFound);
-        boolean visible = job.getStatus() == JobStatus.PUBLISHED || job.getStatus() == JobStatus.CLOSED
-                || isOwner(job, me) || isStaff(me);
+        boolean visible = (job.getStatus() == JobStatus.PUBLISHED || job.getStatus() == JobStatus.CLOSED)
+                && !job.isHidden() || isOwner(job, me) || isStaff(me);
         if (!visible) {
             throw notFound();
         }

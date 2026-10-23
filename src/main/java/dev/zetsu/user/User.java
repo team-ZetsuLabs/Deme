@@ -29,6 +29,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /** Masqué par la modération (MOD-2, MOD-3) : écrit seulement par ModerationService. */
+    @Column(nullable = false, insertable = false, updatable = false)
+    private boolean hidden;
+
     @Column(nullable = false, unique = true, length = 30)
     private String username;
 
@@ -250,5 +254,9 @@ public class User {
 
     public Instant getCreatedAt() {
         return createdAt;
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 }

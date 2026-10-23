@@ -12,16 +12,23 @@ import java.util.Optional;
 
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
-    /** Réponse acceptée en tête, puis par score, puis la plus ancienne d'abord. */
+    /**
+     * Réponse acceptée en tête, puis par score, puis la plus ancienne d'abord. Les réponses masquées (MOD-2) ne
+     * restent visibles que pour leur auteur et l'équipe.
+     */
     @EntityGraph(attributePaths = "author")
     @Query(value = """
             select a from Answer a
             where a.questionId = :questionId
+              and (a.hidden = false or a.author.id = :viewerId or :staff = true)
             order by case when a.id = :acceptedId then 0 else 1 end, a.score desc, a.createdAt asc, a.id asc
             """,
-            countQuery = "select count(a) from Answer a where a.questionId = :questionId")
+            countQuery = """
+                    select count(a) from Answer a where a.questionId = :questionId
+                      and (a.hidden = false or a.author.id = :viewerId or :staff = true)
+                    """)
     Page<Answer> findForQuestion(@Param("questionId") Long questionId, @Param("acceptedId") Long acceptedId,
-                                 Pageable pageable);
+                                 @Param("viewerId") Long viewerId, @Param("staff") boolean staff, Pageable pageable);
 
     @EntityGraph(attributePaths = "author")
     @Query("select a from Answer a where a.id = :id")

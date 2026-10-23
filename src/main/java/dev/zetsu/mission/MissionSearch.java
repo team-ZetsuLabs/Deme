@@ -24,7 +24,8 @@ public class MissionSearch {
     }
 
     public Result search(Criteria c, int page, int size) {
-        StringBuilder where = new StringBuilder(" where true");
+        // Une mission masquée (MOD-2) reste lisible par son auteur sur sa page, pas dans les listes.
+        StringBuilder where = new StringBuilder(" where not m.hidden");
         MapSqlParameterSource params = new MapSqlParameterSource();
         if (c.status() != null) {
             where.append(" and m.status = :status");

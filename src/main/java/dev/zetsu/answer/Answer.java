@@ -21,6 +21,10 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /** Masqué par la modération (MOD-2, MOD-3) : écrit seulement par ModerationService. */
+    @Column(nullable = false, insertable = false, updatable = false)
+    private boolean hidden;
+
     @Column(name = "question_id", nullable = false, updatable = false)
     private Long questionId;
 
@@ -102,5 +106,9 @@ public class Answer {
 
     public Instant getUpdatedAt() {
         return updatedAt;
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 }

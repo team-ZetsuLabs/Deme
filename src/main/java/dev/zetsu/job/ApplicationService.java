@@ -90,7 +90,7 @@ public class ApplicationService {
     /** JOB-5 : se proposer sur une mission ouverte, avec un montant si l'on ne prend pas le budget indicatif. */
     @Transactional
     public MyApplication applyToMission(Long missionId, MissionApplicationRequest req, ZetsuPrincipal me) {
-        Mission mission = missionService.load(missionId);
+        Mission mission = missionService.loadVisible(missionId, me);
         if (MissionService.isAuthor(mission, me)) {
             throw ApiException.forbidden("CANNOT_APPLY_OWN", "Impossible de se proposer sur sa propre mission");
         }

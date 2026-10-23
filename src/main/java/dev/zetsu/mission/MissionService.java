@@ -79,7 +79,7 @@ public class MissionService {
 
     @Transactional(readOnly = true)
     public MissionDetail get(Long id, ZetsuPrincipal me) {
-        return toDetail(load(id), me);
+        return toDetail(loadVisible(id, me), me);
     }
 
     @Transactional
@@ -121,6 +121,15 @@ public class MissionService {
     public Mission load(Long id) {
         return missions.findDetailed(id)
                 .orElseThrow(() -> ApiException.notFound("MISSION_NOT_FOUND", "Mission introuvable"));
+    }
+
+    /** Une mission masquée (MOD-2) n'existe que pour son auteur et l'équipe : 404 pour les autres. */
+    public Mission loadVisible(Long id, ZetsuPrincipal me) {
+        Mission m = load(id);
+        if (m.isHidden() && !isAuthor(m, me) && !(me != null && me.staff())) {
+            throw ApiException.notFound("MISSION_NOT_FOUND", "Mission introuvable");
+        }
+        return m;
     }
 
     public Mission loadOwned(Long id, ZetsuPrincipal me) {

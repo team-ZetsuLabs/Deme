@@ -53,8 +53,8 @@ public class UserController {
     @Operation(summary = "Profil public d'un membre")
     @ApiResponse(responseCode = "200", description = "Le profil")
     @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
-    public PublicProfile profile(@PathVariable String username) {
-        return userService.profile(username);
+    public PublicProfile profile(@PathVariable String username, @AuthenticationPrincipal ZetsuPrincipal me) {
+        return userService.profile(username, me);
     }
 
     @GetMapping("/{username}/reputation")

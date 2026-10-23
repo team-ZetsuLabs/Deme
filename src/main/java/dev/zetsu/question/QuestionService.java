@@ -71,7 +71,7 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public QuestionDetail get(Long id, ZetsuPrincipal me) {
-        return toDetail(load(id), me);
+        return toDetail(loadVisible(id, me), me);
     }
 
     @Transactional
@@ -99,6 +99,15 @@ public class QuestionService {
     public Question load(Long id) {
         return questions.findDetailed(id)
                 .orElseThrow(() -> ApiException.notFound("QUESTION_NOT_FOUND", "Question introuvable"));
+    }
+
+    /** Une question masquée (MOD-2) n'existe que pour son auteur et l'équipe : 404 pour les autres. */
+    public Question loadVisible(Long id, ZetsuPrincipal me) {
+        Question q = load(id);
+        if (q.isHidden() && !(me != null && (q.getAuthor().getId().equals(me.id()) || me.staff()))) {
+            throw ApiException.notFound("QUESTION_NOT_FOUND", "Question introuvable");
+        }
+        return q;
     }
 
     private void apply(Question q, QuestionRequest req) {

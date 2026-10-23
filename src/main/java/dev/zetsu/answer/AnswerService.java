@@ -55,15 +55,16 @@ public class AnswerService {
 
     @Transactional(readOnly = true)
     public PageResponse<AnswerView> list(Long questionId, int page, int size, ZetsuPrincipal me) {
-        Question q = questionService.load(questionId);
-        Page<Answer> result = answers.findForQuestion(questionId, q.getAcceptedAnswerId(), Paging.of(page, size));
+        Question q = questionService.loadVisible(questionId, me);
+        Page<Answer> result = answers.findForQuestion(questionId, q.getAcceptedAnswerId(),
+                me == null ? null : me.id(), me != null && me.staff(), Paging.of(page, size));
         Map<Long, Integer> myVotes = myVotes(result.getContent(), me);
         return PageResponse.of(result, a -> toView(a, q, myVotes.get(a.getId()), me));
     }
 
     @Transactional
     public AnswerView create(Long questionId, AnswerDtos.AnswerRequest req, ZetsuPrincipal me) {
-        Question q = questionService.load(questionId);
+        Question q = questionService.loadVisible(questionId, me);
         Answer a = new Answer(q.getId(), users.getReferenceById(me.id()));
         a.setBody(req.body(), markdown.toSafeHtml(req.body()));
         a.setCode(blankToNull(req.code()));
@@ -138,6 +139,16 @@ public class AnswerService {
     public Answer load(Long id) {
         return answers.findDetailed(id)
                 .orElseThrow(() -> ApiException.notFound("ANSWER_NOT_FOUND", "Réponse introuvable"));
+    }
+
+    /** Une réponse masquée (MOD-2) n'existe que pour son auteur et l'équipe, comme sa question. */
+    public Answer loadVisible(Long id, ZetsuPrincipal me) {
+        Answer a = load(id);
+        if (a.isHidden() && !(me != null && (a.getAuthor().getId().equals(me.id()) || me.staff()))) {
+            throw ApiException.notFound("ANSWER_NOT_FOUND", "Réponse introuvable");
+        }
+        questionService.loadVisible(a.getQuestionId(), me);
+        return a;
     }
 
     private static boolean sameAnswer(Answer a, Answer b) {

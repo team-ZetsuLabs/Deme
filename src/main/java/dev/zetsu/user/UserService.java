@@ -2,6 +2,7 @@ package dev.zetsu.user;
 
 import dev.zetsu.answer.AnswerRepository;
 import dev.zetsu.auth.OAuthAccountRepository;
+import dev.zetsu.auth.ZetsuPrincipal;
 import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.question.QuestionRepository;
@@ -54,9 +55,14 @@ public class UserService {
         return Me.from(u, reputation.levelOf(u.getReputation()));
     }
 
+    /** Un profil masqué (MOD-2) n'existe que pour le membre lui-même et l'équipe : 404 pour les autres. */
     @Transactional(readOnly = true)
-    public PublicProfile profile(String username) {
-        return profile(byUsername(username));
+    public PublicProfile profile(String username, ZetsuPrincipal me) {
+        User u = byUsername(username);
+        if (u.isHidden() && !(me != null && (u.getId().equals(me.id()) || me.staff()))) {
+            throw notFound();
+        }
+        return profile(u);
     }
 
     /** Profil public d'un membre déjà chargé, par exemple celui d'un candidat (JOB-3). */
