@@ -1,8 +1,10 @@
 .page {
   display: flex;
   min-height: 100vh;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: var(--space-4);
   padding: var(--space-4);
 }
 
@@ -34,4 +36,9 @@
   margin-top: var(--space-1);
   color: var(--color-text-muted);
   font-size: var(--font-size-small);
+}
+
+.prefs {
+  width: 100%;
+  max-width: 26rem;
 }

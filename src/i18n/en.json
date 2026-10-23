@@ -22,9 +22,6 @@
     "menu": "Menu",
     "closeMenu": "Close menu",
     "navLabel": "Main navigation",
-    "themeDark": "Dark mode",
-    "themeLight": "Light mode",
-    "switchLanguage": "Switch language",
     "logout": "Log out"
   },
   "login": {
@@ -41,7 +38,11 @@
     "title": "Reports and appeals",
     "intro": "Work through the queue of reported content. Every decision is recorded and can be appealed.",
     "filter": "Filter reports",
-    "tab": { "pending": "To review", "treated": "Handled", "contests": "Appeals" },
+    "tab": {
+      "pending": "To review",
+      "treated": "Handled",
+      "contests": "Appeals"
+    },
     "empty": "No reports in this list.",
     "target": {
       "question": "Question",
@@ -67,7 +68,12 @@
       "warned": "Author warned",
       "suspended": "Account suspended"
     },
-    "action": { "ignore": "Ignore", "hide": "Hide", "warn": "Warn", "suspend": "Suspend" },
+    "action": {
+      "ignore": "Ignore",
+      "hide": "Hide",
+      "warn": "Warn",
+      "suspend": "Suspend"
+    },
     "undoMessage": "Decision recorded. You have 6 seconds to undo it.",
     "suspendDialog": {
       "title": "Suspend this account?",
@@ -90,7 +96,11 @@
     "intro": "An offer is only published once the team approves it. Check the company domain and the pay.",
     "filter": "Filter offers",
     "empty": "No offers in this list.",
-    "status": { "pending": "Pending", "approved": "Approved", "refused": "Refused" },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "refused": "Refused"
+    },
     "type": {
       "permanent": "Permanent",
       "remote": "Remote",
@@ -192,5 +202,11 @@
   "referent": {
     "title": "Referent view",
     "intro": "Moderation by trusted members. You can ignore or hide a piece of content; the author can appeal to the team."
+  },
+  "prefs": {
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "language": "Language"
   }
 }

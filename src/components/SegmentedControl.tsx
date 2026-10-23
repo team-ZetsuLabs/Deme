@@ -7,6 +7,7 @@ export type SegmentedControlProps<T extends string> = {
   options: SegmentedOption<T>[]
   value: T
   onChange: (value: T) => void
+  compact?: boolean
 }
 
 export default function SegmentedControl<T extends string>({
@@ -14,9 +15,14 @@ export default function SegmentedControl<T extends string>({
   options,
   value,
   onChange,
+  compact = false,
 }: SegmentedControlProps<T>) {
   return (
-    <div role="group" aria-label={label} className={styles.group}>
+    <div
+      role="group"
+      aria-label={label}
+      className={`${styles.group} ${compact ? styles.compact : ''}`}
+    >
       {options.map((option) => (
         <button
           key={option.value}

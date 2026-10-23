@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import Button from '../../components/Button'
 import Field from '../../components/Field'
+import Preferences from '../../components/Preferences'
 import styles from './LoginPage.module.css'
 
 export default function LoginPage() {
@@ -24,6 +25,9 @@ export default function LoginPage() {
 
   return (
     <main className={styles.page}>
+      <div className={styles.prefs}>
+        <Preferences />
+      </div>
       <form className={styles.card} onSubmit={handleSubmit} noValidate>
         <div>
           <p className={styles.brand}>Zetsu</p>

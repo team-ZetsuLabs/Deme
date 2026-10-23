@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink, Outlet } from 'react-router-dom'
 import Button from '../components/Button'
-import { useTheme } from '../hooks/useTheme'
+import Preferences from '../components/Preferences'
 import styles from './AdminLayout.module.css'
 
 const NAV_ITEMS = [
@@ -15,10 +15,8 @@ const NAV_ITEMS = [
 ]
 
 export default function AdminLayout() {
-  const { t, i18n } = useTranslation()
-  const { theme, toggleTheme } = useTheme()
+  const { t } = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
-  const nextLanguage = i18n.language === 'fr' ? 'en' : 'fr'
 
   return (
     <div className={styles.shell}>
@@ -60,17 +58,7 @@ export default function AdminLayout() {
             </ul>
           </nav>
           <div className={styles.tools}>
-            <Button variant="ghost" onClick={toggleTheme}>
-              {theme === 'light' ? t('shell.themeDark') : t('shell.themeLight')}
-            </Button>
-            <Button
-              variant="ghost"
-              lang={nextLanguage}
-              aria-label={t('shell.switchLanguage')}
-              onClick={() => i18n.changeLanguage(nextLanguage)}
-            >
-              {nextLanguage.toUpperCase()}
-            </Button>
+            <Preferences />
             <NavLink to="/login" className={styles.logout}>
               {t('shell.logout')}
             </NavLink>

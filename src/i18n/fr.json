@@ -22,9 +22,6 @@
     "menu": "Menu",
     "closeMenu": "Fermer le menu",
     "navLabel": "Navigation principale",
-    "themeDark": "Mode sombre",
-    "themeLight": "Mode clair",
-    "switchLanguage": "Changer de langue",
     "logout": "Se déconnecter"
   },
   "login": {
@@ -41,7 +38,11 @@
     "title": "Signalements et contestations",
     "intro": "Traitez la file des contenus signalés. Chaque décision est enregistrée et peut être contestée.",
     "filter": "Filtrer les signalements",
-    "tab": { "pending": "À traiter", "treated": "Traités", "contests": "Contestations" },
+    "tab": {
+      "pending": "À traiter",
+      "treated": "Traités",
+      "contests": "Contestations"
+    },
     "empty": "Aucun signalement dans cette liste.",
     "target": {
       "question": "Question",
@@ -67,7 +68,12 @@
       "warned": "Auteur averti",
       "suspended": "Compte suspendu"
     },
-    "action": { "ignore": "Ignorer", "hide": "Masquer", "warn": "Avertir", "suspend": "Suspendre" },
+    "action": {
+      "ignore": "Ignorer",
+      "hide": "Masquer",
+      "warn": "Avertir",
+      "suspend": "Suspendre"
+    },
     "undoMessage": "Décision enregistrée. Vous avez 6 secondes pour l'annuler.",
     "suspendDialog": {
       "title": "Suspendre ce compte ?",
@@ -90,7 +96,11 @@
     "intro": "Une offre n'est publiée qu'après validation par l'équipe. Vérifiez le domaine de l'entreprise et la rémunération.",
     "filter": "Filtrer les offres",
     "empty": "Aucune offre dans cette liste.",
-    "status": { "pending": "En attente", "approved": "Approuvées", "refused": "Refusées" },
+    "status": {
+      "pending": "En attente",
+      "approved": "Approuvées",
+      "refused": "Refusées"
+    },
     "type": {
       "permanent": "CDI",
       "remote": "À distance",
@@ -192,5 +202,11 @@
   "referent": {
     "title": "Vue Référent",
     "intro": "La modération par les membres de confiance. Vous pouvez ignorer ou masquer un contenu ; l'auteur peut contester devant l'équipe."
+  },
+  "prefs": {
+    "theme": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "language": "Langue"
   }
 }

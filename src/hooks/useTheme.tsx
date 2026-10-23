@@ -1,9 +1,9 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
 export type Theme = 'light' | 'dark'
 
-type ThemeContextValue = { theme: Theme; toggleTheme: () => void }
+type ThemeContextValue = { theme: Theme; setTheme: (theme: Theme) => void }
 
 const STORAGE_KEY = 'zetsu-bo-theme'
 const ThemeContext = createContext<ThemeContextValue | null>(null)
@@ -28,8 +28,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }, [theme])
 
-  const toggleTheme = useCallback(() => setTheme((t) => (t === 'light' ? 'dark' : 'light')), [])
-  const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme])
+  const value = useMemo(() => ({ theme, setTheme }), [theme])
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }
