@@ -28,7 +28,8 @@ public class QuestionSearch {
     }
 
     public record Criteria(String text, String tag, String countryCode, MobileMoneyOperator operator,
-                           NetworkQuality network, String authorUsername, Status status, Sort sort) {
+                           NetworkQuality network, String authorUsername, String community, Status status,
+                           Sort sort) {
     }
 
     public record Result(List<Long> ids, long total) {
@@ -73,6 +74,13 @@ public class QuestionSearch {
         if (c.authorUsername() != null) {
             where.append(" and q.author_id = (select id from users where lower(username) = lower(:author))");
             params.addValue("author", c.authorUsername());
+        }
+        if (c.community() != null) {
+            // Communauté (COM-1) : questions de son pays ou de son étiquette. Adresse inconnue : aucune question.
+            where.append(" and exists (select 1 from communities co where co.slug = :community and ("
+                    + "(co.kind = 'COUNTRY' and q.country_code = co.country_code) or (co.kind = 'TECH' and exists ("
+                    + "select 1 from question_tags cqt where cqt.question_id = q.id and cqt.tag_id = co.tag_id))))");
+            params.addValue("community", c.community());
         }
         if (c.status() == Status.UNSOLVED) {
             where.append(" and q.accepted_answer_id is null");

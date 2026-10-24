@@ -1,0 +1,51 @@
+{
+  "items": [
+    {
+      "slug": "senegal",
+      "name": "Sénégal",
+      "kind": "COUNTRY",
+      "countryCode": "SN",
+      "tag": null,
+      "description": "Développeurs de Dakar, Thiès, Saint-Louis et d'ailleurs : Wave, Orange Money, freelance et premiers emplois.",
+      "memberCount": 1284,
+      "questionCount": 412,
+      "joined": true
+    },
+    {
+      "slug": "mobile-money",
+      "name": "Mobile money",
+      "kind": "TECH",
+      "countryCode": null,
+      "tag": "mobile-money",
+      "description": "Intégrer Wave, Orange Money, MTN MoMo et M-Pesa : webhooks, réconciliation, cas d'erreur.",
+      "memberCount": 1102,
+      "questionCount": 367,
+      "joined": true
+    },
+    {
+      "slug": "kenya",
+      "name": "Kenya",
+      "kind": "COUNTRY",
+      "countryCode": "KE",
+      "tag": null,
+      "description": "De Nairobi à Mombasa : M-Pesa, Daraja API, startups et missions à distance.",
+      "memberCount": 973,
+      "questionCount": 288,
+      "joined": false
+    },
+    {
+      "slug": "flutter",
+      "name": "Flutter",
+      "kind": "TECH",
+      "countryCode": null,
+      "tag": "flutter",
+      "description": "Applications Flutter légères qui tiennent en 3G et sur Android Go, du prototype à la publication.",
+      "memberCount": 846,
+      "questionCount": 233,
+      "joined": false
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 4
+}

@@ -82,7 +82,7 @@ docs/           contrat d'API exporté, notes de décision
 
 - Un composant utilisé par le site web **et** le back office va dans `shared/`. Un composant utilisé par un seul des deux reste dans son application.
 
-Côté back-end, le code est rangé **par domaine**, pas par couche : `auth`, `user`, `question`, `answer`, `vote`, `reputation`, `job`, `mission`, `notification`, `moderation`, `challenge`, `ai`. Chaque domaine contient son contrôleur, son service, son dépôt et ses DTO.
+Côté back-end, le code est rangé **par domaine**, pas par couche : `auth`, `user`, `question`, `answer`, `vote`, `reputation`, `job`, `mission`, `notification`, `moderation`, `challenge`, `community`, `ai`. Chaque domaine contient son contrôleur, son service, son dépôt et ses DTO.
 
 ## Le contrat d'API (la règle qui évite que le back-end bloque tout le monde)
 
@@ -158,10 +158,10 @@ Ce qu'on **fait** :
 
 ## Identifiants et priorités
 
-Chaque fonctionnalité a un identifiant dans le cahier des charges (AUTH, QA, REP, JOB, PRJ, IA, CH, NOT, MOD, SET ; R pour les idées en réserve). On les cite dans les branches, les commits et les issues.
+Chaque fonctionnalité a un identifiant dans le cahier des charges (AUTH, QA, REP, JOB, PRJ, IA, CH, NOT, MOD, SET ; COM pour les communautés, ajoutées par l'équipe hors cahier ; R pour les idées en réserve). On les cite dans les branches, les commits et les issues.
 
 - **P0** : obligatoire pour la démo. On ne commence pas un P1 tant qu'un P0 de son projet est ouvert.
-- **P1** : assistant IA (IA-1), questions similaires, badges, espace Projets (seulement quand Cédric est là).
+- **P1** : assistant IA (IA-1), questions similaires, badges, communautés par pays et par techno (COM-1, et COM-2 : propositions des Référents validées par l'équipe), espace Projets (seulement quand Cédric est là).
 - **P2 et idées en réserve** : on n'y touche pas avant le 11 novembre, et seulement si tout le P0 est en ligne sans bug bloquant.
 
 ## Tests et qualité

@@ -76,6 +76,11 @@ public class TagService {
                 .toList();
     }
 
+    /** Vrai pour une étiquette déjà normalisée et bien formée, sans la créer. */
+    public static boolean isValidName(String name) {
+        return NAME.matcher(name).matches();
+    }
+
     public static String normalize(String raw) {
         return raw == null ? "" : raw.trim().toLowerCase().replaceAll("\\s+", "-");
     }

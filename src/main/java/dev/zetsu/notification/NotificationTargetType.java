@@ -9,5 +9,7 @@ public enum NotificationTargetType {
     CHALLENGE,
     PROJECT,
     /** Un profil, pour un avertissement ou un profil masqué. */
-    USER
+    USER,
+    /** Une proposition de communauté (COM-2). */
+    COMMUNITY_PROPOSAL
 }

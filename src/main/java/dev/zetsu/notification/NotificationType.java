@@ -29,5 +29,7 @@ public enum NotificationType {
     /** L'équipe m'a adressé un avertissement (MOD-4). */
     ACCOUNT_WARNED,
     /** Mon dépôt de défi a été noté (CH-3). */
-    SUBMISSION_REVIEWED
+    SUBMISSION_REVIEWED,
+    /** L'équipe a accepté ou refusé ma proposition de communauté (COM-2). */
+    COMMUNITY_PROPOSAL_DECISION
 }

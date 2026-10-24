@@ -56,6 +56,8 @@ public class QuestionController {
             @RequestParam(required = false) MobileMoneyOperator operator,
             @RequestParam(required = false) NetworkQuality network,
             @Parameter(description = "Pseudo de l'auteur") @RequestParam(required = false) String author,
+            @Parameter(description = "Adresse d'une communauté (COM-1) : questions de son pays ou de son étiquette")
+            @RequestParam(required = false) String community,
             @Parameter(description = "Toutes, sans solution, résolues")
             @RequestParam(defaultValue = "ALL") QuestionSearch.Status status,
             @RequestParam(defaultValue = "RELEVANCE") QuestionSearch.Sort sort,
@@ -66,7 +68,7 @@ public class QuestionController {
         }
         String text = q == null ? null : q.length() > 200 ? q.substring(0, 200) : q;
         var criteria = new QuestionSearch.Criteria(text, tag == null ? null : TagService.normalize(tag),
-                country, operator, network, author, status, sort);
+                country, operator, network, author, community, status, sort);
         return questionService.list(criteria, page, size);
     }
 

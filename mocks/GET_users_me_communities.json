@@ -1,0 +1,24 @@
+[
+  {
+    "slug": "mobile-money",
+    "name": "Mobile money",
+    "kind": "TECH",
+    "countryCode": null,
+    "tag": "mobile-money",
+    "description": "Intégrer Wave, Orange Money, MTN MoMo et M-Pesa : webhooks, réconciliation, cas d'erreur.",
+    "memberCount": 1102,
+    "questionCount": 367,
+    "joined": true
+  },
+  {
+    "slug": "senegal",
+    "name": "Sénégal",
+    "kind": "COUNTRY",
+    "countryCode": "SN",
+    "tag": null,
+    "description": "Développeurs de Dakar, Thiès, Saint-Louis et d'ailleurs : Wave, Orange Money, freelance et premiers emplois.",
+    "memberCount": 1284,
+    "questionCount": 412,
+    "joined": true
+  }
+]

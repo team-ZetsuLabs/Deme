@@ -83,6 +83,12 @@ public class TagAdminService {
             throw ApiException.badRequest("SAME_TAG", "Choisissez une autre étiquette cible");
         }
         MapSqlParameterSource params = new MapSqlParameterSource("from", from).addValue("into", into);
+        // Une communauté de techno (COM-1) suit son étiquette ; deux communautés sur la même étiquette, non.
+        if (communityCount(from) > 0 && communityCount(into) > 0) {
+            throw ApiException.conflict("TAG_HAS_COMMUNITY",
+                    "Les deux étiquettes ont une communauté : fermez ou modifiez l'une d'elles d'abord");
+        }
+        jdbc.update("update communities set tag_id = :into, updated_at = now() where tag_id = :from", params);
         for (String[] usage : USAGES) {
             String table = usage[0];
             String owner = usage[1];
@@ -104,7 +110,8 @@ public class TagAdminService {
     @Transactional
     public void delete(String rawName) {
         AdminTag tag = load(TagService.normalize(rawName));
-        if (tag.questionCount() + tag.jobCount() + tag.missionCount() + tag.memberCount() > 0) {
+        if (tag.questionCount() + tag.jobCount() + tag.missionCount() + tag.memberCount() > 0
+                || communityCount(idOf(tag.name())) > 0) {
             throw ApiException.conflict("TAG_IN_USE", "Cette étiquette est encore utilisée");
         }
         jdbc.update("delete from tags where name = :name", new MapSqlParameterSource("name", tag.name()));
@@ -113,6 +120,12 @@ public class TagAdminService {
     private AdminTag load(String name) {
         return jdbc.query(WITH_COUNTS + " where t.name = :name", new MapSqlParameterSource("name", name), ROW)
                 .stream().findFirst().orElseThrow(TagAdminService::notFound);
+    }
+
+    private long communityCount(long tagId) {
+        Long n = jdbc.queryForObject("select count(*) from communities where tag_id = :tag",
+                new MapSqlParameterSource("tag", tagId), Long.class);
+        return n == null ? 0 : n;
     }
 
     private long idOf(String name) {

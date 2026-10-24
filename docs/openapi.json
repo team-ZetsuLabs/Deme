@@ -16,38 +16,41 @@
     "name" : "answers",
     "description" : "Réponses aux questions et réponse acceptée"
   }, {
-    "name" : "moderation",
-    "description" : "Signalements et file des Référents"
-  }, {
     "name" : "admin",
     "description" : "Back office de l'équipe (Modérateur, Administrateur)"
-  }, {
-    "name" : "votes",
-    "description" : "Votes +1 / -1 sur les questions et les réponses"
   }, {
     "name" : "auth",
     "description" : "Inscription, connexion par email ou OAuth, session"
   }, {
-    "name" : "challenges",
-    "description" : "Défis, dépôts et classement"
-  }, {
     "name" : "notifications",
     "description" : "Notifications dans l'application"
   }, {
-    "name" : "applications",
-    "description" : "Candidatures aux offres et propositions sur les missions"
-  }, {
     "name" : "jobs",
     "description" : "Offres d'emploi, validées par l'équipe avant publication"
-  }, {
-    "name" : "missions",
-    "description" : "Missions courtes entre pairs : dépannage, intégration, revue de code"
   }, {
     "name" : "users",
     "description" : "Profils des membres"
   }, {
     "name" : "questions",
     "description" : "Entraide : questions avec contexte africain"
+  }, {
+    "name" : "moderation",
+    "description" : "Signalements et file des Référents"
+  }, {
+    "name" : "votes",
+    "description" : "Votes +1 / -1 sur les questions et les réponses"
+  }, {
+    "name" : "communities",
+    "description" : "Communautés par pays ou par technologie"
+  }, {
+    "name" : "challenges",
+    "description" : "Défis, dépôts et classement"
+  }, {
+    "name" : "applications",
+    "description" : "Candidatures aux offres et propositions sur les missions"
+  }, {
+    "name" : "missions",
+    "description" : "Missions courtes entre pairs : dépannage, intégration, revue de code"
   } ],
   "paths" : {
     "/api/v1/users/me" : {
@@ -864,6 +867,172 @@
         }
       }
     },
+    "/api/v1/admin/communities/{slug}" : {
+      "put" : {
+        "tags" : [ "admin" ],
+        "summary" : "Modifier une communauté",
+        "description" : "Modification complète ; l'adresse ne change pas.",
+        "operationId" : "communityAdminUpdate",
+        "parameters" : [ {
+          "name" : "slug",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CommunityRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Communauté modifiée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminCommunity"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "COMMUNITY_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "COMMUNITY_EXISTS",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/communities/{slug}/referents" : {
+      "put" : {
+        "tags" : [ "admin" ],
+        "summary" : "Nommer les Référents d'une communauté",
+        "description" : "Remplace la liste, dans l'ordre d'affichage. Chacun doit avoir le niveau Référent (section 8) et devient membre de la communauté.",
+        "operationId" : "communityAdminReferents",
+        "parameters" : [ {
+          "name" : "slug",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CommunityReferentsRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Référents enregistrés",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminCommunity"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, NOT_A_REFERENT",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "COMMUNITY_NOT_FOUND, USER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/admin/challenges/{id}" : {
       "put" : {
         "tags" : [ "admin" ],
@@ -1207,6 +1376,14 @@
           "name" : "author",
           "in" : "query",
           "description" : "Pseudo de l'auteur",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "community",
+          "in" : "query",
+          "description" : "Adresse d'une communauté (COM-1) : questions de son pays ou de son étiquette",
           "required" : false,
           "schema" : {
             "type" : "string"
@@ -2576,6 +2753,170 @@
         }
       }
     },
+    "/api/v1/community-proposals" : {
+      "post" : {
+        "tags" : [ "communities" ],
+        "summary" : "Proposer une communauté (COM-2)",
+        "description" : "Réservé au niveau Référent. La proposition est créée « PENDING » ; l'équipe l'accepte ou la refuse avec un motif, et le Référent reçoit COMMUNITY_PROPOSAL_DECISION.",
+        "operationId" : "communityPropose",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CommunityRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Proposition en attente",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommunityProposal"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "LEVEL_TOO_LOW",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "COMMUNITY_EXISTS : communauté ou proposition en attente avec ce nom, ce pays ou cette étiquette",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/communities/{slug}/members" : {
+      "post" : {
+        "tags" : [ "communities" ],
+        "summary" : "Rejoindre une communauté",
+        "description" : "Ouvert à tous les niveaux. Sans effet si déjà membre.",
+        "operationId" : "communityJoin",
+        "parameters" : [ {
+          "name" : "slug",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Membre",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MembershipResult"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "COMMUNITY_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "communities" ],
+        "summary" : "Quitter une communauté",
+        "description" : "Sans effet si déjà hors de la communauté.",
+        "operationId" : "communityLeave",
+        "parameters" : [ {
+          "name" : "slug",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Plus membre",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MembershipResult"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "COMMUNITY_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/challenges/{id}/submissions" : {
       "post" : {
         "tags" : [ "challenges" ],
@@ -3223,7 +3564,7 @@
       "post" : {
         "tags" : [ "admin" ],
         "summary" : "Fusionner une étiquette dans une autre",
-        "description" : "Questions, offres, missions et stacks passent sur l'étiquette cible, sans doublon ; l'étiquette fusionnée disparaît. Renvoie l'étiquette cible.",
+        "description" : "Questions, offres, missions, stacks et communauté de techno passent sur l'étiquette cible, sans doublon ; l'étiquette fusionnée disparaît. Renvoie l'étiquette cible.",
         "operationId" : "tagAdminMerge",
         "parameters" : [ {
           "name" : "name",
@@ -3286,6 +3627,16 @@
           },
           "404" : {
             "description" : "TAG_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "TAG_HAS_COMMUNITY : les deux étiquettes ont une communauté",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -3454,6 +3805,361 @@
           },
           "409" : {
             "description" : "JOB_NOT_PENDING",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/community-proposals/{id}/decision" : {
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Accepter ou refuser une proposition",
+        "description" : "Accepter crée la communauté ; le proposeur en devient le premier Référent et membre. Le motif est obligatoire pour un refus. Le Référent reçoit COMMUNITY_PROPOSAL_DECISION.",
+        "operationId" : "communityAdminDecide",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CommunityProposalReviewRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Proposition acceptée ou refusée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminCommunityProposal"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, REASON_REQUIRED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROPOSAL_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PROPOSAL_NOT_PENDING, COMMUNITY_EXISTS (créée entre-temps : à refuser)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/communities" : {
+      "get" : {
+        "tags" : [ "admin" ],
+        "summary" : "Communautés, ouvertes et fermées",
+        "description" : "Sans status : toutes. Les plus grandes d'abord.",
+        "operationId" : "communityAdminList",
+        "parameters" : [ {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "OPEN", "CLOSED" ]
+          }
+        }, {
+          "name" : "kind",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "COUNTRY", "TECH" ]
+          }
+        }, {
+          "name" : "q",
+          "in" : "query",
+          "description" : "Texte recherché",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de communautés",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseAdminCommunity"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Créer une communauté",
+        "description" : "L'adresse (slug) vient du nom, sans accent, et ne change plus. L'étiquette d'une communauté de techno est créée si elle n'existe pas.",
+        "operationId" : "communityAdminCreate",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CommunityRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Communauté ouverte",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminCommunity"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "COMMUNITY_EXISTS",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/communities/{slug}/reopen" : {
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Rouvrir une communauté fermée",
+        "operationId" : "communityAdminReopen",
+        "parameters" : [ {
+          "name" : "slug",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Communauté ouverte",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminCommunity"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "COMMUNITY_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/communities/{slug}/close" : {
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Fermer une communauté",
+        "description" : "Elle disparaît des listes et de sa page (404) ; ses questions restent dans le fil. Membres et Référents sont gardés pour une réouverture.",
+        "operationId" : "communityAdminClose",
+        "parameters" : [ {
+          "name" : "slug",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Communauté fermée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminCommunity"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "COMMUNITY_NOT_FOUND",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -3972,6 +4678,72 @@
         }
       }
     },
+    "/api/v1/users/me/community-proposals" : {
+      "get" : {
+        "tags" : [ "communities" ],
+        "summary" : "Mes propositions de communauté (COM-2)",
+        "description" : "La plus récente d'abord.",
+        "operationId" : "communityMyProposals",
+        "responses" : {
+          "200" : {
+            "description" : "Propositions du membre",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CommunityProposal"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/communities" : {
+      "get" : {
+        "tags" : [ "communities" ],
+        "summary" : "Mes communautés",
+        "description" : "Communautés ouvertes rejointes, la plus récente d'abord.",
+        "operationId" : "communityMine",
+        "responses" : {
+          "200" : {
+            "description" : "Communautés du membre",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CommunitySummary"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/users/me/applications" : {
       "get" : {
         "tags" : [ "applications" ],
@@ -4267,6 +5039,109 @@
           },
           "401" : {
             "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/communities" : {
+      "get" : {
+        "tags" : [ "communities" ],
+        "summary" : "Liste des communautés (COM-1)",
+        "description" : "Communautés ouvertes, les plus grandes d'abord. Publique ; joined vaut false sans session. q cherche dans le nom, l'étiquette et l'adresse (« senegal » trouve « Sénégal »).",
+        "operationId" : "communityList",
+        "parameters" : [ {
+          "name" : "kind",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "COUNTRY", "TECH" ]
+          }
+        }, {
+          "name" : "q",
+          "in" : "query",
+          "description" : "Texte recherché",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de communautés",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseCommunitySummary"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "INVALID_PAGE, INVALID_PAGE_SIZE, INVALID_PARAMETER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/communities/{slug}" : {
+      "get" : {
+        "tags" : [ "communities" ],
+        "summary" : "Page d'une communauté (COM-1)",
+        "description" : "Ses questions s'obtiennent avec GET /questions?community={slug}.",
+        "operationId" : "communityGet",
+        "parameters" : [ {
+          "name" : "slug",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Communauté",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CommunityDetail"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "COMMUNITY_NOT_FOUND (inconnue ou fermée)",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -4677,6 +5552,74 @@
         }
       }
     },
+    "/api/v1/admin/community-proposals" : {
+      "get" : {
+        "tags" : [ "admin" ],
+        "summary" : "Propositions de communauté (COM-2)",
+        "description" : "Par défaut « PENDING », les plus anciennes d'abord.",
+        "operationId" : "communityAdminProposals",
+        "parameters" : [ {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "default" : "PENDING",
+            "enum" : [ "PENDING", "APPROVED", "REJECTED" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de propositions",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseAdminCommunityProposal"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/admin/challenges/{id}/submissions" : {
       "get" : {
         "tags" : [ "admin" ],
@@ -4886,7 +5829,7 @@
             }
           },
           "409" : {
-            "description" : "TAG_IN_USE",
+            "description" : "TAG_IN_USE (aussi par une communauté)",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -5730,6 +6673,125 @@
         },
         "required" : [ "createdAt", "displayName", "hiddenContentCount", "id", "level", "reputation", "role", "status", "username", "warningCount" ]
       },
+      "CommunityRequest" : {
+        "type" : "object",
+        "description" : "Proposition d'un Référent (COM-2) ou création par l'équipe. countryCode est obligatoire pour une communauté de pays, tag pour une communauté de techno.",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "Flutter",
+            "maxLength" : 40,
+            "minLength" : 3
+          },
+          "kind" : {
+            "type" : "string",
+            "enum" : [ "COUNTRY", "TECH" ]
+          },
+          "countryCode" : {
+            "type" : "string",
+            "example" : "SN"
+          },
+          "tag" : {
+            "type" : "string",
+            "description" : "Étiquette créée à l'acceptation si elle n'existe pas",
+            "example" : "flutter",
+            "maxLength" : 30,
+            "minLength" : 0
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Texte brut",
+            "maxLength" : 200,
+            "minLength" : 30
+          },
+          "rules" : {
+            "type" : "array",
+            "description" : "0 à 5 règles de 200 caractères au plus, texte brut",
+            "items" : {
+              "type" : "string",
+              "maxLength" : 200,
+              "minLength" : 0
+            },
+            "maxItems" : 5,
+            "minItems" : 0
+          }
+        },
+        "required" : [ "description", "kind", "name" ]
+      },
+      "AdminCommunity" : {
+        "type" : "object",
+        "description" : "Communauté dans le back office, ouverte ou fermée",
+        "properties" : {
+          "slug" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "kind" : {
+            "type" : "string",
+            "enum" : [ "COUNTRY", "TECH" ]
+          },
+          "countryCode" : {
+            "type" : "string"
+          },
+          "tag" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "rules" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "OPEN", "CLOSED" ]
+          },
+          "memberCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "questionCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "referents" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AuthorSummary"
+            }
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "createdAt", "description", "kind", "memberCount", "name", "questionCount", "referents", "rules", "slug", "status", "updatedAt" ]
+      },
+      "CommunityReferentsRequest" : {
+        "type" : "object",
+        "description" : "Référents de la communauté, dans l'ordre d'affichage. Remplace la liste ; une liste vide retire tout le monde.",
+        "properties" : {
+          "usernames" : {
+            "type" : "array",
+            "example" : [ "aminata_dev", "moussa_s" ],
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 0
+          }
+        },
+        "required" : [ "usernames" ]
+      },
       "ChallengeRequest" : {
         "type" : "object",
         "description" : "Création ou modification d'un défi par l'équipe",
@@ -6255,6 +7317,60 @@
         },
         "required" : [ "message" ]
       },
+      "CommunityProposal" : {
+        "type" : "object",
+        "description" : "Proposition de communauté, vue par son auteur (COM-2)",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "kind" : {
+            "type" : "string",
+            "enum" : [ "COUNTRY", "TECH" ]
+          },
+          "countryCode" : {
+            "type" : "string"
+          },
+          "tag" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "APPROVED", "REJECTED" ]
+          },
+          "rejectionReason" : {
+            "type" : "string",
+            "description" : "Motif donné par l'équipe, rempli si refusée"
+          },
+          "slug" : {
+            "type" : "string",
+            "description" : "Adresse de la communauté créée, rempli si acceptée"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "createdAt", "id", "kind", "name", "status" ]
+      },
+      "MembershipResult" : {
+        "type" : "object",
+        "description" : "Réponse de POST et DELETE /communities/{slug}/members",
+        "properties" : {
+          "joined" : {
+            "type" : "boolean"
+          },
+          "memberCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "joined", "memberCount" ]
+      },
       "SubmissionRequest" : {
         "type" : "object",
         "description" : "Dépôt d'un lien GitHub public (CH-2)",
@@ -6476,6 +7592,78 @@
           }
         },
         "required" : [ "decision" ]
+      },
+      "CommunityProposalReviewRequest" : {
+        "type" : "object",
+        "description" : "Décision de l'équipe sur une proposition (COM-2)",
+        "properties" : {
+          "decision" : {
+            "type" : "string",
+            "enum" : [ "APPROVE", "REJECT" ]
+          },
+          "reason" : {
+            "type" : "string",
+            "description" : "Obligatoire pour un refus, montré au Référent",
+            "example" : "Une communauté Afrique de l'Ouest couvre déjà ce sujet",
+            "maxLength" : 500,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "decision" ]
+      },
+      "AdminCommunityProposal" : {
+        "type" : "object",
+        "description" : "Proposition dans la file de l'équipe (COM-2)",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "kind" : {
+            "type" : "string",
+            "enum" : [ "COUNTRY", "TECH" ]
+          },
+          "countryCode" : {
+            "type" : "string"
+          },
+          "tag" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "rules" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "APPROVED", "REJECTED" ]
+          },
+          "rejectionReason" : {
+            "type" : "string"
+          },
+          "slug" : {
+            "type" : "string"
+          },
+          "proposer" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "reviewedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "createdAt", "description", "id", "kind", "name", "proposer", "rules", "status" ]
       },
       "ApplicationDecisionRequest" : {
         "type" : "object",
@@ -6706,6 +7894,53 @@
         },
         "required" : [ "accounts", "hasPassword" ]
       },
+      "CommunitySummary" : {
+        "type" : "object",
+        "description" : "Communauté telle qu'affichée dans une liste (COM-1)",
+        "properties" : {
+          "slug" : {
+            "type" : "string",
+            "description" : "Adresse /communities/{slug}",
+            "example" : "senegal"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "Sénégal"
+          },
+          "kind" : {
+            "type" : "string",
+            "enum" : [ "COUNTRY", "TECH" ]
+          },
+          "countryCode" : {
+            "type" : "string",
+            "description" : "Rempli pour une communauté de pays",
+            "example" : "SN"
+          },
+          "tag" : {
+            "type" : "string",
+            "description" : "Rempli pour une communauté de techno : étiquette de ses questions",
+            "example" : "flutter"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Texte brut, 200 caractères au plus"
+          },
+          "memberCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "questionCount" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Questions visibles du pays ou de l'étiquette"
+          },
+          "joined" : {
+            "type" : "boolean",
+            "description" : "Le membre connecté en fait partie ; false sans session"
+          }
+        },
+        "required" : [ "description", "joined", "kind", "memberCount", "name", "questionCount", "slug" ]
+      },
       "PageResponseMyApplication" : {
         "type" : "object",
         "properties" : {
@@ -6857,7 +8092,7 @@
           },
           "type" : {
             "type" : "string",
-            "enum" : [ "ANSWER_POSTED", "ANSWER_ACCEPTED", "VOTE_RECEIVED", "JOB_MATCH", "MISSION_MATCH", "APPLICATION_RECEIVED", "APPLICATION_DECIDED", "JOB_REVIEWED", "CHALLENGE_STARTED", "PROJECT_REQUEST_DECIDED", "CONTENT_HIDDEN", "CONTENT_RESTORED", "ACCOUNT_WARNED", "SUBMISSION_REVIEWED" ]
+            "enum" : [ "ANSWER_POSTED", "ANSWER_ACCEPTED", "VOTE_RECEIVED", "JOB_MATCH", "MISSION_MATCH", "APPLICATION_RECEIVED", "APPLICATION_DECIDED", "JOB_REVIEWED", "CHALLENGE_STARTED", "PROJECT_REQUEST_DECIDED", "CONTENT_HIDDEN", "CONTENT_RESTORED", "ACCOUNT_WARNED", "SUBMISSION_REVIEWED", "COMMUNITY_PROPOSAL_DECISION" ]
           },
           "read" : {
             "type" : "boolean"
@@ -6887,7 +8122,7 @@
         "properties" : {
           "type" : {
             "type" : "string",
-            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "APPLICATION", "CHALLENGE", "PROJECT", "USER" ]
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "APPLICATION", "CHALLENGE", "PROJECT", "USER", "COMMUNITY_PROPOSAL" ]
           },
           "id" : {
             "type" : "integer",
@@ -7138,6 +8373,99 @@
         },
         "required" : [ "items", "page", "size", "total" ]
       },
+      "PageResponseCommunitySummary" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CommunitySummary"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "CommunityDetail" : {
+        "type" : "object",
+        "description" : "Page d'une communauté (COM-1)",
+        "properties" : {
+          "slug" : {
+            "type" : "string",
+            "example" : "senegal"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "Sénégal"
+          },
+          "kind" : {
+            "type" : "string",
+            "enum" : [ "COUNTRY", "TECH" ]
+          },
+          "countryCode" : {
+            "type" : "string",
+            "example" : "SN"
+          },
+          "tag" : {
+            "type" : "string",
+            "example" : "flutter"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "memberCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "questionCount" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "joined" : {
+            "type" : "boolean"
+          },
+          "rules" : {
+            "type" : "array",
+            "description" : "Règles propres à la communauté, texte brut, en plus des règles générales",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "referents" : {
+            "type" : "array",
+            "description" : "Référents nommés par l'équipe",
+            "items" : {
+              "$ref" : "#/components/schemas/AuthorSummary"
+            }
+          },
+          "topMembers" : {
+            "type" : "array",
+            "description" : "Jusqu'à 5 membres qui ont gagné le plus de points sur les questions de la communauté ces 30 derniers jours",
+            "items" : {
+              "$ref" : "#/components/schemas/AuthorSummary"
+            }
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "createdAt", "description", "joined", "kind", "memberCount", "name", "questionCount", "referents", "rules", "slug", "topMembers" ]
+      },
       "LeaderboardEntry" : {
         "type" : "object",
         "properties" : {
@@ -7291,6 +8619,60 @@
             "type" : "array",
             "items" : {
               "$ref" : "#/components/schemas/JobDetail"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "PageResponseAdminCommunityProposal" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AdminCommunityProposal"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "PageResponseAdminCommunity" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AdminCommunity"
             }
           },
           "page" : {
