@@ -1,6 +1,7 @@
 package dev.zetsu.user;
 
 import dev.zetsu.common.CountryCode;
+import dev.zetsu.reputation.Badge;
 import dev.zetsu.reputation.Level;
 import dev.zetsu.tag.Tag;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -75,7 +76,10 @@ public final class UserDtos {
             List<String> technologies,
             @Schema(requiredMode = REQUIRED) long questionCount,
             @Schema(requiredMode = REQUIRED) long answerCount,
-            @Schema(requiredMode = REQUIRED) Instant createdAt) {
+            @Schema(requiredMode = REQUIRED) Instant createdAt,
+            @Schema(requiredMode = REQUIRED, description = """
+                    Badges gagnés (REP-4), du plus ancien au plus récent. La progression : GET /users/{username}/badges""")
+            List<Badge> badges) {
     }
 
     /** Auteur affiché à côté d'une question ou d'une réponse. */

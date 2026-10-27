@@ -21,7 +21,7 @@ public class RateLimiter {
         REGISTER(5, Duration.ofHours(1)),
         PUBLISH(20, Duration.ofHours(1)),
         VOTE(60, Duration.ofMinutes(10)),
-        AI(20, Duration.ofHours(1)),
+        AI(10, Duration.ofHours(1)),
         REPORT(30, Duration.ofHours(1));
 
         final int limit;

@@ -1,0 +1,44 @@
+[
+  {
+    "badge": "FIRST_STEP",
+    "earned": true,
+    "awardedAt": "2026-08-02T11:42:00Z",
+    "progress": 1,
+    "target": 1
+  },
+  {
+    "badge": "HELPER",
+    "earned": true,
+    "awardedAt": "2026-08-09T18:15:00Z",
+    "progress": 10,
+    "target": 10
+  },
+  {
+    "badge": "SOLVER",
+    "earned": true,
+    "awardedAt": "2026-09-01T07:30:00Z",
+    "progress": 5,
+    "target": 5
+  },
+  {
+    "badge": "CHALLENGER",
+    "earned": false,
+    "awardedAt": null,
+    "progress": 0,
+    "target": 1
+  },
+  {
+    "badge": "POLYGLOT",
+    "earned": true,
+    "awardedAt": "2026-09-14T20:05:00Z",
+    "progress": 3,
+    "target": 3
+  },
+  {
+    "badge": "LOCAL_HELP",
+    "earned": true,
+    "awardedAt": "2026-08-20T12:00:00Z",
+    "progress": 5,
+    "target": 5
+  }
+]
