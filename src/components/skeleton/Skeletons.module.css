@@ -112,7 +112,51 @@
   gap: var(--s5);
 }
 
+/* Fil d'Ariane, comme .crumbs des pages de détail */
+.crumbs {
+  display: flex;
+  gap: var(--s2);
+  margin-bottom: var(--s3);
+}
+
+/* Titre de section et contrôle à droite, entre deux panneaux */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s3);
+  margin: var(--s5) 0 var(--s3);
+}
+
+/* Titre à gauche, bouton à droite */
+.headRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--s4);
+}
+
+.fill {
+  flex: 1;
+  min-width: 0;
+}
+
+.sideStack {
+  display: grid;
+  gap: var(--s4);
+}
+
 /* Profil */
+.activityRow {
+  padding: var(--s4) 0;
+  border-top: 1px solid var(--line);
+}
+
+.activityRow:first-child {
+  border-top: none;
+}
+
 .profileHead {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -121,7 +165,7 @@
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--s2);
   margin-top: var(--s5);
 }
@@ -168,7 +212,13 @@
     gap: var(--s3);
   }
   .stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .headRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .headRow > :last-child {
+    display: none;
   }
 }
 

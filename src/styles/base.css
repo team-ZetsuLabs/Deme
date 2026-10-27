@@ -9,6 +9,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   background: var(--bg);
+  /* Place de la barre de défilement réservée : rien ne bouge quand le contenu dépasse l'écran. */
+  scrollbar-gutter: stable;
 }
 
 body {

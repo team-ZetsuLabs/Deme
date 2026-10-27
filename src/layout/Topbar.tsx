@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { buttonClass } from '../components/buttonClass';
 import { Icon } from '../components/Icon';
+import { Skeleton } from '../components/skeleton/Skeleton';
 import { useSession } from '../features/auth/useSession';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { Logo } from './Logo';
@@ -68,6 +69,12 @@ export function Topbar() {
           <ThemeToggle />
           {user && <NotificationBell />}
           {user && <UserMenu user={user} />}
+          {/* Pendant la lecture de la session, la place des boutons est gardée : rien ne se décale. */}
+          {status === 'loading' && (
+            <span className={styles.authLink} aria-hidden="true">
+              <Skeleton width={286} height={40} radius="md" />
+            </span>
+          )}
           {status === 'anonymous' && (
             <>
               {/* Sur mobile, l'onglet « Compte » de la barre du bas mène à la connexion. */}
