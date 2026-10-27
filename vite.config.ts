@@ -1,9 +1,9 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     VitePWA({
@@ -41,12 +41,20 @@ export default defineConfig({
   ],
   server: {
     port: 3100,
-    proxy: { '/api': 'http://localhost:8080' },
+    // En local, /api part vers le back-end choisi dans .env.local (localhost:8080 par défaut).
+    proxy: {
+      '/api': {
+        target: loadEnv(mode, '.', '').API_PROXY_TARGET || 'http://localhost:8080',
+        changeOrigin: true,
+      },
+    },
   },
   test: {
     environment: 'jsdom',
     setupFiles: ['src/test/setup.ts'],
+    // Les tests tournent sur les exemples, même si .env.local vise la vraie API.
+    env: { VITE_API_MODE: 'mock' },
     // Les pages se chargent à la demande (React.lazy) : sur une machine chargée, 5 s ne suffit pas.
     testTimeout: 15000,
   },
-});
+}));
