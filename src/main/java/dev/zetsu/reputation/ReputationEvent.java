@@ -44,6 +44,10 @@ public class ReputationEvent {
     @Column(name = "submission_id")
     private Long submissionId;
 
+    /** Projet clôturé (PRJ-6), pour PROJECT_COMPLETED. */
+    @Column(name = "project_id")
+    private Long projectId;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 
@@ -63,6 +67,12 @@ public class ReputationEvent {
     public static ReputationEvent forSubmission(Long userId, int delta, ReputationReason reason, Long submissionId) {
         ReputationEvent e = new ReputationEvent(userId, delta, reason, null, null, null);
         e.submissionId = submissionId;
+        return e;
+    }
+
+    public static ReputationEvent forProject(Long userId, int delta, ReputationReason reason, Long projectId) {
+        ReputationEvent e = new ReputationEvent(userId, delta, reason, null, null, null);
+        e.projectId = projectId;
         return e;
     }
 
