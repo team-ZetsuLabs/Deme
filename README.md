@@ -19,13 +19,19 @@ Les variables d'environnement sont décrites dans `.env.example`. Spring ne lit 
 
 Pour la connexion GitHub et Google, on ajoute le profil `oauth` (`SPRING_PROFILES_ACTIVE=local,oauth`) et les quatre identifiants. Sans ce profil, seule l'inscription par email est active et `GET /api/v1/auth/providers` renvoie une liste vide.
 
+Pour l'assistant IA, on renseigne `AI_API_KEY` (clé Gemini gratuite sur https://aistudio.google.com/apikey). Sans clé, l'assistant répond `503 AI_UNAVAILABLE` et tout le reste marche.
+
+Le profil `demo` abaisse les seuils des niveaux et des badges pour que les privilèges soient visibles pendant la démo (`SPRING_PROFILES_ACTIVE=local,demo`).
+
+Maven doit tourner avec Java 21 : si `java -version` affiche une autre version, on pointe `JAVA_HOME` vers un JDK 21.
+
 ## Tests
 
 ```bash
 ./mvnw verify
 ```
 
-Les tests d'intégration lancent PostgreSQL 16 avec Testcontainers : Docker doit tourner, sinon ils sont ignorés.
+Les tests d'intégration lancent PostgreSQL 16 avec Testcontainers : Docker doit tourner, sinon ils sont ignorés. La suite compte 138 tests ; la CI (`.github/workflows/backend-ci.yml`) la lance sur chaque pull request et sur `main`.
 
 Après un changement de contrat, on régénère `docs/openapi.json` et on le pousse dans la même pull request :
 
@@ -84,6 +90,35 @@ Comptes connectés (codés) : `POST /users/me/connections/{provider}` est proté
 
 Nouveaux types de notification : `CONTENT_HIDDEN`, `CONTENT_RESTORED`, `ACCOUNT_WARNED`, `SUBMISSION_REVIEWED`, et la cible `USER`.
 
+## P1 : communautés, assistant IA, questions similaires, badges, projets
+
+Tout est dans Swagger UI et codé.
+
+Communautés (COM-1, COM-2, idée de l'équipe hors cahier) : une communauté réunit un pays ou une technologie ; ses questions sont celles de son pays ou de son étiquette (`GET /questions?community={slug}`). Tout membre peut la rejoindre. Un Référent propose une communauté, l'équipe l'accepte ou la refuse depuis le back office ; une fois acceptée, elle est créée telle quelle et le proposant est notifié (`COMMUNITY_PROPOSAL_DECISION`).
+
+Assistant de rédaction (IA-1) : le serveur envoie le brouillon au fournisseur et ne garde de la réponse que ce qui entre dans le format attendu : un titre de 15 à 150 caractères, des étiquettes valides marquées existantes ou nouvelles, un contexte (pays ISO, opérateur, réseau) pris dans les listes connues, et des informations manquantes choisies dans une liste fermée que le front traduit (`ERROR_MESSAGE`, `CODE`, `TECH_VERSION`, `EXPECTED_RESULT`, `ATTEMPTS`, `ENVIRONMENT`). Les consignes et le texte du membre voyagent dans deux blocs séparés, le texte étant envoyé comme une valeur JSON : une tentative d'injection ne change ni la forme ni les valeurs de la réponse. Aucune donnée du compte n'est envoyée et les adresses email du texte sont masquées. 10 appels par membre et par heure, cache de 24 heures (table `ai_suggestions`, clé SHA-256 du brouillon, sans identifiant de membre), 7 secondes au plus. Le fournisseur est derrière l'interface `AiProvider` : Gemini aujourd'hui (palier gratuit, modèle réglable par `AI_MODEL`), remplaçable sans toucher au reste.
+
+Questions similaires (QA-8) : plein texte en français et en anglais. Un titre en cours de saisie est rarement complet, on ne demande donc pas tous ses mots : une question doit partager au moins deux mots utiles avec le titre (ou le seul, s'il n'y en a qu'un), et le classement se fait par nombre de mots partagés puis par pertinence. Un mot vide dans l'une des deux langues est écarté (le texte étant indexé dans les deux, « que » deviendrait sinon un mot utile en anglais), ainsi que les mots interrogatifs présents dans la moitié des titres (« comment », « how »…).
+
+Badges (REP-4) : Premier pas (une question ou une réponse), Entraide (réponses publiées), Résolveur (réponses acceptées), Challenger (dépôts de défi validés), Polyglotte (étiquettes différentes avec une réponse acceptée ou votée), Aide locale (réponses à des questions d'autres membres de son pays). Les compteurs sont recalculés depuis les contenus visibles après chaque réponse et chaque gain de réputation, jamais tenus à la main. Seuils dans `zetsu.badges` (10, 5, 1, 3, 5), abaissés par le profil `demo` (3, 2, 1, 2, 2). Un badge gagné ne se perd pas.
+
+Espace Projets (PRJ-1 à PRJ-6) : un projet a de 1 à 6 rôles, un membre par rôle, soit 7 personnes au plus avec le porteur, sous la limite de 8 de la section 5.2. Un projet est `OPEN` tant qu'un rôle est ouvert, `IN_PROGRESS` quand tous sont pourvus, `PAUSED` après 60 jours sans activité de l'équipe (vérification chaque heure ; la prochaine action du porteur ou d'un membre le relance), `CLOSED` à la clôture. Une demande est `PENDING`, `ACCEPTED`, `REFUSED` ou `LEFT` (départ ou retrait avec un motif, que le membre retrouve sur sa demande). Accepter une demande refuse les autres demandes en attente sur ce rôle. À la clôture, chaque membre accepté gagne 10 points, une seule fois ; le porteur n'en gagne pas, pour qu'un projet ouvert et clôturé seul ne rapporte rien. Les liens de dépôt et de contact n'acceptent que `https://github.com/…` et `http(s)://…`. Pas de messagerie interne : les échanges passent par le lien de contact.
+
+| Domaine | Points d'entrée |
+| --- | --- |
+| `community` | `GET /communities`, `GET /communities/{slug}`, `POST` et `DELETE /communities/{slug}/members`, `GET /users/me/communities`, `POST /community-proposals` (niveau Référent), `GET /users/me/community-proposals` |
+| `admin` (communautés) | `GET` et `POST /admin/communities`, `PUT /admin/communities/{slug}`, `PUT /admin/communities/{slug}/referents`, `POST /admin/communities/{slug}/close` et `/reopen`, `GET /admin/community-proposals`, `POST /admin/community-proposals/{id}/decision` |
+| `ai` | `POST /ai/question-assist` (IA-1) |
+| `question` | `GET /questions/similar?title=&exclude=&limit=` (QA-8, publique, de 1 à 10 résultats) |
+| `reputation` | `GET /users/{username}/badges` (les six badges et la progression) ; champ `badges` du profil public (badges gagnés) |
+| `project` | `GET` et `POST /projects`, `GET` et `PUT /projects/{id}`, `POST /projects/{id}/roles`, `DELETE /projects/{id}/roles/{roleId}`, `POST /projects/{id}/close`, `POST` et `GET /projects/{id}/requests`, `PATCH` et `DELETE /projects/{id}/requests/{requestId}`, `POST /projects/{id}/leave`, `POST /projects/{id}/members/{username}/remove`, `GET` et `POST /projects/{id}/updates`, `GET /users/me/project-requests` |
+
+Nouveaux types de notification : `COMMUNITY_PROPOSAL_DECISION`, `PROJECT_REQUEST_RECEIVED`, `PROJECT_REQUEST_DECIDED`, `PROJECT_MEMBER_REMOVED`, `PROJECT_CLOSED`, et la cible `PROJECT`. Un projet se signale avec `targetType: PROJECT`.
+
+## Données de démo
+
+Les scripts de `seed/` remplissent une base avec des membres, des questions, des réponses, des communautés, des badges, des projets et des photos de profil dessinées, tous réalistes et africains. Le compte du jury n'a ni email ni mot de passe dans le dépôt : ils sont passés en variables au lancement. Ordre, commandes et scénarios de démo : `seed/README.md`.
+
 Les `operationId` sont stables, de la forme `<domaine><Méthode>` (`questionList`, `jobApply`, `jobAdminDecide`).
 
 Un exemple de réponse par point d'entrée se trouve dans `mocks/` (`GET_questions.json`, `GET_questions_id.json`…), plus quelques erreurs types (`ERROR_*.json`).
@@ -101,3 +136,5 @@ Un exemple de réponse par point d'entrée se trouve dans `mocks/` (`GET_questio
 - Le Markdown est rendu par commonmark puis nettoyé par jsoup (liste blanche). Le HTML brut écrit par un membre est échappé, les images sont retirées (poids en 3G et pistage), seuls les liens `http` et `https` passent et reçoivent `rel="nofollow noopener noreferrer"`.
 - Un compte GitHub ou Google n'est jamais rattaché automatiquement à un compte email existant, même avec la même adresse : l'email d'inscription n'est pas vérifié, ce serait une porte ouverte au vol de compte.
 - La limitation de débit est en mémoire (une seule instance). Les sessions aussi : un redémarrage déconnecte tout le monde.
+- Les compteurs des badges et la recherche des questions similaires sont faits en SQL (`BadgeService`, `QuestionSearch`) : pas de compteur à tenir à jour, pas de service de recherche externe.
+- Les migrations Flyway ne se modifient jamais une fois fusionnées ; la dernière est `V14__projets.sql`.
