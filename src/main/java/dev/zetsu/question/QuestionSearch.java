@@ -1,10 +1,15 @@
 package dev.zetsu.question;
 
+import dev.zetsu.question.QuestionDtos.SimilarQuestion;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Fil et recherche plein texte des questions (QA-6, QA-7) : titre, détails et étiquettes, en français et en anglais.
@@ -102,5 +107,48 @@ public class QuestionSearch {
         List<Long> ids = jdbc.queryForList(
                 "select q.id from questions q" + where + orderBy + " limit :limit offset :offset", params, Long.class);
         return new Result(ids, total == null ? 0 : total);
+    }
+
+    /**
+     * Mots présents dans la plupart des titres de questions mais absents des listes de mots vides de PostgreSQL :
+     * partagés par la moitié du site, ils ne rendent pas deux questions similaires.
+     */
+    private static final Set<String> QUESTION_WORDS = Set.of("comment", "pourquoi", "quoi", "quel", "quelle",
+            "quels", "quelles", "faire", "how", "why", "what", "which");
+
+    /**
+     * Questions similaires (QA-8). Un titre en cours de saisie est rarement complet : on ne demande pas tous ses mots
+     * (ET), mais au moins deux (ou le seul, s'il n'y en a qu'un), en classant par nombre de mots partagés.
+     * Le texte est indexé en français et en anglais : un mot vide dans l'une des deux langues (« que », « the »)
+     * deviendrait un mot utile dans l'autre, on l'écarte donc s'il est vide dans l'une ou l'autre.
+     * Ignore les questions masquées et, en modification, la question elle-même.
+     */
+    public List<SimilarQuestion> similar(String title, Long excludeId, int limit) {
+        String words = Arrays.stream(title.split("\\s+"))
+                .filter(w -> !QUESTION_WORDS.contains(w.toLowerCase(Locale.ROOT)))
+                .collect(Collectors.joining(" "));
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("title", words)
+                .addValue("exclude", excludeId == null ? -1L : excludeId)
+                .addValue("limit", limit);
+        return jdbc.query("""
+                with words as (
+                    select distinct plainto_tsquery('french', w) || plainto_tsquery('english', w) as query
+                    from regexp_split_to_table(:title, '\\s+') w
+                    where numnode(plainto_tsquery('french', w)) > 0 and numnode(plainto_tsquery('english', w)) > 0
+                ), any_word as (
+                    select cast(string_agg('(' || query::text || ')', ' | ') as tsquery) as query, count(*) as total
+                    from words
+                )
+                select q.id, q.title, q.score, q.answer_count, q.accepted_answer_id is not null as solved
+                from questions q
+                cross join any_word a
+                cross join lateral (select count(*) as shared from words w where q.search_vector @@ w.query) m
+                where not q.hidden and q.id <> :exclude and q.search_vector @@ a.query
+                  and m.shared >= least(2, a.total)
+                order by m.shared desc, ts_rank(q.search_vector, a.query) desc, solved desc, q.score desc, q.id desc
+                limit :limit""", params,
+                (rs, i) -> new SimilarQuestion(rs.getLong("id"), rs.getString("title"), rs.getInt("score"),
+                        rs.getInt("answer_count"), rs.getBoolean("solved")));
     }
 }

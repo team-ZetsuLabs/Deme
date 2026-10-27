@@ -37,6 +37,9 @@
     "name" : "moderation",
     "description" : "Signalements et file des Référents"
   }, {
+    "name" : "ai",
+    "description" : "Assistant IA : propose, ne décide jamais"
+  }, {
     "name" : "votes",
     "description" : "Votes +1 / -1 sur les questions et les réponses"
   }, {
@@ -3261,6 +3264,76 @@
         }
       }
     },
+    "/api/v1/ai/question-assist" : {
+      "post" : {
+        "tags" : [ "ai" ],
+        "summary" : "Améliorer un brouillon de question (IA-1)",
+        "description" : "Propose un titre plus clair, des étiquettes, le contexte africain détecté et les informations manquantes. Rien n'est enregistré ni modifié. 10 appels par membre et par heure ; un même brouillon est servi depuis un cache de 24 heures. Le front abandonne au bout de 8 secondes : sur toute erreur, il masque le bouton et le formulaire continue de marcher.",
+        "operationId" : "aiQuestionAssist",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QuestionAssistRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Suggestions",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionAssistResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "AI_UNAVAILABLE : fournisseur coupé, trop lent ou non configuré",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/admin/users/{id}/suspend" : {
       "post" : {
         "tags" : [ "admin" ],
@@ -4882,6 +4955,67 @@
                   "items" : {
                     "$ref" : "#/components/schemas/TagCount"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/questions/similar" : {
+      "get" : {
+        "tags" : [ "questions" ],
+        "summary" : "Questions similaires (QA-8)",
+        "description" : "À appeler pendant la saisie du titre, après une courte pause. Plein texte en français et en anglais ; un titre de moins de 10 caractères renvoie une liste vide. exclude écarte la question en cours de modification.",
+        "operationId" : "questionSimilar",
+        "parameters" : [ {
+          "name" : "title",
+          "in" : "query",
+          "description" : "Titre en cours de saisie",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "exclude",
+          "in" : "query",
+          "description" : "Identifiant de la question modifiée",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "De 1 à 10",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 5
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Jusqu'à limit questions, les plus proches d'abord",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SimilarQuestion"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "INVALID_LIMIT, INVALID_PARAMETER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
                 }
               }
             }
@@ -7477,6 +7611,89 @@
         },
         "required" : [ "email", "password" ]
       },
+      "QuestionAssistRequest" : {
+        "type" : "object",
+        "description" : "Brouillon de question à améliorer (IA-1). Rien n'est enregistré.",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "example" : "ça marche pas",
+            "maxLength" : 150,
+            "minLength" : 0
+          },
+          "body" : {
+            "type" : "string",
+            "description" : "Markdown, tel que saisi",
+            "maxLength" : 30000,
+            "minLength" : 0
+          },
+          "code" : {
+            "type" : "string",
+            "description" : "Code facultatif, en texte brut",
+            "maxLength" : 20000,
+            "minLength" : 0
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "Étiquettes déjà choisies",
+            "example" : [ "flutter" ],
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 4,
+            "minItems" : 0
+          },
+          "context" : {
+            "$ref" : "#/components/schemas/QuestionContext",
+            "description" : "Contexte déjà rempli"
+          }
+        },
+        "required" : [ "title" ]
+      },
+      "QuestionAssistResponse" : {
+        "type" : "object",
+        "description" : "Suggestions de l'assistant (IA-1), à afficher avec l'étiquette « Suggéré par l'IA ». Chacune s'applique d'un clic ou s'ignore ; rien n'est modifié sans l'accord du membre.",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "description" : "Titre plus clair, entre 15 et 150 caractères ; null si le titre convient déjà"
+          },
+          "tags" : {
+            "type" : "array",
+            "description" : "De 0 à 4 étiquettes, sans celles déjà choisies",
+            "items" : {
+              "$ref" : "#/components/schemas/SuggestedTag"
+            }
+          },
+          "context" : {
+            "$ref" : "#/components/schemas/QuestionContext",
+            "description" : "Contexte africain détecté dans le texte ; chaque champ est null s'il n'est pas détecté ou déjà rempli"
+          },
+          "missing" : {
+            "type" : "array",
+            "description" : "Informations manquantes, à traduire côté front",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "ERROR_MESSAGE", "CODE", "TECH_VERSION", "EXPECTED_RESULT", "ATTEMPTS", "ENVIRONMENT" ]
+            }
+          }
+        },
+        "required" : [ "context", "missing", "tags" ]
+      },
+      "SuggestedTag" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "example" : "spring-boot"
+          },
+          "existing" : {
+            "type" : "boolean",
+            "description" : "Faux si l'étiquette sera créée à la publication"
+          }
+        },
+        "required" : [ "existing", "name" ]
+      },
       "SuspendRequest" : {
         "type" : "object",
         "description" : "Suspension d'un compte : ses sessions ouvertes sont fermées",
@@ -8161,6 +8378,32 @@
           }
         },
         "required" : [ "items", "page", "size", "total" ]
+      },
+      "SimilarQuestion" : {
+        "type" : "object",
+        "description" : "Question proche du titre en cours de saisie (QA-8), version légère",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "answerCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "hasAcceptedAnswer" : {
+            "type" : "boolean",
+            "description" : "Vrai si une réponse est acceptée (question résolue)"
+          }
+        },
+        "required" : [ "answerCount", "hasAcceptedAnswer", "id", "score", "title" ]
       },
       "Notification" : {
         "type" : "object",
