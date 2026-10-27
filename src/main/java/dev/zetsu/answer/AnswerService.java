@@ -10,6 +10,7 @@ import dev.zetsu.question.Question;
 import dev.zetsu.question.QuestionDtos.QuestionDetail;
 import dev.zetsu.question.QuestionRepository;
 import dev.zetsu.question.QuestionService;
+import dev.zetsu.reputation.BadgeService;
 import dev.zetsu.reputation.ReputationReason;
 import dev.zetsu.reputation.ReputationService;
 import dev.zetsu.user.Role;
@@ -39,10 +40,11 @@ public class AnswerService {
     private final ReputationService reputation;
     private final MarkdownRenderer markdown;
     private final NotificationService notifications;
+    private final BadgeService badges;
 
     public AnswerService(AnswerRepository answers, QuestionRepository questions, QuestionService questionService,
                          UserRepository users, VoteRepository votes, ReputationService reputation,
-                         MarkdownRenderer markdown, NotificationService notifications) {
+                         MarkdownRenderer markdown, NotificationService notifications, BadgeService badges) {
         this.answers = answers;
         this.questions = questions;
         this.questionService = questionService;
@@ -51,6 +53,7 @@ public class AnswerService {
         this.reputation = reputation;
         this.markdown = markdown;
         this.notifications = notifications;
+        this.badges = badges;
     }
 
     @Transactional(readOnly = true)
@@ -72,6 +75,8 @@ public class AnswerService {
         questions.addAnswerCount(q.getId(), 1);
         notifications.notify(q.getAuthor().getId(), NotificationType.ANSWER_POSTED, me.id(),
                 NotificationService.answer(a.getId(), q.getTitle(), q.getId()), null);
+        // Une réponse ne rapporte pas de points mais compte pour Premier pas, Entraide et Aide locale (REP-4).
+        badges.refresh(me.id());
         return toView(a, q, null, me);
     }
 

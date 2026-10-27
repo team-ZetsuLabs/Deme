@@ -4,6 +4,7 @@ import dev.zetsu.auth.ZetsuPrincipal;
 import dev.zetsu.common.ApiError;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.common.RateLimiter;
+import dev.zetsu.reputation.ReputationDtos.BadgeProgress;
 import dev.zetsu.reputation.ReputationDtos.ReputationEntry;
 import dev.zetsu.user.UserDtos.AvatarForm;
 import dev.zetsu.user.UserDtos.DeleteAccountRequest;
@@ -40,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -62,6 +64,15 @@ public class UserController {
     @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public PublicProfile profile(@PathVariable String username, @AuthenticationPrincipal ZetsuPrincipal me) {
         return userService.profile(username, me);
+    }
+
+    @GetMapping("/{username}/badges")
+    @Operation(summary = "Badges d'un membre et sa progression (REP-4)",
+            description = "Toujours les six badges, dans le même ordre. Un badge gagné ne se perd pas.")
+    @ApiResponse(responseCode = "200", description = "Les six badges")
+    @ApiResponse(responseCode = "404", description = "USER_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    public List<BadgeProgress> badges(@PathVariable String username, @AuthenticationPrincipal ZetsuPrincipal me) {
+        return userService.badges(username, me);
     }
 
     @GetMapping("/{username}/reputation")

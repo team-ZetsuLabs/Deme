@@ -30,12 +30,15 @@ public class ReputationService {
     private final ReputationEventRepository events;
     private final UserRepository users;
     private final ReputationProperties props;
+    private final BadgeService badges;
     private final Clock clock;
 
-    public ReputationService(ReputationEventRepository events, UserRepository users, ReputationProperties props) {
+    public ReputationService(ReputationEventRepository events, UserRepository users, ReputationProperties props,
+                             BadgeService badges) {
         this.events = events;
         this.users = users;
         this.props = props;
+        this.badges = badges;
         this.clock = Clock.systemUTC();
     }
 
@@ -46,6 +49,12 @@ public class ReputationService {
      */
     @Transactional(propagation = Propagation.MANDATORY)
     public void grant(Long userId, ReputationReason reason, Long questionId, Long answerId, Long sourceUserId) {
+        applyGrant(userId, reason, questionId, answerId, sourceUserId);
+        // Même sans points (plafond atteint), l'action peut faire gagner un badge (REP-4).
+        badges.refresh(userId);
+    }
+
+    private void applyGrant(Long userId, ReputationReason reason, Long questionId, Long answerId, Long sourceUserId) {
         int delta = reason.points();
         if (reason.capped()) {
             Instant today = LocalDate.now(clock).atStartOfDay(ZoneOffset.UTC).toInstant();
@@ -85,6 +94,7 @@ public class ReputationService {
             events.saveAndFlush(ReputationEvent.forSubmission(userId, reason.points(), reason, submissionId));
             users.addReputation(userId, reason.points());
         }
+        badges.refresh(userId);
     }
 
     /** Un dépôt validé puis refusé perd ce qu'il avait rapporté. */

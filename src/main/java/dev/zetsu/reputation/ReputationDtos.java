@@ -23,4 +23,13 @@ public final class ReputationDtos {
             return new ReputationEntry(e.getDelta(), e.getReason(), e.getQuestionId(), e.getAnswerId(), e.getCreatedAt());
         }
     }
+
+    @Schema(name = "BadgeProgress", description = "Un badge (REP-4) et la progression du membre vers lui")
+    public record BadgeProgress(
+            @Schema(requiredMode = REQUIRED) Badge badge,
+            @Schema(requiredMode = REQUIRED) boolean earned,
+            @Schema(description = "Date d'obtention, null si pas encore gagné") Instant awardedAt,
+            @Schema(requiredMode = REQUIRED, example = "3", description = "Avancement, plafonné à target") int progress,
+            @Schema(requiredMode = REQUIRED, example = "10") int target) {
+    }
 }

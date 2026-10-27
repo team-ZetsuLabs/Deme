@@ -61,6 +61,13 @@ zetsu:
     daily-cap: 200
     rewarded-questions-per-day: 3
     rewarded-votes-per-pair-per-day: 3
+  # REP-4 : seuils des badges (Premier pas : 1 question ou réponse, fixe). Abaissés par le profil « demo ».
+  badges:
+    helper-answers: 10
+    solver-accepted: 5
+    challenger-validated: 1
+    polyglot-tags: 3
+    local-help-answers: 5
   # Section 7 : masquage automatique après 5 signalements de comptes distincts (MOD-2).
   moderation:
     auto-hide-threshold: 5
