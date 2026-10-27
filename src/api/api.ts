@@ -37,11 +37,15 @@ export type ApiConfig = {
   mocks: Record<string, MockLoader>
   fetchFn?: typeof fetch
   readCookie?: (name: string) => string | undefined
+  /** Appelé quand l'API répond 401 sur une route qui exige une session (session expirée). */
+  onUnauthorized?: () => void
 }
 
 const API_PREFIX = '/api/v1'
 const CSRF_COOKIE = 'XSRF-TOKEN'
 const CSRF_HEADER = 'X-XSRF-TOKEN'
+/** Routes où un 401 veut dire « identifiants refusés » ou « pas de session », pas « session expirée ». */
+const SESSION_ROUTES = ['/auth/login', '/auth/me', '/auth/logout', '/auth/csrf']
 
 function defaultReadCookie(name: string): string | undefined {
   const match = document.cookie.split('; ').find((part) => part.startsWith(`${name}=`))
@@ -80,6 +84,20 @@ async function toApiError(response: Response): Promise<ApiError> {
 export function createApi(config: ApiConfig) {
   const fetchFn = config.fetchFn ?? ((...args) => fetch(...args))
   const readCookie = config.readCookie ?? defaultReadCookie
+  let onUnauthorized = config.onUnauthorized
+
+  /** Jeton CSRF : cookie XSRF-TOKEN, sinon demandé à GET /auth/csrf (premier appel avant toute écriture). */
+  async function csrfHeader(): Promise<[string, string]> {
+    const cookie = readCookie(CSRF_COOKIE)
+    if (cookie) return [CSRF_HEADER, cookie]
+    const response = await fetchFn(`${API_PREFIX}/auth/csrf`, {
+      credentials: 'same-origin',
+      headers: { Accept: 'application/json' },
+    })
+    if (!response.ok) throw await toApiError(response)
+    const body = (await response.json()) as { headerName: string; token: string }
+    return [body.headerName, body.token]
+  }
 
   async function request<T>(
     method: Method,
@@ -95,8 +113,13 @@ export function createApi(config: ApiConfig) {
     const headers: Record<string, string> = { Accept: 'application/json' }
     if (options.body !== undefined) headers['Content-Type'] = 'application/json'
     if (method !== 'GET') {
-      const token = readCookie(CSRF_COOKIE)
-      if (token) headers[CSRF_HEADER] = token
+      try {
+        const [name, value] = await csrfHeader()
+        headers[name] = value
+      } catch (error) {
+        if (error instanceof ApiError) throw error
+        throw new ApiError(0, 'NETWORK_ERROR')
+      }
     }
 
     let response: Response
@@ -113,12 +136,18 @@ export function createApi(config: ApiConfig) {
       throw new ApiError(0, 'NETWORK_ERROR')
     }
 
-    if (!response.ok) throw await toApiError(response)
+    if (!response.ok) {
+      if (response.status === 401 && !SESSION_ROUTES.includes(path)) onUnauthorized?.()
+      throw await toApiError(response)
+    }
     if (response.status === 204) return undefined as T
     return (await response.json()) as T
   }
 
   return {
+    setOnUnauthorized(handler: (() => void) | undefined) {
+      onUnauthorized = handler
+    },
     get: <T>(path: string, options?: RequestOptions) => request<T>('GET', path, options),
     post: <T>(path: string, options?: RequestOptions) => request<T>('POST', path, options),
     put: <T>(path: string, options?: RequestOptions) => request<T>('PUT', path, options),
@@ -145,6 +174,6 @@ function toMockRegistry(files: Record<string, MockLoader>): Record<string, MockL
 }
 
 export const api = createApi({
-  mode: import.meta.env.VITE_API_MODE === 'live' ? 'live' : 'mock',
+  mode: import.meta.env.VITE_API_MODE === 'mock' ? 'mock' : 'live',
   mocks: toMockRegistry(mockFiles),
 })

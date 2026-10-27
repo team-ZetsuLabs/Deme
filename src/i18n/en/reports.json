@@ -1,70 +1,69 @@
 {
-  "pending_one": "{{count}} report pending.",
-  "pending_other": "{{count}} reports pending.",
-  "autoHideRule": "Content reported {{count}} times is hidden automatically.",
-  "allReasons": "All",
-  "filterByReason": "Filter by reason",
+  "lead": "Work through the queue of reported content. Every decision is recorded and the author can appeal it. Heavily reported content is hidden automatically.",
+  "statusFilter": "Case status",
+  "tab": {
+    "OPEN": "To review",
+    "APPEALED": "Appeals"
+  },
+  "allTypes": "All types",
+  "filterByType": "Filter by content type",
   "queue": "Report queue",
   "count_one": "{{count}} report",
   "count_other": "{{count}} reports",
   "reasonBy": "{{reason}}, by {{name}}",
-  "types": {
-    "answer": "Answer",
-    "question": "Question",
-    "profile": "Profile",
-    "offer": "Offer"
-  },
-  "reason": {
-    "spam": "Spam",
-    "offensive": "Offensive content",
-    "offTopic": "Off topic",
-    "impersonation": "Impersonation",
-    "fraudulentOffer": "Fraudulent offer"
-  },
+  "emptyTitle": "No case to review",
+  "emptyHint": "The queue is empty. Good work.",
   "detailTitle": {
-    "answer": "Answer reported for “{{reason}}”",
-    "question": "Question reported for “{{reason}}”",
-    "profile": "Profile reported for “{{reason}}”",
-    "offer": "Offer reported for “{{reason}}”"
-  },
-  "context": {
-    "answerTo": "Answer to “{{title}}”",
-    "questionIn": "Question posted in {{tag}}",
-    "profileIntro": "Profile introduction",
-    "offer": "Offer “{{title}}”"
+    "QUESTION": "Question reported for “{{reason}}”",
+    "ANSWER": "Answer reported for “{{reason}}”",
+    "JOB": "Offer reported for “{{reason}}”",
+    "MISSION": "Mission reported for “{{reason}}”",
+    "USER": "Profile reported for “{{reason}}”",
+    "PROJECT": "Project reported for “{{reason}}”"
   },
   "author": "Author",
-  "accountStatus": "Account status",
-  "history": "History",
-  "noWarning": "No warning",
-  "joined": "Joined on",
-  "reportedBy": "Reported by",
+  "deletedUser": "Deleted user",
+  "authorLevel": "Level",
+  "points_one": "{{count}} reputation point",
+  "points_other": "{{count}} reputation points",
+  "country": "Country",
+  "firstReported": "First reported",
+  "decision": "Decision",
+  "byTeam": "(team)",
+  "byReferent": "(Referent)",
+  "appeal": "Author's appeal",
+  "reasonsTitle": "Reasons",
+  "comments": "Member comments",
   "action": {
-    "ignore": "Ignore the report",
-    "hide": "Hide the content",
-    "warn": "Warn the author",
-    "suspend": "Suspend the author"
+    "DISMISS": "Ignore the report",
+    "HIDE": "Hide the content",
+    "WARN": "Warn the author",
+    "SUSPEND": "Suspend the author",
+    "RESTORE": "Restore the content",
+    "KEEP": "Keep it hidden"
   },
   "toast": {
-    "reportIgnored": "Report ignored.",
-    "contentHidden": "Content hidden.",
-    "warningSent": "Warning sent.",
-    "accountSuspended": "Account suspended."
+    "DISMISS": "Report ignored",
+    "HIDE": "Content hidden",
+    "WARN": "Warning sent",
+    "SUSPEND": "Account suspended and content hidden",
+    "RESTORE": "Content restored"
   },
-  "remaining_one": "{{count}} left to handle.",
-  "remaining_other": "{{count}} left to handle.",
-  "queueEmpty": "Queue empty.",
-  "emptyAll": "No reports pending",
-  "emptyAllHint": "The moderation queue is empty. Good work.",
-  "emptyReason": "No reports for the reason “{{reason}}”",
-  "warn": {
-    "title": "Warn the author",
-    "lead": "{{name}} will receive this message by email and in their notifications.",
-    "message": "Message sent to the author",
+  "note": {
+    "label": "Reason shown to the author",
+    "hint": "The author receives this message and can appeal the decision.",
     "template": "Hello {{name}}, your {{type}} was reported for “{{reason}}”. Please read the community rules again.",
-    "hideToo": "Also hide the content",
-    "hideHint": "It stays visible to its author.",
-    "submit": "Send the warning",
-    "error": "Explain the rule that was broken in at least {{count}} characters."
+    "HIDE": {
+      "title": "Hide the content",
+      "lead": "The content of {{name}} stays visible to its author, who can appeal to the team."
+    },
+    "WARN": {
+      "title": "Warn the author",
+      "lead": "{{name}} will receive this warning in their notifications. The content is also hidden."
+    },
+    "SUSPEND": {
+      "title": "Suspend the author",
+      "lead": "The account of {{name}} will be suspended and the content hidden. You can reactivate it from Users."
+    }
   }
 }

@@ -1,0 +1,6 @@
+{
+  "PENDING": "Pending",
+  "PUBLISHED": "Published",
+  "REJECTED": "Refused",
+  "CLOSED": "Closed"
+}

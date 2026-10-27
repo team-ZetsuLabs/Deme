@@ -1,70 +1,69 @@
 {
-  "pending_one": "{{count}} signalement en attente.",
-  "pending_other": "{{count}} signalements en attente.",
-  "autoHideRule": "Un contenu signalé {{count}} fois est masqué automatiquement.",
-  "allReasons": "Tous",
-  "filterByReason": "Filtrer par motif",
+  "lead": "Traitez la file des contenus signalés. Chaque décision est enregistrée et l'auteur peut la contester. Un contenu très signalé est masqué automatiquement.",
+  "statusFilter": "Statut des dossiers",
+  "tab": {
+    "OPEN": "À traiter",
+    "APPEALED": "Contestations"
+  },
+  "allTypes": "Tous les types",
+  "filterByType": "Filtrer par type de contenu",
   "queue": "File de signalements",
   "count_one": "{{count}} signalement",
   "count_other": "{{count}} signalements",
   "reasonBy": "{{reason}}, par {{name}}",
-  "types": {
-    "answer": "Réponse",
-    "question": "Question",
-    "profile": "Profil",
-    "offer": "Offre"
-  },
-  "reason": {
-    "spam": "Spam",
-    "offensive": "Contenu offensant",
-    "offTopic": "Hors sujet",
-    "impersonation": "Usurpation d'identité",
-    "fraudulentOffer": "Offre frauduleuse"
-  },
+  "emptyTitle": "Aucun dossier à traiter",
+  "emptyHint": "La file est vide. Bon travail.",
   "detailTitle": {
-    "answer": "Réponse signalée pour « {{reason}} »",
-    "question": "Question signalée pour « {{reason}} »",
-    "profile": "Profil signalé pour « {{reason}} »",
-    "offer": "Offre signalée pour « {{reason}} »"
-  },
-  "context": {
-    "answerTo": "Réponse à « {{title}} »",
-    "questionIn": "Question publiée dans {{tag}}",
-    "profileIntro": "Présentation du profil",
-    "offer": "Offre « {{title}} »"
+    "QUESTION": "Question signalée pour « {{reason}} »",
+    "ANSWER": "Réponse signalée pour « {{reason}} »",
+    "JOB": "Offre signalée pour « {{reason}} »",
+    "MISSION": "Mission signalée pour « {{reason}} »",
+    "USER": "Profil signalé pour « {{reason}} »",
+    "PROJECT": "Projet signalé pour « {{reason}} »"
   },
   "author": "Auteur",
-  "accountStatus": "Statut du compte",
-  "history": "Antécédents",
-  "noWarning": "Aucun avertissement",
-  "joined": "Inscrit le",
-  "reportedBy": "Signalé par",
+  "deletedUser": "Utilisateur supprimé",
+  "authorLevel": "Niveau",
+  "points_one": "{{count}} point de réputation",
+  "points_other": "{{count}} points de réputation",
+  "country": "Pays",
+  "firstReported": "Premier signalement",
+  "decision": "Décision",
+  "byTeam": "(équipe)",
+  "byReferent": "(Référent)",
+  "appeal": "Contestation de l'auteur",
+  "reasonsTitle": "Motifs",
+  "comments": "Commentaires des membres",
   "action": {
-    "ignore": "Ignorer le signalement",
-    "hide": "Masquer le contenu",
-    "warn": "Avertir l'auteur",
-    "suspend": "Suspendre l'auteur"
+    "DISMISS": "Ignorer le signalement",
+    "HIDE": "Masquer le contenu",
+    "WARN": "Avertir l'auteur",
+    "SUSPEND": "Suspendre l'auteur",
+    "RESTORE": "Rétablir le contenu",
+    "KEEP": "Maintenir le masquage"
   },
   "toast": {
-    "reportIgnored": "Signalement ignoré.",
-    "contentHidden": "Contenu masqué.",
-    "warningSent": "Avertissement envoyé.",
-    "accountSuspended": "Compte suspendu."
+    "DISMISS": "Signalement ignoré",
+    "HIDE": "Contenu masqué",
+    "WARN": "Avertissement envoyé",
+    "SUSPEND": "Compte suspendu et contenu masqué",
+    "RESTORE": "Contenu rétabli"
   },
-  "remaining_one": "Encore {{count}} à traiter.",
-  "remaining_other": "Encore {{count}} à traiter.",
-  "queueEmpty": "File vide.",
-  "emptyAll": "Aucun signalement en attente",
-  "emptyAllHint": "La file de modération est vide. Bon travail.",
-  "emptyReason": "Aucun signalement pour le motif « {{reason}} »",
-  "warn": {
-    "title": "Avertir l'auteur",
-    "lead": "{{name}} recevra ce message par email et dans ses notifications.",
-    "message": "Message envoyé à l'auteur",
+  "note": {
+    "label": "Motif montré à l'auteur",
+    "hint": "L'auteur reçoit ce message et peut contester la décision.",
     "template": "Bonjour {{name}}, votre {{type}} a été signalé pour « {{reason}} ». Merci de relire les règles de la communauté.",
-    "hideToo": "Masquer aussi le contenu",
-    "hideHint": "Il reste visible pour son auteur.",
-    "submit": "Envoyer l'avertissement",
-    "error": "Expliquez la règle enfreinte en au moins {{count}} caractères."
+    "HIDE": {
+      "title": "Masquer le contenu",
+      "lead": "Le contenu de {{name}} reste visible pour son auteur, qui peut contester devant l'équipe."
+    },
+    "WARN": {
+      "title": "Avertir l'auteur",
+      "lead": "{{name}} recevra cet avertissement dans ses notifications. Le contenu est aussi masqué."
+    },
+    "SUSPEND": {
+      "title": "Suspendre l'auteur",
+      "lead": "Le compte de {{name}} sera suspendu et le contenu masqué. Vous pourrez le réactiver depuis Utilisateurs."
+    }
   }
 }

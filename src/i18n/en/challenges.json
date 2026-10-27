@@ -1,46 +1,39 @@
 {
-  "lead": "One challenge per week, Monday to Sunday.",
+  "lead": "One challenge per week. Create a challenge and grade members' repositories out of 100.",
   "create": "Create a challenge",
+  "noneTitle": "No challenges",
+  "noneHint": "Create the first challenge of the community.",
   "col": {
     "challenge": "Challenge",
     "status": "Status",
     "period": "Period",
     "submissions": "Submissions",
-    "points": "Points",
     "participant": "Participant",
     "repo": "Repository",
     "received": "Received",
     "evaluation": "Evaluation"
   },
-  "status": {
-    "ongoing": "Ongoing",
-    "upcoming": "Upcoming",
-    "finished": "Finished"
-  },
   "period": "{{from}} to {{to}}",
-  "submissionsTitle": "Submissions for the current challenge",
+  "submissionsTitle": "Submissions",
+  "pick": "Challenge",
+  "submissionStatus": "Submission status",
   "scoreLabel": "Score out of 100",
   "validate": "Validate",
   "reject": "Reject",
-  "scoreError": "Enter a score between 0 and 100",
-  "graded": "{{name}} receives +20 points",
+  "scoreError": "Enter a whole number from 0 to 100",
+  "graded": "{{name}}: submission validated",
   "rejectedToast": "Submission rejected",
-  "submission": {
-    "toGrade": "To grade",
-    "validated": "Validated",
-    "rejected": "Rejected"
-  },
-  "note": {
-    "empty": "Empty repository",
-    "offBrief": "Does not meet the brief"
-  },
+  "noSubmissions": "No submissions in this list",
+  "invalidLink": "Invalid link, it is not displayed",
   "newTitle": "New challenge",
   "newLead": "The preview updates as you type.",
   "defaultEndpoint1": "Start an action",
   "defaultEndpoint2": "View the results",
+  "specsIntro": "Expected endpoints:",
   "errors": {
-    "title": "The title must be at least 10 characters.",
-    "description": "Describe the challenge in at least 40 characters.",
+    "title": "The title must be between 10 and 120 characters.",
+    "statement": "The brief must be at least 50 characters.",
+    "specifications": "Describe the endpoints: the specifications must be at least 50 characters.",
     "date": "The end date must be after the start date."
   },
   "scheduled": "Challenge scheduled",
@@ -48,18 +41,19 @@
   "previewDescription": "The brief will appear here.",
   "field": {
     "title": "Title",
-    "description": "Brief",
+    "statement": "Brief",
     "endpoints": "Expected endpoints",
     "method": "Method {{n}}",
     "endpointDescription": "Description {{n}}",
     "removeEndpoint": "Remove endpoint {{n}}",
     "addEndpoint": "Add an endpoint",
+    "technologies": "Technologies",
+    "technologiesHint": "Separated by commas, for example: java, spring-boot.",
     "start": "Start",
-    "end": "End",
-    "points": "Reputation points"
+    "end": "End"
   },
   "scheduling": "Scheduling",
   "schedule": "Schedule the challenge",
   "preview": "Preview for members",
-  "previewMeta": "From {{from}} to {{to}}, +{{points}} points"
+  "previewMeta": "From {{from}} to {{to}}"
 }

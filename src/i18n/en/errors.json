@@ -11,12 +11,18 @@
   "backHome": "Back to the dashboard",
   "codes": {
     "NETWORK_ERROR": "Unable to connect. Check your network and try again.",
+    "INVALID_CREDENTIALS": "Incorrect email or password.",
     "LOGIN_LOCKED": "Too many failed attempts. Try again in 15 minutes.",
     "ACCOUNT_SUSPENDED": "This account is suspended.",
+    "NOT_STAFF": "This account has no access to the administration.",
+    "UNAUTHENTICATED": "Your session has expired. Sign in again.",
+    "CSRF_INVALID": "Security token expired, reload the page.",
+    "FORBIDDEN": "You are not allowed to do this.",
     "LEVEL_TOO_LOW": "Your reputation level does not allow this action.",
-    "HTTP_401": "Your session has expired. Sign in again.",
-    "HTTP_403": "You are not allowed to do this.",
-    "HTTP_404": "Item not found.",
+    "CANNOT_SUSPEND_STAFF": "You cannot suspend yourself or a team member.",
+    "CANNOT_CHANGE_OWN_ROLE": "You cannot change your own role.",
+    "CASE_ALREADY_DECIDED": "This case has already been decided.",
+    "CHALLENGE_OVERLAP": "This challenge overlaps another one.",
     "HTTP_429": "Too many requests. Please wait a moment.",
     "MOCK_NOT_FOUND": "Sample response missing in src/mocks."
   }

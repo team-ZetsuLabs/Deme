@@ -84,7 +84,37 @@ describe('createApi en mode live', () => {
 
   it('renvoie undefined sur 204', async () => {
     const fetchFn = vi.fn().mockResolvedValue(new Response(null, { status: 204 }))
-    const api = createApi({ mode: 'live', mocks: {}, fetchFn })
+    const api = createApi({ mode: 'live', mocks: {}, fetchFn, readCookie: () => 'jeton' })
     expect(await api.delete('/tags/1')).toBeUndefined()
+  })
+
+  it("demande le jeton CSRF à l'API quand le cookie est absent", async () => {
+    const fetchFn = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse({ headerName: 'X-XSRF-TOKEN', token: 'frais' }))
+      .mockResolvedValueOnce(jsonResponse({}))
+    const api = createApi({ mode: 'live', mocks: {}, fetchFn, readCookie: () => undefined })
+    await api.post('/auth/login', { body: { email: 'a@b.cd', password: 'x' } })
+    expect(fetchFn.mock.calls[0][0]).toBe('/api/v1/auth/csrf')
+    expect(fetchFn.mock.calls[1][1].headers['X-XSRF-TOKEN']).toBe('frais')
+  })
+
+  it('signale une session expirée sur 401, sauf pour la connexion', async () => {
+    const fetchFn = vi
+      .fn()
+      .mockImplementation(async () => jsonResponse({ code: 'UNAUTHENTICATED', message: 'x' }, 401))
+    const handler = vi.fn()
+    const api = createApi({
+      mode: 'live',
+      mocks: {},
+      fetchFn,
+      readCookie: () => 'jeton',
+      onUnauthorized: handler,
+    })
+    await api.get('/admin/cases').catch(() => {})
+    expect(handler).toHaveBeenCalledTimes(1)
+    await api.post('/auth/login', { body: {} }).catch(() => {})
+    await api.get('/auth/me').catch(() => {})
+    expect(handler).toHaveBeenCalledTimes(1)
   })
 })

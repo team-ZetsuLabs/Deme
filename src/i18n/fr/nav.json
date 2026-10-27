@@ -2,11 +2,9 @@
   "dashboard": "Tableau de bord",
   "reports": "Signalements",
   "referent": "Vue Référent",
-  "contents": "Contenus",
   "tags": "Tags",
   "users": "Utilisateurs",
   "jobs": "Offres d'emploi",
   "challenges": "Challenges",
-  "audit": "Journal d'audit",
-  "settings": "Paramètres"
+  "communities": "Communautés"
 }

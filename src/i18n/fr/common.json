@@ -5,5 +5,11 @@
   "retry": "Réessayer",
   "cancel": "Annuler",
   "close": "Fermer",
-  "undo": "Annuler"
+  "undo": "Annuler",
+  "noteTooShort": "Écrivez au moins {{count}} caractères.",
+  "page": "Page {{page}} sur {{pages}}",
+  "previous": "Précédent",
+  "next": "Suivant",
+  "save": "Enregistrer",
+  "search": "Rechercher"
 }

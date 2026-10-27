@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import ErrorBoundary from './components/ErrorBoundary'
 import { ConfirmProvider } from './components/ConfirmProvider'
 import { ToastProvider } from './components/ToastProvider'
-import { AdminStoreProvider } from './features/admin/AdminStore'
+import { CountsProvider } from './layout/counts'
 import { AuthProvider } from './hooks/useAuth'
 import { ThemeProvider } from './hooks/useTheme'
 
@@ -12,11 +12,11 @@ export default function Providers({ children }: { children: ReactNode }) {
     <ThemeProvider>
       <ErrorBoundary>
         <AuthProvider>
-          <AdminStoreProvider>
+          <CountsProvider>
             <ToastProvider>
               <ConfirmProvider>{children}</ConfirmProvider>
             </ToastProvider>
-          </AdminStoreProvider>
+          </CountsProvider>
         </AuthProvider>
       </ErrorBoundary>
     </ThemeProvider>

@@ -1,55 +1,38 @@
 {
   "lead": "Every offer is checked before publication to protect members from scams.",
   "statusLabel": "Offer status",
-  "tab": {
-    "pending": "Pending",
-    "published": "Published",
-    "refused": "Refused"
-  },
-  "meta": "{{company}}, {{city}}, {{type}}. Submitted {{ago}} by {{by}}",
+  "meta": "{{company}}, {{place}}, {{type}}. Submitted {{ago}} by {{by}}",
   "remote": "Remote",
-  "type": {
-    "permanent": "Permanent",
-    "mission": "Mission",
-    "internship": "Internship"
-  },
   "check": {
-    "domain": "Company domain verified",
     "pay": "Pay shown",
-    "description": "Complete description"
+    "website": "Company website provided"
   },
   "yes": ": yes",
   "no": ": no",
   "viewAd": "View the ad",
-  "publishing": "Publishing",
+  "compensation": "Pay:",
   "approve": "Approve",
   "published": "Offer from {{company}} published",
   "refusedToast": "Offer from {{company}} refused",
   "refuse": {
     "action": "Refuse",
     "title": "Refuse the offer",
-    "lead": "{{company}} will receive this reason by email.",
+    "lead": "{{company}} will receive this reason.",
     "reasonLabel": "Reason sent to the company",
-    "presetLabel": "Common reason",
-    "choosePreset": "Choose a common reason",
-    "preset": {
-      "vague": "Job description too vague",
-      "unverifiable": "Company cannot be verified",
-      "notDev": "Offer not related to development",
-      "abusivePay": "Clearly abusive pay"
-    },
     "placeholder": "Say what the company must fix to republish.",
-    "submit": "Refuse the offer",
-    "error": "Give a reason of at least {{count}} characters."
+    "submit": "Refuse the offer"
   },
-  "nonePending": "No offers pending",
-  "nonePendingHint": "New offers will appear here before publication.",
+  "none": {
+    "PENDING": "No offers pending",
+    "PUBLISHED": "No published offers",
+    "REJECTED": "No refused offers"
+  },
+  "noneHint": "New offers will appear here before publication.",
   "col": {
     "offer": "Offer",
     "company": "Company",
     "applicants": "Applicants",
-    "publishedOn": "Published on",
     "reason": "Reason",
-    "date": "Date"
+    "date": "Updated"
   }
 }

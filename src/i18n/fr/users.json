@@ -1,56 +1,14 @@
 {
-  "roles": {
-    "member": "Membre",
-    "moderator": "Modérateur"
-  },
-  "durations": {
-    "1d": "1 jour",
-    "7d": "7 jours",
-    "30d": "30 jours",
-    "permanent": "Définitive"
-  },
-  "status": {
-    "active": "Actif",
-    "flagged": "Signalé",
-    "suspended": "Suspendu"
-  },
-  "warnings_one": "{{count}} avertissement",
-  "warnings_other": "{{count}} avertissements",
-  "points_one": "{{count}} point de réputation",
-  "points_other": "{{count}} points de réputation",
-  "suspend": {
-    "title": "Suspendre le compte",
-    "lead": "{{name}} ne pourra plus publier ni se connecter pendant la durée choisie.",
-    "duration": "Durée",
-    "reason": "Motif",
-    "hint": "Le motif est envoyé à l'utilisateur et conservé dans le journal d'audit.",
-    "reasonError": "Indiquez un motif d'au moins {{count}} caractères.",
-    "submit": "Suspendre",
-    "action": "Suspendre",
-    "done": "{{name}} est suspendu ({{duration}})"
-  },
-  "summary_one": "{{count}} compte, dont {{suspended}} suspendu et {{flagged}} signalé.",
-  "summary_other": "{{count}} comptes, dont {{suspended}} suspendu et {{flagged}} signalé.",
+  "lead": "Recherchez un membre, suspendez ou réactivez son compte, changez son rôle.",
+  "summary_one": "{{count}} compte.",
+  "summary_other": "{{count}} comptes.",
   "exportCsv": "Exporter en CSV",
   "exported_one": "{{count}} ligne exportée",
   "exported_other": "{{count}} lignes exportées",
   "search": "Rechercher",
-  "searchPlaceholder": "Nom ou email",
+  "searchPlaceholder": "Nom, identifiant ou email",
   "allRoles": "Tous les rôles",
   "allStatuses": "Tous les statuts",
-  "bulk": {
-    "label": "Actions groupées",
-    "title": "Suspendre les comptes",
-    "text_one": "Suspendre {{count}} compte pendant 7 jours ? Chaque utilisateur sera prévenu par email.",
-    "text_other": "Suspendre {{count}} comptes pendant 7 jours ? Chaque utilisateur sera prévenu par email.",
-    "selected_one": "{{count}} compte sélectionné",
-    "selected_other": "{{count}} comptes sélectionnés",
-    "export": "Exporter la sélection",
-    "suspend": "Suspendre 7 jours",
-    "clear": "Désélectionner",
-    "done_one": "{{count}} compte suspendu",
-    "done_other": "{{count}} comptes suspendus"
-  },
   "selectPage": "Sélectionner les comptes de cette page",
   "select": "Sélectionner {{name}}",
   "unknownCountry": "Inconnu",
@@ -60,76 +18,48 @@
     "role": "Rôle",
     "reputation": "Réputation",
     "joined": "Inscrit le",
-    "status": "Statut"
+    "status": "Statut",
+    "actions": "Actions"
   },
   "view": "Voir",
   "range": "{{from}} à {{to}} sur {{total}}",
-  "previous": "Précédent",
-  "next": "Suivant",
   "noneTitle": "Aucun compte ne correspond",
   "noneHint": "Modifiez la recherche ou les filtres.",
   "reset": "Réinitialiser les filtres",
-  "sanction": {
-    "aggressive": "Avertissement : ton agressif dans une réponse",
-    "promo": "Avertissement : liens promotionnels répétés",
-    "suspension": "Suspension de 30 jours : spam répété"
-  },
+  "notFound": "Compte introuvable",
+  "backToList": "Retour à la liste des utilisateurs",
   "roleChange": {
     "title": "Changer le rôle",
-    "text": "Passer {{name}} au rôle « {{role}} » ? Le changement est immédiat.",
+    "text": "Passer {{name}} au rôle « {{role}} » ? Le changement est pris en compte à sa prochaine requête.",
     "ok": "Changer le rôle",
     "done": "{{name}} est maintenant {{role}}"
   },
-  "delete": {
-    "title": "Supprimer le compte",
-    "text": "Supprimer définitivement le compte de {{name}} ? Ses contenus resteront visibles sous « Utilisateur supprimé ».",
-    "ok": "Supprimer le compte",
-    "done": "Compte de {{name}} supprimé"
-  },
   "reactivated": "{{name}} est de nouveau actif",
   "reactivate": "Réactiver le compte",
+  "cannotSuspend": "Impossible sur soi-même ou sur un membre de l'équipe",
   "profile": {
-    "line": "{{email}}, {{country}}, inscrit le {{date}} via {{provider}}",
+    "line": "@{{handle}}, {{email}}, {{country}}, inscrit le {{date}}",
     "public": "Profil public"
   },
   "stat": {
     "reputation": "réputation",
-    "questions": "questions",
-    "answers": "réponses",
+    "level": "niveau",
+    "hidden": "contenus masqués",
     "warnings": "avertissements"
   },
-  "tabs": {
-    "label": "Historique du compte",
-    "activity": "Activité",
-    "sanctions": "Sanctions ({{count}})",
-    "logins": "Connexions"
-  },
-  "published": "A publié",
-  "noQuestions": "Aucune question publiée récemment.",
-  "answersTotal_one": "{{count}} réponse au total.",
-  "answersTotal_other": "{{count}} réponses au total.",
-  "by": "par {{name}}",
-  "noSanctions": "Aucune sanction sur ce compte.",
-  "today": "Aujourd'hui",
-  "yesterday": "Hier",
-  "login": {
-    "today": "Connexion via {{provider}}, Chrome sur Android, IP 102.180.xx.xx ({{country}})",
-    "yesterday": "Connexion via {{provider}}, Firefox sur Windows, IP 102.180.xx.xx",
-    "password": "Modification du mot de passe"
+  "suspend": {
+    "title": "Suspendre le compte",
+    "lead": "{{name}} ne pourra plus se connecter ni publier. Ses contenus restent visibles.",
+    "reason": "Motif",
+    "hint": "Le motif est envoyé à l'utilisateur.",
+    "submit": "Suspendre",
+    "action": "Suspendre",
+    "done": "{{name}} est suspendu"
   },
   "manage": {
     "title": "Gestion du compte",
     "roleHint": "Un modérateur peut traiter les signalements et masquer des contenus.",
-    "recruiters": "Visible par les recruteurs",
-    "recruitersHint": "Choix de l'utilisateur, en lecture seule.",
-    "reset": "Réinitialiser le mot de passe",
-    "resetHint": "Envoie un lien par email.",
-    "resetDone": "Lien de réinitialisation envoyé",
-    "send": "Envoyer",
-    "delete": "Supprimer le compte",
-    "deleteHint": "Ses contenus seront anonymisés."
+    "adminOnly": "Seul un administrateur peut changer un rôle."
   },
-  "yes": "Oui",
-  "no": "Non",
-  "backToList": "Retour à la liste des utilisateurs"
+  "suspensionReason": "Motif de la suspension :"
 }

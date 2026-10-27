@@ -1,304 +1,222 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { adminApi } from '../../api/endpoints'
+import { errorMessage } from '../../api/errorMessage'
+import type { AdminUser, Role } from '../../api/types'
+import { useQuery } from '../../api/useQuery'
 import Avatar from '../../components/Avatar'
 import Button, { ExternalButtonLink } from '../../components/Button'
 import { useConfirm } from '../../components/ConfirmProvider'
-import Field, { SwitchRow } from '../../components/Field'
+import Field from '../../components/Field'
 import Icon from '../../components/Icon'
-import { Grid2, Panel, PanelBody, PanelHead } from '../../components/Panel'
-import Segmented from '../../components/Segmented'
-import { Pill, Status } from '../../components/Status'
+import NoteDialog from '../../components/NoteDialog'
+import { EmptyState, Panel, PanelBody, PanelHead } from '../../components/Panel'
+import QueryState from '../../components/QueryState'
+import { Status } from '../../components/Status'
 import { useToast } from '../../components/ToastProvider'
-import { useAdminStore } from '../../features/admin/AdminStore'
-import { daysAgoToTime, fmt, formatDate, formatDayMonth } from '../../features/admin/format'
-import SuspendDialog from '../../features/admin/SuspendDialog'
-import type { Duration } from '../../features/admin/SuspendDialog'
-import type { MemberRole, User } from '../../features/admin/types'
+import { fmt, formatDate } from '../../features/admin/format'
+import { useAuth } from '../../hooks/useAuth'
 import { useCrumbs } from '../../layout/crumbs'
 import styles from './UserDetailPage.module.css'
 
-type Tab = 'activity' | 'sanctions' | 'logins'
-const STATUS_TONE = { active: 'good', flagged: 'warn', suspended: 'crit' } as const
-const CONTENT_TONE = { published: 'good', hidden: 'serious', closed: 'neutral' } as const
+const ROLES: Role[] = ['MEMBER', 'RECRUITER', 'MODERATOR', 'ADMIN']
+const TONE = { ACTIVE: 'good', SUSPENDED: 'crit', DELETED: 'neutral' } as const
 
 export default function UserDetailPage() {
-  const { id = '' } = useParams()
-  const { users } = useAdminStore()
-  const user = users.find((u) => u.id === id)
-  if (!user) return <Navigate to="/utilisateurs" replace />
-  return <UserDetail user={user} />
-}
-
-function UserDetail({ user }: { user: User }) {
-  const { t, i18n } = useTranslation()
-  const lang = i18n.language
-  const store = useAdminStore()
-  const notify = useToast()
-  const confirm = useConfirm()
-  const navigate = useNavigate()
-  const [tab, setTab] = useState<Tab>('activity')
-  const [suspending, setSuspending] = useState(false)
+  const { username = '' } = useParams()
+  const { t } = useTranslation()
+  const query = useQuery(
+    async (signal) => {
+      const page = await adminApi.listUsers({ q: username, size: 20 }, { signal })
+      return page.items.find((u) => u.username === username) ?? null
+    },
+    [username],
+  )
   useCrumbs([
     { label: t('shell.groups.community'), to: '/utilisateurs' },
     { label: t('nav.users'), to: '/utilisateurs' },
-    { label: user.name },
+    { label: username },
   ])
 
-  const contents = store.contents.filter((c) => c.author === user.id)
-  const sanctions = [
-    ...(user.warnings
-      ? [
-          {
-            key: 'warning-1',
-            at: daysAgoToTime(1),
-            text: t('users.sanction.aggressive'),
-            by: 'eric',
-          },
-        ]
-      : []),
-    ...(user.warnings > 1
-      ? [{ key: 'warning-2', at: daysAgoToTime(26), text: t('users.sanction.promo'), by: 'mariam' }]
-      : []),
-    ...(user.status === 'suspended'
-      ? [
-          {
-            key: 'suspension',
-            at: daysAgoToTime(2),
-            text: t('users.sanction.suspension'),
-            by: 'salif',
-          },
-        ]
-      : []),
-  ]
+  return (
+    <QueryState
+      query={query}
+      isEmpty={(user) => user === null}
+      empty={
+        <Panel>
+          <EmptyState title={t('users.notFound')}>
+            <Link to="/utilisateurs">{t('users.backToList')}</Link>
+          </EmptyState>
+        </Panel>
+      }
+    >
+      {(user) => user && <UserDetail user={user} reload={query.reload} />}
+    </QueryState>
+  )
+}
 
-  async function changeRole(next: MemberRole) {
+function UserDetail({ user, reload }: { user: AdminUser; reload: () => void }) {
+  const { t, i18n } = useTranslation()
+  const lang = i18n.language
+  const { me, isAdmin } = useAuth()
+  const notify = useToast()
+  const confirm = useConfirm()
+  const [suspending, setSuspending] = useState(false)
+  const self = me?.id === user.id
+  const protectedAccount = user.role === 'ADMIN' || user.role === 'MODERATOR'
+
+  async function run(action: () => Promise<unknown>, success: string) {
+    try {
+      await action()
+      notify(success)
+      reload()
+    } catch (error) {
+      notify(errorMessage(t, error))
+    }
+  }
+
+  async function changeRole(next: Role) {
     const ok = await confirm({
       title: t('users.roleChange.title'),
-      text: t('users.roleChange.text', { name: user.name, role: t(`users.roles.${next}`) }),
+      text: t('users.roleChange.text', { name: user.displayName, role: t(`roles.${next}`) }),
       okLabel: t('users.roleChange.ok'),
     })
     if (!ok) return
-    store.setUserRole(user.id, next)
-    notify(
-      t('users.roleChange.done', { name: user.name, role: t(`users.roles.${next}`).toLowerCase() }),
+    await run(
+      () => adminApi.setRole(user.id, next),
+      t('users.roleChange.done', {
+        name: user.displayName,
+        role: t(`roles.${next}`).toLowerCase(),
+      }),
     )
   }
-
-  async function remove() {
-    const ok = await confirm({
-      title: t('users.delete.title'),
-      text: t('users.delete.text', { name: user.name }),
-      okLabel: t('users.delete.ok'),
-      danger: true,
-    })
-    if (!ok) return
-    store.deleteUser(user.id)
-    navigate('/utilisateurs')
-    notify(t('users.delete.done', { name: user.name }))
-  }
-
-  function suspend(target: User, duration: Duration, reason: string) {
-    store.suspendUsers([target.id], duration, reason)
-    setSuspending(false)
-    notify(
-      t('users.suspend.done', { name: target.name, duration: t(`users.durations.${duration}`) }),
-    )
-  }
-
-  const tabOptions = [
-    { value: 'activity' as Tab, label: t('users.tabs.activity') },
-    { value: 'sanctions' as Tab, label: t('users.tabs.sanctions', { count: sanctions.length }) },
-    { value: 'logins' as Tab, label: t('users.tabs.logins') },
-  ]
 
   return (
     <>
       <Panel>
         <PanelBody className={styles.profileHead}>
-          <Avatar name={user.name} size={64} />
+          <Avatar name={user.displayName} size={64} />
           <div>
-            <h1>{user.name}</h1>
+            <h1>{user.displayName}</h1>
             <p className={styles.sub}>
               {t('users.profile.line', {
-                email: user.email,
-                country: user.country ?? t('users.unknownCountry'),
-                date: formatDate(daysAgoToTime(user.joinedDays), lang, {
+                handle: user.username,
+                email: user.email ?? '-',
+                country: user.countryCode ?? t('users.unknownCountry'),
+                date: formatDate(user.createdAt, lang, {
                   day: '2-digit',
                   month: 'short',
                   year: 'numeric',
                 }),
-                provider: user.provider,
               })}
             </p>
             <div style={{ marginTop: 6 }}>
-              <Status tone={STATUS_TONE[user.status]}>{t(`users.status.${user.status}`)}</Status>
+              <Status tone={TONE[user.status]}>{t(`userStatus.${user.status}`)}</Status>
             </div>
           </div>
           <div className={styles.actions}>
-            <ExternalButtonLink href={`/profil/${user.id}`} target="_blank" rel="noopener">
+            <ExternalButtonLink
+              href={`/profil/${encodeURIComponent(user.username)}`}
+              target="_blank"
+              rel="noopener"
+            >
               {t('users.profile.public')}
               <Icon name="ext" size={13} />
             </ExternalButtonLink>
-            {user.status === 'suspended' ? (
+            {user.status === 'SUSPENDED' ? (
               <Button
-                onClick={() => {
-                  store.reactivateUser(user.id)
-                  notify(t('users.reactivated', { name: user.name }))
-                }}
+                onClick={() =>
+                  run(
+                    () => adminApi.reactivate(user.id),
+                    t('users.reactivated', { name: user.displayName }),
+                  )
+                }
               >
                 {t('users.reactivate')}
               </Button>
             ) : (
-              <Button variant="dangerLine" onClick={() => setSuspending(true)}>
-                {t('users.suspend.action')}
-              </Button>
+              user.status === 'ACTIVE' && (
+                <Button
+                  variant="dangerLine"
+                  disabled={self || protectedAccount}
+                  title={self || protectedAccount ? t('users.cannotSuspend') : undefined}
+                  onClick={() => setSuspending(true)}
+                >
+                  {t('users.suspend.action')}
+                </Button>
+              )
             )}
           </div>
         </PanelBody>
         <div className={styles.strip}>
           <div>
-            <strong>{fmt(user.rep, lang)}</strong>
+            <strong>{fmt(user.reputation, lang)}</strong>
             <span>{t('users.stat.reputation')}</span>
           </div>
           <div>
-            <strong>{user.questions}</strong>
-            <span>{t('users.stat.questions')}</span>
+            <strong>{t(`levels.${user.level}`)}</strong>
+            <span>{t('users.stat.level')}</span>
           </div>
           <div>
-            <strong>{user.answers}</strong>
-            <span>{t('users.stat.answers')}</span>
+            <strong>{user.hiddenContentCount}</strong>
+            <span>{t('users.stat.hidden')}</span>
           </div>
           <div>
-            <strong>{user.warnings}</strong>
+            <strong>{user.warningCount}</strong>
             <span>{t('users.stat.warnings')}</span>
           </div>
         </div>
       </Panel>
 
-      <Grid2 className={styles.below}>
-        <Panel>
-          <div className={styles.tabbar}>
-            <Segmented<Tab>
-              kind="tabs"
-              underline
-              label={t('users.tabs.label')}
-              options={tabOptions}
-              value={tab}
-              onChange={setTab}
-            />
-          </div>
-          <PanelBody>
-            {tab === 'activity' &&
-              (contents.length ? (
-                <ul className={styles.timeline}>
-                  {contents.map((c) => (
-                    <li key={c.id}>
-                      <time>{formatDayMonth(daysAgoToTime(c.daysAgo), lang)}</time>
-                      <span>
-                        {t('users.published')}{' '}
-                        <a href={`/question/${c.id}`} target="_blank" rel="noopener">
-                          {c.title}
-                        </a>{' '}
-                        <Status tone={CONTENT_TONE[c.status]}>
-                          {t(`contents.status.${c.status}`)}
-                        </Status>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className={styles.muted}>
-                  {t('users.noQuestions')} {t('users.answersTotal', { count: user.answers })}
-                </p>
-              ))}
-            {tab === 'sanctions' &&
-              (sanctions.length ? (
-                <ul className={styles.timeline}>
-                  {sanctions.map((s) => (
-                    <li key={s.key}>
-                      <time>{formatDate(s.at, lang)}</time>
-                      <span>
-                        {s.text}{' '}
-                        <span className={styles.muted}>
-                          {t('users.by', { name: store.staffBy(s.by).name })}
-                        </span>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className={styles.muted}>{t('users.noSanctions')}</p>
-              ))}
-            {tab === 'logins' && (
-              <ul className={styles.timeline}>
-                <li>
-                  <time>{t('users.today')}</time>
-                  <span>
-                    {t('users.login.today', {
-                      provider: user.provider,
-                      country: user.country ?? '',
-                    })}
-                  </span>
-                </li>
-                <li>
-                  <time>{t('users.yesterday')}</time>
-                  <span>{t('users.login.yesterday', { provider: user.provider })}</span>
-                </li>
-                <li>
-                  <time>{formatDayMonth(daysAgoToTime(4), lang)}</time>
-                  <span>{t('users.login.password')}</span>
-                </li>
-              </ul>
-            )}
-          </PanelBody>
-        </Panel>
-
-        <Panel>
-          <PanelHead title={t('users.manage.title')} />
-          <PanelBody>
-            <Field label={t('users.col.role')} hint={t('users.manage.roleHint')} select>
-              {(control) => (
-                <select
-                  {...control}
-                  value={user.role}
-                  onChange={(event) => changeRole(event.target.value as MemberRole)}
-                >
-                  <option value="member">{t('users.roles.member')}</option>
-                  <option value="moderator">{t('users.roles.moderator')}</option>
-                </select>
-              )}
-            </Field>
-            <SwitchRow
-              title={t('users.manage.recruiters')}
-              description={t('users.manage.recruitersHint')}
-            >
-              <Pill>{user.rep > 100 ? t('users.yes') : t('users.no')}</Pill>
-            </SwitchRow>
-            <SwitchRow title={t('users.manage.reset')} description={t('users.manage.resetHint')}>
-              <Button
-                size="sm"
-                onClick={() => {
-                  store.logPasswordReset(user.id)
-                  notify(t('users.manage.resetDone'))
-                }}
+      <Panel className={styles.below} style={{ maxWidth: 560 }}>
+        <PanelHead title={t('users.manage.title')} />
+        <PanelBody>
+          <Field
+            label={t('users.col.role')}
+            hint={isAdmin ? t('users.manage.roleHint') : t('users.manage.adminOnly')}
+            select
+          >
+            {(control) => (
+              <select
+                {...control}
+                value={user.role}
+                disabled={!isAdmin || self}
+                onChange={(event) => changeRole(event.target.value as Role)}
               >
-                {t('users.manage.send')}
-              </Button>
-            </SwitchRow>
-            <SwitchRow title={t('users.manage.delete')} description={t('users.manage.deleteHint')}>
-              <Button size="sm" variant="dangerLine" onClick={remove}>
-                {t('users.delete.ok')}
-              </Button>
-            </SwitchRow>
-          </PanelBody>
-        </Panel>
-      </Grid2>
+                {ROLES.map((r) => (
+                  <option key={r} value={r}>
+                    {t(`roles.${r}`)}
+                  </option>
+                ))}
+              </select>
+            )}
+          </Field>
+          {user.suspensionReason && (
+            <p style={{ fontSize: 14 }}>
+              <b>{t('users.suspensionReason')}</b> {user.suspensionReason}
+            </p>
+          )}
+        </PanelBody>
+      </Panel>
 
-      <SuspendDialog
-        user={suspending ? user : null}
+      <NoteDialog
+        open={suspending}
+        title={t('users.suspend.title')}
+        lead={t('users.suspend.lead', { name: user.displayName })}
+        label={t('users.suspend.reason')}
+        hint={t('users.suspend.hint')}
+        minLength={10}
+        submitLabel={t('users.suspend.submit')}
+        danger
         onClose={() => setSuspending(false)}
-        onConfirm={suspend}
+        onSubmit={async (reason) => {
+          setSuspending(false)
+          await run(
+            () => adminApi.suspend(user.id, reason),
+            t('users.suspend.done', { name: user.displayName }),
+          )
+        }}
       />
       <p style={{ marginTop: 24 }}>
         <Link to="/utilisateurs">{t('users.backToList')}</Link>

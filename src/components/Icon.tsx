@@ -20,6 +20,7 @@ export type IconName =
   | 'dl'
   | 'plus'
   | 'shield'
+  | 'globe'
 
 export type IconProps = { name: IconName; size?: number }
 
@@ -201,6 +202,18 @@ const ICONS: Record<IconName, { viewBox: string; body: JSX.Element }> = {
     viewBox: '0 0 14 14',
     body: (
       <path d="M7 2.5v9M2.5 7h9" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" />
+    ),
+  },
+  globe: {
+    viewBox: '0 0 18 18',
+    body: (
+      <>
+        <circle cx="9" cy="9" r="6.5" {...S} />
+        <path
+          d="M2.5 9h13M9 2.5c1.8 1.8 2.7 4 2.7 6.5S10.8 13.7 9 15.5C7.2 13.7 6.3 11.5 6.3 9S7.2 4.3 9 2.5Z"
+          {...S}
+        />
+      </>
     ),
   },
   shield: {

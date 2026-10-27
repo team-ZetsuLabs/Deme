@@ -12,7 +12,7 @@ export default function ReferentPage() {
   return (
     <>
       <PageHead title={t('nav.referent')} description={t('referent.intro')} />
-      <ReportQueue actions={['ignore', 'hide']} />
+      <ReportQueue source="referent" />
     </>
   )
 }

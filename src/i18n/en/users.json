@@ -1,56 +1,14 @@
 {
-  "roles": {
-    "member": "Member",
-    "moderator": "Moderator"
-  },
-  "durations": {
-    "1d": "1 day",
-    "7d": "7 days",
-    "30d": "30 days",
-    "permanent": "Permanent"
-  },
-  "status": {
-    "active": "Active",
-    "flagged": "Flagged",
-    "suspended": "Suspended"
-  },
-  "warnings_one": "{{count}} warning",
-  "warnings_other": "{{count}} warnings",
-  "points_one": "{{count}} reputation point",
-  "points_other": "{{count}} reputation points",
-  "suspend": {
-    "title": "Suspend the account",
-    "lead": "{{name}} will not be able to post or sign in for the chosen duration.",
-    "duration": "Duration",
-    "reason": "Reason",
-    "hint": "The reason is sent to the user and kept in the audit log.",
-    "reasonError": "Give a reason of at least {{count}} characters.",
-    "submit": "Suspend",
-    "action": "Suspend",
-    "done": "{{name}} is suspended ({{duration}})"
-  },
-  "summary_one": "{{count}} account, including {{suspended}} suspended and {{flagged}} flagged.",
-  "summary_other": "{{count}} accounts, including {{suspended}} suspended and {{flagged}} flagged.",
+  "lead": "Find a member, suspend or reactivate their account, change their role.",
+  "summary_one": "{{count}} account.",
+  "summary_other": "{{count}} accounts.",
   "exportCsv": "Export as CSV",
   "exported_one": "{{count}} row exported",
   "exported_other": "{{count}} rows exported",
   "search": "Search",
-  "searchPlaceholder": "Name or email",
+  "searchPlaceholder": "Name, handle or email",
   "allRoles": "All roles",
   "allStatuses": "All statuses",
-  "bulk": {
-    "label": "Bulk actions",
-    "title": "Suspend the accounts",
-    "text_one": "Suspend {{count}} account for 7 days? Each user will be notified by email.",
-    "text_other": "Suspend {{count}} accounts for 7 days? Each user will be notified by email.",
-    "selected_one": "{{count}} account selected",
-    "selected_other": "{{count}} accounts selected",
-    "export": "Export the selection",
-    "suspend": "Suspend for 7 days",
-    "clear": "Clear selection",
-    "done_one": "{{count}} account suspended",
-    "done_other": "{{count}} accounts suspended"
-  },
   "selectPage": "Select the accounts on this page",
   "select": "Select {{name}}",
   "unknownCountry": "Unknown",
@@ -60,76 +18,48 @@
     "role": "Role",
     "reputation": "Reputation",
     "joined": "Joined",
-    "status": "Status"
+    "status": "Status",
+    "actions": "Actions"
   },
   "view": "View",
   "range": "{{from}} to {{to}} of {{total}}",
-  "previous": "Previous",
-  "next": "Next",
   "noneTitle": "No account matches",
   "noneHint": "Change the search or the filters.",
   "reset": "Reset the filters",
-  "sanction": {
-    "aggressive": "Warning: aggressive tone in an answer",
-    "promo": "Warning: repeated promotional links",
-    "suspension": "30-day suspension: repeated spam"
-  },
+  "notFound": "Account not found",
+  "backToList": "Back to the list of users",
   "roleChange": {
     "title": "Change the role",
-    "text": "Change {{name}} to the role “{{role}}”? The change is immediate.",
+    "text": "Change {{name}} to the role “{{role}}”? It takes effect on their next request.",
     "ok": "Change the role",
     "done": "{{name}} is now {{role}}"
   },
-  "delete": {
-    "title": "Delete the account",
-    "text": "Permanently delete the account of {{name}}? Their content will remain visible as “Deleted user”.",
-    "ok": "Delete the account",
-    "done": "Account of {{name}} deleted"
-  },
   "reactivated": "{{name}} is active again",
   "reactivate": "Reactivate the account",
+  "cannotSuspend": "Not possible on yourself or on a team member",
   "profile": {
-    "line": "{{email}}, {{country}}, joined on {{date}} via {{provider}}",
+    "line": "@{{handle}}, {{email}}, {{country}}, joined on {{date}}",
     "public": "Public profile"
   },
   "stat": {
     "reputation": "reputation",
-    "questions": "questions",
-    "answers": "answers",
+    "level": "level",
+    "hidden": "hidden content",
     "warnings": "warnings"
   },
-  "tabs": {
-    "label": "Account history",
-    "activity": "Activity",
-    "sanctions": "Sanctions ({{count}})",
-    "logins": "Sign-ins"
-  },
-  "published": "Published",
-  "noQuestions": "No question published recently.",
-  "answersTotal_one": "{{count}} answer in total.",
-  "answersTotal_other": "{{count}} answers in total.",
-  "by": "by {{name}}",
-  "noSanctions": "No sanction on this account.",
-  "today": "Today",
-  "yesterday": "Yesterday",
-  "login": {
-    "today": "Sign-in via {{provider}}, Chrome on Android, IP 102.180.xx.xx ({{country}})",
-    "yesterday": "Sign-in via {{provider}}, Firefox on Windows, IP 102.180.xx.xx",
-    "password": "Password changed"
+  "suspend": {
+    "title": "Suspend the account",
+    "lead": "{{name}} will no longer be able to sign in or post. Their content stays visible.",
+    "reason": "Reason",
+    "hint": "The reason is sent to the user.",
+    "submit": "Suspend",
+    "action": "Suspend",
+    "done": "{{name}} is suspended"
   },
   "manage": {
     "title": "Account management",
     "roleHint": "A moderator can handle reports and hide content.",
-    "recruiters": "Visible to recruiters",
-    "recruitersHint": "User's choice, read-only.",
-    "reset": "Reset the password",
-    "resetHint": "Sends a link by email.",
-    "resetDone": "Reset link sent",
-    "send": "Send",
-    "delete": "Delete the account",
-    "deleteHint": "Their content will be anonymised."
+    "adminOnly": "Only an administrator can change a role."
   },
-  "yes": "Yes",
-  "no": "No",
-  "backToList": "Back to the list of users"
+  "suspensionReason": "Suspension reason:"
 }

@@ -8,14 +8,21 @@ import Icon from '../components/Icon'
 import type { IconName } from '../components/Icon'
 import Logo from '../components/Logo'
 import { LanguageSwitch, ThemeToggle } from '../components/Preferences'
-import { useAdminStore } from '../features/admin/AdminStore'
+import StateMessage from '../components/StateMessage'
+import { useCounts } from './counts'
 import { useAuth } from '../hooks/useAuth'
 import { CrumbsContext } from './crumbs'
 import type { Crumb } from './crumbs'
 import styles from './AdminLayout.module.css'
 import utils from '../styles/utils.module.css'
 
-type NavItem = { to: string; key: string; icon: IconName; count?: 'reports' | 'jobs' }
+type NavItem = {
+  to: string
+  key: string
+  icon: IconName
+  count?: 'reports' | 'jobs' | 'proposals'
+  referent?: boolean
+}
 
 const NAV: { group: string; items: NavItem[] }[] = [
   { group: 'pilotage', items: [{ to: '/tableau-de-bord', key: 'dashboard', icon: 'home' }] },
@@ -23,8 +30,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
     group: 'moderation',
     items: [
       { to: '/signalements', key: 'reports', icon: 'flag', count: 'reports' },
-      { to: '/referent', key: 'referent', icon: 'shield' },
-      { to: '/contenus', key: 'contents', icon: 'doc' },
+      { to: '/referent', key: 'referent', icon: 'shield', referent: true },
       { to: '/tags', key: 'tags', icon: 'tag' },
     ],
   },
@@ -34,21 +40,15 @@ const NAV: { group: string; items: NavItem[] }[] = [
       { to: '/utilisateurs', key: 'users', icon: 'users' },
       { to: '/offres', key: 'jobs', icon: 'jobs', count: 'jobs' },
       { to: '/challenges', key: 'challenges', icon: 'trophy' },
-    ],
-  },
-  {
-    group: 'system',
-    items: [
-      { to: '/journal', key: 'audit', icon: 'list' },
-      { to: '/parametres', key: 'settings', icon: 'gear' },
+      { to: '/communautes', key: 'communities', icon: 'globe', count: 'proposals' },
     ],
   },
 ]
 
 export default function AdminLayout() {
   const { t } = useTranslation()
-  const { loggedIn, signOut } = useAuth()
-  const store = useAdminStore()
+  const { status, me, access, signOut } = useAuth()
+  const counts = useCounts()
   const location = useLocation()
   const navigate = useNavigate()
   const [openAt, setOpenAt] = useState<string | null>(null)
@@ -76,10 +76,12 @@ export default function AdminLayout() {
     return () => document.removeEventListener('keydown', onKey)
   }, [setNavOpen])
 
-  if (!loggedIn) return <Navigate to="/connexion" replace state={{ from: location.pathname }} />
-
-  const counts = { reports: store.reports.length, jobs: store.pendingJobs.length }
-  const admin = store.currentAdmin
+  if (status === 'loading') return <StateMessage kind="loading" />
+  if (!me || !access)
+    return <Navigate to="/connexion" replace state={{ from: location.pathname }} />
+  if (access === 'referent' && location.pathname !== '/referent') {
+    return <Navigate to="/referent" replace />
+  }
 
   function handleSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -102,49 +104,54 @@ export default function AdminLayout() {
             <span className={styles.env}>admin</span>
           </div>
           <nav>
-            {NAV.map((group) => (
-              <div key={group.group} className={styles.navGroup}>
-                <p className={styles.navLabel}>{t(`shell.groups.${group.group}`)}</p>
-                {group.items.map((item) => {
-                  const n = item.count ? counts[item.count] : 0
-                  return (
-                    <NavLink key={item.to} to={item.to} className={styles.navLink}>
-                      {({ isActive }) => (
-                        <span className={`${styles.navInner} ${isActive ? styles.active : ''}`}>
-                          <Icon name={item.icon} size={18} />
-                          {t(`nav.${item.key}`)}
-                          {n > 0 && (
-                            <span
-                              className={`${styles.count} ${item.count === 'reports' ? styles.alert : ''}`}
-                              aria-label={t('shell.pending', { count: n })}
-                            >
-                              {n}
-                            </span>
-                          )}
-                        </span>
-                      )}
-                    </NavLink>
-                  )
-                })}
-              </div>
-            ))}
+            {NAV.map((group) => ({
+              ...group,
+              items: group.items.filter((item) => access === 'staff' || item.referent),
+            }))
+              .filter((group) => group.items.length > 0)
+              .map((group) => (
+                <div key={group.group} className={styles.navGroup}>
+                  <p className={styles.navLabel}>{t(`shell.groups.${group.group}`)}</p>
+                  {group.items.map((item) => {
+                    const n = item.count ? counts[item.count] : 0
+                    return (
+                      <NavLink key={item.to} to={item.to} className={styles.navLink}>
+                        {({ isActive }) => (
+                          <span className={`${styles.navInner} ${isActive ? styles.active : ''}`}>
+                            <Icon name={item.icon} size={18} />
+                            {t(`nav.${item.key}`)}
+                            {n > 0 && (
+                              <span
+                                className={`${styles.count} ${item.count === 'reports' ? styles.alert : ''}`}
+                                aria-label={t('shell.pending', { count: n })}
+                              >
+                                {n}
+                              </span>
+                            )}
+                          </span>
+                        )}
+                      </NavLink>
+                    )
+                  })}
+                </div>
+              ))}
           </nav>
           <div className={styles.sidebarFoot}>
             <div className={styles.langSide}>
               <LanguageSwitch />
             </div>
             <div className={styles.me}>
-              <Avatar name={admin.name} size={32} />
+              <Avatar name={me.displayName} size={32} />
               <div>
-                <b>{admin.name}</b>
-                <small>{t(`settings.roles.${admin.role}`)}</small>
+                <b>{me.displayName}</b>
+                <small>{t(`roles.${me.role}`)}</small>
               </div>
               <Button
                 variant="ghost"
                 size="icon"
                 aria-label={t('shell.logout')}
-                onClick={() => {
-                  signOut()
+                onClick={async () => {
+                  await signOut()
                   navigate('/connexion')
                 }}
               >

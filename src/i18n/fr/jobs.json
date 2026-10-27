@@ -1,55 +1,38 @@
 {
   "lead": "Chaque offre est vérifiée avant publication pour protéger les membres des arnaques.",
   "statusLabel": "Statut des offres",
-  "tab": {
-    "pending": "En attente",
-    "published": "Publiées",
-    "refused": "Refusées"
-  },
-  "meta": "{{company}}, {{city}}, {{type}}. Soumise {{ago}} par {{by}}",
+  "meta": "{{company}}, {{place}}, {{type}}. Soumise {{ago}} par {{by}}",
   "remote": "À distance",
-  "type": {
-    "permanent": "CDI",
-    "mission": "Mission",
-    "internship": "Stage"
-  },
   "check": {
-    "domain": "Domaine de l'entreprise vérifié",
     "pay": "Rémunération indiquée",
-    "description": "Description complète"
+    "website": "Site de l'entreprise renseigné"
   },
   "yes": " : oui",
   "no": " : non",
   "viewAd": "Voir l'annonce",
-  "publishing": "Publication",
+  "compensation": "Rémunération :",
   "approve": "Approuver",
   "published": "Offre de {{company}} publiée",
   "refusedToast": "Offre de {{company}} refusée",
   "refuse": {
     "action": "Refuser",
     "title": "Refuser l'offre",
-    "lead": "{{company}} recevra ce motif par email.",
+    "lead": "{{company}} recevra ce motif.",
     "reasonLabel": "Motif communiqué à l'entreprise",
-    "presetLabel": "Motif fréquent",
-    "choosePreset": "Choisir un motif fréquent",
-    "preset": {
-      "vague": "Description du poste trop vague",
-      "unverifiable": "Entreprise non vérifiable",
-      "notDev": "Offre non liée au développement",
-      "abusivePay": "Rémunération manifestement abusive"
-    },
     "placeholder": "Précisez ce que l'entreprise doit corriger pour republier.",
-    "submit": "Refuser l'offre",
-    "error": "Indiquez un motif d'au moins {{count}} caractères."
+    "submit": "Refuser l'offre"
   },
-  "nonePending": "Aucune offre en attente",
-  "nonePendingHint": "Les nouvelles offres apparaîtront ici avant publication.",
+  "none": {
+    "PENDING": "Aucune offre en attente",
+    "PUBLISHED": "Aucune offre publiée",
+    "REJECTED": "Aucune offre refusée"
+  },
+  "noneHint": "Les nouvelles offres apparaîtront ici avant publication.",
   "col": {
     "offer": "Offre",
     "company": "Entreprise",
     "applicants": "Candidatures",
-    "publishedOn": "Publiée le",
     "reason": "Motif",
-    "date": "Date"
+    "date": "Mise à jour"
   }
 }

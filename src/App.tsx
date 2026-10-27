@@ -9,15 +9,13 @@ const LoginPage = lazy(() => import('./pages/login/LoginPage'))
 const DashboardPage = lazy(() => import('./pages/dashboard/DashboardPage'))
 const ReportsPage = lazy(() => import('./pages/reports/ReportsPage'))
 const ReferentPage = lazy(() => import('./pages/referent/ReferentPage'))
-const ContentsPage = lazy(() => import('./pages/contents/ContentsPage'))
 const TagsPage = lazy(() => import('./pages/tags/TagsPage'))
 const UsersPage = lazy(() => import('./pages/users/UsersPage'))
 const UserDetailPage = lazy(() => import('./pages/users/UserDetailPage'))
 const JobsPage = lazy(() => import('./pages/jobs/JobsPage'))
 const ChallengesPage = lazy(() => import('./pages/challenges/ChallengesPage'))
+const CommunitiesPage = lazy(() => import('./pages/communities/CommunitiesPage'))
 const NewChallengePage = lazy(() => import('./pages/challenges/NewChallengePage'))
-const AuditPage = lazy(() => import('./pages/audit/AuditPage'))
-const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'))
 const NotFoundPage = lazy(() => import('./pages/not-found/NotFoundPage'))
 
 export default function App() {
@@ -33,15 +31,13 @@ export default function App() {
               <Route path="tableau-de-bord" element={<DashboardPage />} />
               <Route path="signalements" element={<ReportsPage />} />
               <Route path="referent" element={<ReferentPage />} />
-              <Route path="contenus" element={<ContentsPage />} />
               <Route path="tags" element={<TagsPage />} />
               <Route path="utilisateurs" element={<UsersPage />} />
-              <Route path="utilisateurs/:id" element={<UserDetailPage />} />
+              <Route path="utilisateurs/:username" element={<UserDetailPage />} />
               <Route path="offres" element={<JobsPage />} />
               <Route path="challenges" element={<ChallengesPage />} />
               <Route path="challenges/nouveau" element={<NewChallengePage />} />
-              <Route path="journal" element={<AuditPage />} />
-              <Route path="parametres" element={<SettingsPage />} />
+              <Route path="communautes" element={<CommunitiesPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>

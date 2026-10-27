@@ -2,13 +2,13 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { adminApi } from '../../api/endpoints'
+import { errorMessage } from '../../api/errorMessage'
 import Button, { ButtonLink } from '../../components/Button'
-import { inputClass } from '../../components/Field'
-import Field from '../../components/Field'
+import Field, { inputClass } from '../../components/Field'
 import Icon from '../../components/Icon'
 import { Grid2, PageHead, Panel, PanelBody, PanelHead, SaveBar } from '../../components/Panel'
 import { useToast } from '../../components/ToastProvider'
-import { useAdminStore } from '../../features/admin/AdminStore'
 import { formatDate } from '../../features/admin/format'
 import { useCrumbs } from '../../layout/crumbs'
 import styles from './NewChallengePage.module.css'
@@ -19,10 +19,17 @@ const METHODS = ['GET', 'POST', 'PUT', 'DELETE']
 const isoDay = (offset: number) =>
   new Date(Date.now() + offset * 86_400_000).toISOString().slice(0, 10)
 
+/** Les endpoints attendus deviennent la liste Markdown des spécifications du défi. */
+function specificationsOf(endpoints: Endpoint[], intro: string): string {
+  const lines = endpoints
+    .filter((e) => e.description.trim())
+    .map((e) => `- \`${e.method}\` ${e.description.trim()}`)
+  return lines.length ? `${intro}\n\n${lines.join('\n')}` : ''
+}
+
 export default function NewChallengePage() {
   const { t, i18n } = useTranslation()
   const lang = i18n.language
-  const { createChallenge } = useAdminStore()
   const notify = useToast()
   const navigate = useNavigate()
   useCrumbs([
@@ -32,20 +39,30 @@ export default function NewChallengePage() {
   ])
 
   const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
+  const [statement, setStatement] = useState('')
+  const [technologies, setTechnologies] = useState('')
   const [endpoints, setEndpoints] = useState<Endpoint[]>([
     { id: 1, method: 'POST', description: t('challenges.defaultEndpoint1') },
     { id: 2, method: 'GET', description: t('challenges.defaultEndpoint2') },
   ])
   const [start, setStart] = useState(isoDay(4))
   const [end, setEnd] = useState(isoDay(10))
-  const [points, setPoints] = useState('20')
   const [submitted, setSubmitted] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [alert, setAlert] = useState('')
 
+  const specifications = specificationsOf(endpoints, t('challenges.specsIntro'))
+  const techList = technologies
+    .split(/[,\s]+/)
+    .map((x) => x.trim().toLowerCase())
+    .filter(Boolean)
   const errors = {
-    title: title.trim().length < 10 ? t('challenges.errors.title') : undefined,
-    description: description.trim().length < 40 ? t('challenges.errors.description') : undefined,
+    title:
+      title.trim().length < 10 || title.trim().length > 120
+        ? t('challenges.errors.title')
+        : undefined,
+    statement: statement.trim().length < 50 ? t('challenges.errors.statement') : undefined,
+    specifications: specifications.length < 50 ? t('challenges.errors.specifications') : undefined,
     date: end <= start ? t('challenges.errors.date') : undefined,
   }
 
@@ -56,17 +73,25 @@ export default function NewChallengePage() {
   async function submit(event: FormEvent) {
     event.preventDefault()
     setSubmitted(true)
-    if (errors.title || errors.description || errors.date) return
+    setAlert('')
+    if (Object.values(errors).some(Boolean)) return
     setBusy(true)
-    await new Promise((resolve) => setTimeout(resolve, 600))
-    createChallenge({ title: title.trim(), start, end, points: Number(points) || 20 })
-    navigate('/challenges')
-    notify(t('challenges.scheduled'))
-  }
-
-  const preview = {
-    title: title.trim() || t('challenges.previewTitle'),
-    description: description.trim() || t('challenges.previewDescription'),
+    try {
+      await adminApi.createChallenge({
+        title: title.trim(),
+        statement: statement.trim(),
+        specifications,
+        technologies: techList,
+        startsAt: new Date(`${start}T00:00:00`).toISOString(),
+        endsAt: new Date(`${end}T23:59:59`).toISOString(),
+      })
+      notify(t('challenges.scheduled'))
+      navigate('/challenges')
+    } catch (error) {
+      setAlert(errorMessage(t, error))
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
@@ -75,25 +100,33 @@ export default function NewChallengePage() {
       <Grid2>
         <Panel as="form" onSubmit={submit} noValidate>
           <PanelBody>
+            {alert && (
+              <p
+                role="alert"
+                style={{ color: 'var(--crit-text)', marginBottom: 16, fontWeight: 500 }}
+              >
+                {alert}
+              </p>
+            )}
             <Field label={t('challenges.field.title')} error={submitted ? errors.title : undefined}>
               {(control) => (
                 <input
                   {...control}
-                  maxLength={80}
+                  maxLength={120}
                   value={title}
                   onChange={(event) => setTitle(event.target.value)}
                 />
               )}
             </Field>
             <Field
-              label={t('challenges.field.description')}
-              error={submitted ? errors.description : undefined}
+              label={t('challenges.field.statement')}
+              error={submitted ? errors.statement : undefined}
             >
               {(control) => (
                 <textarea
                   {...control}
-                  value={description}
-                  onChange={(event) => setDescription(event.target.value)}
+                  value={statement}
+                  onChange={(event) => setStatement(event.target.value)}
                 />
               )}
             </Field>
@@ -135,6 +168,11 @@ export default function NewChallengePage() {
                 </Button>
               </div>
             ))}
+            {submitted && errors.specifications && (
+              <p role="alert" style={{ color: 'var(--crit-text)', fontSize: 13, marginBottom: 8 }}>
+                {errors.specifications}
+              </p>
+            )}
             <Button
               size="sm"
               variant="ghost"
@@ -149,6 +187,18 @@ export default function NewChallengePage() {
               <Icon name="plus" size={12} />
               {t('challenges.field.addEndpoint')}
             </Button>
+            <Field
+              label={t('challenges.field.technologies')}
+              hint={t('challenges.field.technologiesHint')}
+            >
+              {(control) => (
+                <input
+                  {...control}
+                  value={technologies}
+                  onChange={(event) => setTechnologies(event.target.value)}
+                />
+              )}
+            </Field>
             <div className={styles.dates}>
               <Field label={t('challenges.field.start')}>
                 {(control) => (
@@ -171,18 +221,6 @@ export default function NewChallengePage() {
                 )}
               </Field>
             </div>
-            <Field label={t('challenges.field.points')}>
-              {(control) => (
-                <input
-                  {...control}
-                  type="number"
-                  min={5}
-                  max={100}
-                  value={points}
-                  onChange={(event) => setPoints(event.target.value)}
-                />
-              )}
-            </Field>
           </PanelBody>
           <SaveBar>
             <ButtonLink variant="ghost" to="/challenges">
@@ -197,8 +235,8 @@ export default function NewChallengePage() {
           <PanelHead title={t('challenges.preview')} />
           <PanelBody>
             <div className={styles.preview}>
-              <h3>{preview.title}</h3>
-              <p>{preview.description}</p>
+              <h3>{title.trim() || t('challenges.previewTitle')}</h3>
+              <p>{statement.trim() || t('challenges.previewDescription')}</p>
               <ul>
                 {endpoints.map((endpoint) => (
                   <li key={endpoint.id}>
@@ -211,7 +249,6 @@ export default function NewChallengePage() {
                 {t('challenges.previewMeta', {
                   from: formatDate(start, lang),
                   to: formatDate(end, lang),
-                  points,
                 })}
               </p>
             </div>

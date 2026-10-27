@@ -1,80 +1,110 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
+import { adminApi } from '../../api/endpoints'
+import { errorMessage } from '../../api/errorMessage'
+import type { AdminTag } from '../../api/types'
+import { useQuery } from '../../api/useQuery'
 import Button from '../../components/Button'
-import { cell, TableWrap } from '../../components/DataTable'
-import Dialog, { DialogBody, DialogFoot, DialogLead } from '../../components/Dialog'
-import Field from '../../components/Field'
-import Icon from '../../components/Icon'
-import { PageHead, Panel, PanelBody } from '../../components/Panel'
-import { Tag, Tags } from '../../components/Status'
 import { useConfirm } from '../../components/ConfirmProvider'
+import { cell, Pager, TableWrap } from '../../components/DataTable'
+import Dialog, { DialogBody, DialogFoot, DialogLead } from '../../components/Dialog'
+import Field, { compactSelectClass, inputClass, selectClass } from '../../components/Field'
+import Icon from '../../components/Icon'
+import { EmptyState, Filters, PageHead, Panel, PanelBody } from '../../components/Panel'
+import QueryState from '../../components/QueryState'
+import { Tag } from '../../components/Status'
 import { useToast } from '../../components/ToastProvider'
-import { useAdminStore } from '../../features/admin/AdminStore'
-import { daysAgoToTime, formatDate } from '../../features/admin/format'
-import type { Tag as TagModel } from '../../features/admin/types'
+import { useDebouncedValue } from '../../hooks/useDebouncedValue'
 import { useCrumbs } from '../../layout/crumbs'
+import utils from '../../styles/utils.module.css'
 
-const TAG_PATTERN = /^[a-z0-9][a-z0-9-]{1,23}$/
+const TAG_PATTERN = /^[a-z0-9][a-z0-9.+#-]{0,29}$/
+const PAGE_SIZE = 50
 
 export default function TagsPage() {
-  const { t, i18n } = useTranslation()
-  const { tags, createTag, mergeTag, deleteTag } = useAdminStore()
+  const { t } = useTranslation()
   const notify = useToast()
   const confirm = useConfirm()
   const [name, setName] = useState('')
   const [submitted, setSubmitted] = useState(false)
-  const [merging, setMerging] = useState<TagModel | null>(null)
+  const [serverError, setServerError] = useState<string>()
+  const [search, setSearch] = useState('')
+  const [unused, setUnused] = useState(false)
+  const [page, setPage] = useState(1)
+  const [merging, setMerging] = useState<AdminTag | null>(null)
   const [target, setTarget] = useState('')
+  const q = useDebouncedValue(search)
   useCrumbs([
     { label: t('shell.groups.moderation'), to: '/signalements' },
     { label: t('nav.tags') },
   ])
 
-  const value = name.trim().toLowerCase()
-  const error = !submitted
-    ? undefined
-    : !TAG_PATTERN.test(value)
-      ? t('tags.invalid')
-      : tags.some((tag) => tag.name === value || tag.synonyms.includes(value))
-        ? t('tags.exists', { name: value })
-        : undefined
+  const query = useQuery(
+    (signal) =>
+      adminApi.listTags(
+        { q: q || undefined, unused: unused || undefined, page: page - 1, size: PAGE_SIZE },
+        { signal },
+      ),
+    [q, unused, page],
+  )
 
-  function submit(event: FormEvent) {
+  const value = name.trim().toLowerCase()
+  const error = submitted && !TAG_PATTERN.test(value) ? t('tags.invalid') : serverError
+
+  async function run(action: () => Promise<unknown>, success: string) {
+    try {
+      await action()
+      notify(success)
+      query.reload()
+      return true
+    } catch (e) {
+      notify(errorMessage(t, e))
+      return false
+    }
+  }
+
+  async function submit(event: FormEvent) {
     event.preventDefault()
     setSubmitted(true)
+    setServerError(undefined)
     if (!TAG_PATTERN.test(value)) return
-    if (tags.some((tag) => tag.name === value || tag.synonyms.includes(value))) return
-    createTag(value)
-    notify(t('tags.created', { name: value }))
-    setName('')
-    setSubmitted(false)
+    try {
+      await adminApi.createTag(value)
+      notify(t('tags.created', { name: value }))
+      setName('')
+      setSubmitted(false)
+      query.reload()
+    } catch (e) {
+      setServerError(errorMessage(t, e))
+    }
   }
 
-  function openMerge(tag: TagModel) {
-    setMerging(tag)
-    setTarget(tags.find((x) => x.name !== tag.name)?.name ?? '')
-  }
-
-  function confirmMerge(event: FormEvent) {
+  async function confirmMerge(event: FormEvent) {
     event.preventDefault()
-    if (!merging || !target) return
-    mergeTag(merging.name, target)
-    notify(t('tags.merged', { from: merging.name, into: target }))
-    setMerging(null)
+    const into = target.trim().toLowerCase()
+    if (!merging || !into || into === merging.name) return
+    const ok = await run(
+      () => adminApi.mergeTag(merging.name, into),
+      t('tags.merged', { from: merging.name, into }),
+    )
+    if (ok) setMerging(null)
   }
 
-  async function remove(tag: TagModel) {
+  async function remove(tag: AdminTag) {
     const ok = await confirm({
       title: t('tags.deleteTitle'),
       text: t('tags.deleteText', { name: tag.name }),
       okLabel: t('tags.delete'),
       danger: true,
     })
-    if (!ok) return
-    deleteTag(tag.name)
-    notify(t('tags.deleted'))
+    if (ok) await run(() => adminApi.deleteTag(tag.name), t('tags.deleted'))
   }
+
+  const total = query.data?.total ?? 0
+  const pages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  const isUnused = (tag: AdminTag) =>
+    tag.questionCount + tag.jobCount + tag.missionCount + tag.memberCount === 0
 
   return (
     <>
@@ -95,6 +125,7 @@ export default function TagsPage() {
               {(control) => (
                 <input
                   {...control}
+                  maxLength={30}
                   placeholder={t('tags.placeholder')}
                   value={name}
                   onChange={(event) => setName(event.target.value)}
@@ -109,85 +140,120 @@ export default function TagsPage() {
         </PanelBody>
       </Panel>
 
+      <Filters>
+        <label className={utils.srOnly} htmlFor="tagSearch">
+          {t('tags.search')}
+        </label>
+        <input
+          id="tagSearch"
+          type="search"
+          className={inputClass}
+          style={{ width: 260, minHeight: 36, fontSize: 14 }}
+          placeholder={t('tags.search')}
+          value={search}
+          onChange={(event) => {
+            setSearch(event.target.value)
+            setPage(1)
+          }}
+        />
+        <label className={utils.srOnly} htmlFor="tagUsage">
+          {t('tags.usageFilter')}
+        </label>
+        <select
+          id="tagUsage"
+          className={`${selectClass} ${compactSelectClass}`}
+          value={unused ? 'unused' : 'all'}
+          onChange={(event) => {
+            setUnused(event.target.value === 'unused')
+            setPage(1)
+          }}
+        >
+          <option value="all">{t('tags.allTags')}</option>
+          <option value="unused">{t('tags.onlyUnused')}</option>
+        </select>
+      </Filters>
+
       <Panel>
-        <TableWrap>
-          <thead>
-            <tr>
-              <th>{t('tags.col.tag')}</th>
-              <th className={cell.num}>{t('tags.col.questions')}</th>
-              <th className={cell.hideSm}>{t('tags.col.synonyms')}</th>
-              <th className={cell.hideSm}>{t('tags.col.created')}</th>
-              <th className={cell.right}>{t('tags.col.actions')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {[...tags]
-              .sort((a, b) => b.count - a.count)
-              .map((tag) => (
-                <tr key={tag.name}>
-                  <td>
-                    <Tag>{tag.name}</Tag>
-                  </td>
-                  <td className={cell.num}>{tag.count}</td>
-                  <td className={cell.hideSm}>
-                    {tag.synonyms.length ? (
-                      <Tags>
-                        {tag.synonyms.map((s) => (
-                          <Tag key={s} soft>
-                            {s}
-                          </Tag>
-                        ))}
-                      </Tags>
-                    ) : (
-                      <span className={cell.muted}>{t('tags.none')}</span>
-                    )}
-                  </td>
-                  <td className={`${cell.hideSm} ${cell.muted}`}>
-                    {formatDate(daysAgoToTime(tag.createdDaysAgo), i18n.language, {
-                      month: 'short',
-                      year: 'numeric',
-                    })}
-                  </td>
-                  <td>
-                    <div className={cell.rowActions}>
-                      <Button size="sm" variant="ghost" onClick={() => openMerge(tag)}>
-                        {t('tags.merge')}
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        disabled={tag.count > 0}
-                        title={tag.count > 0 ? t('tags.deleteDisabled') : undefined}
-                        onClick={() => remove(tag)}
-                      >
-                        {t('tags.delete')}
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </TableWrap>
+        <QueryState
+          query={query}
+          isEmpty={(d) => d.items.length === 0}
+          empty={<EmptyState title={t('tags.emptyTitle')}>{t('tags.emptyHint')}</EmptyState>}
+        >
+          {(d) => (
+            <>
+              <TableWrap>
+                <thead>
+                  <tr>
+                    <th>{t('tags.col.tag')}</th>
+                    <th className={cell.num}>{t('tags.col.questions')}</th>
+                    <th className={`${cell.num} ${cell.hideSm}`}>{t('tags.col.jobs')}</th>
+                    <th className={`${cell.num} ${cell.hideSm}`}>{t('tags.col.missions')}</th>
+                    <th className={`${cell.num} ${cell.hideSm}`}>{t('tags.col.members')}</th>
+                    <th className={cell.right}>{t('tags.col.actions')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {d.items.map((tag) => (
+                    <tr key={tag.name}>
+                      <td>
+                        <Tag>{tag.name}</Tag>
+                      </td>
+                      <td className={cell.num}>{tag.questionCount}</td>
+                      <td className={`${cell.num} ${cell.hideSm}`}>{tag.jobCount}</td>
+                      <td className={`${cell.num} ${cell.hideSm}`}>{tag.missionCount}</td>
+                      <td className={`${cell.num} ${cell.hideSm}`}>{tag.memberCount}</td>
+                      <td>
+                        <div className={cell.rowActions}>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              setMerging(tag)
+                              setTarget('')
+                            }}
+                          >
+                            {t('tags.merge')}
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            disabled={!isUnused(tag)}
+                            title={!isUnused(tag) ? t('tags.deleteDisabled') : undefined}
+                            onClick={() => remove(tag)}
+                          >
+                            {t('tags.delete')}
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </TableWrap>
+              {pages > 1 && (
+                <Pager summary={t('common.page', { page, pages })}>
+                  <Button size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+                    {t('common.previous')}
+                  </Button>
+                  <Button size="sm" disabled={page >= pages} onClick={() => setPage(page + 1)}>
+                    {t('common.next')}
+                  </Button>
+                </Pager>
+              )}
+            </>
+          )}
+        </QueryState>
       </Panel>
 
       <Dialog open={merging !== null} title={t('tags.mergeTitle')} onClose={() => setMerging(null)}>
         <DialogBody onSubmit={confirmMerge}>
           <DialogLead>{t('tags.mergeLead', { name: merging?.name })}</DialogLead>
-          <Field label={t('tags.mergeInto')} select>
+          <Field label={t('tags.mergeInto')} hint={t('tags.mergeHint')}>
             {(control) => (
-              <select
+              <input
                 {...control}
                 value={target}
                 onChange={(event) => setTarget(event.target.value)}
-              >
-                {tags
-                  .filter((x) => x.name !== merging?.name)
-                  .map((x) => (
-                    <option key={x.name} value={x.name}>
-                      {x.name}
-                    </option>
-                  ))}
-              </select>
+              />
             )}
           </Field>
           <DialogFoot>
