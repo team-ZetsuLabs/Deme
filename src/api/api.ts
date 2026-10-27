@@ -183,15 +183,52 @@ async function mockRequest<T>(
   return structuredClone(mod.default) as T;
 }
 
+/** Une requête lancée au démarrage n'est reprise par la page que si elle est récente. */
+const EARLY_TTL_MS = 15_000;
+
 export function createApi(mode: ApiMode, mocks: MockLoaders = defaultMocks) {
   const request = <T>(method: HttpMethod, path: string, opts: RequestOptions = {}) =>
     mode === 'live'
       ? liveRequest<T>(method, path, opts)
       : mockRequest<T>(method, path, opts, mocks);
 
+  // Requêtes GET lancées avant le rendu (prefetch), reprises une seule fois par la page.
+  const early = new Map<string, { promise: Promise<unknown>; at: number }>();
+  let capturing = false;
+
+  const get = <T>(path: string, opts?: Omit<RequestOptions, 'body'>): Promise<T> => {
+    const key = `${path}${buildQuery(opts?.query)}`;
+    if (capturing) {
+      const promise = request<T>('GET', path, opts);
+      promise.catch(() => undefined); // l'erreur sera traitée par la page qui reprend la requête
+      early.set(key, { promise, at: Date.now() });
+      return promise;
+    }
+    const hit = early.get(key);
+    if (hit) {
+      early.delete(key);
+      if (!opts?.signal && Date.now() - hit.at < EARLY_TTL_MS) return hit.promise as Promise<T>;
+    }
+    return request<T>('GET', path, opts);
+  };
+
   return {
     mode,
-    get: <T>(path: string, opts?: Omit<RequestOptions, 'body'>) => request<T>('GET', path, opts),
+    get,
+    /**
+     * Lance tout de suite les GET faits par `start`, sans attendre le rendu de la page :
+     * la page qui fera les mêmes appels reprendra ces requêtes au lieu d'en relancer.
+     */
+    prefetch: (start: () => unknown) => {
+      capturing = true;
+      try {
+        start();
+      } catch {
+        // un préchargement raté ne doit jamais empêcher l'application de démarrer
+      } finally {
+        capturing = false;
+      }
+    },
     post: <T>(path: string, body?: unknown, opts?: RequestOptions) =>
       request<T>('POST', path, { ...opts, body }),
     put: <T>(path: string, body?: unknown, opts?: RequestOptions) =>

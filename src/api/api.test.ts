@@ -122,3 +122,43 @@ describe('mode live', () => {
     await expect(createApi('live').delete('/votes/question/1')).resolves.toBeUndefined();
   });
 });
+
+describe('prefetch', () => {
+  it('reprend une seule fois la requête lancée au démarrage', async () => {
+    const fetchMock = vi.fn(async () => jsonResponse(200, { items: [] }));
+    vi.stubGlobal('fetch', fetchMock);
+    const api = createApi('live');
+
+    api.prefetch(() => api.get('/questions', { query: { page: 0 } }));
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+
+    await api.get('/questions', { query: { page: 0 } });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+
+    // Un rechargement plus tard (nouveau filtre, bouton Réessayer) repart vers le serveur.
+    await api.get('/questions', { query: { page: 0 } });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("ne reprend pas une requête d'une autre adresse ni une requête annulable", async () => {
+    const fetchMock = vi.fn(async () => jsonResponse(200, {}));
+    vi.stubGlobal('fetch', fetchMock);
+    const api = createApi('live');
+
+    api.prefetch(() => api.get('/questions', { query: { page: 0 } }));
+    await api.get('/questions', { query: { page: 1 } });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+
+    await api.get('/questions', { query: { page: 0 }, signal: new AbortController().signal });
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+
+  it("n'empêche pas le démarrage si le préchargement échoue", () => {
+    const api = createApi('live');
+    expect(() =>
+      api.prefetch(() => {
+        throw new Error('route inconnue');
+      }),
+    ).not.toThrow();
+  });
+});

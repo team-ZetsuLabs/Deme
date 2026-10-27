@@ -5,27 +5,30 @@ import type { QuestionFilters, QuestionSort, QuestionStatus } from './questionsA
 const STATUSES: QuestionStatus[] = ['all', 'open', 'solved'];
 const SORTS: QuestionSort[] = ['relevance', 'recent', 'votes'];
 
+/** Filtres du fil lus dans l'adresse (aussi utilisé par le préchargement au démarrage). */
+export function parseQuestionFilters(params: URLSearchParams): QuestionFilters {
+  const status = params.get('status') as QuestionStatus;
+  const sort = params.get('sort') as QuestionSort;
+  const page = Number(params.get('page') ?? '1');
+  const q = params.get('q');
+  return {
+    status: STATUSES.includes(status) ? status : 'all',
+    // Avec une recherche, le tri par défaut est la pertinence ; sans recherche, les plus récentes.
+    sort: SORTS.includes(sort) && (sort !== 'relevance' || q) ? sort : q ? 'relevance' : 'recent',
+    tag: params.get('tag'),
+    country: params.get('country'),
+    operator: params.get('operator'),
+    q,
+    // Dans l'adresse, la première page est 1 ; l'API compte à partir de 0.
+    page: Number.isInteger(page) && page > 0 ? page - 1 : 0,
+  };
+}
+
 /** Les filtres du fil vivent dans l'adresse : une recherche se partage par un lien. */
 export function useQuestionFilters() {
   const [params, setParams] = useSearchParams();
 
-  const filters = useMemo<QuestionFilters>(() => {
-    const status = params.get('status') as QuestionStatus;
-    const sort = params.get('sort') as QuestionSort;
-    const page = Number(params.get('page') ?? '1');
-    const q = params.get('q');
-    return {
-      status: STATUSES.includes(status) ? status : 'all',
-      // Avec une recherche, le tri par défaut est la pertinence ; sans recherche, les plus récentes.
-      sort: SORTS.includes(sort) && (sort !== 'relevance' || q) ? sort : q ? 'relevance' : 'recent',
-      tag: params.get('tag'),
-      country: params.get('country'),
-      operator: params.get('operator'),
-      q,
-      // Dans l'adresse, la première page est 1 ; l'API compte à partir de 0.
-      page: Number.isInteger(page) && page > 0 ? page - 1 : 0,
-    };
-  }, [params]);
+  const filters = useMemo(() => parseQuestionFilters(params), [params]);
 
   /** Change un ou plusieurs filtres et revient à la première page (sauf si on change de page). */
   const update = useCallback(

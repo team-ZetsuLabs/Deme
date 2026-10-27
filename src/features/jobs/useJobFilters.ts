@@ -4,20 +4,23 @@ import { JOB_TYPES, type JobFilters, type JobTypeFilter } from './jobsApi';
 
 const TYPES: JobTypeFilter[] = ['all', ...JOB_TYPES];
 
+/** Filtres des offres lus dans l'adresse (aussi utilisé par le préchargement au démarrage). */
+export function parseJobFilters(params: URLSearchParams): JobFilters {
+  const type = params.get('type') as JobTypeFilter;
+  const page = Number(params.get('page') ?? '1');
+  return {
+    type: TYPES.includes(type) ? type : 'all',
+    country: params.get('country'),
+    tech: params.get('tech'),
+    page: Number.isInteger(page) && page > 0 ? page - 1 : 0,
+  };
+}
+
 /** Filtres des offres dans l'adresse, comme pour le fil des questions. */
 export function useJobFilters() {
   const [params, setParams] = useSearchParams();
 
-  const filters = useMemo<JobFilters>(() => {
-    const type = params.get('type') as JobTypeFilter;
-    const page = Number(params.get('page') ?? '1');
-    return {
-      type: TYPES.includes(type) ? type : 'all',
-      country: params.get('country'),
-      tech: params.get('tech'),
-      page: Number.isInteger(page) && page > 0 ? page - 1 : 0,
-    };
-  }, [params]);
+  const filters = useMemo(() => parseJobFilters(params), [params]);
 
   const update = useCallback(
     (changes: Partial<Record<keyof JobFilters, string | number | null>>) => {

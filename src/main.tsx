@@ -11,10 +11,14 @@ import '@fontsource/geist-mono/latin-600.css';
 import './styles/tokens.css';
 import './styles/base.css';
 import { i18nReady } from './i18n';
+import { prefetchRoute } from './api/prefetchRoute';
 import { App } from './App';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Élément #root introuvable');
+
+// Données de la page lancées tout de suite, en parallèle du code de la page (React.lazy).
+prefetchRoute(window.location.pathname, window.location.search);
 
 // Pour un visiteur anglophone, on attend le fichier anglais : pas de flash de texte français.
 void i18nReady.finally(() =>
