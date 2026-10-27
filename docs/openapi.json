@@ -4556,6 +4556,47 @@
         }
       }
     },
+    "/api/v1/users/{username}/badges" : {
+      "get" : {
+        "tags" : [ "users" ],
+        "summary" : "Badges d'un membre et sa progression (REP-4)",
+        "description" : "Toujours les six badges, dans le même ordre. Un badge gagné ne se perd pas.",
+        "operationId" : "userBadges",
+        "parameters" : [ {
+          "name" : "username",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Les six badges",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/BadgeProgress"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "USER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/users/{username}/avatar/{file}" : {
       "get" : {
         "tags" : [ "users" ],
@@ -7730,9 +7771,17 @@
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
+          },
+          "badges" : {
+            "type" : "array",
+            "description" : "Badges gagnés (REP-4), du plus ancien au plus récent. La progression : GET /users/{username}/badges",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "FIRST_STEP", "HELPER", "SOLVER", "CHALLENGER", "POLYGLOT", "LOCAL_HELP" ]
+            }
           }
         },
-        "required" : [ "answerCount", "createdAt", "displayName", "level", "questionCount", "reputation", "role", "technologies", "username", "visibleToRecruiters" ]
+        "required" : [ "answerCount", "badges", "createdAt", "displayName", "level", "questionCount", "reputation", "role", "technologies", "username", "visibleToRecruiters" ]
       },
       "ReceivedApplication" : {
         "type" : "object",
@@ -7827,6 +7876,36 @@
           }
         },
         "required" : [ "createdAt", "delta", "reason" ]
+      },
+      "BadgeProgress" : {
+        "type" : "object",
+        "description" : "Un badge (REP-4) et la progression du membre vers lui",
+        "properties" : {
+          "badge" : {
+            "type" : "string",
+            "enum" : [ "FIRST_STEP", "HELPER", "SOLVER", "CHALLENGER", "POLYGLOT", "LOCAL_HELP" ]
+          },
+          "earned" : {
+            "type" : "boolean"
+          },
+          "awardedAt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "Date d'obtention, null si pas encore gagné"
+          },
+          "progress" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Avancement, plafonné à target",
+            "example" : 3
+          },
+          "target" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 10
+          }
+        },
+        "required" : [ "badge", "earned", "progress", "target" ]
       },
       "PageResponseMyModeratedContent" : {
         "type" : "object",

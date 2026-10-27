@@ -4,3 +4,9 @@ zetsu:
     member-threshold: 5
     contributor-threshold: 25
     referent-threshold: 60
+  badges:
+    helper-answers: 3
+    solver-accepted: 2
+    challenger-validated: 1
+    polyglot-tags: 2
+    local-help-answers: 2

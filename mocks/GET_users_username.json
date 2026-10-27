@@ -16,5 +16,12 @@
   ],
   "questionCount": 14,
   "answerCount": 96,
-  "createdAt": "2026-08-02T11:00:00Z"
+  "createdAt": "2026-08-02T11:00:00Z",
+  "badges": [
+    "FIRST_STEP",
+    "HELPER",
+    "LOCAL_HELP",
+    "SOLVER",
+    "POLYGLOT"
+  ]
 }

@@ -6,6 +6,8 @@ import dev.zetsu.auth.ZetsuPrincipal;
 import dev.zetsu.common.ApiException;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.question.QuestionRepository;
+import dev.zetsu.reputation.BadgeService;
+import dev.zetsu.reputation.ReputationDtos.BadgeProgress;
 import dev.zetsu.reputation.ReputationDtos.ReputationEntry;
 import dev.zetsu.reputation.ReputationEventRepository;
 import dev.zetsu.reputation.ReputationService;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -32,10 +35,12 @@ public class UserService {
     private final OAuthAccountRepository oauthAccounts;
     private final ReputationEventRepository reputationEvents;
     private final ApplicationEventPublisher events;
+    private final BadgeService badges;
 
     public UserService(UserRepository users, QuestionRepository questions, AnswerRepository answers,
                        ReputationService reputation, TagService tags, OAuthAccountRepository oauthAccounts,
-                       ReputationEventRepository reputationEvents, ApplicationEventPublisher events) {
+                       ReputationEventRepository reputationEvents, ApplicationEventPublisher events,
+                       BadgeService badges) {
         this.users = users;
         this.questions = questions;
         this.answers = answers;
@@ -44,6 +49,7 @@ public class UserService {
         this.oauthAccounts = oauthAccounts;
         this.reputationEvents = reputationEvents;
         this.events = events;
+        this.badges = badges;
     }
 
     @Transactional(readOnly = true)
@@ -58,11 +64,13 @@ public class UserService {
     /** Un profil masqué (MOD-2) n'existe que pour le membre lui-même et l'équipe : 404 pour les autres. */
     @Transactional(readOnly = true)
     public PublicProfile profile(String username, ZetsuPrincipal me) {
-        User u = byUsername(username);
-        if (u.isHidden() && !(me != null && (u.getId().equals(me.id()) || me.staff()))) {
-            throw notFound();
-        }
-        return profile(u);
+        return profile(visible(username, me));
+    }
+
+    /** Les six badges et la progression du membre (REP-4), mis à jour à la lecture. Même visibilité que le profil. */
+    @Transactional
+    public List<BadgeProgress> badges(String username, ZetsuPrincipal me) {
+        return badges.progress(visible(username, me).getId());
     }
 
     /** Profil public d'un membre déjà chargé, par exemple celui d'un candidat (JOB-3). */
@@ -70,7 +78,8 @@ public class UserService {
         return new PublicProfile(u.getUsername(), u.getDisplayName(), u.getAvatarUrl(), u.getBio(),
                 u.getCountryCode(), u.getCity(), u.getRole(), u.getReputation(),
                 reputation.levelOf(u.getReputation()), u.isVisibleToRecruiters(), UserDtos.technologyNames(u),
-                questions.countByAuthorId(u.getId()), answers.countByAuthorId(u.getId()), u.getCreatedAt());
+                questions.countByAuthorId(u.getId()), answers.countByAuthorId(u.getId()), u.getCreatedAt(),
+                badges.earned(u.getId()));
     }
 
     @Transactional
@@ -120,6 +129,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public PageResponse<ReputationEntry> reputationHistory(String username, int page, int size) {
         return reputation.history(byUsername(username).getId(), page, size);
+    }
+
+    private User visible(String username, ZetsuPrincipal me) {
+        User u = byUsername(username);
+        if (u.isHidden() && !(me != null && (u.getId().equals(me.id()) || me.staff()))) {
+            throw notFound();
+        }
+        return u;
     }
 
     private User byUsername(String username) {
