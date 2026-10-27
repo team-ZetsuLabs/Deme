@@ -13,10 +13,11 @@ export function LanguageSwitcher() {
           type="button"
           lang={lang}
           aria-pressed={current === lang}
-          aria-label={t(`language.${lang}`)}
           onClick={() => changeLanguage(lang)}
         >
+          {/* Le nom accessible commence par le texte visible (« FR »), pour la commande vocale. */}
           {lang.toUpperCase()}
+          <span className="sr-only"> {t(`language.${lang}`)}</span>
         </button>
       ))}
     </div>

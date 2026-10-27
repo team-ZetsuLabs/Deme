@@ -14,9 +14,9 @@ export function MissionRow({ mission: m }: MissionRowProps) {
     <article className={styles.row}>
       <div className={styles.body}>
         <MissionFacts mission={m} />
-        <h3 className={styles.title}>
+        <h2 className={styles.title}>
           <Link to={`/missions/${m.id}`}>{m.title}</Link>
-        </h3>
+        </h2>
         <div className={styles.foot}>
           <ul className={styles.tags}>
             {m.technologies.map((tech) => (

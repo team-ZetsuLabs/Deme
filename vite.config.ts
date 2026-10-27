@@ -8,6 +8,8 @@ export default defineConfig(({ mode }) => ({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Enregistrement du service worker après l'analyse de la page : il ne bloque plus l'affichage.
+      injectRegister: 'script-defer',
       includeAssets: ['favicon.svg', 'theme-init.js', 'flags/*.svg'],
       manifest: {
         name: 'Zetsu',

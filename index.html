@@ -11,7 +11,21 @@
     <title>Zetsu</title>
   </head>
   <body>
-    <div id="root"></div>
+    <!--
+      Coquille affichée dès l'arrivée du CSS, avant le JavaScript (premier affichage en 3G).
+      React la remplace au premier rendu. HTML et CSS seulement : pas de script inline (CSP).
+    -->
+    <div id="root">
+      <div class="app-shell" aria-hidden="true">
+        <div class="app-shell-bar"><span class="app-shell-brand">zetsu</span></div>
+        <div class="app-shell-body">
+          <span class="app-shell-line app-shell-title"></span>
+          <span class="app-shell-line"></span>
+          <span class="app-shell-line"></span>
+          <span class="app-shell-line app-shell-short"></span>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

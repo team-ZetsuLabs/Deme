@@ -119,3 +119,44 @@ code {
     animation: none !important;
   }
 }
+
+/* Coquille statique de index.html, remplacée par React au premier rendu. */
+.app-shell-bar {
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--s5);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+
+.app-shell-brand {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.app-shell-body {
+  display: grid;
+  gap: var(--s3);
+  max-width: 760px;
+  margin: var(--s6) auto 0;
+  padding: 0 var(--s4);
+}
+
+.app-shell-line {
+  display: block;
+  height: 14px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+}
+
+.app-shell-title {
+  width: 55%;
+  height: 24px;
+  margin-bottom: var(--s2);
+}
+
+.app-shell-short {
+  width: 40%;
+}

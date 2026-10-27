@@ -16,9 +16,9 @@ export function JobRow({ job }: JobRowProps) {
     <article className={styles.row}>
       <Avatar name={job.companyName} photoUrl={null} size={44} square />
       <div className={styles.body}>
-        <h3 className={styles.title}>
+        <h2 className={styles.title}>
           <Link to={`/jobs/${job.id}`}>{job.title}</Link>
-        </h3>
+        </h2>
         <p className={styles.company}>
           {job.companyName}
           <span aria-hidden="true"> · </span>

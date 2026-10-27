@@ -22,10 +22,11 @@ export function BottomTabs() {
           to={item.to}
           className={styles.tab}
           aria-current={isSpaceActive(item, pathname) ? 'page' : undefined}
-          aria-label={item.shortLabelKey ? t(item.labelKey) : undefined}
         >
           <Icon name={item.icon} size={20} />
           <span>{t(item.shortLabelKey ?? item.labelKey)}</span>
+          {/* Libellé court visible, nom complet ajouté pour les lecteurs d'écran. */}
+          {item.shortLabelKey && <span className="sr-only"> ({t(item.labelKey)})</span>}
         </Link>
       ))}
     </nav>
