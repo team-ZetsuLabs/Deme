@@ -87,6 +87,19 @@ public class ReputationService {
         }
     }
 
+    /**
+     * PRJ-6 : +10 par membre accepté à la clôture d'un projet, une seule fois par projet. Pas de plafond quotidien :
+     * un projet ne se clôture qu'une fois.
+     */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void grantForProject(Long userId, Long projectId) {
+        ReputationReason reason = ReputationReason.PROJECT_COMPLETED;
+        if (events.netForProject(userId, reason.name(), projectId) == 0) {
+            events.saveAndFlush(ReputationEvent.forProject(userId, reason.points(), reason, projectId));
+            users.addReputation(userId, reason.points());
+        }
+    }
+
     /** Un dépôt validé puis refusé perd ce qu'il avait rapporté. */
     @Transactional(propagation = Propagation.MANDATORY)
     public void revokeForSubmission(Long userId, Long submissionId) {

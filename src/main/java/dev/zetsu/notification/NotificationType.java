@@ -31,5 +31,11 @@ public enum NotificationType {
     /** Mon dépôt de défi a été noté (CH-3). */
     SUBMISSION_REVIEWED,
     /** L'équipe a accepté ou refusé ma proposition de communauté (COM-2). */
-    COMMUNITY_PROPOSAL_DECISION
+    COMMUNITY_PROPOSAL_DECISION,
+    /** Demande reçue pour rejoindre mon projet (PRJ-3). */
+    PROJECT_REQUEST_RECEIVED,
+    /** Le porteur m'a retiré de l'équipe d'un projet ; le motif est sur ma demande. */
+    PROJECT_MEMBER_REMOVED,
+    /** Un projet dont je fais partie est clôturé : +10 de réputation (PRJ-6). */
+    PROJECT_CLOSED
 }

@@ -34,6 +34,9 @@
     "name" : "questions",
     "description" : "Entraide : questions avec contexte africain"
   }, {
+    "name" : "projects",
+    "description" : "Espace Projets : publier un projet, constituer son équipe"
+  }, {
     "name" : "moderation",
     "description" : "Signalements et file des Référents"
   }, {
@@ -478,6 +481,122 @@
           },
           "404" : {
             "description" : "QUESTION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{id}" : {
+      "get" : {
+        "tags" : [ "projects" ],
+        "summary" : "Page d'un projet (PRJ-5)",
+        "description" : "Équipe, rôles pourvus et ouverts. Le fil : GET /projects/{id}/updates.",
+        "operationId" : "projectGet",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Le projet",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProjectDetail"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROJECT_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "projects" ],
+        "summary" : "Modifier son projet",
+        "description" : "Sans les rôles, qui se gèrent à part. Relance un projet en pause.",
+        "operationId" : "projectEdit",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ProjectEditRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Projet modifié",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProjectDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PROJECT_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROJECT_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PROJECT_CLOSED",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1764,6 +1883,761 @@
           },
           "429" : {
             "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects" : {
+      "get" : {
+        "tags" : [ "projects" ],
+        "summary" : "Liste des projets (PRJ-2)",
+        "description" : "Par défaut tous les projets sauf les clôturés, les plus actifs d'abord. member liste les projets d'un membre (porteur ou membre accepté), clôturés compris, pour son profil.",
+        "operationId" : "projectList",
+        "parameters" : [ {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "OPEN", "IN_PROGRESS", "PAUSED", "CLOSED" ]
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "OPEN_SOURCE", "STUDY", "STARTUP", "VOLUNTEER" ]
+          }
+        }, {
+          "name" : "technology",
+          "in" : "query",
+          "description" : "Nom de technologie exact, du projet ou d'un rôle",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "role",
+          "in" : "query",
+          "description" : "Texte cherché dans l'intitulé des rôles ouverts",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "openRoles",
+          "in" : "query",
+          "description" : "Seulement les projets qui recrutent",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean",
+            "default" : false
+          }
+        }, {
+          "name" : "member",
+          "in" : "query",
+          "description" : "Pseudo d'un membre : ses projets",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de projets",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseProjectSummary"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "INVALID_PAGE, INVALID_PAGE_SIZE, INVALID_PARAMETER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "projects" ],
+        "summary" : "Publier un projet (PRJ-1)",
+        "description" : "Ouvert à tout membre connecté, de 1 à 6 rôles.",
+        "operationId" : "projectCreate",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ProjectCreateRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Projet publié",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProjectDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{id}/updates" : {
+      "get" : {
+        "tags" : [ "projects" ],
+        "summary" : "Fil de mises à jour (PRJ-5)",
+        "description" : "Plus récentes d'abord.",
+        "operationId" : "projectUpdates",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de mises à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseProjectUpdate"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROJECT_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "projects" ],
+        "summary" : "Écrire dans le fil",
+        "description" : "Porteur et membres acceptés. Relance un projet en pause.",
+        "operationId" : "projectPostUpdate",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ProjectUpdateRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Mise à jour publiée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProjectUpdate"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PROJECT_MEMBER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROJECT_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PROJECT_CLOSED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{id}/roles" : {
+      "post" : {
+        "tags" : [ "projects" ],
+        "summary" : "Ajouter un rôle recherché",
+        "description" : "6 rôles au plus par projet.",
+        "operationId" : "projectAddRole",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ProjectRoleRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Projet avec le nouveau rôle",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProjectDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_TAG",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PROJECT_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROJECT_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PROJECT_CLOSED, TOO_MANY_ROLES",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{id}/requests" : {
+      "get" : {
+        "tags" : [ "projects" ],
+        "summary" : "Demandes reçues sur son projet",
+        "description" : "Plus récentes d'abord ; status filtre.",
+        "operationId" : "projectRequests",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "ACCEPTED", "REFUSED", "LEFT" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de demandes",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseReceivedProjectRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PROJECT_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROJECT_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "projects" ],
+        "summary" : "Demander à rejoindre un rôle (PRJ-3)",
+        "description" : "Une seule demande en attente par membre et par projet. Le porteur est notifié.",
+        "operationId" : "projectRequest",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ProjectJoinRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Demande envoyée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MyProjectRequest"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "CANNOT_JOIN_OWN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROJECT_NOT_FOUND, ROLE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PROJECT_NOT_OPEN, ROLE_FILLED, ALREADY_REQUESTED, ALREADY_MEMBER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{id}/members/{username}/remove" : {
+      "post" : {
+        "tags" : [ "projects" ],
+        "summary" : "Retirer un membre de l'équipe",
+        "description" : "Avec un motif, montré au membre. Le rôle se rouvre.",
+        "operationId" : "projectRemoveMember",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "username",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ProjectMemberRemoval"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Projet à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProjectDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PROJECT_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROJECT_NOT_FOUND, MEMBER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PROJECT_CLOSED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{id}/leave" : {
+      "post" : {
+        "tags" : [ "projects" ],
+        "summary" : "Quitter l'équipe",
+        "description" : "Le rôle se rouvre.",
+        "operationId" : "projectLeave",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Projet à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProjectDetail"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROJECT_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PROJECT_CLOSED, NOT_PROJECT_MEMBER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{id}/close" : {
+      "post" : {
+        "tags" : [ "projects" ],
+        "summary" : "Clôturer son projet (PRJ-6)",
+        "description" : "Définitif. Chaque membre accepté gagne 10 points et le projet reste sur son profil ; les demandes en attente sont refusées.",
+        "operationId" : "projectClose",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Projet clôturé",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProjectDetail"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PROJECT_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROJECT_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PROJECT_CLOSED",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -4385,6 +5259,151 @@
         }
       }
     },
+    "/api/v1/projects/{id}/requests/{requestId}" : {
+      "delete" : {
+        "tags" : [ "projects" ],
+        "summary" : "Retirer sa demande",
+        "description" : "Seulement tant qu'elle est en attente.",
+        "operationId" : "projectWithdraw",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "requestId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Demande retirée"
+          },
+          "403" : {
+            "description" : "NOT_REQUEST_AUTHOR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "REQUEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "REQUEST_NOT_PENDING",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "projects" ],
+        "summary" : "Accepter ou refuser une demande (PRJ-4)",
+        "description" : "Le candidat est notifié. Acceptée, le rôle passe « Pourvu » et les autres demandes en attente sur ce rôle sont refusées.",
+        "operationId" : "projectDecide",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "requestId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ProjectRequestDecision"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Demande décidée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ReceivedProjectRequest"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, INVALID_STATUS",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PROJECT_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROJECT_NOT_FOUND, REQUEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PROJECT_CLOSED, REQUEST_NOT_PENDING, ROLE_FILLED, TEAM_FULL",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/applications/{id}" : {
       "patch" : {
         "tags" : [ "applications" ],
@@ -4588,6 +5607,55 @@
           },
           "404" : {
             "description" : "AVATAR_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me/project-requests" : {
+      "get" : {
+        "tags" : [ "projects" ],
+        "summary" : "Mes demandes pour rejoindre des projets",
+        "description" : "Plus récentes d'abord.",
+        "operationId" : "projectMyRequests",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de demandes",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseMyProjectRequest"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -4947,7 +6015,7 @@
           "required" : false,
           "schema" : {
             "type" : "string",
-            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER" ]
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER", "PROJECT" ]
           }
         }, {
           "name" : "page",
@@ -5726,7 +6794,7 @@
           "required" : false,
           "schema" : {
             "type" : "string",
-            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER" ]
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER", "PROJECT" ]
           }
         }, {
           "name" : "page",
@@ -5770,6 +6838,73 @@
           },
           "403" : {
             "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{id}/roles/{roleId}" : {
+      "delete" : {
+        "tags" : [ "projects" ],
+        "summary" : "Retirer un rôle ouvert",
+        "description" : "Les demandes en attente sur ce rôle sont refusées.",
+        "operationId" : "projectRemoveRole",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "roleId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Projet sans ce rôle",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProjectDetail"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PROJECT_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PROJECT_NOT_FOUND, ROLE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PROJECT_CLOSED, ROLE_FILLED",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -6206,6 +7341,198 @@
           }
         },
         "required" : [ "body", "tags", "title" ]
+      },
+      "ProjectEditRequest" : {
+        "type" : "object",
+        "description" : "Modification d'un projet ; les rôles se gèrent à part",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "maxLength" : 120,
+            "minLength" : 10
+          },
+          "description" : {
+            "type" : "string",
+            "maxLength" : 10000,
+            "minLength" : 30
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "OPEN_SOURCE", "STUDY", "STARTUP", "VOLUNTEER" ]
+          },
+          "technologies" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 0
+          },
+          "githubUrl" : {
+            "type" : "string",
+            "maxLength" : 200,
+            "minLength" : 0,
+            "pattern" : "^https://github\\.com/[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)?/?$"
+          },
+          "contactUrl" : {
+            "type" : "string",
+            "maxLength" : 200,
+            "minLength" : 0,
+            "pattern" : "^https?://[^\\s<>\"']+$"
+          }
+        },
+        "required" : [ "description", "title", "type" ]
+      },
+      "MyProjectRequestRef" : {
+        "type" : "object",
+        "description" : "Dernière demande du membre connecté sur ce projet",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "roleId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Null si le rôle a été retiré depuis"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "ACCEPTED", "REFUSED", "LEFT" ]
+          }
+        },
+        "required" : [ "id", "status" ]
+      },
+      "ProjectDetail" : {
+        "type" : "object",
+        "description" : "Page d'un projet (PRJ-5)",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "descriptionMarkdown" : {
+            "type" : "string",
+            "description" : "Markdown d'origine, pour pré-remplir le formulaire d'édition"
+          },
+          "descriptionHtml" : {
+            "type" : "string",
+            "description" : "HTML nettoyé côté serveur, à afficher avec MemberContent"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "OPEN_SOURCE", "STUDY", "STARTUP", "VOLUNTEER" ]
+          },
+          "technologies" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "githubUrl" : {
+            "type" : "string"
+          },
+          "contactUrl" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "OPEN", "IN_PROGRESS", "PAUSED", "CLOSED" ]
+          },
+          "owner" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "roles" : {
+            "type" : "array",
+            "description" : "Rôles ouverts et pourvus",
+            "items" : {
+              "$ref" : "#/components/schemas/ProjectRole"
+            }
+          },
+          "team" : {
+            "type" : "array",
+            "description" : "Porteur d'abord, puis les membres par date d'arrivée",
+            "items" : {
+              "$ref" : "#/components/schemas/ProjectTeamMember"
+            }
+          },
+          "myRequest" : {
+            "$ref" : "#/components/schemas/MyProjectRequestRef",
+            "description" : "Null si le membre connecté n'a jamais demandé à rejoindre"
+          },
+          "canEdit" : {
+            "type" : "boolean",
+            "description" : "Vrai si le membre connecté est le porteur et le projet n'est pas clôturé"
+          },
+          "canPostUpdate" : {
+            "type" : "boolean",
+            "description" : "Vrai si le membre connecté peut écrire dans le fil"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "lastActivityAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "canEdit", "canPostUpdate", "createdAt", "descriptionHtml", "descriptionMarkdown", "id", "lastActivityAt", "owner", "roles", "status", "team", "technologies", "title", "type", "updatedAt" ]
+      },
+      "ProjectRole" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "technologies" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "OPEN", "FILLED" ]
+          },
+          "member" : {
+            "$ref" : "#/components/schemas/AuthorSummary",
+            "description" : "Membre qui occupe le rôle, null s'il est ouvert"
+          }
+        },
+        "required" : [ "id", "status", "technologies", "title" ]
+      },
+      "ProjectTeamMember" : {
+        "type" : "object",
+        "properties" : {
+          "member" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "roleTitle" : {
+            "type" : "string",
+            "description" : "Null pour le porteur",
+            "example" : "Développeur mobile Flutter"
+          },
+          "owner" : {
+            "type" : "boolean"
+          },
+          "joinedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "joinedAt", "member", "owner" ]
       },
       "Budget" : {
         "type" : "object",
@@ -6949,7 +8276,7 @@
         "properties" : {
           "targetType" : {
             "type" : "string",
-            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER" ]
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER", "PROJECT" ]
           },
           "targetId" : {
             "type" : "integer",
@@ -7012,6 +8339,191 @@
           }
         },
         "required" : [ "score" ]
+      },
+      "ProjectCreateRequest" : {
+        "type" : "object",
+        "description" : "Publication d'un projet avec ses rôles (PRJ-1)",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "example" : "Application de cotisation de tontine en mobile money",
+            "maxLength" : 120,
+            "minLength" : 10
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Markdown. Le HTML brut est ignoré.",
+            "maxLength" : 10000,
+            "minLength" : 30
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "OPEN_SOURCE", "STUDY", "STARTUP", "VOLUNTEER" ]
+          },
+          "technologies" : {
+            "type" : "array",
+            "example" : [ "flutter", "firebase", "orange-money" ],
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 0
+          },
+          "roles" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProjectRoleRequest"
+            },
+            "maxItems" : 6,
+            "minItems" : 1
+          },
+          "githubUrl" : {
+            "type" : "string",
+            "example" : "https://github.com/tontine-cash/app",
+            "maxLength" : 200,
+            "minLength" : 0,
+            "pattern" : "^https://github\\.com/[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)?/?$"
+          },
+          "contactUrl" : {
+            "type" : "string",
+            "description" : "Discord, Telegram… Pas de messagerie interne : les échanges passent par ce lien.",
+            "example" : "https://discord.gg/tontinecash",
+            "maxLength" : 200,
+            "minLength" : 0,
+            "pattern" : "^https?://[^\\s<>\"']+$"
+          }
+        },
+        "required" : [ "description", "roles", "title", "type" ]
+      },
+      "ProjectRoleRequest" : {
+        "type" : "object",
+        "description" : "Rôle recherché (PRJ-1)",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "example" : "Développeur mobile Flutter",
+            "maxLength" : 80,
+            "minLength" : 3
+          },
+          "technologies" : {
+            "type" : "array",
+            "example" : [ "flutter", "dart" ],
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 5,
+            "minItems" : 0
+          }
+        },
+        "required" : [ "title" ]
+      },
+      "ProjectUpdateRequest" : {
+        "type" : "object",
+        "description" : "Message du fil de mises à jour (PRJ-5)",
+        "properties" : {
+          "text" : {
+            "type" : "string",
+            "description" : "Texte brut",
+            "maxLength" : 1000,
+            "minLength" : 5
+          }
+        },
+        "required" : [ "text" ]
+      },
+      "ProjectUpdate" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "author" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "text" : {
+            "type" : "string",
+            "description" : "Texte brut, à afficher échappé"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "author", "createdAt", "id", "text" ]
+      },
+      "ProjectJoinRequest" : {
+        "type" : "object",
+        "description" : "Demande pour rejoindre un rôle (PRJ-3)",
+        "properties" : {
+          "roleId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "Texte brut, affiché tel quel au porteur",
+            "example" : "Je fais du Flutter depuis deux ans, j'ai déjà intégré Wave et Orange Money.",
+            "maxLength" : 500,
+            "minLength" : 10
+          }
+        },
+        "required" : [ "message", "roleId" ]
+      },
+      "MyProjectRequest" : {
+        "type" : "object",
+        "description" : "Demande envoyée par le membre connecté",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "projectId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "projectTitle" : {
+            "type" : "string"
+          },
+          "roleTitle" : {
+            "type" : "string"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "ACCEPTED", "REFUSED", "LEFT" ]
+          },
+          "removalReason" : {
+            "type" : "string",
+            "description" : "Motif donné par le porteur s'il a retiré le membre"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "decidedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "leftAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "createdAt", "id", "message", "projectId", "projectTitle", "roleTitle", "status" ]
+      },
+      "ProjectMemberRemoval" : {
+        "type" : "object",
+        "properties" : {
+          "reason" : {
+            "type" : "string",
+            "description" : "Motif, montré au membre retiré",
+            "maxLength" : 300,
+            "minLength" : 5
+          }
+        },
+        "required" : [ "reason" ]
       },
       "MarkReadRequest" : {
         "type" : "object",
@@ -7141,7 +8653,7 @@
         "properties" : {
           "type" : {
             "type" : "string",
-            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER" ]
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER", "PROJECT" ]
           },
           "id" : {
             "type" : "integer",
@@ -7665,6 +9177,54 @@
         },
         "required" : [ "createdAt", "description", "id", "kind", "name", "proposer", "rules", "status" ]
       },
+      "ProjectRequestDecision" : {
+        "type" : "object",
+        "description" : "Décision du porteur (PRJ-4)",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "enum" : [ "ACCEPTED", "REFUSED" ]
+          }
+        },
+        "required" : [ "status" ]
+      },
+      "ReceivedProjectRequest" : {
+        "type" : "object",
+        "description" : "Demande reçue par le porteur",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "roleId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Null si le rôle a été retiré depuis"
+          },
+          "roleTitle" : {
+            "type" : "string"
+          },
+          "candidate" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "PENDING", "ACCEPTED", "REFUSED", "LEFT" ]
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "decidedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "candidate", "createdAt", "id", "message", "roleTitle", "status" ]
+      },
       "ApplicationDecisionRequest" : {
         "type" : "object",
         "description" : "Retenir ou refuser une candidature reçue",
@@ -7827,6 +9387,33 @@
           }
         },
         "required" : [ "createdAt", "delta", "reason" ]
+      },
+      "PageResponseMyProjectRequest" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MyProjectRequest"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
       },
       "PageResponseMyModeratedContent" : {
         "type" : "object",
@@ -8083,6 +9670,138 @@
         },
         "required" : [ "items", "page", "size", "total" ]
       },
+      "PageResponseProjectSummary" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProjectSummary"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "ProjectSummary" : {
+        "type" : "object",
+        "description" : "Projet tel qu'affiché dans une liste (PRJ-2)",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "OPEN_SOURCE", "STUDY", "STARTUP", "VOLUNTEER" ]
+          },
+          "technologies" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "OPEN", "IN_PROGRESS", "PAUSED", "CLOSED" ]
+          },
+          "owner" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "openRoles" : {
+            "type" : "array",
+            "example" : [ "Développeur mobile Flutter", "Designer UX" ],
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "teamSize" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Porteur compris"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "lastActivityAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "createdAt", "id", "lastActivityAt", "openRoles", "owner", "status", "teamSize", "technologies", "title", "type" ]
+      },
+      "PageResponseProjectUpdate" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ProjectUpdate"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "PageResponseReceivedProjectRequest" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ReceivedProjectRequest"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
       "Notification" : {
         "type" : "object",
         "properties" : {
@@ -8092,7 +9811,7 @@
           },
           "type" : {
             "type" : "string",
-            "enum" : [ "ANSWER_POSTED", "ANSWER_ACCEPTED", "VOTE_RECEIVED", "JOB_MATCH", "MISSION_MATCH", "APPLICATION_RECEIVED", "APPLICATION_DECIDED", "JOB_REVIEWED", "CHALLENGE_STARTED", "PROJECT_REQUEST_DECIDED", "CONTENT_HIDDEN", "CONTENT_RESTORED", "ACCOUNT_WARNED", "SUBMISSION_REVIEWED", "COMMUNITY_PROPOSAL_DECISION" ]
+            "enum" : [ "ANSWER_POSTED", "ANSWER_ACCEPTED", "VOTE_RECEIVED", "JOB_MATCH", "MISSION_MATCH", "APPLICATION_RECEIVED", "APPLICATION_DECIDED", "JOB_REVIEWED", "CHALLENGE_STARTED", "PROJECT_REQUEST_DECIDED", "CONTENT_HIDDEN", "CONTENT_RESTORED", "ACCOUNT_WARNED", "SUBMISSION_REVIEWED", "COMMUNITY_PROPOSAL_DECISION", "PROJECT_REQUEST_RECEIVED", "PROJECT_MEMBER_REMOVED", "PROJECT_CLOSED" ]
           },
           "read" : {
             "type" : "boolean"

@@ -1,0 +1,35 @@
+{
+  "items": [
+    {
+      "id": 5,
+      "author": {
+        "username": "kofi_mensah",
+        "displayName": "Kofi Mensah",
+        "avatarUrl": null,
+        "countryCode": "GH",
+        "reputation": 315,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "text": "Écran de cotisation terminé, le paiement Wave est branché en bac à sable.",
+      "createdAt": "2026-10-26T18:40:00Z"
+    },
+    {
+      "id": 3,
+      "author": {
+        "username": "awa_ndiaye",
+        "displayName": "Awa Ndiaye",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 742,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "text": "Réunion jeudi 20 h sur Discord pour choisir entre Firebase et Supabase.",
+      "createdAt": "2026-10-20T12:10:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 2
+}
