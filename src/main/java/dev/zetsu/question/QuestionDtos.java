@@ -91,4 +91,14 @@ public final class QuestionDtos {
             @Schema(requiredMode = REQUIRED) Instant createdAt,
             @Schema(requiredMode = REQUIRED) Instant updatedAt) {
     }
+
+    @Schema(name = "SimilarQuestion", description = "Question proche du titre en cours de saisie (QA-8), version légère")
+    public record SimilarQuestion(
+            @Schema(requiredMode = REQUIRED) Long id,
+            @Schema(requiredMode = REQUIRED) String title,
+            @Schema(requiredMode = REQUIRED) int score,
+            @Schema(requiredMode = REQUIRED) int answerCount,
+            @Schema(requiredMode = REQUIRED, description = "Vrai si une réponse est acceptée (question résolue)")
+            boolean hasAcceptedAnswer) {
+    }
 }
