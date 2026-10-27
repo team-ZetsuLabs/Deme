@@ -11,9 +11,9 @@ import type {
 export const NOTIFICATIONS_PAGE_SIZE = 20;
 
 export const notificationsApi = {
-  list: (page: number) =>
+  list: (page: number, unreadOnly = false) =>
     api.get<Page<AppNotification>>('/notifications', {
-      query: { page, size: NOTIFICATIONS_PAGE_SIZE },
+      query: { unreadOnly: unreadOnly || undefined, page, size: NOTIFICATIONS_PAGE_SIZE },
     }),
   unreadCount: () => api.get<UnreadCount>('/notifications/unread-count'),
   /** Sans ids : tout marquer comme lu. Renvoie le compteur à jour. */

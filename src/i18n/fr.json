@@ -685,7 +685,11 @@
       "VALIDATED": "validé",
       "APPROVED": "acceptée"
     },
-    "someone": "Un membre"
+    "someone": "Un membre",
+    "filter": "Afficher",
+    "all": "Toutes",
+    "unreadOnly": "Non lues",
+    "emptyUnread": "Vous avez tout lu."
   },
   "home": {
     "pageTitle": "Zetsu, l'entraide entre développeurs africains",
@@ -1106,7 +1110,18 @@
     "kind": {
       "JOB": "Offre",
       "MISSION": "Mission"
-    }
+    },
+    "filters": {
+      "type": "Type",
+      "types": {
+        "all": "Tout",
+        "JOB": "Offres",
+        "MISSION": "Missions"
+      },
+      "status": "Statut",
+      "anyStatus": "Tous les statuts"
+    },
+    "emptyFiltered": "Aucune candidature ne correspond à ces filtres."
   },
   "missions": {
     "pageTitle": "Missions",

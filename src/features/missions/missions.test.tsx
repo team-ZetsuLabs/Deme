@@ -6,6 +6,7 @@ import i18n from '../../i18n';
 import type { Me, MissionDetail, ReceivedApplication } from '../../api/types';
 import { ToastProvider } from '../../components/ToastProvider';
 import MissionPage from '../../pages/mission/MissionPage';
+import MissionsPage from '../../pages/missions/MissionsPage';
 import { authApi } from '../auth/authApi';
 import { jobsApi } from '../jobs/jobsApi';
 import { SessionProvider } from '../auth/SessionProvider';
@@ -194,5 +195,21 @@ describe('modifier une mission (JOB-5)', () => {
         countryCode: mission.countryCode ?? null,
       }),
     );
+  });
+});
+
+describe('MissionsPage (JOB-5)', () => {
+  it("transmet le pays choisi dans l'adresse au serveur", async () => {
+    const list = vi.spyOn(missionsApi, 'list');
+    wrap(
+      <Routes>
+        <Route path="/missions" element={<MissionsPage />} />
+      </Routes>,
+      '/missions?country=CI',
+    );
+    await waitFor(() =>
+      expect(list).toHaveBeenCalledWith(expect.objectContaining({ country: 'CI', kind: 'all' })),
+    );
+    expect(await screen.findByRole('combobox', { name: /Pays/ })).toBeTruthy();
   });
 });

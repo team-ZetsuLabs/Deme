@@ -5,6 +5,7 @@ import { errorMessage } from '../../api/errorMessage';
 import { Button } from '../../components/Button';
 import { ErrorState } from '../../components/ErrorState';
 import { Pagination } from '../../components/Pagination';
+import { Segmented } from '../../components/Segmented';
 import { StateMessage } from '../../components/StateMessage';
 import { useToast } from '../../components/useToast';
 import { groupByDate } from '../../features/notifications/groupByDate';
@@ -23,7 +24,8 @@ export default function NotificationsPage() {
   const unread = useUnread();
   const [page, setPage] = useState(0);
   const [busy, setBusy] = useState(false);
-  const query = useApiQuery(() => notificationsApi.list(page), [page]);
+  const [view, setView] = useState<'all' | 'unread'>('all');
+  const query = useApiQuery(() => notificationsApi.list(page, view === 'unread'), [page, view]);
   usePageTitle(t('notifications.pageTitle'));
 
   const markLocal = (match: (n: AppNotification) => boolean) =>
@@ -66,6 +68,20 @@ export default function NotificationsPage() {
           </Button>
         )}
       </div>
+      <div className={styles.filter}>
+        <Segmented<'all' | 'unread'>
+          label={t('notifications.filter')}
+          value={view}
+          onChange={(next) => {
+            setView(next);
+            setPage(0);
+          }}
+          options={[
+            { value: 'all', label: t('notifications.all') },
+            { value: 'unread', label: t('notifications.unreadOnly') },
+          ]}
+        />
+      </div>
 
       <div className={styles.panel} aria-busy={query.loading}>
         {query.loading && <NotificationRowsSkeleton />}
@@ -73,7 +89,9 @@ export default function NotificationsPage() {
           <ErrorState error={query.error} onRetry={query.reload} />
         )}
         {!query.loading && query.data?.items.length === 0 && (
-          <StateMessage>{t('notifications.empty')}</StateMessage>
+          <StateMessage>
+            {t(view === 'unread' ? 'notifications.emptyUnread' : 'notifications.empty')}
+          </StateMessage>
         )}
         {!query.loading &&
           query.data &&

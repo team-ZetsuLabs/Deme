@@ -13,6 +13,7 @@ export function useMissionFilters() {
     const page = Number(params.get('page') ?? '1');
     return {
       kind: KINDS.includes(kind) ? kind : 'all',
+      country: params.get('country'),
       tech: params.get('tech'),
       page: Number.isInteger(page) && page > 0 ? page - 1 : 0,
     };

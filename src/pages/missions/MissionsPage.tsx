@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button';
+import { CountrySelect } from '../../components/CountrySelect';
 import { buttonClass } from '../../components/buttonClass';
 import { ErrorState } from '../../components/ErrorState';
 import { Pagination } from '../../components/Pagination';
@@ -50,22 +51,34 @@ export default function MissionsPage() {
             label: kind === 'all' ? t('questions.filters.all') : t(`missions.kind.${kind}`),
           }))}
         />
-        <form className={styles.techForm} onSubmit={onTech} role="search">
-          <label className="sr-only" htmlFor="missions-tech">
-            {t('jobs.filters.tech')}
+        <div className={styles.row}>
+          <label className="sr-only" htmlFor="missions-country">
+            {t('jobs.filters.country')}
           </label>
-          <input
-            id="missions-tech"
-            className={styles.input}
-            value={tech}
-            placeholder={t('jobs.filters.techPlaceholder')}
-            autoCapitalize="none"
-            onChange={(e) => setTech(e.target.value)}
+          <CountrySelect
+            id="missions-country"
+            variant="filter"
+            value={filters.country ?? ''}
+            onChange={(country) => update({ country })}
+            emptyLabel={t('questions.filters.anyCountry')}
           />
-          <Button type="submit" size="sm">
-            {t('jobs.filters.apply')}
-          </Button>
-        </form>
+          <form className={styles.techForm} onSubmit={onTech} role="search">
+            <label className="sr-only" htmlFor="missions-tech">
+              {t('jobs.filters.tech')}
+            </label>
+            <input
+              id="missions-tech"
+              className={styles.input}
+              value={tech}
+              placeholder={t('jobs.filters.techPlaceholder')}
+              autoCapitalize="none"
+              onChange={(e) => setTech(e.target.value)}
+            />
+            <Button type="submit" size="sm">
+              {t('jobs.filters.apply')}
+            </Button>
+          </form>
+        </div>
       </div>
 
       <div className={styles.panel} aria-busy={query.loading}>

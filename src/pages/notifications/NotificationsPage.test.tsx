@@ -89,4 +89,13 @@ describe('NotificationsPage (NOT-1)', () => {
     ).toBeTruthy();
     expect(screen.queryByText('Non lue')).toBeNull();
   });
+
+  it('filtre les notifications non lues', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(member);
+    const list = vi.spyOn(notificationsApi, 'list');
+    renderPage();
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Non lues' }));
+    await waitFor(() => expect(list).toHaveBeenLastCalledWith(0, true));
+  });
 });

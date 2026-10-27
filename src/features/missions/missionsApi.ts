@@ -23,6 +23,7 @@ export const MISSION_KINDS: MissionKind[] = [
 
 export type MissionFilters = {
   kind: MissionKindFilter;
+  country: string | null;
   tech: string | null;
   page: number;
 };
@@ -32,6 +33,7 @@ export const missionsApi = {
     api.get<Page<MissionSummary>>('/missions', {
       query: {
         kind: f.kind === 'all' ? undefined : f.kind,
+        country: f.country,
         technology: f.tech,
         status: 'OPEN',
         page: f.page,

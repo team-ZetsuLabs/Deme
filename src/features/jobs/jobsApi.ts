@@ -1,6 +1,7 @@
 import { api } from '../../api/api';
 import type {
   ApplicationStatus,
+  ApplicationTarget,
   JobDetail,
   JobRequest,
   JobSummary,
@@ -23,6 +24,18 @@ export type JobFilters = {
   tech: string | null;
   page: number;
 };
+
+export type ApplicationFilters = {
+  type: 'all' | ApplicationTarget['type'];
+  status: 'all' | ApplicationStatus;
+};
+
+export const APPLICATION_STATUSES: ApplicationStatus[] = [
+  'SENT',
+  'VIEWED',
+  'SHORTLISTED',
+  'REJECTED',
+];
 
 export type ApplyRequest = {
   message: string;
@@ -52,9 +65,14 @@ export const jobsApi = {
     return api.post<MyApplication>(`/jobs/${id}/applications`, form);
   },
   /** Candidatures et propositions de mission envoyées par le membre (JOB-7). */
-  myApplications: (page: number) =>
+  myApplications: (page: number, filters: ApplicationFilters = { type: 'all', status: 'all' }) =>
     api.get<Page<MyApplication>>('/users/me/applications', {
-      query: { page, size: JOBS_PAGE_SIZE },
+      query: {
+        type: filters.type === 'all' ? undefined : filters.type,
+        status: filters.status === 'all' ? undefined : filters.status,
+        page,
+        size: JOBS_PAGE_SIZE,
+      },
     }),
   /** Offres publiées par le recruteur connecté, quel que soit leur statut. */
   mine: (page: number) =>

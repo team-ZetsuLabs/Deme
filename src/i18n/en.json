@@ -685,7 +685,11 @@
       "VALIDATED": "accepted",
       "APPROVED": "approved"
     },
-    "someone": "A member"
+    "someone": "A member",
+    "filter": "Show",
+    "all": "All",
+    "unreadOnly": "Unread",
+    "emptyUnread": "You are all caught up."
   },
   "home": {
     "pageTitle": "Zetsu, where African developers help each other",
@@ -1106,7 +1110,18 @@
     "kind": {
       "JOB": "Job",
       "MISSION": "Gig"
-    }
+    },
+    "filters": {
+      "type": "Type",
+      "types": {
+        "all": "All",
+        "JOB": "Jobs",
+        "MISSION": "Gigs"
+      },
+      "status": "Status",
+      "anyStatus": "All statuses"
+    },
+    "emptyFiltered": "No application matches these filters."
   },
   "missions": {
     "pageTitle": "Gigs",
