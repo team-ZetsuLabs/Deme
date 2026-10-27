@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ApiError } from '../../api/api';
 import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
+import { buttonClass } from '../../components/buttonClass';
 import { ErrorState } from '../../components/ErrorState';
 import { MemberContent } from '../../components/MemberContent';
 import { RelativeTime } from '../../components/RelativeTime';
@@ -123,6 +124,14 @@ function MissionView({ id }: { id: number }) {
           {isAuthor ? (
             <>
               <p className={styles.boxText}>{t('missions.yours')}</p>
+              {m.canEdit && open && (
+                <Link
+                  to={`/missions/${m.id}/edit`}
+                  className={`${buttonClass({ variant: 'secondary', block: true })} ${styles.editLink}`}
+                >
+                  {t('missions.edit.button')}
+                </Link>
+              )}
               {m.status !== 'CLOSED' && (
                 <CloseListingButton
                   labels="missions.close"

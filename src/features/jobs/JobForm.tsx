@@ -1,8 +1,10 @@
 import { useState, type FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { JobDetail, JobType } from '../../api/types';
 import { CountrySelect } from '../../components/CountrySelect';
 import { Button } from '../../components/Button';
+import { buttonClass } from '../../components/buttonClass';
 import { Field } from '../../components/Field';
 import { describedBy } from '../../components/fieldIds';
 import { fieldErrorText } from '../../hooks/fieldErrorText';
@@ -42,20 +44,33 @@ const IDS: Record<keyof JobValues, string> = {
   description: 'job-description',
 };
 
-export type JobFormProps = { onCreated: (job: JobDetail) => void };
+export type JobFormProps = {
+  /** Offre à modifier ; absente pour une nouvelle offre. */
+  initial?: JobDetail;
+  onSaved: (job: JobDetail) => void;
+};
 
-/** Publication d'une offre par une entreprise (JOB-4), « En attente » jusqu'à validation. */
-export function JobForm({ onCreated }: JobFormProps) {
+/**
+ * Publication d'une offre par une entreprise (JOB-4), « En attente » jusqu'à validation.
+ * Sert aussi à la modifier : elle repasse alors en validation.
+ */
+export function JobForm({ initial, onSaved }: JobFormProps) {
   const { t } = useTranslation();
   const form = useValidatedForm<JobValues>(
-    { title: '', company: '', website: '', technologies: '', description: '' },
+    {
+      title: initial?.title ?? '',
+      company: initial?.companyName ?? '',
+      website: initial?.companyWebsite ?? '',
+      technologies: initial?.technologies.join(', ') ?? '',
+      description: initial?.descriptionMarkdown ?? '',
+    },
     VALIDATORS,
   );
   const submitError = useSubmitError(form.setServerErrors);
-  const [jobType, setJobType] = useState<JobType>('PERMANENT');
-  const [city, setCity] = useState('');
-  const [country, setCountry] = useState('');
-  const [salary, setSalary] = useState('');
+  const [jobType, setJobType] = useState<JobType>(initial?.type ?? 'PERMANENT');
+  const [city, setCity] = useState(initial?.city ?? '');
+  const [country, setCountry] = useState(initial?.countryCode ?? '');
+  const [salary, setSalary] = useState(initial?.compensation ?? '');
   const [busy, setBusy] = useState(false);
   const { values, errors } = form;
 
@@ -69,7 +84,7 @@ export function JobForm({ onCreated }: JobFormProps) {
     }
     setBusy(true);
     try {
-      const job = await jobsApi.create({
+      const body = {
         title: values.title.trim(),
         companyName: values.company.trim(),
         companyWebsite: values.website.trim() || null,
@@ -79,8 +94,8 @@ export function JobForm({ onCreated }: JobFormProps) {
         technologies: parseTags(values.technologies),
         compensation: salary.trim() || null,
         description: values.description.trim(),
-      });
-      onCreated(job);
+      };
+      onSaved(initial ? await jobsApi.update(initial.id, body) : await jobsApi.create(body));
     } catch (error) {
       submitError.report(error);
       setBusy(false);
@@ -215,10 +230,15 @@ export function JobForm({ onCreated }: JobFormProps) {
         <textarea rows={10} {...input('description', { hint: true })} />
       </Field>
 
-      <p className={styles.notice}>{t('jobs.new.notice')}</p>
+      <p className={styles.notice}>{t(initial ? 'jobs.edit.notice' : 'jobs.new.notice')}</p>
       <div className={styles.actions}>
+        {initial && (
+          <Link to={`/jobs/${initial.id}`} className={buttonClass({ variant: 'secondary' })}>
+            {t('settings.cancel')}
+          </Link>
+        )}
         <Button type="submit" variant="primary" busy={busy}>
-          {busy ? t('jobs.new.busy') : t('jobs.new.submit')}
+          {busy ? t('jobs.new.busy') : t(initial ? 'jobs.edit.submit' : 'jobs.new.submit')}
         </Button>
       </div>
     </form>

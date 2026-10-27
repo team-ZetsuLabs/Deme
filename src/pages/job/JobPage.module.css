@@ -123,6 +123,10 @@
   color: var(--text-2);
 }
 
+.editLink {
+  margin-bottom: var(--s2);
+}
+
 .ownerStatus {
   margin-bottom: var(--s4);
 }

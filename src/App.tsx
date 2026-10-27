@@ -32,12 +32,14 @@ const NotificationsPage = lazy(() => import('./pages/notifications/Notifications
 const JobsPage = lazy(() => import('./pages/jobs/JobsPage'));
 const JobPage = lazy(() => import('./pages/job/JobPage'));
 const NewJobPage = lazy(() => import('./pages/job-new/NewJobPage'));
+const EditJobPage = lazy(() => import('./pages/job-edit/EditJobPage'));
 const ApplicationsPage = lazy(() => import('./pages/applications/ApplicationsPage'));
 const MyJobsPage = lazy(() => import('./pages/my-jobs/MyJobsPage'));
 const MyModerationPage = lazy(() => import('./pages/my-moderation/MyModerationPage'));
 const MissionsPage = lazy(() => import('./pages/missions/MissionsPage'));
 const MissionPage = lazy(() => import('./pages/mission/MissionPage'));
 const NewMissionPage = lazy(() => import('./pages/mission-new/NewMissionPage'));
+const EditMissionPage = lazy(() => import('./pages/mission-edit/EditMissionPage'));
 const ChallengesPage = lazy(() => import('./pages/challenges/ChallengesPage'));
 const LegalPage = lazy(() => import('./pages/legal/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/notfound/NotFoundPage'));
@@ -131,6 +133,14 @@ export function App() {
                         />
                         <Route path="jobs/:id" element={<JobPage />} />
                         <Route
+                          path="jobs/:id/edit"
+                          element={
+                            <RequireAuth>
+                              <EditJobPage />
+                            </RequireAuth>
+                          }
+                        />
+                        <Route
                           path="applications"
                           element={
                             <RequireAuth>
@@ -148,6 +158,14 @@ export function App() {
                           }
                         />
                         <Route path="missions/:id" element={<MissionPage />} />
+                        <Route
+                          path="missions/:id/edit"
+                          element={
+                            <RequireAuth>
+                              <EditMissionPage />
+                            </RequireAuth>
+                          }
+                        />
                         <Route path="challenges" element={<ChallengesPage />} />
                         <Route path="communities" element={<CommunitiesPage />} />
                         <Route

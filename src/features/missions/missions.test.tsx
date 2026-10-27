@@ -144,7 +144,7 @@ describe('MissionForm (JOB-5)', () => {
   it('refuse un délai hors limites puis publie la mission', async () => {
     const create = vi.spyOn(missionsApi, 'create');
     const onCreated = vi.fn();
-    wrap(<MissionForm onCreated={onCreated} />);
+    wrap(<MissionForm onSaved={onCreated} />);
 
     fireEvent.click(screen.getByLabelText(/Revue de code/));
     type(/^Titre/, "Revue d'une API Laravel de paiement");
@@ -168,6 +168,30 @@ describe('MissionForm (JOB-5)', () => {
         budget: { amount: 40000, currency: 'XOF' },
         durationDays: 3,
         technologies: ['laravel', 'php'],
+      }),
+    );
+  });
+});
+
+describe('modifier une mission (JOB-5)', () => {
+  it('garde le budget, la monnaie et le pays de la mission modifiée', async () => {
+    const mission = (await import('../../mocks/GET_missions_id.json')).default as MissionDetail;
+    const update = vi.spyOn(missionsApi, 'update');
+    const onSaved = vi.fn();
+    wrap(<MissionForm initial={mission} onSaved={onSaved} />);
+
+    expect((screen.getByLabelText(/^Budget indicatif/) as HTMLInputElement).value).toBe('75000');
+    type(/^Délai souhaité/, '7');
+    fireEvent.click(screen.getByRole('button', { name: 'Enregistrer les modifications' }));
+
+    await waitFor(() => expect(onSaved).toHaveBeenCalled());
+    expect(update).toHaveBeenCalledWith(
+      14,
+      expect.objectContaining({
+        kind: mission.kind,
+        budget: { amount: 75000, currency: 'XOF' },
+        durationDays: 7,
+        countryCode: mission.countryCode ?? null,
       }),
     );
   });

@@ -3,11 +3,12 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import i18n from '../../i18n';
-import type { Me } from '../../api/types';
+import type { JobDetail, Me } from '../../api/types';
 import { safeUrl } from '../../components/safeUrl';
 import { ToastProvider } from '../../components/ToastProvider';
 import JobPage from '../../pages/job/JobPage';
 import NewJobPage from '../../pages/job-new/NewJobPage';
+import EditJobPage from '../../pages/job-edit/EditJobPage';
 import { authApi } from '../auth/authApi';
 import { SessionProvider } from '../auth/SessionProvider';
 import { JobForm } from './JobForm';
@@ -149,7 +150,7 @@ describe('JobForm (JOB-4)', () => {
   it('refuse un site sans https, puis envoie l’offre', async () => {
     const create = vi.spyOn(jobsApi, 'create');
     const onCreated = vi.fn();
-    wrap(<JobForm onCreated={onCreated} />);
+    wrap(<JobForm onSaved={onCreated} />);
 
     const type = (label: RegExp, value: string) =>
       fireEvent.change(screen.getByLabelText(label), { target: { value } });
@@ -176,5 +177,42 @@ describe('JobForm (JOB-4)', () => {
         type: 'PERMANENT',
       }),
     );
+  });
+});
+
+describe('modifier une offre (JOB-4)', () => {
+  it('pré-remplit le formulaire et envoie la modification', async () => {
+    const job = (await import('../../mocks/GET_jobs_id.json')).default as JobDetail;
+    const update = vi.spyOn(jobsApi, 'update');
+    const onSaved = vi.fn();
+    wrap(<JobForm initial={job} onSaved={onSaved} />);
+
+    const title = screen.getByLabelText(/^Intitulé du poste/) as HTMLInputElement;
+    expect(title.value).toBe(job.title);
+    expect((screen.getByLabelText(/^Entreprise/) as HTMLInputElement).value).toBe('Sahel Pay');
+    fireEvent.change(title, { target: { value: 'Développeur back-end Java senior' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Enregistrer et renvoyer en validation' }));
+
+    await waitFor(() => expect(onSaved).toHaveBeenCalled());
+    expect(update).toHaveBeenCalledWith(
+      31,
+      expect.objectContaining({
+        title: 'Développeur back-end Java senior',
+        companyName: 'Sahel Pay',
+        technologies: ['java', 'spring-boot', 'postgresql'],
+      }),
+    );
+  });
+
+  it("refuse la modification à qui n'a pas publié l'offre", async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(member);
+    wrap(
+      <Routes>
+        <Route path="/jobs/:id/edit" element={<EditJobPage />} />
+      </Routes>,
+      '/jobs/31/edit',
+    );
+    expect(await screen.findByText(/Seul le recruteur/)).toBeTruthy();
+    expect(screen.queryByLabelText(/^Intitulé du poste/)).toBeNull();
   });
 });

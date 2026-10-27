@@ -40,6 +40,8 @@ export const missionsApi = {
     }),
   get: (id: number) => api.get<MissionDetail>(`/missions/${id}`),
   create: (body: MissionRequest) => api.post<MissionDetail>('/missions', body),
+  /** Modifier sa mission, tant qu'elle est ouverte. 409 MISSION_NOT_OPEN. */
+  update: (id: number, body: MissionRequest) => api.put<MissionDetail>(`/missions/${id}`, body),
   /** Se proposer pour une mission. 409 ALREADY_APPLIED. */
   offer: (id: number, body: MissionApplicationRequest) =>
     api.post<MyApplication>(`/missions/${id}/applications`, body),

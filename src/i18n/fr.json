@@ -1084,6 +1084,17 @@
       "text": "Elle disparaît de la liste des offres et n'accepte plus de candidatures. Les candidatures reçues restent consultables.",
       "confirm": "Clôturer",
       "done": "Offre clôturée"
+    },
+    "edit": {
+      "pageTitle": "Modifier l'offre",
+      "lead": "Corrigez ce qui doit l'être. L'équipe Zetsu revalidera l'offre avant de la republier.",
+      "notice": "Après modification, l'offre repasse « En attente » jusqu'à la nouvelle validation.",
+      "submit": "Enregistrer et renvoyer en validation",
+      "saved": "Offre modifiée, en attente de validation",
+      "button": "Modifier l'offre",
+      "back": "Retour à l'offre",
+      "closed": "Cette offre est clôturée : elle ne peut plus être modifiée.",
+      "notAllowed": "Seul le recruteur qui a publié cette offre peut la modifier."
     }
   },
   "applications": {
@@ -1184,6 +1195,16 @@
       "text": "Elle n'accepte plus de propositions. À faire quand la mission est terminée ou abandonnée.",
       "confirm": "Clôturer",
       "done": "Mission clôturée"
+    },
+    "edit": {
+      "pageTitle": "Modifier la mission",
+      "lead": "Les membres qui se sont déjà proposés gardent leur proposition.",
+      "submit": "Enregistrer les modifications",
+      "saved": "Mission modifiée",
+      "button": "Modifier la mission",
+      "back": "Retour à la mission",
+      "notOpen": "Cette mission n'est plus ouverte : elle ne peut plus être modifiée.",
+      "notAllowed": "Seul l'auteur de cette mission peut la modifier."
     }
   },
   "challenges": {

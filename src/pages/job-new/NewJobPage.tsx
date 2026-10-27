@@ -40,7 +40,7 @@ export default function NewJobPage() {
       <h1 className={styles.title}>{t('jobs.new.pageTitle')}</h1>
       <p className={styles.lead}>{t('jobs.new.lead')}</p>
       <JobForm
-        onCreated={(job) => {
+        onSaved={(job) => {
           toast(t('jobs.new.created'));
           navigate(`/jobs/${job.id}`, { replace: true });
         }}

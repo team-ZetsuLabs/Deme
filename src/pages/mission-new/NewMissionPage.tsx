@@ -17,7 +17,7 @@ export default function NewMissionPage() {
       <h1 className={styles.title}>{t('missions.new.pageTitle')}</h1>
       <p className={styles.lead}>{t('missions.new.lead')}</p>
       <MissionForm
-        onCreated={(mission) => {
+        onSaved={(mission) => {
           toast(t('missions.new.created'));
           navigate(`/missions/${mission.id}`, { replace: true });
         }}

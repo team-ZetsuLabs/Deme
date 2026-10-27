@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ApiError } from '../../api/api';
 import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
+import { buttonClass } from '../../components/buttonClass';
 import { ErrorState } from '../../components/ErrorState';
 import { Icon } from '../../components/Icon';
 import { MemberContent } from '../../components/MemberContent';
@@ -150,6 +151,14 @@ function JobView({ id }: { id: number }) {
               <div className={styles.ownerStatus}>
                 <JobStatusBadge status={job.status} />
               </div>
+              {job.canEdit && job.status !== 'CLOSED' && (
+                <Link
+                  to={`/jobs/${job.id}/edit`}
+                  className={`${buttonClass({ variant: 'secondary', block: true })} ${styles.editLink}`}
+                >
+                  {t('jobs.edit.button')}
+                </Link>
+              )}
               {(job.status === 'PUBLISHED' || job.status === 'PENDING') && (
                 <CloseListingButton
                   labels="jobs.close"

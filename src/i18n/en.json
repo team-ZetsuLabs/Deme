@@ -1084,6 +1084,17 @@
       "text": "It leaves the job list and no longer accepts applications. Applications received stay available.",
       "confirm": "Close",
       "done": "Job closed"
+    },
+    "edit": {
+      "pageTitle": "Edit the job",
+      "lead": "Fix what needs fixing. The Zetsu team will review the job again before republishing it.",
+      "notice": "After editing, the job goes back to « Pending » until it is approved again.",
+      "submit": "Save and send for review",
+      "saved": "Job updated, pending review",
+      "button": "Edit the job",
+      "back": "Back to the job",
+      "closed": "This job is closed: it can no longer be edited.",
+      "notAllowed": "Only the recruiter who posted this job can edit it."
     }
   },
   "applications": {
@@ -1184,6 +1195,16 @@
       "text": "It no longer accepts proposals. Do it when the gig is done or abandoned.",
       "confirm": "Close",
       "done": "Gig closed"
+    },
+    "edit": {
+      "pageTitle": "Edit the gig",
+      "lead": "Members who already made a proposal keep it.",
+      "submit": "Save changes",
+      "saved": "Gig updated",
+      "button": "Edit the gig",
+      "back": "Back to the gig",
+      "notOpen": "This gig is no longer open: it can no longer be edited.",
+      "notAllowed": "Only the author of this gig can edit it."
     }
   },
   "challenges": {

@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { MissionDetail, MissionKind } from '../../api/types';
 import { Button } from '../../components/Button';
+import { buttonClass } from '../../components/buttonClass';
 import { Field } from '../../components/Field';
 import { describedBy } from '../../components/fieldIds';
 import { fieldErrorText } from '../../hooks/fieldErrorText';
@@ -44,18 +46,28 @@ const IDS: Record<keyof MissionValues, string> = {
   budget: 'mission-budget',
 };
 
-export type MissionFormProps = { onCreated: (mission: MissionDetail) => void };
+export type MissionFormProps = {
+  /** Mission à modifier ; absente pour une nouvelle mission. */
+  initial?: MissionDetail;
+  onSaved: (mission: MissionDetail) => void;
+};
 
-/** Publier une mission courte entre pairs (JOB-5), avec budget indicatif et délai. */
-export function MissionForm({ onCreated }: MissionFormProps) {
+/** Publier ou modifier une mission courte entre pairs (JOB-5), avec budget indicatif et délai. */
+export function MissionForm({ initial, onSaved }: MissionFormProps) {
   const { t } = useTranslation();
   const form = useValidatedForm<MissionValues>(
-    { title: '', description: '', technologies: '', delay: '3', budget: '' },
+    {
+      title: initial?.title ?? '',
+      description: initial?.descriptionMarkdown ?? '',
+      technologies: initial?.technologies.join(', ') ?? '',
+      delay: String(initial?.durationDays ?? 3),
+      budget: initial ? String(initial.budget.amount) : '',
+    },
     VALIDATORS,
   );
   const submitError = useSubmitError(form.setServerErrors);
-  const [kind, setKind] = useState<MissionKind>('TROUBLESHOOTING');
-  const [currency, setCurrency] = useState(CURRENCIES[0]);
+  const [kind, setKind] = useState<MissionKind>(initial?.kind ?? 'TROUBLESHOOTING');
+  const [currency, setCurrency] = useState(initial?.budget.currency ?? CURRENCIES[0]);
   const [busy, setBusy] = useState(false);
   const { values, errors } = form;
 
@@ -69,15 +81,19 @@ export function MissionForm({ onCreated }: MissionFormProps) {
     }
     setBusy(true);
     try {
-      const mission = await missionsApi.create({
+      const body = {
         title: values.title.trim(),
         kind,
         description: values.description.trim(),
         budget: { amount: Number(values.budget), currency },
         durationDays: Number(values.delay),
         technologies: parseTags(values.technologies),
-      });
-      onCreated(mission);
+        // Pas de champ pays dans le formulaire : on garde celui de la mission modifiée.
+        countryCode: initial?.countryCode ?? null,
+      };
+      onSaved(
+        initial ? await missionsApi.update(initial.id, body) : await missionsApi.create(body),
+      );
     } catch (error) {
       submitError.report(error);
       setBusy(false);
@@ -191,8 +207,15 @@ export function MissionForm({ onCreated }: MissionFormProps) {
 
       <p className={styles.notice}>{t('missions.new.notice')}</p>
       <div className={styles.actions}>
+        {initial && (
+          <Link to={`/missions/${initial.id}`} className={buttonClass({ variant: 'secondary' })}>
+            {t('settings.cancel')}
+          </Link>
+        )}
         <Button type="submit" variant="primary" busy={busy}>
-          {busy ? t('missions.new.busy') : t('missions.new.submit')}
+          {busy
+            ? t('missions.new.busy')
+            : t(initial ? 'missions.edit.submit' : 'missions.new.submit')}
         </Button>
       </div>
     </form>
