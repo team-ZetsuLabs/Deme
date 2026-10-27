@@ -8,7 +8,14 @@
 - **2 propositions** : « Mobile money », acceptée, et « React Native », en attente dans la file du back office ;
 - **le compte Référent du jury**, seul compte qui peut se connecter. Il est Référent de « Sénégal » et de « Mobile money », mais n'est pas membre de « Flutter » ni de « Kenya » : il peut les rejoindre pendant la démo, puis proposer une communauté.
 
-Le script est rejouable : il ne crée rien deux fois. Il s'applique après les migrations Flyway, donc une fois que le back-end a démarré au moins une fois sur la base.
+`projets-badges.sql` s'appuie sur ces membres et ces questions, et ajoute :
+
+- **11 réponses**, dont 5 acceptées, qui donnent leur contenu aux badges (REP-4) ;
+- **les badges** que ces contenus font gagner, avec les seuils du profil `demo` : le jury en a 5 sur 6, et Challenger est à 0/1 ;
+- **5 projets** (PRJ-1 à PRJ-6) : 3 qui recrutent, 1 dont l'équipe est complète, 1 clôturé dont le membre a gagné ses 10 points ;
+- **le jury dans deux rôles** : porteur de « Annuaire des développeurs du Sénégal », avec deux demandes en attente sur le même rôle (en accepter une refuse l'autre), et membre de « Tontine Cash », dont il peut alimenter le fil ou qu'il peut quitter.
+
+Les deux scripts sont rejouables : ils ne créent rien deux fois. Ils s'appliquent après les migrations Flyway, donc une fois que le back-end a démarré au moins une fois sur la base, et dans cet ordre : `communautes.sql` puis `projets-badges.sql`. Le second a besoin des migrations V13 (badges) et V14 (projets).
 
 ## Lancer
 
@@ -20,6 +27,10 @@ En local, avec `compose.dev.yaml` :
 docker compose -f compose.dev.yaml exec -T db psql -U zetsu -d zetsu \
   -v demo_username=aminata_dev -v demo_email="$DEMO_EMAIL" -v demo_password="$DEMO_PASSWORD" \
   < seed/communautes.sql
+
+docker compose -f compose.dev.yaml exec -T db psql -U zetsu -d zetsu \
+  -v demo_username=aminata_dev -v demo_email="$DEMO_EMAIL" -v demo_password="$DEMO_PASSWORD" \
+  < seed/projets-badges.sql
 ```
 
 Sur une autre base, la même commande avec `psql "$DATABASE_URL"` (forme `postgresql://`, pas `jdbc:`).
@@ -31,3 +42,5 @@ Le script active l'extension `pgcrypto` pour hacher le mot de passe en bcrypt. I
 - Avec le profil `demo`, le niveau Référent commence à 60 points. Les réputations du script dépassent aussi le seuil normal (1 500), donc la démo marche avec ou sans ce profil.
 - Les réputations des membres sont posées directement : leur historique de points ne contient que les gains du mois qui servent aux communautés.
 - Pour la démo de la proposition : se connecter avec le compte du jury, proposer une communauté depuis /communities/new, puis l'accepter ou la refuser depuis le back office.
+- Les badges sont recalculés depuis les contenus à chaque action : un badge gagné ne se perd pas, il reste affiché si l'on démarre ensuite sans le profil `demo`, même si la progression est sous le seuil normal.
+- Pour la démo des projets : se connecter avec le compte du jury, ouvrir « Annuaire des développeurs du Sénégal », accepter une des deux demandes sur « Développeur front React » (l'autre est refusée et notifiée, le projet passe « En cours »), puis clôturer le projet : les deux membres gagnent 10 points.
