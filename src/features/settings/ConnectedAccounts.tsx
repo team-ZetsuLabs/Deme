@@ -42,7 +42,11 @@ export function ConnectedAccounts({ user }: ConnectedAccountsProps) {
   };
 
   return (
-    <section className={settings.section} aria-labelledby="settings-accounts-title">
+    <section
+      id="connections"
+      className={settings.section}
+      aria-labelledby="settings-accounts-title"
+    >
       <h2 id="settings-accounts-title" className={settings.title}>
         {t('settings.accounts.title')}
       </h2>

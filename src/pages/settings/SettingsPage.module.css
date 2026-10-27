@@ -1,13 +1,62 @@
 .page {
-  max-width: 760px;
+  max-width: 980px;
 }
 
 .title {
-  margin-bottom: var(--s4);
   font-size: var(--fs-2xl);
   font-weight: 600;
   letter-spacing: -0.035em;
   line-height: var(--lh-tight);
+}
+
+.lead {
+  margin: var(--s2) 0 var(--s4);
+  color: var(--text-2);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: var(--s5);
+  align-items: start;
+}
+
+/* Sommaire : reste visible pendant le défilement, comme le menu latéral. */
+.toc {
+  position: sticky;
+  top: calc(var(--topbar-h) + var(--s5));
+  display: grid;
+  gap: 2px;
+}
+
+.toc a {
+  padding: var(--s2) var(--s3);
+  border-radius: var(--r-md);
+  font-size: var(--fs-md);
+  color: var(--text-2);
+}
+
+.toc a:hover {
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.sections {
+  min-width: 0;
+}
+
+.sections > section {
+  scroll-margin-top: calc(var(--topbar-h) + var(--s5));
+}
+
+@media (max-width: 1023px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .toc {
+    display: none;
+  }
 }
 
 @media (max-width: 767px) {

@@ -38,6 +38,15 @@ afterEach(() => {
 });
 
 describe('SettingsPage', () => {
+  it("envoie le lien pour créer un mot de passe à l'adresse du compte", async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(member);
+    const reset = vi.spyOn(authApi, 'requestPasswordReset').mockResolvedValue(undefined);
+    renderSettings();
+    fireEvent.click(await screen.findByRole('button', { name: 'Créer un mot de passe' }));
+    expect(await screen.findByRole('button', { name: 'Lien envoyé' })).toBeTruthy();
+    expect(reset).toHaveBeenCalledWith(member.email);
+  });
+
   it('empêche de délier le seul moyen de connexion', async () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(member);
     renderSettings();

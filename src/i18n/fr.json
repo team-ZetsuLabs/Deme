@@ -532,8 +532,6 @@
     "saved": "Modifications enregistrées",
     "cancel": "Annuler",
     "profile": {
-      "title": "Profil public",
-      "intro": "Ces informations apparaissent sur votre profil et à côté de vos réponses.",
       "city": "Ville",
       "bio": "Présentation",
       "bioHint": "Ce que vous faites et ce qui vous intéresse.",
@@ -586,6 +584,21 @@
       "mismatch": "Tapez {{word}} en majuscules pour confirmer.",
       "confirm": "Supprimer définitivement",
       "done": "Votre compte a été supprimé."
+    },
+    "lead": "Votre compte et vos préférences. Ce que les autres voient se modifie depuis votre profil.",
+    "toc": "Sections des paramètres",
+    "account": {
+      "title": "Compte",
+      "intro": "Votre adresse de connexion et votre mot de passe.",
+      "email": "Adresse email",
+      "unverified": "Adresse pas encore vérifiée",
+      "password": "Mot de passe",
+      "passwordHint": "Pour le changer, nous vous envoyons un lien par email.",
+      "noPassword": "Vous vous connectez avec GitHub ou Google. Un mot de passe vous permet aussi d'entrer avec votre email.",
+      "changePassword": "Changer le mot de passe",
+      "setPassword": "Créer un mot de passe",
+      "passwordSent": "Lien envoyé à {{email}}",
+      "passwordSentShort": "Lien envoyé"
     }
   },
   "notifications": {

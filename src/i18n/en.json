@@ -532,8 +532,6 @@
     "saved": "Changes saved",
     "cancel": "Cancel",
     "profile": {
-      "title": "Public profile",
-      "intro": "This information appears on your profile and next to your answers.",
       "city": "City",
       "bio": "About you",
       "bioHint": "What you do and what you are interested in.",
@@ -586,6 +584,21 @@
       "mismatch": "Type {{word}} in capital letters to confirm.",
       "confirm": "Delete for good",
       "done": "Your account has been deleted."
+    },
+    "lead": "Your account and preferences. What others see is edited from your profile.",
+    "toc": "Settings sections",
+    "account": {
+      "title": "Account",
+      "intro": "Your sign-in address and password.",
+      "email": "Email address",
+      "unverified": "Address not verified yet",
+      "password": "Password",
+      "passwordHint": "To change it, we email you a link.",
+      "noPassword": "You sign in with GitHub or Google. A password also lets you sign in with your email.",
+      "changePassword": "Change password",
+      "setPassword": "Create a password",
+      "passwordSent": "Link sent to {{email}}",
+      "passwordSentShort": "Link sent"
     }
   },
   "notifications": {

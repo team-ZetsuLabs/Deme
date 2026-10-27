@@ -47,6 +47,7 @@ export function DeleteAccountSection() {
 
   return (
     <section
+      id="delete"
       className={`${styles.section} ${styles.danger}`}
       aria-labelledby="settings-delete-title"
     >

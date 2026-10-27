@@ -25,7 +25,7 @@ export function AppearanceSection() {
   };
 
   return (
-    <section className={styles.section} aria-labelledby="settings-appearance-title">
+    <section id="appearance" className={styles.section} aria-labelledby="settings-appearance-title">
       <h2 id="settings-appearance-title" className={styles.title}>
         {t('settings.appearance.title')}
       </h2>
