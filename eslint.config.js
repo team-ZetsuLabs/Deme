@@ -31,6 +31,10 @@ export default tseslint.config(
     },
   },
   {
+    files: ['seed/**/*.mjs'],
+    languageOptions: { globals: globals.node },
+  },
+  {
     files: ['src/components/MemberContent.tsx'],
     rules: { 'no-restricted-syntax': 'off' },
   },

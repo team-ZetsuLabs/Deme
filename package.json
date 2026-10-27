@@ -12,7 +12,8 @@
     "test": "vitest run",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "gen:api": "openapi-typescript $VITE_API_SPEC -o src/api/api-types.ts"
+    "gen:api": "openapi-typescript $VITE_API_SPEC -o src/api/api-types.ts",
+    "seed": "node seed/seed.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
