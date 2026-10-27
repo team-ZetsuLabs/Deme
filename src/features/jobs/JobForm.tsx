@@ -1,13 +1,13 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ContractType, JobDetail } from '../../api/types';
+import { CountrySelect } from '../../components/CountrySelect';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
 import { describedBy } from '../../components/fieldIds';
 import { fieldErrorText } from '../../hooks/fieldErrorText';
 import { useSubmitError } from '../../hooks/useSubmitError';
 import { useValidatedForm, type Validators } from '../../hooks/useValidatedForm';
-import { countryOptions } from '../../i18n/countries';
 import { parseTags } from '../questions/validation';
 import { jobsApi } from './jobsApi';
 import {
@@ -48,7 +48,7 @@ export type JobFormProps = { onCreated: (job: JobDetail) => void };
 
 /** Publication d'une offre par une entreprise (JOB-4), « En attente » jusqu'à validation. */
 export function JobForm({ onCreated }: JobFormProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const form = useValidatedForm<JobValues>(
     { title: '', company: '', website: '', technologies: '', description: '' },
     VALIDATORS,
@@ -61,7 +61,6 @@ export function JobForm({ onCreated }: JobFormProps) {
   const [salary, setSalary] = useState('');
   const [experience, setExperience] = useState('');
   const [busy, setBusy] = useState(false);
-  const countries = useMemo(() => countryOptions(i18n.language), [i18n.language]);
   const { values, errors } = form;
 
   const onSubmit = async (e: FormEvent) => {
@@ -184,14 +183,12 @@ export function JobForm({ onCreated }: JobFormProps) {
             </>
           }
         >
-          <select id="job-country" value={country} onChange={(e) => setCountry(e.target.value)}>
-            <option value="">{t('ask.fields.noCountry')}</option>
-            {countries.map((c) => (
-              <option key={c.code} value={c.code}>
-                {c.name}
-              </option>
-            ))}
-          </select>
+          <CountrySelect
+            id="job-country"
+            value={country}
+            onChange={setCountry}
+            emptyLabel={t('ask.fields.noCountry')}
+          />
         </Field>
       </div>
 

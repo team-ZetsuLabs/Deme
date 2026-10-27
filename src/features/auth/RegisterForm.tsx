@@ -1,11 +1,11 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
+import { CountrySelect } from '../../components/CountrySelect';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
 import { describedBy } from '../../components/fieldIds';
 import { useValidatedForm, type Validators } from '../../hooks/useValidatedForm';
-import { countryOptions, OTHER_COUNTRY } from '../../i18n/countries';
 import { fieldErrorText } from '../../hooks/fieldErrorText';
 import { PasswordInput } from './PasswordInput';
 import { StrengthMeter } from './StrengthMeter';
@@ -40,7 +40,7 @@ const IDS: Record<keyof RegisterValues, string> = {
 export type RegisterFormProps = { onSignedIn: () => void };
 
 export function RegisterForm({ onSignedIn }: RegisterFormProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { register } = useSession();
   const [busy, setBusy] = useState(false);
   const [website, setWebsite] = useState('');
@@ -53,7 +53,6 @@ export function RegisterForm({ onSignedIn }: RegisterFormProps) {
     form.setServerErrors({ ...rest, name: displayName, country: countryCode }),
   );
   const { values, errors } = form;
-  const countries = useMemo(() => countryOptions(i18n.language), [i18n.language]);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -108,23 +107,16 @@ export function RegisterForm({ onSignedIn }: RegisterFormProps) {
         </Field>
 
         <Field id={IDS.country} label={t('auth.fields.country')} error={countryError}>
-          <select
+          <CountrySelect
             id={IDS.country}
-            autoComplete="country"
             value={values.country}
-            onChange={(e) => form.setValue('country', e.target.value)}
+            onChange={(value) => form.setValue('country', value)}
             onBlur={() => form.onBlur('country')}
-            aria-invalid={!!countryError}
-            aria-describedby={describedBy(IDS.country, false, countryError)}
-          >
-            <option value="">{t('auth.fields.countryPlaceholder')}</option>
-            {countries.map((c) => (
-              <option key={c.code} value={c.code}>
-                {c.name}
-              </option>
-            ))}
-            <option value={OTHER_COUNTRY}>{t('auth.fields.countryOther')}</option>
-          </select>
+            emptyLabel={t('auth.fields.countryPlaceholder')}
+            otherLabel={t('auth.fields.countryOther')}
+            invalid={!!countryError}
+            describedBy={describedBy(IDS.country, false, countryError)}
+          />
         </Field>
       </div>
 

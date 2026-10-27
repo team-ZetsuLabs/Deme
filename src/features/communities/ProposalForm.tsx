@@ -1,13 +1,13 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { CommunityKind, CommunityProposal } from '../../api/types';
+import { CountrySelect } from '../../components/CountrySelect';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
 import { describedBy } from '../../components/fieldIds';
 import { fieldErrorText } from '../../hooks/fieldErrorText';
 import { useSubmitError } from '../../hooks/useSubmitError';
 import { useValidatedForm, type Validators } from '../../hooks/useValidatedForm';
-import { countryOptions } from '../../i18n/countries';
 import { communitiesApi } from './communitiesApi';
 import {
   DESCRIPTION_MAX,
@@ -42,10 +42,9 @@ export type ProposalFormProps = { onProposed: (proposal: CommunityProposal) => v
 
 /** Proposer une communauté (COM-2) : réservé aux Référents, validé ensuite par l'équipe. */
 export function ProposalForm({ onProposed }: ProposalFormProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [kind, setKind] = useState<CommunityKind>('TECH');
   const [busy, setBusy] = useState(false);
-  const countries = useMemo(() => countryOptions(i18n.language), [i18n.language]);
 
   // Le pays ou le tag n'est obligatoire que pour le type choisi.
   const validators = useMemo<Validators<ProposalValues>>(
@@ -141,21 +140,15 @@ export function ProposalForm({ onProposed }: ProposalFormProps) {
 
         {kind === 'COUNTRY' ? (
           <Field id={IDS.country} label={t('auth.fields.country')} error={error('country')}>
-            <select
+            <CountrySelect
               id={IDS.country}
               value={values.country}
-              onChange={(e) => form.setValue('country', e.target.value)}
+              onChange={(value) => form.setValue('country', value)}
               onBlur={() => form.onBlur('country')}
-              aria-invalid={!!error('country')}
-              aria-describedby={describedBy(IDS.country, false, error('country'))}
-            >
-              <option value="">{t('auth.fields.countryPlaceholder')}</option>
-              {countries.map((c) => (
-                <option key={c.code} value={c.code}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
+              emptyLabel={t('auth.fields.countryPlaceholder')}
+              invalid={!!error('country')}
+              describedBy={describedBy(IDS.country, false, error('country'))}
+            />
           </Field>
         ) : (
           <Field

@@ -1,6 +1,7 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { CountrySelect } from '../../components/CountrySelect';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
 import { useToast } from '../../components/useToast';
@@ -9,7 +10,6 @@ import { useSession } from '../../features/auth/useSession';
 import { SkillPicker } from '../../features/profile/SkillPicker';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { changeLanguage, LANGUAGES, type Language } from '../../i18n';
-import { countryOptions, OTHER_COUNTRY } from '../../i18n/countries';
 import { Logo } from '../../layout/Logo';
 import { PageLoader } from '../../layout/PageLoader';
 import styles from './WelcomePage.module.css';
@@ -31,7 +31,6 @@ export default function WelcomePage() {
   const [skills, setSkills] = useState<string[]>(user?.skills ?? []);
   const [country, setCountry] = useState(user?.countryCode ?? '');
   const [busy, setBusy] = useState<'save' | 'later' | null>(null);
-  const countries = useMemo(() => countryOptions(i18n.language), [i18n.language]);
   const language = (i18n.resolvedLanguage ?? 'fr') as Language;
   usePageTitle(t('welcome.pageTitle'));
 
@@ -94,20 +93,14 @@ export default function WelcomePage() {
               label={t('auth.fields.country')}
               hint={t('welcome.country.hint')}
             >
-              <select
+              <CountrySelect
                 id="welcome-country"
                 value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                aria-describedby="welcome-country-hint"
-              >
-                <option value="">{t('auth.fields.countryPlaceholder')}</option>
-                {countries.map((c) => (
-                  <option key={c.code} value={c.code}>
-                    {c.name}
-                  </option>
-                ))}
-                <option value={OTHER_COUNTRY}>{t('auth.fields.countryOther')}</option>
-              </select>
+                onChange={setCountry}
+                emptyLabel={t('auth.fields.countryPlaceholder')}
+                otherLabel={t('auth.fields.countryOther')}
+                describedBy="welcome-country-hint"
+              />
             </Field>
           </fieldset>
 

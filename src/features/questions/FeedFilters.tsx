@@ -1,7 +1,6 @@
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { CountrySelect } from '../../components/CountrySelect';
 import { Segmented } from '../../components/Segmented';
-import { countryOptions } from '../../i18n/countries';
 import { OPERATORS } from './context';
 import type { QuestionFilters } from './questionsApi';
 import type { useQuestionFilters } from './useQuestionFilters';
@@ -14,8 +13,7 @@ export type FeedFiltersProps = {
 
 /** Filtres du fil (QA-6) : statut, tri, pays et opérateur (QA-2). */
 export function FeedFilters({ filters, update }: FeedFiltersProps) {
-  const { t, i18n } = useTranslation();
-  const countries = useMemo(() => countryOptions(i18n.language), [i18n.language]);
+  const { t } = useTranslation();
 
   return (
     <div className={styles.filters}>
@@ -45,19 +43,13 @@ export function FeedFilters({ filters, update }: FeedFiltersProps) {
         <label className="sr-only" htmlFor="filter-country">
           {t('questions.filters.country')}
         </label>
-        <select
+        <CountrySelect
           id="filter-country"
-          className={styles.select}
+          variant="filter"
           value={filters.country ?? ''}
-          onChange={(e) => update({ country: e.target.value })}
-        >
-          <option value="">{t('questions.filters.anyCountry')}</option>
-          {countries.map((c) => (
-            <option key={c.code} value={c.code}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+          onChange={(country) => update({ country })}
+          emptyLabel={t('questions.filters.anyCountry')}
+        />
         <label className="sr-only" htmlFor="filter-operator">
           {t('questions.filters.operator')}
         </label>

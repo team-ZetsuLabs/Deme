@@ -19,6 +19,12 @@ const wrap = (ui: ReactNode) =>
 const type = (label: RegExp, value: string) =>
   fireEvent.change(screen.getByLabelText(label), { target: { value } });
 
+/** Le pays se choisit dans une liste avec drapeaux (CountrySelect), pas dans un <select>. */
+const chooseCountry = (name: string) => {
+  fireEvent.click(screen.getByRole('combobox', { name: /^Pays/ }));
+  fireEvent.click(screen.getByRole('option', { name }));
+};
+
 beforeAll(async () => {
   await i18n.changeLanguage('fr');
 });
@@ -59,7 +65,7 @@ describe('RegisterForm', () => {
 
     type(/^Nom complet/, '  Koffi Mensah ');
     type(/^Adresse email/, 'koffi.mensah@example.com');
-    type(/^Pays/, 'TG');
+    chooseCountry('Togo');
     type(/^Mot de passe/, 'lome2026');
     fireEvent.click(screen.getByRole('button', { name: 'Créer mon compte' }));
 
@@ -77,7 +83,7 @@ describe('RegisterForm', () => {
     wrap(<RegisterForm onSignedIn={vi.fn()} />);
     type(/^Nom complet/, 'Koffi Mensah');
     type(/^Adresse email/, 'koffi.mensah@example.com');
-    type(/^Pays/, 'TG');
+    chooseCountry('Togo');
     type(/^Mot de passe/, 'lome2026');
     fireEvent.change(document.getElementById('register-website') as HTMLInputElement, {
       target: { value: 'https://spam.example' },
@@ -98,7 +104,7 @@ describe('RegisterForm', () => {
     wrap(<RegisterForm onSignedIn={vi.fn()} />);
     type(/^Nom complet/, 'Koffi Mensah');
     type(/^Adresse email/, 'koffi.mensah@example.com');
-    type(/^Pays/, 'TG');
+    chooseCountry('Togo');
     type(/^Mot de passe/, 'lome2026');
     fireEvent.click(screen.getByRole('button', { name: 'Créer mon compte' }));
 

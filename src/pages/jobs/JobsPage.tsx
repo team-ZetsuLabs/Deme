@@ -1,6 +1,7 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { CountrySelect } from '../../components/CountrySelect';
 import { Button } from '../../components/Button';
 import { buttonClass } from '../../components/buttonClass';
 import { ErrorState } from '../../components/ErrorState';
@@ -12,7 +13,6 @@ import { jobsApi, type JobTypeFilter } from '../../features/jobs/jobsApi';
 import { useJobFilters } from '../../features/jobs/useJobFilters';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
-import { countryOptions } from '../../i18n/countries';
 import { JobRowsSkeleton } from '../../components/skeleton/JobRowsSkeleton';
 import styles from './JobsPage.module.css';
 
@@ -20,10 +20,9 @@ const TYPES: JobTypeFilter[] = ['all', 'FULL_TIME', 'REMOTE', 'CONTRACT', 'INTER
 
 /** Offres d'emploi filtrables par type, pays et technologie (JOB-1). */
 export default function JobsPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { filters, update } = useJobFilters();
   const [tech, setTech] = useState(filters.tech ?? '');
-  const countries = useMemo(() => countryOptions(i18n.language), [i18n.language]);
   const query = useApiQuery(() => jobsApi.list(filters), [filters]);
   usePageTitle(t('jobs.pageTitle'));
 
@@ -55,19 +54,13 @@ export default function JobsPage() {
           <label className="sr-only" htmlFor="jobs-country">
             {t('jobs.filters.country')}
           </label>
-          <select
+          <CountrySelect
             id="jobs-country"
-            className={styles.select}
+            variant="filter"
             value={filters.country ?? ''}
-            onChange={(e) => update({ country: e.target.value })}
-          >
-            <option value="">{t('questions.filters.anyCountry')}</option>
-            {countries.map((c) => (
-              <option key={c.code} value={c.code}>
-                {c.name}
-              </option>
-            ))}
-          </select>
+            onChange={(country) => update({ country })}
+            emptyLabel={t('questions.filters.anyCountry')}
+          />
           <form className={styles.techForm} onSubmit={onTech} role="search">
             <label className="sr-only" htmlFor="jobs-tech">
               {t('jobs.filters.tech')}

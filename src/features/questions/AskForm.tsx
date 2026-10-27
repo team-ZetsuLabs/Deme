@@ -1,12 +1,13 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { MobileMoneyOperator, NetworkQuality, QuestionDetail } from '../../api/types';
+import { CountrySelect } from '../../components/CountrySelect';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
 import { describedBy } from '../../components/fieldIds';
 import { useValidatedForm, type Validators } from '../../hooks/useValidatedForm';
-import { countryOptions, OTHER_COUNTRY } from '../../i18n/countries';
+import { OTHER_COUNTRY } from '../../i18n/countries';
 import { fieldErrorText } from '../../hooks/fieldErrorText';
 import { useSubmitError } from '../../hooks/useSubmitError';
 import { AiAssist } from './AiAssist';
@@ -45,7 +46,7 @@ export function AskForm({
   defaultCountry,
   onPosted,
 }: AskFormProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
   const form = useValidatedForm<AskValues>(
@@ -60,7 +61,6 @@ export function AskForm({
   const [operator, setOperator] = useState<MobileMoneyOperator | ''>('');
   const [network, setNetwork] = useState<NetworkQuality | ''>('');
   const [techVersion, setTechVersion] = useState('');
-  const countries = useMemo(() => countryOptions(i18n.language), [i18n.language]);
   const { values, errors } = form;
   const context = {
     countryCode: country || null,
@@ -208,14 +208,12 @@ export function AskForm({
 
         <div className={styles.grid}>
           <Field id="ask-country" label={t('ask.fields.country')}>
-            <select id="ask-country" value={country} onChange={(e) => setCountry(e.target.value)}>
-              <option value="">{t('ask.fields.noCountry')}</option>
-              {countries.map((c) => (
-                <option key={c.code} value={c.code}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
+            <CountrySelect
+              id="ask-country"
+              value={country}
+              onChange={setCountry}
+              emptyLabel={t('ask.fields.noCountry')}
+            />
           </Field>
           <Field id="ask-operator" label={t('ask.fields.operator')}>
             <select

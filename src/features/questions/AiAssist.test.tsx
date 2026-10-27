@@ -75,7 +75,7 @@ describe('Assistant de rédaction (IA-1)', () => {
     expect((screen.getByLabelText(/^Opérateur mobile money/) as HTMLSelectElement).value).toBe(
       'WAVE',
     );
-    expect((screen.getByLabelText(/^Pays/) as HTMLSelectElement).value).toBe('SN');
+    expect(screen.getByRole('combobox', { name: /^Pays/ }).textContent).toBe('Sénégal');
   });
 
   it('affiche les suggestions comme du texte, sans jamais exécuter de HTML', async () => {
