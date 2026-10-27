@@ -549,7 +549,8 @@
       "badType": "Choisissez une image PNG, JPG ou WebP.",
       "tooBig": "L'image doit faire 2 Mo au plus.",
       "updated": "Photo mise à jour",
-      "removed": "Photo retirée, vos initiales sont affichées"
+      "removed": "Photo retirée, vos initiales sont affichées",
+      "title": "Photo de profil"
     },
     "accounts": {
       "title": "Comptes connectés",
@@ -1212,5 +1213,11 @@
         "ruleLength": "Chaque règle fait 200 caractères au plus."
       }
     }
+  },
+  "profileEdit": {
+    "pageTitle": "Modifier mon profil",
+    "lead": "Ce que les autres membres voient sur votre profil. Les réglages du compte et de l'appli sont dans les Paramètres.",
+    "back": "Retour au profil",
+    "saved": "Profil mis à jour"
   }
 }

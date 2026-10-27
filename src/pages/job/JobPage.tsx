@@ -137,7 +137,7 @@ function JobView({ id }: { id: number }) {
               <SkillMatch required={job.technologies} mine={user.skills} />
             ) : (
               <p className={styles.boxText}>
-                {t('jobs.match.noSkills')} <Link to="/settings">{t('nav.settings')}</Link>
+                {t('jobs.match.noSkills')} <Link to="/profile/edit">{t('profile.edit')}</Link>
               </p>
             )
           ) : (

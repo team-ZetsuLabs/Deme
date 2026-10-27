@@ -27,6 +27,7 @@ const AskPage = lazy(() => import('./pages/ask/AskPage'));
 const WelcomePage = lazy(() => import('./pages/welcome/WelcomePage'));
 const ProfilePage = lazy(() => import('./pages/profile/ProfilePage'));
 const SettingsPage = lazy(() => import('./pages/settings/SettingsPage'));
+const ProfileEditPage = lazy(() => import('./pages/profile-edit/ProfileEditPage'));
 const NotificationsPage = lazy(() => import('./pages/notifications/NotificationsPage'));
 const JobsPage = lazy(() => import('./pages/jobs/JobsPage'));
 const JobPage = lazy(() => import('./pages/job/JobPage'));
@@ -77,6 +78,14 @@ export function App() {
                         />
                         <Route path="questions/:id" element={<QuestionPage />} />
                         <Route path="users/:username" element={<ProfilePage />} />
+                        <Route
+                          path="profile/edit"
+                          element={
+                            <RequireAuth>
+                              <ProfileEditPage />
+                            </RequireAuth>
+                          }
+                        />
                         <Route
                           path="settings"
                           element={

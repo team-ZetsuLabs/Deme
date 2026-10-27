@@ -63,6 +63,11 @@
   gap: var(--s2);
 }
 
+.ownActions {
+  display: flex;
+  gap: var(--s2);
+}
+
 .recruiter {
   display: inline-flex;
   align-items: center;

@@ -1,0 +1,28 @@
+.page {
+  max-width: 760px;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: var(--s3);
+  font-size: var(--fs-md);
+  color: var(--text-2);
+}
+
+.title {
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: var(--lh-tight);
+}
+
+.lead {
+  margin: var(--s2) 0 var(--s4);
+  color: var(--text-2);
+}
+
+@media (max-width: 767px) {
+  .title {
+    font-size: var(--fs-xl);
+  }
+}

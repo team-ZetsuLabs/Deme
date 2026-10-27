@@ -1,22 +1,24 @@
 import { useState, type FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { Me } from '../../api/types';
 import { Button } from '../../components/Button';
+import { buttonClass } from '../../components/buttonClass';
+import { CountrySelect } from '../../components/CountrySelect';
 import { Field } from '../../components/Field';
 import { describedBy } from '../../components/fieldIds';
-import { useToast } from '../../components/useToast';
 import { fieldErrorText } from '../../hooks/fieldErrorText';
 import { useSubmitError } from '../../hooks/useSubmitError';
 import { useValidatedForm, type Validators } from '../../hooks/useValidatedForm';
 import { NAME_MAX, validateName } from '../auth/validation';
 import { useSession } from '../auth/useSession';
-import { SkillPicker } from '../profile/SkillPicker';
 import { PhotoField } from './PhotoField';
-import styles from './Settings.module.css';
+import { SkillPicker } from './SkillPicker';
+import styles from './ProfileForm.module.css';
 
 export const BIO_MAX = 200;
 
-type ProfileValues = { name: string; city: string; bio: string };
+type ProfileValues = { name: string; country: string; city: string; bio: string };
 
 const VALIDATORS: Validators<ProfileValues> = {
   name: validateName,
@@ -24,35 +26,39 @@ const VALIDATORS: Validators<ProfileValues> = {
 };
 
 const IDS: Record<keyof ProfileValues, string> = {
-  name: 'settings-name',
-  city: 'settings-city',
-  bio: 'settings-bio',
+  name: 'profile-name',
+  country: 'profile-country',
+  city: 'profile-city',
+  bio: 'profile-bio',
 };
 
-export type ProfileSectionProps = { user: Me };
+export type ProfileFormProps = {
+  user: Me;
+  /** Appelé après l'enregistrement, pour revenir au profil. */
+  onSaved: () => void;
+};
 
-/** Profil public (SET-1) et visibilité pour les recruteurs (REP-5). */
-export function ProfileSection({ user }: ProfileSectionProps) {
+/** Tout ce que les autres membres voient (SET-1), et la visibilité pour les recruteurs (REP-5). */
+export function ProfileForm({ user, onSaved }: ProfileFormProps) {
   const { t } = useTranslation();
   const { updateMe } = useSession();
-  const toast = useToast();
-  const initial = { name: user.displayName, city: user.city ?? '', bio: user.bio ?? '' };
-  const form = useValidatedForm<ProfileValues>(initial, VALIDATORS);
-  // Le contrat nomme le champ du nom displayName.
-  const submitError = useSubmitError(({ displayName, ...rest }) =>
-    form.setServerErrors({ ...rest, name: displayName }),
+  const form = useValidatedForm<ProfileValues>(
+    {
+      name: user.displayName,
+      country: user.countryCode ?? '',
+      city: user.city ?? '',
+      bio: user.bio ?? '',
+    },
+    VALIDATORS,
+  );
+  // Le contrat nomme les champs displayName et countryCode.
+  const submitError = useSubmitError(({ displayName, countryCode, ...rest }) =>
+    form.setServerErrors({ ...rest, name: displayName, country: countryCode }),
   );
   const [skills, setSkills] = useState(user.skills ?? []);
   const [recruiterVisible, setRecruiterVisible] = useState(user.visibleToRecruiters);
   const [busy, setBusy] = useState(false);
   const { values, errors } = form;
-
-  const reset = () => {
-    form.reset(initial);
-    setSkills(user.skills ?? []);
-    setRecruiterVisible(user.visibleToRecruiters);
-    submitError.clear();
-  };
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -66,32 +72,33 @@ export function ProfileSection({ user }: ProfileSectionProps) {
     try {
       await updateMe({
         displayName: values.name.trim(),
+        countryCode: values.country || undefined,
         city: values.city.trim() || null,
         bio: values.bio.trim() || null,
         skills,
         visibleToRecruiters: recruiterVisible,
       });
-      toast(t('settings.saved'));
+      onSaved();
     } catch (error) {
       submitError.report(error);
-    } finally {
       setBusy(false);
     }
   };
 
   const nameError = fieldErrorText(t, errors.name);
+  const countryError = fieldErrorText(t, errors.country);
   const bioError = fieldErrorText(t, errors.bio);
 
   return (
-    <section className={styles.section} aria-labelledby="settings-profile-title">
-      <h2 id="settings-profile-title" className={styles.title}>
-        {t('settings.profile.title')}
-      </h2>
-      <p className={styles.intro}>{t('settings.profile.intro')}</p>
+    <>
+      <section className={styles.block} aria-labelledby="profile-photo-title">
+        <h2 id="profile-photo-title" className={styles.subTitle}>
+          {t('settings.photo.title')}
+        </h2>
+        <PhotoField user={user} />
+      </section>
 
-      <PhotoField user={user} />
-
-      <form onSubmit={onSubmit} noValidate>
+      <form onSubmit={onSubmit} noValidate className={styles.block}>
         {submitError.message && (
           <div ref={submitError.alertRef} role="alert" tabIndex={-1} className={styles.alert}>
             {submitError.message}
@@ -109,15 +116,28 @@ export function ProfileSection({ user }: ProfileSectionProps) {
             aria-describedby={describedBy(IDS.name, false, nameError)}
           />
         </Field>
-        <Field id={IDS.city} label={t('settings.profile.city')}>
-          <input
-            id={IDS.city}
-            autoComplete="address-level2"
-            maxLength={60}
-            value={values.city}
-            onChange={(e) => form.setValue('city', e.target.value)}
-          />
-        </Field>
+        <div className={styles.row}>
+          <Field id={IDS.country} label={t('auth.fields.country')} error={countryError}>
+            <CountrySelect
+              id={IDS.country}
+              value={values.country}
+              onChange={(value) => form.setValue('country', value)}
+              emptyLabel={t('auth.fields.countryPlaceholder')}
+              otherLabel={t('auth.fields.countryOther')}
+              invalid={!!countryError}
+              describedBy={describedBy(IDS.country, false, countryError)}
+            />
+          </Field>
+          <Field id={IDS.city} label={t('settings.profile.city')}>
+            <input
+              id={IDS.city}
+              autoComplete="address-level2"
+              maxLength={60}
+              value={values.city}
+              onChange={(e) => form.setValue('city', e.target.value)}
+            />
+          </Field>
+        </div>
         <Field
           id={IDS.bio}
           label={t('settings.profile.bio')}
@@ -140,7 +160,7 @@ export function ProfileSection({ user }: ProfileSectionProps) {
           />
         </Field>
 
-        <h3 className={styles.subTitle}>{t('settings.profile.skills')}</h3>
+        <h2 className={styles.subTitle}>{t('settings.profile.skills')}</h2>
         <SkillPicker value={skills} onChange={setSkills} />
 
         <label className={styles.check}>
@@ -156,14 +176,14 @@ export function ProfileSection({ user }: ProfileSectionProps) {
         </label>
 
         <div className={styles.saveBar}>
-          <Button variant="ghost" onClick={reset} disabled={busy}>
+          <Link to={`/users/${user.username}`} className={buttonClass({ variant: 'ghost' })}>
             {t('settings.cancel')}
-          </Button>
+          </Link>
           <Button type="submit" variant="primary" busy={busy}>
             {busy ? t('settings.saving') : t('settings.save')}
           </Button>
         </div>
       </form>
-    </section>
+    </>
   );
 }

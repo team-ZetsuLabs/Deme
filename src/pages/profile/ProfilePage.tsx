@@ -84,9 +84,20 @@ function ProfileView({ username }: { username: string }) {
         </div>
         <div className={styles.headActions}>
           {isMe ? (
-            <Link to="/settings" className={buttonClass({ variant: 'secondary' })}>
-              {t('profile.edit')}
-            </Link>
+            <div className={styles.ownActions}>
+              <Link to="/profile/edit" className={buttonClass({ variant: 'secondary' })}>
+                {t('profile.edit')}
+              </Link>
+              {/* Accès aux paramètres depuis le profil, utile sur mobile (onglet Compte). */}
+              <Link
+                to="/settings"
+                className={buttonClass({ variant: 'ghost' })}
+                aria-label={t('nav.settings')}
+                title={t('nav.settings')}
+              >
+                <Icon name="gear" size={18} />
+              </Link>
+            </div>
           ) : (
             <ReportButton targetType="PROFILE" targetId={p.username} authorUsername={p.username} />
           )}
