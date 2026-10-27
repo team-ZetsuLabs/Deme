@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSession } from '../auth/useSession';
+import { isRecruiter } from './recruiter';
 import styles from './JobsSubnav.module.css';
 
-/** Offres et Mes candidatures, en tête des deux pages de l'espace Emploi (membres connectés). */
+/** Offres, Mes candidatures et, pour un recruteur, Mes offres : en tête de l'espace Emploi. */
 export function JobsSubnav() {
   const { t } = useTranslation();
   const { user } = useSession();
@@ -16,6 +17,11 @@ export function JobsSubnav() {
       <NavLink to="/applications" className={styles.link}>
         {t('nav.applications')}
       </NavLink>
+      {isRecruiter(user) && (
+        <NavLink to="/jobs/mine" className={styles.link}>
+          {t('jobs.subnav.mine')}
+        </NavLink>
+      )}
     </nav>
   );
 }

@@ -123,6 +123,14 @@
   color: var(--text-2);
 }
 
+.ownerStatus {
+  margin-bottom: var(--s4);
+}
+
+.received {
+  margin-top: var(--s6);
+}
+
 .boxLink {
   display: block;
   margin-top: var(--s3);

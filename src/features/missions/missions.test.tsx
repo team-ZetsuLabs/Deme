@@ -132,7 +132,9 @@ describe('MissionPage (JOB-5)', () => {
 
     expect(await screen.findByText('1 proposition reçue')).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Se proposer' })).toBeNull();
-    fireEvent.click(await screen.findByRole('button', { name: 'Retenir' }));
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'Retenir la proposition (Moussa Traoré)' }),
+    );
     await waitFor(() => expect(decide).toHaveBeenCalledWith(301, 'SHORTLISTED'));
     expect(await screen.findByText('Retenue')).toBeTruthy();
   });

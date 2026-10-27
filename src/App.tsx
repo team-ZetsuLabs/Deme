@@ -33,6 +33,7 @@ const JobsPage = lazy(() => import('./pages/jobs/JobsPage'));
 const JobPage = lazy(() => import('./pages/job/JobPage'));
 const NewJobPage = lazy(() => import('./pages/job-new/NewJobPage'));
 const ApplicationsPage = lazy(() => import('./pages/applications/ApplicationsPage'));
+const MyJobsPage = lazy(() => import('./pages/my-jobs/MyJobsPage'));
 const MissionsPage = lazy(() => import('./pages/missions/MissionsPage'));
 const MissionPage = lazy(() => import('./pages/mission/MissionPage'));
 const NewMissionPage = lazy(() => import('./pages/mission-new/NewMissionPage'));
@@ -108,6 +109,14 @@ export function App() {
                           element={
                             <RequireAuth>
                               <NewJobPage />
+                            </RequireAuth>
+                          }
+                        />
+                        <Route
+                          path="jobs/mine"
+                          element={
+                            <RequireAuth>
+                              <MyJobsPage />
                             </RequireAuth>
                           }
                         />

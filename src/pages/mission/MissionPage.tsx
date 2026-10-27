@@ -15,7 +15,8 @@ import { MissionFacts } from '../../features/missions/MissionFacts';
 import { missionsApi } from '../../features/missions/missionsApi';
 import { formatMoney } from '../../features/missions/money';
 import { OfferDialog } from '../../features/missions/OfferDialog';
-import { OffersList } from '../../features/missions/OffersList';
+import { CloseListingButton } from '../../features/jobs/CloseListingButton';
+import { ReceivedApplications } from '../../features/jobs/ReceivedApplications';
 import { ReportButton } from '../../features/moderation/ReportButton';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
@@ -94,7 +95,14 @@ function MissionView({ id }: { id: number }) {
             <h2 id="mission-offers-title" className={styles.sectionTitle}>
               {t('missions.offers.title', { count: m.applicationCount })}
             </h2>
-            <OffersList missionId={m.id} />
+            <ReceivedApplications
+              labels="missions.offers"
+              load={(page) => missionsApi.applications(m.id, page)}
+              // Retenir une proposition passe la mission « en cours » : on relit son statut.
+              onDecided={(application) => {
+                if (application.status === 'SHORTLISTED') query.reload();
+              }}
+            />
           </section>
         )}
 
@@ -113,7 +121,19 @@ function MissionView({ id }: { id: number }) {
             {t('missions.offerCount', { count: m.applicationCount })}
           </p>
           {isAuthor ? (
-            <p className={styles.boxText}>{t('missions.yours')}</p>
+            <>
+              <p className={styles.boxText}>{t('missions.yours')}</p>
+              {m.status !== 'CLOSED' && (
+                <CloseListingButton
+                  labels="missions.close"
+                  onConfirm={async () => {
+                    const closed = await missionsApi.close(m.id);
+                    query.setData((current) => ({ ...current, status: closed.status }));
+                    toast(t('missions.close.done'));
+                  }}
+                />
+              )}
+            </>
           ) : m.myApplication ? (
             <>
               <p className={styles.boxText}>{t('missions.offer.sentText')}</p>

@@ -7,6 +7,7 @@ import type { Me } from '../../api/types';
 import { safeUrl } from '../../components/safeUrl';
 import { ToastProvider } from '../../components/ToastProvider';
 import JobPage from '../../pages/job/JobPage';
+import NewJobPage from '../../pages/job-new/NewJobPage';
 import { authApi } from '../auth/authApi';
 import { SessionProvider } from '../auth/SessionProvider';
 import { JobForm } from './JobForm';
@@ -91,6 +92,56 @@ describe('JobPage (JOB-2, JOB-3)', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Envoyer ma candidature' }));
     await waitFor(() => expect(apply).toHaveBeenCalledWith(31, { message: text, cv: null }));
     expect(await screen.findByRole('heading', { name: 'Candidature envoyée' })).toBeTruthy();
+  });
+});
+
+describe('JobPage, côté recruteur (JOB-7)', () => {
+  // fatou_sow a publié l'offre 31 dans les exemples du contrat.
+  const recruiter: Me = demoMe({ id: 8, username: 'fatou_sow', role: 'RECRUITER' });
+  const renderJob = () =>
+    wrap(
+      <Routes>
+        <Route path="/jobs/:id" element={<JobPage />} />
+      </Routes>,
+      '/jobs/31',
+    );
+
+  it('montre les candidatures reçues et permet de retenir un candidat', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(recruiter);
+    const decide = vi.spyOn(jobsApi, 'decide');
+    renderJob();
+
+    expect(await screen.findByRole('heading', { name: 'Votre offre' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Postuler' })).toBeNull();
+    expect(await screen.findByRole('link', { name: 'Aminata Diallo' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Voir le CV' }).getAttribute('href')).toBe(
+      '/api/v1/applications/207/cv',
+    );
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Retenir la candidature (Aminata Diallo)' }),
+    );
+    await waitFor(() => expect(decide).toHaveBeenCalledWith(207, 'SHORTLISTED'));
+  });
+
+  it("clôture l'offre après confirmation", async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(recruiter);
+    const close = vi.spyOn(jobsApi, 'close');
+    renderJob();
+
+    fireEvent.click(await screen.findByRole('button', { name: "Clôturer l'offre" }));
+    expect(close).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'Clôturer' }));
+    await waitFor(() => expect(close).toHaveBeenCalledWith(31));
+  });
+});
+
+describe('NewJobPage (JOB-4)', () => {
+  it('explique à un membre sans rôle recruteur pourquoi il ne peut pas publier', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(member);
+    wrap(<NewJobPage />);
+    expect(await screen.findByText(/réservé aux comptes recruteurs/)).toBeTruthy();
+    expect(screen.queryByLabelText(/^Intitulé du poste/)).toBeNull();
   });
 });
 

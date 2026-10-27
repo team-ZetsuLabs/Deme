@@ -1032,11 +1032,14 @@
         "website": "Entrez une adresse qui commence par https://",
         "technologies": "Indiquez au moins une technologie.",
         "description": "Décrivez le poste en 100 caractères au moins."
-      }
+      },
+      "recruiterOnly": "Publier une offre est réservé aux comptes recruteurs. Écrivez à l'équipe Zetsu pour faire vérifier votre entreprise.",
+      "backToJobs": "Voir les offres"
     },
     "subnav": {
       "label": "Emploi",
-      "offers": "Offres"
+      "offers": "Offres",
+      "mine": "Mes offres"
     },
     "jobStatus": {
       "PENDING": "En attente",
@@ -1046,7 +1049,35 @@
     },
     "rejectedNotice": "L'équipe Zetsu n'a pas validé cette offre.",
     "rejectedNoticeReason": "L'équipe Zetsu n'a pas validé cette offre : {{reason}}",
-    "closedNotice": "Cette offre est clôturée : elle n'accepte plus de candidatures."
+    "closedNotice": "Cette offre est clôturée : elle n'accepte plus de candidatures.",
+    "owner": {
+      "title": "Votre offre",
+      "applications_one": "{{count}} candidature reçue.",
+      "applications_other": "{{count}} candidatures reçues.",
+      "all": "Toutes mes offres"
+    },
+    "received": {
+      "title_one": "{{count}} candidature reçue",
+      "title_other": "{{count}} candidatures reçues",
+      "empty": "Aucune candidature pour le moment.",
+      "cv": "Voir le CV",
+      "noCv": "Pas de CV joint",
+      "mockCv": "En mode mock, les CV ne sont pas disponibles.",
+      "shortlist": "Retenir",
+      "reject": "Refuser",
+      "shortlistLabel": "Retenir la candidature ({{name}})",
+      "rejectLabel": "Refuser la candidature ({{name}})",
+      "shortlisted": "Candidature retenue. Le candidat est prévenu.",
+      "rejected": "Candidature refusée. Le candidat est prévenu.",
+      "titleNoCount": "Candidatures reçues"
+    },
+    "close": {
+      "button": "Clôturer l'offre",
+      "title": "Clôturer cette offre ?",
+      "text": "Elle disparaît de la liste des offres et n'accepte plus de candidatures. Les candidatures reçues restent consultables.",
+      "confirm": "Clôturer",
+      "done": "Offre clôturée"
+    }
   },
   "applications": {
     "pageTitle": "Mes candidatures",
@@ -1112,7 +1143,9 @@
       "shortlist": "Retenir",
       "reject": "Refuser",
       "shortlisted": "Proposition retenue. Le membre est prévenu.",
-      "rejected": "Proposition refusée. Le membre est prévenu."
+      "rejected": "Proposition refusée. Le membre est prévenu.",
+      "shortlistLabel": "Retenir la proposition ({{name}})",
+      "rejectLabel": "Refuser la proposition ({{name}})"
     },
     "new": {
       "pageTitle": "Publier une mission",
@@ -1137,6 +1170,13 @@
         "delay": "Indiquez un délai entre 1 et 90 jours.",
         "budget": "Indiquez un budget indicatif, en montant positif."
       }
+    },
+    "close": {
+      "button": "Clôturer la mission",
+      "title": "Clôturer cette mission ?",
+      "text": "Elle n'accepte plus de propositions. À faire quand la mission est terminée ou abandonnée.",
+      "confirm": "Clôturer",
+      "done": "Mission clôturée"
     }
   },
   "challenges": {
@@ -1284,5 +1324,10 @@
     "lead": "Ce que les autres membres voient sur votre profil. Les réglages du compte et de l'appli sont dans les Paramètres.",
     "back": "Retour au profil",
     "saved": "Profil mis à jour"
+  },
+  "myJobs": {
+    "pageTitle": "Mes offres",
+    "lead": "Vos offres, qu'elles soient en attente de validation, publiées ou clôturées. Ouvrez-en une pour voir les candidatures.",
+    "empty": "Vous n'avez pas encore publié d'offre."
   }
 }

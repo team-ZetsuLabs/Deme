@@ -34,6 +34,24 @@
   color: var(--text-3);
 }
 
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: var(--s3);
+  list-style: none;
+}
+
+.tags li {
+  padding: 2px var(--s2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  font-family: var(--f-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+
 .message {
   margin-top: var(--s3);
   color: var(--text-2);
@@ -53,6 +71,11 @@
   font-family: var(--f-mono);
   font-size: var(--fs-sm);
   color: var(--text);
+}
+
+.cv {
+  font-size: var(--fs-md);
+  font-weight: 500;
 }
 
 .actions {

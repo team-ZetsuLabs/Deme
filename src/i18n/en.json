@@ -1032,11 +1032,14 @@
         "website": "Enter an address that starts with https://",
         "technologies": "Enter at least one technology.",
         "description": "Describe the position in at least 100 characters."
-      }
+      },
+      "recruiterOnly": "Posting a job is for recruiter accounts. Write to the Zetsu team to have your company verified.",
+      "backToJobs": "See jobs"
     },
     "subnav": {
       "label": "Jobs",
-      "offers": "Job offers"
+      "offers": "Job offers",
+      "mine": "My jobs"
     },
     "jobStatus": {
       "PENDING": "Pending",
@@ -1046,7 +1049,35 @@
     },
     "rejectedNotice": "The Zetsu team did not approve this job.",
     "rejectedNoticeReason": "The Zetsu team did not approve this job: {{reason}}",
-    "closedNotice": "This job is closed: it no longer accepts applications."
+    "closedNotice": "This job is closed: it no longer accepts applications.",
+    "owner": {
+      "title": "Your job",
+      "applications_one": "{{count}} application received.",
+      "applications_other": "{{count}} applications received.",
+      "all": "All my jobs"
+    },
+    "received": {
+      "title_one": "{{count}} application received",
+      "title_other": "{{count}} applications received",
+      "empty": "No application yet.",
+      "cv": "View CV",
+      "noCv": "No CV attached",
+      "mockCv": "In mock mode, CVs are not available.",
+      "shortlist": "Shortlist",
+      "reject": "Decline",
+      "shortlistLabel": "Shortlist the application ({{name}})",
+      "rejectLabel": "Decline the application ({{name}})",
+      "shortlisted": "Application shortlisted. The candidate is notified.",
+      "rejected": "Application declined. The candidate is notified.",
+      "titleNoCount": "Applications received"
+    },
+    "close": {
+      "button": "Close the job",
+      "title": "Close this job?",
+      "text": "It leaves the job list and no longer accepts applications. Applications received stay available.",
+      "confirm": "Close",
+      "done": "Job closed"
+    }
   },
   "applications": {
     "pageTitle": "My applications",
@@ -1112,7 +1143,9 @@
       "shortlist": "Shortlist",
       "reject": "Decline",
       "shortlisted": "Proposal shortlisted. The member is notified.",
-      "rejected": "Proposal declined. The member is notified."
+      "rejected": "Proposal declined. The member is notified.",
+      "shortlistLabel": "Shortlist the proposal ({{name}})",
+      "rejectLabel": "Decline the proposal ({{name}})"
     },
     "new": {
       "pageTitle": "Post a gig",
@@ -1137,6 +1170,13 @@
         "delay": "Enter a timeline between 1 and 90 days.",
         "budget": "Enter an indicative budget, as a positive amount."
       }
+    },
+    "close": {
+      "button": "Close the gig",
+      "title": "Close this gig?",
+      "text": "It no longer accepts proposals. Do it when the gig is done or abandoned.",
+      "confirm": "Close",
+      "done": "Gig closed"
     }
   },
   "challenges": {
@@ -1284,5 +1324,10 @@
     "lead": "What other members see on your profile. Account and app preferences are in Settings.",
     "back": "Back to profile",
     "saved": "Profile updated"
+  },
+  "myJobs": {
+    "pageTitle": "My jobs",
+    "lead": "Your jobs, whether pending review, published or closed. Open one to see its applications.",
+    "empty": "You have not posted a job yet."
   }
 }
