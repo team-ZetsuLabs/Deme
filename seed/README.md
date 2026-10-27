@@ -15,7 +15,9 @@
 - **5 projets** (PRJ-1 à PRJ-6) : 3 qui recrutent, 1 dont l'équipe est complète, 1 clôturé dont le membre a gagné ses 10 points ;
 - **le jury dans deux rôles** : porteur de « Annuaire des développeurs du Sénégal », avec deux demandes en attente sur le même rôle (en accepter une refuse l'autre), et membre de « Tontine Cash », dont il peut alimenter le fil ou qu'il peut quitter.
 
-Les deux scripts sont rejouables : ils ne créent rien deux fois. Ils s'appliquent après les migrations Flyway, donc une fois que le back-end a démarré au moins une fois sur la base, et dans cet ordre : `communautes.sql` puis `projets-badges.sql`. Le second a besoin des migrations V13 (badges) et V14 (projets).
+`photos.sql` donne une photo de profil aux 9 membres de démo, jury compris : des avatars dessinés (`seed/avatars/`, WebP de 2 Ko environ), jamais des photos de vraies personnes. Il ne remplace jamais une photo déjà mise par un membre ou venue de GitHub ou Google.
+
+Les deux premiers scripts sont rejouables : ils ne créent rien deux fois, `photos.sql` non plus. Ils s'appliquent après les migrations Flyway, donc une fois que le back-end a démarré au moins une fois sur la base, et dans cet ordre : `communautes.sql` puis `projets-badges.sql`. Le second a besoin des migrations V13 (badges) et V14 (projets).
 
 ## Lancer
 
@@ -32,6 +34,16 @@ docker compose -f compose.dev.yaml exec -T db psql -U zetsu -d zetsu \
   -v demo_username=aminata_dev -v demo_email="$DEMO_EMAIL" -v demo_password="$DEMO_PASSWORD" \
   < seed/projets-badges.sql
 ```
+
+Pour les photos, on copie d'abord les images dans le dossier des téléversements (`UPLOADS_DIR`, par défaut `data/uploads`), puis on lance le script. Sans la copie, les profils pointent vers des images introuvables.
+
+```sh
+mkdir -p data/uploads/avatars && cp seed/avatars/*.webp data/uploads/avatars/
+docker compose -f compose.dev.yaml exec -T db psql -U zetsu -d zetsu \
+  -v demo_username=aminata_dev < seed/photos.sql
+```
+
+En production, les images vont dans le volume des téléversements du conteneur de l'application, par exemple `docker compose cp seed/avatars/. app:<UPLOADS_DIR>/avatars/`, avant de lancer `photos.sql` sur la base.
 
 Sur une autre base, la même commande avec `psql "$DATABASE_URL"` (forme `postgresql://`, pas `jdbc:`).
 
