@@ -4848,6 +4848,67 @@
         }
       }
     },
+    "/api/v1/questions/similar" : {
+      "get" : {
+        "tags" : [ "questions" ],
+        "summary" : "Questions similaires (QA-8)",
+        "description" : "À appeler pendant la saisie du titre, après une courte pause. Plein texte en français et en anglais ; un titre de moins de 10 caractères renvoie une liste vide. exclude écarte la question en cours de modification.",
+        "operationId" : "questionSimilar",
+        "parameters" : [ {
+          "name" : "title",
+          "in" : "query",
+          "description" : "Titre en cours de saisie",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "exclude",
+          "in" : "query",
+          "description" : "Identifiant de la question modifiée",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "De 1 à 10",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 5
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Jusqu'à limit questions, les plus proches d'abord",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/SimilarQuestion"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "INVALID_LIMIT, INVALID_PARAMETER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/notifications" : {
       "get" : {
         "tags" : [ "notifications" ],
@@ -8082,6 +8143,32 @@
           }
         },
         "required" : [ "items", "page", "size", "total" ]
+      },
+      "SimilarQuestion" : {
+        "type" : "object",
+        "description" : "Question proche du titre en cours de saisie (QA-8), version légère",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "answerCount" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "hasAcceptedAnswer" : {
+            "type" : "boolean",
+            "description" : "Vrai si une réponse est acceptée (question résolue)"
+          }
+        },
+        "required" : [ "answerCount", "hasAcceptedAnswer", "id", "score", "title" ]
       },
       "Notification" : {
         "type" : "object",

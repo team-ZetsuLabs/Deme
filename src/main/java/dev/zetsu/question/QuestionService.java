@@ -9,6 +9,7 @@ import dev.zetsu.question.QuestionDtos.QuestionContext;
 import dev.zetsu.question.QuestionDtos.QuestionDetail;
 import dev.zetsu.question.QuestionDtos.QuestionRequest;
 import dev.zetsu.question.QuestionDtos.QuestionSummary;
+import dev.zetsu.question.QuestionDtos.SimilarQuestion;
 import dev.zetsu.reputation.ReputationReason;
 import dev.zetsu.reputation.ReputationService;
 import dev.zetsu.tag.Tag;
@@ -34,6 +35,8 @@ import java.util.stream.Collectors;
 public class QuestionService {
 
     private static final int EXCERPT_LENGTH = 200;
+    private static final int SIMILAR_MIN_TITLE = 10;
+    private static final int SIMILAR_MAX = 10;
 
     private final QuestionRepository questions;
     private final QuestionSearch search;
@@ -67,6 +70,18 @@ public class QuestionService {
                 .map(this::toSummary)
                 .toList();
         return new PageResponse<>(items, page, size, result.total());
+    }
+
+    /** Questions similaires (QA-8). Un titre trop court pour être parlant ne renvoie rien, sans erreur. */
+    public List<SimilarQuestion> similar(String title, Long excludeId, int limit) {
+        String text = title == null ? "" : title.strip();
+        if (text.length() < SIMILAR_MIN_TITLE) {
+            return List.of();
+        }
+        if (limit < 1 || limit > SIMILAR_MAX) {
+            throw ApiException.badRequest("INVALID_LIMIT", "limit doit être compris entre 1 et " + SIMILAR_MAX);
+        }
+        return search.similar(text.length() > 150 ? text.substring(0, 150) : text, excludeId, limit);
     }
 
     @Transactional(readOnly = true)

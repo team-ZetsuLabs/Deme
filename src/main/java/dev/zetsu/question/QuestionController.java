@@ -9,6 +9,7 @@ import dev.zetsu.common.RateLimiter;
 import dev.zetsu.question.QuestionDtos.QuestionDetail;
 import dev.zetsu.question.QuestionDtos.QuestionRequest;
 import dev.zetsu.question.QuestionDtos.QuestionSummary;
+import dev.zetsu.question.QuestionDtos.SimilarQuestion;
 import dev.zetsu.tag.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/questions")
@@ -70,6 +73,21 @@ public class QuestionController {
         var criteria = new QuestionSearch.Criteria(text, tag == null ? null : TagService.normalize(tag),
                 country, operator, network, author, community, status, sort);
         return questionService.list(criteria, page, size);
+    }
+
+    @GetMapping("/similar")
+    @Operation(summary = "Questions similaires (QA-8)",
+            description = "À appeler pendant la saisie du titre, après une courte pause. Plein texte en français et en "
+                    + "anglais ; un titre de moins de 10 caractères renvoie une liste vide. exclude écarte la question "
+                    + "en cours de modification.")
+    @ApiResponse(responseCode = "200", description = "Jusqu'à limit questions, les plus proches d'abord")
+    @ApiResponse(responseCode = "400", description = "INVALID_LIMIT, INVALID_PARAMETER",
+            content = @Content(schema = @Schema(implementation = ApiError.class)))
+    public List<SimilarQuestion> similar(
+            @Parameter(description = "Titre en cours de saisie") @RequestParam String title,
+            @Parameter(description = "Identifiant de la question modifiée") @RequestParam(required = false) Long exclude,
+            @Parameter(description = "De 1 à 10") @RequestParam(defaultValue = "5") int limit) {
+        return questionService.similar(title, exclude, limit);
     }
 
     @GetMapping("/{id}")
