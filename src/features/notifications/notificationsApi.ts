@@ -1,6 +1,7 @@
 import { api } from '../../api/api';
 import type {
   AppNotification,
+  NotificationType,
   MarkReadRequest,
   NotificationTarget,
   Page,
@@ -19,8 +20,16 @@ export const notificationsApi = {
   markRead: (body: MarkReadRequest) => api.post<UnreadCount>('/notifications/read', body),
 };
 
+/** Notifications de modération : elles mènent à mes contenus signalés, où l'on peut contester. */
+const MODERATION_TYPES: NotificationType[] = [
+  'CONTENT_HIDDEN',
+  'CONTENT_RESTORED',
+  'ACCOUNT_WARNED',
+];
+
 /** Page de destination d'une notification. */
-export function notificationLink(target: NotificationTarget): string {
+export function notificationLink(target: NotificationTarget, type?: NotificationType): string {
+  if (type && MODERATION_TYPES.includes(type)) return '/moderation';
   const { id } = target;
   switch (target.type) {
     case 'QUESTION':

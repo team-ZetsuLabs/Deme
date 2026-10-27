@@ -5,6 +5,7 @@ import { AccountSection } from '../../features/settings/AccountSection';
 import { AppearanceSection } from '../../features/settings/AppearanceSection';
 import { ConnectedAccounts } from '../../features/settings/ConnectedAccounts';
 import { DeleteAccountSection } from '../../features/settings/DeleteAccountSection';
+import { ModerationSection } from '../../features/settings/ModerationSection';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import styles from './SettingsPage.module.css';
@@ -13,6 +14,7 @@ const SECTIONS = [
   { id: 'account', labelKey: 'settings.account.title' },
   { id: 'connections', labelKey: 'settings.accounts.title' },
   { id: 'appearance', labelKey: 'settings.appearance.title' },
+  { id: 'moderation', labelKey: 'settings.moderation.title' },
   { id: 'delete', labelKey: 'settings.delete.title' },
 ] as const;
 
@@ -47,6 +49,7 @@ export default function SettingsPage() {
             onChange={(next) => connections.setData(() => next)}
           />
           <AppearanceSection />
+          <ModerationSection />
           <DeleteAccountSection />
         </div>
       </div>

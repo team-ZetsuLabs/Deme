@@ -49,7 +49,7 @@ export function NotificationItem({ notification: n, onOpen }: NotificationItemPr
       <div className={styles.body}>
         <p>
           {text} :{' '}
-          <Link to={notificationLink(n.target)} onClick={onOpen}>
+          <Link to={notificationLink(n.target, n.type)} onClick={onOpen}>
             {n.target.title}
           </Link>
         </p>

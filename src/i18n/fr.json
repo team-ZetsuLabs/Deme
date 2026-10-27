@@ -490,7 +490,9 @@
     "messageLength": "Expliquez en {{min}} caractères au moins.",
     "submit": "Envoyer la contestation",
     "busy": "Envoi en cours",
-    "sent": "Contestation envoyée. Vous serez notifié de la décision."
+    "sent": "Contestation envoyée. Vous serez notifié de la décision.",
+    "byTeam": "L'équipe Zetsu a masqué ce contenu.",
+    "note": "Motif : {{note}}."
   },
   "profile": {
     "pageTitle": "Profil",
@@ -636,6 +638,11 @@
       "setPassword": "Créer un mot de passe",
       "passwordSent": "Lien envoyé à {{email}}",
       "passwordSentShort": "Lien envoyé"
+    },
+    "moderation": {
+      "title": "Modération",
+      "intro": "Vos contenus signalés par des membres, les décisions prises et vos contestations.",
+      "link": "Voir mes contenus signalés"
     }
   },
   "notifications": {
@@ -1329,5 +1336,25 @@
     "pageTitle": "Mes offres",
     "lead": "Vos offres, qu'elles soient en attente de validation, publiées ou clôturées. Ouvrez-en une pour voir les candidatures.",
     "empty": "Vous n'avez pas encore publié d'offre."
+  },
+  "myModeration": {
+    "pageTitle": "Mes contenus signalés",
+    "lead": "Les contenus que des membres ont signalés, et ce qui a été décidé. Vous pouvez contester un masquage une fois, devant l'équipe Zetsu.",
+    "empty": "Aucun de vos contenus n'a été signalé.",
+    "updated": "Mis à jour",
+    "kind": {
+      "QUESTION": "Question",
+      "ANSWER": "Réponse",
+      "JOB": "Offre",
+      "MISSION": "Mission",
+      "USER": "Profil"
+    },
+    "status": {
+      "OPEN": "Signalé, en attente",
+      "DISMISSED": "Signalement écarté",
+      "HIDDEN": "Masqué",
+      "APPEALED": "Contestation en cours",
+      "RESTORED": "Rétabli"
+    }
   }
 }

@@ -32,7 +32,12 @@ export function HiddenNotice({ item, onAppealed }: HiddenNoticeProps) {
   const [busy, setBusy] = useState(false);
   const fieldId = `appeal-${item.caseId}`;
   // Sans décision, le masquage vient des signalements (MOD-2) ; sinon d'un Référent ou de l'équipe.
-  const reason = t(item.decision ? 'hidden.byReferent' : 'hidden.byReports');
+  const by = !item.decision
+    ? t('hidden.byReports')
+    : t(item.decision.byTeam ? 'hidden.byTeam' : 'hidden.byReferent');
+  const reason = item.decision?.note
+    ? `${by} ${t('hidden.note', { note: item.decision.note })}`
+    : by;
   const rejected = item.status === 'HIDDEN' && !item.canAppeal;
 
   const close = () => {

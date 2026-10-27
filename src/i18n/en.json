@@ -490,7 +490,9 @@
     "messageLength": "Please write at least {{min}} characters.",
     "submit": "Send the appeal",
     "busy": "Sending",
-    "sent": "Appeal sent. You will be notified of the decision."
+    "sent": "Appeal sent. You will be notified of the decision.",
+    "byTeam": "The Zetsu team hid this content.",
+    "note": "Reason: {{note}}."
   },
   "profile": {
     "pageTitle": "Profile",
@@ -636,6 +638,11 @@
       "setPassword": "Create a password",
       "passwordSent": "Link sent to {{email}}",
       "passwordSentShort": "Link sent"
+    },
+    "moderation": {
+      "title": "Moderation",
+      "intro": "Your content reported by members, the decisions taken and your appeals.",
+      "link": "See my reported content"
     }
   },
   "notifications": {
@@ -1329,5 +1336,25 @@
     "pageTitle": "My jobs",
     "lead": "Your jobs, whether pending review, published or closed. Open one to see its applications.",
     "empty": "You have not posted a job yet."
+  },
+  "myModeration": {
+    "pageTitle": "My reported content",
+    "lead": "Content that members reported, and what was decided. You can appeal a hidden post once, to the Zetsu team.",
+    "empty": "None of your content has been reported.",
+    "updated": "Updated",
+    "kind": {
+      "QUESTION": "Question",
+      "ANSWER": "Answer",
+      "JOB": "Job",
+      "MISSION": "Gig",
+      "USER": "Profile"
+    },
+    "status": {
+      "OPEN": "Reported, pending",
+      "DISMISSED": "Report dismissed",
+      "HIDDEN": "Hidden",
+      "APPEALED": "Appeal in progress",
+      "RESTORED": "Restored"
+    }
   }
 }
