@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { ErrorState } from '../../components/ErrorState';
+import { Flag } from '../../components/Flag';
 import { LeaderboardSkeleton } from '../../components/skeleton/LeaderboardSkeleton';
 import { StateMessage } from '../../components/StateMessage';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { countryName } from '../../i18n/countries';
 import { useSession } from '../auth/useSession';
 import { challengesApi } from './challengesApi';
-import { flagOf } from '../../i18n/flag';
 import styles from './Leaderboard.module.css';
 
 export type CountryLeaderboardProps = {
@@ -50,9 +50,7 @@ export function CountryLeaderboard({ challengeId, refreshKey }: CountryLeaderboa
               </td>
               <td>
                 <span className={styles.person}>
-                  <span className={styles.flag} aria-hidden="true">
-                    {flagOf(entry.country)}
-                  </span>
+                  <Flag code={entry.country} width={27} />
                   <span>
                     <b className={styles.countryName}>{name}</b>
                     {mine && ` ${t('challenges.board.yourCountry')}`}

@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ApiError } from '../../api/api';
 import { Avatar } from '../../components/Avatar';
+import { Flag } from '../../components/Flag';
 import { buttonClass } from '../../components/buttonClass';
 import { ErrorState } from '../../components/ErrorState';
 import { Icon } from '../../components/Icon';
@@ -71,7 +72,7 @@ function ProfileView({ username }: { username: string }) {
           <ul className={styles.meta}>
             {place && (
               <li>
-                <Icon name="pin" size={14} />
+                {country ? <Flag code={p.countryCode} width={18} /> : <Icon name="pin" size={14} />}
                 {place}
               </li>
             )}

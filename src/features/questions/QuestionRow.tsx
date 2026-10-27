@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { QuestionSummary } from '../../api/types';
 import { Avatar } from '../../components/Avatar';
+import { Flag } from '../../components/Flag';
 import { RelativeTime } from '../../components/RelativeTime';
 import { Tag } from '../../components/Tag';
+import { countryName } from '../../i18n/countries';
 import { ContextChips } from './ContextChips';
 import styles from './QuestionRow.module.css';
 
@@ -14,7 +16,7 @@ export type QuestionRowProps = {
 };
 
 export function QuestionRow({ question: q, activeTag, onTag }: QuestionRowProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const answersClass = q.hasAcceptedAnswer
     ? `${styles.answers} ${styles.solved}`
     : q.answerCount
@@ -54,6 +56,11 @@ export function QuestionRow({ question: q, activeTag, onTag }: QuestionRowProps)
           <div className={styles.who}>
             <Avatar name={q.author.displayName} photoUrl={q.author.avatarUrl ?? null} size={24} />
             <span className={styles.author}>{q.author.displayName}</span>
+            <Flag
+              code={q.author.countryCode}
+              width={16}
+              label={countryName(q.author.countryCode ?? null, i18n.language)}
+            />
             <RelativeTime iso={q.createdAt} />
           </div>
         </div>

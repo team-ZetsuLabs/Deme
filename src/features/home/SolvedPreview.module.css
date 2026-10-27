@@ -89,3 +89,9 @@
   font-size: var(--fs-md);
   font-weight: 500;
 }
+
+.author {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}

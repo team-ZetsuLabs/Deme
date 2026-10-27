@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { AuthorSummary } from '../../api/types';
 import { Avatar } from '../../components/Avatar';
+import { Flag } from '../../components/Flag';
+import { countryName } from '../../i18n/countries';
 import styles from './AuthorCard.module.css';
 
 export type AuthorCardProps = { author: AuthorSummary; label: ReactNode };
@@ -18,6 +20,10 @@ export function AuthorCard({ author, label }: AuthorCardProps) {
         <Link to={`/users/${author.username}`} className={styles.name}>
           {author.displayName}
         </Link>{' '}
+        <Flag
+          code={author.countryCode}
+          label={countryName(author.countryCode ?? null, i18n.language)}
+        />{' '}
         <span className={styles.rep}>
           {t('question.points', { points: author.reputation.toLocaleString(i18n.language) })}
         </span>

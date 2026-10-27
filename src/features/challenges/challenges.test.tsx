@@ -9,7 +9,7 @@ import ChallengesPage from '../../pages/challenges/ChallengesPage';
 import { authApi } from '../auth/authApi';
 import { SessionProvider } from '../auth/SessionProvider';
 import { challengesApi, validateRepoUrl } from './challengesApi';
-import { flagOf } from '../../i18n/flag';
+import { Flag } from '../../components/Flag';
 import { remainingUntil } from './remaining';
 import { demoMe } from '../../test/fixtures';
 
@@ -99,9 +99,12 @@ describe('ChallengesPage', () => {
 });
 
 describe('classement par pays (CH-5)', () => {
-  it('donne le drapeau à partir du code du pays', () => {
-    expect(flagOf('SN')).toBe('\u{1F1F8}\u{1F1F3}');
-    expect(flagOf('OTHER')).toBe('');
+  it('affiche le drapeau en image, et rien pour « Autre »', () => {
+    render(<Flag code="SN" label="Sénégal" />);
+    expect(screen.getByRole('img', { name: 'Sénégal' }).getAttribute('src')).toBe('/flags/SN.svg');
+    cleanup();
+    const { container } = render(<Flag code="OTHER" />);
+    expect(container.querySelector('img')).toBeNull();
   });
 
   it('bascule du classement des membres à celui des pays', async () => {

@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'theme-init.js'],
+      includeAssets: ['favicon.svg', 'theme-init.js', 'flags/*.svg'],
       manifest: {
         name: 'Zetsu',
         short_name: 'Zetsu',

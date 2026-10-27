@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '../../components/Avatar';
+import { Flag } from '../../components/Flag';
 import { ErrorState } from '../../components/ErrorState';
 import { Icon } from '../../components/Icon';
 import { StateMessage } from '../../components/StateMessage';
@@ -61,7 +62,8 @@ export function SolvedPreview() {
                     <Icon name="check" size={14} />
                     {t('home.solved.answers', { count: q.answerCount })}
                   </span>
-                  <span>
+                  <span className={styles.author}>
+                    <Flag code={q.author.countryCode} width={15} />
                     {q.author.displayName}
                     {countryName(q.author.countryCode ?? null, i18n.language) &&
                       `, ${countryName(q.author.countryCode ?? null, i18n.language)}`}

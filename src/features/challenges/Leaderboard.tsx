@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Avatar } from '../../components/Avatar';
+import { Flag } from '../../components/Flag';
 import { ErrorState } from '../../components/ErrorState';
 import { LeaderboardSkeleton } from '../../components/skeleton/LeaderboardSkeleton';
 import { StateMessage } from '../../components/StateMessage';
@@ -60,7 +61,12 @@ export function Leaderboard({ challengeId, refreshKey }: LeaderboardProps) {
                   <span>
                     <Link to={`/users/${entry.member.username}`}>{entry.member.displayName}</Link>
                     {mine && ` ${t('challenges.board.you')}`}
-                    {place && <small>{place}</small>}
+                    {place && (
+                      <small className={styles.place}>
+                        <Flag code={entry.member.countryCode} width={15} />
+                        {place}
+                      </small>
+                    )}
                   </span>
                 </span>
               </td>

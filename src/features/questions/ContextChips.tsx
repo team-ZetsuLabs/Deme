@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { QuestionContext } from '../../api/types';
-import { Icon } from '../../components/Icon';
+import { Flag } from '../../components/Flag';
 import { countryName } from '../../i18n/countries';
 import styles from './ContextChips.module.css';
 
@@ -11,7 +11,7 @@ export function ContextChips({ context }: ContextChipsProps) {
   const { t, i18n } = useTranslation();
   const country = countryName(context.countryCode ?? null, i18n.language);
   const chips = [
-    country && { key: 'country', label: country, icon: true },
+    country && { key: 'country', label: country, flag: context.countryCode },
     context.mobileMoneyOperator && {
       key: 'operator',
       label: t(`context.operator.${context.mobileMoneyOperator}`),
@@ -21,14 +21,14 @@ export function ContextChips({ context }: ContextChipsProps) {
       label: t(`context.network.${context.networkQuality}`),
     },
     context.techVersion && { key: 'version', label: context.techVersion, mono: true },
-  ].filter(Boolean) as { key: string; label: string; icon?: boolean; mono?: boolean }[];
+  ].filter(Boolean) as { key: string; label: string; flag?: string; mono?: boolean }[];
 
   if (!chips.length) return null;
   return (
     <ul className={styles.chips} aria-label={t('context.label')}>
       {chips.map((chip) => (
         <li key={chip.key} className={chip.mono ? `${styles.chip} ${styles.mono}` : styles.chip}>
-          {chip.icon && <Icon name="pin" size={13} />}
+          {chip.flag && <Flag code={chip.flag} width={15} />}
           {chip.label}
         </li>
       ))}
