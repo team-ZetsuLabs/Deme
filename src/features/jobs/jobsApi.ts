@@ -39,5 +39,7 @@ export const jobsApi = {
     return api.post<MyApplication>(`/jobs/${id}/apply`, form);
   },
   myApplications: (page: number) =>
-    api.get<Page<MyApplication>>('/me/applications', { query: { page, size: JOBS_PAGE_SIZE } }),
+    api.get<Page<MyApplication>>('/users/me/applications', {
+      query: { page, size: JOBS_PAGE_SIZE },
+    }),
 };

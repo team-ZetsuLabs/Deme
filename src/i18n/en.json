@@ -15,7 +15,6 @@
     "profile": "My profile",
     "settings": "Settings",
     "notifications": "Notifications",
-    "myAccount": "My account",
     "applications": "My applications",
     "communities": "Communities",
     "communitiesShort": "Groups"
@@ -976,6 +975,10 @@
         "technologies": "Enter at least one technology.",
         "description": "Describe the position in at least 100 characters."
       }
+    },
+    "subnav": {
+      "label": "Jobs",
+      "offers": "Job offers"
     }
   },
   "applications": {

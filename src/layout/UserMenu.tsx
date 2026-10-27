@@ -5,7 +5,7 @@ import type { Me } from '../api/types';
 import { Avatar } from '../components/Avatar';
 import { Icon } from '../components/Icon';
 import { useSession } from '../features/auth/useSession';
-import { ACCOUNT_LINKS } from './navItems';
+import { USER_MENU_LINKS } from './navItems';
 import styles from './UserMenu.module.css';
 
 export type UserMenuProps = { user: Me };
@@ -68,7 +68,7 @@ export function UserMenu({ user }: UserMenuProps) {
           <b>{user.displayName}</b>
           <span>{t('topbar.points', { points })}</span>
         </div>
-        {ACCOUNT_LINKS.map((item) => (
+        {USER_MENU_LINKS.map((item) => (
           <Link
             key={item.to}
             to={item.to === '/users/me' ? `/users/${user.username}` : item.to}

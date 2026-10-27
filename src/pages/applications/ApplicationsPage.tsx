@@ -8,6 +8,7 @@ import { RelativeTime } from '../../components/RelativeTime';
 import { StateMessage } from '../../components/StateMessage';
 import { ApplicationStatusBadge } from '../../features/jobs/ApplicationStatusBadge';
 import { jobsApi } from '../../features/jobs/jobsApi';
+import { JobsSubnav } from '../../features/jobs/JobsSubnav';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { ListRowsSkeleton } from '../../components/skeleton/ListRowsSkeleton';
@@ -22,6 +23,7 @@ export default function ApplicationsPage() {
 
   return (
     <>
+      <JobsSubnav />
       <h1 className={styles.title}>{t('applications.pageTitle')}</h1>
       <p className={styles.lead}>{t('applications.lead')}</p>
 

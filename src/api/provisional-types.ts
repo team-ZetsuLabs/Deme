@@ -164,7 +164,7 @@ export type JobRequest = {
   description: string; // Markdown
 };
 
-/** Élément de GET /api/v1/me/applications (JOB-7) : candidatures et propositions de mission. */
+/** Élément de GET /api/v1/users/me/applications (JOB-7) : candidatures et propositions de mission. */
 export type MyApplication = {
   id: number;
   targetType: 'JOB' | 'MISSION';

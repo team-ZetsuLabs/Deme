@@ -15,7 +15,6 @@
     "profile": "Mon profil",
     "settings": "Paramètres",
     "notifications": "Notifications",
-    "myAccount": "Mon compte",
     "applications": "Mes candidatures",
     "communities": "Communautés",
     "communitiesShort": "Groupes"
@@ -976,6 +975,10 @@
         "technologies": "Indiquez au moins une technologie.",
         "description": "Décrivez le poste en 100 caractères au moins."
       }
+    },
+    "subnav": {
+      "label": "Emploi",
+      "offers": "Offres"
     }
   },
   "applications": {

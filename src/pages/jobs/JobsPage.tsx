@@ -9,6 +9,7 @@ import { Pagination } from '../../components/Pagination';
 import { Segmented } from '../../components/Segmented';
 import { StateMessage } from '../../components/StateMessage';
 import { JobRow } from '../../features/jobs/JobRow';
+import { JobsSubnav } from '../../features/jobs/JobsSubnav';
 import { jobsApi, type JobTypeFilter } from '../../features/jobs/jobsApi';
 import { useJobFilters } from '../../features/jobs/useJobFilters';
 import { useApiQuery } from '../../hooks/useApiQuery';
@@ -33,6 +34,7 @@ export default function JobsPage() {
 
   return (
     <>
+      <JobsSubnav />
       <div className={styles.head}>
         <div>
           <h1 className={styles.title}>{t('jobs.title')}</h1>
