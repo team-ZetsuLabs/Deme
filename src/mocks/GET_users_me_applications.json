@@ -1,37 +1,40 @@
 {
   "items": [
     {
-      "id": 87,
-      "targetType": "JOB",
-      "targetId": 2,
-      "title": "Développeur mobile Flutter",
-      "organisation": "AgriLien",
+      "id": 207,
+      "target": {
+        "type": "JOB",
+        "id": 31,
+        "title": "Développeur back-end Java, paiements mobiles",
+        "companyName": "Sahel Pay"
+      },
       "status": "SHORTLISTED",
-      "sentAt": "2026-10-10T11:00:00Z",
-      "updatedAt": "2026-10-12T16:30:00Z"
+      "message": "Je construis des intégrations Orange Money depuis deux ans chez un agrégateur à Thiès, dont la réconciliation des webhooks en double.",
+      "hasCv": true,
+      "proposedBudget": null,
+      "createdAt": "2026-10-23T10:15:00Z",
+      "updatedAt": "2026-10-23T10:05:00Z"
     },
     {
-      "id": 86,
-      "targetType": "MISSION",
-      "targetId": 3,
-      "title": "Revue de code d’une API Django avant mise en production",
-      "organisation": "Grace Njeri",
-      "status": "VIEWED",
-      "sentAt": "2026-10-14T09:20:00Z",
-      "updatedAt": "2026-10-15T08:00:00Z"
-    },
-    {
-      "id": 85,
-      "targetType": "JOB",
-      "targetId": 3,
-      "title": "Ingénieur DevOps",
-      "organisation": "Teranga Cloud",
-      "status": "REJECTED",
-      "sentAt": "2026-10-02T10:00:00Z",
-      "updatedAt": "2026-10-08T15:00:00Z"
+      "id": 211,
+      "target": {
+        "type": "MISSION",
+        "id": 14,
+        "title": "Brancher Wave sur ma boutique WooCommerce",
+        "companyName": null
+      },
+      "status": "SENT",
+      "message": "J'ai intégré Wave et Orange Money pour deux boutiques à Abidjan, je peux livrer en 3 jours avec la gestion du paiement confirmé après fermeture de la page.",
+      "hasCv": false,
+      "proposedBudget": {
+        "amount": 70000,
+        "currency": "XOF"
+      },
+      "createdAt": "2026-10-23T09:00:00Z",
+      "updatedAt": "2026-10-23T09:00:00Z"
     }
   ],
   "page": 0,
   "size": 20,
-  "total": 3
+  "total": 2
 }

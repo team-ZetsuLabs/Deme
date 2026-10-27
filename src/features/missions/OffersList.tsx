@@ -1,34 +1,39 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { MissionOffer } from '../../api/types';
+import type { ReceivedApplication } from '../../api/types';
 import { errorMessage } from '../../api/errorMessage';
 import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
+import { ErrorState } from '../../components/ErrorState';
 import { RelativeTime } from '../../components/RelativeTime';
+import { ListRowsSkeleton } from '../../components/skeleton/ListRowsSkeleton';
 import { StateMessage } from '../../components/StateMessage';
 import { useToast } from '../../components/useToast';
+import { useApiQuery } from '../../hooks/useApiQuery';
 import { ApplicationStatusBadge } from '../jobs/ApplicationStatusBadge';
+import { jobsApi } from '../jobs/jobsApi';
 import { missionsApi } from './missionsApi';
 import { formatMoney } from './money';
 import styles from './OffersList.module.css';
 
-export type OffersListProps = {
-  missionId: number;
-  offers: MissionOffer[];
-  onChange: (offer: MissionOffer) => void;
-};
+export type OffersListProps = { missionId: number };
 
 /** Propositions reçues, vues par l'auteur de la mission : retenir ou refuser (JOB-7). */
-export function OffersList({ missionId, offers, onChange }: OffersListProps) {
+export function OffersList({ missionId }: OffersListProps) {
   const { t, i18n } = useTranslation();
   const toast = useToast();
   const [pending, setPending] = useState<number | null>(null);
+  const query = useApiQuery(() => missionsApi.applications(missionId, 0), [missionId]);
 
-  const decide = async (offer: MissionOffer, status: 'SHORTLISTED' | 'REJECTED') => {
+  const decide = async (offer: ReceivedApplication, status: 'SHORTLISTED' | 'REJECTED') => {
     setPending(offer.id);
     try {
-      onChange(await missionsApi.decide(missionId, offer.id, { status }));
+      const updated = await jobsApi.decide(offer.id, status);
+      query.setData((current) => ({
+        ...current,
+        items: current.items.map((o) => (o.id === updated.id ? updated : o)),
+      }));
       toast(t(`missions.offers.${status === 'SHORTLISTED' ? 'shortlisted' : 'rejected'}`));
     } catch (error) {
       toast(errorMessage(t, error));
@@ -37,6 +42,9 @@ export function OffersList({ missionId, offers, onChange }: OffersListProps) {
     }
   };
 
+  if (query.loading) return <ListRowsSkeleton count={2} />;
+  if (query.error || !query.data) return <ErrorState error={query.error} onRetry={query.reload} />;
+  const offers = query.data.items;
   if (!offers.length) return <StateMessage>{t('missions.offers.empty')}</StateMessage>;
 
   return (
@@ -46,12 +54,16 @@ export function OffersList({ missionId, offers, onChange }: OffersListProps) {
         return (
           <li key={o.id} className={styles.item}>
             <div className={styles.head}>
-              <Avatar name={o.member.displayName} photoUrl={o.member.avatarUrl ?? null} size={36} />
+              <Avatar
+                name={o.candidate.displayName}
+                photoUrl={o.candidate.avatarUrl ?? null}
+                size={36}
+              />
               <div className={styles.who}>
-                <Link to={`/users/${o.member.username}`}>{o.member.displayName}</Link>
+                <Link to={`/users/${o.candidate.username}`}>{o.candidate.displayName}</Link>
                 <small>
                   {t('question.points', {
-                    points: o.member.reputation.toLocaleString(i18n.language),
+                    points: o.candidate.reputation.toLocaleString(i18n.language),
                   })}
                   <span aria-hidden="true"> · </span>
                   <RelativeTime iso={o.createdAt} />
@@ -62,12 +74,9 @@ export function OffersList({ missionId, offers, onChange }: OffersListProps) {
             <p className={styles.message}>{o.message}</p>
             <div className={styles.foot}>
               <span className={styles.terms}>
-                {[
-                  o.price && formatMoney(o.price, i18n.language),
-                  o.delayDays && t('missions.delay', { count: o.delayDays }),
-                ]
-                  .filter(Boolean)
-                  .join(', ') || t('missions.offers.noTerms')}
+                {o.proposedBudget
+                  ? formatMoney(o.proposedBudget, i18n.language)
+                  : t('missions.offers.noTerms')}
               </span>
               {!decided && (
                 <div className={styles.actions}>

@@ -12,5 +12,7 @@
   "role": "MEMBER",
   "reputation": 342,
   "level": "MEMBER",
+  "technologies": ["java", "spring-boot", "postgresql"],
+  "onboardingCompleted": true,
   "createdAt": "2026-09-14T08:21:00Z"
 }

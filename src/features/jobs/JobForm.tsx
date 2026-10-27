@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ContractType, JobDetail } from '../../api/types';
+import type { JobDetail, JobType } from '../../api/types';
 import { CountrySelect } from '../../components/CountrySelect';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
@@ -9,7 +9,7 @@ import { fieldErrorText } from '../../hooks/fieldErrorText';
 import { useSubmitError } from '../../hooks/useSubmitError';
 import { useValidatedForm, type Validators } from '../../hooks/useValidatedForm';
 import { parseTags } from '../questions/validation';
-import { jobsApi } from './jobsApi';
+import { JOB_TYPES, jobsApi } from './jobsApi';
 import {
   validateCompany,
   validateDescription,
@@ -42,8 +42,6 @@ const IDS: Record<keyof JobValues, string> = {
   description: 'job-description',
 };
 
-const CONTRACTS: ContractType[] = ['FULL_TIME', 'CONTRACT', 'INTERNSHIP'];
-
 export type JobFormProps = { onCreated: (job: JobDetail) => void };
 
 /** Publication d'une offre par une entreprise (JOB-4), « En attente » jusqu'à validation. */
@@ -54,12 +52,10 @@ export function JobForm({ onCreated }: JobFormProps) {
     VALIDATORS,
   );
   const submitError = useSubmitError(form.setServerErrors);
-  const [contractType, setContractType] = useState<ContractType>('FULL_TIME');
-  const [remote, setRemote] = useState(false);
+  const [jobType, setJobType] = useState<JobType>('PERMANENT');
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
   const [salary, setSalary] = useState('');
-  const [experience, setExperience] = useState('');
   const [busy, setBusy] = useState(false);
   const { values, errors } = form;
 
@@ -75,14 +71,13 @@ export function JobForm({ onCreated }: JobFormProps) {
     try {
       const job = await jobsApi.create({
         title: values.title.trim(),
-        company: { name: values.company.trim(), website: values.website.trim() || null },
+        companyName: values.company.trim(),
+        companyWebsite: values.website.trim() || null,
         city: city.trim() || null,
-        country: country || null,
-        contractType,
-        remote,
+        countryCode: country || null,
+        type: jobType,
         technologies: parseTags(values.technologies),
-        salary: salary.trim() || null,
-        experience: experience.trim() || null,
+        compensation: salary.trim() || null,
         description: values.description.trim(),
       });
       onCreated(job);
@@ -141,21 +136,17 @@ export function JobForm({ onCreated }: JobFormProps) {
       <fieldset className={styles.fieldset}>
         <legend className={styles.legend}>{t('jobs.new.contract')}</legend>
         <div className={styles.radios}>
-          {CONTRACTS.map((value) => (
+          {JOB_TYPES.map((value) => (
             <label key={value} className={styles.radio}>
               <input
                 type="radio"
                 name="job-contract"
-                checked={contractType === value}
-                onChange={() => setContractType(value)}
+                checked={jobType === value}
+                onChange={() => setJobType(value)}
               />
               {t(`jobs.contract.${value}`)}
             </label>
           ))}
-          <label className={styles.radio}>
-            <input type="checkbox" checked={remote} onChange={(e) => setRemote(e.target.checked)} />
-            {t('jobs.new.remote')}
-          </label>
         </div>
       </fieldset>
 
@@ -205,33 +196,15 @@ export function JobForm({ onCreated }: JobFormProps) {
         />
       </Field>
 
-      <div className={styles.grid}>
-        <Field id="job-salary" label={t('jobs.new.salary')} hint={t('jobs.new.salaryHint')}>
-          <input
-            id="job-salary"
-            maxLength={80}
-            value={salary}
-            onChange={(e) => setSalary(e.target.value)}
-            aria-describedby="job-salary-hint"
-          />
-        </Field>
-        <Field
-          id="job-experience"
-          label={
-            <>
-              {t('jobs.new.experience')} {optional}
-            </>
-          }
-        >
-          <input
-            id="job-experience"
-            maxLength={60}
-            placeholder={t('jobs.new.experiencePlaceholder')}
-            value={experience}
-            onChange={(e) => setExperience(e.target.value)}
-          />
-        </Field>
-      </div>
+      <Field id="job-salary" label={t('jobs.new.salary')} hint={t('jobs.new.salaryHint')}>
+        <input
+          id="job-salary"
+          maxLength={80}
+          value={salary}
+          onChange={(e) => setSalary(e.target.value)}
+          aria-describedby="job-salary-hint"
+        />
+      </Field>
 
       <Field
         id={IDS.description}

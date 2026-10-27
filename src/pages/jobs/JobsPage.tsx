@@ -10,14 +10,14 @@ import { Segmented } from '../../components/Segmented';
 import { StateMessage } from '../../components/StateMessage';
 import { JobRow } from '../../features/jobs/JobRow';
 import { JobsSubnav } from '../../features/jobs/JobsSubnav';
-import { jobsApi, type JobTypeFilter } from '../../features/jobs/jobsApi';
+import { JOB_TYPES, jobsApi, type JobTypeFilter } from '../../features/jobs/jobsApi';
 import { useJobFilters } from '../../features/jobs/useJobFilters';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { JobRowsSkeleton } from '../../components/skeleton/JobRowsSkeleton';
 import styles from './JobsPage.module.css';
 
-const TYPES: JobTypeFilter[] = ['all', 'FULL_TIME', 'REMOTE', 'CONTRACT', 'INTERNSHIP'];
+const TYPES: JobTypeFilter[] = ['all', ...JOB_TYPES];
 
 /** Offres d'emploi filtrables par type, pays et technologie (JOB-1). */
 export default function JobsPage() {

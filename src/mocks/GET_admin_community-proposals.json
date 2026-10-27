@@ -1,0 +1,30 @@
+{
+  "items": [
+    {
+      "id": 12,
+      "name": "React Native",
+      "kind": "TECH",
+      "countryCode": null,
+      "tag": "react-native",
+      "description": "Applications React Native pour l'Afrique : petits appareils, réseau instable, paiements mobiles.",
+      "rules": ["Indiquez la version de React Native et d'Expo."],
+      "status": "PENDING",
+      "rejectionReason": null,
+      "slug": null,
+      "proposer": {
+        "username": "aminata_dev",
+        "displayName": "Aminata Diallo",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 1642,
+        "level": "REFERENT",
+        "deleted": false
+      },
+      "createdAt": "2026-10-24T10:15:00Z",
+      "reviewedAt": null
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 1
+}

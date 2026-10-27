@@ -1,10 +1,13 @@
 import { api } from '../../api/api';
 import type {
   AuthProvider,
+  Connections,
+  LinkStart,
   LoginRequest,
   Me,
   MeUpdate,
   OAuthProviderId,
+  OnboardingRequest,
   RegisterRequest,
   UpdateProfileRequest,
 } from '../../api/types';
@@ -12,7 +15,7 @@ import type {
 export type OAuthProvider = OAuthProviderId;
 
 /** Profil complet attendu par PUT /users/me, à partir du membre et des changements. */
-export function profileRequest(me: Me, changes: MeUpdate): UpdateProfileRequest & MeUpdate {
+export function profileRequest(me: Me, changes: MeUpdate): UpdateProfileRequest {
   return {
     displayName: me.displayName,
     bio: me.bio,
@@ -20,6 +23,7 @@ export function profileRequest(me: Me, changes: MeUpdate): UpdateProfileRequest 
     city: me.city,
     language: me.language,
     visibleToRecruiters: me.visibleToRecruiters,
+    technologies: me.technologies,
     ...changes,
   };
 }
@@ -32,17 +36,27 @@ export const authApi = {
   register: (body: RegisterRequest) => api.post<Me>('/auth/register', body),
   logout: () => api.post<void>('/auth/logout'),
   updateMe: (me: Me, changes: MeUpdate) => api.put<Me>('/users/me', profileRequest(me, changes)),
+  /** Parcours d'accueil (AUTH-5) : passe onboardingCompleted à vrai. */
+  completeOnboarding: (body: OnboardingRequest) => api.put<Me>('/users/me/onboarding', body),
   /** Photo de profil (SET-1) : PNG, JPG ou WebP, 2 Mo au plus, type réel vérifié par le serveur. */
   uploadPhoto: (file: File) => {
     const form = new FormData();
     form.append('photo', file);
-    return api.post<Me>('/users/me/photo', form);
+    return api.put<Me>('/users/me/avatar', form);
   },
-  deletePhoto: () => api.delete<Me>('/users/me/photo'),
-  /** Délier GitHub ou Google (SET-4). Refusé par le serveur si c'est le dernier moyen de connexion. */
-  unlink: (provider: OAuthProvider) => api.delete<Me>(`/users/me/connections/${provider}`),
-  /** Suppression du compte (AUTH-6) : contenus anonymisés, réputation et candidatures effacées. */
-  deleteAccount: () => api.delete<void>('/users/me'),
+  deletePhoto: () => api.delete<Me>('/users/me/avatar'),
+  /** Comptes GitHub et Google liés, et présence d'un mot de passe (SET-4). */
+  connections: () => api.get<Connections>('/users/me/connections'),
+  /** Commence la liaison : le serveur renvoie l'adresse OAuth, puis revient sur /settings?linked=… */
+  link: (provider: OAuthProvider) => api.post<LinkStart>(`/users/me/connections/${provider}`),
+  /** Délier GitHub ou Google. 409 LAST_LOGIN_METHOD si c'est le dernier moyen de connexion. */
+  unlink: (provider: OAuthProvider) => api.delete<Connections>(`/users/me/connections/${provider}`),
+  /**
+   * Suppression du compte (AUTH-6) : contenus anonymisés, réputation et candidatures effacées.
+   * Le membre recopie son pseudo ; 400 CONFIRMATION_MISMATCH sinon.
+   */
+  deleteAccount: (confirmation: string) =>
+    api.delete<void>('/users/me', { body: { confirmation } }),
   /** Mot de passe oublié (AUTH-4) : 204 que l'adresse existe ou non. */
   requestPasswordReset: (email: string) => api.post<void>('/auth/password-reset', { email }),
   /** Nouveau mot de passe ; 400 RESET_TOKEN_INVALID ou RESET_TOKEN_EXPIRED si le lien est périmé. */

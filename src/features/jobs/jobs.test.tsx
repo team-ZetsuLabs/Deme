@@ -15,7 +15,7 @@ import { cvError, validateWebsite } from './validation';
 import { demoMe } from '../../test/fixtures';
 
 const member: Me = demoMe({
-  skills: ['spring-boot', 'docker', 'flutter'],
+  technologies: ['spring-boot', 'docker', 'flutter'],
   visibleToRecruiters: true,
 });
 
@@ -70,7 +70,8 @@ describe('JobPage (JOB-2, JOB-3)', () => {
   it('compare la stack du membre aux technologies demandées', async () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(member);
     renderJob();
-    expect(await screen.findByText('2 technologies sur 4 dans votre profil.')).toBeTruthy();
+    // Exemple du contrat : java, spring-boot, postgresql.
+    expect(await screen.findByText(/^1 technologie sur 3/)).toBeTruthy();
   });
 
   it('envoie une candidature avec un message assez long', async () => {
@@ -88,7 +89,7 @@ describe('JobPage (JOB-2, JOB-3)', () => {
     const text = "J'ai intégré Orange Money dans deux applications Spring Boot en production.";
     fireEvent.change(message, { target: { value: text } });
     fireEvent.click(screen.getByRole('button', { name: 'Envoyer ma candidature' }));
-    await waitFor(() => expect(apply).toHaveBeenCalledWith(1, { message: text, cv: null }));
+    await waitFor(() => expect(apply).toHaveBeenCalledWith(31, { message: text, cv: null }));
     expect(await screen.findByRole('heading', { name: 'Candidature envoyée' })).toBeTruthy();
   });
 });
@@ -118,9 +119,10 @@ describe('JobForm (JOB-4)', () => {
     await waitFor(() => expect(onCreated).toHaveBeenCalled());
     expect(create).toHaveBeenCalledWith(
       expect.objectContaining({
-        company: { name: 'AgriLien', website: 'https://agrilien.example' },
+        companyName: 'AgriLien',
+        companyWebsite: 'https://agrilien.example',
         technologies: ['flutter', 'firebase'],
-        contractType: 'FULL_TIME',
+        type: 'PERMANENT',
       }),
     );
   });

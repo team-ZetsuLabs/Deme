@@ -17,10 +17,8 @@ export function demoMe(overrides: Partial<Me> = {}): Me {
     reputation: 342,
     level: 'MEMBER',
     createdAt: '2026-09-14T08:21:00Z',
-    skills: [],
-    providers: [],
-    hasPassword: true,
-    onboarded: true,
+    technologies: [],
+    onboardingCompleted: true,
     ...overrides,
   };
 }
@@ -34,6 +32,7 @@ export function author(overrides: Partial<AuthorSummary> = {}): AuthorSummary {
     countryCode: 'SN',
     reputation: 342,
     level: 'MEMBER',
+    deleted: false,
     ...overrides,
   };
 }

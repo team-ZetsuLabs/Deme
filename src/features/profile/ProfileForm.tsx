@@ -55,7 +55,7 @@ export function ProfileForm({ user, onSaved }: ProfileFormProps) {
   const submitError = useSubmitError(({ displayName, countryCode, ...rest }) =>
     form.setServerErrors({ ...rest, name: displayName, country: countryCode }),
   );
-  const [skills, setSkills] = useState(user.skills ?? []);
+  const [skills, setSkills] = useState(user.technologies);
   const [recruiterVisible, setRecruiterVisible] = useState(user.visibleToRecruiters);
   const [busy, setBusy] = useState(false);
   const { values, errors } = form;
@@ -75,7 +75,7 @@ export function ProfileForm({ user, onSaved }: ProfileFormProps) {
         countryCode: values.country || undefined,
         city: values.city.trim() || null,
         bio: values.bio.trim() || null,
-        skills,
+        technologies: skills,
         visibleToRecruiters: recruiterVisible,
       });
       onSaved();

@@ -28,7 +28,7 @@ export function Leaderboard({ challengeId, refreshKey }: LeaderboardProps) {
 
   if (query.loading) return <LeaderboardSkeleton />;
   if (query.error) return <ErrorState error={query.error} onRetry={query.reload} />;
-  if (!query.data?.length) return <StateMessage>{t('challenges.board.empty')}</StateMessage>;
+  if (!query.data?.items.length) return <StateMessage>{t('challenges.board.empty')}</StateMessage>;
 
   return (
     <table className={styles.table}>
@@ -43,7 +43,7 @@ export function Leaderboard({ challengeId, refreshKey }: LeaderboardProps) {
         </tr>
       </thead>
       <tbody>
-        {query.data.map((entry) => {
+        {query.data.items.map((entry) => {
           const mine = user?.username === entry.member.username;
           const place = countryName(entry.member.countryCode ?? null, i18n.language);
           return (

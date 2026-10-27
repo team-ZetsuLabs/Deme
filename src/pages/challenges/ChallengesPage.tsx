@@ -5,6 +5,7 @@ import { ApiError } from '../../api/api';
 import { Button } from '../../components/Button';
 import { ErrorState } from '../../components/ErrorState';
 import { Icon } from '../../components/Icon';
+import { MemberContent } from '../../components/MemberContent';
 import { safeUrl } from '../../components/safeUrl';
 import { ChallengeSkeleton } from '../../components/skeleton/ChallengeSkeleton';
 import { StateMessage } from '../../components/StateMessage';
@@ -23,6 +24,9 @@ import styles from './ChallengesPage.module.css';
 
 /** Défi en cours (CH-1), dépôt d'un lien GitHub (CH-2) et classement. */
 type BoardView = 'members' | 'countries';
+
+/** Points gagnés pour un dépôt validé (section 8 du cahier) : le contrat ne les renvoie pas. */
+const CHALLENGE_POINTS = 20;
 
 export default function ChallengesPage() {
   const { t } = useTranslation();
@@ -47,8 +51,8 @@ export default function ChallengesPage() {
   }
   if (query.error || !c) return <ErrorState error={query.error} onRetry={query.reload} />;
 
-  const ended = remainingUntil(c.endsAt, Date.now()).ended;
-  const repo = c.mySubmission ? safeUrl(c.mySubmission.repoUrl) : null;
+  const ended = c.status !== 'OPEN' || remainingUntil(c.endsAt, Date.now()).ended;
+  const repo = c.mySubmission ? safeUrl(c.mySubmission.repositoryUrl) : null;
 
   const onSubmitClick = () => {
     if (!user) {
@@ -66,18 +70,13 @@ export default function ChallengesPage() {
             {c.title}
           </h1>
           <p className={styles.meta}>
-            {t('challenges.current')}
-            <span className={styles.points}>{t('challenges.reward', { points: c.points })}</span>
+            {t(c.status === 'UPCOMING' ? 'challenges.upcoming' : 'challenges.current')}
+            <span className={styles.points}>
+              {t('challenges.reward', { points: CHALLENGE_POINTS })}
+            </span>
           </p>
-          <p className={styles.summary}>{c.summary}</p>
-          <ul className={styles.specs}>
-            {c.specs.map((spec) => (
-              <li key={spec.text}>
-                <span className={styles.label}>{spec.label ?? '·'}</span>
-                {spec.text}
-              </li>
-            ))}
-          </ul>
+          <MemberContent html={c.statementHtml} className={styles.summary} />
+          <MemberContent html={c.specificationsHtml} className={styles.specs} />
         </div>
 
         <div className={styles.side}>
@@ -90,6 +89,9 @@ export default function ChallengesPage() {
                   score: c.mySubmission.score,
                 })}
               </p>
+              {c.mySubmission.feedback && (
+                <p className={styles.feedback}>{c.mySubmission.feedback}</p>
+              )}
               {repo && (
                 <a href={repo} rel="noopener noreferrer nofollow" className={styles.repo}>
                   {repo.replace('https://github.com/', '')}

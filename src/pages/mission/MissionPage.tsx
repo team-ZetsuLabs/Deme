@@ -89,21 +89,12 @@ function MissionView({ id }: { id: number }) {
           ))}
         </ul>
 
-        {isAuthor && m.offers && (
+        {isAuthor && (
           <section className={own.offers} aria-labelledby="mission-offers-title">
             <h2 id="mission-offers-title" className={styles.sectionTitle}>
-              {t('missions.offers.title', { count: m.offers.length })}
+              {t('missions.offers.title', { count: m.applicationCount })}
             </h2>
-            <OffersList
-              missionId={m.id}
-              offers={m.offers}
-              onChange={(offer) =>
-                query.setData((current) => ({
-                  ...current,
-                  offers: (current.offers ?? []).map((o) => (o.id === offer.id ? offer : o)),
-                }))
-              }
-            />
+            <OffersList missionId={m.id} />
           </section>
         )}
 
@@ -115,20 +106,18 @@ function MissionView({ id }: { id: number }) {
       <aside className={styles.side}>
         <section className={styles.box}>
           <p className={own.label}>{t('missions.budgetLabel')}</p>
-          <p className={own.amount}>
-            {m.budget ? formatMoney(m.budget, i18n.language) : t('missions.budgetOpen')}
-          </p>
+          <p className={own.amount}>{formatMoney(m.budget, i18n.language)}</p>
           <p className={styles.boxText}>
-            {t('missions.delay', { count: m.delayDays })}
+            {t('missions.delay', { count: m.durationDays })}
             <span aria-hidden="true"> · </span>
-            {t('missions.offerCount', { count: m.offerCount })}
+            {t('missions.offerCount', { count: m.applicationCount })}
           </p>
           {isAuthor ? (
             <p className={styles.boxText}>{t('missions.yours')}</p>
-          ) : m.myOffer ? (
+          ) : m.myApplication ? (
             <>
               <p className={styles.boxText}>{t('missions.offer.sentText')}</p>
-              <ApplicationStatusBadge status={m.myOffer} />
+              <ApplicationStatusBadge status={m.myApplication.status} />
               <Link to="/applications" className={styles.boxLink}>
                 {t('jobs.applied.follow')}
               </Link>
@@ -151,8 +140,8 @@ function MissionView({ id }: { id: number }) {
           onSent={(application) => {
             query.setData((current) => ({
               ...current,
-              myOffer: application.status,
-              offerCount: current.offerCount + 1,
+              myApplication: { id: application.id, status: application.status },
+              applicationCount: current.applicationCount + 1,
             }));
             toast(t('missions.offer.sent'));
           }}

@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import type { JobFilters, JobTypeFilter } from './jobsApi';
+import { JOB_TYPES, type JobFilters, type JobTypeFilter } from './jobsApi';
 
-const TYPES: JobTypeFilter[] = ['all', 'FULL_TIME', 'REMOTE', 'CONTRACT', 'INTERNSHIP'];
+const TYPES: JobTypeFilter[] = ['all', ...JOB_TYPES];
 
 /** Filtres des offres dans l'adresse, comme pour le fil des questions. */
 export function useJobFilters() {

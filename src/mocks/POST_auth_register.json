@@ -12,5 +12,7 @@
   "role": "MEMBER",
   "reputation": 0,
   "level": "NEWCOMER",
+  "technologies": [],
+  "onboardingCompleted": false,
   "createdAt": "2026-10-21T10:02:13Z"
 }

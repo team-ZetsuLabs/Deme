@@ -20,7 +20,8 @@
       "avatarUrl": null,
       "countryCode": "SN",
       "reputation": 1642,
-      "level": "REFERENT"
+      "level": "REFERENT",
+      "deleted": false
     },
     {
       "username": "moussa_s",
@@ -28,7 +29,8 @@
       "avatarUrl": null,
       "countryCode": "SN",
       "reputation": 1580,
-      "level": "REFERENT"
+      "level": "REFERENT",
+      "deleted": false
     }
   ],
   "topMembers": [
@@ -38,15 +40,8 @@
       "avatarUrl": null,
       "countryCode": "SN",
       "reputation": 612,
-      "level": "CONTRIBUTOR"
-    },
-    {
-      "username": "ibrahima_f",
-      "displayName": "Ibrahima Fall",
-      "avatarUrl": null,
-      "countryCode": "SN",
-      "reputation": 455,
-      "level": "MEMBER"
+      "level": "CONTRIBUTOR",
+      "deleted": false
     },
     {
       "username": "awa_k",
@@ -54,15 +49,17 @@
       "avatarUrl": null,
       "countryCode": "SN",
       "reputation": 875,
-      "level": "CONTRIBUTOR"
+      "level": "CONTRIBUTOR",
+      "deleted": false
     },
     {
-      "username": "cheikh_d",
-      "displayName": "Cheikh Diop",
+      "username": "ibrahima_f",
+      "displayName": "Ibrahima Fall",
       "avatarUrl": null,
       "countryCode": "SN",
-      "reputation": 238,
-      "level": "MEMBER"
+      "reputation": 455,
+      "level": "MEMBER",
+      "deleted": false
     }
   ],
   "createdAt": "2026-09-20T09:00:00Z"

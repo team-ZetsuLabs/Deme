@@ -12,14 +12,15 @@ import styles from './Settings.module.css';
 /** Suppression du compte (AUTH-6), confirmée en tapant un mot. */
 export function DeleteAccountSection() {
   const { t } = useTranslation();
-  const { deleteAccount } = useSession();
+  const { user, deleteAccount } = useSession();
   const navigate = useNavigate();
   const toast = useToast();
   const [open, setOpen] = useState(false);
   const [confirm, setConfirm] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const word = t('settings.delete.word');
+  // Le contrat demande de recopier son pseudo (AUTH-6).
+  const word = user?.username ?? '';
 
   const close = () => {
     setOpen(false);
@@ -35,7 +36,7 @@ export function DeleteAccountSection() {
     }
     setBusy(true);
     try {
-      await deleteAccount();
+      await deleteAccount(confirm.trim());
       close();
       navigate('/questions', { replace: true });
       toast(t('settings.delete.done'));

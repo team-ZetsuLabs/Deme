@@ -1,0 +1,115 @@
+{
+  "items": [
+    {
+      "id": 21,
+      "target": {
+        "type": "ANSWER",
+        "id": 690,
+        "title": "Utilisez le SDK officiel de Wave plutôt qu'un appel HTTP brut",
+        "excerpt": "Utilisez le SDK officiel de Wave plutôt qu'un appel HTTP brut : il gère la signature des webhooks.",
+        "questionId": 155,
+        "author": {
+          "username": "awa_kone",
+          "displayName": "Awa Koné",
+          "avatarUrl": null,
+          "countryCode": "CI",
+          "reputation": 640,
+          "level": "CONTRIBUTOR",
+          "deleted": false
+        }
+      },
+      "status": "APPEALED",
+      "reportCount": 3,
+      "reasons": [
+        {
+          "reason": "SPAM",
+          "count": 3
+        }
+      ],
+      "comments": ["Lien vers un site commercial"],
+      "decision": {
+        "action": "HIDE",
+        "note": "Lien commercial",
+        "byTeam": false,
+        "decidedAt": "2026-10-30T09:00:00Z"
+      },
+      "appeal": "Le lien pointe vers la documentation officielle de l'API Wave, pas vers une offre commerciale.",
+      "firstReportedAt": "2026-10-29T16:20:00Z",
+      "updatedAt": "2026-10-30T10:15:00Z"
+    },
+    {
+      "id": 18,
+      "target": {
+        "type": "ANSWER",
+        "id": 733,
+        "title": "Pour Orange Money, passez par notre passerelle, frais réduits garantis",
+        "excerpt": "Pour Orange Money, passez par notre passerelle, frais réduits garantis. Contactez-nous sur WhatsApp pour un accès immédiat.",
+        "questionId": 101,
+        "author": {
+          "username": "cashflow_promo",
+          "displayName": "Cash Flow Promo",
+          "avatarUrl": null,
+          "countryCode": "SN",
+          "reputation": 12,
+          "level": "NEWCOMER",
+          "deleted": false
+        }
+      },
+      "status": "HIDDEN",
+      "reportCount": 5,
+      "reasons": [
+        {
+          "reason": "SPAM",
+          "count": 4
+        },
+        {
+          "reason": "OFF_TOPIC",
+          "count": 1
+        }
+      ],
+      "comments": [
+        "Même message collé sous six questions sur le mobile money",
+        "Lien vers un numéro WhatsApp, aucune réponse technique"
+      ],
+      "decision": null,
+      "appeal": null,
+      "firstReportedAt": "2026-10-28T09:12:00Z",
+      "updatedAt": "2026-10-28T14:30:00Z"
+    },
+    {
+      "id": 19,
+      "target": {
+        "type": "QUESTION",
+        "id": 214,
+        "title": "Quel est le meilleur ordinateur portable pour un étudiant à Bamako ?",
+        "excerpt": "Je cherche un ordinateur pas cher pour commencer l'informatique, vous conseillez quelle marque ?",
+        "questionId": null,
+        "author": {
+          "username": "moussa_traore",
+          "displayName": "Moussa Traoré",
+          "avatarUrl": null,
+          "countryCode": "ML",
+          "reputation": 85,
+          "level": "MEMBER",
+          "deleted": false
+        }
+      },
+      "status": "OPEN",
+      "reportCount": 2,
+      "reasons": [
+        {
+          "reason": "OFF_TOPIC",
+          "count": 2
+        }
+      ],
+      "comments": ["Question d'achat, pas de développement"],
+      "decision": null,
+      "appeal": null,
+      "firstReportedAt": "2026-10-29T08:05:00Z",
+      "updatedAt": "2026-10-29T11:47:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 3
+}

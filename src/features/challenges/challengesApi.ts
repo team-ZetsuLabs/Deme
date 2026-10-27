@@ -3,17 +3,21 @@ import type {
   Challenge,
   CountryLeaderboardEntry,
   LeaderboardEntry,
-  Submission,
+  MySubmission,
+  Page,
   SubmissionRequest,
 } from '../../api/types';
 
 export const challengesApi = {
   current: () => api.get<Challenge>('/challenges/current'),
-  leaderboard: (id: number) => api.get<LeaderboardEntry[]>(`/challenges/${id}/leaderboard`),
+  leaderboard: (id: number) =>
+    api.get<Page<LeaderboardEntry>>(`/challenges/${id}/leaderboard`, {
+      query: { page: 0, size: 50 },
+    }),
   countryLeaderboard: (id: number) =>
     api.get<CountryLeaderboardEntry[]>(`/challenges/${id}/leaderboard/countries`),
   submit: (id: number, body: SubmissionRequest) =>
-    api.post<Submission>(`/challenges/${id}/submissions`, body),
+    api.post<MySubmission>(`/challenges/${id}/submissions`, body),
 };
 
 // Dépôt public GitHub : https://github.com/compte/depot, sans chemin supplémentaire (CH-2).

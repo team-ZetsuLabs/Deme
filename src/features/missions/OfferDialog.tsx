@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Money, MyApplication } from '../../api/types';
+import type { Budget, MyApplication } from '../../api/types';
 import { errorMessage } from '../../api/errorMessage';
 import { Button } from '../../components/Button';
 import { Dialog } from '../../components/Dialog';
@@ -14,7 +14,7 @@ export type OfferDialogProps = {
   open: boolean;
   missionId: number;
   /** Budget de la mission : sa monnaie sert pour le prix proposé. */
-  budget: Money | null;
+  budget: Budget;
   onClose: () => void;
   onSent: (application: MyApplication) => void;
 };
@@ -22,10 +22,9 @@ export type OfferDialogProps = {
 /** Se proposer pour une mission (JOB-5) : message, prix et délai facultatifs. */
 export function OfferDialog({ open, missionId, budget, onClose, onSent }: OfferDialogProps) {
   const { t } = useTranslation();
-  const currency = budget?.currency ?? 'XOF';
+  const currency = budget.currency;
   const [message, setMessage] = useState('');
   const [price, setPrice] = useState('');
-  const [delay, setDelay] = useState('');
   const [messageErr, setMessageErr] = useState<string | null>(null);
   const [formErr, setFormErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -33,7 +32,6 @@ export function OfferDialog({ open, missionId, budget, onClose, onSent }: OfferD
   const close = () => {
     setMessage('');
     setPrice('');
-    setDelay('');
     setMessageErr(null);
     setFormErr(null);
     onClose();
@@ -51,11 +49,9 @@ export function OfferDialog({ open, missionId, budget, onClose, onSent }: OfferD
     setFormErr(null);
     try {
       const amount = Number(price);
-      const days = Number(delay);
       const application = await missionsApi.offer(missionId, {
         message: message.trim(),
-        price: price && amount > 0 ? { amount, currency } : null,
-        delayDays: delay && days > 0 ? days : null,
+        proposedBudget: price && amount > 0 ? { amount, currency } : null,
       });
       onSent(application);
       close();
@@ -99,45 +95,25 @@ export function OfferDialog({ open, missionId, budget, onClose, onSent }: OfferD
             aria-describedby={describedBy('offer-message', true, messageErr)}
           />
         </Field>
-        <div className={styles.grid}>
-          <Field
+        <Field
+          id="offer-price"
+          label={
+            <>
+              {t('missions.offer.price', { currency })}{' '}
+              <span className="muted">{t('question.optional')}</span>
+            </>
+          }
+        >
+          <input
             id="offer-price"
-            label={
-              <>
-                {t('missions.offer.price', { currency })}{' '}
-                <span className="muted">{t('question.optional')}</span>
-              </>
-            }
-          >
-            <input
-              id="offer-price"
-              type="number"
-              inputMode="numeric"
-              min={0}
-              step={500}
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-            />
-          </Field>
-          <Field
-            id="offer-delay"
-            label={
-              <>
-                {t('missions.offer.delay')} <span className="muted">{t('question.optional')}</span>
-              </>
-            }
-          >
-            <input
-              id="offer-delay"
-              type="number"
-              inputMode="numeric"
-              min={1}
-              max={90}
-              value={delay}
-              onChange={(e) => setDelay(e.target.value)}
-            />
-          </Field>
-        </div>
+            type="number"
+            inputMode="numeric"
+            min={0}
+            step={500}
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
+        </Field>
         <div className={styles.actions}>
           <Button variant="secondary" onClick={close} disabled={busy}>
             {t('settings.cancel')}

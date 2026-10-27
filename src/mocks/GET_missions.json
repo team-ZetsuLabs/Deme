@@ -1,124 +1,79 @@
 {
   "items": [
     {
-      "id": 1,
-      "title": "Intégrer Wave dans une boutique WooCommerce",
+      "id": 14,
+      "title": "Brancher Wave sur ma boutique WooCommerce",
       "kind": "INTEGRATION",
-      "excerpt": "Ma boutique de tissus wax accepte Orange Money, il manque Wave. Il faut le plugin, les tests en bac à sable et la mise en production.",
       "budget": {
         "amount": 75000,
         "currency": "XOF"
       },
-      "delayDays": 5,
-      "technologies": ["wordpress", "php", "mobile-money"],
+      "durationDays": 3,
+      "technologies": ["woocommerce", "php", "wave"],
+      "countryCode": "CI",
       "author": {
-        "username": "mariama_s",
-        "displayName": "Mariama Sow",
-        "avatarUrl": null,
-        "countryCode": "SN",
-        "reputation": 85,
-        "level": "MEMBER"
-      },
-      "createdAt": "2026-10-21T10:30:00Z",
-      "status": "OPEN",
-      "offerCount": 3,
-      "myOffer": null
-    },
-    {
-      "id": 2,
-      "title": "Mon API Spring Boot plante en production après 2 heures",
-      "kind": "FIX",
-      "excerpt": "OutOfMemoryError au bout de deux heures sur un VPS de 2 Go. J'ai besoin de quelqu'un pour analyser un heap dump et corriger la fuite.",
-      "budget": {
-        "amount": 50000,
-        "currency": "XOF"
-      },
-      "delayDays": 2,
-      "technologies": ["spring-boot", "java"],
-      "author": {
-        "username": "jeanbaptiste_k",
-        "displayName": "Jean-Baptiste Kaboré",
-        "avatarUrl": null,
-        "countryCode": "BF",
-        "reputation": 240,
-        "level": "MEMBER"
-      },
-      "createdAt": "2026-10-21T07:15:00Z",
-      "status": "OPEN",
-      "offerCount": 1,
-      "myOffer": null
-    },
-    {
-      "id": 3,
-      "title": "Revue de code d'une API Django avant mise en production",
-      "kind": "CODE_REVIEW",
-      "excerpt": "API de réservation de bus Nairobi Mombasa, environ 4 000 lignes. Je cherche un regard sur la sécurité, les requêtes et les tests.",
-      "budget": {
-        "amount": 15000,
-        "currency": "KES"
-      },
-      "delayDays": 4,
-      "technologies": ["django", "python", "postgresql"],
-      "author": {
-        "username": "grace_n",
-        "displayName": "Grace Njeri",
-        "avatarUrl": null,
-        "countryCode": "KE",
-        "reputation": 640,
-        "level": "CONTRIBUTOR"
-      },
-      "createdAt": "2026-10-20T12:00:00Z",
-      "status": "OPEN",
-      "offerCount": 4,
-      "myOffer": "VIEWED"
-    },
-    {
-      "id": 4,
-      "title": "Mode hors ligne pour une app Flutter de collecte agricole",
-      "kind": "INTEGRATION",
-      "excerpt": "Les agents saisissent des fiches dans des villages sans réseau. Il faut stocker localement et synchroniser au retour de la connexion.",
-      "budget": {
-        "amount": 1500,
-        "currency": "GHS"
-      },
-      "delayDays": 10,
-      "technologies": ["flutter", "sqlite", "hors-ligne"],
-      "author": {
-        "username": "kwame_a",
-        "displayName": "Kwame Asante",
-        "avatarUrl": null,
-        "countryCode": "GH",
-        "reputation": 980,
-        "level": "CONTRIBUTOR"
-      },
-      "createdAt": "2026-10-19T16:40:00Z",
-      "status": "OPEN",
-      "offerCount": 2,
-      "myOffer": null
-    },
-    {
-      "id": 5,
-      "title": "Configurer les sauvegardes PostgreSQL sur un VPS",
-      "kind": "OTHER",
-      "excerpt": "Sauvegarde quotidienne chiffrée vers un stockage externe, avec un test de restauration documenté. Serveur Ubuntu 24.04.",
-      "budget": null,
-      "delayDays": 3,
-      "technologies": ["postgresql", "linux", "devops"],
-      "author": {
-        "username": "fatou_d",
-        "displayName": "Fatou Diallo",
+        "username": "yao_kouassi",
+        "displayName": "Yao Kouassi",
         "avatarUrl": null,
         "countryCode": "CI",
-        "reputation": 455,
-        "level": "MEMBER"
+        "reputation": 64,
+        "level": "MEMBER",
+        "deleted": false
       },
-      "createdAt": "2026-10-18T09:20:00Z",
       "status": "OPEN",
-      "offerCount": 0,
-      "myOffer": null
+      "applicationCount": 2,
+      "createdAt": "2026-10-22T18:20:00Z"
+    },
+    {
+      "id": 12,
+      "title": "Revue de code d'une API Laravel avant mise en production",
+      "kind": "CODE_REVIEW",
+      "budget": {
+        "amount": 40000,
+        "currency": "XAF"
+      },
+      "durationDays": 2,
+      "technologies": ["laravel", "php", "mysql"],
+      "countryCode": "CM",
+      "author": {
+        "username": "brice_ndongo",
+        "displayName": "Brice Ndongo",
+        "avatarUrl": null,
+        "countryCode": "CM",
+        "reputation": 210,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "status": "OPEN",
+      "applicationCount": 1,
+      "createdAt": "2026-10-21T09:45:00Z"
+    },
+    {
+      "id": 9,
+      "title": "Mon application Android plante au retour de l'écran M-Pesa",
+      "kind": "TROUBLESHOOTING",
+      "budget": {
+        "amount": 3000,
+        "currency": "KES"
+      },
+      "durationDays": 1,
+      "technologies": ["kotlin", "android", "mpesa"],
+      "countryCode": "KE",
+      "author": {
+        "username": "wanjiru_k",
+        "displayName": "Wanjiru Kamau",
+        "avatarUrl": null,
+        "countryCode": "KE",
+        "reputation": 38,
+        "level": "NEWCOMER",
+        "deleted": false
+      },
+      "status": "OPEN",
+      "applicationCount": 0,
+      "createdAt": "2026-10-20T16:10:00Z"
     }
   ],
   "page": 0,
   "size": 20,
-  "total": 5
+  "total": 3
 }

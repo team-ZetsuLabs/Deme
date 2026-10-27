@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next';
+import { authApi } from '../../features/auth/authApi';
 import { useSession } from '../../features/auth/useSession';
 import { AccountSection } from '../../features/settings/AccountSection';
 import { AppearanceSection } from '../../features/settings/AppearanceSection';
 import { ConnectedAccounts } from '../../features/settings/ConnectedAccounts';
 import { DeleteAccountSection } from '../../features/settings/DeleteAccountSection';
+import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import styles from './SettingsPage.module.css';
 
@@ -22,6 +24,8 @@ export default function SettingsPage() {
   const { t } = useTranslation();
   const { user } = useSession();
   usePageTitle(t('settings.pageTitle'));
+  // Comptes liés et mot de passe : servent à la section Compte et à Comptes connectés.
+  const connections = useApiQuery(() => authApi.connections(), []);
   if (!user) return null;
 
   return (
@@ -37,8 +41,11 @@ export default function SettingsPage() {
           ))}
         </nav>
         <div className={styles.sections}>
-          <AccountSection user={user} />
-          <ConnectedAccounts user={user} />
+          <AccountSection user={user} hasPassword={connections.data?.hasPassword} />
+          <ConnectedAccounts
+            connections={connections.data}
+            onChange={(next) => connections.setData(() => next)}
+          />
           <AppearanceSection />
           <DeleteAccountSection />
         </div>

@@ -1,21 +1,30 @@
 {
-  "id": 77,
-  "title": "Offre envoyée en mode mock",
-  "company": {
-    "name": "Entreprise de démonstration",
-    "logoUrl": null,
-    "website": null
-  },
-  "city": null,
-  "country": null,
-  "contractType": "FULL_TIME",
-  "remote": false,
-  "technologies": ["react"],
-  "salary": null,
-  "createdAt": "2026-10-21T16:10:00Z",
-  "myApplication": null,
-  "experience": null,
+  "id": 31,
+  "title": "Développeur back-end Java, paiements mobiles",
+  "companyName": "Sahel Pay",
+  "companyWebsite": "https://sahelpay.example",
+  "type": "PERMANENT",
+  "countryCode": "SN",
+  "city": "Dakar",
+  "technologies": ["java", "spring-boot", "postgresql"],
+  "descriptionMarkdown": "Sahel Pay construit l'encaissement mobile money pour les commerçants d'Afrique de l'Ouest.\n\n**Vous allez :**\n\n- concevoir les API d'encaissement Orange Money et Wave ;\n- fiabiliser les webhooks et la réconciliation quotidienne ;\n- relire le code de l'équipe.\n\n**Profil :** 3 ans de Java et Spring Boot, à l'aise avec PostgreSQL.",
+  "descriptionHtml": "<p>Sahel Pay construit l'encaissement mobile money pour les commerçants d'Afrique de l'Ouest.</p>\n<p><strong>Vous allez :</strong></p>\n<ul>\n<li>concevoir les API d'encaissement Orange Money et Wave ;</li>\n<li>fiabiliser les webhooks et la réconciliation quotidienne ;</li>\n<li>relire le code de l'équipe.</li>\n</ul>\n<p><strong>Profil :</strong> 3 ans de Java et Spring Boot, à l'aise avec PostgreSQL.</p>\n",
+  "compensation": "900 000 à 1 300 000 XOF par mois",
   "status": "PENDING",
-  "postedBy": "awa_k",
-  "descriptionHtml": "<p>En mode mock, l'API renvoie toujours cette offre fixe.</p>"
+  "rejectionReason": null,
+  "recruiter": {
+    "username": "fatou_sow",
+    "displayName": "Fatou Sow",
+    "avatarUrl": null,
+    "countryCode": "SN",
+    "reputation": 120,
+    "level": "MEMBER",
+    "deleted": false
+  },
+  "match": null,
+  "myApplication": null,
+  "applicationCount": 0,
+  "canEdit": true,
+  "createdAt": "2026-10-23T08:00:00Z",
+  "updatedAt": "2026-10-23T08:00:00Z"
 }

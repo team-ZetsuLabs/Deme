@@ -99,7 +99,10 @@ function ProfileView({ username }: { username: string }) {
               </Link>
             </div>
           ) : (
-            <ReportButton targetType="PROFILE" targetId={p.username} authorUsername={p.username} />
+            // Signaler un profil demande son identifiant numérique, que PublicProfile n'expose pas encore.
+            p.id != null && (
+              <ReportButton targetType="USER" targetId={p.id} authorUsername={p.username} />
+            )
           )}
           {p.visibleToRecruiters && (
             <span className={styles.recruiter}>
@@ -162,11 +165,11 @@ function ProfileView({ username }: { username: string }) {
           />
         )}
         {tab === 'skills' &&
-          (p.skills?.length ? (
+          (p.technologies.length ? (
             <>
               <p className={styles.skillsHint}>{t('profile.skillsHint')}</p>
               <ul className={styles.skills}>
-                {p.skills.map((skill) => (
+                {p.technologies.map((skill) => (
                   <li key={skill}>
                     <Link
                       className={styles.skill}

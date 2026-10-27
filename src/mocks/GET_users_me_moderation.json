@@ -1,0 +1,35 @@
+{
+  "items": [
+    {
+      "caseId": 21,
+      "target": {
+        "type": "ANSWER",
+        "id": 690,
+        "title": "Utilisez le SDK officiel de Wave plutôt qu'un appel HTTP brut",
+        "excerpt": "Utilisez le SDK officiel de Wave plutôt qu'un appel HTTP brut : il gère la signature des webhooks.",
+        "questionId": 155,
+        "author": {
+          "username": "awa_kone",
+          "displayName": "Awa Koné",
+          "avatarUrl": null,
+          "countryCode": "CI",
+          "reputation": 640,
+          "level": "CONTRIBUTOR",
+          "deleted": false
+        }
+      },
+      "status": "HIDDEN",
+      "decision": {
+        "action": "HIDE",
+        "note": "Lien commercial",
+        "byTeam": false,
+        "decidedAt": "2026-10-30T09:00:00Z"
+      },
+      "canAppeal": true,
+      "updatedAt": "2026-10-30T09:00:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 1
+}

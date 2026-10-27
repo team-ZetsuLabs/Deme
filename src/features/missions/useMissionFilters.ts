@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import type { MissionFilters, MissionKindFilter } from './missionsApi';
+import { MISSION_KINDS, type MissionFilters, type MissionKindFilter } from './missionsApi';
 
-const KINDS: MissionKindFilter[] = ['all', 'FIX', 'INTEGRATION', 'CODE_REVIEW', 'OTHER'];
+const KINDS: MissionKindFilter[] = ['all', ...MISSION_KINDS];
 
 /** Filtres des missions dans l'adresse, comme pour les offres. */
 export function useMissionFilters() {

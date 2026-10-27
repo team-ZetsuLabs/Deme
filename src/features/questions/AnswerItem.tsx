@@ -7,7 +7,6 @@ import { Icon } from '../../components/Icon';
 import { MemberContent } from '../../components/MemberContent';
 import { RelativeTime } from '../../components/RelativeTime';
 import { useToast } from '../../components/useToast';
-import { HiddenNotice } from '../moderation/HiddenNotice';
 import { AnswerForm } from './AnswerForm';
 import { AuthorCard } from './AuthorCard';
 import { CommentThread } from './CommentThread';
@@ -84,15 +83,6 @@ export function AnswerItem({
               </span>
             )}
           </div>
-        )}
-
-        {a.hidden && a.canEdit && (
-          <HiddenNotice
-            targetType="ANSWER"
-            targetId={a.id}
-            hidden={a.hidden}
-            onAppealed={(hidden) => onEdited({ ...a, hidden })}
-          />
         )}
 
         {editing ? (

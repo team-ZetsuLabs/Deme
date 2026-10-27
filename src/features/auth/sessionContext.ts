@@ -10,10 +10,13 @@ export type SessionContextValue = {
   register: (body: RegisterRequest) => Promise<Me>;
   /** Met à jour le profil du membre connecté (PUT /me) et la session. */
   updateMe: (body: MeUpdate) => Promise<Me>;
-  /** Remplace le membre par la version renvoyée par le serveur (photo, comptes liés…). */
+  /** Remplace le membre par la version renvoyée par le serveur (photo, parcours d'accueil…). */
   setUser: (me: Me) => Me;
-  /** Supprime le compte (AUTH-6) puis ferme la session. */
-  deleteAccount: () => Promise<void>;
+  /** Le membre remet le parcours d'accueil à plus tard : on ne le lui redemande pas avant sa prochaine visite. */
+  onboardingSkipped: boolean;
+  skipOnboarding: () => void;
+  /** Supprime le compte (AUTH-6) puis ferme la session. Le pseudo recopié sert de confirmation. */
+  deleteAccount: (confirmation: string) => Promise<void>;
   logout: () => Promise<void>;
 };
 

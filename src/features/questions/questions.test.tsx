@@ -1,12 +1,13 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import i18n from '../../i18n';
 import { ToastProvider } from '../../components/ToastProvider';
 import { authApi } from '../auth/authApi';
 import { appealsApi } from '../moderation/appealsApi';
-import type { Answer, Page } from '../../api/types';
+import { HiddenNotice } from '../moderation/HiddenNotice';
+import type { Answer, MyModeratedContent, Page } from '../../api/types';
 import answersMock from '../../mocks/GET_questions_id_answers.json';
 import { author, demoMe } from '../../test/fixtures';
 import { SessionProvider } from '../auth/SessionProvider';
@@ -189,34 +190,33 @@ describe('QuestionPage, vote (QA-4)', () => {
   });
 });
 
-describe('QuestionPage, contenu masqué (MOD-2, MOD-3)', () => {
-  const hiddenAnswer = (canEdit: boolean) =>
-    answersPage((items) => [
-      ...items,
-      {
-        ...items[1],
-        id: 530,
+describe('HiddenNotice (MOD-3)', () => {
+  it("permet à l'auteur de contester le masquage, une seule fois", async () => {
+    const item: MyModeratedContent = {
+      caseId: 21,
+      target: {
+        type: 'ANSWER',
+        id: 690,
+        title: 'Utilisez le SDK officiel de Wave',
+        questionId: 155,
         author: author(),
-        canEdit,
-        hidden: { by: 'REFERENT' as const, reason: 'OFF_TOPIC' as const, appeal: 'NONE' as const },
       },
-    ]);
+      status: 'HIDDEN',
+      decision: { action: 'HIDE', byTeam: false, decidedAt: '2026-10-22T09:00:00Z' },
+      canAppeal: true,
+      updatedAt: '2026-10-22T09:00:00Z',
+    };
+    const create = vi
+      .spyOn(appealsApi, 'create')
+      .mockResolvedValue({ ...item, status: 'APPEALED', canAppeal: false });
+    const Notice = () => {
+      const [current, setCurrent] = useState(item);
+      return <HiddenNotice item={current} onAppealed={setCurrent} />;
+    };
+    wrap(<Notice />);
 
-  it('ne montre pas une réponse masquée aux autres membres', async () => {
-    vi.spyOn(questionsApi, 'answers').mockResolvedValue(hiddenAnswer(false));
-    renderQuestion();
-    expect(await screen.findByRole('heading', { level: 1 })).toBeTruthy();
-    expect(document.getElementById('answer-530')).toBeNull();
-  });
-
-  it('la montre à son auteur avec un avis, et lui permet de contester', async () => {
-    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe());
-    vi.spyOn(questionsApi, 'answers').mockResolvedValue(hiddenAnswer(true));
-    const create = vi.spyOn(appealsApi, 'create');
-    renderQuestion();
-
-    const notice = await screen.findByRole('note');
-    expect(notice.textContent).toContain('Hors sujet');
+    const notice = screen.getByRole('note');
+    expect(notice.textContent).toContain('Un Référent a masqué ce contenu.');
     expect(notice.textContent).toContain('Vous êtes seul à le voir.');
 
     fireEvent.click(screen.getByRole('button', { name: 'Contester la décision' }));
@@ -229,9 +229,8 @@ describe('QuestionPage, contenu masqué (MOD-2, MOD-3)', () => {
     const message = "Ma réponse propose une autre solution de paiement, c'est une piste utile.";
     fireEvent.change(textarea, { target: { value: message } });
     fireEvent.click(screen.getByRole('button', { name: 'Envoyer la contestation' }));
-    await waitFor(() =>
-      expect(create).toHaveBeenCalledWith({ targetType: 'ANSWER', targetId: 530, message }),
-    );
+    await waitFor(() => expect(create).toHaveBeenCalledWith(21, message));
     expect(await screen.findByText(/l'équipe Zetsu l'examine/)).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Contester la décision' })).toBeNull();
   });
 });

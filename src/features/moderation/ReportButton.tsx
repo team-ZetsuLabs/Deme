@@ -15,7 +15,7 @@ import styles from './ReportButton.module.css';
 export type ReportButtonProps = {
   targetType: ReportTargetType;
   /** Identifiant du contenu, ou pseudo pour un profil. */
-  targetId: number | string;
+  targetId: number;
   /** Auteur du contenu : on ne signale pas son propre contenu. */
   authorUsername: string;
 };

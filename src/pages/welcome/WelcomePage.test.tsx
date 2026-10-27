@@ -19,7 +19,7 @@ const newMember: Me = demoMe({
   city: null,
   reputation: 1,
   level: 'NEWCOMER',
-  onboarded: false,
+  onboardingCompleted: false,
 });
 
 const renderAt = (path: string) =>
@@ -55,9 +55,7 @@ afterEach(() => {
 describe("parcours d'accueil (AUTH-5)", () => {
   it('envoie un nouveau membre vers /welcome, puis le ramène où il allait', async () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(newMember);
-    const updateMe = vi
-      .spyOn(authApi, 'updateMe')
-      .mockImplementation(async (me, body) => ({ ...me, ...body }) as Me);
+    const complete = vi.spyOn(authApi, 'completeOnboarding');
 
     renderAt('/questions');
 
@@ -68,13 +66,26 @@ describe("parcours d'accueil (AUTH-5)", () => {
 
     expect(await screen.findByRole('heading', { name: 'Fil des questions' })).toBeTruthy();
     await waitFor(() =>
-      expect(updateMe).toHaveBeenCalledWith(expect.objectContaining({ username: 'koffi_m' }), {
-        skills: ['flutter', 'mobile-money'],
+      expect(complete).toHaveBeenCalledWith({
+        technologies: ['flutter', 'mobile-money'],
         countryCode: 'TG',
         language: 'fr',
-        onboarded: true,
       }),
     );
+  });
+
+  it('demande un pays avant de terminer, et « Plus tard » laisse passer', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue({ ...newMember, countryCode: null });
+    const complete = vi.spyOn(authApi, 'completeOnboarding');
+    renderAt('/questions');
+
+    fireEvent.click(await screen.findByRole('button', { name: "C'est parti" }));
+    expect(await screen.findByText('Choisissez votre pays pour continuer.')).toBeTruthy();
+    expect(complete).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Plus tard' }));
+    expect(await screen.findByRole('heading', { name: 'Fil des questions' })).toBeTruthy();
+    expect(complete).not.toHaveBeenCalled();
   });
 
   it('ajoute une technologie saisie et refuse un nom invalide', async () => {

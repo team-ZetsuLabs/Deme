@@ -2,7 +2,7 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import i18n from '../../i18n';
-import type { Me } from '../../api/types';
+import type { Challenge, Me } from '../../api/types';
 import { ApiError } from '../../api/api';
 import { ToastProvider } from '../../components/ToastProvider';
 import ChallengesPage from '../../pages/challenges/ChallengesPage';
@@ -62,11 +62,17 @@ describe('lien de dépôt (CH-2)', () => {
 describe('ChallengesPage', () => {
   it('affiche le défi, le classement et enregistre un dépôt', async () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(member);
+    // L'exemple du contrat a déjà un dépôt : on part d'un membre qui n'a rien soumis.
+    const current = await import('../../mocks/GET_challenges_current.json');
+    vi.spyOn(challengesApi, 'current').mockResolvedValue({
+      ...(current.default as Challenge),
+      mySubmission: null,
+    });
     const submit = vi.spyOn(challengesApi, 'submit');
     renderPage();
 
     expect(
-      await screen.findByRole('heading', { name: 'Simuler une API de paiement mobile' }),
+      await screen.findByRole('heading', { name: 'Un menu USSD de paiement de facture' }),
     ).toBeTruthy();
     expect(await screen.findByRole('link', { name: 'Kwame Asante' })).toBeTruthy();
     expect(screen.getByText('92/100')).toBeTruthy();
@@ -83,7 +89,7 @@ describe('ChallengesPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Soumettre' }));
     await waitFor(() =>
       expect(submit).toHaveBeenCalledWith(4, {
-        repoUrl: 'https://github.com/aminata-dev/api-paiement-mobile',
+        repositoryUrl: 'https://github.com/aminata-dev/api-paiement-mobile',
       }),
     );
     expect(await screen.findByText('Dépôt reçu, en attente de notation')).toBeTruthy();

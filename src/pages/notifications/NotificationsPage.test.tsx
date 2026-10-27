@@ -67,7 +67,7 @@ describe('NotificationsPage (NOT-1)', () => {
     ).toBeTruthy();
     fireEvent.click(
       await screen.findByRole('link', {
-        name: 'BeanCreationException au démarrage quand PostgreSQL tourne dans Docker',
+        name: 'Développeur back-end Java, paiements mobiles',
       }),
     );
 
@@ -83,7 +83,7 @@ describe('NotificationsPage (NOT-1)', () => {
     renderPage();
 
     fireEvent.click(await screen.findByRole('button', { name: 'Tout marquer comme lu' }));
-    await waitFor(() => expect(markRead).toHaveBeenCalledWith({ all: true }));
+    await waitFor(() => expect(markRead).toHaveBeenCalledWith({}));
     expect(
       await screen.findByRole('link', { name: 'Notifications, 0 non lue' }, { timeout: 3000 }),
     ).toBeTruthy();

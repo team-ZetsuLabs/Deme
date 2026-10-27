@@ -1,67 +1,49 @@
-[
-  {
-    "rank": 1,
-    "member": {
-      "username": "kwame_a",
-      "displayName": "Kwame Asante",
-      "avatarUrl": null,
-      "countryCode": "GH",
-      "reputation": 980,
-      "level": "CONTRIBUTOR"
+{
+  "items": [
+    {
+      "rank": 1,
+      "member": {
+        "username": "kwame_codes",
+        "displayName": "Kwame Asante",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/1024",
+        "countryCode": "GH",
+        "reputation": 1587,
+        "level": "REFERENT",
+        "deleted": false
+      },
+      "score": 92,
+      "submittedAt": "2026-11-02T21:40:00Z"
     },
-    "score": 92,
-    "submittedAt": "2026-10-20T10:00:00Z"
-  },
-  {
-    "rank": 2,
-    "member": {
-      "username": "awa_k",
-      "displayName": "Awa Kane",
-      "avatarUrl": null,
-      "countryCode": "SN",
-      "reputation": 875,
-      "level": "CONTRIBUTOR"
+    {
+      "rank": 2,
+      "member": {
+        "username": "wanjiru_k",
+        "displayName": "Wanjiru Kamau",
+        "avatarUrl": null,
+        "countryCode": "KE",
+        "reputation": 910,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "score": 88,
+      "submittedAt": "2026-11-03T07:05:00Z"
     },
-    "score": 88,
-    "submittedAt": "2026-10-20T14:30:00Z"
-  },
-  {
-    "rank": 3,
-    "member": {
-      "username": "ibrahim_s",
-      "displayName": "Ibrahim Sawadogo",
-      "avatarUrl": null,
-      "countryCode": "BF",
-      "reputation": 790,
-      "level": "CONTRIBUTOR"
-    },
-    "score": 81,
-    "submittedAt": "2026-10-21T08:15:00Z"
-  },
-  {
-    "rank": 4,
-    "member": {
-      "username": "grace_n",
-      "displayName": "Grace Njeri",
-      "avatarUrl": null,
-      "countryCode": "KE",
-      "reputation": 640,
-      "level": "CONTRIBUTOR"
-    },
-    "score": 77,
-    "submittedAt": "2026-10-21T09:40:00Z"
-  },
-  {
-    "rank": 5,
-    "member": {
-      "username": "chinedu_o",
-      "displayName": "Chinedu Okafor",
-      "avatarUrl": null,
-      "countryCode": "NG",
-      "reputation": 410,
-      "level": "MEMBER"
-    },
-    "score": null,
-    "submittedAt": "2026-10-21T15:05:00Z"
-  }
-]
+    {
+      "rank": 2,
+      "member": {
+        "username": "chidi_okafor",
+        "displayName": "Chidi Okafor",
+        "avatarUrl": null,
+        "countryCode": "NG",
+        "reputation": 1240,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "score": 88,
+      "submittedAt": "2026-11-03T12:30:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 3
+}

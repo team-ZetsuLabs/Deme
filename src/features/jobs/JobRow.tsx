@@ -4,7 +4,7 @@ import type { JobSummary } from '../../api/types';
 import { Avatar } from '../../components/Avatar';
 import { buttonClass } from '../../components/buttonClass';
 import { RelativeTime } from '../../components/RelativeTime';
-import { ApplicationStatusBadge } from './ApplicationStatusBadge';
+import { JobStatusBadge } from './JobStatusBadge';
 import { JobFacts } from './JobFacts';
 import styles from './JobRow.module.css';
 
@@ -14,13 +14,13 @@ export function JobRow({ job }: JobRowProps) {
   const { t } = useTranslation();
   return (
     <article className={styles.row}>
-      <Avatar name={job.company.name} photoUrl={job.company.logoUrl} size={44} square />
+      <Avatar name={job.companyName} photoUrl={null} size={44} square />
       <div className={styles.body}>
         <h3 className={styles.title}>
           <Link to={`/jobs/${job.id}`}>{job.title}</Link>
         </h3>
         <p className={styles.company}>
-          {job.company.name}
+          {job.companyName}
           <span aria-hidden="true"> · </span>
           <RelativeTime iso={job.createdAt} />
         </p>
@@ -32,8 +32,8 @@ export function JobRow({ job }: JobRowProps) {
         </ul>
       </div>
       <div className={styles.action}>
-        {job.myApplication ? (
-          <ApplicationStatusBadge status={job.myApplication} />
+        {job.status !== 'PUBLISHED' ? (
+          <JobStatusBadge status={job.status} />
         ) : (
           <Link
             to={`/jobs/${job.id}`}

@@ -5,11 +5,14 @@ import { CountrySelect } from '../../components/CountrySelect';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
 import { useToast } from '../../components/useToast';
+import { api } from '../../api/api';
 import { errorMessage } from '../../api/errorMessage';
+import { authApi } from '../../features/auth/authApi';
 import { useSession } from '../../features/auth/useSession';
 import { SkillPicker } from '../../features/profile/SkillPicker';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { changeLanguage, LANGUAGES, type Language } from '../../i18n';
+import { OTHER_COUNTRY } from '../../i18n/countries';
 import { Logo } from '../../layout/Logo';
 import { PageLoader } from '../../layout/PageLoader';
 import styles from './WelcomePage.module.css';
@@ -24,38 +27,59 @@ function useReturnTo(): string {
 /** Parcours d'accueil après inscription (AUTH-5) : stack, pays, langue. */
 export default function WelcomePage() {
   const { t, i18n } = useTranslation();
-  const { status, user, updateMe } = useSession();
+  const { status, user, setUser, onboardingSkipped, skipOnboarding } = useSession();
   const navigate = useNavigate();
   const toast = useToast();
   const returnTo = useReturnTo();
-  const [skills, setSkills] = useState<string[]>(user?.skills ?? []);
+  const [skills, setSkills] = useState<string[]>(user?.technologies ?? []);
   const [country, setCountry] = useState(user?.countryCode ?? '');
-  const [busy, setBusy] = useState<'save' | 'later' | null>(null);
+  const [countryError, setCountryError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
   const language = (i18n.resolvedLanguage ?? 'fr') as Language;
   usePageTitle(t('welcome.pageTitle'));
 
   if (status === 'loading') return <PageLoader />;
   if (!user) return <Navigate to="/login" replace />;
-  if (user.onboarded !== false) return <Navigate to={returnTo} replace />;
+  if (user.onboardingCompleted || onboardingSkipped) return <Navigate to={returnTo} replace />;
 
-  const save = async (mode: 'save' | 'later') => {
-    setBusy(mode);
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    // Le contrat exige un pays : « Autre » n'est pas un code accepté.
+    if (!country || country === OTHER_COUNTRY) {
+      setCountryError(t('welcome.country.required'));
+      document.getElementById('welcome-country')?.focus();
+      return;
+    }
+    setBusy(true);
     try {
-      await updateMe(
-        mode === 'save'
-          ? { skills, countryCode: country || undefined, language, onboarded: true }
-          : { language, onboarded: true },
+      const me = await authApi.completeOnboarding({
+        technologies: skills,
+        countryCode: country,
+        language,
+      });
+      // En mode mock, la réponse est un fichier fixe : on garde les choix du membre.
+      setUser(
+        api.mode === 'mock'
+          ? {
+              ...user,
+              technologies: skills,
+              countryCode: country,
+              language,
+              onboardingCompleted: true,
+            }
+          : me,
       );
       navigate(returnTo, { replace: true });
     } catch (error) {
       toast(errorMessage(t, error));
-      setBusy(null);
+      setBusy(false);
     }
   };
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    void save('save');
+  // Le parcours demande pays et langue : « Plus tard » ne l'enregistre pas, on le repropose à la prochaine visite.
+  const later = () => {
+    skipOnboarding();
+    navigate(returnTo, { replace: true });
   };
 
   return (
@@ -92,14 +116,18 @@ export default function WelcomePage() {
               id="welcome-country"
               label={t('auth.fields.country')}
               hint={t('welcome.country.hint')}
+              error={countryError}
             >
               <CountrySelect
                 id="welcome-country"
                 value={country}
-                onChange={setCountry}
+                onChange={(value) => {
+                  setCountry(value);
+                  setCountryError(null);
+                }}
                 emptyLabel={t('auth.fields.countryPlaceholder')}
-                otherLabel={t('auth.fields.countryOther')}
-                describedBy="welcome-country-hint"
+                invalid={!!countryError}
+                describedBy={countryError ? 'welcome-country-error' : 'welcome-country-hint'}
               />
             </Field>
           </fieldset>
@@ -129,16 +157,11 @@ export default function WelcomePage() {
           </fieldset>
 
           <div className={styles.actions}>
-            <Button
-              variant="ghost"
-              busy={busy === 'later'}
-              disabled={!!busy}
-              onClick={() => save('later')}
-            >
+            <Button variant="ghost" disabled={busy} onClick={later}>
               {t('welcome.later')}
             </Button>
-            <Button type="submit" variant="primary" busy={busy === 'save'} disabled={!!busy}>
-              {busy === 'save' ? t('welcome.busy') : t('welcome.submit')}
+            <Button type="submit" variant="primary" busy={busy} disabled={busy}>
+              {busy ? t('welcome.busy') : t('welcome.submit')}
             </Button>
           </div>
         </form>

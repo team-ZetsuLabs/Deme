@@ -1,0 +1,18 @@
+{
+  "id": 211,
+  "target": {
+    "type": "MISSION",
+    "id": 14,
+    "title": "Brancher Wave sur ma boutique WooCommerce",
+    "companyName": null
+  },
+  "status": "SENT",
+  "message": "J'ai intégré Wave et Orange Money pour deux boutiques à Abidjan, je peux livrer en 3 jours avec la gestion du paiement confirmé après fermeture de la page.",
+  "hasCv": false,
+  "proposedBudget": {
+    "amount": 70000,
+    "currency": "XOF"
+  },
+  "createdAt": "2026-10-23T09:00:00Z",
+  "updatedAt": "2026-10-23T09:00:00Z"
+}

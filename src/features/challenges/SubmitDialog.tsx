@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Submission } from '../../api/types';
+import type { MySubmission } from '../../api/types';
 import { errorMessage } from '../../api/errorMessage';
 import { Button } from '../../components/Button';
 import { Dialog } from '../../components/Dialog';
@@ -13,7 +13,7 @@ export type SubmitDialogProps = {
   open: boolean;
   challengeId: number;
   onClose: () => void;
-  onSubmitted: (submission: Submission) => void;
+  onSubmitted: (submission: MySubmission) => void;
 };
 
 /** Dépôt d'un lien GitHub public, validé par format ; un dépôt par membre et par défi (CH-2). */
@@ -39,7 +39,7 @@ export function SubmitDialog({ open, challengeId, onClose, onSubmitted }: Submit
     }
     setBusy(true);
     try {
-      onSubmitted(await challengesApi.submit(challengeId, { repoUrl: url.trim() }));
+      onSubmitted(await challengesApi.submit(challengeId, { repositoryUrl: url.trim() }));
       close();
     } catch (err) {
       setError(errorMessage(t, err));

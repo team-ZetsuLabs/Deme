@@ -6,16 +6,15 @@ import styles from './JobFacts.module.css';
 
 export type JobFactsProps = { job: JobSummary; extra?: (string | null)[] };
 
-/** Type de contrat, télétravail, lieu et rémunération, en étiquettes. */
+/** Type de poste, lieu et rémunération, en étiquettes. */
 export function JobFacts({ job, extra = [] }: JobFactsProps) {
   const { t, i18n } = useTranslation();
-  const place = [job.city, countryName(job.country, i18n.language)].filter(Boolean).join(', ');
-  const facts = [
-    t(`jobs.contract.${job.contractType}`),
-    job.remote ? t('jobs.remote') : null,
-    job.salary,
-    ...extra,
-  ].filter(Boolean) as string[];
+  const place = [job.city, countryName(job.countryCode ?? null, i18n.language)]
+    .filter(Boolean)
+    .join(', ');
+  const facts = [t(`jobs.contract.${job.type}`), job.compensation, ...extra].filter(
+    Boolean,
+  ) as string[];
 
   return (
     <ul className={styles.facts}>

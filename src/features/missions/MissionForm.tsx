@@ -8,7 +8,7 @@ import { fieldErrorText } from '../../hooks/fieldErrorText';
 import { useSubmitError } from '../../hooks/useSubmitError';
 import { useValidatedForm, type Validators } from '../../hooks/useValidatedForm';
 import { parseTags } from '../questions/validation';
-import { missionsApi } from './missionsApi';
+import { MISSION_KINDS, missionsApi } from './missionsApi';
 import { CURRENCIES } from './money';
 import styles from './MissionForm.module.css';
 
@@ -33,7 +33,7 @@ const VALIDATORS: Validators<MissionValues> = {
       ? null
       : 'missions.new.errors.delay';
   },
-  budget: (v) => (v === '' || Number(v) > 0 ? null : 'missions.new.errors.budget'),
+  budget: (v) => (Number(v) > 0 ? null : 'missions.new.errors.budget'),
 };
 
 const IDS: Record<keyof MissionValues, string> = {
@@ -43,8 +43,6 @@ const IDS: Record<keyof MissionValues, string> = {
   delay: 'mission-delay',
   budget: 'mission-budget',
 };
-
-const KINDS: MissionKind[] = ['FIX', 'INTEGRATION', 'CODE_REVIEW', 'OTHER'];
 
 export type MissionFormProps = { onCreated: (mission: MissionDetail) => void };
 
@@ -56,7 +54,7 @@ export function MissionForm({ onCreated }: MissionFormProps) {
     VALIDATORS,
   );
   const submitError = useSubmitError(form.setServerErrors);
-  const [kind, setKind] = useState<MissionKind>('FIX');
+  const [kind, setKind] = useState<MissionKind>('TROUBLESHOOTING');
   const [currency, setCurrency] = useState(CURRENCIES[0]);
   const [busy, setBusy] = useState(false);
   const { values, errors } = form;
@@ -75,8 +73,8 @@ export function MissionForm({ onCreated }: MissionFormProps) {
         title: values.title.trim(),
         kind,
         description: values.description.trim(),
-        budget: values.budget ? { amount: Number(values.budget), currency } : null,
-        delayDays: Number(values.delay),
+        budget: { amount: Number(values.budget), currency },
+        durationDays: Number(values.delay),
         technologies: parseTags(values.technologies),
       });
       onCreated(mission);
@@ -107,7 +105,7 @@ export function MissionForm({ onCreated }: MissionFormProps) {
       <fieldset className={styles.fieldset}>
         <legend className={styles.legend}>{t('missions.new.kind')}</legend>
         <div className={styles.kinds}>
-          {KINDS.map((value) => (
+          {MISSION_KINDS.map((value) => (
             <label key={value} className={styles.kind}>
               <input
                 type="radio"
@@ -153,11 +151,7 @@ export function MissionForm({ onCreated }: MissionFormProps) {
       <div className={styles.grid}>
         <Field
           id={IDS.budget}
-          label={
-            <>
-              {t('missions.new.budget')} <span className="muted">{t('question.optional')}</span>
-            </>
-          }
+          label={<>{t('missions.new.budget')}</>}
           hint={t('missions.new.budgetHint')}
           error={err('budget')}
         >

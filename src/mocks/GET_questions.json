@@ -16,7 +16,8 @@
         "avatarUrl": null,
         "countryCode": "SN",
         "reputation": 342,
-        "level": "MEMBER"
+        "level": "MEMBER",
+        "deleted": false
       },
       "score": 7,
       "answerCount": 2,
@@ -39,7 +40,8 @@
         "avatarUrl": null,
         "countryCode": "BF",
         "reputation": 58,
-        "level": "MEMBER"
+        "level": "MEMBER",
+        "deleted": false
       },
       "score": 12,
       "answerCount": 0,
@@ -62,7 +64,8 @@
         "avatarUrl": null,
         "countryCode": "KE",
         "reputation": 896,
-        "level": "CONTRIBUTOR"
+        "level": "CONTRIBUTOR",
+        "deleted": false
       },
       "score": 21,
       "answerCount": 3,

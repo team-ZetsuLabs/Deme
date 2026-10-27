@@ -45,7 +45,8 @@ function JobView({ id }: { id: number }) {
   if (query.error instanceof ApiError && query.error.status === 404) return <NotFoundPage />;
   if (query.error || !job) return <ErrorState error={query.error} onRetry={query.reload} />;
 
-  const website = safeUrl(job.company.website);
+  const website = safeUrl(job.companyWebsite);
+  const isOwner = !!user && user.username === job.recruiter.username;
 
   const onApply = () => {
     if (!user) {
@@ -61,7 +62,7 @@ function JobView({ id }: { id: number }) {
         <nav className={styles.crumbs} aria-label={t('question.crumbs')}>
           <Link to="/jobs">{t('nav.jobs')}</Link>
           <span aria-hidden="true">/</span>
-          <span aria-current="page">{job.company.name}</span>
+          <span aria-current="page">{job.companyName}</span>
         </nav>
 
         {job.status === 'PENDING' && (
@@ -69,23 +70,35 @@ function JobView({ id }: { id: number }) {
             {t('jobs.pendingNotice')}
           </p>
         )}
+        {job.status === 'REJECTED' && (
+          <p className={styles.pending} role="status">
+            {job.rejectionReason
+              ? t('jobs.rejectedNoticeReason', { reason: job.rejectionReason })
+              : t('jobs.rejectedNotice')}
+          </p>
+        )}
+        {job.status === 'CLOSED' && (
+          <p className={styles.pending} role="status">
+            {t('jobs.closedNotice')}
+          </p>
+        )}
 
         <div className={styles.head}>
-          <Avatar name={job.company.name} photoUrl={job.company.logoUrl} size={56} square />
+          <Avatar name={job.companyName} photoUrl={null} size={56} square />
           <div className={styles.headText}>
             <h1 className={styles.title}>{job.title}</h1>
             <p className={styles.company}>
               {website ? (
                 <a href={website} rel="noopener noreferrer nofollow">
-                  {job.company.name}
+                  {job.companyName}
                 </a>
               ) : (
-                job.company.name
+                job.companyName
               )}
               <span aria-hidden="true"> · </span>
               {t('jobs.published')} <RelativeTime iso={job.createdAt} />
             </p>
-            <JobFacts job={job} extra={[job.experience]} />
+            <JobFacts job={job} />
           </div>
         </div>
 
@@ -99,7 +112,11 @@ function JobView({ id }: { id: number }) {
         </ul>
 
         <div className={styles.report}>
-          <ReportButton targetType="JOB" targetId={job.id} authorUsername={job.postedBy} />
+          <ReportButton
+            targetType="JOB"
+            targetId={job.id}
+            authorUsername={job.recruiter.username}
+          />
         </div>
       </article>
 
@@ -109,7 +126,7 @@ function JobView({ id }: { id: number }) {
             <>
               <h2 className={styles.boxTitle}>{t('jobs.applied.title')}</h2>
               <p className={styles.boxText}>{t('jobs.applied.text')}</p>
-              <ApplicationStatusBadge status={job.myApplication} />
+              <ApplicationStatusBadge status={job.myApplication.status} />
               <Link to="/applications" className={styles.boxLink}>
                 {t('jobs.applied.follow')}
               </Link>
@@ -122,7 +139,7 @@ function JobView({ id }: { id: number }) {
                 variant="primary"
                 block
                 onClick={onApply}
-                disabled={job.status !== 'PUBLISHED'}
+                disabled={job.status !== 'PUBLISHED' || isOwner}
               >
                 {t('jobs.applyBox.button')}
               </Button>
@@ -133,8 +150,8 @@ function JobView({ id }: { id: number }) {
         <section className={styles.box}>
           <h2 className={styles.boxTitle}>{t('jobs.match.title')}</h2>
           {user ? (
-            user.skills?.length ? (
-              <SkillMatch required={job.technologies} mine={user.skills} />
+            user.technologies.length ? (
+              <SkillMatch required={job.technologies} mine={user.technologies} />
             ) : (
               <p className={styles.boxText}>
                 {t('jobs.match.noSkills')} <Link to="/profile/edit">{t('profile.edit')}</Link>
@@ -152,12 +169,15 @@ function JobView({ id }: { id: number }) {
         <ApplyDialog
           open={applying}
           jobId={job.id}
-          company={job.company.name}
+          company={job.companyName}
           user={user}
           onClose={() => setApplying(false)}
           onApplied={(application) => {
-            query.setData((current) => ({ ...current, myApplication: application.status }));
-            toast(t('jobs.apply.sent', { company: job.company.name }));
+            query.setData((current) => ({
+              ...current,
+              myApplication: { id: application.id, status: application.status },
+            }));
+            toast(t('jobs.apply.sent', { company: job.companyName }));
           }}
         />
       )}

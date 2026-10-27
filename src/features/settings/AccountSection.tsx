@@ -9,13 +9,17 @@ import { ResendVerificationButton } from '../auth/ResendVerificationButton';
 import styles from './Settings.module.css';
 import account from './AccountSection.module.css';
 
-export type AccountSectionProps = { user: Me };
+export type AccountSectionProps = {
+  user: Me;
+  /** Vient de GET /users/me/connections ; absent pendant le chargement. */
+  hasPassword?: boolean;
+};
 
 /**
  * Email et mot de passe. Le contrat n'a pas de changement de mot de passe connecté : on envoie
  * le lien de réinitialisation à l'adresse du compte, ce qui prouve aussi qu'on la possède.
  */
-export function AccountSection({ user }: AccountSectionProps) {
+export function AccountSection({ user, hasPassword }: AccountSectionProps) {
   const { t } = useTranslation();
   const toast = useToast();
   const [busy, setBusy] = useState(false);
@@ -58,7 +62,7 @@ export function AccountSection({ user }: AccountSectionProps) {
         <div className={account.text}>
           <b>{t('settings.account.password')}</b>
           <span>
-            {user.hasPassword === false
+            {hasPassword === false
               ? t('settings.account.noPassword')
               : t('settings.account.passwordHint')}
           </span>
@@ -72,7 +76,7 @@ export function AccountSection({ user }: AccountSectionProps) {
         >
           {sent
             ? t('settings.account.passwordSentShort')
-            : user.hasPassword === false
+            : hasPassword === false
               ? t('settings.account.setPassword')
               : t('settings.account.changePassword')}
         </Button>

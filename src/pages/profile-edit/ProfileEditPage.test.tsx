@@ -10,7 +10,7 @@ import { photoError } from '../../features/profile/photo';
 import ProfileEditPage from './ProfileEditPage';
 import { demoMe } from '../../test/fixtures';
 
-const member: Me = demoMe({ skills: ['flutter'], countryCode: 'SN' });
+const member: Me = demoMe({ technologies: ['flutter'], countryCode: 'SN' });
 
 const renderPage = () =>
   render(
@@ -67,7 +67,7 @@ describe('ProfileEditPage', () => {
         countryCode: 'BF',
         city: 'Dakar',
         bio: 'Développeuse Flutter à Ouagadougou.',
-        skills: ['flutter'],
+        technologies: ['flutter'],
         visibleToRecruiters: true,
       }),
     );

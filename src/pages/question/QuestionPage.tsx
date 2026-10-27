@@ -21,7 +21,6 @@ import { CommentThread } from '../../features/questions/CommentThread';
 import { ContextChips } from '../../features/questions/ContextChips';
 import { questionsApi } from '../../features/questions/questionsApi';
 import { VoteControl } from '../../features/questions/VoteControl';
-import { HiddenNotice } from '../../features/moderation/HiddenNotice';
 import { ReportButton } from '../../features/moderation/ReportButton';
 import detail from '../../features/questions/QuestionDetail.module.css';
 import { useApiQuery } from '../../hooks/useApiQuery';
@@ -68,22 +67,13 @@ function QuestionView({ id }: { id: number }) {
   const q = query.data?.question;
   usePageTitle(q?.title ?? t('question.crumbQuestion'));
 
-  // Un contenu masqué n'est visible que par son auteur (MOD-2) : le serveur filtre déjà, on reste prudent.
-  const answers = useMemo(
-    () =>
-      sortAnswers(
-        (query.data?.answers ?? []).filter((a) => !a.hidden || a.canEdit),
-        sort,
-      ),
-    [query.data, sort],
-  );
+  const answers = useMemo(() => sortAnswers(query.data?.answers ?? [], sort), [query.data, sort]);
 
   if (query.loading) return <QuestionDetailSkeleton />;
   if (query.error instanceof ApiError && query.error.status === 404) return <NotFoundPage />;
   if (query.error || !q) return <ErrorState error={query.error} onRetry={query.reload} />;
 
   const isAuthor = !!user && user.username === q.author.username;
-  if (q.hidden && !isAuthor) return <NotFoundPage />;
   const answerCount = query.data?.answers.length ?? 0;
 
   const setQuestion = (update: (question: QuestionDetail) => QuestionDetail) =>
@@ -163,14 +153,6 @@ function QuestionView({ id }: { id: number }) {
             />
           </div>
           <div className={detail.content}>
-            {q.hidden && (
-              <HiddenNotice
-                targetType="QUESTION"
-                targetId={q.id}
-                hidden={q.hidden}
-                onAppealed={(hidden) => setQuestion((c) => ({ ...c, hidden }))}
-              />
-            )}
             <MemberContent html={q.bodyHtml} />
             {q.code && <CodeBlock code={q.code} />}
             <div className={detail.foot}>

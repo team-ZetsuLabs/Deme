@@ -88,7 +88,44 @@
     "INVALID_TAG": "Un tag ne contient que des lettres minuscules, des chiffres, des tirets ou des points.",
     "INVALID_COUNTRY": "Ce pays n'est pas reconnu.",
     "INTERNAL_ERROR": "Une erreur est survenue de notre côté. Réessayez dans un instant.",
-    "COMMUNITY_EXISTS": "Une communauté de ce nom ou de ce tag existe déjà, ou est déjà proposée."
+    "COMMUNITY_EXISTS": "Une communauté de ce nom ou de ce tag existe déjà, ou est déjà proposée.",
+    "ACTION_NOT_ALLOWED": "Cette action n'est pas permise.",
+    "ALREADY_APPLIED": "Vous avez déjà postulé.",
+    "ALREADY_LINKED": "Ce compte est déjà lié.",
+    "ALREADY_LINKED_ELSEWHERE": "Ce compte appartient déjà à un autre membre de Zetsu.",
+    "APPLICATION_NOT_FOUND": "Candidature introuvable.",
+    "CANNOT_APPLY_OWN": "Vous ne pouvez pas postuler à votre propre annonce.",
+    "CANNOT_MODERATE_OWN": "Vous ne pouvez pas modérer votre propre contenu.",
+    "CANNOT_REPORT_OWN": "Vous ne pouvez pas signaler votre propre contenu.",
+    "CASE_ALREADY_DECIDED": "Ce dossier a déjà été traité.",
+    "CASE_NOT_FOUND": "Dossier de modération introuvable.",
+    "CASE_NOT_HIDDEN": "Ce contenu n'est pas masqué.",
+    "CHALLENGE_NOT_FOUND": "Défi introuvable.",
+    "CHALLENGE_NOT_OPEN": "Ce défi n'accepte pas de dépôt en ce moment.",
+    "COMMUNITY_NOT_FOUND": "Communauté introuvable.",
+    "CONFIRMATION_MISMATCH": "Le pseudo recopié ne correspond pas.",
+    "CV_NOT_FOUND": "Aucun CV joint à cette candidature.",
+    "CV_NOT_PDF": "Le CV doit être un fichier PDF.",
+    "CV_TOO_LARGE": "Le CV dépasse 2 Mo.",
+    "FILE_TOO_LARGE": "Le fichier dépasse 5 Mo.",
+    "INVALID_VOTE": "Vote invalide.",
+    "JOB_CLOSED": "Cette offre est clôturée.",
+    "JOB_NOT_FOUND": "Offre introuvable.",
+    "LAST_LOGIN_METHOD": "C'est votre seul moyen de connexion : il ne peut pas être retiré.",
+    "MISSION_NOT_FOUND": "Mission introuvable.",
+    "MISSION_NOT_OPEN": "Cette mission n'accepte plus de propositions.",
+    "NOTE_REQUIRED": "Ajoutez une note pour expliquer la décision.",
+    "NOT_JOB_OWNER": "Seul le recruteur de cette offre peut faire cela.",
+    "NOT_LINKED": "Ce compte n'est pas lié.",
+    "NOT_MISSION_AUTHOR": "Seul l'auteur de la mission peut faire cela.",
+    "NOT_TARGET_OWNER": "Seul l'auteur du contenu peut faire cela.",
+    "NO_CURRENT_CHALLENGE": "Pas de défi en cours.",
+    "PHOTO_REQUIRED": "Choisissez une photo.",
+    "PHOTO_TOO_LARGE": "La photo dépasse 2 Mo.",
+    "PHOTO_TYPE": "La photo doit être au format PNG, JPG ou WebP.",
+    "PROVIDER_NOT_FOUND": "Ce fournisseur de connexion n'est pas proposé.",
+    "RECRUITER_ONLY": "Réservé aux comptes recruteurs.",
+    "TARGET_NOT_FOUND": "Ce contenu n'existe plus."
   },
   "auth": {
     "browse": "Parcourir sans compte",
@@ -401,12 +438,13 @@
       "add": "Ajouter",
       "selected_one": "{{count}} technologie choisie",
       "selected_other": "{{count}} technologies choisies",
-      "max": "15 technologies au maximum.",
+      "max": "10 technologies au maximum.",
       "invalid": "Utilisez des lettres minuscules, des chiffres, des tirets ou des points."
     },
     "country": {
       "legend": "Votre pays",
-      "hint": "Il sert à mettre en avant les réponses et les offres proches de vous."
+      "hint": "Il sert à mettre en avant les réponses et les offres proches de vous.",
+      "required": "Choisissez votre pays pour continuer."
     },
     "language": {
       "legend": "Langue de l'interface",
@@ -426,7 +464,7 @@
       "OFFENSIVE": "Propos offensants",
       "OFF_TOPIC": "Hors sujet",
       "IMPERSONATION": "Usurpation d'identité",
-      "FRAUD": "Offre frauduleuse"
+      "FRAUDULENT_JOB": "Offre frauduleuse"
     },
     "comment": "Précisions",
     "commentHint": "300 caractères maximum.",
@@ -440,7 +478,6 @@
     "title": "Contenu masqué",
     "byReports": "Ce contenu a été masqué après 5 signalements de membres différents, en attendant la décision d'un Référent.",
     "byReferent": "Un Référent a masqué ce contenu.",
-    "byReferentReason": "Un Référent a masqué ce contenu pour le motif « {{reason}} ».",
     "onlyYou": "Vous êtes seul à le voir.",
     "appeal": "Contester la décision",
     "rules": "Relire les règles",
@@ -562,7 +599,8 @@
       "unlinked": "Compte déconnecté",
       "lastMethod": "C'est votre seul moyen de connexion : il ne peut pas être retiré.",
       "mockOnly": "En mode mock, la connexion OAuth n'est pas disponible.",
-      "unavailable": "Pas encore proposé"
+      "unavailable": "Pas encore proposé",
+      "linkedNow": "Compte connecté"
     },
     "appearance": {
       "title": "Apparence et langue",
@@ -579,9 +617,8 @@
       "intro": "Votre réputation et vos candidatures seront effacées définitivement.",
       "button": "Supprimer mon compte",
       "explain": "Vos questions et réponses resteront visibles, signées « Utilisateur supprimé ». Votre réputation et vos candidatures seront effacées. Cette action est définitive.",
-      "word": "SUPPRIMER",
-      "confirmLabel": "Tapez {{word}} pour confirmer",
-      "mismatch": "Tapez {{word}} en majuscules pour confirmer.",
+      "confirmLabel": "Recopiez votre pseudo {{word}} pour confirmer",
+      "mismatch": "Recopiez exactement votre pseudo {{word}}.",
       "confirm": "Supprimer définitivement",
       "done": "Votre compte a été supprimé."
     },
@@ -616,22 +653,32 @@
       "earlier": "Plus ancien"
     },
     "types": {
-      "ANSWER_ON_QUESTION": "{{actor}} a répondu à votre question",
+      "ANSWER_POSTED": "{{actor}} a répondu à votre question",
       "ANSWER_ACCEPTED": "{{actor}} a accepté votre réponse",
-      "VOTE": "{{actor}} a voté pour votre contenu",
+      "VOTE_RECEIVED": "{{actor}} a voté pour votre contenu",
       "JOB_MATCH": "Une offre correspond à votre profil",
       "MISSION_MATCH": "Une mission correspond à votre profil",
-      "NEW_CHALLENGE": "Nouveau défi de la semaine",
-      "APPLICATION_DECISION": "Votre candidature est {{decision}}",
-      "PROJECT_REQUEST_DECISION": "Votre demande pour rejoindre le projet est {{decision}}",
-      "COMMUNITY_PROPOSAL_DECISION": "La proposition de communauté est {{decision}}"
+      "APPLICATION_RECEIVED": "{{actor}} a postulé",
+      "APPLICATION_DECIDED": "Votre candidature est {{decision}}",
+      "JOB_REVIEWED": "Votre offre est {{decision}}",
+      "CHALLENGE_STARTED": "Nouveau défi de la semaine",
+      "SUBMISSION_REVIEWED": "Votre dépôt est {{decision}}",
+      "PROJECT_REQUEST_DECIDED": "Votre demande pour rejoindre le projet est {{decision}}",
+      "COMMUNITY_PROPOSAL_DECISION": "La proposition de communauté est {{decision}}",
+      "CONTENT_HIDDEN": "Un de vos contenus a été masqué",
+      "CONTENT_RESTORED": "Un de vos contenus est de nouveau visible",
+      "ACCOUNT_WARNED": "Vous avez reçu un avertissement de l'équipe"
     },
     "decisions": {
       "VIEWED": "vue",
       "SHORTLISTED": "retenue",
       "ACCEPTED": "acceptée",
-      "REJECTED": "refusée"
-    }
+      "REJECTED": "refusée",
+      "PUBLISHED": "publiée",
+      "VALIDATED": "validé",
+      "APPROVED": "acceptée"
+    },
+    "someone": "Un membre"
   },
   "home": {
     "pageTitle": "Zetsu, l'entraide entre développeurs africains",
@@ -900,12 +947,12 @@
     "view": "Voir l'offre",
     "viewLabel": "Voir l'offre : {{title}}",
     "empty": "Aucune offre ne correspond à ces filtres pour le moment.",
-    "remote": "À distance",
     "published": "Publiée",
     "technologies": "Technologies",
     "pendingNotice": "Cette offre est en attente de validation par l'équipe Zetsu. Elle n'est visible que par vous.",
     "contract": {
-      "FULL_TIME": "CDI",
+      "PERMANENT": "CDI",
+      "REMOTE": "À distance",
       "CONTRACT": "Mission freelance",
       "INTERNSHIP": "Stage"
     },
@@ -919,7 +966,7 @@
       "type": "Type de poste",
       "types": {
         "all": "Toutes",
-        "FULL_TIME": "CDI",
+        "PERMANENT": "CDI",
         "REMOTE": "À distance",
         "CONTRACT": "Missions",
         "INTERNSHIP": "Stages"
@@ -970,12 +1017,9 @@
       "website": "Site de l'entreprise",
       "websiteHint": "Adresse en https://, elle aide à vérifier votre entreprise.",
       "contract": "Type de contrat",
-      "remote": "Télétravail possible",
       "technologiesHint": "Séparées par des virgules. Exemple : spring-boot, react, postgresql",
       "salary": "Rémunération",
       "salaryHint": "Indiquer une fourchette donne plus de candidatures. Exemple : 450 000 à 600 000 FCFA par mois",
-      "experience": "Expérience attendue",
-      "experiencePlaceholder": "Ex. : 2 à 4 ans d'expérience",
       "description": "Description du poste",
       "descriptionHint": "L'entreprise, les missions et le profil recherché. Markdown accepté.",
       "notice": "Une offre ne doit jamais demander de frais d'inscription ou promettre des gains rapides. Les offres de ce type sont refusées.",
@@ -993,7 +1037,16 @@
     "subnav": {
       "label": "Emploi",
       "offers": "Offres"
-    }
+    },
+    "jobStatus": {
+      "PENDING": "En attente",
+      "PUBLISHED": "Publiée",
+      "REJECTED": "Refusée",
+      "CLOSED": "Clôturée"
+    },
+    "rejectedNotice": "L'équipe Zetsu n'a pas validé cette offre.",
+    "rejectedNoticeReason": "L'équipe Zetsu n'a pas validé cette offre : {{reason}}",
+    "closedNotice": "Cette offre est clôturée : elle n'accepte plus de candidatures."
   },
   "applications": {
     "pageTitle": "Mes candidatures",
@@ -1013,7 +1066,6 @@
     "publish": "Publier une mission",
     "empty": "Aucune mission ouverte ne correspond pour le moment. Publiez la vôtre.",
     "budget": "Budget : {{amount}}",
-    "budgetOpen": "Budget à discuter",
     "budgetLabel": "Budget indicatif",
     "delay_one": "{{count}} jour",
     "delay_other": "{{count}} jours",
@@ -1022,13 +1074,13 @@
     "yours": "Vous avez publié cette mission. Les propositions reçues sont listées sur la page.",
     "paymentNotice": "Zetsu ne gère aucun paiement. Mettez-vous d'accord directement, et ne payez jamais pour obtenir une mission.",
     "kind": {
-      "FIX": "Dépannage",
+      "TROUBLESHOOTING": "Dépannage",
       "INTEGRATION": "Intégration",
       "CODE_REVIEW": "Revue de code",
       "OTHER": "Autre"
     },
     "kindHint": {
-      "FIX": "Un bug ou une panne à régler vite.",
+      "TROUBLESHOOTING": "Un bug ou une panne à régler vite.",
       "INTEGRATION": "Brancher une API, un paiement, un service.",
       "CODE_REVIEW": "Un regard extérieur avant une mise en production.",
       "OTHER": "Tout autre coup de main court."
@@ -1048,7 +1100,6 @@
       "messageHint": "Comment vous comptez vous y prendre, et une expérience proche.",
       "messageTooShort": "Écrivez au moins {{min}} caractères pour présenter votre proposition.",
       "price": "Votre prix ({{currency}})",
-      "delay": "Votre délai (jours)",
       "submit": "Envoyer ma proposition",
       "sent": "Proposition envoyée. L'auteur de la mission sera prévenu.",
       "sentText": "Vous vous êtes proposé pour cette mission."
@@ -1072,7 +1123,7 @@
       "description": "Description",
       "descriptionHint": "Le contexte, ce qui est attendu et comment vous saurez que c'est terminé. Markdown accepté.",
       "budget": "Budget indicatif",
-      "budgetHint": "Laissez vide si vous préférez en discuter.",
+      "budgetHint": "Montant indicatif : aucun paiement ne passe par Zetsu.",
       "currency": "Monnaie",
       "delay": "Délai souhaité (jours)",
       "delayHint": "Entre 1 et {{max}} jours.",
@@ -1084,7 +1135,7 @@
         "title": "Le titre doit faire entre 10 et 120 caractères.",
         "description": "Décrivez la mission en 50 caractères au moins.",
         "delay": "Indiquez un délai entre 1 et 90 jours.",
-        "budget": "Le budget doit être un montant positif."
+        "budget": "Indiquez un budget indicatif, en montant positif."
       }
     }
   },
@@ -1108,7 +1159,7 @@
     "submissions_other": "{{count}} dépôts pour le moment",
     "submission": {
       "PENDING": "Dépôt reçu, en attente de notation",
-      "REVIEWED": "Dépôt noté : {{score}}/100",
+      "VALIDATED": "Dépôt validé : {{score}}/100",
       "REJECTED": "Dépôt refusé"
     },
     "submit": {
@@ -1140,7 +1191,8 @@
       "yourCountry": "(votre pays)",
       "participants_one": "{{count}} participant",
       "participants_other": "{{count}} participants"
-    }
+    },
+    "upcoming": "Défi à venir"
   },
   "communities": {
     "pageTitle": "Communautés",

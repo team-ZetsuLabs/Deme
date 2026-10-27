@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import type { MissionSummary } from '../../api/types';
 import { Avatar } from '../../components/Avatar';
 import { RelativeTime } from '../../components/RelativeTime';
-import { ApplicationStatusBadge } from '../jobs/ApplicationStatusBadge';
 import { MissionFacts } from './MissionFacts';
 import styles from './MissionRow.module.css';
 
@@ -18,7 +17,6 @@ export function MissionRow({ mission: m }: MissionRowProps) {
         <h3 className={styles.title}>
           <Link to={`/missions/${m.id}`}>{m.title}</Link>
         </h3>
-        <p className={styles.excerpt}>{m.excerpt}</p>
         <div className={styles.foot}>
           <ul className={styles.tags}>
             {m.technologies.map((tech) => (
@@ -33,11 +31,9 @@ export function MissionRow({ mission: m }: MissionRowProps) {
         </div>
       </div>
       <div className={styles.side}>
-        {m.myOffer ? (
-          <ApplicationStatusBadge status={m.myOffer} />
-        ) : (
-          <span className={styles.offers}>{t('missions.offerCount', { count: m.offerCount })}</span>
-        )}
+        <span className={styles.offers}>
+          {t('missions.offerCount', { count: m.applicationCount })}
+        </span>
       </div>
     </article>
   );

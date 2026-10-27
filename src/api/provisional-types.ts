@@ -1,13 +1,12 @@
 /**
- * TYPES PROVISOIRES des sprints suivants, en attendant leur contrat.
+ * TYPES PROVISOIRES des points d'entrée que le site utilise mais que le contrat ne publie
+ * pas encore (demandés au back-end).
  *
  * Le CLAUDE.md interdit de recopier un type d'API à la main : ce fichier est une
- * exception temporaire. Le sprint 1 vient déjà du contrat (voir types.ts) ; à chaque
- * contrat publié, on déplace les types concernés vers les alias de types.ts.
+ * exception temporaire. Dès qu'un point d'entrée est publié, son type part vers les
+ * alias de types.ts.
  */
 import type { AuthorSummary, QuestionContext } from './types';
-
-export type OAuthProviderId = 'github' | 'google';
 
 /** Commentaire court en texte brut (QA-9), 10 à 300 caractères. */
 export type Comment = {
@@ -39,68 +38,6 @@ export type QuestionAssist = {
   missing: MissingInfo[];
 };
 
-export type ReportTargetType = 'QUESTION' | 'ANSWER' | 'JOB' | 'MISSION' | 'PROJECT' | 'PROFILE';
-export type ReportReason = 'SPAM' | 'OFFENSIVE' | 'OFF_TOPIC' | 'IMPERSONATION' | 'FRAUD';
-
-/** POST /api/v1/reports (MOD-1). 409 ALREADY_REPORTED si déjà signalé par ce membre. */
-export type ReportRequest = {
-  targetType: ReportTargetType;
-  targetId: number | string; // pseudo pour un profil
-  reason: ReportReason;
-  comment: string | null;
-};
-
-/**
- * Contenu masqué (MOD-2 et MOD-3). Le serveur n'envoie un contenu masqué qu'à son auteur,
- * avec ce champ rempli ; pour tous les autres, le contenu n'apparaît pas.
- */
-export type HiddenState = {
-  by: 'REPORTS' | 'REFERENT'; // 5 signalements (MOD-2) ou décision d'un Référent (MOD-3)
-  reason: ReportReason | null; // motif retenu, null pour un masquage automatique
-  appeal: 'NONE' | 'PENDING' | 'REJECTED'; // contestation devant l'équipe
-};
-
-/** POST /api/v1/appeals (MOD-3). 409 ALREADY_APPEALED si une contestation existe déjà. */
-export type AppealRequest = {
-  targetType: ReportTargetType;
-  targetId: number;
-  message: string; // 20 à 500 caractères
-};
-
-export type NotificationType =
-  | 'ANSWER_ON_QUESTION'
-  | 'ANSWER_ACCEPTED'
-  | 'VOTE'
-  | 'JOB_MATCH'
-  | 'MISSION_MATCH'
-  | 'NEW_CHALLENGE'
-  | 'APPLICATION_DECISION'
-  | 'PROJECT_REQUEST_DECISION'
-  | 'COMMUNITY_PROPOSAL_DECISION';
-
-export type NotificationTargetType =
-  'QUESTION' | 'JOB' | 'MISSION' | 'CHALLENGE' | 'PROJECT' | 'APPLICATION' | 'COMMUNITY_PROPOSAL';
-
-/** Élément de GET /api/v1/notifications (NOT-1). */
-export type AppNotification = {
-  id: number;
-  type: NotificationType;
-  actor: AuthorSummary | null; // null pour une notification de la plateforme (offre, défi…)
-  targetType: NotificationTargetType;
-  targetId: number;
-  targetTitle: string;
-  /** Décision pour une candidature ou une demande de projet : VIEWED, SHORTLISTED, ACCEPTED, REJECTED. */
-  decision: 'VIEWED' | 'SHORTLISTED' | 'ACCEPTED' | 'REJECTED' | null;
-  createdAt: string;
-  read: boolean;
-};
-
-/** GET /api/v1/notifications/unread-count */
-export type UnreadCount = { count: number };
-
-/** POST /api/v1/notifications/read : des notifications précises, ou toutes. */
-export type MarkReadRequest = { ids: number[] } | { all: true };
-
 /** GET /api/v1/stats : chiffres publics de la page d'accueil, calculés depuis la base. */
 export type PublicStats = {
   questions: number;
@@ -112,162 +49,6 @@ export type PublicStats = {
   levels: { MEMBER: number; CONTRIBUTOR: number; REFERENT: number };
 };
 
-export type ContractType = 'FULL_TIME' | 'CONTRACT' | 'INTERNSHIP';
-
-/** Statut de validation d'une offre par l'équipe (JOB-4). */
-export type JobStatus = 'PENDING' | 'PUBLISHED' | 'REJECTED' | 'CLOSED';
-
-/** Suivi d'une candidature ou d'une proposition de mission (JOB-7). */
-export type ApplicationStatus = 'SENT' | 'VIEWED' | 'SHORTLISTED' | 'REJECTED';
-
-export type Company = {
-  name: string;
-  logoUrl: string | null;
-  website: string | null; // https uniquement, vérifié par le serveur
-};
-
-/** Élément de GET /api/v1/jobs (JOB-1). */
-export type JobSummary = {
-  id: number;
-  title: string;
-  company: Company;
-  city: string | null;
-  country: string | null;
-  contractType: ContractType;
-  remote: boolean;
-  technologies: string[];
-  salary: string | null; // texte libre : « 450 000 à 600 000 FCFA par mois »
-  createdAt: string;
-  /** Statut de ma candidature, null si je n'ai pas postulé ou si je ne suis pas connecté. */
-  myApplication: ApplicationStatus | null;
-};
-
-/** GET /api/v1/jobs/{id} (JOB-2). */
-export type JobDetail = JobSummary & {
-  experience: string | null; // « 2 à 4 ans d'expérience »
-  descriptionHtml: string; // Markdown de l'entreprise, nettoyé par le serveur
-  status: JobStatus;
-  postedBy: string; // pseudo du membre qui a publié l'offre (pour le signalement)
-};
-
-/** POST /api/v1/jobs (JOB-4) : l'offre est créée « En attente » jusqu'à validation. */
-export type JobRequest = {
-  title: string;
-  company: { name: string; website: string | null };
-  city: string | null;
-  country: string | null;
-  contractType: ContractType;
-  remote: boolean;
-  technologies: string[];
-  salary: string | null;
-  experience: string | null;
-  description: string; // Markdown
-};
-
-/** Élément de GET /api/v1/users/me/applications (JOB-7) : candidatures et propositions de mission. */
-export type MyApplication = {
-  id: number;
-  targetType: 'JOB' | 'MISSION';
-  targetId: number;
-  title: string;
-  organisation: string; // entreprise de l'offre, ou auteur de la mission
-  status: ApplicationStatus;
-  sentAt: string;
-  updatedAt: string;
-};
-
-/** Missions courtes entre pairs (JOB-5). */
-export type MissionKind = 'FIX' | 'INTEGRATION' | 'CODE_REVIEW' | 'OTHER';
-export type MissionStatus = 'OPEN' | 'IN_PROGRESS' | 'CLOSED';
-
-/** Montant indicatif : aucun paiement ne passe par Zetsu. */
-export type Money = { amount: number; currency: string }; // ISO 4217 : XOF, XAF, GHS, NGN, KES…
-
-/** Élément de GET /api/v1/missions */
-export type MissionSummary = {
-  id: number;
-  title: string;
-  kind: MissionKind;
-  excerpt: string;
-  budget: Money | null;
-  delayDays: number;
-  technologies: string[];
-  author: AuthorSummary;
-  createdAt: string;
-  status: MissionStatus;
-  offerCount: number;
-  /** Statut de ma proposition, null si je ne me suis pas proposé. */
-  myOffer: ApplicationStatus | null;
-};
-
-/** Proposition d'un membre sur une mission, visible par l'auteur de la mission. */
-export type MissionOffer = {
-  id: number;
-  member: AuthorSummary;
-  message: string;
-  price: Money | null;
-  delayDays: number | null;
-  status: ApplicationStatus;
-  createdAt: string;
-};
-
-/** GET /api/v1/missions/{id} : `offers` n'est rempli que pour l'auteur de la mission. */
-export type MissionDetail = MissionSummary & {
-  descriptionHtml: string;
-  offers: MissionOffer[] | null;
-};
-
-/** POST /api/v1/missions */
-export type MissionRequest = {
-  title: string;
-  kind: MissionKind;
-  description: string; // Markdown
-  budget: Money | null;
-  delayDays: number;
-  technologies: string[];
-};
-
-/** POST /api/v1/missions/{id}/offers : se proposer. Renvoie une MyApplication (JOB-7). */
-export type OfferRequest = {
-  message: string;
-  price: Money | null;
-  delayDays: number | null;
-};
-
-/** PATCH /api/v1/missions/{id}/offers/{offerId} : décision de l'auteur. */
-export type OfferDecision = { status: 'SHORTLISTED' | 'REJECTED' };
-
-/** Dépôt d'un membre sur un défi (CH-2), noté par l'équipe sur 100 (CH-3). */
-export type Submission = {
-  id: number;
-  repoUrl: string;
-  status: 'PENDING' | 'REVIEWED' | 'REJECTED';
-  score: number | null;
-  submittedAt: string;
-};
-
-/** GET /api/v1/challenges/current (CH-1). 404 NO_CURRENT_CHALLENGE s'il n'y a pas de défi en cours. */
-export type Challenge = {
-  id: number;
-  title: string;
-  summary: string;
-  /** Spécifications : une ligne par exigence, avec une étiquette courte facultative (« POST »). */
-  specs: { label: string | null; text: string }[];
-  startsAt: string;
-  endsAt: string; // le compte à rebours se calcule depuis cette date, pas depuis « dimanche prochain »
-  points: number; // points gagnés pour un dépôt validé (+20, section 8)
-  submissionCount: number;
-  mySubmission: Submission | null;
-};
-
-/** Élément de GET /api/v1/challenges/{id}/leaderboard */
-export type LeaderboardEntry = {
-  rank: number;
-  member: AuthorSummary;
-  score: number | null; // null tant que l'équipe n'a pas noté
-  submittedAt: string;
-};
-
 /**
  * Élément de GET /api/v1/challenges/{id}/leaderboard/countries (CH-5).
  * Classé par le serveur : total des notes des dépôts évalués du pays.
@@ -277,58 +58,4 @@ export type CountryLeaderboardEntry = {
   country: string; // code ISO 3166-1 alpha-2
   participants: number; // dépôts du pays, évalués ou non
   points: number;
-};
-
-/** POST /api/v1/challenges/{id}/submissions. 409 ALREADY_SUBMITTED : un dépôt par membre et par défi. */
-export type SubmissionRequest = { repoUrl: string };
-
-/** Communautés par pays ou par technologie (COM-1, idée de l'équipe hors cahier). */
-export type CommunityKind = 'COUNTRY' | 'TECH';
-
-/** Élément de GET /api/v1/communities et de GET /api/v1/users/me/communities. */
-export type CommunitySummary = {
-  slug: string; // « senegal », « flutter » : sert d'adresse /communities/{slug}
-  name: string;
-  kind: CommunityKind;
-  countryCode: string | null; // rempli pour une communauté de pays
-  tag: string | null; // rempli pour une communauté de techno : étiquette de ses questions
-  description: string; // texte brut, 200 caractères au plus
-  memberCount: number;
-  questionCount: number;
-  joined: boolean; // le membre connecté en fait partie (false sans session)
-};
-
-/** GET /api/v1/communities/{slug} */
-export type CommunityDetail = CommunitySummary & {
-  rules: string[]; // règles propres à la communauté, texte brut, en plus des règles générales
-  referents: AuthorSummary[]; // Référents qui veillent sur la communauté
-  topMembers: AuthorSummary[]; // membres les plus utiles ce mois-ci
-  createdAt: string;
-};
-
-/** Réponse de POST et DELETE /api/v1/communities/{slug}/members */
-export type MembershipResult = { joined: boolean; memberCount: number };
-
-/**
- * POST /api/v1/community-proposals (COM-2) : un Référent propose une communauté.
- * 403 LEVEL_TOO_LOW sous le niveau Référent, 409 COMMUNITY_EXISTS si le nom ou le tag existe déjà.
- */
-export type CommunityProposalRequest = {
-  name: string; // 3 à 40 caractères
-  kind: CommunityKind;
-  countryCode: string | null; // obligatoire pour une communauté de pays
-  tag: string | null; // obligatoire pour une communauté de techno
-  description: string; // 30 à 200 caractères, texte brut
-  rules: string[]; // 0 à 5 règles, 200 caractères chacune
-};
-
-/** Élément de GET /api/v1/users/me/community-proposals : l'équipe valide ou refuse avec un motif. */
-export type CommunityProposal = {
-  id: number;
-  name: string;
-  kind: CommunityKind;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  rejectionReason: string | null; // rempli si refusée
-  slug: string | null; // rempli si acceptée : adresse de la communauté créée
-  createdAt: string;
 };

@@ -36,7 +36,7 @@ afterEach(() => {
 describe('ReportButton (MOD-1)', () => {
   it('envoie le motif choisi et la précision', async () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(member);
-    const create = vi.spyOn(reportsApi, 'create').mockResolvedValue(undefined);
+    const create = vi.spyOn(reportsApi, 'create').mockResolvedValue({ caseId: 9, hidden: false });
     renderButton();
 
     fireEvent.click(await screen.findByRole('button', { name: 'Signaler' }));

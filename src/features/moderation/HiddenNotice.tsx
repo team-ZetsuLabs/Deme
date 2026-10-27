@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { HiddenState, ReportTargetType } from '../../api/types';
+import type { MyModeratedContent } from '../../api/types';
 import { errorMessage } from '../../api/errorMessage';
 import { Button } from '../../components/Button';
 import { Dialog } from '../../components/Dialog';
@@ -13,30 +13,27 @@ import { APPEAL_MAX, APPEAL_MIN, appealsApi } from './appealsApi';
 import styles from './HiddenNotice.module.css';
 
 export type HiddenNoticeProps = {
-  targetType: ReportTargetType;
-  targetId: number;
-  hidden: HiddenState;
-  /** Appelé après l'envoi d'une contestation, avec le nouvel état (« en cours »). */
-  onAppealed: (hidden: HiddenState) => void;
+  /** Élément de GET /users/me/moderation. */
+  item: MyModeratedContent;
+  /** Appelé après l'envoi d'une contestation, avec le dossier à jour (APPEALED). */
+  onAppealed: (item: MyModeratedContent) => void;
 };
 
 /**
  * Avis montré à l'auteur d'un contenu masqué (MOD-2), qui reste seul à le voir,
  * avec la possibilité de contester la décision devant l'équipe (MOD-3).
  */
-export function HiddenNotice({ targetType, targetId, hidden, onAppealed }: HiddenNoticeProps) {
+export function HiddenNotice({ item, onAppealed }: HiddenNoticeProps) {
   const { t } = useTranslation();
   const toast = useToast();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const fieldId = `appeal-${targetType.toLowerCase()}-${targetId}`;
-
-  const reason =
-    hidden.by === 'REFERENT' && hidden.reason
-      ? t('hidden.byReferentReason', { reason: t(`report.reasons.${hidden.reason}`) })
-      : t(hidden.by === 'REFERENT' ? 'hidden.byReferent' : 'hidden.byReports');
+  const fieldId = `appeal-${item.caseId}`;
+  // Sans décision, le masquage vient des signalements (MOD-2) ; sinon d'un Référent ou de l'équipe.
+  const reason = t(item.decision ? 'hidden.byReferent' : 'hidden.byReports');
+  const rejected = item.status === 'HIDDEN' && !item.canAppeal;
 
   const close = () => {
     setOpen(false);
@@ -53,9 +50,9 @@ export function HiddenNotice({ targetType, targetId, hidden, onAppealed }: Hidde
     }
     setBusy(true);
     try {
-      await appealsApi.create({ targetType, targetId, message: text });
+      const updated = await appealsApi.create(item.caseId, text);
       close();
-      onAppealed({ ...hidden, appeal: 'PENDING' });
+      onAppealed(updated);
       toast(t('hidden.sent'));
     } catch (err) {
       setError(errorMessage(t, err));
@@ -73,7 +70,7 @@ export function HiddenNotice({ targetType, targetId, hidden, onAppealed }: Hidde
       <p className={styles.text}>
         {reason} {t('hidden.onlyYou')}
       </p>
-      {hidden.appeal === 'NONE' && (
+      {item.canAppeal && (
         <div className={styles.actions}>
           <Button size="sm" variant="secondary" onClick={() => setOpen(true)}>
             {t('hidden.appeal')}
@@ -83,8 +80,8 @@ export function HiddenNotice({ targetType, targetId, hidden, onAppealed }: Hidde
           </Link>
         </div>
       )}
-      {hidden.appeal === 'PENDING' && <p className={styles.status}>{t('hidden.pending')}</p>}
-      {hidden.appeal === 'REJECTED' && <p className={styles.status}>{t('hidden.rejected')}</p>}
+      {item.status === 'APPEALED' && <p className={styles.status}>{t('hidden.pending')}</p>}
+      {rejected && <p className={styles.status}>{t('hidden.rejected')}</p>}
 
       <Dialog open={open} title={t('hidden.dialogTitle')} onClose={close}>
         <p className={styles.lead}>{t('hidden.dialogLead')}</p>

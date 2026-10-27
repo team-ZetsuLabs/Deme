@@ -13,9 +13,57 @@ export interface paths {
         };
         get?: never;
         /** Modifier son profil */
-        put: operations["update"];
+        put: operations["userUpdate"];
+        post?: never;
+        /**
+         * Supprimer son compte
+         * @description Le membre recopie son pseudo pour confirmer (AUTH-6). Ses questions et réponses restent, signées « Utilisateur supprimé » ; réputation, comptes liés et données personnelles sont effacés. La session est fermée.
+         */
+        delete: operations["userDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/onboarding": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Terminer le parcours d'accueil
+         * @description Stack (1 à 10 technologies, partagées avec les étiquettes), pays et langue (AUTH-5). Passe onboardingCompleted à vrai ; peut être rappelé pour corriger ses choix.
+         */
+        put: operations["userOnboarding"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/avatar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Changer sa photo de profil (SET-1)
+         * @description Formulaire multipart, champ photo : PNG, JPG ou WebP de 2 Mo maximum, vérifié par son contenu et pas par son nom. Stockée hors du dossier public sous un nom régénéré ; avatarUrl change à chaque nouvelle photo, on peut donc la garder en cache.
+         */
+        put: operations["userUpdateAvatar"];
+        post?: never;
+        /**
+         * Retirer sa photo de profil
+         * @description Le front affiche alors les initiales.
+         */
+        delete: operations["userDeleteAvatar"];
         options?: never;
         head?: never;
         patch?: never;
@@ -30,10 +78,10 @@ export interface paths {
         };
         get?: never;
         /** Accepter une réponse (auteur de la question seulement) */
-        put: operations["accept"];
+        put: operations["answerAccept"];
         post?: never;
         /** Retirer l'acceptation (auteur de la question seulement) */
-        delete: operations["unaccept"];
+        delete: operations["answerUnaccept"];
         options?: never;
         head?: never;
         patch?: never;
@@ -47,9 +95,54 @@ export interface paths {
             cookie?: never;
         };
         /** Détail d'une question */
-        get: operations["get"];
+        get: operations["questionGet"];
         /** Modifier sa question */
-        put: operations["update_1"];
+        put: operations["questionUpdate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/missions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Détail d'une mission */
+        get: operations["missionGet"];
+        /**
+         * Modifier sa mission
+         * @description Seulement tant qu'elle est ouverte.
+         */
+        put: operations["missionUpdate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Détail d'une offre (JOB-2)
+         * @description Une offre en attente ou refusée n'est visible que par son recruteur et l'équipe.
+         */
+        get: operations["jobGet"];
+        /**
+         * Modifier son offre
+         * @description Renvoie l'offre « PENDING » pour une nouvelle validation.
+         */
+        put: operations["jobUpdate"];
         post?: never;
         delete?: never;
         options?: never;
@@ -66,8 +159,132 @@ export interface paths {
         };
         get?: never;
         /** Modifier sa réponse */
-        put: operations["update_2"];
+        put: operations["answerUpdate"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{id}/role": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Changer le rôle d'un compte
+         * @description Administrateur seulement. Pris en compte à la prochaine requête du membre. Un Administrateur ne peut pas retirer son propre rôle.
+         */
+        put: operations["userAdminChangeRole"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/communities/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Modifier une communauté
+         * @description Modification complète ; l'adresse ne change pas.
+         */
+        put: operations["communityAdminUpdate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/communities/{slug}/referents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Nommer les Référents d'une communauté
+         * @description Remplace la liste, dans l'ordre d'affichage. Chacun doit avoir le niveau Référent (section 8) et devient membre de la communauté.
+         */
+        put: operations["communityAdminReferents"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/challenges/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Modifier un défi
+         * @description Tout est modifiable avant le début ; une fois commencé, seuls l'énoncé, les spécifications et la date de fin (repoussée) changent.
+         */
+        put: operations["challengeAdminUpdate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/connections/{provider}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Commencer la liaison d'un compte
+         * @description Note dans la session que la prochaine connexion OAuth doit être liée au membre connecté, puis renvoie l'adresse vers laquelle naviguer. Au retour, le serveur renvoie vers FRONT_URL/settings?linked=github, ou ?linkError=ALREADY_LINKED_ELSEWHERE si ce compte GitHub ou Google appartient déjà à un autre membre.
+         */
+        post: operations["connectionLink"];
+        /**
+         * Délier un compte
+         * @description Refusé si c'est le dernier moyen de connexion (pas de mot de passe, aucun autre compte lié).
+         */
+        delete: operations["connectionUnlink"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Signaler un contenu (MOD-1)
+         * @description À partir du niveau Membre. Un signalement par membre et par contenu. Au 5e signalement de comptes distincts, le contenu est masqué pour tous sauf son auteur (MOD-2) ; le seuil est dans la configuration.
+         */
+        post: operations["moderationReport"];
         delete?: never;
         options?: never;
         head?: never;
@@ -85,10 +302,10 @@ export interface paths {
          * Liste et recherche des questions
          * @description Recherche plein texte en français et en anglais sur titre, détails et étiquettes avec q (syntaxe web : "phrase exacte", -exclu, OR). Pagination par 20.
          */
-        get: operations["list"];
+        get: operations["questionList"];
         put?: never;
         /** Poser une question */
-        post: operations["create"];
+        post: operations["questionCreate"];
         delete?: never;
         options?: never;
         head?: never;
@@ -108,9 +325,9 @@ export interface paths {
          * Voter pour une question
          * @description Voter l'inverse de son vote actuel le remplace.
          */
-        post: operations["voteQuestion"];
+        post: operations["voteVoteQuestion"];
         /** Retirer son vote sur une question */
-        delete: operations["unvoteQuestion"];
+        delete: operations["voteUnvoteQuestion"];
         options?: never;
         head?: never;
         patch?: never;
@@ -127,10 +344,270 @@ export interface paths {
          * Réponses d'une question
          * @description Réponse acceptée en tête, puis par score.
          */
-        get: operations["list_1"];
+        get: operations["answerList"];
         put?: never;
         /** Répondre à une question */
-        post: operations["create_1"];
+        post: operations["answerCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Marquer comme lues
+         * @description Sans ids : « Tout marquer comme lu ». Renvoie le compteur à jour.
+         */
+        post: operations["notificationMarkRead"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/moderation/cases/{id}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ignorer ou masquer un contenu signalé (MOD-3)
+         * @description Réservé aux Référents, et seulement DISMISS ou HIDE (le motif est obligatoire pour HIDE). La décision est enregistrée et l'auteur est notifié ; il peut la contester devant l'équipe.
+         */
+        post: operations["moderationDecide"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/moderation/cases/{id}/appeal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Contester le masquage de son contenu
+         * @description Par l'auteur du contenu, une seule fois par dossier. Le dossier passe « APPEALED » et arrive dans le back office de l'équipe.
+         */
+        post: operations["moderationAppeal"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/missions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Liste des missions
+         * @description Par défaut les missions ouvertes, plus récentes d'abord.
+         */
+        get: operations["missionList"];
+        put?: never;
+        /**
+         * Publier une mission (JOB-5)
+         * @description Ouvert à tout membre connecté, publiée tout de suite.
+         */
+        post: operations["missionCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/missions/{id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Clore sa mission
+         * @description Terminée ou abandonnée ; plus aucune proposition acceptée.
+         */
+        post: operations["missionClose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/missions/{id}/applications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Propositions reçues sur sa mission
+         * @description Les propositions encore « SENT » passent « VIEWED » quand l'auteur les liste (JOB-7).
+         */
+        get: operations["missionApplications"];
+        put?: never;
+        /**
+         * Se proposer sur une mission
+         * @description Une seule proposition par membre et par mission.
+         */
+        post: operations["missionApply"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Liste des offres publiées (JOB-1)
+         * @description Plus récentes d'abord. Avec une session, chaque offre porte sa correspondance avec la stack du membre.
+         */
+        get: operations["jobList"];
+        put?: never;
+        /**
+         * Publier une offre (JOB-4)
+         * @description Réservé au rôle Recruteur, attribué par l'équipe. L'offre est créée « PENDING ».
+         */
+        post: operations["jobCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/{id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Clore son offre
+         * @description Elle disparaît de la liste ; les candidatures restent consultables.
+         */
+        post: operations["jobClose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/{id}/applications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Candidatures reçues sur son offre
+         * @description Les candidatures encore « SENT » passent « VIEWED » quand le recruteur les liste (JOB-7).
+         */
+        get: operations["jobApplications"];
+        put?: never;
+        /**
+         * Postuler à une offre (JOB-3)
+         * @description Formulaire multipart : message (40 à 2000 caractères) et CV PDF facultatif de 2 Mo maximum. Le profil Zetsu du membre est transmis au recruteur. Une seule candidature par offre.
+         */
+        post: operations["jobApply"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/community-proposals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Proposer une communauté (COM-2)
+         * @description Réservé au niveau Référent. La proposition est créée « PENDING » ; l'équipe l'accepte ou la refuse avec un motif, et le Référent reçoit COMMUNITY_PROPOSAL_DECISION.
+         */
+        post: operations["communityPropose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/communities/{slug}/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Rejoindre une communauté
+         * @description Ouvert à tous les niveaux. Sans effet si déjà membre.
+         */
+        post: operations["communityJoin"];
+        /**
+         * Quitter une communauté
+         * @description Sans effet si déjà hors de la communauté.
+         */
+        delete: operations["communityLeave"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/challenges/{id}/submissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Déposer son dépôt GitHub (CH-2)
+         * @description Un dépôt par membre et par défi, tant que le défi est « OPEN ». Seul le format de l'adresse est vérifié ; l'équipe ouvre le dépôt en notant.
+         */
+        post: operations["challengeSubmit"];
         delete?: never;
         options?: never;
         head?: never;
@@ -150,7 +627,7 @@ export interface paths {
          * Inscription par email (secours d'OAuth)
          * @description Connecte le membre dans la foulée.
          */
-        post: operations["register"];
+        post: operations["authRegister"];
         delete?: never;
         options?: never;
         head?: never;
@@ -170,7 +647,7 @@ export interface paths {
          * Connexion par email et mot de passe
          * @description 5 essais ratés sur un même email bloquent ce compte pendant 15 minutes (AUTH-3).
          */
-        post: operations["login"];
+        post: operations["authLogin"];
         delete?: never;
         options?: never;
         head?: never;
@@ -190,12 +667,278 @@ export interface paths {
          * Voter pour une réponse
          * @description Voter l'inverse de son vote actuel le remplace.
          */
-        post: operations["voteAnswer"];
+        post: operations["voteVoteAnswer"];
         /** Retirer son vote sur une réponse */
-        delete: operations["unvoteAnswer"];
+        delete: operations["voteUnvoteAnswer"];
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{id}/suspend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Suspendre un compte
+         * @description Appliqué côté serveur : connexion refusée (ACCOUNT_SUSPENDED) et sessions ouvertes fermées à la requête suivante. Ses contenus restent visibles. Impossible sur soi-même ou sur un membre de l'équipe.
+         */
+        post: operations["userAdminSuspend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{id}/reactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Réactiver un compte suspendu */
+        post: operations["userAdminReactivate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/tags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Étiquettes et leurs usages
+         * @description q filtre par début de nom. unused=true ne garde que les étiquettes que plus rien n'utilise. Par ordre alphabétique.
+         */
+        get: operations["tagAdminList"];
+        put?: never;
+        /**
+         * Créer une étiquette
+         * @description Le nom est mis en minuscules.
+         */
+        post: operations["tagAdminCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/tags/{name}/merge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Fusionner une étiquette dans une autre
+         * @description Questions, offres, missions, stacks et communauté de techno passent sur l'étiquette cible, sans doublon ; l'étiquette fusionnée disparaît. Renvoie l'étiquette cible.
+         */
+        post: operations["tagAdminMerge"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/submissions/{id}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Noter un dépôt (CH-3)
+         * @description Note sur 100 et validation. Un dépôt validé rapporte +20 de réputation (CHALLENGE_VALIDATED), une seule fois ; une note corrigée plus tard ne change pas les points, un passage de VALIDATED à REJECTED les retire. Le membre est notifié.
+         */
+        post: operations["challengeAdminReview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/jobs/{id}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Valider ou refuser une offre
+         * @description Le motif est obligatoire pour un refus. Le recruteur est notifié (JOB_REVIEWED).
+         */
+        post: operations["jobAdminDecide"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/community-proposals/{id}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Accepter ou refuser une proposition
+         * @description Accepter crée la communauté ; le proposeur en devient le premier Référent et membre. Le motif est obligatoire pour un refus. Le Référent reçoit COMMUNITY_PROPOSAL_DECISION.
+         */
+        post: operations["communityAdminDecide"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/communities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Communautés, ouvertes et fermées
+         * @description Sans status : toutes. Les plus grandes d'abord.
+         */
+        get: operations["communityAdminList"];
+        put?: never;
+        /**
+         * Créer une communauté
+         * @description L'adresse (slug) vient du nom, sans accent, et ne change plus. L'étiquette d'une communauté de techno est créée si elle n'existe pas.
+         */
+        post: operations["communityAdminCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/communities/{slug}/reopen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Rouvrir une communauté fermée */
+        post: operations["communityAdminReopen"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/communities/{slug}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Fermer une communauté
+         * @description Elle disparaît des listes et de sa page (404) ; ses questions restent dans le fil. Membres et Référents sont gardés pour une réouverture.
+         */
+        post: operations["communityAdminClose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/challenges": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Tous les défis
+         * @description Les plus récents d'abord, « UPCOMING » compris.
+         */
+        get: operations["challengeAdminList"];
+        put?: never;
+        /**
+         * Créer un défi
+         * @description endsAt après startsAt. Deux défis ne peuvent pas se chevaucher. Au début du défi, les membres sont notifiés (CHALLENGE_STARTED).
+         */
+        post: operations["challengeAdminCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/cases/{id}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Trancher un dossier
+         * @description Toutes les actions : ignorer, masquer, rétablir (contestation acceptée), avertir ou suspendre l'auteur (le contenu est aussi masqué). Le motif est obligatoire sauf pour DISMISS et RESTORE. Peut revenir sur la décision d'un Référent. L'annulation pendant 6 secondes se fait côté front, avant l'envoi.
+         */
+        post: operations["moderationAdminDecide"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Retenir ou refuser une candidature reçue
+         * @description Par le recruteur de l'offre ou l'auteur de la mission. Le candidat est notifié. Retenir une proposition passe la mission « IN_PROGRESS ».
+         */
+        patch: operations["applicationDecide"];
         trace?: never;
     };
     "/api/v1/users/{username}": {
@@ -206,7 +949,7 @@ export interface paths {
             cookie?: never;
         };
         /** Profil public d'un membre */
-        get: operations["profile"];
+        get: operations["userProfile"];
         put?: never;
         post?: never;
         delete?: never;
@@ -223,7 +966,127 @@ export interface paths {
             cookie?: never;
         };
         /** Historique de réputation d'un membre */
-        get: operations["reputation"];
+        get: operations["userReputation"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/{username}/avatar/{file}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Photo de profil d'un membre
+         * @description Ne pas construire cette adresse : utiliser avatarUrl. Réponse image/png, image/jpeg ou image/webp, en cache un an (le nom change avec la photo).
+         */
+        get: operations["userAvatar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/moderation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mes contenus masqués
+         * @description Contenus du membre connecté masqués, contestés ou rétablis, avec la décision et la possibilité de contester. Les plus récents d'abord.
+         */
+        get: operations["moderationMine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/connections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mes comptes connectés
+         * @description Un élément par fournisseur activé sur ce serveur.
+         */
+        get: operations["connectionList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/community-proposals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mes propositions de communauté (COM-2)
+         * @description La plus récente d'abord.
+         */
+        get: operations["communityMyProposals"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/communities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mes communautés
+         * @description Communautés ouvertes rejointes, la plus récente d'abord.
+         */
+        get: operations["communityMine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/applications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mes candidatures et propositions (JOB-7)
+         * @description Statut : envoyée, vue, retenue, refusée.
+         */
+        get: operations["applicationMine"];
         put?: never;
         post?: never;
         delete?: never;
@@ -240,7 +1103,184 @@ export interface paths {
             cookie?: never;
         };
         /** Étiquettes les plus utilisées, filtrables par début de nom (autocomplétion) */
-        get: operations["list_2"];
+        get: operations["tagList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mes notifications
+         * @description Plus récentes d'abord. Lire la liste ne les marque pas comme lues.
+         */
+        get: operations["notificationList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/notifications/unread-count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Nombre de non-lues
+         * @description Réponse minuscule, à interroger toutes les 60 s au plus (réseau 3G).
+         */
+        get: operations["notificationUnreadCount"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/moderation/cases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * File des signalements (MOD-3)
+         * @description À partir du niveau Contributeur (lecture) ; seul un Référent peut décider. Les dossiers sans décision (« OPEN », ou « HIDDEN » après un masquage automatique), les plus signalés d'abord. Un membre ne voit jamais les dossiers de ses propres contenus.
+         */
+        get: operations["moderationQueue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Offres publiées par le recruteur connecté, tous statuts confondus */
+        get: operations["jobMine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/communities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Liste des communautés (COM-1)
+         * @description Communautés ouvertes, les plus grandes d'abord. Publique ; joined vaut false sans session. q cherche dans le nom, l'étiquette et l'adresse (« senegal » trouve « Sénégal »).
+         */
+        get: operations["communityList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/communities/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Page d'une communauté (COM-1)
+         * @description Ses questions s'obtiennent avec GET /questions?community={slug}.
+         */
+        get: operations["communityGet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/challenges/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Un défi
+         * @description Les défis « UPCOMING » ne sont visibles que dans le back office.
+         */
+        get: operations["challengeGet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/challenges/{id}/leaderboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Classement d'un défi (CH-1)
+         * @description Dépôts validés seulement, meilleure note d'abord, puis le dépôt le plus ancien. Vide tant que rien n'est noté.
+         */
+        get: operations["challengeLeaderboard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/challenges/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Défi en cours (CH-1)
+         * @description Le défi « OPEN » ; à défaut, le dernier défi « CLOSED », pour garder son classement visible.
+         */
+        get: operations["challengeCurrent"];
         put?: never;
         post?: never;
         delete?: never;
@@ -257,7 +1297,7 @@ export interface paths {
             cookie?: never;
         };
         /** Fournisseurs OAuth activés sur ce serveur */
-        get: operations["providers"];
+        get: operations["authProviders"];
         put?: never;
         post?: never;
         delete?: never;
@@ -274,7 +1314,7 @@ export interface paths {
             cookie?: never;
         };
         /** Membre connecté */
-        get: operations["me"];
+        get: operations["authMe"];
         put?: never;
         post?: never;
         delete?: never;
@@ -294,10 +1334,147 @@ export interface paths {
          * Jeton CSRF courant
          * @description Pose aussi le cookie XSRF-TOKEN. À appeler au démarrage du front.
          */
-        get: operations["csrf"];
+        get: operations["authCsrf"];
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/applications/{id}/cv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Télécharger le CV joint
+         * @description Par le candidat ou le recruteur de l'offre. Réponse application/pdf, en pièce jointe.
+         */
+        get: operations["applicationCv"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Rechercher des comptes
+         * @description q cherche dans le pseudo, le nom et l'email. Les plus récents d'abord.
+         */
+        get: operations["userAdminList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/jobs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Offres à valider (JOB-4)
+         * @description Par défaut les offres « PENDING », les plus anciennes d'abord.
+         */
+        get: operations["jobAdminList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/community-proposals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Propositions de communauté (COM-2)
+         * @description Par défaut « PENDING », les plus anciennes d'abord.
+         */
+        get: operations["communityAdminProposals"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/challenges/{id}/submissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Dépôts d'un défi
+         * @description Par défaut ceux à noter (« PENDING »), les plus anciens d'abord.
+         */
+        get: operations["challengeAdminSubmissions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/cases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Signalements et contestations
+         * @description Sans filtre : les dossiers « APPEALED » d'abord, puis ceux sans décision, les plus signalés d'abord.
+         */
+        get: operations["moderationAdminList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/tags/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Supprimer une étiquette inutilisée */
+        delete: operations["tagAdminDelete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -313,7 +1490,7 @@ export interface paths {
         get?: never;
         put?: never;
         /** Déconnexion */
-        post: operations["logout"];
+        post: operations["authLogout"];
         delete?: never;
         options?: never;
         head?: never;
@@ -332,6 +1509,8 @@ export interface components {
             /** @enum {string} */
             language: "fr" | "en";
             visibleToRecruiters: boolean;
+            /** @description Stack du membre. Absent ou null : inchangée. Liste vide : effacée. */
+            technologies?: string[];
         };
         ApiError: {
             /** @example QUESTION_NOT_FOUND */
@@ -372,8 +1551,41 @@ export interface components {
             reputation: number;
             /** @enum {string} */
             level: "NEWCOMER" | "MEMBER" | "CONTRIBUTOR" | "REFERENT";
+            /**
+             * @description Stack du membre, dans l'ordre qu'il a choisi
+             * @example [
+             *       "java",
+             *       "spring-boot",
+             *       "postgresql"
+             *     ]
+             */
+            technologies: string[];
+            /** @description Faux tant que le parcours d'accueil n'est pas terminé (AUTH-5) */
+            onboardingCompleted: boolean;
             /** Format: date-time */
             createdAt: string;
+        };
+        OnboardingRequest: {
+            /**
+             * @example [
+             *       "java",
+             *       "spring-boot",
+             *       "postgresql"
+             *     ]
+             */
+            technologies: string[];
+            /** @example SN */
+            countryCode: string;
+            /** @enum {string} */
+            language: "fr" | "en";
+        };
+        /** @description Formulaire multipart de photo de profil (SET-1) */
+        AvatarForm: {
+            /**
+             * Format: binary
+             * @description PNG, JPG ou WebP, 2 Mo maximum
+             */
+            photo: string;
         };
         AcceptAnswerRequest: {
             /** Format: int64 */
@@ -388,6 +1600,8 @@ export interface components {
             reputation: number;
             /** @enum {string} */
             level: "NEWCOMER" | "MEMBER" | "CONTRIBUTOR" | "REFERENT";
+            /** @description Compte supprimé (AUTH-6) : afficher « Utilisateur supprimé » traduit, sans lien vers le profil */
+            deleted: boolean;
         };
         QuestionContext: {
             /**
@@ -453,6 +1667,168 @@ export interface components {
             tags: string[];
             context?: components["schemas"]["QuestionContext"];
         };
+        Budget: {
+            /**
+             * Format: int64
+             * @example 75000
+             */
+            amount: number;
+            /**
+             * @description Code ISO 4217 : XOF, XAF, GHS, NGN, KES, MAD, EUR…
+             * @example XOF
+             */
+            currency: string;
+        };
+        /** @description Création ou modification complète d'une mission entre pairs (JOB-5) */
+        MissionRequest: {
+            /** @example Brancher Wave sur ma boutique WooCommerce */
+            title: string;
+            /** @description Markdown. Le HTML brut est ignoré. */
+            description: string;
+            /** @enum {string} */
+            kind: "TROUBLESHOOTING" | "INTEGRATION" | "CODE_REVIEW" | "OTHER";
+            budget: components["schemas"]["Budget"];
+            /**
+             * Format: int32
+             * @description Délai souhaité, en jours
+             * @example 3
+             */
+            durationDays: number;
+            /**
+             * @example [
+             *       "woocommerce",
+             *       "php",
+             *       "wave"
+             *     ]
+             */
+            technologies?: string[];
+            /** @example CI */
+            countryCode?: string;
+        };
+        MissionDetail: {
+            /** Format: int64 */
+            id: number;
+            title: string;
+            /** @description Markdown d'origine, pour pré-remplir le formulaire d'édition */
+            descriptionMarkdown: string;
+            /** @description HTML nettoyé côté serveur, à afficher avec MemberContent */
+            descriptionHtml: string;
+            /** @enum {string} */
+            kind: "TROUBLESHOOTING" | "INTEGRATION" | "CODE_REVIEW" | "OTHER";
+            budget: components["schemas"]["Budget"];
+            /** Format: int32 */
+            durationDays: number;
+            technologies: string[];
+            countryCode?: string;
+            author: components["schemas"]["AuthorSummary"];
+            /** @enum {string} */
+            status: "OPEN" | "IN_PROGRESS" | "CLOSED";
+            /** Format: int32 */
+            applicationCount: number;
+            /** @description Null si le membre connecté ne s'est pas proposé */
+            myApplication?: components["schemas"]["MyApplicationRef"];
+            /** @description Vrai si le membre connecté est l'auteur */
+            canEdit: boolean;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        /** @description Candidature du membre connecté sur cette cible */
+        MyApplicationRef: {
+            /** Format: int64 */
+            id: number;
+            /** @enum {string} */
+            status: "SENT" | "VIEWED" | "SHORTLISTED" | "REJECTED";
+        };
+        /** @description Création ou modification complète d'une offre (JOB-4). Toute modification renvoie l'offre en attente de validation. */
+        JobRequest: {
+            /** @example Développeur back-end Java, paiements mobiles */
+            title: string;
+            /** @example Kora Pay */
+            companyName: string;
+            /** @example https://korapay.example */
+            companyWebsite?: string;
+            /** @enum {string} */
+            type: "PERMANENT" | "REMOTE" | "CONTRACT" | "INTERNSHIP";
+            /**
+             * @description Facultatif pour une offre à distance
+             * @example SN
+             */
+            countryCode?: string;
+            /** @example Dakar */
+            city?: string;
+            /**
+             * @example [
+             *       "java",
+             *       "spring-boot",
+             *       "postgresql"
+             *     ]
+             */
+            technologies: string[];
+            /** @description Markdown. Le HTML brut est ignoré. */
+            description: string;
+            /** @example 600 000 à 900 000 XOF par mois */
+            compensation?: string;
+        };
+        JobDetail: {
+            /** Format: int64 */
+            id: number;
+            title: string;
+            companyName: string;
+            companyWebsite?: string;
+            /** @enum {string} */
+            type: "PERMANENT" | "REMOTE" | "CONTRACT" | "INTERNSHIP";
+            countryCode?: string;
+            city?: string;
+            technologies: string[];
+            /** @description Markdown d'origine, pour pré-remplir le formulaire d'édition */
+            descriptionMarkdown: string;
+            /** @description HTML nettoyé côté serveur, à afficher avec MemberContent */
+            descriptionHtml: string;
+            compensation?: string;
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "CLOSED";
+            /** @description Motif du refus par l'équipe, visible par le recruteur et l'équipe seulement */
+            rejectionReason?: string;
+            recruiter: components["schemas"]["AuthorSummary"];
+            /** @description Null sans session ou sans stack */
+            match?: components["schemas"]["StackMatch"];
+            /** @description Null si le membre connecté n'a pas postulé */
+            myApplication?: components["schemas"]["MyApplicationRef"];
+            /**
+             * Format: int32
+             * @description Nombre de candidatures, visible par le recruteur et l'équipe seulement
+             */
+            applicationCount?: number;
+            /** @description Vrai si le membre connecté peut modifier ou clore l'offre */
+            canEdit: boolean;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        StackMatch: {
+            /**
+             * @example [
+             *       "java",
+             *       "postgresql"
+             *     ]
+             */
+            matched: string[];
+            /**
+             * @example [
+             *       "spring-boot"
+             *     ]
+             */
+            missing: string[];
+            /**
+             * Format: int32
+             * @description Part des technologies demandées, de 0 à 100
+             * @example 67
+             */
+            percent: number;
+        };
         AnswerRequest: {
             /** @description Markdown. Le HTML brut est ignoré. */
             body: string;
@@ -483,6 +1859,212 @@ export interface components {
             /** Format: date-time */
             updatedAt: string;
         };
+        /** @description Changement de rôle, par un Administrateur seulement */
+        RoleChangeRequest: {
+            /** @enum {string} */
+            role: "MEMBER" | "RECRUITER" | "MODERATOR" | "ADMIN";
+        };
+        AdminUser: {
+            /** Format: int64 */
+            id: number;
+            /** @example kofi_mensah */
+            username: string;
+            /** @example Kofi Mensah */
+            displayName: string;
+            /**
+             * @description Null pour un compte supprimé (AUTH-6)
+             * @example kofi@exemple.gh
+             */
+            email?: string;
+            avatarUrl?: string;
+            /** @example GH */
+            countryCode?: string;
+            /** @enum {string} */
+            role: "MEMBER" | "RECRUITER" | "MODERATOR" | "ADMIN";
+            /** @enum {string} */
+            status: "ACTIVE" | "SUSPENDED" | "DELETED";
+            /** Format: int32 */
+            reputation: number;
+            /** @enum {string} */
+            level: "NEWCOMER" | "MEMBER" | "CONTRIBUTOR" | "REFERENT";
+            /**
+             * Format: int64
+             * @description Contenus de ce membre actuellement masqués
+             * @example 0
+             */
+            hiddenContentCount: number;
+            /**
+             * Format: int64
+             * @description Avertissements reçus de l'équipe
+             * @example 0
+             */
+            warningCount: number;
+            /** @description Motif de la suspension en cours */
+            suspensionReason?: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        /** @description Proposition d'un Référent (COM-2) ou création par l'équipe. countryCode est obligatoire pour une communauté de pays, tag pour une communauté de techno. */
+        CommunityRequest: {
+            /** @example Flutter */
+            name: string;
+            /** @enum {string} */
+            kind: "COUNTRY" | "TECH";
+            /** @example SN */
+            countryCode?: string;
+            /**
+             * @description Étiquette créée à l'acceptation si elle n'existe pas
+             * @example flutter
+             */
+            tag?: string;
+            /** @description Texte brut */
+            description: string;
+            /** @description 0 à 5 règles de 200 caractères au plus, texte brut */
+            rules?: string[];
+        };
+        /** @description Communauté dans le back office, ouverte ou fermée */
+        AdminCommunity: {
+            slug: string;
+            name: string;
+            /** @enum {string} */
+            kind: "COUNTRY" | "TECH";
+            countryCode?: string;
+            tag?: string;
+            description: string;
+            rules: string[];
+            /** @enum {string} */
+            status: "OPEN" | "CLOSED";
+            /** Format: int64 */
+            memberCount: number;
+            /** Format: int64 */
+            questionCount: number;
+            referents: components["schemas"]["AuthorSummary"][];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        /** @description Référents de la communauté, dans l'ordre d'affichage. Remplace la liste ; une liste vide retire tout le monde. */
+        CommunityReferentsRequest: {
+            /**
+             * @example [
+             *       "aminata_dev",
+             *       "moussa_s"
+             *     ]
+             */
+            usernames: string[];
+        };
+        /** @description Création ou modification d'un défi par l'équipe */
+        ChallengeRequest: {
+            /** @example Un menu USSD de paiement de facture */
+            title: string;
+            /** @description Markdown */
+            statement: string;
+            /** @description Markdown */
+            specifications: string;
+            /**
+             * @example [
+             *       "ussd",
+             *       "node.js"
+             *     ]
+             */
+            technologies: string[];
+            /** Format: date-time */
+            startsAt: string;
+            /** Format: date-time */
+            endsAt: string;
+        };
+        /** @description Un défi (CH-1) */
+        Challenge: {
+            /** Format: int64 */
+            id: number;
+            /** @example Un menu USSD de paiement de facture */
+            title: string;
+            /** @description Énoncé, Markdown d'origine */
+            statementMarkdown: string;
+            /** @description Énoncé en HTML nettoyé, à afficher avec MemberContent */
+            statementHtml: string;
+            /** @description Spécifications, Markdown d'origine */
+            specificationsMarkdown: string;
+            /** @description Spécifications en HTML nettoyé */
+            specificationsHtml: string;
+            /**
+             * @example [
+             *       "ussd",
+             *       "node.js"
+             *     ]
+             */
+            technologies: string[];
+            /** @enum {string} */
+            status: "UPCOMING" | "OPEN" | "CLOSED";
+            /** Format: date-time */
+            startsAt: string;
+            /**
+             * Format: date-time
+             * @description Fin des dépôts, base du compte à rebours
+             */
+            endsAt: string;
+            /**
+             * Format: date-time
+             * @description Heure du serveur à la réponse : le compte à rebours se cale dessus plutôt que sur l'horloge du téléphone
+             */
+            serverTime: string;
+            /**
+             * Format: int64
+             * @example 37
+             */
+            submissionCount: number;
+            /** @description Null sans session ou sans dépôt */
+            mySubmission?: components["schemas"]["MySubmission"];
+        };
+        /** @description Dépôt du membre connecté sur ce défi */
+        MySubmission: {
+            /** Format: int64 */
+            id: number;
+            /** @example https://github.com/awa-kone/zetsu-defi-ussd */
+            repositoryUrl: string;
+            /** @enum {string} */
+            status: "PENDING" | "VALIDATED" | "REJECTED";
+            /**
+             * Format: int32
+             * @description Note sur 100, null tant que l'équipe n'a pas noté
+             * @example 84
+             */
+            score?: number;
+            /** @description Retour de l'équipe */
+            feedback?: string;
+            /** Format: date-time */
+            submittedAt: string;
+        };
+        /** @description Adresse vers laquelle naviguer (pas de fetch) pour lier le compte */
+        LinkStart: {
+            /** @example /api/v1/auth/oauth2/authorization/github */
+            authorizationUrl: string;
+        };
+        /** @description Signaler un contenu (MOD-1), à partir du niveau Membre */
+        ReportRequest: {
+            /** @enum {string} */
+            targetType: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER";
+            /**
+             * Format: int64
+             * @example 42
+             */
+            targetId: number;
+            /** @enum {string} */
+            reason: "SPAM" | "OFFENSIVE" | "OFF_TOPIC" | "IMPERSONATION" | "FRAUDULENT_JOB";
+            /**
+             * @description Précision facultative, lue par le Référent
+             * @example Même lien de paiement publié sous six questions différentes
+             */
+            comment?: string;
+        };
+        /** @description Accusé de réception d'un signalement */
+        ReportReceipt: {
+            /** Format: int64 */
+            caseId: number;
+            /** @description Vrai si ce signalement a déclenché le masquage automatique (MOD-2) */
+            hidden: boolean;
+        };
         VoteRequest: {
             /**
              * Format: int32
@@ -503,6 +2085,194 @@ export interface components {
              */
             myVote?: number;
         };
+        MarkReadRequest: {
+            /**
+             * @description Notifications à marquer comme lues ; absent ou null : toutes (« Tout marquer comme lu »)
+             * @example [
+             *       41,
+             *       42
+             *     ]
+             */
+            ids?: number[];
+        };
+        UnreadCount: {
+            /**
+             * Format: int64
+             * @example 3
+             */
+            count: number;
+        };
+        /** @description Décision sur un dossier */
+        CaseDecisionRequest: {
+            /** @enum {string} */
+            action: "DISMISS" | "HIDE" | "RESTORE" | "WARN" | "SUSPEND";
+            /**
+             * @description Motif montré à l'auteur ; obligatoire pour masquer, avertir ou suspendre
+             * @example Publicité répétée pour un service de paiement
+             */
+            note?: string;
+        };
+        /** @description Tous les signalements d'un même contenu */
+        ModerationCase: {
+            /** Format: int64 */
+            id: number;
+            target: components["schemas"]["ModerationTarget"];
+            /** @enum {string} */
+            status: "OPEN" | "DISMISSED" | "HIDDEN" | "APPEALED" | "RESTORED";
+            /**
+             * Format: int64
+             * @description Signalements de comptes distincts
+             * @example 4
+             */
+            reportCount: number;
+            /** @description Motifs, du plus fréquent au moins fréquent */
+            reasons: components["schemas"]["ReasonCount"][];
+            /** @description Commentaires des signalants, plus récents d'abord, 5 au plus */
+            comments: string[];
+            /** @description Null tant que personne n'a décidé */
+            decision?: components["schemas"]["ModerationDecision"];
+            /** @description Texte de la contestation de l'auteur, visible par l'équipe */
+            appeal?: string;
+            /** Format: date-time */
+            firstReportedAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        /** @description Dernière décision prise sur un dossier */
+        ModerationDecision: {
+            /** @enum {string} */
+            action: "DISMISS" | "HIDE" | "RESTORE" | "WARN" | "SUSPEND";
+            /** @description Motif donné à l'auteur */
+            note?: string;
+            /** @description Vrai si la décision vient de l'équipe plutôt que d'un Référent ; le nom de la personne n'est jamais montré à l'auteur */
+            byTeam: boolean;
+            /** Format: date-time */
+            decidedAt: string;
+        };
+        /** @description Contenu signalé, pour construire le lien et l'aperçu côté front */
+        ModerationTarget: {
+            /** @enum {string} */
+            type: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER";
+            /** Format: int64 */
+            id: number;
+            /** @description Titre de la question, de l'offre, de la mission ; début de la réponse ; pseudo pour un profil */
+            title: string;
+            /** @description Début du texte signalé, 300 caractères au plus, en texte brut */
+            excerpt?: string;
+            /**
+             * Format: int64
+             * @description Question parente quand la cible est une réponse
+             */
+            questionId?: number;
+            /** @description Auteur du contenu, ou le membre lui-même pour un profil */
+            author: components["schemas"]["AuthorSummary"];
+        };
+        ReasonCount: {
+            /** @enum {string} */
+            reason: "SPAM" | "OFFENSIVE" | "OFF_TOPIC" | "IMPERSONATION" | "FRAUDULENT_JOB";
+            /**
+             * Format: int64
+             * @example 3
+             */
+            count: number;
+        };
+        /** @description L'auteur conteste le masquage de son contenu devant l'équipe (MOD-3) */
+        AppealRequest: {
+            /** @example Le lien pointe vers la documentation officielle de l'API Wave, pas vers une offre commerciale. */
+            message: string;
+        };
+        /** @description Un contenu du membre connecté masqué ou en cours d'examen */
+        MyModeratedContent: {
+            /** Format: int64 */
+            caseId: number;
+            target: components["schemas"]["ModerationTarget"];
+            /** @enum {string} */
+            status: "OPEN" | "DISMISSED" | "HIDDEN" | "APPEALED" | "RESTORED";
+            /** @description Null pour un masquage automatique (MOD-2) */
+            decision?: components["schemas"]["ModerationDecision"];
+            /** @description Vrai si le membre peut encore contester */
+            canAppeal: boolean;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        /** @description Se proposer sur une mission */
+        MissionApplicationRequest: {
+            /** @example J'ai intégré Wave et Orange Money pour deux boutiques à Abidjan, je peux livrer en 3 jours. */
+            message: string;
+            /** @description Montant proposé, si différent du budget indicatif */
+            proposedBudget?: components["schemas"]["Budget"];
+        };
+        ApplicationTarget: {
+            /** @enum {string} */
+            type: "JOB" | "MISSION";
+            /** Format: int64 */
+            id: number;
+            title: string;
+            /** @description Entreprise pour une offre, null pour une mission */
+            companyName?: string;
+        };
+        /** @description Candidature ou proposition envoyée par le membre connecté (JOB-7) */
+        MyApplication: {
+            /** Format: int64 */
+            id: number;
+            target: components["schemas"]["ApplicationTarget"];
+            /** @enum {string} */
+            status: "SENT" | "VIEWED" | "SHORTLISTED" | "REJECTED";
+            message: string;
+            hasCv: boolean;
+            proposedBudget?: components["schemas"]["Budget"];
+            /** Format: date-time */
+            createdAt: string;
+            /**
+             * Format: date-time
+             * @description Dernier changement de statut
+             */
+            updatedAt: string;
+        };
+        /** @description Formulaire multipart de candidature à une offre (JOB-3) */
+        JobApplicationForm: {
+            /** @example Je construis des intégrations Orange Money depuis deux ans chez un agrégateur à Thiès. */
+            message: string;
+            /**
+             * Format: binary
+             * @description CV au format PDF, 2 Mo maximum
+             */
+            cv?: string;
+        };
+        /** @description Proposition de communauté, vue par son auteur (COM-2) */
+        CommunityProposal: {
+            /** Format: int64 */
+            id: number;
+            name: string;
+            /** @enum {string} */
+            kind: "COUNTRY" | "TECH";
+            countryCode?: string;
+            tag?: string;
+            /** @enum {string} */
+            status: "PENDING" | "APPROVED" | "REJECTED";
+            /** @description Motif donné par l'équipe, rempli si refusée */
+            rejectionReason?: string;
+            /** @description Adresse de la communauté créée, rempli si acceptée */
+            slug?: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        /** @description Réponse de POST et DELETE /communities/{slug}/members */
+        MembershipResult: {
+            joined: boolean;
+            /** Format: int64 */
+            memberCount: number;
+        };
+        /** @description Dépôt d'un lien GitHub public (CH-2) */
+        SubmissionRequest: {
+            /** @example https://github.com/awa-kone/zetsu-defi-ussd */
+            repositoryUrl: string;
+            /**
+             * @description Mot pour l'équipe, facultatif
+             * @example Testé avec le simulateur Africa's Talking
+             */
+            comment?: string;
+        };
         RegisterRequest: {
             /** @example Kofi Mensah */
             displayName: string;
@@ -520,6 +2290,134 @@ export interface components {
             email: string;
             password: string;
         };
+        /** @description Suspension d'un compte : ses sessions ouvertes sont fermées */
+        SuspendRequest: {
+            /** @example Offres frauduleuses répétées malgré un avertissement */
+            reason: string;
+        };
+        TagRequest: {
+            /**
+             * @description Lettres minuscules, chiffres et . + # -
+             * @example orange-money
+             */
+            name: string;
+        };
+        AdminTag: {
+            /** @example mobile-money */
+            name: string;
+            /**
+             * Format: int64
+             * @example 42
+             */
+            questionCount: number;
+            /**
+             * Format: int64
+             * @example 3
+             */
+            jobCount: number;
+            /**
+             * Format: int64
+             * @example 5
+             */
+            missionCount: number;
+            /**
+             * Format: int64
+             * @description Membres qui l'ont dans leur stack
+             * @example 17
+             */
+            memberCount: number;
+        };
+        TagMergeRequest: {
+            /**
+             * @description Étiquette qui reste
+             * @example mobile-money
+             */
+            into: string;
+        };
+        /** @description Note de l'équipe sur un dépôt (CH-3) */
+        SubmissionReviewRequest: {
+            /** @enum {string} */
+            status: "VALIDATED" | "REJECTED";
+            /**
+             * Format: int32
+             * @example 84
+             */
+            score: number;
+            /**
+             * @description Retour montré au membre
+             * @example Parcours clair et gestion du délai de session USSD, il manque des tests sur les montants.
+             */
+            feedback?: string;
+        };
+        /** @description Un dépôt vu par l'équipe, pour la notation (CH-3) */
+        AdminSubmission: {
+            /** Format: int64 */
+            id: number;
+            /** Format: int64 */
+            challengeId: number;
+            member: components["schemas"]["AuthorSummary"];
+            /** @example https://github.com/awa-kone/zetsu-defi-ussd */
+            repositoryUrl: string;
+            comment?: string;
+            /** @enum {string} */
+            status: "PENDING" | "VALIDATED" | "REJECTED";
+            /**
+             * Format: int32
+             * @example 84
+             */
+            score?: number;
+            feedback?: string;
+            /** Format: date-time */
+            submittedAt: string;
+            /** Format: date-time */
+            reviewedAt?: string;
+        };
+        /** @description Décision de l'équipe sur une offre en attente (JOB-4) */
+        JobReviewRequest: {
+            /** @enum {string} */
+            decision: "APPROVE" | "REJECT";
+            /**
+             * @description Obligatoire pour un refus, montré au recruteur
+             * @example Rémunération à préciser avant publication
+             */
+            reason?: string;
+        };
+        /** @description Décision de l'équipe sur une proposition (COM-2) */
+        CommunityProposalReviewRequest: {
+            /** @enum {string} */
+            decision: "APPROVE" | "REJECT";
+            /**
+             * @description Obligatoire pour un refus, montré au Référent
+             * @example Une communauté Afrique de l'Ouest couvre déjà ce sujet
+             */
+            reason?: string;
+        };
+        /** @description Proposition dans la file de l'équipe (COM-2) */
+        AdminCommunityProposal: {
+            /** Format: int64 */
+            id: number;
+            name: string;
+            /** @enum {string} */
+            kind: "COUNTRY" | "TECH";
+            countryCode?: string;
+            tag?: string;
+            description: string;
+            rules: string[];
+            /** @enum {string} */
+            status: "PENDING" | "APPROVED" | "REJECTED";
+            rejectionReason?: string;
+            slug?: string;
+            proposer: components["schemas"]["AuthorSummary"];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            reviewedAt?: string;
+        };
+        /** @description Retenir ou refuser une candidature reçue */
+        ApplicationDecisionRequest: {
+            /** @enum {string} */
+            status: "SHORTLISTED" | "REJECTED";
+        };
         PublicProfile: {
             username: string;
             displayName: string;
@@ -534,12 +2432,38 @@ export interface components {
             /** @enum {string} */
             level: "NEWCOMER" | "MEMBER" | "CONTRIBUTOR" | "REFERENT";
             visibleToRecruiters: boolean;
+            /**
+             * @example [
+             *       "java",
+             *       "spring-boot",
+             *       "postgresql"
+             *     ]
+             */
+            technologies: string[];
             /** Format: int64 */
             questionCount: number;
             /** Format: int64 */
             answerCount: number;
             /** Format: date-time */
             createdAt: string;
+        };
+        /** @description Candidature ou proposition reçue par le recruteur ou l'auteur de la mission */
+        ReceivedApplication: {
+            /** Format: int64 */
+            id: number;
+            target: components["schemas"]["ApplicationTarget"];
+            /** @description Profil Zetsu du candidat, transmis par sa candidature */
+            candidate: components["schemas"]["PublicProfile"];
+            message: string;
+            /** @description Vrai si un CV est joint : GET /applications/{id}/cv */
+            hasCv: boolean;
+            proposedBudget?: components["schemas"]["Budget"];
+            /** @enum {string} */
+            status: "SENT" | "VIEWED" | "SHORTLISTED" | "REJECTED";
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
         };
         PageResponseReputationEntry: {
             items: components["schemas"]["ReputationEntry"][];
@@ -573,6 +2497,93 @@ export interface components {
             answerId?: number;
             /** Format: date-time */
             createdAt: string;
+        };
+        PageResponseMyModeratedContent: {
+            items: components["schemas"]["MyModeratedContent"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        ConnectedAccount: {
+            /** @enum {string} */
+            provider: "github" | "google";
+            linked: boolean;
+            /**
+             * Format: date-time
+             * @description Null si non lié
+             */
+            linkedAt?: string;
+            /** @description Faux si c'est le dernier moyen de connexion du compte */
+            canUnlink: boolean;
+        };
+        Connections: {
+            /** @description Un élément par fournisseur activé */
+            accounts: components["schemas"]["ConnectedAccount"][];
+            /** @description Le compte a un mot de passe (inscription par email) */
+            hasPassword: boolean;
+        };
+        /** @description Communauté telle qu'affichée dans une liste (COM-1) */
+        CommunitySummary: {
+            /**
+             * @description Adresse /communities/{slug}
+             * @example senegal
+             */
+            slug: string;
+            /** @example Sénégal */
+            name: string;
+            /** @enum {string} */
+            kind: "COUNTRY" | "TECH";
+            /**
+             * @description Rempli pour une communauté de pays
+             * @example SN
+             */
+            countryCode?: string;
+            /**
+             * @description Rempli pour une communauté de techno : étiquette de ses questions
+             * @example flutter
+             */
+            tag?: string;
+            /** @description Texte brut, 200 caractères au plus */
+            description: string;
+            /** Format: int64 */
+            memberCount: number;
+            /**
+             * Format: int64
+             * @description Questions visibles du pays ou de l'étiquette
+             */
+            questionCount: number;
+            /** @description Le membre connecté en fait partie ; false sans session */
+            joined: boolean;
+        };
+        PageResponseMyApplication: {
+            items: components["schemas"]["MyApplication"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
         };
         TagCount: {
             /** @example mobile-money */
@@ -638,6 +2649,248 @@ export interface components {
              */
             total: number;
         };
+        Notification: {
+            /** Format: int64 */
+            id: number;
+            /** @enum {string} */
+            type: "ANSWER_POSTED" | "ANSWER_ACCEPTED" | "VOTE_RECEIVED" | "JOB_MATCH" | "MISSION_MATCH" | "APPLICATION_RECEIVED" | "APPLICATION_DECIDED" | "JOB_REVIEWED" | "CHALLENGE_STARTED" | "PROJECT_REQUEST_DECIDED" | "CONTENT_HIDDEN" | "CONTENT_RESTORED" | "ACCOUNT_WARNED" | "SUBMISSION_REVIEWED" | "COMMUNITY_PROPOSAL_DECISION";
+            read: boolean;
+            /** @description Membre à l'origine de l'événement ; null pour un événement de la plateforme */
+            actor?: components["schemas"]["AuthorSummary"];
+            target: components["schemas"]["NotificationTarget"];
+            /**
+             * @description Statut décidé, pour APPLICATION_DECIDED (SHORTLISTED, REJECTED) et JOB_REVIEWED (PUBLISHED, REJECTED), SUBMISSION_REVIEWED (VALIDATED, REJECTED)
+             * @example SHORTLISTED
+             */
+            outcome?: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        /** @description Contenu concerné, pour construire le lien côté front */
+        NotificationTarget: {
+            /** @enum {string} */
+            type: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "APPLICATION" | "CHALLENGE" | "PROJECT" | "USER" | "COMMUNITY_PROPOSAL";
+            /** Format: int64 */
+            id: number;
+            /** @description Titre de la question, de l'offre, de la mission, du défi… */
+            title: string;
+            /**
+             * Format: int64
+             * @description Question parente quand la cible est une réponse
+             */
+            questionId?: number;
+        };
+        PageResponseNotification: {
+            items: components["schemas"]["Notification"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        PageResponseModerationCase: {
+            items: components["schemas"]["ModerationCase"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        /** @description Mission telle qu'affichée dans une liste */
+        MissionSummary: {
+            /** Format: int64 */
+            id: number;
+            title: string;
+            /** @enum {string} */
+            kind: "TROUBLESHOOTING" | "INTEGRATION" | "CODE_REVIEW" | "OTHER";
+            budget: components["schemas"]["Budget"];
+            /** Format: int32 */
+            durationDays: number;
+            technologies: string[];
+            countryCode?: string;
+            author: components["schemas"]["AuthorSummary"];
+            /** @enum {string} */
+            status: "OPEN" | "IN_PROGRESS" | "CLOSED";
+            /** Format: int32 */
+            applicationCount: number;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        PageResponseMissionSummary: {
+            items: components["schemas"]["MissionSummary"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        PageResponseReceivedApplication: {
+            items: components["schemas"]["ReceivedApplication"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        /** @description Offre telle qu'affichée dans une liste */
+        JobSummary: {
+            /** Format: int64 */
+            id: number;
+            title: string;
+            companyName: string;
+            /** @enum {string} */
+            type: "PERMANENT" | "REMOTE" | "CONTRACT" | "INTERNSHIP";
+            countryCode?: string;
+            city?: string;
+            technologies: string[];
+            compensation?: string;
+            /** @enum {string} */
+            status: "PENDING" | "PUBLISHED" | "REJECTED" | "CLOSED";
+            /**
+             * Format: int32
+             * @description Correspondance avec la stack du membre connecté, de 0 à 100 ; null sans session ou sans stack
+             */
+            matchPercent?: number;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        PageResponseJobSummary: {
+            items: components["schemas"]["JobSummary"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        PageResponseCommunitySummary: {
+            items: components["schemas"]["CommunitySummary"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        /** @description Page d'une communauté (COM-1) */
+        CommunityDetail: {
+            /** @example senegal */
+            slug: string;
+            /** @example Sénégal */
+            name: string;
+            /** @enum {string} */
+            kind: "COUNTRY" | "TECH";
+            /** @example SN */
+            countryCode?: string;
+            /** @example flutter */
+            tag?: string;
+            description: string;
+            /** Format: int64 */
+            memberCount: number;
+            /** Format: int64 */
+            questionCount: number;
+            joined: boolean;
+            /** @description Règles propres à la communauté, texte brut, en plus des règles générales */
+            rules: string[];
+            /** @description Référents nommés par l'équipe */
+            referents: components["schemas"]["AuthorSummary"][];
+            /** @description Jusqu'à 5 membres qui ont gagné le plus de points sur les questions de la communauté ces 30 derniers jours */
+            topMembers: components["schemas"]["AuthorSummary"][];
+            /** Format: date-time */
+            createdAt: string;
+        };
+        LeaderboardEntry: {
+            /**
+             * Format: int32
+             * @description Rang ; deux notes égales partagent le même rang
+             * @example 1
+             */
+            rank: number;
+            member: components["schemas"]["AuthorSummary"];
+            /**
+             * Format: int32
+             * @example 92
+             */
+            score: number;
+            /** Format: date-time */
+            submittedAt: string;
+        };
+        PageResponseLeaderboardEntry: {
+            items: components["schemas"]["LeaderboardEntry"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
         AuthProvider: {
             /** @example github */
             id: string;
@@ -650,10 +2903,144 @@ export interface components {
         AuthProviders: {
             providers: components["schemas"]["AuthProvider"][];
         };
+        /** @description À renvoyer dans l'en-tête headerName sur chaque POST, PUT, PATCH, DELETE. Le même jeton est aussi posé dans le cookie XSRF-TOKEN. */
         CsrfToken: {
-            parameterName?: string;
-            token?: string;
-            headerName?: string;
+            /** @example X-XSRF-TOKEN */
+            headerName: string;
+            token: string;
+        };
+        PageResponseAdminUser: {
+            items: components["schemas"]["AdminUser"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        PageResponseAdminTag: {
+            items: components["schemas"]["AdminTag"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        PageResponseJobDetail: {
+            items: components["schemas"]["JobDetail"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        PageResponseAdminCommunityProposal: {
+            items: components["schemas"]["AdminCommunityProposal"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        PageResponseAdminCommunity: {
+            items: components["schemas"]["AdminCommunity"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        PageResponseChallenge: {
+            items: components["schemas"]["Challenge"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        PageResponseAdminSubmission: {
+            items: components["schemas"]["AdminSubmission"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        DeleteAccountRequest: {
+            /**
+             * @description Pseudo du membre connecté, recopié
+             * @example aminata_diallo
+             */
+            confirmation: string;
         };
     };
     responses: never;
@@ -664,7 +3051,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    update: {
+    userUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -686,7 +3073,7 @@ export interface operations {
                     "application/json": components["schemas"]["Me"];
                 };
             };
-            /** @description VALIDATION_ERROR */
+            /** @description VALIDATION_ERROR, INVALID_TAG */
             400: {
                 headers: {
                     [name: string]: unknown;
@@ -706,7 +3093,169 @@ export interface operations {
             };
         };
     };
-    accept: {
+    userDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteAccountRequest"];
+            };
+        };
+        responses: {
+            /** @description Compte supprimé, session fermée */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description VALIDATION_ERROR, CONFIRMATION_MISMATCH */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    userOnboarding: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OnboardingRequest"];
+            };
+        };
+        responses: {
+            /** @description Profil à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Me"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_TAG, TAG_REQUIRED */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    userUpdateAvatar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["AvatarForm"];
+            };
+        };
+        responses: {
+            /** @description Profil à jour, avatarUrl pointe vers la nouvelle photo */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Me"];
+                };
+            };
+            /** @description PHOTO_REQUIRED, PHOTO_TYPE, PHOTO_TOO_LARGE, FILE_TOO_LARGE (plus de 5 Mo) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    userDeleteAvatar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Profil à jour, avatarUrl à null */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Me"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    answerAccept: {
         parameters: {
             query?: never;
             header?: never;
@@ -759,7 +3308,7 @@ export interface operations {
             };
         };
     };
-    unaccept: {
+    answerUnaccept: {
         parameters: {
             query?: never;
             header?: never;
@@ -790,7 +3339,7 @@ export interface operations {
             };
         };
     };
-    get: {
+    questionGet: {
         parameters: {
             query?: never;
             header?: never;
@@ -821,7 +3370,7 @@ export interface operations {
             };
         };
     };
-    update_1: {
+    questionUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -874,7 +3423,193 @@ export interface operations {
             };
         };
     };
-    update_2: {
+    missionGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description La mission */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MissionDetail"];
+                };
+            };
+            /** @description MISSION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    missionUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MissionRequest"];
+            };
+        };
+        responses: {
+            /** @description Mission modifiée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MissionDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_TAG */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_MISSION_AUTHOR */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description MISSION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description MISSION_NOT_OPEN */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    jobGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description L'offre */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobDetail"];
+                };
+            };
+            /** @description JOB_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    jobUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JobRequest"];
+            };
+        };
+        responses: {
+            /** @description Offre modifiée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_TAG, TAG_REQUIRED */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_JOB_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description JOB_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description JOB_CLOSED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    answerUpdate: {
         parameters: {
             query?: never;
             header?: never;
@@ -918,7 +3653,458 @@ export interface operations {
             };
         };
     };
-    list: {
+    userAdminChangeRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoleChangeRequest"];
+            };
+        };
+        responses: {
+            /** @description Rôle changé */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUser"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN, CANNOT_CHANGE_OWN_ROLE */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description USER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description USER_NOT_ACTIVE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityAdminUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommunityRequest"];
+            };
+        };
+        responses: {
+            /** @description Communauté modifiée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminCommunity"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_TAG */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description COMMUNITY_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description COMMUNITY_EXISTS */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityAdminReferents: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommunityReferentsRequest"];
+            };
+        };
+        responses: {
+            /** @description Référents enregistrés */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminCommunity"];
+                };
+            };
+            /** @description VALIDATION_ERROR, NOT_A_REFERENT */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description COMMUNITY_NOT_FOUND, USER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    challengeAdminUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChallengeRequest"];
+            };
+        };
+        responses: {
+            /** @description Défi à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Challenge"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_TAG, INVALID_PERIOD */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CHALLENGE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CHALLENGE_OVERLAP, CHALLENGE_STARTED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    connectionLink: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                provider: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Adresse d'autorisation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LinkStart"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROVIDER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description ALREADY_LINKED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    connectionUnlink: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                provider: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Comptes à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Connections"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROVIDER_NOT_FOUND, NOT_LINKED */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description LAST_LOGIN_METHOD */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    moderationReport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportRequest"];
+            };
+        };
+        responses: {
+            /** @description Signalement enregistré */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportReceipt"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description LEVEL_TOO_LOW, CANNOT_REPORT_OWN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description TARGET_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description ALREADY_REPORTED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    questionList: {
         parameters: {
             query?: {
                 /** @description Texte recherché */
@@ -931,6 +4117,8 @@ export interface operations {
                 network?: "GOOD" | "UNSTABLE" | "VERY_POOR";
                 /** @description Pseudo de l'auteur */
                 author?: string;
+                /** @description Adresse d'une communauté (COM-1) : questions de son pays ou de son étiquette */
+                community?: string;
                 /** @description Toutes, sans solution, résolues */
                 status?: "ALL" | "UNSOLVED" | "SOLVED";
                 sort?: "RELEVANCE" | "RECENT" | "VOTES";
@@ -963,7 +4151,7 @@ export interface operations {
             };
         };
     };
-    create: {
+    questionCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -1014,7 +4202,7 @@ export interface operations {
             };
         };
     };
-    voteQuestion: {
+    voteVoteQuestion: {
         parameters: {
             query?: never;
             header?: never;
@@ -1094,7 +4282,7 @@ export interface operations {
             };
         };
     };
-    unvoteQuestion: {
+    voteUnvoteQuestion: {
         parameters: {
             query?: never;
             header?: never;
@@ -1125,7 +4313,7 @@ export interface operations {
             };
         };
     };
-    list_1: {
+    answerList: {
         parameters: {
             query?: {
                 page?: number;
@@ -1159,7 +4347,7 @@ export interface operations {
             };
         };
     };
-    create_1: {
+    answerCreate: {
         parameters: {
             query?: never;
             header?: never;
@@ -1221,7 +4409,936 @@ export interface operations {
             };
         };
     };
-    register: {
+    notificationMarkRead: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["MarkReadRequest"];
+            };
+        };
+        responses: {
+            /** @description Compteur de non-lues après l'opération */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnreadCount"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    moderationDecide: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CaseDecisionRequest"];
+            };
+        };
+        responses: {
+            /** @description Dossier à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModerationCase"];
+                };
+            };
+            /** @description VALIDATION_ERROR, NOTE_REQUIRED, ACTION_NOT_ALLOWED */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description LEVEL_TOO_LOW, CANNOT_MODERATE_OWN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CASE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CASE_ALREADY_DECIDED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    moderationAppeal: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AppealRequest"];
+            };
+        };
+        responses: {
+            /** @description Contestation enregistrée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyModeratedContent"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CASE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CASE_NOT_HIDDEN, ALREADY_APPEALED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    missionList: {
+        parameters: {
+            query?: {
+                kind?: "TROUBLESHOOTING" | "INTEGRATION" | "CODE_REVIEW" | "OTHER";
+                /** @description Code pays ISO, ex. CI */
+                country?: string;
+                /** @description Nom de technologie exact */
+                technology?: string;
+                /** @description Pseudo de l'auteur */
+                author?: string;
+                status?: "OPEN" | "IN_PROGRESS" | "CLOSED";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de missions */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseMissionSummary"];
+                };
+            };
+            /** @description INVALID_PAGE, INVALID_PAGE_SIZE, INVALID_PARAMETER, INVALID_COUNTRY */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    missionCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MissionRequest"];
+            };
+        };
+        responses: {
+            /** @description Mission publiée */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MissionDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_TAG */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    missionClose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Mission close */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MissionDetail"];
+                };
+            };
+            /** @description NOT_MISSION_AUTHOR */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description MISSION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    missionApplications: {
+        parameters: {
+            query?: {
+                status?: "SENT" | "VIEWED" | "SHORTLISTED" | "REJECTED";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de propositions, plus récentes d'abord */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseReceivedApplication"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_MISSION_AUTHOR */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description MISSION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    missionApply: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MissionApplicationRequest"];
+            };
+        };
+        responses: {
+            /** @description Proposition envoyée */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyApplication"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CANNOT_APPLY_OWN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description MISSION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description ALREADY_APPLIED, MISSION_NOT_OPEN */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    jobList: {
+        parameters: {
+            query?: {
+                type?: "PERMANENT" | "REMOTE" | "CONTRACT" | "INTERNSHIP";
+                /** @description Code pays ISO, ex. SN */
+                country?: string;
+                /** @description Nom de technologie exact, ex. spring-boot */
+                technology?: string;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page d'offres */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseJobSummary"];
+                };
+            };
+            /** @description INVALID_PAGE, INVALID_PAGE_SIZE, INVALID_PARAMETER, INVALID_COUNTRY */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    jobCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JobRequest"];
+            };
+        };
+        responses: {
+            /** @description Offre créée, en attente de validation */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_TAG, TAG_REQUIRED */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RECRUITER_ONLY */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    jobClose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Offre close */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobDetail"];
+                };
+            };
+            /** @description NOT_JOB_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description JOB_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    jobApplications: {
+        parameters: {
+            query?: {
+                status?: "SENT" | "VIEWED" | "SHORTLISTED" | "REJECTED";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de candidatures, plus récentes d'abord */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseReceivedApplication"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_JOB_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description JOB_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    jobApply: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["JobApplicationForm"];
+            };
+        };
+        responses: {
+            /** @description Candidature envoyée */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyApplication"];
+                };
+            };
+            /** @description VALIDATION_ERROR, CV_NOT_PDF, CV_TOO_LARGE, FILE_TOO_LARGE (plus de 5 Mo) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CANNOT_APPLY_OWN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description JOB_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description ALREADY_APPLIED, JOB_CLOSED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityPropose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommunityRequest"];
+            };
+        };
+        responses: {
+            /** @description Proposition en attente */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommunityProposal"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description LEVEL_TOO_LOW */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description COMMUNITY_EXISTS : communauté ou proposition en attente avec ce nom, ce pays ou cette étiquette */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityJoin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Membre */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembershipResult"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description COMMUNITY_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityLeave: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Plus membre */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembershipResult"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description COMMUNITY_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    challengeSubmit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmissionRequest"];
+            };
+        };
+        responses: {
+            /** @description Dépôt enregistré */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MySubmission"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CHALLENGE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description ALREADY_SUBMITTED, CHALLENGE_NOT_OPEN */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    authRegister: {
         parameters: {
             query?: never;
             header?: never;
@@ -1272,7 +5389,7 @@ export interface operations {
             };
         };
     };
-    login: {
+    authLogin: {
         parameters: {
             query?: never;
             header?: never;
@@ -1323,7 +5440,7 @@ export interface operations {
             };
         };
     };
-    voteAnswer: {
+    voteVoteAnswer: {
         parameters: {
             query?: never;
             header?: never;
@@ -1403,7 +5520,7 @@ export interface operations {
             };
         };
     };
-    unvoteAnswer: {
+    voteUnvoteAnswer: {
         parameters: {
             query?: never;
             header?: never;
@@ -1434,7 +5551,943 @@ export interface operations {
             };
         };
     };
-    profile: {
+    userAdminSuspend: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SuspendRequest"];
+            };
+        };
+        responses: {
+            /** @description Compte suspendu */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUser"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN, CANNOT_SUSPEND_STAFF */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description USER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description USER_NOT_ACTIVE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    userAdminReactivate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Compte actif */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUser"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description USER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description USER_NOT_SUSPENDED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    tagAdminList: {
+        parameters: {
+            query?: {
+                q?: string;
+                unused?: boolean;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page d'étiquettes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseAdminTag"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    tagAdminCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TagRequest"];
+            };
+        };
+        responses: {
+            /** @description Étiquette créée */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminTag"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_TAG */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description TAG_EXISTS */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    tagAdminMerge: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TagMergeRequest"];
+            };
+        };
+        responses: {
+            /** @description Étiquette cible, usages à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminTag"];
+                };
+            };
+            /** @description VALIDATION_ERROR, SAME_TAG */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description TAG_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description TAG_HAS_COMMUNITY : les deux étiquettes ont une communauté */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    challengeAdminReview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmissionReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Dépôt noté */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminSubmission"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description SUBMISSION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    jobAdminDecide: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JobReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Offre publiée ou refusée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR, REASON_REQUIRED */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description JOB_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description JOB_NOT_PENDING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityAdminDecide: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommunityProposalReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Proposition acceptée ou refusée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminCommunityProposal"];
+                };
+            };
+            /** @description VALIDATION_ERROR, REASON_REQUIRED */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROPOSAL_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROPOSAL_NOT_PENDING, COMMUNITY_EXISTS (créée entre-temps : à refuser) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityAdminList: {
+        parameters: {
+            query?: {
+                status?: "OPEN" | "CLOSED";
+                kind?: "COUNTRY" | "TECH";
+                /** @description Texte recherché */
+                q?: string;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de communautés */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseAdminCommunity"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityAdminCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommunityRequest"];
+            };
+        };
+        responses: {
+            /** @description Communauté ouverte */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminCommunity"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_TAG */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description COMMUNITY_EXISTS */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityAdminReopen: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Communauté ouverte */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminCommunity"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description COMMUNITY_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityAdminClose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Communauté fermée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminCommunity"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description COMMUNITY_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    challengeAdminList: {
+        parameters: {
+            query?: {
+                status?: "UPCOMING" | "OPEN" | "CLOSED";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de défis */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseChallenge"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    challengeAdminCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChallengeRequest"];
+            };
+        };
+        responses: {
+            /** @description Défi créé */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Challenge"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_TAG, INVALID_PERIOD */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CHALLENGE_OVERLAP */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    moderationAdminDecide: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CaseDecisionRequest"];
+            };
+        };
+        responses: {
+            /** @description Dossier à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModerationCase"];
+                };
+            };
+            /** @description VALIDATION_ERROR, NOTE_REQUIRED */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN, CANNOT_SUSPEND_STAFF */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CASE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    applicationDecide: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApplicationDecisionRequest"];
+            };
+        };
+        responses: {
+            /** @description Candidature à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceivedApplication"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_STATUS */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_TARGET_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description APPLICATION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    userProfile: {
         parameters: {
             query?: never;
             header?: never;
@@ -1465,7 +6518,7 @@ export interface operations {
             };
         };
     };
-    reputation: {
+    userReputation: {
         parameters: {
             query?: {
                 page?: number;
@@ -1499,7 +6552,194 @@ export interface operations {
             };
         };
     };
-    list_2: {
+    userAvatar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                username: string;
+                file: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description L'image */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/png": unknown;
+                    "image/jpeg": unknown;
+                    "image/webp": unknown;
+                };
+            };
+            /** @description AVATAR_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    moderationMine: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de contenus */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseMyModeratedContent"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    connectionList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Les comptes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Connections"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityMyProposals: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Propositions du membre */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommunityProposal"][];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Communautés du membre */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommunitySummary"][];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    applicationMine: {
+        parameters: {
+            query?: {
+                type?: "JOB" | "MISSION";
+                status?: "SENT" | "VIEWED" | "SHORTLISTED" | "REJECTED";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page, plus récentes d'abord */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseMyApplication"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    tagList: {
         parameters: {
             query?: {
                 q?: string;
@@ -1522,7 +6762,303 @@ export interface operations {
             };
         };
     };
-    providers: {
+    notificationList: {
+        parameters: {
+            query?: {
+                unreadOnly?: boolean;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de notifications */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseNotification"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    notificationUnreadCount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Le compteur */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnreadCount"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    moderationQueue: {
+        parameters: {
+            query?: {
+                targetType?: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de dossiers */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseModerationCase"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description LEVEL_TOO_LOW */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    jobMine: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page d'offres, plus récentes d'abord */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseJobSummary"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityList: {
+        parameters: {
+            query?: {
+                kind?: "COUNTRY" | "TECH";
+                /** @description Texte recherché */
+                q?: string;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de communautés */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseCommunitySummary"];
+                };
+            };
+            /** @description INVALID_PAGE, INVALID_PAGE_SIZE, INVALID_PARAMETER */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Communauté */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommunityDetail"];
+                };
+            };
+            /** @description COMMUNITY_NOT_FOUND (inconnue ou fermée) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    challengeGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Le défi */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Challenge"];
+                };
+            };
+            /** @description CHALLENGE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    challengeLeaderboard: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page du classement */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseLeaderboardEntry"];
+                };
+            };
+            /** @description CHALLENGE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    challengeCurrent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Le défi */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Challenge"];
+                };
+            };
+            /** @description NO_CURRENT_CHALLENGE */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    authProviders: {
         parameters: {
             query?: never;
             header?: never;
@@ -1542,7 +7078,7 @@ export interface operations {
             };
         };
     };
-    me: {
+    authMe: {
         parameters: {
             query?: never;
             header?: never;
@@ -1571,11 +7107,9 @@ export interface operations {
             };
         };
     };
-    csrf: {
+    authCsrf: {
         parameters: {
-            query: {
-                token: components["schemas"]["CsrfToken"];
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
@@ -1593,7 +7127,336 @@ export interface operations {
             };
         };
     };
-    logout: {
+    applicationCv: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Le PDF */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": unknown;
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description APPLICATION_NOT_FOUND, CV_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    userAdminList: {
+        parameters: {
+            query?: {
+                q?: string;
+                status?: "ACTIVE" | "SUSPENDED" | "DELETED";
+                role?: "MEMBER" | "RECRUITER" | "MODERATOR" | "ADMIN";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de comptes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseAdminUser"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    jobAdminList: {
+        parameters: {
+            query?: {
+                status?: "PENDING" | "PUBLISHED" | "REJECTED" | "CLOSED";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page d'offres */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseJobDetail"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    communityAdminProposals: {
+        parameters: {
+            query?: {
+                status?: "PENDING" | "APPROVED" | "REJECTED";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de propositions */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseAdminCommunityProposal"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    challengeAdminSubmissions: {
+        parameters: {
+            query?: {
+                status?: "PENDING" | "VALIDATED" | "REJECTED";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de dépôts */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseAdminSubmission"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CHALLENGE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    moderationAdminList: {
+        parameters: {
+            query?: {
+                status?: "OPEN" | "DISMISSED" | "HIDDEN" | "APPEALED" | "RESTORED";
+                targetType?: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de dossiers */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseModerationCase"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    tagAdminDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Étiquette supprimée */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description TAG_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description TAG_IN_USE (aussi par une communauté) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    authLogout: {
         parameters: {
             query?: never;
             header?: never;

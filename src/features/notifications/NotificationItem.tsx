@@ -10,10 +10,16 @@ import styles from './NotificationItem.module.css';
 const SYSTEM_ICONS: Partial<Record<AppNotification['type'], IconName>> = {
   JOB_MATCH: 'jobs',
   MISSION_MATCH: 'mission',
-  NEW_CHALLENGE: 'trophy',
-  APPLICATION_DECISION: 'jobs',
-  PROJECT_REQUEST_DECISION: 'user',
+  CHALLENGE_STARTED: 'trophy',
+  SUBMISSION_REVIEWED: 'trophy',
+  APPLICATION_RECEIVED: 'jobs',
+  APPLICATION_DECIDED: 'jobs',
+  JOB_REVIEWED: 'jobs',
+  PROJECT_REQUEST_DECIDED: 'user',
   COMMUNITY_PROPOSAL_DECISION: 'users',
+  CONTENT_HIDDEN: 'flag',
+  CONTENT_RESTORED: 'flag',
+  ACCOUNT_WARNED: 'flag',
 };
 
 export type NotificationItemProps = {
@@ -24,8 +30,11 @@ export type NotificationItemProps = {
 export function NotificationItem({ notification: n, onOpen }: NotificationItemProps) {
   const { t } = useTranslation();
   const text = t(`notifications.types.${n.type}`, {
-    actor: n.actor?.displayName ?? '',
-    decision: n.decision ? t(`notifications.decisions.${n.decision}`) : '',
+    // Vote anonyme : le contrat n'envoie pas d'auteur.
+    actor: n.actor?.displayName ?? t('notifications.someone'),
+    decision: n.outcome
+      ? t(`notifications.decisions.${n.outcome}`, { defaultValue: n.outcome.toLowerCase() })
+      : '',
   });
 
   return (
@@ -40,8 +49,8 @@ export function NotificationItem({ notification: n, onOpen }: NotificationItemPr
       <div className={styles.body}>
         <p>
           {text} :{' '}
-          <Link to={notificationLink(n.targetType, n.targetId)} onClick={onOpen}>
-            {n.targetTitle}
+          <Link to={notificationLink(n.target)} onClick={onOpen}>
+            {n.target.title}
           </Link>
         </p>
         <small>

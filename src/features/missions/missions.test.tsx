@@ -3,17 +3,18 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import i18n from '../../i18n';
-import type { Me, MissionDetail } from '../../api/types';
+import type { Me, MissionDetail, ReceivedApplication } from '../../api/types';
 import { ToastProvider } from '../../components/ToastProvider';
 import MissionPage from '../../pages/mission/MissionPage';
 import { authApi } from '../auth/authApi';
+import { jobsApi } from '../jobs/jobsApi';
 import { SessionProvider } from '../auth/SessionProvider';
 import { MissionForm } from './MissionForm';
 import { missionsApi } from './missionsApi';
 import { formatMoney } from './money';
 import { author, demoMe } from '../../test/fixtures';
 
-const member: Me = demoMe({ skills: ['php', 'mobile-money'] });
+const member: Me = demoMe({ technologies: ['php', 'mobile-money'] });
 
 const wrap = (ui: ReactNode, path = '/') =>
   render(
@@ -64,14 +65,12 @@ describe('MissionPage (JOB-5)', () => {
       "J'ai intégré Wave sur deux boutiques WooCommerce à Dakar l'an dernier.",
     );
     type(/^Votre prix/, '70000');
-    type(/^Votre délai/, '4');
     fireEvent.click(screen.getByRole('button', { name: 'Envoyer ma proposition' }));
 
     await waitFor(() =>
-      expect(offer).toHaveBeenCalledWith(1, {
+      expect(offer).toHaveBeenCalledWith(14, {
         message: "J'ai intégré Wave sur deux boutiques WooCommerce à Dakar l'an dernier.",
-        price: { amount: 70000, currency: 'XOF' },
-        delayDays: 4,
+        proposedBudget: { amount: 70000, currency: 'XOF' },
       }),
     );
     expect(await screen.findByText('Vous vous êtes proposé pour cette mission.')).toBeTruthy();
@@ -83,41 +82,58 @@ describe('MissionPage (JOB-5)', () => {
       id: 1,
       title: 'Intégrer Wave dans une boutique WooCommerce',
       kind: 'INTEGRATION',
-      excerpt: '',
       budget: { amount: 75000, currency: 'XOF' },
-      delayDays: 5,
+      durationDays: 5,
       technologies: ['php'],
       author: author(),
       createdAt: '2026-10-21T10:30:00Z',
+      updatedAt: '2026-10-21T10:30:00Z',
       status: 'OPEN',
-      offerCount: 1,
-      myOffer: null,
+      applicationCount: 1,
+      myApplication: null,
+      canEdit: true,
+      descriptionMarkdown: 'Description',
       descriptionHtml: '<p>Description</p>',
-      offers: [
-        {
-          id: 301,
-          member: author({
-            username: 'moussa_t',
-            displayName: 'Moussa Traoré',
-            countryCode: 'ML',
-            reputation: 310,
-          }),
-          message: 'Je peux commencer demain.',
-          price: { amount: 70000, currency: 'XOF' },
-          delayDays: 4,
-          status: 'SENT',
-          createdAt: '2026-10-21T11:00:00Z',
-        },
-      ],
+    };
+    const offer: ReceivedApplication = {
+      id: 301,
+      target: { type: 'MISSION', id: 1, title: detail.title },
+      candidate: {
+        username: 'moussa_t',
+        displayName: 'Moussa Traoré',
+        countryCode: 'ML',
+        role: 'MEMBER',
+        reputation: 310,
+        level: 'MEMBER',
+        visibleToRecruiters: false,
+        technologies: ['php'],
+        questionCount: 2,
+        answerCount: 14,
+        createdAt: '2026-09-01T08:00:00Z',
+      },
+      message: 'Je peux commencer demain.',
+      hasCv: false,
+      proposedBudget: { amount: 70000, currency: 'XOF' },
+      status: 'SENT',
+      createdAt: '2026-10-21T11:00:00Z',
+      updatedAt: '2026-10-21T11:00:00Z',
     };
     vi.spyOn(missionsApi, 'get').mockResolvedValue(detail);
-    const decide = vi.spyOn(missionsApi, 'decide');
+    vi.spyOn(missionsApi, 'applications').mockResolvedValue({
+      items: [offer],
+      page: 0,
+      size: 20,
+      total: 1,
+    });
+    const decide = vi
+      .spyOn(jobsApi, 'decide')
+      .mockResolvedValue({ ...offer, status: 'SHORTLISTED' });
     renderMission();
 
     expect(await screen.findByText('1 proposition reçue')).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Se proposer' })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'Retenir' }));
-    await waitFor(() => expect(decide).toHaveBeenCalledWith(1, 301, { status: 'SHORTLISTED' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Retenir' }));
+    await waitFor(() => expect(decide).toHaveBeenCalledWith(301, 'SHORTLISTED'));
     expect(await screen.findByText('Retenue')).toBeTruthy();
   });
 });
@@ -148,7 +164,7 @@ describe('MissionForm (JOB-5)', () => {
       expect.objectContaining({
         kind: 'CODE_REVIEW',
         budget: { amount: 40000, currency: 'XOF' },
-        delayDays: 3,
+        durationDays: 3,
         technologies: ['laravel', 'php'],
       }),
     );

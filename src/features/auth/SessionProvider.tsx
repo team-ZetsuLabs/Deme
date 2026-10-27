@@ -11,6 +11,7 @@ type SessionProviderProps = { children: ReactNode };
 export function SessionProvider({ children }: SessionProviderProps) {
   const [user, setUser] = useState<Me | null>(null);
   const [status, setStatus] = useState<SessionStatus>('loading');
+  const [onboardingSkipped, setOnboardingSkipped] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -38,30 +39,30 @@ export function SessionProvider({ children }: SessionProviderProps) {
   }, []);
 
   const login = useCallback((body: LoginRequest) => authApi.login(body).then(signIn), [signIn]);
-  // Un compte qui vient d'être créé passe par le parcours d'accueil (AUTH-5).
+  // Un compte qui vient d'être créé a onboardingCompleted à faux : il passe par /welcome (AUTH-5).
   const register = useCallback(
-    (body: RegisterRequest) =>
-      authApi.register(body).then((me) => signIn({ ...me, onboarded: me.onboarded ?? false })),
+    (body: RegisterRequest) => authApi.register(body).then(signIn),
     [signIn],
   );
   const updateMe = useCallback(
     async (body: MeUpdate) => {
       if (!user) throw new Error('updateMe sans membre connecté');
       const me = await authApi.updateMe(user, body);
-      // Les Extras (stack, parcours d'accueil) ne sont pas encore renvoyés par le serveur : on
-      // les garde. En mode mock, la réponse est un fichier fixe : on applique toute la modification.
-      const extras = {
-        skills: body.skills ?? user.skills,
-        onboarded: body.onboarded ?? user.onboarded,
-      };
-      return signIn(api.mode === 'mock' ? { ...user, ...body } : { ...user, ...me, ...extras });
+      // En mode mock, la réponse est un fichier fixe : on applique toute la modification.
+      return signIn(
+        api.mode === 'mock'
+          ? { ...user, ...body, technologies: body.technologies ?? user.technologies }
+          : { ...user, ...me },
+      );
     },
     [signIn, user],
   );
   const signOutLocally = useCallback(() => {
     setUser(null);
     setStatus('anonymous');
+    setOnboardingSkipped(false);
   }, []);
+  const skipOnboarding = useCallback(() => setOnboardingSkipped(true), []);
   const logout = useCallback(async () => {
     try {
       await authApi.logout();
@@ -69,14 +70,39 @@ export function SessionProvider({ children }: SessionProviderProps) {
       signOutLocally();
     }
   }, [signOutLocally]);
-  const deleteAccount = useCallback(async () => {
-    await authApi.deleteAccount();
-    signOutLocally();
-  }, [signOutLocally]);
+  const deleteAccount = useCallback(
+    async (confirmation: string) => {
+      await authApi.deleteAccount(confirmation);
+      signOutLocally();
+    },
+    [signOutLocally],
+  );
 
   const value = useMemo(
-    () => ({ status, user, login, register, updateMe, setUser: signIn, logout, deleteAccount }),
-    [status, user, login, register, updateMe, signIn, logout, deleteAccount],
+    () => ({
+      status,
+      user,
+      login,
+      register,
+      updateMe,
+      setUser: signIn,
+      onboardingSkipped,
+      skipOnboarding,
+      logout,
+      deleteAccount,
+    }),
+    [
+      status,
+      user,
+      login,
+      register,
+      updateMe,
+      signIn,
+      onboardingSkipped,
+      skipOnboarding,
+      logout,
+      deleteAccount,
+    ],
   );
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 }

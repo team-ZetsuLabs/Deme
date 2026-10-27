@@ -1,0 +1,28 @@
+{
+  "slug": "kenya",
+  "name": "Kenya et Ouganda",
+  "kind": "COUNTRY",
+  "countryCode": "KE",
+  "tag": null,
+  "description": "De Nairobi à Mombasa : M-Pesa, Daraja API, startups et missions à distance.",
+  "rules": [
+    "English or Swahili, always courteous.",
+    "Pour M-Pesa, précisez sandbox ou production."
+  ],
+  "status": "OPEN",
+  "memberCount": 973,
+  "questionCount": 288,
+  "referents": [
+    {
+      "username": "wanjiru_k",
+      "displayName": "Wanjiru Kamau",
+      "avatarUrl": null,
+      "countryCode": "KE",
+      "reputation": 1710,
+      "level": "REFERENT",
+      "deleted": false
+    }
+  ],
+  "createdAt": "2026-09-20T09:00:00Z",
+  "updatedAt": "2026-10-21T16:30:00Z"
+}

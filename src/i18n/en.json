@@ -88,7 +88,44 @@
     "INVALID_TAG": "A tag only contains lowercase letters, digits, hyphens or dots.",
     "INVALID_COUNTRY": "This country is not recognised.",
     "INTERNAL_ERROR": "Something went wrong on our side. Please try again in a moment.",
-    "COMMUNITY_EXISTS": "A community with this name or tag already exists or is already proposed."
+    "COMMUNITY_EXISTS": "A community with this name or tag already exists or is already proposed.",
+    "ACTION_NOT_ALLOWED": "This action is not allowed.",
+    "ALREADY_APPLIED": "You have already applied.",
+    "ALREADY_LINKED": "This account is already linked.",
+    "ALREADY_LINKED_ELSEWHERE": "This account already belongs to another Zetsu member.",
+    "APPLICATION_NOT_FOUND": "Application not found.",
+    "CANNOT_APPLY_OWN": "You cannot apply to your own listing.",
+    "CANNOT_MODERATE_OWN": "You cannot moderate your own content.",
+    "CANNOT_REPORT_OWN": "You cannot report your own content.",
+    "CASE_ALREADY_DECIDED": "This case has already been handled.",
+    "CASE_NOT_FOUND": "Moderation case not found.",
+    "CASE_NOT_HIDDEN": "This content is not hidden.",
+    "CHALLENGE_NOT_FOUND": "Challenge not found.",
+    "CHALLENGE_NOT_OPEN": "This challenge does not accept submissions right now.",
+    "COMMUNITY_NOT_FOUND": "Community not found.",
+    "CONFIRMATION_MISMATCH": "The username you typed does not match.",
+    "CV_NOT_FOUND": "No CV attached to this application.",
+    "CV_NOT_PDF": "The CV must be a PDF file.",
+    "CV_TOO_LARGE": "The CV is larger than 2 MB.",
+    "FILE_TOO_LARGE": "The file is larger than 5 MB.",
+    "INVALID_VOTE": "Invalid vote.",
+    "JOB_CLOSED": "This job is closed.",
+    "JOB_NOT_FOUND": "Job not found.",
+    "LAST_LOGIN_METHOD": "This is your only way to sign in: it cannot be removed.",
+    "MISSION_NOT_FOUND": "Gig not found.",
+    "MISSION_NOT_OPEN": "This gig no longer accepts proposals.",
+    "NOTE_REQUIRED": "Add a note to explain the decision.",
+    "NOT_JOB_OWNER": "Only the recruiter of this job can do that.",
+    "NOT_LINKED": "This account is not linked.",
+    "NOT_MISSION_AUTHOR": "Only the gig author can do that.",
+    "NOT_TARGET_OWNER": "Only the author of the content can do that.",
+    "NO_CURRENT_CHALLENGE": "No challenge right now.",
+    "PHOTO_REQUIRED": "Choose a photo.",
+    "PHOTO_TOO_LARGE": "The photo is larger than 2 MB.",
+    "PHOTO_TYPE": "The photo must be PNG, JPG or WebP.",
+    "PROVIDER_NOT_FOUND": "This sign-in provider is not available.",
+    "RECRUITER_ONLY": "For recruiter accounts only.",
+    "TARGET_NOT_FOUND": "This content no longer exists."
   },
   "auth": {
     "browse": "Browse without an account",
@@ -401,12 +438,13 @@
       "add": "Add",
       "selected_one": "{{count}} technology selected",
       "selected_other": "{{count}} technologies selected",
-      "max": "15 technologies at most.",
+      "max": "10 technologies at most.",
       "invalid": "Use lowercase letters, digits, hyphens or dots."
     },
     "country": {
       "legend": "Your country",
-      "hint": "Used to highlight answers and jobs close to you."
+      "hint": "Used to highlight answers and jobs close to you.",
+      "required": "Choose your country to continue."
     },
     "language": {
       "legend": "Interface language",
@@ -426,7 +464,7 @@
       "OFFENSIVE": "Offensive language",
       "OFF_TOPIC": "Off topic",
       "IMPERSONATION": "Impersonation",
-      "FRAUD": "Fraudulent offer"
+      "FRAUDULENT_JOB": "Fraudulent offer"
     },
     "comment": "Details",
     "commentHint": "300 characters at most.",
@@ -440,7 +478,6 @@
     "title": "Hidden content",
     "byReports": "This content was hidden after 5 reports from different members, until a Referent reviews it.",
     "byReferent": "A Referent hid this content.",
-    "byReferentReason": "A Referent hid this content for the reason “{{reason}}”.",
     "onlyYou": "Only you can see it.",
     "appeal": "Appeal the decision",
     "rules": "Read the rules",
@@ -562,7 +599,8 @@
       "unlinked": "Account disconnected",
       "lastMethod": "This is your only way to log in: it cannot be removed.",
       "mockOnly": "In mock mode, OAuth login is not available.",
-      "unavailable": "Not available yet"
+      "unavailable": "Not available yet",
+      "linkedNow": "Account connected"
     },
     "appearance": {
       "title": "Appearance and language",
@@ -579,9 +617,8 @@
       "intro": "Your reputation and applications will be erased for good.",
       "button": "Delete my account",
       "explain": "Your questions and answers will stay visible, signed “Deleted user”. Your reputation and applications will be erased. This cannot be undone.",
-      "word": "DELETE",
-      "confirmLabel": "Type {{word}} to confirm",
-      "mismatch": "Type {{word}} in capital letters to confirm.",
+      "confirmLabel": "Type your username {{word}} to confirm",
+      "mismatch": "Type your username {{word}} exactly.",
       "confirm": "Delete for good",
       "done": "Your account has been deleted."
     },
@@ -616,22 +653,32 @@
       "earlier": "Earlier"
     },
     "types": {
-      "ANSWER_ON_QUESTION": "{{actor}} answered your question",
+      "ANSWER_POSTED": "{{actor}} answered your question",
       "ANSWER_ACCEPTED": "{{actor}} accepted your answer",
-      "VOTE": "{{actor}} voted for your content",
+      "VOTE_RECEIVED": "{{actor}} voted for your content",
       "JOB_MATCH": "A job matches your profile",
       "MISSION_MATCH": "A gig matches your profile",
-      "NEW_CHALLENGE": "New challenge of the week",
-      "APPLICATION_DECISION": "Your application was {{decision}}",
-      "PROJECT_REQUEST_DECISION": "Your request to join the project was {{decision}}",
-      "COMMUNITY_PROPOSAL_DECISION": "The community proposal was {{decision}}"
+      "APPLICATION_RECEIVED": "{{actor}} applied",
+      "APPLICATION_DECIDED": "Your application was {{decision}}",
+      "JOB_REVIEWED": "Your job was {{decision}}",
+      "CHALLENGE_STARTED": "New challenge of the week",
+      "SUBMISSION_REVIEWED": "Your submission was {{decision}}",
+      "PROJECT_REQUEST_DECIDED": "Your request to join the project was {{decision}}",
+      "COMMUNITY_PROPOSAL_DECISION": "The community proposal was {{decision}}",
+      "CONTENT_HIDDEN": "One of your posts was hidden",
+      "CONTENT_RESTORED": "One of your posts is visible again",
+      "ACCOUNT_WARNED": "You received a warning from the team"
     },
     "decisions": {
       "VIEWED": "viewed",
       "SHORTLISTED": "shortlisted",
       "ACCEPTED": "accepted",
-      "REJECTED": "declined"
-    }
+      "REJECTED": "declined",
+      "PUBLISHED": "published",
+      "VALIDATED": "accepted",
+      "APPROVED": "approved"
+    },
+    "someone": "A member"
   },
   "home": {
     "pageTitle": "Zetsu, where African developers help each other",
@@ -900,12 +947,12 @@
     "view": "View job",
     "viewLabel": "View job: {{title}}",
     "empty": "No job matches these filters yet.",
-    "remote": "Remote",
     "published": "Posted",
     "technologies": "Technologies",
     "pendingNotice": "This offer is waiting for review by the Zetsu team. Only you can see it.",
     "contract": {
-      "FULL_TIME": "Permanent",
+      "PERMANENT": "Permanent",
+      "REMOTE": "Remote",
       "CONTRACT": "Freelance contract",
       "INTERNSHIP": "Internship"
     },
@@ -919,7 +966,7 @@
       "type": "Job type",
       "types": {
         "all": "All",
-        "FULL_TIME": "Permanent",
+        "PERMANENT": "Permanent",
         "REMOTE": "Remote",
         "CONTRACT": "Contracts",
         "INTERNSHIP": "Internships"
@@ -970,12 +1017,9 @@
       "website": "Company website",
       "websiteHint": "An https:// address, it helps verify your company.",
       "contract": "Contract type",
-      "remote": "Remote work possible",
       "technologiesHint": "Separated by commas. Example: spring-boot, react, postgresql",
       "salary": "Salary",
       "salaryHint": "Giving a range brings more applications. Example: 450,000 to 600,000 FCFA per month",
-      "experience": "Expected experience",
-      "experiencePlaceholder": "E.g. 2 to 4 years of experience",
       "description": "Job description",
       "descriptionHint": "The company, the tasks and the profile you are looking for. Markdown accepted.",
       "notice": "An offer must never ask for registration fees or promise quick money. Offers like this are rejected.",
@@ -993,7 +1037,16 @@
     "subnav": {
       "label": "Jobs",
       "offers": "Job offers"
-    }
+    },
+    "jobStatus": {
+      "PENDING": "Pending",
+      "PUBLISHED": "Published",
+      "REJECTED": "Rejected",
+      "CLOSED": "Closed"
+    },
+    "rejectedNotice": "The Zetsu team did not approve this job.",
+    "rejectedNoticeReason": "The Zetsu team did not approve this job: {{reason}}",
+    "closedNotice": "This job is closed: it no longer accepts applications."
   },
   "applications": {
     "pageTitle": "My applications",
@@ -1013,7 +1066,6 @@
     "publish": "Post a gig",
     "empty": "No open gig matches yet. Post yours.",
     "budget": "Budget: {{amount}}",
-    "budgetOpen": "Budget to discuss",
     "budgetLabel": "Indicative budget",
     "delay_one": "{{count}} day",
     "delay_other": "{{count}} days",
@@ -1022,13 +1074,13 @@
     "yours": "You posted this gig. Proposals you receive are listed on the page.",
     "paymentNotice": "Zetsu handles no payment. Agree directly with each other, and never pay to get a gig.",
     "kind": {
-      "FIX": "Fix",
+      "TROUBLESHOOTING": "Fix",
       "INTEGRATION": "Integration",
       "CODE_REVIEW": "Code review",
       "OTHER": "Other"
     },
     "kindHint": {
-      "FIX": "A bug or an outage to fix quickly.",
+      "TROUBLESHOOTING": "A bug or an outage to fix quickly.",
       "INTEGRATION": "Connect an API, a payment, a service.",
       "CODE_REVIEW": "An outside look before going to production.",
       "OTHER": "Any other short job."
@@ -1048,7 +1100,6 @@
       "messageHint": "How you plan to do it, and a similar experience.",
       "messageTooShort": "Write at least {{min}} characters to introduce your proposal.",
       "price": "Your price ({{currency}})",
-      "delay": "Your timeline (days)",
       "submit": "Send my proposal",
       "sent": "Proposal sent. The gig author will be notified.",
       "sentText": "You made a proposal for this gig."
@@ -1072,7 +1123,7 @@
       "description": "Description",
       "descriptionHint": "The context, what is expected and how you will know it is done. Markdown accepted.",
       "budget": "Indicative budget",
-      "budgetHint": "Leave empty if you prefer to discuss it.",
+      "budgetHint": "Indicative amount: no payment goes through Zetsu.",
       "currency": "Currency",
       "delay": "Desired timeline (days)",
       "delayHint": "Between 1 and {{max}} days.",
@@ -1084,7 +1135,7 @@
         "title": "The title must be between 10 and 120 characters.",
         "description": "Describe the gig in at least 50 characters.",
         "delay": "Enter a timeline between 1 and 90 days.",
-        "budget": "The budget must be a positive amount."
+        "budget": "Enter an indicative budget, as a positive amount."
       }
     }
   },
@@ -1108,7 +1159,7 @@
     "submissions_other": "{{count}} submissions so far",
     "submission": {
       "PENDING": "Submission received, waiting for grading",
-      "REVIEWED": "Submission graded: {{score}}/100",
+      "VALIDATED": "Submission accepted: {{score}}/100",
       "REJECTED": "Submission rejected"
     },
     "submit": {
@@ -1140,7 +1191,8 @@
       "yourCountry": "(your country)",
       "participants_one": "{{count}} participant",
       "participants_other": "{{count}} participants"
-    }
+    },
+    "upcoming": "Upcoming challenge"
   },
   "communities": {
     "pageTitle": "Communities",

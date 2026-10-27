@@ -13,13 +13,11 @@ export function MissionFacts({ mission }: MissionFactsProps) {
     <ul className={styles.facts}>
       <li className={styles.kind}>{t(`missions.kind.${mission.kind}`)}</li>
       <li className={styles.fact}>
-        {mission.budget
-          ? t('missions.budget', { amount: formatMoney(mission.budget, i18n.language) })
-          : t('missions.budgetOpen')}
+        {t('missions.budget', { amount: formatMoney(mission.budget, i18n.language) })}
       </li>
       <li className={styles.fact}>
         <Icon name="clock" size={13} />
-        {t('missions.delay', { count: mission.delayDays })}
+        {t('missions.delay', { count: mission.durationDays })}
       </li>
     </ul>
   );

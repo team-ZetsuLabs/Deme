@@ -134,12 +134,12 @@ describe('Propositions de communauté (COM-2)', () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(demoMe({ level: 'REFERENT', reputation: 1642 }));
     renderAt('/communities/new');
     const list = await screen.findByRole('region', { name: 'Vos propositions' });
-    expect(await within(list).findByText('Laravel')).toBeTruthy();
+    expect(await within(list).findByText('React Native')).toBeTruthy();
     expect(within(list).getByText('En attente')).toBeTruthy();
-    expect(within(list).getByRole('link', { name: 'Mali' }).getAttribute('href')).toBe(
-      '/communities/mali',
+    expect(within(list).getByRole('link', { name: 'Mobile money' }).getAttribute('href')).toBe(
+      '/communities/mobile-money',
     );
-    expect(within(list).getByText(/Motif : Elle ferait doublon/)).toBeTruthy();
+    expect(within(list).getByText(/Motif : Pas encore assez de questions du Bénin/)).toBeTruthy();
   });
 
   it('valide puis envoie une proposition de techno', async () => {

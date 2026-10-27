@@ -1,19 +1,25 @@
 import { api } from '../../api/api';
 import type {
+  MissionApplicationRequest,
   MissionDetail,
   MissionKind,
-  MissionOffer,
   MissionRequest,
   MissionSummary,
   MyApplication,
-  OfferDecision,
-  OfferRequest,
   Page,
+  ReceivedApplication,
 } from '../../api/types';
 
 export const MISSIONS_PAGE_SIZE = 20;
 
 export type MissionKindFilter = 'all' | MissionKind;
+
+export const MISSION_KINDS: MissionKind[] = [
+  'TROUBLESHOOTING',
+  'INTEGRATION',
+  'CODE_REVIEW',
+  'OTHER',
+];
 
 export type MissionFilters = {
   kind: MissionKindFilter;
@@ -26,7 +32,7 @@ export const missionsApi = {
     api.get<Page<MissionSummary>>('/missions', {
       query: {
         kind: f.kind === 'all' ? undefined : f.kind,
-        tech: f.tech,
+        technology: f.tech,
         status: 'OPEN',
         page: f.page,
         size: MISSIONS_PAGE_SIZE,
@@ -34,8 +40,13 @@ export const missionsApi = {
     }),
   get: (id: number) => api.get<MissionDetail>(`/missions/${id}`),
   create: (body: MissionRequest) => api.post<MissionDetail>('/missions', body),
-  offer: (id: number, body: OfferRequest) =>
-    api.post<MyApplication>(`/missions/${id}/offers`, body),
-  decide: (id: number, offerId: number, body: OfferDecision) =>
-    api.patch<MissionOffer>(`/missions/${id}/offers/${offerId}`, body),
+  /** Se proposer pour une mission. 409 ALREADY_APPLIED. */
+  offer: (id: number, body: MissionApplicationRequest) =>
+    api.post<MyApplication>(`/missions/${id}/applications`, body),
+  /** Propositions reçues, pour l'auteur de la mission. Décision : jobsApi.decide. */
+  applications: (id: number, page: number) =>
+    api.get<Page<ReceivedApplication>>(`/missions/${id}/applications`, {
+      query: { page, size: MISSIONS_PAGE_SIZE },
+    }),
+  close: (id: number) => api.post<MissionDetail>(`/missions/${id}/close`),
 };

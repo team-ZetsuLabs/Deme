@@ -43,7 +43,7 @@ export default function NotificationsPage() {
   const onReadAll = async () => {
     setBusy(true);
     try {
-      await notificationsApi.markRead({ all: true });
+      await notificationsApi.markRead({});
       markLocal(() => true);
       unread.setCount(() => 0);
       toast(t('notifications.allRead'));

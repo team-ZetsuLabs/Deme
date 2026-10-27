@@ -77,7 +77,7 @@ export function ApplyDialog({ open, jobId, company, user, onClose, onApplied }: 
           <b>{user.displayName}</b>
           <span>
             {t('question.points', { points: user.reputation.toLocaleString(i18n.language) })}
-            {!!user.skills?.length && `, ${user.skills.join(', ')}`}
+            {!!user.technologies.length && `, ${user.technologies.join(', ')}`}
           </span>
         </div>
       </div>

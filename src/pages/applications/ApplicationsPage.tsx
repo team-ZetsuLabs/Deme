@@ -48,16 +48,22 @@ export default function ApplicationsPage() {
             {query.data.items.map((a) => (
               <li key={a.id} className={styles.item}>
                 <div className={styles.body}>
-                  <span className={styles.kind}>{t(`applications.kind.${a.targetType}`)}</span>
+                  <span className={styles.kind}>{t(`applications.kind.${a.target.type}`)}</span>
                   <Link
-                    to={a.targetType === 'JOB' ? `/jobs/${a.targetId}` : `/missions/${a.targetId}`}
+                    to={
+                      a.target.type === 'JOB' ? `/jobs/${a.target.id}` : `/missions/${a.target.id}`
+                    }
                   >
-                    {a.title}
+                    {a.target.title}
                   </Link>
                   <small>
-                    {a.organisation}
-                    <span aria-hidden="true"> · </span>
-                    {t('applications.sent')} <RelativeTime iso={a.sentAt} />
+                    {a.target.companyName && (
+                      <>
+                        {a.target.companyName}
+                        <span aria-hidden="true"> · </span>
+                      </>
+                    )}
+                    {t('applications.sent')} <RelativeTime iso={a.createdAt} />
                   </small>
                 </div>
                 <ApplicationStatusBadge status={a.status} />

@@ -1,26 +1,29 @@
 {
-  "id": 1,
-  "title": "Intégrer Wave dans une boutique WooCommerce",
+  "id": 14,
+  "title": "Brancher Wave sur ma boutique WooCommerce",
+  "descriptionMarkdown": "Ma boutique tourne sous WooCommerce sur un hébergement mutualisé. Je veux proposer Wave au paiement, avec la confirmation automatique de la commande quand le paiement est validé.\n\nLe réseau de mes clients est souvent instable : il faut gérer le cas où ils ferment la page avant le retour.",
+  "descriptionHtml": "<p>Ma boutique tourne sous WooCommerce sur un hébergement mutualisé. Je veux proposer Wave au paiement, avec la confirmation automatique de la commande quand le paiement est validé.</p>\n<p>Le réseau de mes clients est souvent instable : il faut gérer le cas où ils ferment la page avant le retour.</p>\n",
   "kind": "INTEGRATION",
-  "excerpt": "Ma boutique de tissus wax accepte Orange Money, il manque Wave. Il faut le plugin, les tests en bac à sable et la mise en production.",
   "budget": {
     "amount": 75000,
     "currency": "XOF"
   },
-  "delayDays": 5,
-  "technologies": ["wordpress", "php", "mobile-money"],
+  "durationDays": 3,
+  "technologies": ["woocommerce", "php", "wave"],
+  "countryCode": "CI",
   "author": {
-    "username": "mariama_s",
-    "displayName": "Mariama Sow",
+    "username": "yao_kouassi",
+    "displayName": "Yao Kouassi",
     "avatarUrl": null,
-    "countryCode": "SN",
-    "reputation": 85,
-    "level": "MEMBER"
+    "countryCode": "CI",
+    "reputation": 64,
+    "level": "MEMBER",
+    "deleted": false
   },
-  "createdAt": "2026-10-21T10:30:00Z",
   "status": "OPEN",
-  "offerCount": 3,
-  "myOffer": null,
-  "descriptionHtml": "<p>Ma boutique en ligne de tissus wax tourne sous WordPress et WooCommerce. Les clients paient déjà par Orange Money, mais beaucoup me demandent Wave.</p><h3>Ce qui est attendu</h3><ul><li>Installer et configurer le moyen de paiement Wave</li><li>Tester les paiements en bac à sable, puis en production avec un petit montant</li><li>Vérifier que les commandes passent bien en « payée » après confirmation</li></ul><p>Je fournis les accès au compte marchand Wave et à l'hébergement.</p>",
-  "offers": null
+  "applicationCount": 2,
+  "myApplication": null,
+  "canEdit": false,
+  "createdAt": "2026-10-22T18:20:00Z",
+  "updatedAt": "2026-10-22T18:20:00Z"
 }

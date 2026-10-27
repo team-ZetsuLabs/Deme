@@ -1,0 +1,17 @@
+{
+  "accounts": [
+    {
+      "provider": "github",
+      "linked": false,
+      "linkedAt": null,
+      "canUnlink": false
+    },
+    {
+      "provider": "google",
+      "linked": false,
+      "linkedAt": null,
+      "canUnlink": false
+    }
+  ],
+  "hasPassword": true
+}
