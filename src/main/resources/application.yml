@@ -64,6 +64,13 @@ zetsu:
   # Section 7 : masquage automatique après 5 signalements de comptes distincts (MOD-2).
   moderation:
     auto-hide-threshold: 5
+  # Section 6 : assistant de rédaction (IA-1). Sans clé, l'assistant répond 503 AI_UNAVAILABLE et tout le reste marche.
+  ai:
+    provider: ${AI_PROVIDER:gemini}
+    api-key: ${AI_API_KEY:}
+    model: ${AI_MODEL:gemini-2.5-flash-lite}
+    timeout: 7s
+    cache-ttl: 24h
 
 springdoc:
   api-docs:

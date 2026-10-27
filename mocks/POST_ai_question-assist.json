@@ -1,0 +1,15 @@
+{
+  "title": "Paiement Orange Money refusé dans une application Flutter à Dakar",
+  "tags": [
+    { "name": "flutter", "existing": true },
+    { "name": "orange-money", "existing": true },
+    { "name": "webhook-paiement", "existing": false }
+  ],
+  "context": {
+    "countryCode": "SN",
+    "mobileMoneyOperator": "ORANGE_MONEY",
+    "networkQuality": null,
+    "techVersion": "Flutter 3.24"
+  },
+  "missing": ["ERROR_MESSAGE", "CODE", "EXPECTED_RESULT"]
+}
