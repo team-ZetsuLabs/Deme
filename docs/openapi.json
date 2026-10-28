@@ -7218,8 +7218,8 @@
           },
           "language" : {
             "type" : "string",
-            "enum" : [ "fr", "en" ],
-            "pattern" : "^(fr|en)$"
+            "enum" : [ "fr", "en", "pt", "ar" ],
+            "pattern" : "^(fr|en|pt|ar)$"
           },
           "visibleToRecruiters" : {
             "type" : "boolean"
@@ -7298,7 +7298,7 @@
           },
           "language" : {
             "type" : "string",
-            "enum" : [ "fr", "en" ]
+            "enum" : [ "fr", "en", "pt", "ar" ]
           },
           "visibleToRecruiters" : {
             "type" : "boolean",
@@ -7354,8 +7354,8 @@
           },
           "language" : {
             "type" : "string",
-            "enum" : [ "fr", "en" ],
-            "pattern" : "^(fr|en)$"
+            "enum" : [ "fr", "en", "pt", "ar" ],
+            "pattern" : "^(fr|en|pt|ar)$"
           }
         },
         "required" : [ "countryCode", "language", "technologies" ]

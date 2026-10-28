@@ -37,7 +37,7 @@ public final class UserDtos {
             String bio,
             @Schema(example = "SN") String countryCode,
             @Schema(example = "Dakar") String city,
-            @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en"}) String language,
+            @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en", "pt", "ar"}) String language,
             @Schema(requiredMode = REQUIRED, description = "Profil visible par les recruteurs (désactivé par défaut)")
             boolean visibleToRecruiters,
             @Schema(requiredMode = REQUIRED) Role role,
@@ -119,8 +119,8 @@ public final class UserDtos {
             @Size(max = 200, message = "200 caractères maximum") String bio,
             @CountryCode String countryCode,
             @Size(max = 80, message = "80 caractères maximum") String city,
-            @NotNull(message = "Obligatoire") @Pattern(regexp = "^(fr|en)$", message = "fr ou en")
-            @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en"}) String language,
+            @NotNull(message = "Obligatoire") @Pattern(regexp = "^(fr|en|pt|ar)$", message = "fr, en, pt ou ar")
+            @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en", "pt", "ar"}) String language,
             @NotNull(message = "Obligatoire") @Schema(requiredMode = REQUIRED) Boolean visibleToRecruiters,
             @Size(max = MAX_TECHNOLOGIES, message = MAX_TECHNOLOGIES + " technologies maximum")
             @Schema(description = "Stack du membre. Absent ou null : inchangée. Liste vide : effacée.")
@@ -151,7 +151,7 @@ public final class UserDtos {
             List<String> technologies,
             @NotBlank(message = "Obligatoire") @CountryCode
             @Schema(requiredMode = REQUIRED, example = "SN") String countryCode,
-            @NotNull(message = "Obligatoire") @Pattern(regexp = "^(fr|en)$", message = "fr ou en")
-            @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en"}) String language) {
+            @NotNull(message = "Obligatoire") @Pattern(regexp = "^(fr|en|pt|ar)$", message = "fr, en, pt ou ar")
+            @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en", "pt", "ar"}) String language) {
     }
 }

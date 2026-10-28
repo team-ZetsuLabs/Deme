@@ -104,6 +104,24 @@ class OnboardingIntegrationTest extends IntegrationTest {
                 .andExpect(jsonPath("$.technologies", empty()));
     }
 
+    @Test
+    void lePortugaisEtLArabeSontAcceptesPasLesAutresLangues() throws Exception {
+        Member nadia = register("Nadia", "MA");
+
+        mvc.perform(onboarding(nadia, List.of("php"), "MA", "ar"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.language").value("ar"));
+        mvc.perform(onboarding(nadia, List.of("php"), "AO", "pt"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.language").value("pt"));
+        mvc.perform(get("/api/v1/auth/me").session(nadia.session()))
+                .andExpect(jsonPath("$.language").value("pt"));
+
+        mvc.perform(onboarding(nadia, List.of("php"), "MA", "es"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fields.language").value("fr, en, pt ou ar"));
+    }
+
     private RequestBuilder onboarding(Member member, List<String> technologies, String country, String language)
             throws Exception {
         return put("/api/v1/users/me/onboarding").with(csrf()).session(member.session())
