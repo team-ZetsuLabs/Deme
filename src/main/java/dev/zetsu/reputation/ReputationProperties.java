@@ -34,4 +34,14 @@ public record ReputationProperties(
         }
         return Level.NEWCOMER;
     }
+
+    /** Réputation à atteindre pour le niveau suivant, ou null au niveau Référent. */
+    public Integer nextLevelAt(int reputation) {
+        return switch (levelOf(reputation)) {
+            case NEWCOMER -> memberThreshold;
+            case MEMBER -> contributorThreshold;
+            case CONTRIBUTOR -> referentThreshold;
+            case REFERENT -> null;
+        };
+    }
 }

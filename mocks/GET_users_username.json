@@ -1,4 +1,5 @@
 {
+  "id": 24,
   "username": "kwame_codes",
   "displayName": "Kwame Asante",
   "avatarUrl": "https://avatars.githubusercontent.com/u/1024",
@@ -8,6 +9,7 @@
   "role": "MEMBER",
   "reputation": 1587,
   "level": "REFERENT",
+  "nextLevelAt": null,
   "visibleToRecruiters": false,
   "technologies": [
     "kotlin",
@@ -16,6 +18,7 @@
   ],
   "questionCount": 14,
   "answerCount": 96,
+  "acceptedCount": 24,
   "createdAt": "2026-08-02T11:00:00Z",
   "badges": [
     "FIRST_STEP",

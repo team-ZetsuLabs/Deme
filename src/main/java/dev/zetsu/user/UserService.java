@@ -75,10 +75,12 @@ public class UserService {
 
     /** Profil public d'un membre déjà chargé, par exemple celui d'un candidat (JOB-3). */
     public PublicProfile profile(User u) {
-        return new PublicProfile(u.getUsername(), u.getDisplayName(), u.getAvatarUrl(), u.getBio(),
+        return new PublicProfile(u.getId(), u.getUsername(), u.getDisplayName(), u.getAvatarUrl(), u.getBio(),
                 u.getCountryCode(), u.getCity(), u.getRole(), u.getReputation(),
-                reputation.levelOf(u.getReputation()), u.isVisibleToRecruiters(), UserDtos.technologyNames(u),
-                questions.countByAuthorId(u.getId()), answers.countByAuthorId(u.getId()), u.getCreatedAt(),
+                reputation.levelOf(u.getReputation()), reputation.nextLevelAt(u.getReputation()),
+                u.isVisibleToRecruiters(), UserDtos.technologyNames(u),
+                questions.countByAuthorId(u.getId()), answers.countByAuthorId(u.getId()),
+                answers.countAcceptedByAuthorId(u.getId()), u.getCreatedAt(),
                 badges.earned(u.getId()));
     }
 

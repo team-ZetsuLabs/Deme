@@ -7259,6 +7259,10 @@
             "type" : "string",
             "example" : "aminata@exemple.sn"
           },
+          "emailVerified" : {
+            "type" : "boolean",
+            "description" : "Vrai pour un email venu de GitHub ou Google, ou confirmé par le lien envoyé (AUTH-4)"
+          },
           "avatarUrl" : {
             "type" : "string"
           },
@@ -7310,7 +7314,7 @@
             "format" : "date-time"
           }
         },
-        "required" : [ "createdAt", "displayName", "id", "language", "level", "onboardingCompleted", "reputation", "role", "technologies", "username", "visibleToRecruiters" ]
+        "required" : [ "createdAt", "displayName", "emailVerified", "id", "language", "level", "onboardingCompleted", "reputation", "role", "technologies", "username", "visibleToRecruiters" ]
       },
       "OnboardingRequest" : {
         "type" : "object",
@@ -9497,6 +9501,11 @@
       "PublicProfile" : {
         "type" : "object",
         "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Identifiant du membre, cible d'un signalement de profil"
+          },
           "username" : {
             "type" : "string"
           },
@@ -9527,6 +9536,12 @@
             "type" : "string",
             "enum" : [ "NEWCOMER", "MEMBER", "CONTRIBUTOR", "REFERENT" ]
           },
+          "nextLevelAt" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Réputation à atteindre pour le niveau suivant ; null au niveau Référent",
+            "example" : 500
+          },
           "visibleToRecruiters" : {
             "type" : "boolean"
           },
@@ -9545,6 +9560,11 @@
             "type" : "integer",
             "format" : "int64"
           },
+          "acceptedCount" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Réponses acceptées comme solution, hors réponses masquées"
+          },
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
@@ -9558,7 +9578,7 @@
             }
           }
         },
-        "required" : [ "answerCount", "badges", "createdAt", "displayName", "level", "questionCount", "reputation", "role", "technologies", "username", "visibleToRecruiters" ]
+        "required" : [ "acceptedCount", "answerCount", "badges", "createdAt", "displayName", "id", "level", "questionCount", "reputation", "role", "technologies", "username", "visibleToRecruiters" ]
       },
       "ReceivedApplication" : {
         "type" : "object",

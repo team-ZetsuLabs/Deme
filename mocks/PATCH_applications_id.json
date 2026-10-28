@@ -7,6 +7,7 @@
     "companyName": null
   },
   "candidate": {
+    "id": 25,
     "username": "aminata_dev",
     "displayName": "Aminata Diallo",
     "avatarUrl": null,
@@ -16,6 +17,7 @@
     "role": "MEMBER",
     "reputation": 342,
     "level": "MEMBER",
+    "nextLevelAt": 500,
     "visibleToRecruiters": true,
     "technologies": [
       "java",
@@ -24,6 +26,7 @@
     ],
     "questionCount": 6,
     "answerCount": 41,
+    "acceptedCount": 10,
     "createdAt": "2026-09-14T08:21:00Z"
   },
   "message": "J'ai intégré Wave et Orange Money pour deux boutiques à Abidjan, je peux livrer en 3 jours avec la gestion du paiement confirmé après fermeture de la page.",

@@ -36,6 +36,13 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
     long countByAuthorId(Long authorId);
 
+    /** Réponses acceptées comme solution, hors réponses masquées (MOD-2), comme le badge Résolveur. */
+    @Query(value = """
+            select count(*) from answers a join questions q on q.accepted_answer_id = a.id
+            where a.author_id = :authorId and not a.hidden
+            """, nativeQuery = true)
+    long countAcceptedByAuthorId(@Param("authorId") Long authorId);
+
     @Modifying(flushAutomatically = true)
     @Query(value = "update answers set score = score + :delta where id = :id", nativeQuery = true)
     void addScore(@Param("id") Long id, @Param("delta") int delta);
