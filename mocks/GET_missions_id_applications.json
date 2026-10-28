@@ -9,6 +9,7 @@
         "companyName": null
       },
       "candidate": {
+        "id": 22,
         "username": "aminata_dev",
         "displayName": "Aminata Diallo",
         "avatarUrl": null,
@@ -18,6 +19,7 @@
         "role": "MEMBER",
         "reputation": 342,
         "level": "MEMBER",
+        "nextLevelAt": 500,
         "visibleToRecruiters": true,
         "technologies": [
           "java",
@@ -26,6 +28,7 @@
         ],
         "questionCount": 6,
         "answerCount": 41,
+        "acceptedCount": 10,
         "createdAt": "2026-09-14T08:21:00Z"
       },
       "message": "J'ai intégré Wave et Orange Money pour deux boutiques à Abidjan, je peux livrer en 3 jours avec la gestion du paiement confirmé après fermeture de la page.",
@@ -47,6 +50,7 @@
         "companyName": null
       },
       "candidate": {
+        "id": 23,
         "username": "kwame_codes",
         "displayName": "Kwame Asante",
         "avatarUrl": "https://avatars.githubusercontent.com/u/1024",
@@ -56,6 +60,7 @@
         "role": "MEMBER",
         "reputation": 1587,
         "level": "REFERENT",
+        "nextLevelAt": null,
         "visibleToRecruiters": true,
         "technologies": [
           "kotlin",
@@ -64,6 +69,7 @@
         ],
         "questionCount": 14,
         "answerCount": 96,
+        "acceptedCount": 24,
         "createdAt": "2026-08-02T11:00:00Z"
       },
       "message": "Je maintiens un plugin de paiement mobile pour WooCommerce, l'intégration Wave est déjà prête à adapter.",

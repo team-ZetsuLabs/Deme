@@ -30,11 +30,14 @@ public final class UserDtos {
             @Schema(requiredMode = REQUIRED, example = "aminata_diallo") String username,
             @Schema(requiredMode = REQUIRED, example = "Aminata Diallo") String displayName,
             @Schema(example = "aminata@exemple.sn") String email,
+            @Schema(requiredMode = REQUIRED, description = """
+                    Vrai pour un email venu de GitHub ou Google, ou confirmé par le lien envoyé (AUTH-4)""")
+            boolean emailVerified,
             String avatarUrl,
             String bio,
             @Schema(example = "SN") String countryCode,
             @Schema(example = "Dakar") String city,
-            @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en"}) String language,
+            @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en", "pt", "ar"}) String language,
             @Schema(requiredMode = REQUIRED, description = "Profil visible par les recruteurs (désactivé par défaut)")
             boolean visibleToRecruiters,
             @Schema(requiredMode = REQUIRED) Role role,
@@ -48,7 +51,8 @@ public final class UserDtos {
             @Schema(requiredMode = REQUIRED) Instant createdAt) {
 
         public static Me from(User u, Level level) {
-            return new Me(u.getId(), u.getUsername(), u.getDisplayName(), u.getEmail(), u.getAvatarUrl(),
+            return new Me(u.getId(), u.getUsername(), u.getDisplayName(), u.getEmail(), u.isEmailVerified(),
+                    u.getAvatarUrl(),
                     u.getBio(), u.getCountryCode(), u.getCity(), u.getLanguage(), u.isVisibleToRecruiters(),
                     u.getRole(), u.getReputation(), level, technologyNames(u), u.getOnboardedAt() != null,
                     u.getCreatedAt());
@@ -62,6 +66,8 @@ public final class UserDtos {
     /** Profil public d'un membre. */
     @Schema(name = "PublicProfile")
     public record PublicProfile(
+            @Schema(requiredMode = REQUIRED, description = "Identifiant du membre, cible d'un signalement de profil")
+            Long id,
             @Schema(requiredMode = REQUIRED) String username,
             @Schema(requiredMode = REQUIRED) String displayName,
             String avatarUrl,
@@ -71,11 +77,15 @@ public final class UserDtos {
             @Schema(requiredMode = REQUIRED) Role role,
             @Schema(requiredMode = REQUIRED) int reputation,
             @Schema(requiredMode = REQUIRED) Level level,
+            @Schema(description = "Réputation à atteindre pour le niveau suivant ; null au niveau Référent", example = "500")
+            Integer nextLevelAt,
             @Schema(requiredMode = REQUIRED) boolean visibleToRecruiters,
             @Schema(requiredMode = REQUIRED, example = "[\"java\", \"spring-boot\", \"postgresql\"]")
             List<String> technologies,
             @Schema(requiredMode = REQUIRED) long questionCount,
             @Schema(requiredMode = REQUIRED) long answerCount,
+            @Schema(requiredMode = REQUIRED, description = "Réponses acceptées comme solution, hors réponses masquées")
+            long acceptedCount,
             @Schema(requiredMode = REQUIRED) Instant createdAt,
             @Schema(requiredMode = REQUIRED, description = """
                     Badges gagnés (REP-4), du plus ancien au plus récent. La progression : GET /users/{username}/badges""")
@@ -109,8 +119,8 @@ public final class UserDtos {
             @Size(max = 200, message = "200 caractères maximum") String bio,
             @CountryCode String countryCode,
             @Size(max = 80, message = "80 caractères maximum") String city,
-            @NotNull(message = "Obligatoire") @Pattern(regexp = "^(fr|en)$", message = "fr ou en")
-            @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en"}) String language,
+            @NotNull(message = "Obligatoire") @Pattern(regexp = "^(fr|en|pt|ar)$", message = "fr, en, pt ou ar")
+            @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en", "pt", "ar"}) String language,
             @NotNull(message = "Obligatoire") @Schema(requiredMode = REQUIRED) Boolean visibleToRecruiters,
             @Size(max = MAX_TECHNOLOGIES, message = MAX_TECHNOLOGIES + " technologies maximum")
             @Schema(description = "Stack du membre. Absent ou null : inchangée. Liste vide : effacée.")
@@ -141,7 +151,7 @@ public final class UserDtos {
             List<String> technologies,
             @NotBlank(message = "Obligatoire") @CountryCode
             @Schema(requiredMode = REQUIRED, example = "SN") String countryCode,
-            @NotNull(message = "Obligatoire") @Pattern(regexp = "^(fr|en)$", message = "fr ou en")
-            @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en"}) String language) {
+            @NotNull(message = "Obligatoire") @Pattern(regexp = "^(fr|en|pt|ar)$", message = "fr, en, pt ou ar")
+            @Schema(requiredMode = REQUIRED, allowableValues = {"fr", "en", "pt", "ar"}) String language) {
     }
 }

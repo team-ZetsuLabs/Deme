@@ -9,6 +9,7 @@
         "companyName": "Sahel Pay"
       },
       "candidate": {
+        "id": 21,
         "username": "aminata_dev",
         "displayName": "Aminata Diallo",
         "avatarUrl": null,
@@ -18,6 +19,7 @@
         "role": "MEMBER",
         "reputation": 342,
         "level": "MEMBER",
+        "nextLevelAt": 500,
         "visibleToRecruiters": true,
         "technologies": [
           "java",
@@ -26,6 +28,7 @@
         ],
         "questionCount": 6,
         "answerCount": 41,
+        "acceptedCount": 10,
         "createdAt": "2026-09-14T08:21:00Z"
       },
       "message": "Je construis des intégrations Orange Money depuis deux ans chez un agrégateur à Thiès, dont la réconciliation des webhooks en double.",

@@ -125,6 +125,10 @@ public class ReputationService {
         return props.levelOf(reputation);
     }
 
+    public Integer nextLevelAt(int reputation) {
+        return props.nextLevelAt(reputation);
+    }
+
     private void record(Long userId, int delta, ReputationReason reason, Long questionId, Long answerId,
                         Long sourceUserId) {
         events.saveAndFlush(new ReputationEvent(userId, delta, reason, questionId, answerId, sourceUserId));

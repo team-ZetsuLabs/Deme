@@ -6030,6 +6030,25 @@
         }
       }
     },
+    "/api/v1/stats" : {
+      "get" : {
+        "tags" : [ "stats" ],
+        "summary" : "Chiffres de la page d'accueil, publics, mis en cache 5 minutes par le navigateur",
+        "operationId" : "statsHome",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HomeStats"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/questions/similar" : {
       "get" : {
         "tags" : [ "questions" ],
@@ -7199,8 +7218,8 @@
           },
           "language" : {
             "type" : "string",
-            "enum" : [ "fr", "en" ],
-            "pattern" : "^(fr|en)$"
+            "enum" : [ "fr", "en", "pt", "ar" ],
+            "pattern" : "^(fr|en|pt|ar)$"
           },
           "visibleToRecruiters" : {
             "type" : "boolean"
@@ -7259,6 +7278,10 @@
             "type" : "string",
             "example" : "aminata@exemple.sn"
           },
+          "emailVerified" : {
+            "type" : "boolean",
+            "description" : "Vrai pour un email venu de GitHub ou Google, ou confirmé par le lien envoyé (AUTH-4)"
+          },
           "avatarUrl" : {
             "type" : "string"
           },
@@ -7275,7 +7298,7 @@
           },
           "language" : {
             "type" : "string",
-            "enum" : [ "fr", "en" ]
+            "enum" : [ "fr", "en", "pt", "ar" ]
           },
           "visibleToRecruiters" : {
             "type" : "boolean",
@@ -7310,7 +7333,7 @@
             "format" : "date-time"
           }
         },
-        "required" : [ "createdAt", "displayName", "id", "language", "level", "onboardingCompleted", "reputation", "role", "technologies", "username", "visibleToRecruiters" ]
+        "required" : [ "createdAt", "displayName", "emailVerified", "id", "language", "level", "onboardingCompleted", "reputation", "role", "technologies", "username", "visibleToRecruiters" ]
       },
       "OnboardingRequest" : {
         "type" : "object",
@@ -7331,8 +7354,8 @@
           },
           "language" : {
             "type" : "string",
-            "enum" : [ "fr", "en" ],
-            "pattern" : "^(fr|en)$"
+            "enum" : [ "fr", "en", "pt", "ar" ],
+            "pattern" : "^(fr|en|pt|ar)$"
           }
         },
         "required" : [ "countryCode", "language", "technologies" ]
@@ -9497,6 +9520,11 @@
       "PublicProfile" : {
         "type" : "object",
         "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Identifiant du membre, cible d'un signalement de profil"
+          },
           "username" : {
             "type" : "string"
           },
@@ -9527,6 +9555,12 @@
             "type" : "string",
             "enum" : [ "NEWCOMER", "MEMBER", "CONTRIBUTOR", "REFERENT" ]
           },
+          "nextLevelAt" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Réputation à atteindre pour le niveau suivant ; null au niveau Référent",
+            "example" : 500
+          },
           "visibleToRecruiters" : {
             "type" : "boolean"
           },
@@ -9545,6 +9579,11 @@
             "type" : "integer",
             "format" : "int64"
           },
+          "acceptedCount" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Réponses acceptées comme solution, hors réponses masquées"
+          },
           "createdAt" : {
             "type" : "string",
             "format" : "date-time"
@@ -9558,7 +9597,7 @@
             }
           }
         },
-        "required" : [ "answerCount", "badges", "createdAt", "displayName", "level", "questionCount", "reputation", "role", "technologies", "username", "visibleToRecruiters" ]
+        "required" : [ "acceptedCount", "answerCount", "badges", "createdAt", "displayName", "id", "level", "questionCount", "reputation", "role", "technologies", "username", "visibleToRecruiters" ]
       },
       "ReceivedApplication" : {
         "type" : "object",
@@ -9865,6 +9904,66 @@
           }
         },
         "required" : [ "name", "questionCount" ]
+      },
+      "HomeStats" : {
+        "type" : "object",
+        "properties" : {
+          "questions" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Questions visibles",
+            "example" : 1284
+          },
+          "answers" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Réponses visibles",
+            "example" : 3410
+          },
+          "solvedRate" : {
+            "type" : "number",
+            "format" : "double",
+            "description" : "Part des questions visibles qui ont une réponse acceptée, de 0 à 1, arrondie à deux décimales",
+            "example" : "0.68"
+          },
+          "members" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Membres actifs (ni suspendus ni supprimés)",
+            "example" : 2150
+          },
+          "countries" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Pays distincts renseignés par ces membres",
+            "example" : 18
+          },
+          "levels" : {
+            "$ref" : "#/components/schemas/LevelCounts"
+          }
+        },
+        "required" : [ "answers", "countries", "levels", "members", "questions", "solvedRate" ]
+      },
+      "LevelCounts" : {
+        "type" : "object",
+        "properties" : {
+          "MEMBER" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 640
+          },
+          "CONTRIBUTOR" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 85
+          },
+          "REFERENT" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 12
+          }
+        },
+        "required" : [ "CONTRIBUTOR", "MEMBER", "REFERENT" ]
       },
       "PageResponseQuestionSummary" : {
         "type" : "object",
