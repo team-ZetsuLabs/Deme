@@ -5,6 +5,7 @@ import { buttonClass } from '../components/buttonClass';
 import { Icon } from '../components/Icon';
 import { Skeleton } from '../components/skeleton/Skeleton';
 import { useSession } from '../features/auth/useSession';
+import { InstallButton } from '../features/pwa/InstallButton';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { Logo } from './Logo';
 import { ThemeToggle } from './ThemeToggle';
@@ -67,6 +68,7 @@ export function Topbar() {
             <LanguageSwitcher />
           </div>
           <ThemeToggle />
+          <InstallButton />
           {user && <NotificationBell />}
           {user && <UserMenu user={user} />}
           {/* Pendant la lecture de la session, la place des boutons est gardée : rien ne se décale. */}

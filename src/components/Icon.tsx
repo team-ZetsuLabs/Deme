@@ -21,7 +21,9 @@ export type IconName =
   | 'offline'
   | 'flag'
   | 'clock'
-  | 'users';
+  | 'users'
+  | 'share'
+  | 'install';
 
 export type IconProps = {
   name: IconName;

@@ -8,6 +8,7 @@ import { buttonClass } from '../../components/buttonClass';
 import { ErrorState } from '../../components/ErrorState';
 import { MemberContent } from '../../components/MemberContent';
 import { RelativeTime } from '../../components/RelativeTime';
+import { ShareButton } from '../../components/ShareButton';
 import { MissionDetailSkeleton } from '../../components/skeleton/MissionDetailSkeleton';
 import { useToast } from '../../components/useToast';
 import { useSession } from '../../features/auth/useSession';
@@ -80,6 +81,7 @@ function MissionView({ id }: { id: number }) {
           <Link to={`/users/${m.author.username}`}>{m.author.displayName}</Link>
           <span aria-hidden="true">·</span>
           <RelativeTime iso={m.createdAt} />
+          <ShareButton title={m.title} path={`/missions/${m.id}`} />
         </p>
 
         <MemberContent html={m.descriptionHtml} className={styles.description} />

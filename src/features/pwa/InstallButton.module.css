@@ -1,0 +1,10 @@
+.install {
+  flex: none;
+}
+
+/* Sur petit écran, on garde l'icône seule pour ne pas encombrer la barre du haut. */
+@media (max-width: 767px) {
+  .label {
+    display: none;
+  }
+}

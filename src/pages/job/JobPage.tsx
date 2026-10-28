@@ -9,6 +9,7 @@ import { ErrorState } from '../../components/ErrorState';
 import { Icon } from '../../components/Icon';
 import { MemberContent } from '../../components/MemberContent';
 import { RelativeTime } from '../../components/RelativeTime';
+import { ShareButton } from '../../components/ShareButton';
 import { safeUrl } from '../../components/safeUrl';
 import { useToast } from '../../components/useToast';
 import { useSession } from '../../features/auth/useSession';
@@ -104,6 +105,7 @@ function JobView({ id }: { id: number }) {
             </p>
             <JobFacts job={job} />
           </div>
+          <ShareButton title={job.title} path={`/jobs/${job.id}`} />
         </div>
 
         <MemberContent html={job.descriptionHtml} className={styles.description} />

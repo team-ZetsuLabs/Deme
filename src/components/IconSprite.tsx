@@ -143,6 +143,16 @@ export function IconSprite() {
         <circle {...line} strokeWidth={1.4} cx="8" cy="8" r="6" />
         <path {...round} strokeWidth={1.4} d="M8 4.8V8l2.2 1.4" />
       </symbol>
+      <symbol id="i-share" viewBox="0 0 16 16">
+        <circle {...line} strokeWidth={1.4} cx="12" cy="3.5" r="2" />
+        <circle {...line} strokeWidth={1.4} cx="4" cy="8" r="2" />
+        <circle {...line} strokeWidth={1.4} cx="12" cy="12.5" r="2" />
+        <path {...round} strokeWidth={1.4} d="m5.8 7 4.4-2.5M5.8 9l4.4 2.5" />
+      </symbol>
+      <symbol id="i-install" viewBox="0 0 16 16">
+        <path {...round} d="M8 2v7.5M5 6.5 8 9.5l3-3" />
+        <path {...round} d="M3 11v1.5A1.5 1.5 0 0 0 4.5 14h7a1.5 1.5 0 0 0 1.5-1.5V11" />
+      </symbol>
     </svg>
   );
 }

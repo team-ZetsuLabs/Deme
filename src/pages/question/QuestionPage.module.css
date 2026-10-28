@@ -33,6 +33,13 @@
   padding-top: var(--s5);
 }
 
+.headActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+}
+
 .title {
   flex: 1 1 320px;
   min-width: 0;

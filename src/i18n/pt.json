@@ -32,6 +32,14 @@
     "toLight": "Mudar para o modo claro",
     "toDark": "Mudar para o modo escuro"
   },
+  "install": {
+    "button": "Instalar a aplicação"
+  },
+  "share": {
+    "button": "Partilhar",
+    "copied": "Link copiado",
+    "failed": "Não foi possível copiar o link."
+  },
   "language": {
     "label": "Idioma da interface",
     "fr": "Français",

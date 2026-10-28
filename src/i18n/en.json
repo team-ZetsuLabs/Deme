@@ -32,6 +32,14 @@
     "toLight": "Switch to light mode",
     "toDark": "Switch to dark mode"
   },
+  "install": {
+    "button": "Install the app"
+  },
+  "share": {
+    "button": "Share",
+    "copied": "Link copied",
+    "failed": "Couldn't copy the link."
+  },
   "language": {
     "label": "Interface language",
     "fr": "Français",

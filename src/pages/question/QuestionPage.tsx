@@ -27,6 +27,7 @@ import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { QuestionDetailSkeleton } from '../../components/skeleton/QuestionDetailSkeleton';
 import NotFoundPage from '../notfound/NotFoundPage';
+import { ShareButton } from '../../components/ShareButton';
 import styles from './QuestionPage.module.css';
 
 type AnswerSort = 'votes' | 'recent';
@@ -127,9 +128,12 @@ function QuestionView({ id }: { id: number }) {
       <article className={styles.panel}>
         <div className={styles.head}>
           <h1 className={styles.title}>{q.title}</h1>
-          <Link to="/questions/ask" className={buttonClass({ variant: 'primary' })}>
-            {t('question.askQuestion')}
-          </Link>
+          <div className={styles.headActions}>
+            <ShareButton title={q.title} path={`/questions/${q.id}`} />
+            <Link to="/questions/ask" className={buttonClass({ variant: 'primary' })}>
+              {t('question.askQuestion')}
+            </Link>
+          </div>
         </div>
         <div className={styles.meta}>
           <span>

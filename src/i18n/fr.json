@@ -32,6 +32,14 @@
     "toLight": "Passer en mode clair",
     "toDark": "Passer en mode sombre"
   },
+  "install": {
+    "button": "Installer l'application"
+  },
+  "share": {
+    "button": "Partager",
+    "copied": "Lien copié",
+    "failed": "Impossible de copier le lien."
+  },
   "language": {
     "label": "Langue de l'interface",
     "fr": "Français",
