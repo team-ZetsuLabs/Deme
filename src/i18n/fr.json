@@ -35,7 +35,8 @@
   "language": {
     "label": "Langue de l'interface",
     "fr": "Français",
-    "en": "English"
+    "en": "English",
+    "pt": "Português"
   },
   "network": {
     "offline": "Vous êtes hors ligne. Les questions déjà consultées restent lisibles.",

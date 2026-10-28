@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { errorMessage } from '../../api/errorMessage';
 import { useToast } from '../../components/useToast';
-import { changeLanguage, LANGUAGES, type Language } from '../../i18n';
+import { changeLanguage, isSavedLanguage, LANGUAGES, type Language } from '../../i18n';
 import type { ThemePref } from '../../theme/themeContext';
 import { useTheme } from '../../theme/useTheme';
 import { useSession } from '../auth/useSession';
@@ -20,8 +20,11 @@ export function AppearanceSection() {
 
   const onLanguage = async (lang: Language) => {
     await changeLanguage(lang);
-    // La langue est aussi enregistrée sur le compte, pour les emails et les autres appareils.
-    updateMe({ language: lang }).catch((error: unknown) => toast(errorMessage(t, error)));
+    // La langue est aussi enregistrée sur le compte (emails, autres appareils) tant que le
+    // contrat l'accepte. Le portugais n'y est pas encore : il reste dans le localStorage.
+    if (isSavedLanguage(lang)) {
+      updateMe({ language: lang }).catch((error: unknown) => toast(errorMessage(t, error)));
+    }
   };
 
   return (

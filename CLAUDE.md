@@ -155,8 +155,9 @@ Ce qu'on **fait** :
 
 ## Langues
 
-- Français et anglais dès le départ. Aucun texte d'interface écrit en dur dans le JSX : tout passe par `t('question.ask.title')` de react-i18next, avec les textes dans `src/i18n/fr.json` et `en.json` et des clés par écran. Le français est dans le fichier principal ; l'anglais n'est téléchargé que s'il est choisi.
-- On ajoute la clé dans les **deux** fichiers en même temps. S'il manque la traduction anglaise, on recopie le français et on ajoute `"TODO"` dans un commentaire de la pull request.
+- Français, anglais et portugais. Aucun texte d'interface écrit en dur dans le JSX : tout passe par `t('question.ask.title')` de react-i18next, avec les textes dans `src/i18n/fr.json`, `en.json` et `pt.json` et des clés par écran. Le français est dans le fichier principal ; l'anglais et le portugais ne sont téléchargés que s'ils sont choisis (`src/i18n/index.ts`, liste `LANGUAGES`).
+- On ajoute la clé dans **tous** les fichiers de langue en même temps. S'il manque une traduction, on recopie le français et on ajoute `"TODO"` dans un commentaire de la pull request. Une nouvelle langue est relue par un locuteur ; l'arabe (droite-à-gauche) demande en plus une passe RTL et n'est pas encore en place.
+- Le choix de langue est enregistré dans le profil seulement pour les langues que le contrat accepte (`SAVED_LANGUAGES`, aujourd'hui `fr`/`en`). Les autres (portugais) tiennent dans le localStorage en attendant que le back-end ajoute la langue à l'enum `language`.
 - Le contenu des membres n'est pas traduit.
 
 ## Git et pull requests

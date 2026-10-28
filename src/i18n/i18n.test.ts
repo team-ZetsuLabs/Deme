@@ -15,4 +15,11 @@ describe('chargement des langues', () => {
     expect(i18n.t('topbar.login')).toBe('Log in');
     expect(document.documentElement.lang).toBe('en');
   });
+
+  it('charge le portugais à la demande', async () => {
+    await changeLanguage('pt');
+    expect(i18n.hasResourceBundle('pt', 'translation')).toBe(true);
+    expect(i18n.t('topbar.login')).toBe('Entrar');
+    expect(document.documentElement.lang).toBe('pt');
+  });
 });

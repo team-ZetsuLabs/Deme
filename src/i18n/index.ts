@@ -4,23 +4,36 @@ import { initReactI18next } from 'react-i18next';
 // L'anglais n'est téléchargé que s'il est choisi : la première page reste légère en 3G.
 import fr from './fr.json';
 
-export const LANGUAGES = ['fr', 'en'] as const;
+export const LANGUAGES = ['fr', 'en', 'pt'] as const;
 export type Language = (typeof LANGUAGES)[number];
+
+// Langues que le profil sait enregistrer aujourd'hui (enum du contrat d'API, figé à fr/en).
+// Le portugais ne vit pour l'instant que dans le localStorage ; dès que le back-end l'ajoute
+// à l'enum `language`, on l'ajoute ici pour que le choix suive le membre d'un appareil à l'autre.
+export const SAVED_LANGUAGES = ['fr', 'en'] as const;
+export type SavedLanguage = (typeof SAVED_LANGUAGES)[number];
+
+/** La langue peut-elle être enregistrée dans le profil (sinon : localStorage seulement) ? */
+export function isSavedLanguage(lang: Language): lang is SavedLanguage {
+  return (SAVED_LANGUAGES as readonly string[]).includes(lang);
+}
 
 const STORAGE_KEY = 'zetsu-lang';
 
 const loaders: Record<Exclude<Language, 'fr'>, () => Promise<{ default: object }>> = {
   en: () => import('./en.json'),
+  pt: () => import('./pt.json'),
 };
 
 function initialLanguage(): Language {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === 'fr' || saved === 'en') return saved;
+    const saved = LANGUAGES.find((lang) => lang === localStorage.getItem(STORAGE_KEY));
+    if (saved) return saved;
   } catch {
     // stockage indisponible
   }
-  return navigator.language.toLowerCase().startsWith('en') ? 'en' : 'fr';
+  const navLang = navigator.language.toLowerCase();
+  return LANGUAGES.find((lang) => lang !== 'fr' && navLang.startsWith(lang)) ?? 'fr';
 }
 
 /** Télécharge les textes d'une langue s'ils ne sont pas encore chargés. */

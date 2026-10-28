@@ -11,7 +11,7 @@ import { authApi } from '../../features/auth/authApi';
 import { useSession } from '../../features/auth/useSession';
 import { SkillPicker } from '../../features/profile/SkillPicker';
 import { usePageTitle } from '../../hooks/usePageTitle';
-import { changeLanguage, LANGUAGES, type Language } from '../../i18n';
+import { changeLanguage, isSavedLanguage, LANGUAGES, type Language } from '../../i18n';
 import { OTHER_COUNTRY } from '../../i18n/countries';
 import { Logo } from '../../layout/Logo';
 import { PageLoader } from '../../layout/PageLoader';
@@ -51,11 +51,14 @@ export default function WelcomePage() {
       return;
     }
     setBusy(true);
+    // Le contrat n'enregistre pour l'instant que fr/en ; le portugais vit dans le localStorage,
+    // l'interface reste donc en portugais même si le compte retient le français.
+    const savedLanguage = isSavedLanguage(language) ? language : 'fr';
     try {
       const me = await authApi.completeOnboarding({
         technologies: skills,
         countryCode: country,
-        language,
+        language: savedLanguage,
       });
       // En mode mock, la réponse est un fichier fixe : on garde les choix du membre.
       setUser(
@@ -64,7 +67,7 @@ export default function WelcomePage() {
               ...user,
               technologies: skills,
               countryCode: country,
-              language,
+              language: savedLanguage,
               onboardingCompleted: true,
             }
           : me,

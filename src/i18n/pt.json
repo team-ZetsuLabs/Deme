@@ -1,0 +1,1397 @@
+{
+  "app": {
+    "name": "Zetsu",
+    "home": "Zetsu, início",
+    "skipToContent": "Ir para o conteúdo"
+  },
+  "nav": {
+    "label": "Navegação principal",
+    "spaces": "Espaços",
+    "questions": "Ajuda",
+    "jobs": "Emprego",
+    "missions": "Missões",
+    "challenges": "Desafios",
+    "account": "Conta",
+    "profile": "O meu perfil",
+    "settings": "Definições",
+    "notifications": "Notificações",
+    "applications": "As minhas candidaturas",
+    "communities": "Comunidades",
+    "communitiesShort": "Grupos"
+  },
+  "topbar": {
+    "search": "Pesquisar",
+    "searchPlaceholder": "Pesquisar um erro, uma tag, uma tecnologia",
+    "login": "Entrar",
+    "register": "Criar conta",
+    "account": "A minha conta",
+    "points": "Reputação: {{points}} pontos",
+    "logout": "Terminar sessão"
+  },
+  "theme": {
+    "toLight": "Mudar para o modo claro",
+    "toDark": "Mudar para o modo escuro"
+  },
+  "language": {
+    "label": "Idioma da interface",
+    "fr": "Français",
+    "en": "English",
+    "pt": "Português"
+  },
+  "network": {
+    "offline": "Está offline. As perguntas já consultadas continuam legíveis.",
+    "loadingOffline": "Está offline. O carregamento continuará assim que a ligação voltar.",
+    "loadingSlow": "Ligação lenta: o carregamento demora um pouco mais.",
+    "pageOffline": "Esta página não pôde ser carregada porque está offline. Recarregará assim que a ligação voltar.",
+    "pageFailed": "Esta página não pôde ser carregada. Verifique a sua ligação e tente novamente."
+  },
+  "common": {
+    "loading": "A carregar",
+    "retry": "Tentar novamente",
+    "pagination": {
+      "label": "Paginação",
+      "prev": "Página anterior",
+      "next": "Página seguinte",
+      "status": "Página {{page}} de {{pages}}"
+    },
+    "close": "Fechar"
+  },
+  "errors": {
+    "NETWORK_ERROR": "Não foi possível contactar o servidor. Verifique a sua ligação.",
+    "MOCK_NOT_FOUND": "Os dados de exemplo deste ecrã ainda não estão disponíveis.",
+    "UNKNOWN_ERROR": "Ocorreu um erro. Tente novamente dentro de instantes.",
+    "VALIDATION_ERROR": "Alguns campos precisam de ser corrigidos.",
+    "INVALID_CREDENTIALS": "Email ou palavra-passe incorretos.",
+    "TOO_MANY_ATTEMPTS": "Demasiadas tentativas. Tente novamente dentro de 15 minutos.",
+    "ACCOUNT_SUSPENDED": "Esta conta está suspensa. Contacte a equipa Zetsu se achar que é um erro.",
+    "ALREADY_REPORTED": "Já denunciou este conteúdo.",
+    "ALREADY_SUBMITTED": "Já enviou um trabalho para este desafio.",
+    "ALREADY_APPEALED": "Já contestou esta decisão.",
+    "MAINTENANCE": "O Zetsu está em manutenção. Tente novamente dentro de alguns minutos.",
+    "EMAIL_TAKEN": "Este endereço não pode ser utilizado. Se já tem conta, inicie sessão.",
+    "LOGIN_LOCKED": "Demasiadas tentativas falhadas. O início de sessão está bloqueado durante 15 minutos.",
+    "RATE_LIMITED": "Demasiadas ações em pouco tempo. Aguarde um instante antes de tentar novamente.",
+    "UNAUTHENTICATED": "Inicie sessão para continuar.",
+    "FORBIDDEN": "Não tem permissão para realizar esta ação.",
+    "CSRF_INVALID": "A sua sessão expirou. Recarregue a página e tente novamente.",
+    "LEVEL_TOO_LOW": "O seu nível ainda não permite esta ação.",
+    "ALREADY_VOTED": "Já votou neste conteúdo.",
+    "CANNOT_VOTE_OWN_CONTENT": "Não pode votar no seu próprio conteúdo.",
+    "VOTE_NOT_FOUND": "Não tinha votado neste conteúdo.",
+    "QUESTION_NOT_FOUND": "Esta pergunta não existe ou foi eliminada.",
+    "ANSWER_NOT_FOUND": "Esta resposta não existe ou foi eliminada.",
+    "ANSWER_NOT_IN_QUESTION": "Esta resposta não pertence à pergunta.",
+    "USER_NOT_FOUND": "Este membro não existe.",
+    "NOT_QUESTION_AUTHOR": "Apenas o autor da pergunta pode realizar esta ação.",
+    "NOT_ANSWER_AUTHOR": "Apenas o autor da resposta a pode modificar.",
+    "TOO_MANY_TAGS": "Indique no máximo 4 tags.",
+    "TAG_REQUIRED": "Indique pelo menos uma tag.",
+    "INVALID_TAG": "Uma tag só pode conter letras minúsculas, algarismos, hífenes ou pontos.",
+    "INVALID_COUNTRY": "Este país não é reconhecido.",
+    "INTERNAL_ERROR": "Ocorreu um erro do nosso lado. Tente novamente dentro de instantes.",
+    "COMMUNITY_EXISTS": "Já existe, ou já foi proposta, uma comunidade com este nome ou tag.",
+    "ACTION_NOT_ALLOWED": "Esta ação não é permitida.",
+    "ALREADY_APPLIED": "Já se candidatou.",
+    "ALREADY_LINKED": "Esta conta já está associada.",
+    "ALREADY_LINKED_ELSEWHERE": "Esta conta já pertence a outro membro do Zetsu.",
+    "APPLICATION_NOT_FOUND": "Candidatura não encontrada.",
+    "CANNOT_APPLY_OWN": "Não pode candidatar-se ao seu próprio anúncio.",
+    "CANNOT_MODERATE_OWN": "Não pode moderar o seu próprio conteúdo.",
+    "CANNOT_REPORT_OWN": "Não pode denunciar o seu próprio conteúdo.",
+    "CASE_ALREADY_DECIDED": "Este caso já foi tratado.",
+    "CASE_NOT_FOUND": "Caso de moderação não encontrado.",
+    "CASE_NOT_HIDDEN": "Este conteúdo não está ocultado.",
+    "CHALLENGE_NOT_FOUND": "Desafio não encontrado.",
+    "CHALLENGE_NOT_OPEN": "Este desafio não aceita trabalhos de momento.",
+    "COMMUNITY_NOT_FOUND": "Comunidade não encontrada.",
+    "CONFIRMATION_MISMATCH": "O nome de utilizador copiado não corresponde.",
+    "CV_NOT_FOUND": "Nenhum CV anexado a esta candidatura.",
+    "CV_NOT_PDF": "O CV deve ser um ficheiro PDF.",
+    "CV_TOO_LARGE": "O CV ultrapassa 2 MB.",
+    "FILE_TOO_LARGE": "O ficheiro ultrapassa 5 MB.",
+    "INVALID_VOTE": "Voto inválido.",
+    "JOB_CLOSED": "Esta vaga está encerrada.",
+    "JOB_NOT_FOUND": "Vaga não encontrada.",
+    "LAST_LOGIN_METHOD": "É o seu único meio de início de sessão: não pode ser removido.",
+    "MISSION_NOT_FOUND": "Missão não encontrada.",
+    "MISSION_NOT_OPEN": "Esta missão já não aceita propostas.",
+    "NOTE_REQUIRED": "Adicione uma nota para explicar a decisão.",
+    "NOT_JOB_OWNER": "Apenas o recrutador desta vaga pode fazer isto.",
+    "NOT_LINKED": "Esta conta não está associada.",
+    "NOT_MISSION_AUTHOR": "Apenas o autor da missão pode fazer isto.",
+    "NOT_TARGET_OWNER": "Apenas o autor do conteúdo pode fazer isto.",
+    "NO_CURRENT_CHALLENGE": "Nenhum desafio em curso.",
+    "PHOTO_REQUIRED": "Escolha uma foto.",
+    "PHOTO_TOO_LARGE": "A foto ultrapassa 2 MB.",
+    "PHOTO_TYPE": "A foto deve estar no formato PNG, JPG ou WebP.",
+    "PROVIDER_NOT_FOUND": "Este fornecedor de início de sessão não está disponível.",
+    "RECRUITER_ONLY": "Reservado a contas de recrutador.",
+    "TARGET_NOT_FOUND": "Este conteúdo já não existe."
+  },
+  "auth": {
+    "browse": "Navegar sem conta",
+    "tabs": {
+      "label": "Início de sessão ou registo",
+      "login": "Iniciar sessão",
+      "register": "Registo"
+    },
+    "login": {
+      "pageTitle": "Iniciar sessão",
+      "title": "Bem-vindo de volta",
+      "lead": "Inicie sessão para colocar perguntas, votar e acompanhar a sua reputação.",
+      "submit": "Entrar",
+      "busy": "A iniciar sessão",
+      "switch": "Ainda não tem conta?",
+      "switchLink": "Criar conta"
+    },
+    "register": {
+      "pageTitle": "Criar conta",
+      "title": "Junte-se à comunidade",
+      "lead": "Uma conta gratuita para colocar perguntas, responder, enfrentar os desafios e ser visível para os recrutadores.",
+      "submit": "Criar a minha conta",
+      "busy": "A criar a conta",
+      "switch": "Já está inscrito?",
+      "switchLink": "Entrar",
+      "legal": "Ao criar uma conta, aceita os <terms>termos de utilização</terms> e a <privacy>política de privacidade</privacy>."
+    },
+    "oauth": {
+      "github": "Continuar com o GitHub",
+      "google": "Continuar com o Google",
+      "githubRegister": "Registar-se com o GitHub",
+      "googleRegister": "Registar-se com o Google"
+    },
+    "or": "ou com o seu endereço de email",
+    "fields": {
+      "name": "Nome completo",
+      "nameHint": "Apresentado no seu perfil e junto das suas respostas.",
+      "email": "Endereço de email",
+      "country": "País",
+      "countryPlaceholder": "Escolher um país",
+      "countryHint": "Serve para lhe propor vagas e respostas perto de si.",
+      "countryOther": "Outro país",
+      "password": "Palavra-passe",
+      "passwordHint": "No mínimo 8 caracteres, com pelo menos um algarismo.",
+      "website": "Não preencha este campo",
+      "show": "Mostrar",
+      "hide": "Ocultar"
+    },
+    "errors": {
+      "nameLength": "Introduza o seu nome, entre 3 e 40 caracteres.",
+      "emailInvalid": "Introduza um endereço de email válido, por exemplo nome@dominio.com.",
+      "countryRequired": "Escolha o seu país.",
+      "passwordRule": "A palavra-passe deve ter pelo menos 8 caracteres, com pelo menos um algarismo.",
+      "passwordRequired": "Introduza a sua palavra-passe.",
+      "passwordMismatch": "As duas palavras-passe não são iguais."
+    },
+    "aside": {
+      "label": "Pré-visualização da plataforma",
+      "title": "Os bugs que encontra, outros já os resolveram.",
+      "sub": "Coloque a sua pergunta, receba uma resposta validada pela comunidade e ganhe reputação ajudando por sua vez.",
+      "status": "pergunta resolvida em 38 min",
+      "questionTitle": "A API Orange Money devolve 401 apesar de o token ser gerado",
+      "questionBody": "O meu token de acesso é obtido corretamente, mas a chamada de pagamento falha.",
+      "accepted": "Resposta aceite",
+      "answerBody": "O cabeçalho deve ser prefixado por Bearer, e o token expira ao fim de uma hora:",
+      "reputation": "+15 de reputação"
+    }
+  },
+  "password": {
+    "backToLogin": "Voltar ao início de sessão",
+    "forgot": {
+      "link": "Esqueceu-se da palavra-passe?",
+      "pageTitle": "Palavra-passe esquecida",
+      "title": "Palavra-passe esquecida",
+      "lead": "Introduza o endereço da sua conta. Enviaremos um link para escolher uma nova palavra-passe, válido durante uma hora.",
+      "submit": "Enviar o link",
+      "busy": "A enviar",
+      "sentTitle": "Verifique o seu email",
+      "sentText": "Se existir uma conta Zetsu para {{email}}, acabámos de lhe enviar um link. Não se esqueça de ver no spam."
+    },
+    "reset": {
+      "pageTitle": "Nova palavra-passe",
+      "title": "Escolha uma nova palavra-passe",
+      "lead": "Substituirá a antiga em todos os seus dispositivos.",
+      "new": "Nova palavra-passe",
+      "confirm": "Confirme a palavra-passe",
+      "submit": "Guardar a palavra-passe",
+      "busy": "A guardar",
+      "done": "Palavra-passe alterada. Inicie sessão com a nova.",
+      "deadTitle": "Este link já não é válido",
+      "deadText": "O link expirou ou já foi utilizado. Peça um novo, será válido durante uma hora.",
+      "newLink": "Pedir um novo link"
+    }
+  },
+  "verifyEmail": {
+    "pageTitle": "Confirmação do endereço",
+    "checking": "A confirmar o seu endereço",
+    "doneTitle": "Endereço confirmado",
+    "doneText": "Obrigado, o seu endereço de email está confirmado.",
+    "continue": "Ir para as perguntas",
+    "failedTitle": "Não foi possível confirmar o endereço",
+    "deadText": "O link expirou ou já foi utilizado. Peça um novo email de verificação.",
+    "login": "Inicie sessão para receber um novo link",
+    "resend": "Reenviar o email",
+    "resentShort": "Email enviado",
+    "resent": "Email de verificação enviado.",
+    "banner": "Confirme o seu endereço {{email}} com o link que lhe enviámos."
+  },
+  "context": {
+    "label": "Contexto",
+    "operator": {
+      "ORANGE_MONEY": "Orange Money",
+      "WAVE": "Wave",
+      "MOOV_MONEY": "Moov Money",
+      "MTN_MOMO": "MTN Mobile Money",
+      "MPESA": "M-Pesa",
+      "OTHER": "Outra operadora"
+    },
+    "network": {
+      "GOOD": "Boa rede",
+      "UNSTABLE": "Rede instável",
+      "VERY_POOR": "Rede muito fraca"
+    }
+  },
+  "questions": {
+    "pageTitle": "Ajuda",
+    "title": "Perguntas recentes",
+    "titleTag": "Perguntas sobre {{tag}}",
+    "lead": "Descreva o erro. Programadores de Dacar a Nairobi talvez já o tenham encontrado.",
+    "ask": {
+      "heading": "Que bug o está a bloquear hoje?",
+      "placeholder": "Ex.: a API Orange Money devolve 401 apesar de o meu token ser válido",
+      "submit": "Colocar a pergunta"
+    },
+    "filters": {
+      "status": "Filtrar as perguntas",
+      "all": "Todas",
+      "open": "Sem solução",
+      "solved": "Resolvidas",
+      "sort": "Ordenar as perguntas",
+      "recent": "Recentes",
+      "votes": "Mais votadas",
+      "country": "País",
+      "anyCountry": "Todos os países",
+      "operator": "Operadora",
+      "anyOperator": "Todas as operadoras",
+      "tag": "Tag {{tag}}",
+      "search": "Pesquisa «{{q}}»",
+      "reset": "Remover os filtros",
+      "results_one": "{{count}} resultado",
+      "results_other": "{{count}} resultados",
+      "relevance": "Relevância"
+    },
+    "row": {
+      "votes_one": "voto",
+      "votes_other": "votos",
+      "answers_one": "resposta",
+      "answers_other": "respostas",
+      "solved": "resolvida"
+    },
+    "empty": "Nenhuma pergunta corresponde. Coloque-a, alguém pode ter a resposta."
+  },
+  "question": {
+    "crumbs": "Trilho de navegação",
+    "crumbQuestion": "Pergunta",
+    "askQuestion": "Colocar uma pergunta",
+    "asked": "Colocada",
+    "askedBy": "Colocada por",
+    "answered": "Respondido",
+    "views_one": "{{count}} visualização",
+    "views_other": "{{count}} visualizações",
+    "answers_one": "{{count}} resposta",
+    "answers_other": "{{count}} respostas",
+    "sort": "Ordenar as respostas",
+    "sortVotes": "Mais votadas",
+    "sortRecent": "Mais recentes",
+    "accepted": "Resposta aceite",
+    "accept": "Aceitar esta resposta",
+    "sameCountry": "Mesmo país que a pergunta",
+    "noAnswers": "Ainda sem resposta. Se conhece a solução, pode ser o primeiro a ajudar.",
+    "points": "{{points}} pontos",
+    "vote": "Votar, {{count}} votos",
+    "unvote": "Retirar o meu voto, {{count}} votos",
+    "voteOwn": "Não pode votar no seu próprio conteúdo.",
+    "voteLevel": "São precisos 50 pontos de reputação (nível Membro) para votar.",
+    "yourAnswer": "A sua resposta",
+    "answerHint": "Markdown aceite. Uma resposta aceite rende 15 pontos.",
+    "answerCode": "Código",
+    "optional": "(facultativo)",
+    "publish": "Publicar a minha resposta",
+    "publishing": "A publicar",
+    "answerTooShort": "Escreva pelo menos 30 caracteres para que a resposta seja útil.",
+    "loginToAnswerText": "Inicie sessão para responder e ganhar reputação.",
+    "loginToAnswer": "Iniciar sessão para responder",
+    "posted": "Resposta publicada",
+    "edit": "Modificar",
+    "saveEdit": "Guardar a alteração",
+    "edited": "Resposta modificada",
+    "cancel": "Cancelar"
+  },
+  "comments": {
+    "label": "Comentários",
+    "add": "Adicionar um comentário",
+    "field": "O seu comentário",
+    "placeholder": "Pedir um esclarecimento, assinalar um detalhe…",
+    "submit": "Comentar",
+    "busy": "A enviar",
+    "tooShort": "Escreva pelo menos {{min}} caracteres.",
+    "more_one": "Ver mais {{count}} comentário",
+    "more_other": "Ver os outros {{count}} comentários"
+  },
+  "ask": {
+    "pageTitle": "Colocar uma pergunta",
+    "title": "Colocar uma pergunta",
+    "lead": "Uma pergunta clara recebe uma resposta mais depressa. Descreva o problema, o que já tentou e o seu contexto.",
+    "optional": "(facultativo)",
+    "fields": {
+      "title": "Título",
+      "titleHint": "O problema numa frase, com a mensagem de erro se possível.",
+      "body": "Detalhes",
+      "bodyHint": "O que está a tentar fazer e o que já tentou. Markdown aceite.",
+      "bodyPlaceholder": "Chamo a API de pagamento depois de obter o token, e recebo…",
+      "code": "Código em causa",
+      "tags": "Tags",
+      "tagsHint": "De 1 a 4, separadas por vírgulas. Exemplo: spring-boot, mobile-money",
+      "contextLegend": "Contexto africano",
+      "contextHint": "Facultativo, mas ajuda os membros com o mesmo contexto a responder-lhe.",
+      "country": "País",
+      "noCountry": "Não indicado",
+      "operator": "Operadora de mobile money",
+      "noOperator": "Nenhuma ou não aplicável",
+      "network": "Qualidade da rede",
+      "noNetwork": "Não indicada",
+      "techVersion": "Versão da tecnologia",
+      "techVersionPlaceholder": "Ex.: Spring Boot 3.3, Flutter 3.24"
+    },
+    "submit": "Publicar a pergunta",
+    "busy": "A publicar",
+    "cancel": "Cancelar",
+    "errors": {
+      "titleLength": "O título deve ter entre 15 e 150 caracteres.",
+      "bodyLength": "Adicione pelo menos 30 caracteres: o que tentou e a mensagem de erro.",
+      "tagsCount": "Indique entre 1 e 4 tags.",
+      "tagFormat": "Uma tag só pode conter letras minúsculas, algarismos, hífenes ou pontos."
+    },
+    "posted": "Pergunta publicada",
+    "ai": {
+      "title": "Assistente de redação",
+      "lead": "Propõe um título mais claro, tags e o contexto detetado, e assinala o que falta. Nada muda sem a sua autorização.",
+      "needText": "Escreva primeiro o título e alguns detalhes (pelo menos {{min}} caracteres) para iniciar o assistente.",
+      "button": "Melhorar com a IA",
+      "again": "Analisar novamente",
+      "busy": "A analisar",
+      "label": "Sugestões geradas pela IA, a verificar",
+      "nothing": "A sua pergunta já está clara, nada a sugerir.",
+      "titleSuggestion": "Título mais claro",
+      "tagsSuggestion": "Tags",
+      "newTag": "nova",
+      "contextSuggestion": "Contexto detetado",
+      "missingTitle": "Talvez falte",
+      "missing": {
+        "ERROR_MESSAGE": "A mensagem de erro exata, copiada tal como está.",
+        "TECH_VERSION": "A versão da tecnologia ou da biblioteca.",
+        "CODE": "O trecho de código que causa o problema.",
+        "STEPS_TRIED": "O que já tentou.",
+        "EXPECTED_RESULT": "O resultado esperado e o resultado obtido."
+      },
+      "apply": "Aplicar",
+      "ignore": "Ignorar",
+      "appliedTitle": "Título substituído pela sugestão.",
+      "appliedTags": "Tags substituídas pela sugestão.",
+      "appliedContext": "Contexto adicionado à pergunta.",
+      "unavailable": "O assistente não responde de momento. Pode publicar a sua pergunta normalmente.",
+      "rateLimited": "Já usou o assistente 10 vezes nesta hora. Pode publicar a sua pergunta normalmente."
+    },
+    "similar": {
+      "title": "Perguntas semelhantes",
+      "lead": "A sua resposta pode já existir. Verifique antes de publicar.",
+      "loading": "A procurar perguntas semelhantes",
+      "empty": "Nenhuma pergunta semelhante: a sua talvez seja nova.",
+      "error": "As perguntas semelhantes não estão disponíveis de momento.",
+      "newTab": "(abre num novo separador)"
+    }
+  },
+  "notFound": {
+    "title": "Esta página não existe",
+    "text": "O link pode estar incompleto, ou a página foi eliminada.",
+    "back": "Voltar às perguntas"
+  },
+  "errorPage": {
+    "code": "Erro",
+    "codeOffline": "Offline",
+    "title": "Não foi possível apresentar esta página",
+    "titleOffline": "Sem ligação"
+  },
+  "maintenance": {
+    "code": "Manutenção",
+    "title": "O Zetsu está em manutenção",
+    "text": "Estamos a melhorar a plataforma e voltamos dentro de alguns minutos. As suas perguntas e respostas são conservadas."
+  },
+  "welcome": {
+    "pageTitle": "Bem-vindo",
+    "title": "Bem-vindo ao Zetsu, {{name}}",
+    "lead": "Três informações para lhe propor perguntas, vagas e missões à sua medida. Poderá alterá-las mais tarde nas definições.",
+    "stack": {
+      "legend": "A sua stack",
+      "hint": "Escolha as tecnologias que utiliza. Servem para lhe sugerir vagas, missões e projetos.",
+      "addLabel": "Adicionar outra tecnologia",
+      "addPlaceholder": "Ex.: svelte",
+      "add": "Adicionar",
+      "selected_one": "{{count}} tecnologia escolhida",
+      "selected_other": "{{count}} tecnologias escolhidas",
+      "max": "No máximo 10 tecnologias.",
+      "invalid": "Utilize letras minúsculas, algarismos, hífenes ou pontos."
+    },
+    "country": {
+      "legend": "O seu país",
+      "hint": "Serve para destacar as respostas e vagas perto de si.",
+      "required": "Escolha o seu país para continuar."
+    },
+    "language": {
+      "legend": "Idioma da interface",
+      "hint": "O conteúdo dos membros mantém-se no idioma do seu autor."
+    },
+    "submit": "Vamos a isto",
+    "busy": "A guardar",
+    "later": "Mais tarde"
+  },
+  "report": {
+    "button": "Denunciar",
+    "title": "Denunciar este conteúdo",
+    "lead": "As denúncias são tratadas pelos Referentes da comunidade. Após 5 denúncias de membros diferentes, o conteúdo é ocultado enquanto aguarda a decisão.",
+    "reasonLegend": "Motivo",
+    "reasons": {
+      "SPAM": "Spam ou publicidade",
+      "OFFENSIVE": "Linguagem ofensiva",
+      "OFF_TOPIC": "Fora do tema",
+      "IMPERSONATION": "Usurpação de identidade",
+      "FRAUDULENT_JOB": "Vaga fraudulenta"
+    },
+    "comment": "Esclarecimentos",
+    "commentHint": "No máximo 300 caracteres.",
+    "submit": "Enviar a denúncia",
+    "busy": "A enviar",
+    "sent": "Denúncia enviada. Obrigado pela sua vigilância.",
+    "level": "São precisos 50 pontos de reputação (nível Membro) para denunciar.",
+    "reasonRequired": "Escolha um motivo."
+  },
+  "hidden": {
+    "title": "Conteúdo ocultado",
+    "byReports": "Este conteúdo foi ocultado após 5 denúncias de membros diferentes, enquanto aguarda a decisão de um Referente.",
+    "byReferent": "Um Referente ocultou este conteúdo.",
+    "onlyYou": "Só você o vê.",
+    "appeal": "Contestar a decisão",
+    "rules": "Reler as regras",
+    "pending": "Contestação enviada: a equipa Zetsu está a analisá-la.",
+    "rejected": "A equipa analisou a sua contestação e manteve a decisão.",
+    "dialogTitle": "Contestar a decisão",
+    "dialogLead": "A sua contestação é analisada pela equipa Zetsu, não pelo Referente que tomou a decisão. Explique porque é que este conteúdo respeita as regras.",
+    "message": "A sua explicação",
+    "messageHint": "Entre {{min}} e {{max}} caracteres.",
+    "messageLength": "Explique em pelo menos {{min}} caracteres.",
+    "submit": "Enviar a contestação",
+    "busy": "A enviar",
+    "sent": "Contestação enviada. Será notificado da decisão.",
+    "byTeam": "A equipa Zetsu ocultou este conteúdo.",
+    "note": "Motivo: {{note}}."
+  },
+  "profile": {
+    "pageTitle": "Perfil",
+    "edit": "Modificar o perfil",
+    "recruiterVisible": "Visível para os recrutadores",
+    "joined": "Membro desde {{date}}",
+    "sections": "Secções do perfil",
+    "tabs": {
+      "activity": "Atividade",
+      "skills": "Competências",
+      "badges": "Distintivos"
+    },
+    "stats": {
+      "reputation": "reputação",
+      "answers": "respostas",
+      "accepted": "aceites",
+      "questions": "perguntas"
+    },
+    "nextLevel": "Faltam {{points}} pontos para o nível {{level}}",
+    "progressLabel": "Progresso para o nível seguinte",
+    "empty": "Nenhuma atividade de momento.",
+    "emptyMine": "Ainda não publicou nada. A sua primeira pergunta rende-lhe 5 pontos.",
+    "skillsHint": "Tecnologias declaradas. Um clique mostra as perguntas sobre esse tema.",
+    "noSkills": "Nenhuma tecnologia declarada de momento.",
+    "badgeLocked": "Ainda não obtido.",
+    "reputation": {
+      "QUESTION_ASKED": "Pergunta colocada",
+      "QUESTION_UPVOTED": "Voto numa pergunta",
+      "ANSWER_UPVOTED": "Voto numa resposta",
+      "ANSWER_ACCEPTED": "Resposta aceite",
+      "ACCEPTED_AN_ANSWER": "Aceitou uma resposta",
+      "CHALLENGE_VALIDATED": "Desafio validado",
+      "PROJECT_COMPLETED": "Projeto encerrado",
+      "SPAM_REMOVED": "Conteúdo removido por spam",
+      "seeQuestion": "Ver a pergunta",
+      "seeAnswer": "Ver a resposta",
+      "noLink": "Contribuição para a comunidade"
+    }
+  },
+  "levels": {
+    "NEWCOMER": "Novato",
+    "MEMBER": "Membro",
+    "CONTRIBUTOR": "Colaborador",
+    "REFERENT": "Referente"
+  },
+  "badges": {
+    "FIRST_STEP": {
+      "name": "Primeiro passo",
+      "desc": "Colocar a primeira pergunta."
+    },
+    "HELPER": {
+      "name": "Entreajuda",
+      "desc": "Receber 10 votos nas suas respostas."
+    },
+    "SOLVER": {
+      "name": "Solucionador",
+      "desc": "Ter 5 respostas aceites."
+    },
+    "CHALLENGER": {
+      "name": "Desafiante",
+      "desc": "Submeter um trabalho a um desafio."
+    },
+    "POLYGLOT": {
+      "name": "Poliglota",
+      "desc": "Responder em 5 tags diferentes."
+    },
+    "LOCAL_HELP": {
+      "name": "Ajuda local",
+      "desc": "Responder a perguntas do seu próprio país."
+    }
+  },
+  "settings": {
+    "pageTitle": "Definições",
+    "save": "Guardar as alterações",
+    "saving": "A guardar",
+    "saved": "Alterações guardadas",
+    "cancel": "Cancelar",
+    "profile": {
+      "city": "Cidade",
+      "bio": "Apresentação",
+      "bioHint": "O que faz e o que lhe interessa.",
+      "bioTooLong": "A apresentação deve ter no máximo 200 caracteres.",
+      "skills": "Tecnologias",
+      "recruiterVisible": "Visível para os recrutadores",
+      "recruiterHint": "As empresas podem consultar o seu perfil e as suas respostas. Desativado por predefinição."
+    },
+    "photo": {
+      "change": "Mudar a foto",
+      "remove": "Remover",
+      "hint": "PNG, JPG ou WebP, no máximo 2 MB. Sem foto, são apresentadas as suas iniciais.",
+      "badType": "Escolha uma imagem PNG, JPG ou WebP.",
+      "tooBig": "A imagem deve ter no máximo 2 MB.",
+      "updated": "Foto atualizada",
+      "removed": "Foto removida, são apresentadas as suas iniciais",
+      "title": "Foto de perfil"
+    },
+    "accounts": {
+      "title": "Contas associadas",
+      "intro": "Inicie sessão mais depressa com o GitHub ou o Google.",
+      "linked": "Associada",
+      "notLinked": "Não associada",
+      "link": "Associar",
+      "unlink": "Desassociar",
+      "linkLabel": "Associar {{name}}",
+      "unlinkLabel": "Desassociar {{name}}",
+      "unlinked": "Conta desassociada",
+      "lastMethod": "É o seu único meio de início de sessão: não pode ser removido.",
+      "mockOnly": "No modo mock, o início de sessão OAuth não está disponível.",
+      "unavailable": "Ainda não disponível",
+      "linkedNow": "Conta associada"
+    },
+    "appearance": {
+      "title": "Aparência e idioma",
+      "intro": "O modo claro é utilizado por predefinição. As suas escolhas são memorizadas.",
+      "theme": "Tema",
+      "themes": {
+        "light": "Claro",
+        "dark": "Escuro",
+        "system": "Como o sistema"
+      }
+    },
+    "delete": {
+      "title": "Eliminar a conta",
+      "intro": "A sua reputação e as suas candidaturas serão apagadas definitivamente.",
+      "button": "Eliminar a minha conta",
+      "explain": "As suas perguntas e respostas continuarão visíveis, assinadas «Utilizador eliminado». A sua reputação e as suas candidaturas serão apagadas. Esta ação é definitiva.",
+      "confirmLabel": "Copie o seu nome de utilizador {{word}} para confirmar",
+      "mismatch": "Copie exatamente o seu nome de utilizador {{word}}.",
+      "confirm": "Eliminar definitivamente",
+      "done": "A sua conta foi eliminada."
+    },
+    "lead": "A sua conta e as suas preferências. O que os outros veem altera-se no seu perfil.",
+    "toc": "Secções das definições",
+    "account": {
+      "title": "Conta",
+      "intro": "O seu endereço de início de sessão e a sua palavra-passe.",
+      "email": "Endereço de email",
+      "unverified": "Endereço ainda não verificado",
+      "password": "Palavra-passe",
+      "passwordHint": "Para a alterar, enviamos-lhe um link por email.",
+      "noPassword": "Inicia sessão com o GitHub ou o Google. Uma palavra-passe permite-lhe também entrar com o seu email.",
+      "changePassword": "Alterar a palavra-passe",
+      "setPassword": "Criar uma palavra-passe",
+      "passwordSent": "Link enviado para {{email}}",
+      "passwordSentShort": "Link enviado"
+    },
+    "moderation": {
+      "title": "Moderação",
+      "intro": "Os seus conteúdos denunciados por membros, as decisões tomadas e as suas contestações.",
+      "link": "Ver os meus conteúdos denunciados"
+    }
+  },
+  "notifications": {
+    "pageTitle": "Notificações",
+    "readAll": "Marcar tudo como lido",
+    "allRead": "Todas as notificações estão lidas",
+    "empty": "Nenhuma notificação de momento. Será avisado quando alguém responder às suas perguntas.",
+    "unread": "Não lida",
+    "unreadShort": "não lidas",
+    "bellLabel_one": "Notificações, {{count}} não lida",
+    "bellLabel_other": "Notificações, {{count}} não lidas",
+    "groups": {
+      "today": "Hoje",
+      "week": "Esta semana",
+      "earlier": "Mais antigas"
+    },
+    "types": {
+      "ANSWER_POSTED": "{{actor}} respondeu à sua pergunta",
+      "ANSWER_ACCEPTED": "{{actor}} aceitou a sua resposta",
+      "VOTE_RECEIVED": "{{actor}} votou no seu conteúdo",
+      "JOB_MATCH": "Uma vaga corresponde ao seu perfil",
+      "MISSION_MATCH": "Uma missão corresponde ao seu perfil",
+      "APPLICATION_RECEIVED": "{{actor}} candidatou-se",
+      "APPLICATION_DECIDED": "A sua candidatura foi {{decision}}",
+      "JOB_REVIEWED": "A sua vaga foi {{decision}}",
+      "CHALLENGE_STARTED": "Novo desafio da semana",
+      "SUBMISSION_REVIEWED": "O seu trabalho foi {{decision}}",
+      "PROJECT_REQUEST_DECIDED": "O seu pedido para se juntar ao projeto foi {{decision}}",
+      "COMMUNITY_PROPOSAL_DECISION": "A proposta de comunidade foi {{decision}}",
+      "CONTENT_HIDDEN": "Um dos seus conteúdos foi ocultado",
+      "CONTENT_RESTORED": "Um dos seus conteúdos está novamente visível",
+      "ACCOUNT_WARNED": "Recebeu um aviso da equipa"
+    },
+    "decisions": {
+      "VIEWED": "vista",
+      "SHORTLISTED": "pré-selecionada",
+      "ACCEPTED": "aceite",
+      "REJECTED": "recusada",
+      "PUBLISHED": "publicada",
+      "VALIDATED": "validado",
+      "APPROVED": "aceite"
+    },
+    "someone": "Um membro",
+    "filter": "Mostrar",
+    "all": "Todas",
+    "unreadOnly": "Não lidas",
+    "emptyUnread": "Já leu tudo."
+  },
+  "home": {
+    "pageTitle": "Zetsu, a entreajuda entre programadores africanos",
+    "title": "A entreajuda entre programadores africanos",
+    "lead": "Coloque as suas perguntas com o seu contexto: país, operadora de mobile money, qualidade da rede. Responda, encontre missões entre pares e faça reconhecer o seu trabalho com uma reputação verificável.",
+    "cta": {
+      "email": "Criar conta com um email",
+      "browse": "Navegar pelas perguntas"
+    },
+    "solved": {
+      "title": "resolvido recentemente",
+      "empty": "As primeiras perguntas resolvidas aparecerão aqui.",
+      "answers_one": "{{count}} resposta, resolvida",
+      "answers_other": "{{count}} respostas, resolvida",
+      "more": "Ver todas as perguntas"
+    },
+    "stats": {
+      "questions": "perguntas colocadas",
+      "solved": "perguntas resolvidas",
+      "members": "membros",
+      "countries": "países representados"
+    },
+    "exchanges": {
+      "title": "Um só perfil para quatro trocas",
+      "knowledge": {
+        "name": "O saber",
+        "text": "Perguntas e respostas sobre os problemas que os programadores do continente realmente encontram."
+      },
+      "missions": {
+        "name": "As missões",
+        "text": "Missões curtas entre pares, uma reparação ou uma revisão de código, com um orçamento indicativo."
+      },
+      "collaboration": {
+        "name": "A colaboração",
+        "text": "Projetos em equipa: publique os papéis que procura, junte-se aos dos outros."
+      },
+      "visibility": {
+        "name": "A visibilidade",
+        "text": "A sua reputação e as suas respostas formam um CV vivo, visível para os recrutadores se assim o desejar."
+      }
+    },
+    "differences": {
+      "title": "Pensado para o terreno",
+      "context": {
+        "title": "O contexto africano em cada pergunta",
+        "text": "País, operadora (Orange Money, Wave, MTN, M-Pesa…) e qualidade da rede são indicados nas perguntas e servem de filtros. As respostas de membros do mesmo país são destacadas."
+      },
+      "light": {
+        "title": "Leve, mesmo em 3G",
+        "text": "Páginas leves, a leitura offline das perguntas já consultadas e uma aplicação instalável num telemóvel Android."
+      },
+      "community": {
+        "title": "Moderado pela comunidade",
+        "text": "A reputação abre direitos. Os membros de confiança, os Referentes, tratam das denúncias. A equipa decide em último recurso."
+      }
+    },
+    "levels": {
+      "title": "A reputação ganha-se ajudando",
+      "lead": "Cada ação é registada e rende pontos. Os níveis abrem direitos de moderação.",
+      "from": "a partir de {{points}} pontos",
+      "points": {
+        "QUESTION": {
+          "value": "+5",
+          "label": "por uma pergunta colocada"
+        },
+        "VOTE": {
+          "value": "+2",
+          "label": "por um voto recebido"
+        },
+        "ACCEPTED": {
+          "value": "+15",
+          "label": "por uma resposta aceite"
+        }
+      },
+      "rights": {
+        "NEWCOMER": "Colocar, responder, candidatar-se.",
+        "MEMBER": "Votar e denunciar.",
+        "CONTRIBUTOR": "Propor tags, ver as denúncias.",
+        "REFERENT": "Ocultar um conteúdo denunciado, tratar a fila, propor os desafios."
+      }
+    },
+    "final": {
+      "title": "Uma pergunta a bloqueá-lo? Outros talvez já tenham a resposta."
+    }
+  },
+  "footer": {
+    "label": "Links do site",
+    "about": "Zetsu, pela Zetsu Labs para a CADev 2026.",
+    "rules": "Regras da comunidade",
+    "terms": "Termos de utilização",
+    "privacy": "Privacidade"
+  },
+  "legal": {
+    "docsLabel": "Documentos",
+    "tocLabel": "Índice",
+    "updated": "Última atualização: 21 de outubro de 2026",
+    "contact": "Uma dúvida sobre este documento? Escreva-nos:",
+    "rules": {
+      "title": "Regras da comunidade",
+      "intro": "O Zetsu é feito pelos programadores, para os programadores. Estas regras mantêm a plataforma útil e respeitosa. Os Referentes e a equipa apoiam-se nelas para moderar.",
+      "sections": [
+        {
+          "title": "O espírito do Zetsu",
+          "paragraphs": [
+            "Viemos aqui para aprender e para ajudar. Cada pergunta merece uma resposta séria, seja qual for o nível de quem a coloca.",
+            "Critique o código, nunca a pessoa. Uma resposta seca desencoraja mais do que ajuda."
+          ]
+        },
+        {
+          "title": "Colocar uma boa pergunta",
+          "paragraphs": [
+            "Um título que resume o problema, a mensagem de erro exata, o que já tentou e um trecho de código reduzido ao essencial.",
+            "Indique o seu contexto quando é relevante: país, operadora de mobile money, qualidade da rede, versão da tecnologia. Ajuda os membros que vivem a mesma situação a responder-lhe.",
+            "Nunca publique chaves de API, palavras-passe, tokens nem dados dos seus clientes, mesmo num trecho de código."
+          ]
+        },
+        {
+          "title": "Responder",
+          "paragraphs": [
+            "Explique porque é que a solução funciona, não apenas o que copiar. Cite a documentação quando a conhece.",
+            "Se recorrer a uma ferramenta de inteligência artificial, verifique e teste a resposta antes de a publicar. Continua a ser responsável por ela."
+          ]
+        },
+        {
+          "title": "O que é proibido",
+          "paragraphs": [
+            "Os insultos, o assédio, as declarações discriminatórias, a usurpação de identidade e a publicação de dados pessoais de terceiros.",
+            "O spam, a publicidade disfarçada e as vagas fraudulentas: taxas de inscrição, promessas de ganhos rápidos, pedido de pagamento para se candidatar.",
+            "Os conteúdos ilegais, e os links para software pirata ou malicioso."
+          ]
+        },
+        {
+          "title": "Votos e reputação",
+          "paragraphs": [
+            "Vote pela qualidade de um conteúdo, não pelo seu autor. As trocas de votos entre contas não rendem pontos e podem levar a uma suspensão.",
+            "Os pontos ganhos por dia têm um limite. Um conteúdo eliminado por spam retira 50 pontos ao seu autor."
+          ]
+        },
+        {
+          "title": "Denúncias e moderação",
+          "paragraphs": [
+            "A partir do nível Membro, pode denunciar um conteúdo que infrinja estas regras. Após 5 denúncias de membros diferentes, é ocultado enquanto aguarda uma decisão. O seu autor continua a vê-lo.",
+            "Os Referentes tratam das denúncias: ignoram ou ocultam o conteúdo. Cada decisão é registada, e o autor pode contestá-la junto da equipa Zetsu, que decide em último recurso.",
+            "Em caso de abusos repetidos, a equipa pode avisar e depois suspender uma conta."
+          ]
+        },
+        {
+          "title": "Emprego e missões",
+          "paragraphs": [
+            "As vagas de empresas são validadas pela equipa antes da publicação. Nunca pague para se candidatar a uma vaga ou obter uma missão.",
+            "As trocas de dinheiro por uma missão fazem-se fora do Zetsu, entre os membros. Denuncie qualquer pedido suspeito."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "title": "Termos de utilização",
+      "intro": "Estes termos aplicam-se a qualquer pessoa que utilize o Zetsu. Ao criar uma conta, aceita-os, bem como as regras da comunidade.",
+      "sections": [
+        {
+          "title": "O serviço",
+          "paragraphs": [
+            "O Zetsu é uma plataforma de troca entre programadores: perguntas e respostas, vagas de emprego, missões entre pares, projetos, desafios e reputação. É desenvolvida pela equipa Zetsu Labs no âmbito da CADev 2026."
+          ]
+        },
+        {
+          "title": "A sua conta",
+          "paragraphs": [
+            "As informações da sua conta devem ser exatas. Uma conta corresponde a uma única pessoa.",
+            "É responsável pelo que é feito a partir da sua conta. Guarde a sua palavra-passe para si e avise a equipa se achar que foi utilizada por outra pessoa."
+          ]
+        },
+        {
+          "title": "Os seus conteúdos",
+          "paragraphs": [
+            "Continua a ser autor das suas perguntas, respostas e projetos. Autoriza o Zetsu a apresentá-los, a adaptá-los para a leitura em dispositivos móveis e a conservá-los de forma anónima se eliminar a sua conta.",
+            "Só publica conteúdos que tem o direito de partilhar, sem dados pessoais de terceiros nem segredos."
+          ]
+        },
+        {
+          "title": "Emprego e missões",
+          "paragraphs": [
+            "O Zetsu põe em contacto membros e empresas. O Zetsu não é parte em nenhum contrato de trabalho ou de missão, e não gere qualquer pagamento.",
+            "As vagas são verificadas antes da publicação, mas mantenha-se atento e denuncie qualquer vaga duvidosa."
+          ]
+        },
+        {
+          "title": "Moderação e suspensão",
+          "paragraphs": [
+            "Um conteúdo contrário às regras da comunidade pode ser ocultado ou eliminado. Uma conta pode ser suspensa em caso de abuso. Pode contestar uma decisão junto da equipa."
+          ]
+        },
+        {
+          "title": "Disponibilidade",
+          "paragraphs": [
+            "O serviço é fornecido tal como está. Fazemos o possível para que se mantenha disponível e para que os seus dados sejam guardados todos os dias, sem poder garantir uma disponibilidade permanente."
+          ]
+        },
+        {
+          "title": "Fim da sua conta",
+          "paragraphs": [
+            "Pode eliminar a sua conta a qualquer momento nas suas definições. As suas perguntas e respostas continuam visíveis, assinadas «Utilizador eliminado». A sua reputação e as suas candidaturas são apagadas."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Privacidade",
+      "intro": "Eis os dados que o Zetsu recolhe, o que fazemos com eles e como mantém o controlo sobre eles.",
+      "sections": [
+        {
+          "title": "Os dados recolhidos",
+          "paragraphs": [
+            "A sua conta: nome, endereço de email, país e, se os adicionar, cidade, foto, apresentação e tecnologias.",
+            "Se iniciar sessão com o GitHub ou o Google: o seu identificador nesse serviço, o seu endereço de email e o seu nome público. Nunca recebemos a sua palavra-passe.",
+            "O que publica: perguntas, respostas, votos, denúncias, candidaturas (mensagem e CV se anexar um), projetos e trabalhos de desafios.",
+            "Dados técnicos: um cookie de sessão para o manter com sessão iniciada, e registos de segurança (tentativas de início de sessão, limitação de abusos)."
+          ]
+        },
+        {
+          "title": "Porque os utilizamos",
+          "paragraphs": [
+            "Para fazer funcionar o serviço, propor-lhe perguntas, vagas e missões próximas do seu perfil, calcular a sua reputação, moderar e proteger a plataforma contra abusos."
+          ]
+        },
+        {
+          "title": "O que não fazemos",
+          "paragraphs": [
+            "Não vendemos os seus dados e não apresentamos publicidade. Não há qualquer rastreador publicitário no Zetsu.",
+            "O seu tema e o seu idioma são memorizados no seu navegador, não nos nossos servidores."
+          ]
+        },
+        {
+          "title": "Visibilidade para os recrutadores",
+          "paragraphs": [
+            "A opção «Visível para os recrutadores» está desativada por predefinição. Enquanto não a ativar, as empresas não veem o seu perfil nas suas pesquisas. Pode removê-la a qualquer momento."
+          ]
+        },
+        {
+          "title": "O assistente de redação",
+          "paragraphs": [
+            "Se utilizar o assistente para melhorar uma pergunta, o título, os detalhes e o código da pergunta são enviados a um fornecedor de inteligência artificial. O seu nome, o seu email e o seu identificador nunca são transmitidos."
+          ]
+        },
+        {
+          "title": "Prazo de conservação",
+          "paragraphs": [
+            "Os seus dados são conservados enquanto a sua conta existir. Ao eliminar a conta, os seus conteúdos públicos são anonimizados, e a sua reputação e as suas candidaturas são apagadas. Os registos de segurança são conservados durante um período limitado."
+          ]
+        },
+        {
+          "title": "Os seus direitos",
+          "paragraphs": [
+            "Pode consultar e corrigir as suas informações nas suas definições, e eliminar a sua conta a qualquer momento. Para qualquer outro pedido de acesso, correção ou oposição, escreva à equipa.",
+            "O Zetsu aplica a lei do Burquina Faso sobre a proteção de dados pessoais. Pode também recorrer à Comissão da Informática e das Liberdades (CIL)."
+          ]
+        }
+      ]
+    }
+  },
+  "jobs": {
+    "pageTitle": "Emprego",
+    "title": "Vagas para programadores",
+    "lead": "Vagas de empresas verificadas pela equipa antes da publicação.",
+    "publish": "Publicar uma vaga",
+    "view": "Ver a vaga",
+    "viewLabel": "Ver a vaga: {{title}}",
+    "empty": "Nenhuma vaga corresponde a estes filtros de momento.",
+    "published": "Publicada",
+    "technologies": "Tecnologias",
+    "pendingNotice": "Esta vaga aguarda validação pela equipa Zetsu. Só é visível para si.",
+    "contract": {
+      "PERMANENT": "Efetivo",
+      "REMOTE": "Remoto",
+      "CONTRACT": "Freelance",
+      "INTERNSHIP": "Estágio"
+    },
+    "status": {
+      "SENT": "Enviada",
+      "VIEWED": "Vista",
+      "SHORTLISTED": "Pré-selecionada",
+      "REJECTED": "Recusada"
+    },
+    "filters": {
+      "type": "Tipo de posto",
+      "types": {
+        "all": "Todas",
+        "PERMANENT": "Efetivo",
+        "REMOTE": "Remoto",
+        "CONTRACT": "Freelance",
+        "INTERNSHIP": "Estágios"
+      },
+      "country": "País",
+      "tech": "Tecnologia",
+      "techPlaceholder": "Ex.: flutter",
+      "apply": "Filtrar"
+    },
+    "applyBox": {
+      "title": "Candidatar-se com o seu perfil Zetsu",
+      "text": "A sua reputação, as suas respostas e os seus desafios são transmitidos com a sua mensagem.",
+      "button": "Candidatar-se"
+    },
+    "applied": {
+      "title": "Candidatura enviada",
+      "text": "O recrutador recebeu o seu perfil. Será avisado da sua resposta.",
+      "follow": "Acompanhar as minhas candidaturas"
+    },
+    "match": {
+      "title": "Correspondência com o seu perfil",
+      "summary_one": "{{count}} tecnologia em {{total}} do seu perfil.",
+      "summary_other": "{{count}} tecnologias em {{total}} do seu perfil.",
+      "have": "presente no seu perfil",
+      "missing": "ausente do seu perfil",
+      "login": "Inicie sessão para comparar a vaga com as suas competências.",
+      "noSkills": "Adicione as suas tecnologias para ver a correspondência:"
+    },
+    "apply": {
+      "title": "Candidatar-se na {{company}}",
+      "profile": "Perfil transmitido ao recrutador",
+      "message": "Mensagem ao recrutador",
+      "messageHint": "Porque é que este posto lhe interessa, e um projeto de que se orgulha.",
+      "messageTooShort": "Escreva pelo menos {{min}} caracteres para apresentar a sua candidatura.",
+      "cv": "CV",
+      "cvHint": "PDF, no máximo 2 MB.",
+      "cvType": "O CV deve ser um ficheiro PDF.",
+      "cvSize": "O CV deve ter no máximo 2 MB.",
+      "submit": "Enviar a minha candidatura",
+      "busy": "A enviar",
+      "sent": "Candidatura enviada à {{company}}"
+    },
+    "new": {
+      "pageTitle": "Publicar uma vaga",
+      "lead": "Descreva o posto. A equipa Zetsu verifica cada vaga antes de a publicar, em geral em menos de 24 horas.",
+      "title": "Designação do posto",
+      "company": "Empresa",
+      "website": "Site da empresa",
+      "websiteHint": "Endereço em https://, ajuda a verificar a sua empresa.",
+      "contract": "Tipo de contrato",
+      "technologiesHint": "Separadas por vírgulas. Exemplo: spring-boot, react, postgresql",
+      "salary": "Remuneração",
+      "salaryHint": "Indicar um intervalo atrai mais candidaturas. Exemplo: 450 000 a 600 000 FCFA por mês",
+      "description": "Descrição do posto",
+      "descriptionHint": "A empresa, as funções e o perfil procurado. Markdown aceite.",
+      "notice": "Uma vaga nunca deve pedir taxas de inscrição nem prometer ganhos rápidos. As vagas deste tipo são recusadas.",
+      "submit": "Enviar a vaga para validação",
+      "busy": "A enviar",
+      "created": "Vaga enviada. Será publicada após validação pela equipa.",
+      "errors": {
+        "title": "A designação deve ter entre 10 e 120 caracteres.",
+        "company": "Indique o nome da empresa.",
+        "website": "Introduza um endereço que comece por https://",
+        "technologies": "Indique pelo menos uma tecnologia.",
+        "description": "Descreva o posto em pelo menos 100 caracteres."
+      },
+      "recruiterOnly": "Publicar uma vaga é reservado a contas de recrutador. Escreva à equipa Zetsu para verificar a sua empresa.",
+      "backToJobs": "Ver as vagas"
+    },
+    "subnav": {
+      "label": "Emprego",
+      "offers": "Vagas",
+      "mine": "As minhas vagas"
+    },
+    "jobStatus": {
+      "PENDING": "Em espera",
+      "PUBLISHED": "Publicada",
+      "REJECTED": "Recusada",
+      "CLOSED": "Encerrada"
+    },
+    "rejectedNotice": "A equipa Zetsu não validou esta vaga.",
+    "rejectedNoticeReason": "A equipa Zetsu não validou esta vaga: {{reason}}",
+    "closedNotice": "Esta vaga está encerrada: já não aceita candidaturas.",
+    "owner": {
+      "title": "A sua vaga",
+      "applications_one": "{{count}} candidatura recebida.",
+      "applications_other": "{{count}} candidaturas recebidas.",
+      "all": "Todas as minhas vagas"
+    },
+    "received": {
+      "title_one": "{{count}} candidatura recebida",
+      "title_other": "{{count}} candidaturas recebidas",
+      "empty": "Nenhuma candidatura de momento.",
+      "cv": "Ver o CV",
+      "noCv": "Sem CV anexado",
+      "mockCv": "No modo mock, os CV não estão disponíveis.",
+      "shortlist": "Pré-selecionar",
+      "reject": "Recusar",
+      "shortlistLabel": "Pré-selecionar a candidatura ({{name}})",
+      "rejectLabel": "Recusar a candidatura ({{name}})",
+      "shortlisted": "Candidatura pré-selecionada. O candidato é avisado.",
+      "rejected": "Candidatura recusada. O candidato é avisado.",
+      "titleNoCount": "Candidaturas recebidas"
+    },
+    "close": {
+      "button": "Encerrar a vaga",
+      "title": "Encerrar esta vaga?",
+      "text": "Desaparece da lista de vagas e já não aceita candidaturas. As candidaturas recebidas continuam consultáveis.",
+      "confirm": "Encerrar",
+      "done": "Vaga encerrada"
+    },
+    "edit": {
+      "pageTitle": "Modificar a vaga",
+      "lead": "Corrija o que for necessário. A equipa Zetsu revalidará a vaga antes de a republicar.",
+      "notice": "Após a modificação, a vaga volta a «Em espera» até à nova validação.",
+      "submit": "Guardar e reenviar para validação",
+      "saved": "Vaga modificada, a aguardar validação",
+      "button": "Modificar a vaga",
+      "back": "Voltar à vaga",
+      "closed": "Esta vaga está encerrada: já não pode ser modificada.",
+      "notAllowed": "Apenas o recrutador que publicou esta vaga pode modificá-la."
+    }
+  },
+  "applications": {
+    "pageTitle": "As minhas candidaturas",
+    "lead": "As suas candidaturas às vagas e as suas propostas de missão, com o respetivo estado.",
+    "empty": "Ainda não se candidatou. As vagas que correspondem à sua stack esperam por si.",
+    "browse": "Ver as vagas",
+    "sent": "enviada",
+    "kind": {
+      "JOB": "Vaga",
+      "MISSION": "Missão"
+    },
+    "filters": {
+      "type": "Tipo",
+      "types": {
+        "all": "Tudo",
+        "JOB": "Vagas",
+        "MISSION": "Missões"
+      },
+      "status": "Estado",
+      "anyStatus": "Todos os estados"
+    },
+    "emptyFiltered": "Nenhuma candidatura corresponde a estes filtros."
+  },
+  "missions": {
+    "pageTitle": "Missões",
+    "title": "Missões entre pares",
+    "lead": "Pequenas ajudas curtas entre programadores: uma reparação, uma integração, uma revisão de código.",
+    "publish": "Publicar uma missão",
+    "empty": "Nenhuma missão aberta corresponde de momento. Publique a sua.",
+    "budget": "Orçamento: {{amount}}",
+    "budgetLabel": "Orçamento indicativo",
+    "delay_one": "{{count}} dia",
+    "delay_other": "{{count}} dias",
+    "offerCount_one": "{{count}} proposta",
+    "offerCount_other": "{{count}} propostas",
+    "yours": "Publicou esta missão. As propostas recebidas estão listadas na página.",
+    "paymentNotice": "O Zetsu não gere qualquer pagamento. Entrem em acordo diretamente, e nunca pague para obter uma missão.",
+    "kind": {
+      "TROUBLESHOOTING": "Reparação",
+      "INTEGRATION": "Integração",
+      "CODE_REVIEW": "Revisão de código",
+      "OTHER": "Outro"
+    },
+    "kindHint": {
+      "TROUBLESHOOTING": "Um bug ou uma avaria a resolver depressa.",
+      "INTEGRATION": "Ligar uma API, um pagamento, um serviço.",
+      "CODE_REVIEW": "Um olhar externo antes de uma entrada em produção.",
+      "OTHER": "Qualquer outra ajuda curta."
+    },
+    "statusNotice": {
+      "IN_PROGRESS": "Esta missão está em curso: já não recebe propostas.",
+      "CLOSED": "Esta missão está terminada."
+    },
+    "filters": {
+      "kind": "Tipo de missão"
+    },
+    "offer": {
+      "button": "Propor-me",
+      "title": "Propor-me para esta missão",
+      "lead": "Apresente-se em poucas frases. O autor vê também o seu perfil e a sua reputação.",
+      "message": "A sua mensagem",
+      "messageHint": "Como pensa fazê-lo, e uma experiência semelhante.",
+      "messageTooShort": "Escreva pelo menos {{min}} caracteres para apresentar a sua proposta.",
+      "price": "O seu preço ({{currency}})",
+      "submit": "Enviar a minha proposta",
+      "sent": "Proposta enviada. O autor da missão será avisado.",
+      "sentText": "Propôs-se para esta missão."
+    },
+    "offers": {
+      "title_one": "{{count}} proposta recebida",
+      "title_other": "{{count}} propostas recebidas",
+      "empty": "Nenhuma proposta de momento. Os membros serão avisados se a missão corresponder à sua stack.",
+      "noTerms": "Preço e prazo não indicados",
+      "shortlist": "Pré-selecionar",
+      "reject": "Recusar",
+      "shortlisted": "Proposta pré-selecionada. O membro é avisado.",
+      "rejected": "Proposta recusada. O membro é avisado.",
+      "shortlistLabel": "Pré-selecionar a proposta ({{name}})",
+      "rejectLabel": "Recusar a proposta ({{name}})"
+    },
+    "new": {
+      "pageTitle": "Publicar uma missão",
+      "lead": "Descreva a ajuda de que precisa. Os membros com a stack certa poderão propor-se.",
+      "kind": "Tipo de missão",
+      "title": "Título",
+      "titlePlaceholder": "Ex.: integrar o Wave numa loja WooCommerce",
+      "description": "Descrição",
+      "descriptionHint": "O contexto, o que se espera e como saberá que está terminado. Markdown aceite.",
+      "budget": "Orçamento indicativo",
+      "budgetHint": "Montante indicativo: nenhum pagamento passa pelo Zetsu.",
+      "currency": "Moeda",
+      "delay": "Prazo pretendido (dias)",
+      "delayHint": "Entre 1 e {{max}} dias.",
+      "notice": "Uma missão é um serviço pontual. Para montar uma equipa duradoura, utilize antes um projeto.",
+      "submit": "Publicar a missão",
+      "busy": "A publicar",
+      "created": "Missão publicada",
+      "errors": {
+        "title": "O título deve ter entre 10 e 120 caracteres.",
+        "description": "Descreva a missão em pelo menos 50 caracteres.",
+        "delay": "Indique um prazo entre 1 e 90 dias.",
+        "budget": "Indique um orçamento indicativo, com um montante positivo."
+      }
+    },
+    "close": {
+      "button": "Encerrar a missão",
+      "title": "Encerrar esta missão?",
+      "text": "Já não aceita propostas. A fazer quando a missão estiver terminada ou abandonada.",
+      "confirm": "Encerrar",
+      "done": "Missão encerrada"
+    },
+    "edit": {
+      "pageTitle": "Modificar a missão",
+      "lead": "Os membros que já se propuseram mantêm a sua proposta.",
+      "submit": "Guardar as alterações",
+      "saved": "Missão modificada",
+      "button": "Modificar a missão",
+      "back": "Voltar à missão",
+      "notOpen": "Esta missão já não está aberta: já não pode ser modificada.",
+      "notAllowed": "Apenas o autor desta missão pode modificá-la."
+    }
+  },
+  "challenges": {
+    "pageTitle": "Desafios",
+    "current": "Desafio em curso",
+    "reward": "+{{points}} pontos por um trabalho validado",
+    "none": "Nenhum desafio em curso de momento. O próximo será anunciado nas suas notificações.",
+    "closesIn": "Encerra em",
+    "closesInFull": "Encerra em {{days}} dias, {{hours}} horas e {{minutes}} minutos.",
+    "ended": "Este desafio está encerrado. Os trabalhos estão a ser avaliados.",
+    "units": {
+      "days_one": "dia",
+      "days_other": "dias",
+      "hours_one": "hora",
+      "hours_other": "horas",
+      "minutes_one": "minuto",
+      "minutes_other": "minutos"
+    },
+    "submissions_one": "{{count}} trabalho de momento",
+    "submissions_other": "{{count}} trabalhos de momento",
+    "submission": {
+      "PENDING": "Trabalho recebido, a aguardar avaliação",
+      "VALIDATED": "Trabalho validado: {{score}}/100",
+      "REJECTED": "Trabalho recusado"
+    },
+    "submit": {
+      "button": "Submeter o meu trabalho",
+      "title": "Submeter o meu trabalho",
+      "label": "Link do repositório GitHub",
+      "hint": "O repositório deve ser público, com um README que explique como lançar o projeto.",
+      "badUrl": "Introduza um link no formato https://github.com/conta/repositorio.",
+      "notice": "Um só trabalho por desafio. A equipa avalia-o de 0 a 100 após o encerramento.",
+      "submit": "Submeter",
+      "sent": "Trabalho recebido. Será avaliado pela equipa após o encerramento."
+    },
+    "board": {
+      "title": "Classificação",
+      "caption": "Classificação do desafio em curso",
+      "rank": "Posição",
+      "member": "Programador",
+      "score": "Nota",
+      "scoreValue": "{{score}}/100",
+      "pending": "Por avaliar",
+      "you": "(você)",
+      "empty": "Ainda sem trabalhos. Seja o primeiro a enfrentar o desafio.",
+      "view": "Tipo de classificação",
+      "members": "Membros",
+      "countries": "Países",
+      "country": "País",
+      "points": "Pontos",
+      "countryCaption": "Classificação por país do desafio em curso",
+      "yourCountry": "(o seu país)",
+      "participants_one": "{{count}} participante",
+      "participants_other": "{{count}} participantes"
+    },
+    "upcoming": "Desafio futuro"
+  },
+  "communities": {
+    "pageTitle": "Comunidades",
+    "title": "Comunidades",
+    "lead": "Encontre os programadores do seu país e da sua tecnologia: as suas perguntas, os seus Referentes, as suas regras.",
+    "mine": "As minhas comunidades",
+    "mineEmpty": "Não se juntou a nenhuma comunidade. Comece pelo seu país ou pela sua tecnologia principal.",
+    "mineError": "As suas comunidades não estão disponíveis de momento.",
+    "filters": {
+      "kind": "Tipo de comunidade",
+      "kinds": {
+        "all": "Todas",
+        "COUNTRY": "Países",
+        "TECH": "Tecnologias"
+      },
+      "search": "Procurar uma comunidade",
+      "searchPlaceholder": "Senegal, Flutter, mobile money…",
+      "apply": "Procurar"
+    },
+    "kinds": {
+      "COUNTRY": "Comunidade de país",
+      "TECH": "Comunidade de tecnologia"
+    },
+    "members_one": "{{formatted}} membro",
+    "members_other": "{{formatted}} membros",
+    "questions_one": "{{formatted}} pergunta",
+    "questions_other": "{{formatted}} perguntas",
+    "join": "Juntar-me",
+    "member": "Membro",
+    "joinLabel": "Juntar-me à comunidade {{name}}",
+    "leaveLabel": "Sair da comunidade {{name}}",
+    "joinedToast": "Bem-vindo à comunidade {{name}}.",
+    "left": "Saiu da comunidade {{name}}.",
+    "empty": "Nenhuma comunidade corresponde. A equipa abre novas regularmente.",
+    "ask": "Colocar uma pergunta aqui",
+    "sections": "Secções da comunidade",
+    "tabs": {
+      "questions": "Perguntas",
+      "members": "Membros",
+      "rules": "Regras"
+    },
+    "noQuestions": "Ainda sem perguntas nesta comunidade. Coloque a primeira.",
+    "referents": "Referentes",
+    "topMembers": "Os mais úteis este mês",
+    "nobody": "Ninguém de momento.",
+    "noRules": "Sem regras específicas: as regras gerais chegam.",
+    "generalRules": "As regras gerais do Zetsu também se aplicam.",
+    "rulesLink": "Reler as regras",
+    "propose": {
+      "button": "Propor uma comunidade",
+      "note": "Os Referentes (1 500 pontos) podem propor uma comunidade, validada depois pela equipa.",
+      "pageTitle": "Propor uma comunidade",
+      "lead": "A sua proposta é analisada pela equipa Zetsu, como uma vaga de emprego. Verifique primeiro se já não existe uma comunidade semelhante.",
+      "referentsOnly": "Apenas os Referentes (1 500 pontos de reputação) podem propor uma comunidade. Entretanto, junte-se às que existem e ajude os seus membros.",
+      "back": "Ver as comunidades",
+      "kind": "Tipo de comunidade",
+      "name": "Nome",
+      "namePlaceholderTech": "Ex.: Laravel",
+      "namePlaceholderCountry": "Ex.: Mali",
+      "tag": "Tag das perguntas",
+      "tagHint": "As perguntas com esta tag aparecerão na comunidade.",
+      "description": "Descrição",
+      "descriptionHint": "Para quem, e para falar de quê. 30 a 200 caracteres.",
+      "rules": "Regras próprias",
+      "rulesHint": "Uma regra por linha, no máximo 5. As regras gerais do Zetsu já se aplicam.",
+      "submit": "Enviar a proposta",
+      "busy": "A enviar",
+      "sent": "Proposta enviada. A equipa responder-lhe-á por notificação.",
+      "mine": "As suas propostas",
+      "none": "Ainda não propôs nada.",
+      "reason": "Motivo: {{reason}}",
+      "status": {
+        "PENDING": "Em espera",
+        "APPROVED": "Aceite",
+        "REJECTED": "Recusada"
+      },
+      "errors": {
+        "name": "O nome deve ter entre 3 e 40 caracteres.",
+        "country": "Escolha o país.",
+        "tag": "Uma tag em minúsculas, com algarismos, hífenes ou pontos (no máximo 35 caracteres).",
+        "description": "A descrição deve ter entre 30 e 200 caracteres.",
+        "rulesCount": "No máximo 5 regras.",
+        "ruleLength": "Cada regra tem no máximo 200 caracteres."
+      }
+    }
+  },
+  "profileEdit": {
+    "pageTitle": "Modificar o meu perfil",
+    "lead": "O que os outros membros veem no seu perfil. Os ajustes da conta e da aplicação estão nas Definições.",
+    "back": "Voltar ao perfil",
+    "saved": "Perfil atualizado"
+  },
+  "myJobs": {
+    "pageTitle": "As minhas vagas",
+    "lead": "As suas vagas, quer estejam a aguardar validação, publicadas ou encerradas. Abra uma para ver as candidaturas.",
+    "empty": "Ainda não publicou nenhuma vaga."
+  },
+  "myModeration": {
+    "pageTitle": "Os meus conteúdos denunciados",
+    "lead": "Os conteúdos que membros denunciaram, e o que foi decidido. Pode contestar uma ocultação uma vez, junto da equipa Zetsu.",
+    "empty": "Nenhum dos seus conteúdos foi denunciado.",
+    "updated": "Atualizado",
+    "kind": {
+      "QUESTION": "Pergunta",
+      "ANSWER": "Resposta",
+      "JOB": "Vaga",
+      "MISSION": "Missão",
+      "USER": "Perfil"
+    },
+    "status": {
+      "OPEN": "Denunciado, em espera",
+      "DISMISSED": "Denúncia descartada",
+      "HIDDEN": "Ocultado",
+      "APPEALED": "Contestação em curso",
+      "RESTORED": "Reposto"
+    }
+  }
+}
