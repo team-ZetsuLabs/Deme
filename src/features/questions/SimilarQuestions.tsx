@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '../../components/Icon';
 import { Skeleton } from '../../components/skeleton/Skeleton';
+import { QuestionHoverCard } from './QuestionHoverCard';
 import { useSimilarQuestions } from './useSimilarQuestions';
 import styles from './SimilarQuestions.module.css';
 
@@ -44,15 +45,17 @@ export function SimilarQuestions({ title }: SimilarQuestionsProps) {
           <ul className={styles.list}>
             {state.items.map((q) => (
               <li key={q.id}>
-                <Link
-                  to={`/questions/${q.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.link}
-                >
-                  {q.title}
-                  <span className="sr-only"> {t('ask.similar.newTab')}</span>
-                </Link>
+                <QuestionHoverCard id={q.id} question={q}>
+                  <Link
+                    to={`/questions/${q.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.link}
+                  >
+                    {q.title}
+                    <span className="sr-only"> {t('ask.similar.newTab')}</span>
+                  </Link>
+                </QuestionHoverCard>
                 <span
                   className={q.hasAcceptedAnswer ? `${styles.meta} ${styles.solved}` : styles.meta}
                 >

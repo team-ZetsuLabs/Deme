@@ -4,6 +4,7 @@ import type { AppNotification } from '../../api/types';
 import { Avatar } from '../../components/Avatar';
 import { Icon, type IconName } from '../../components/Icon';
 import { RelativeTime } from '../../components/RelativeTime';
+import { QuestionHoverCard } from '../questions/QuestionHoverCard';
 import { notificationLink } from './notificationsApi';
 import styles from './NotificationItem.module.css';
 
@@ -49,9 +50,17 @@ export function NotificationItem({ notification: n, onOpen }: NotificationItemPr
       <div className={styles.body}>
         <p>
           {text} :{' '}
-          <Link to={notificationLink(n.target, n.type)} onClick={onOpen}>
-            {n.target.title}
-          </Link>
+          {n.target.type === 'QUESTION' ? (
+            <QuestionHoverCard id={n.target.id}>
+              <Link to={notificationLink(n.target, n.type)} onClick={onOpen}>
+                {n.target.title}
+              </Link>
+            </QuestionHoverCard>
+          ) : (
+            <Link to={notificationLink(n.target, n.type)} onClick={onOpen}>
+              {n.target.title}
+            </Link>
+          )}
         </p>
         <small>
           <RelativeTime iso={n.createdAt} />

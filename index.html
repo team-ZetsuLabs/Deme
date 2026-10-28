@@ -5,6 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Zetsu, l'entraide entre développeurs africains." />
     <meta name="theme-color" content="#f6f7f6" />
+    <!-- Aperçu générique quand un lien Zetsu est partagé (WhatsApp, LinkedIn, Slack…).
+         L'aperçu précis par page (titre exact d'une question) demande un rendu côté serveur :
+         les robots des réseaux ne lisent pas le JavaScript. À prévoir côté infra. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Zetsu" />
+    <meta property="og:title" content="Zetsu, l'entraide entre développeurs africains" />
+    <meta
+      property="og:description"
+      content="Posez vos questions avec votre contexte africain, répondez, trouvez des missions entre pairs et faites reconnaître votre travail."
+    />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Zetsu, l'entraide entre développeurs africains" />
+    <meta
+      name="twitter:description"
+      content="Posez vos questions avec votre contexte africain, répondez, trouvez des missions entre pairs."
+    />
+    <meta name="twitter:image" content="/og-image.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <!-- Thème et langue appliqués avant l'affichage, sans script inline (CSP). -->
     <script src="/theme-init.js"></script>
