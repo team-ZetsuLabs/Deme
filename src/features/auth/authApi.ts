@@ -39,10 +39,13 @@ export const authApi = {
   /** Parcours d'accueil (AUTH-5) : passe onboardingCompleted à vrai. */
   completeOnboarding: (body: OnboardingRequest) => api.put<Me>('/users/me/onboarding', body),
   /** Photo de profil (SET-1) : PNG, JPG ou WebP, 2 Mo au plus, type réel vérifié par le serveur. */
-  uploadPhoto: (file: File) => {
+  uploadPhoto: async (file: File) => {
     const form = new FormData();
     form.append('photo', file);
-    return api.put<Me>('/users/me/avatar', form);
+    const me = await api.put<Me>('/users/me/avatar', form);
+    // En mode mock, le serveur ne stocke pas le fichier : on affiche la photo choisie
+    // localement (URL d'objet) pour pouvoir tester l'écran sans back-end.
+    return api.mode === 'mock' ? { ...me, avatarUrl: URL.createObjectURL(file) } : me;
   },
   deletePhoto: () => api.delete<Me>('/users/me/avatar'),
   /** Comptes GitHub et Google liés, et présence d'un mot de passe (SET-4). */

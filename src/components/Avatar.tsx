@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styles from './Avatar.module.css';
 import { avatarColor, initials } from './avatarColor';
 
@@ -12,9 +13,21 @@ export type AvatarProps = {
 export function Avatar({ name, photoUrl, size = 26, square = false }: AvatarProps) {
   const className = square ? `${styles.avatar} ${styles.square}` : styles.avatar;
   const dimensions = { width: size, height: size };
+  // Si la photo ne charge pas (URL expirée, hors ligne, serveur d'avatars indisponible), on
+  // retombe sur les initiales plutôt que sur une image cassée. On retente si l'URL change.
+  const [failedUrl, setFailedUrl] = useState<string | null>(null);
 
-  if (photoUrl) {
-    return <img className={className} src={photoUrl} alt="" style={dimensions} loading="lazy" />;
+  if (photoUrl && photoUrl !== failedUrl) {
+    return (
+      <img
+        className={className}
+        src={photoUrl}
+        alt=""
+        style={dimensions}
+        loading="lazy"
+        onError={() => setFailedUrl(photoUrl)}
+      />
+    );
   }
   return (
     <span
