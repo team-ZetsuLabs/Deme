@@ -10,7 +10,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--s1);
-  margin-right: var(--s1);
+  margin-inline-end: var(--s1);
   font-size: var(--fs-md);
   color: var(--text-2);
 }

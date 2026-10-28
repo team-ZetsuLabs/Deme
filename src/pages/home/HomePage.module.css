@@ -136,7 +136,7 @@
 }
 
 .gain {
-  margin-right: var(--s2);
+  margin-inline-end: var(--s2);
   font-family: var(--f-mono);
   font-weight: 500;
   color: var(--gold-text);
@@ -174,7 +174,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
   .exchanges > div {
-    padding-right: 0;
+    padding-inline-end: 0;
   }
   .differences li {
     grid-template-columns: 40px minmax(0, 1fr);

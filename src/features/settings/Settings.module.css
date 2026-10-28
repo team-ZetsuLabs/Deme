@@ -96,7 +96,7 @@
 }
 
 .choice input {
-  margin-right: var(--s2);
+  margin-inline-end: var(--s2);
   accent-color: var(--green-text);
 }
 

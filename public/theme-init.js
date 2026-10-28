@@ -14,5 +14,9 @@
     pref === 'dark' || (pref === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
   root.dataset.theme = dark ? 'dark' : 'light';
   root.dataset.pref = pref;
-  if (lang === 'fr' || lang === 'en') root.lang = lang;
+  if (lang === 'fr' || lang === 'en' || lang === 'pt' || lang === 'ar') {
+    root.lang = lang;
+    // L'arabe s'écrit de droite à gauche : on le pose avant l'affichage pour éviter un saut.
+    if (lang === 'ar') root.dir = 'rtl';
+  }
 })();

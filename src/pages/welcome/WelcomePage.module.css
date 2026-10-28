@@ -44,7 +44,7 @@
   display: flex;
   align-items: center;
   gap: var(--s3);
-  float: left;
+  float: inline-start;
   width: 100%;
   margin-bottom: var(--s2);
   font-size: var(--fs-lg);

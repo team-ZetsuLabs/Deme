@@ -4,8 +4,16 @@ import { initReactI18next } from 'react-i18next';
 // L'anglais n'est téléchargé que s'il est choisi : la première page reste légère en 3G.
 import fr from './fr.json';
 
-export const LANGUAGES = ['fr', 'en', 'pt'] as const;
+export const LANGUAGES = ['fr', 'en', 'pt', 'ar'] as const;
 export type Language = (typeof LANGUAGES)[number];
+
+// Langues écrites de droite à gauche : on bascule l'attribut `dir` du document (voir plus bas).
+const RTL_LANGUAGES: readonly string[] = ['ar'];
+
+/** La langue s'écrit-elle de droite à gauche ? */
+export function isRtlLanguage(lang: string): boolean {
+  return RTL_LANGUAGES.includes(lang);
+}
 
 // Langues que le profil sait enregistrer aujourd'hui (enum du contrat d'API, figé à fr/en).
 // Le portugais ne vit pour l'instant que dans le localStorage ; dès que le back-end l'ajoute
@@ -23,6 +31,7 @@ const STORAGE_KEY = 'zetsu-lang';
 const loaders: Record<Exclude<Language, 'fr'>, () => Promise<{ default: object }>> = {
   en: () => import('./en.json'),
   pt: () => import('./pt.json'),
+  ar: () => import('./ar.json'),
 };
 
 function initialLanguage(): Language {
@@ -66,6 +75,8 @@ export async function changeLanguage(lang: Language) {
 
 i18n.on('languageChanged', (lng) => {
   document.documentElement.lang = lng;
+  // L'arabe met toute l'interface en droite-à-gauche (les styles s'appuient sur `dir`).
+  document.documentElement.dir = isRtlLanguage(lng) ? 'rtl' : 'ltr';
 });
 
 // En test, on reste en français : les tests choisissent eux-mêmes leur langue.

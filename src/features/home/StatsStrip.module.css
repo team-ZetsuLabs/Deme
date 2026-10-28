@@ -9,12 +9,12 @@
   display: flex;
   flex-direction: column-reverse;
   padding: var(--s5) var(--s4);
-  border-left: 1px solid var(--line);
+  border-inline-start: 1px solid var(--line);
 }
 
 .strip > div:first-child {
-  border-left: none;
-  padding-left: 0;
+  border-inline-start: none;
+  padding-inline-start: 0;
 }
 
 .strip dt {
@@ -37,8 +37,8 @@
     padding: var(--s4) var(--s3);
   }
   .strip > div:nth-child(odd) {
-    border-left: none;
-    padding-left: 0;
+    border-inline-start: none;
+    padding-inline-start: 0;
   }
   .strip > div:nth-child(n + 3) {
     border-top: 1px solid var(--line);

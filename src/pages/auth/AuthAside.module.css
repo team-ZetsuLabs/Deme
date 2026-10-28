@@ -5,7 +5,7 @@
   min-height: 0;
   overflow: hidden;
   padding: var(--s7);
-  border-left: 1px solid var(--line);
+  border-inline-start: 1px solid var(--line);
   background-color: var(--bg);
   background-image:
     linear-gradient(var(--grid) 1px, transparent 1px),
@@ -117,7 +117,7 @@
 }
 
 .rep {
-  margin-left: var(--s2);
+  margin-inline-start: var(--s2);
   font-family: var(--f-mono);
   font-size: var(--fs-sm);
   color: var(--gold-text);

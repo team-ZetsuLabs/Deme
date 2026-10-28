@@ -67,7 +67,7 @@
 .toc ol {
   display: grid;
   gap: var(--s1);
-  padding-left: var(--s5);
+  padding-inline-start: var(--s5);
   font-size: var(--fs-md);
 }
 

@@ -124,7 +124,7 @@
 .ruleList {
   display: grid;
   gap: var(--s2);
-  padding-left: var(--s5);
+  padding-inline-start: var(--s5);
   color: var(--text-2);
 }
 

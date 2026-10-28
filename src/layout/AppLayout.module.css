@@ -27,7 +27,7 @@
 
 .skip {
   position: absolute;
-  left: var(--s4);
+  inset-inline-start: var(--s4);
   top: -100px;
   z-index: var(--z-toast);
   padding: var(--s2) var(--s4);

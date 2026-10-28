@@ -8,3 +8,19 @@
   overflow: hidden;
   box-shadow: inset 0 0 0 1px var(--line-strong);
 }
+
+/* Pastille neutre pour l'arabe (pas de drapeau de pays) : la lettre « ع » centrée. */
+.glyph {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--surface-3);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  color: var(--text-2);
+  font-size: 11px;
+  line-height: 1;
+}

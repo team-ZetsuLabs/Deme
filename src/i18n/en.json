@@ -36,7 +36,8 @@
     "label": "Interface language",
     "fr": "Français",
     "en": "English",
-    "pt": "Português"
+    "pt": "Português",
+    "ar": "العربية"
   },
   "network": {
     "offline": "You are offline. Questions you already viewed are still readable.",

@@ -6,7 +6,7 @@
 .table th {
   padding: var(--s3) var(--s5);
   border-bottom: 1px solid var(--line);
-  text-align: left;
+  text-align: start;
   font-size: var(--fs-sm);
   font-weight: 500;
   color: var(--text-3);
@@ -23,7 +23,7 @@
 }
 
 .table .num {
-  text-align: right;
+  text-align: end;
   font-family: var(--f-mono);
   font-variant-numeric: tabular-nums;
 }

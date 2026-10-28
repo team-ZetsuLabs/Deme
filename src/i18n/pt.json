@@ -36,7 +36,8 @@
     "label": "Idioma da interface",
     "fr": "Français",
     "en": "English",
-    "pt": "Português"
+    "pt": "Português",
+    "ar": "العربية"
   },
   "network": {
     "offline": "Está offline. As perguntas já consultadas continuam legíveis.",

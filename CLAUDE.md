@@ -155,9 +155,10 @@ Ce qu'on **fait** :
 
 ## Langues
 
-- Français, anglais et portugais. Aucun texte d'interface écrit en dur dans le JSX : tout passe par `t('question.ask.title')` de react-i18next, avec les textes dans `src/i18n/fr.json`, `en.json` et `pt.json` et des clés par écran. Le français est dans le fichier principal ; l'anglais et le portugais ne sont téléchargés que s'ils sont choisis (`src/i18n/index.ts`, liste `LANGUAGES`).
-- On ajoute la clé dans **tous** les fichiers de langue en même temps. S'il manque une traduction, on recopie le français et on ajoute `"TODO"` dans un commentaire de la pull request. Une nouvelle langue est relue par un locuteur ; l'arabe (droite-à-gauche) demande en plus une passe RTL et n'est pas encore en place.
-- Le choix de langue est enregistré dans le profil seulement pour les langues que le contrat accepte (`SAVED_LANGUAGES`, aujourd'hui `fr`/`en`). Les autres (portugais) tiennent dans le localStorage en attendant que le back-end ajoute la langue à l'enum `language`.
+- Français, anglais, portugais et arabe. Aucun texte d'interface écrit en dur dans le JSX : tout passe par `t('question.ask.title')` de react-i18next, avec les textes dans `src/i18n/fr.json`, `en.json`, `pt.json` et `ar.json` et des clés par écran. Le français est dans le fichier principal ; les autres langues ne sont téléchargées que si elles sont choisies (`src/i18n/index.ts`, liste `LANGUAGES`).
+- On ajoute la clé dans **tous** les fichiers de langue en même temps. S'il manque une traduction, on recopie le français et on ajoute `"TODO"` dans un commentaire de la pull request. Une nouvelle langue est relue par un locuteur (le portugais et l'arabe attendent encore une relecture native).
+- L'arabe s'écrit de droite à gauche : `src/i18n/index.ts` bascule `document.documentElement.dir` (`isRtlLanguage`), et les styles utilisent des **propriétés logiques** (`margin-inline`, `inset-inline-start`, `text-align: start`…), jamais `left`/`right` directionnels. Toute nouvelle feuille de style suit cette règle. L'arabe a six formes de pluriel (zero/one/two/few/many/other) : les clés comptées les fournissent toutes dans `ar.json`.
+- Le choix de langue est enregistré dans le profil seulement pour les langues que le contrat accepte (`SAVED_LANGUAGES`, aujourd'hui `fr`/`en`). Les autres (portugais, arabe) tiennent dans le localStorage en attendant que le back-end ajoute la langue à l'enum `language`.
 - Le contenu des membres n'est pas traduit.
 
 ## Git et pull requests

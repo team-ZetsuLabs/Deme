@@ -35,7 +35,7 @@
 }
 
 .right {
-  margin-left: auto;
+  margin-inline-start: auto;
   display: flex;
   align-items: center;
   gap: var(--s2);

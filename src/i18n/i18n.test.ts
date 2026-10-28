@@ -22,4 +22,16 @@ describe('chargement des langues', () => {
     expect(i18n.t('topbar.login')).toBe('Entrar');
     expect(document.documentElement.lang).toBe('pt');
   });
+
+  it("charge l'arabe et passe l'interface en droite-à-gauche", async () => {
+    await changeLanguage('ar');
+    expect(i18n.hasResourceBundle('ar', 'translation')).toBe(true);
+    expect(i18n.t('topbar.login')).toBe('تسجيل الدخول');
+    expect(document.documentElement.lang).toBe('ar');
+    expect(document.documentElement.dir).toBe('rtl');
+
+    // Le retour à une langue LTR rétablit le sens d'écriture.
+    await changeLanguage('fr');
+    expect(document.documentElement.dir).toBe('ltr');
+  });
 });

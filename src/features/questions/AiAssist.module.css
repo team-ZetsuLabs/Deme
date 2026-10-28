@@ -98,7 +98,7 @@
 .missing {
   display: grid;
   gap: var(--s1);
-  padding-left: var(--s5);
+  padding-inline-start: var(--s5);
   list-style: disc;
   font-size: var(--fs-md);
   color: var(--text-2);

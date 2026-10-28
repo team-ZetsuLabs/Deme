@@ -8,6 +8,14 @@ export type LanguageFlagProps = { lang: Language };
  * charger). Décoratif : le nom de la langue est toujours écrit à côté.
  */
 export function LanguageFlag({ lang }: LanguageFlagProps) {
+  if (lang === 'ar') {
+    // L'arabe n'est lié à aucun pays : une pastille neutre avec la lettre « ع », pas un drapeau.
+    return (
+      <span className={styles.glyph} aria-hidden="true">
+        ع
+      </span>
+    );
+  }
   if (lang === 'en') {
     return (
       <svg className={styles.flag} viewBox="0 0 60 40" aria-hidden="true" focusable="false">
