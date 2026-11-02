@@ -17,7 +17,8 @@
     "notifications": "Notifications",
     "applications": "My applications",
     "communities": "Communities",
-    "communitiesShort": "Groups"
+    "communitiesShort": "Groups",
+    "projects": "Projects"
   },
   "topbar": {
     "search": "Search",
@@ -1401,6 +1402,158 @@
       "HIDDEN": "Hidden",
       "APPEALED": "Appeal in progress",
       "RESTORED": "Restored"
+    }
+  },
+  "projects": {
+    "pageTitle": "Projects",
+    "title": "Projects",
+    "lead": "Member-led projects: join a team or propose your own.",
+    "propose": "Propose a project",
+    "mine": "My projects",
+    "empty": "No projects yet.",
+    "technologies": "Technologies",
+    "updatedAgo": "updated",
+    "completedNotice": "This project is closed: it is no longer recruiting.",
+    "completeDone": "Project closed.",
+    "githubLink": "View on GitHub",
+    "contactLink": "Contact",
+    "rolesTitle": "Open roles",
+    "updatesTitle": "Updates",
+    "ownerRole": "Owner",
+    "contributor": "Member",
+    "deletedMember": "Deleted user",
+    "team_one": "{{count}} member",
+    "team_other": "{{count}} members",
+    "openRoles_one": "{{count}} open role",
+    "openRoles_other": "{{count}} open roles",
+    "teamTitle_one": "Team — {{count}} member",
+    "teamTitle_other": "Team — {{count}} members",
+    "types": {
+      "STUDY": "Study project",
+      "STARTUP": "Startup",
+      "OPEN_SOURCE": "Open source"
+    },
+    "projectStatus": {
+      "OPEN": "Open",
+      "COMPLETED": "Closed"
+    },
+    "roleStatus": {
+      "OPEN": "Open",
+      "FILLED": "Filled"
+    },
+    "requestStatus": {
+      "PENDING": "Pending",
+      "ACCEPTED": "Accepted",
+      "REJECTED": "Declined"
+    },
+    "filters": {
+      "type": "Project type",
+      "tech": "Technology",
+      "techPlaceholder": "e.g. react",
+      "apply": "Filter",
+      "types": {
+        "all": "All",
+        "STUDY": "Study",
+        "STARTUP": "Startup",
+        "OPEN_SOURCE": "Open source"
+      }
+    },
+    "owner": {
+      "box": "Your project",
+      "edit": "Edit project",
+      "complete": "Close project",
+      "all": "All my projects"
+    },
+    "join": {
+      "title": "Join “{{title}}”",
+      "role": "Role",
+      "roleHint": "Optional: leave empty for a general request.",
+      "roleAny": "No specific role",
+      "message": "Introduction",
+      "messageHint": "Briefly explain why you want to join this project.",
+      "messageTooShort": "At least {{min}} characters.",
+      "busy": "Sending…",
+      "submit": "Send request",
+      "sent": "Request sent to the project owner.",
+      "sentTitle": "Request sent",
+      "status": {
+        "PENDING": "Your request is awaiting a reply.",
+        "ACCEPTED": "Your request was accepted. Welcome to the team!",
+        "REJECTED": "Your request was not accepted."
+      },
+      "cancel": "Cancel my request",
+      "cancelled": "Request cancelled.",
+      "memberTitle": "You are on the team",
+      "memberText": "You are already part of this project.",
+      "box": "Join this project",
+      "boxText": "Offer your help to the project owner.",
+      "button": "Join",
+      "boxRoles_one": "{{count}} open role.",
+      "boxRoles_other": "{{count}} open roles."
+    },
+    "requests": {
+      "title": "Requests received",
+      "empty": "No requests yet.",
+      "general": "General request",
+      "accept": "Accept",
+      "reject": "Decline",
+      "acceptLabel": "Accept {{name}}’s request",
+      "rejectLabel": "Decline {{name}}’s request",
+      "accepted": "Request accepted. The member joins the team.",
+      "rejected": "Request declined."
+    },
+    "updates": {
+      "label": "Post an update",
+      "placeholder": "How is the project going?",
+      "post": "Post",
+      "posted": "Update posted.",
+      "empty": "No updates yet.",
+      "tooShort": "Message too short."
+    },
+    "form": {
+      "title": "Project title",
+      "type": "Project type",
+      "technologiesHint": "Comma-separated: react, node.js, docker.",
+      "description": "Description",
+      "descriptionHint": "Describe the project, its goal and what you are looking for. Markdown allowed.",
+      "github": "GitHub link",
+      "contact": "Contact link",
+      "contactHint": "Where to reach you (https only).",
+      "roles": "Open roles",
+      "rolesHint": "Add the roles you want to fill.",
+      "roleTitle": "Role title",
+      "roleTitlePlaceholder": "e.g. Front-end developer",
+      "roleTech": "Role technologies",
+      "roleTechPlaceholder": "e.g. react, typescript",
+      "removeRole": "Remove this role",
+      "addRole": "Add a role",
+      "busy": "Saving…",
+      "save": "Save",
+      "create": "Create project",
+      "errors": {
+        "title": "Between 10 and 120 characters.",
+        "description": "At least 60 characters.",
+        "url": "Must start with https://",
+        "technologies": "Add at least one technology."
+      }
+    },
+    "new": {
+      "pageTitle": "Propose a project",
+      "lead": "Describe your project and the roles you want to fill.",
+      "created": "Project created."
+    },
+    "edit": {
+      "pageTitle": "Edit project",
+      "lead": "Update your project details.",
+      "saved": "Project updated.",
+      "back": "Back to project",
+      "completed": "This project is closed and can no longer be edited.",
+      "notAllowed": "You cannot edit this project."
+    },
+    "myProjects": {
+      "pageTitle": "My projects",
+      "lead": "The projects you own.",
+      "empty": "You do not own any project yet."
     }
   }
 }

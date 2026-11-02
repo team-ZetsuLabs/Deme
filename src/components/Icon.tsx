@@ -23,7 +23,8 @@ export type IconName =
   | 'clock'
   | 'users'
   | 'share'
-  | 'install';
+  | 'install'
+  | 'projects';
 
 export type IconProps = {
   name: IconName;

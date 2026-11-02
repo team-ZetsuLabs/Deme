@@ -59,3 +59,108 @@ export type CountryLeaderboardEntry = {
   participants: number; // dépôts du pays, évalués ou non
   points: number;
 };
+
+/**
+ * PROJETS (PRJ) : contrat pas encore publié par le back-end.
+ *
+ * Les LECTURES (`GET /projects`, `GET /projects/{id}`) sont alignées sur les réponses
+ * réelles du back déployé. Les ÉCRITURES ci-dessous sont un contrat PROVISOIRE déduit de
+ * `myRequest`, `canEdit`, `canPostUpdate` et des conventions REST : à confirmer avec Salif
+ * avant de passer en `live`. Dès publication, ces types partent vers les alias de types.ts.
+ */
+export type ProjectType = 'STUDY' | 'STARTUP' | 'OPEN_SOURCE';
+export type ProjectStatus = 'OPEN' | 'COMPLETED';
+export type ProjectRoleStatus = 'OPEN' | 'FILLED';
+export type ProjectRequestStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
+
+/** Élément de la liste `GET /projects`. */
+export type ProjectSummary = {
+  id: number;
+  title: string;
+  type: ProjectType;
+  technologies: string[];
+  status: ProjectStatus;
+  owner: AuthorSummary;
+  openRoles: string[];
+  teamSize: number;
+  createdAt: string;
+  lastActivityAt: string;
+};
+
+/** Rôle recherché sur un projet : ouvert, ou pris par un membre. */
+export type ProjectRole = {
+  id: number;
+  title: string;
+  technologies: string[];
+  status: ProjectRoleStatus;
+  member: AuthorSummary | null;
+};
+
+/** Membre de l'équipe d'un projet. */
+export type ProjectTeamMember = {
+  member: AuthorSummary;
+  roleTitle: string | null;
+  owner: boolean;
+  joinedAt: string;
+};
+
+/** Demande du membre connecté pour rejoindre un projet (null s'il n'en a pas fait). */
+export type ProjectRequest = {
+  id: number;
+  roleId: number | null;
+  roleTitle: string | null;
+  message: string;
+  status: ProjectRequestStatus;
+  createdAt: string;
+};
+
+/** Demande reçue par le porteur du projet, avec l'auteur (gestion des demandes). */
+export type ProjectJoinRequest = ProjectRequest & { applicant: AuthorSummary };
+
+/** Mise à jour postée par l'équipe sur le projet (contenu de membre, nettoyé serveur). */
+export type ProjectUpdate = {
+  id: number;
+  bodyMarkdown: string;
+  bodyHtml: string;
+  author: AuthorSummary;
+  createdAt: string;
+};
+
+/** Détail `GET /projects/{id}`. */
+export type ProjectDetail = {
+  id: number;
+  title: string;
+  descriptionMarkdown: string;
+  descriptionHtml: string;
+  type: ProjectType;
+  technologies: string[];
+  githubUrl: string | null;
+  contactUrl: string | null;
+  status: ProjectStatus;
+  owner: AuthorSummary;
+  roles: ProjectRole[];
+  team: ProjectTeamMember[];
+  myRequest: ProjectRequest | null;
+  canEdit: boolean;
+  canPostUpdate: boolean;
+  createdAt: string;
+  updatedAt: string;
+  lastActivityAt: string;
+};
+
+/** Écritures (provisoires). */
+export type ProjectRoleInput = { title: string; technologies: string[] };
+
+export type ProjectInput = {
+  title: string;
+  descriptionMarkdown: string;
+  type: ProjectType;
+  technologies: string[];
+  githubUrl: string | null;
+  contactUrl: string | null;
+  roles: ProjectRoleInput[];
+};
+
+export type JoinProjectRequest = { roleId: number | null; message: string };
+
+export type ProjectUpdateInput = { bodyMarkdown: string };

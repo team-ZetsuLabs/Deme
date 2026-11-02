@@ -1,0 +1,9 @@
+.list {
+  display: grid;
+  gap: var(--s3);
+  list-style: none;
+}
+
+.item {
+  min-width: 0;
+}

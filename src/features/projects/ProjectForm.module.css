@@ -1,0 +1,107 @@
+.alert {
+  margin-bottom: var(--s4);
+  padding: var(--s3);
+  border: 1px solid var(--red);
+  border-radius: var(--r-md);
+  background: var(--red-wash);
+  font-size: var(--fs-md);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--s4);
+}
+
+.fieldset {
+  margin-bottom: var(--s4);
+  padding: 0;
+  border: none;
+}
+
+.legend {
+  margin-bottom: 6px;
+  font-size: var(--fs-md);
+  font-weight: 500;
+}
+
+.radios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1) var(--s4);
+}
+
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: var(--control-h);
+  font-size: var(--fs-md);
+}
+
+.radio input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--green-text);
+}
+
+.rolesHint {
+  margin-bottom: var(--s2);
+  font-size: var(--fs-md);
+  color: var(--text-3);
+}
+
+.roleRow {
+  display: flex;
+  align-items: start;
+  gap: var(--s2);
+  margin-bottom: var(--s2);
+}
+
+.roleInputs {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: var(--s2);
+  flex: 1;
+  min-width: 0;
+}
+
+.remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-h);
+  height: var(--control-h);
+  flex: none;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--text-3);
+}
+
+.remove:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--s2);
+  margin-top: var(--s4);
+}
+
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .roleInputs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .radio {
+    min-height: var(--touch);
+  }
+  .actions > * {
+    width: 100%;
+  }
+}

@@ -17,7 +17,8 @@
     "notifications": "Notifications",
     "applications": "Mes candidatures",
     "communities": "Communautés",
-    "communitiesShort": "Groupes"
+    "communitiesShort": "Groupes",
+    "projects": "Projets"
   },
   "topbar": {
     "search": "Rechercher",
@@ -1401,6 +1402,158 @@
       "HIDDEN": "Masqué",
       "APPEALED": "Contestation en cours",
       "RESTORED": "Rétabli"
+    }
+  },
+  "projects": {
+    "pageTitle": "Projets",
+    "title": "Projets",
+    "lead": "Des projets portés par des membres : rejoignez une équipe ou proposez le vôtre.",
+    "propose": "Proposer un projet",
+    "mine": "Mes projets",
+    "empty": "Aucun projet pour le moment.",
+    "technologies": "Technologies",
+    "updatedAgo": "mis à jour",
+    "completedNotice": "Ce projet est clôturé : il n’accueille plus de nouveaux membres.",
+    "completeDone": "Projet clôturé.",
+    "githubLink": "Voir sur GitHub",
+    "contactLink": "Contacter",
+    "rolesTitle": "Rôles recherchés",
+    "updatesTitle": "Mises à jour",
+    "ownerRole": "Porteur",
+    "contributor": "Membre",
+    "deletedMember": "Utilisateur supprimé",
+    "team_one": "{{count}} membre",
+    "team_other": "{{count}} membres",
+    "openRoles_one": "{{count}} rôle ouvert",
+    "openRoles_other": "{{count}} rôles ouverts",
+    "teamTitle_one": "Équipe — {{count}} membre",
+    "teamTitle_other": "Équipe — {{count}} membres",
+    "types": {
+      "STUDY": "Projet d’étude",
+      "STARTUP": "Startup",
+      "OPEN_SOURCE": "Open source"
+    },
+    "projectStatus": {
+      "OPEN": "Ouvert",
+      "COMPLETED": "Clôturé"
+    },
+    "roleStatus": {
+      "OPEN": "À pourvoir",
+      "FILLED": "Pourvu"
+    },
+    "requestStatus": {
+      "PENDING": "En attente",
+      "ACCEPTED": "Acceptée",
+      "REJECTED": "Refusée"
+    },
+    "filters": {
+      "type": "Type de projet",
+      "tech": "Technologie",
+      "techPlaceholder": "ex. react",
+      "apply": "Filtrer",
+      "types": {
+        "all": "Tous",
+        "STUDY": "Étude",
+        "STARTUP": "Startup",
+        "OPEN_SOURCE": "Open source"
+      }
+    },
+    "owner": {
+      "box": "Votre projet",
+      "edit": "Modifier le projet",
+      "complete": "Clôturer le projet",
+      "all": "Tous mes projets"
+    },
+    "join": {
+      "title": "Rejoindre « {{title}} »",
+      "role": "Rôle visé",
+      "roleHint": "Facultatif : laissez vide pour une proposition générale.",
+      "roleAny": "Pas de rôle précis",
+      "message": "Message de présentation",
+      "messageHint": "Expliquez en quelques mots pourquoi vous voulez rejoindre ce projet.",
+      "messageTooShort": "Au moins {{min}} caractères.",
+      "busy": "Envoi…",
+      "submit": "Envoyer la demande",
+      "sent": "Demande envoyée au porteur du projet.",
+      "sentTitle": "Demande envoyée",
+      "status": {
+        "PENDING": "Votre demande est en attente de réponse.",
+        "ACCEPTED": "Votre demande a été acceptée. Bienvenue dans l’équipe !",
+        "REJECTED": "Votre demande n’a pas été retenue."
+      },
+      "cancel": "Annuler ma demande",
+      "cancelled": "Demande annulée.",
+      "memberTitle": "Vous êtes dans l’équipe",
+      "memberText": "Vous participez déjà à ce projet.",
+      "box": "Rejoindre ce projet",
+      "boxText": "Proposez votre aide au porteur du projet.",
+      "button": "Rejoindre",
+      "boxRoles_one": "{{count}} rôle à pourvoir.",
+      "boxRoles_other": "{{count}} rôles à pourvoir."
+    },
+    "requests": {
+      "title": "Demandes reçues",
+      "empty": "Aucune demande pour le moment.",
+      "general": "Proposition générale",
+      "accept": "Accepter",
+      "reject": "Refuser",
+      "acceptLabel": "Accepter la demande de {{name}}",
+      "rejectLabel": "Refuser la demande de {{name}}",
+      "accepted": "Demande acceptée. Le membre rejoint l’équipe.",
+      "rejected": "Demande refusée."
+    },
+    "updates": {
+      "label": "Poster une mise à jour",
+      "placeholder": "Où en est le projet ?",
+      "post": "Publier",
+      "posted": "Mise à jour publiée.",
+      "empty": "Aucune mise à jour pour l’instant.",
+      "tooShort": "Message trop court."
+    },
+    "form": {
+      "title": "Titre du projet",
+      "type": "Type de projet",
+      "technologiesHint": "Séparées par des virgules : react, node.js, docker.",
+      "description": "Description",
+      "descriptionHint": "Présentez le projet, son objectif et ce que vous cherchez. Markdown accepté.",
+      "github": "Lien GitHub",
+      "contact": "Lien de contact",
+      "contactHint": "Adresse pour vous joindre (https uniquement).",
+      "roles": "Rôles recherchés",
+      "rolesHint": "Ajoutez les rôles que vous cherchez à pourvoir.",
+      "roleTitle": "Intitulé du rôle",
+      "roleTitlePlaceholder": "ex. Développeur front-end",
+      "roleTech": "Technologies du rôle",
+      "roleTechPlaceholder": "ex. react, typescript",
+      "removeRole": "Retirer ce rôle",
+      "addRole": "Ajouter un rôle",
+      "busy": "Enregistrement…",
+      "save": "Enregistrer",
+      "create": "Créer le projet",
+      "errors": {
+        "title": "Entre 10 et 120 caractères.",
+        "description": "Au moins 60 caractères.",
+        "url": "Doit commencer par https://",
+        "technologies": "Indiquez au moins une technologie."
+      }
+    },
+    "new": {
+      "pageTitle": "Proposer un projet",
+      "lead": "Décrivez votre projet et les rôles que vous cherchez à pourvoir.",
+      "created": "Projet créé."
+    },
+    "edit": {
+      "pageTitle": "Modifier le projet",
+      "lead": "Mettez à jour les informations de votre projet.",
+      "saved": "Projet mis à jour.",
+      "back": "Retour au projet",
+      "completed": "Ce projet est clôturé et ne peut plus être modifié.",
+      "notAllowed": "Vous ne pouvez pas modifier ce projet."
+    },
+    "myProjects": {
+      "pageTitle": "Mes projets",
+      "lead": "Les projets que vous portez.",
+      "empty": "Vous ne portez aucun projet pour l’instant."
     }
   }
 }

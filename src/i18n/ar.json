@@ -17,7 +17,8 @@
     "notifications": "الإشعارات",
     "applications": "طلباتي",
     "communities": "المجتمعات",
-    "communitiesShort": "المجموعات"
+    "communitiesShort": "المجموعات",
+    "projects": "المشاريع"
   },
   "topbar": {
     "search": "بحث",
@@ -1489,6 +1490,174 @@
       "HIDDEN": "مُخفى",
       "APPEALED": "اعتراض قيد النظر",
       "RESTORED": "أُعيد"
+    }
+  },
+  "projects": {
+    "pageTitle": "المشاريع",
+    "title": "المشاريع",
+    "lead": "مشاريع يقودها الأعضاء: انضم إلى فريق أو اقترح مشروعك.",
+    "propose": "اقتراح مشروع",
+    "mine": "مشاريعي",
+    "empty": "لا توجد مشاريع بعد.",
+    "technologies": "التقنيات",
+    "updatedAgo": "آخر تحديث",
+    "completedNotice": "هذا المشروع مغلق: لم يعد يستقبل أعضاء جددًا.",
+    "completeDone": "تم إغلاق المشروع.",
+    "githubLink": "عرض على GitHub",
+    "contactLink": "تواصل",
+    "rolesTitle": "الأدوار المطلوبة",
+    "updatesTitle": "التحديثات",
+    "ownerRole": "المسؤول",
+    "contributor": "عضو",
+    "deletedMember": "مستخدم محذوف",
+    "team_zero": "لا أعضاء",
+    "team_one": "عضو واحد",
+    "team_two": "عضوان",
+    "team_few": "{{count}} أعضاء",
+    "team_many": "{{count}} عضوًا",
+    "team_other": "{{count}} عضو",
+    "openRoles_zero": "لا أدوار مفتوحة",
+    "openRoles_one": "دور واحد مفتوح",
+    "openRoles_two": "دوران مفتوحان",
+    "openRoles_few": "{{count}} أدوار مفتوحة",
+    "openRoles_many": "{{count}} دورًا مفتوحًا",
+    "openRoles_other": "{{count}} دور مفتوح",
+    "teamTitle_zero": "الفريق — لا أعضاء",
+    "teamTitle_one": "الفريق — عضو واحد",
+    "teamTitle_two": "الفريق — عضوان",
+    "teamTitle_few": "الفريق — {{count}} أعضاء",
+    "teamTitle_many": "الفريق — {{count}} عضوًا",
+    "teamTitle_other": "الفريق — {{count}} عضو",
+    "types": {
+      "STUDY": "مشروع دراسي",
+      "STARTUP": "شركة ناشئة",
+      "OPEN_SOURCE": "مفتوح المصدر"
+    },
+    "projectStatus": {
+      "OPEN": "مفتوح",
+      "COMPLETED": "مغلق"
+    },
+    "roleStatus": {
+      "OPEN": "شاغر",
+      "FILLED": "مشغول"
+    },
+    "requestStatus": {
+      "PENDING": "قيد الانتظار",
+      "ACCEPTED": "مقبول",
+      "REJECTED": "مرفوض"
+    },
+    "filters": {
+      "type": "نوع المشروع",
+      "tech": "التقنية",
+      "techPlaceholder": "مثال: react",
+      "apply": "تصفية",
+      "types": {
+        "all": "الكل",
+        "STUDY": "دراسي",
+        "STARTUP": "ناشئة",
+        "OPEN_SOURCE": "مفتوح المصدر"
+      }
+    },
+    "owner": {
+      "box": "مشروعك",
+      "edit": "تعديل المشروع",
+      "complete": "إغلاق المشروع",
+      "all": "كل مشاريعي"
+    },
+    "join": {
+      "title": "الانضمام إلى «{{title}}»",
+      "role": "الدور المطلوب",
+      "roleHint": "اختياري: اتركه فارغًا لطلب عام.",
+      "roleAny": "بدون دور محدد",
+      "message": "رسالة تعريفية",
+      "messageHint": "اشرح بإيجاز سبب رغبتك في الانضمام إلى هذا المشروع.",
+      "messageTooShort": "{{min}} حرفًا على الأقل.",
+      "busy": "جارٍ الإرسال…",
+      "submit": "إرسال الطلب",
+      "sent": "تم إرسال الطلب إلى مسؤول المشروع.",
+      "sentTitle": "تم إرسال الطلب",
+      "status": {
+        "PENDING": "طلبك قيد الانتظار.",
+        "ACCEPTED": "تم قبول طلبك. مرحبًا بك في الفريق!",
+        "REJECTED": "لم يُقبل طلبك."
+      },
+      "cancel": "إلغاء طلبي",
+      "cancelled": "تم إلغاء الطلب.",
+      "memberTitle": "أنت ضمن الفريق",
+      "memberText": "أنت تشارك بالفعل في هذا المشروع.",
+      "box": "الانضمام إلى هذا المشروع",
+      "boxText": "اعرض مساعدتك على مسؤول المشروع.",
+      "button": "انضمام",
+      "boxRoles_zero": "لا أدوار شاغرة.",
+      "boxRoles_one": "دور واحد شاغر.",
+      "boxRoles_two": "دوران شاغران.",
+      "boxRoles_few": "{{count}} أدوار شاغرة.",
+      "boxRoles_many": "{{count}} دورًا شاغرًا.",
+      "boxRoles_other": "{{count}} دور شاغر."
+    },
+    "requests": {
+      "title": "الطلبات الواردة",
+      "empty": "لا توجد طلبات بعد.",
+      "general": "طلب عام",
+      "accept": "قبول",
+      "reject": "رفض",
+      "acceptLabel": "قبول طلب {{name}}",
+      "rejectLabel": "رفض طلب {{name}}",
+      "accepted": "تم قبول الطلب. ينضم العضو إلى الفريق.",
+      "rejected": "تم رفض الطلب."
+    },
+    "updates": {
+      "label": "نشر تحديث",
+      "placeholder": "ما مستجدات المشروع؟",
+      "post": "نشر",
+      "posted": "تم نشر التحديث.",
+      "empty": "لا توجد تحديثات بعد.",
+      "tooShort": "الرسالة قصيرة جدًا."
+    },
+    "form": {
+      "title": "عنوان المشروع",
+      "type": "نوع المشروع",
+      "technologiesHint": "مفصولة بفواصل: react، node.js، docker.",
+      "description": "الوصف",
+      "descriptionHint": "عرّف بالمشروع وهدفه وما تبحث عنه. تُقبل صيغة Markdown.",
+      "github": "رابط GitHub",
+      "contact": "رابط التواصل",
+      "contactHint": "عنوان للتواصل معك (https فقط).",
+      "roles": "الأدوار المطلوبة",
+      "rolesHint": "أضف الأدوار التي تريد شغلها.",
+      "roleTitle": "عنوان الدور",
+      "roleTitlePlaceholder": "مثال: مطوّر واجهة أمامية",
+      "roleTech": "تقنيات الدور",
+      "roleTechPlaceholder": "مثال: react، typescript",
+      "removeRole": "إزالة هذا الدور",
+      "addRole": "إضافة دور",
+      "busy": "جارٍ الحفظ…",
+      "save": "حفظ",
+      "create": "إنشاء المشروع",
+      "errors": {
+        "title": "بين 10 و120 حرفًا.",
+        "description": "60 حرفًا على الأقل.",
+        "url": "يجب أن يبدأ بـ https://",
+        "technologies": "أضف تقنية واحدة على الأقل."
+      }
+    },
+    "new": {
+      "pageTitle": "اقتراح مشروع",
+      "lead": "صِف مشروعك والأدوار التي تريد شغلها.",
+      "created": "تم إنشاء المشروع."
+    },
+    "edit": {
+      "pageTitle": "تعديل المشروع",
+      "lead": "حدّث معلومات مشروعك.",
+      "saved": "تم تحديث المشروع.",
+      "back": "العودة إلى المشروع",
+      "completed": "هذا المشروع مغلق ولا يمكن تعديله.",
+      "notAllowed": "لا يمكنك تعديل هذا المشروع."
+    },
+    "myProjects": {
+      "pageTitle": "مشاريعي",
+      "lead": "المشاريع التي تقودها.",
+      "empty": "لا تقود أي مشروع بعد."
     }
   }
 }

@@ -51,6 +51,10 @@ export function IconSprite() {
           d="M5.5 3h7v4a3.5 3.5 0 0 1-7 0V3ZM9 10.5V13m-3 2h6M5.5 4.5H3a2.5 2.5 0 0 0 2.5 3M12.5 4.5H15a2.5 2.5 0 0 1-2.5 3"
         />
       </symbol>
+      <symbol id="i-projects" viewBox="0 0 18 18">
+        <path {...round} d="M9 2.5 15.5 6 9 9.5 2.5 6 9 2.5Z" />
+        <path {...round} d="m2.5 9 6.5 3.5L15.5 9M2.5 12l6.5 3.5L15.5 12" />
+      </symbol>
       <symbol id="i-user" viewBox="0 0 18 18">
         <circle {...line} cx="9" cy="6" r="3" />
         <path {...round} d="M3 15.5c.8-2.8 3.2-4.5 6-4.5s5.2 1.7 6 4.5" />

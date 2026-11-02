@@ -1,0 +1,41 @@
+{
+  "items": [
+    {
+      "id": 7,
+      "roleId": 1,
+      "roleTitle": "Développeur front-end React",
+      "message": "Bonjour, je veux bien aider sur le front React.",
+      "status": "PENDING",
+      "createdAt": "2026-11-02T11:00:00.000000Z",
+      "applicant": {
+        "username": "amadou_diallo",
+        "displayName": "Amadou Diallo",
+        "avatarUrl": null,
+        "countryCode": "ML",
+        "reputation": 34,
+        "level": "MEMBER",
+        "deleted": false
+      }
+    },
+    {
+      "id": 8,
+      "roleId": null,
+      "roleTitle": null,
+      "message": "Je peux aider sur la doc et les tests si besoin.",
+      "status": "PENDING",
+      "createdAt": "2026-11-01T18:20:00.000000Z",
+      "applicant": {
+        "username": "nadia_cherif",
+        "displayName": "Nadia Chérif",
+        "avatarUrl": null,
+        "countryCode": "DZ",
+        "reputation": 72,
+        "level": "MEMBER",
+        "deleted": false
+      }
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 2
+}
