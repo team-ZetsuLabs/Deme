@@ -32,7 +32,7 @@ export default function HomePage() {
   const stats = useApiQuery(() => statsApi.get(), []);
   usePageTitle(t('home.pageTitle'));
 
-  if (status === 'authenticated') return <Navigate to="/questions" replace />;
+  if (status === 'authenticated') return <Navigate to="/feed" replace />;
 
   return (
     <div className={`${styles.page} page-enter`}>
@@ -43,7 +43,7 @@ export default function HomePage() {
             <h1 className={styles.title}>{t('home.title')}</h1>
             <p className={styles.lead}>{t('home.lead')}</p>
             <div className={styles.cta}>
-              <OAuthButtons mode="register" onSignedIn={() => navigate('/questions')} />
+              <OAuthButtons mode="register" onSignedIn={() => navigate('/feed')} />
               <div className={styles.ctaLinks}>
                 <Link to="/register" className={buttonClass({ variant: 'ghost' })}>
                   {t('home.cta.email')}

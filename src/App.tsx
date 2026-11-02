@@ -14,6 +14,7 @@ import { ThemeProvider } from './theme/ThemeProvider';
 
 // Chaque page est chargée à la demande pour rester léger en 3G.
 const HomePage = lazy(() => import('./pages/home/HomePage'));
+const FeedPage = lazy(() => import('./pages/feed/FeedPage'));
 const AuthPage = lazy(() => import('./pages/auth/AuthPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/forgot-password/ForgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('./pages/reset-password/ResetPasswordPage'));
@@ -76,6 +77,14 @@ export function App() {
                           </OnboardingGuard>
                         }
                       >
+                        <Route
+                          path="feed"
+                          element={
+                            <RequireAuth>
+                              <FeedPage />
+                            </RequireAuth>
+                          }
+                        />
                         <Route path="questions" element={<QuestionsPage />} />
                         <Route
                           path="questions/ask"

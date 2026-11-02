@@ -1555,5 +1555,28 @@
       "lead": "Les projets que vous portez.",
       "empty": "Vous ne portez aucun projet pour l’instant."
     }
+  },
+  "feed": {
+    "pageTitle": "Accueil",
+    "title": "Accueil",
+    "greeting": "Bonjour {{name}}",
+    "lead": "Un aperçu de tout ce qui bouge sur Zetsu.",
+    "seeMore": "Voir les {{count}}",
+    "sections": {
+      "challenge": "Défi en cours",
+      "challengeGo": "Voir le défi",
+      "questions": "Questions récentes",
+      "allQuestions": "Toutes les questions",
+      "emptyQuestions": "Aucune question pour le moment.",
+      "jobs": "Offres récentes",
+      "allJobs": "Toutes les offres",
+      "emptyJobs": "Aucune offre pour le moment.",
+      "missions": "Missions ouvertes",
+      "allMissions": "Toutes les missions",
+      "emptyMissions": "Aucune mission pour le moment.",
+      "projects": "Projets qui recrutent",
+      "allProjects": "Tous les projets",
+      "emptyProjects": "Aucun projet pour le moment."
+    }
   }
 }

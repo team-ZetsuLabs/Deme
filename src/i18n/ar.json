@@ -1659,5 +1659,28 @@
       "lead": "المشاريع التي تقودها.",
       "empty": "لا تقود أي مشروع بعد."
     }
+  },
+  "feed": {
+    "pageTitle": "الرئيسية",
+    "title": "الرئيسية",
+    "greeting": "مرحبًا {{name}}",
+    "lead": "لمحة عن كل ما يجري على زيتسو.",
+    "seeMore": "عرض الكل ({{count}})",
+    "sections": {
+      "challenge": "تحدٍّ جارٍ",
+      "challengeGo": "عرض التحدي",
+      "questions": "أحدث الأسئلة",
+      "allQuestions": "كل الأسئلة",
+      "emptyQuestions": "لا أسئلة بعد.",
+      "jobs": "أحدث العروض",
+      "allJobs": "كل العروض",
+      "emptyJobs": "لا عروض بعد.",
+      "missions": "المهام المفتوحة",
+      "allMissions": "كل المهام",
+      "emptyMissions": "لا مهام بعد.",
+      "projects": "مشاريع تبحث عن أعضاء",
+      "allProjects": "كل المشاريع",
+      "emptyProjects": "لا مشاريع بعد."
+    }
   }
 }

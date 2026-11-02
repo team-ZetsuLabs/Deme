@@ -1555,5 +1555,28 @@
       "lead": "Os projetos que lidera.",
       "empty": "Ainda não lidera nenhum projeto."
     }
+  },
+  "feed": {
+    "pageTitle": "Início",
+    "title": "Início",
+    "greeting": "Olá {{name}}",
+    "lead": "Uma vista de tudo o que se passa no Zetsu.",
+    "seeMore": "Ver as {{count}}",
+    "sections": {
+      "challenge": "Desafio em curso",
+      "challengeGo": "Ver o desafio",
+      "questions": "Perguntas recentes",
+      "allQuestions": "Todas as perguntas",
+      "emptyQuestions": "Ainda não há perguntas.",
+      "jobs": "Ofertas recentes",
+      "allJobs": "Todas as ofertas",
+      "emptyJobs": "Ainda não há ofertas.",
+      "missions": "Missões em aberto",
+      "allMissions": "Todas as missões",
+      "emptyMissions": "Ainda não há missões.",
+      "projects": "Projetos a recrutar",
+      "allProjects": "Todos os projetos",
+      "emptyProjects": "Ainda não há projetos."
+    }
   }
 }

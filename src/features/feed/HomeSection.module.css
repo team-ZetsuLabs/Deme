@@ -1,0 +1,42 @@
+.section {
+  margin-bottom: var(--s5);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s3);
+  margin-bottom: var(--s2);
+}
+
+.title {
+  font-size: var(--fs-base);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.more {
+  font-size: var(--fs-md);
+  color: var(--green-text);
+  white-space: nowrap;
+}
+
+.panel {
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+
+.empty {
+  padding: var(--s4) var(--s5);
+  font-size: var(--fs-md);
+  color: var(--text-3);
+}
+
+.footLink {
+  display: inline-block;
+  margin-top: var(--s2);
+  font-size: var(--fs-md);
+}

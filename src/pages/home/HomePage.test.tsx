@@ -19,7 +19,7 @@ const renderHome = () =>
           <ToastProvider>
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/questions" element={<h1>Fil des questions</h1>} />
+              <Route path="/feed" element={<h1>Mon fil</h1>} />
             </Routes>
           </ToastProvider>
         </SessionProvider>
@@ -65,9 +65,9 @@ describe('HomePage', () => {
     expect(screen.getByText('dès 1 500 points')).toBeTruthy();
   });
 
-  it('envoie un membre connecté vers les questions', async () => {
+  it('envoie un membre connecté vers son fil', async () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(demoMe());
     renderHome();
-    expect(await screen.findByRole('heading', { name: 'Fil des questions' })).toBeTruthy();
+    expect(await screen.findByRole('heading', { name: 'Mon fil' })).toBeTruthy();
   });
 });

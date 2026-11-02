@@ -17,7 +17,7 @@ function useReturnTo(): string {
   const from = (state as { from?: unknown } | null)?.from;
   return typeof from === 'string' && from.startsWith('/') && !from.startsWith('//')
     ? from
-    : '/questions';
+    : '/feed';
 }
 
 /** Connexion (AUTH-3) et inscription (AUTH-1), avec GitHub et Google (AUTH-2). */
