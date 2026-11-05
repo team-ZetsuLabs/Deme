@@ -10,17 +10,33 @@ export default defineConfig(({ mode }) => ({
       registerType: 'autoUpdate',
       // Enregistrement du service worker après l'analyse de la page : il ne bloque plus l'affichage.
       injectRegister: 'script-defer',
-      includeAssets: ['favicon.svg', 'theme-init.js', 'flags/*.svg'],
+      includeAssets: ['favicon.svg', 'theme-init.js', 'flags/*.svg', 'icons/*.png'],
       manifest: {
-        name: 'Zetsu',
-        short_name: 'Zetsu',
+        name: 'Dɛmɛ',
+        short_name: 'Dɛmɛ',
         description: "Plateforme d'entraide entre développeurs africains",
         lang: 'fr',
         start_url: '/',
         display: 'standalone',
         background_color: '#f6f7f6',
         theme_color: '#f6f7f6',
-        icons: [{ src: '/favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }],
+        icons: [
+          { src: '/favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          {
+            src: '/icons/icon-maskable-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+          {
+            src: '/icons/icon-maskable-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+        ],
       },
       workbox: {
         navigateFallback: '/index.html',

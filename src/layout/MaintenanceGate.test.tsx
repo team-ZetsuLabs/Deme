@@ -50,7 +50,7 @@ describe('Maintenance', () => {
         .get('/questions')
         .catch(() => undefined);
     });
-    expect(screen.getByRole('heading', { name: 'Zetsu est en maintenance' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Dɛmɛ est en maintenance' })).toBeTruthy();
     expect(screen.queryByText('Contenu de la page')).toBeNull();
   });
 

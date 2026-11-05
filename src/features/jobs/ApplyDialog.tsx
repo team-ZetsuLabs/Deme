@@ -20,7 +20,7 @@ export type ApplyDialogProps = {
   onApplied: (application: MyApplication) => void;
 };
 
-/** Candidature (JOB-3) : profil Zetsu transmis, message de 40 caractères, CV PDF facultatif. */
+/** Candidature (JOB-3) : profil Dɛmɛ transmis, message de 40 caractères, CV PDF facultatif. */
 export function ApplyDialog({ open, jobId, company, user, onClose, onApplied }: ApplyDialogProps) {
   const { t, i18n } = useTranslation();
   const [message, setMessage] = useState('');

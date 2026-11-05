@@ -2,6 +2,6 @@ import { useEffect } from 'react';
 
 export function usePageTitle(title: string) {
   useEffect(() => {
-    document.title = `${title} · Zetsu`;
+    document.title = `${title} · Dɛmɛ`;
   }, [title]);
 }

@@ -57,7 +57,7 @@ export const jobsApi = {
   create: (body: JobRequest) => api.post<JobDetail>('/jobs', body),
   /** Modifier son offre : elle repasse « En attente » pour une nouvelle validation. 409 JOB_CLOSED. */
   update: (id: number, body: JobRequest) => api.put<JobDetail>(`/jobs/${id}`, body),
-  /** Candidature (JOB-3) : le profil Zetsu est joint par le serveur, le CV PDF est facultatif. */
+  /** Candidature (JOB-3) : le profil Dɛmɛ est joint par le serveur, le CV PDF est facultatif. */
   apply: (id: number, body: ApplyRequest) => {
     const form = new FormData();
     form.append('message', body.message);

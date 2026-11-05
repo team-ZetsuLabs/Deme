@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "Zetsu",
-    "home": "Zetsu, home",
+    "name": "Dɛmɛ",
+    "home": "Dɛmɛ, home",
     "skipToContent": "Skip to content"
   },
   "nav": {
@@ -73,11 +73,11 @@
     "VALIDATION_ERROR": "Some fields need to be fixed.",
     "INVALID_CREDENTIALS": "Wrong email or password.",
     "TOO_MANY_ATTEMPTS": "Too many attempts. Try again in 15 minutes.",
-    "ACCOUNT_SUSPENDED": "This account is suspended. Contact the Zetsu team if you think this is a mistake.",
+    "ACCOUNT_SUSPENDED": "This account is suspended. Contact the Dɛmɛ team if you think this is a mistake.",
     "ALREADY_REPORTED": "You already reported this content.",
     "ALREADY_SUBMITTED": "You already submitted a repository for this challenge.",
     "ALREADY_APPEALED": "You have already appealed this decision.",
-    "MAINTENANCE": "Zetsu is under maintenance. Please try again in a few minutes.",
+    "MAINTENANCE": "Dɛmɛ is under maintenance. Please try again in a few minutes.",
     "EMAIL_TAKEN": "This address cannot be used. If you already have an account, sign in.",
     "LOGIN_LOCKED": "Too many failed attempts. Sign-in is blocked for 15 minutes.",
     "RATE_LIMITED": "Too many actions in a short time. Please wait a moment and try again.",
@@ -103,7 +103,7 @@
     "ACTION_NOT_ALLOWED": "This action is not allowed.",
     "ALREADY_APPLIED": "You have already applied.",
     "ALREADY_LINKED": "This account is already linked.",
-    "ALREADY_LINKED_ELSEWHERE": "This account already belongs to another Zetsu member.",
+    "ALREADY_LINKED_ELSEWHERE": "This account already belongs to another Dɛmɛ member.",
     "APPLICATION_NOT_FOUND": "Application not found.",
     "CANNOT_APPLY_OWN": "You cannot apply to your own listing.",
     "CANNOT_MODERATE_OWN": "You cannot moderate your own content.",
@@ -215,7 +215,7 @@
       "submit": "Send the link",
       "busy": "Sending",
       "sentTitle": "Check your inbox",
-      "sentText": "If a Zetsu account exists for {{email}}, a link has just been sent there. Remember to check your spam folder."
+      "sentText": "If a Dɛmɛ account exists for {{email}}, a link has just been sent there. Remember to check your spam folder."
     },
     "reset": {
       "pageTitle": "New password",
@@ -434,12 +434,12 @@
   },
   "maintenance": {
     "code": "Maintenance",
-    "title": "Zetsu is under maintenance",
+    "title": "Dɛmɛ is under maintenance",
     "text": "We are improving the platform and will be back in a few minutes. Your questions and answers are safe."
   },
   "welcome": {
     "pageTitle": "Welcome",
-    "title": "Welcome to Zetsu, {{name}}",
+    "title": "Welcome to Dɛmɛ, {{name}}",
     "lead": "Three details to suggest questions, jobs and gigs that fit you. You can change them later in your settings.",
     "stack": {
       "legend": "Your stack",
@@ -492,17 +492,17 @@
     "onlyYou": "Only you can see it.",
     "appeal": "Appeal the decision",
     "rules": "Read the rules",
-    "pending": "Appeal sent: the Zetsu team is reviewing it.",
+    "pending": "Appeal sent: the Dɛmɛ team is reviewing it.",
     "rejected": "The team reviewed your appeal and upheld the decision.",
     "dialogTitle": "Appeal the decision",
-    "dialogLead": "Your appeal is reviewed by the Zetsu team, not by the Referent who made the decision. Explain why this content follows the rules.",
+    "dialogLead": "Your appeal is reviewed by the Dɛmɛ team, not by the Referent who made the decision. Explain why this content follows the rules.",
     "message": "Your explanation",
     "messageHint": "Between {{min}} and {{max}} characters.",
     "messageLength": "Please write at least {{min}} characters.",
     "submit": "Send the appeal",
     "busy": "Sending",
     "sent": "Appeal sent. You will be notified of the decision.",
-    "byTeam": "The Zetsu team hid this content.",
+    "byTeam": "The Dɛmɛ team hid this content.",
     "note": "Reason: {{note}}."
   },
   "profile": {
@@ -703,7 +703,7 @@
     "emptyUnread": "You are all caught up."
   },
   "home": {
-    "pageTitle": "Zetsu, where African developers help each other",
+    "pageTitle": "Dɛmɛ, where African developers help each other",
     "title": "Where African developers help each other",
     "lead": "Ask questions with your context: country, mobile money operator, network quality. Answer, find gigs between peers and get your work recognised through a verifiable reputation.",
     "cta": {
@@ -788,7 +788,7 @@
   },
   "footer": {
     "label": "Site links",
-    "about": "Zetsu, by Zetsu Labs for CADev 2026.",
+    "about": "Dɛmɛ, by Dɛmɛ Labs for CADev 2026.",
     "rules": "Community rules",
     "terms": "Terms of use",
     "privacy": "Privacy"
@@ -800,10 +800,10 @@
     "contact": "A question about this document? Write to us:",
     "rules": {
       "title": "Community rules",
-      "intro": "Zetsu is made by developers, for developers. These rules keep the platform useful and respectful. Referents and the team rely on them to moderate.",
+      "intro": "Dɛmɛ is made by developers, for developers. These rules keep the platform useful and respectful. Referents and the team rely on them to moderate.",
       "sections": [
         {
-          "title": "The spirit of Zetsu",
+          "title": "The spirit of Dɛmɛ",
           "paragraphs": [
             "People come here to learn and to help. Every question deserves a serious answer, whatever the level of the person asking.",
             "Criticise the code, never the person. A curt answer discourages more than it helps."
@@ -843,7 +843,7 @@
           "title": "Reports and moderation",
           "paragraphs": [
             "From the Member level, you can report content that breaks these rules. After 5 reports from different members, it is hidden until a decision is made. Its author can still see it.",
-            "Referents handle reports: they dismiss or hide the content. Every decision is recorded, and the author can appeal to the Zetsu team, which decides as a last resort.",
+            "Referents handle reports: they dismiss or hide the content. Every decision is recorded, and the author can appeal to the Dɛmɛ team, which decides as a last resort.",
             "In case of repeated abuse, the team can warn and then suspend an account."
           ]
         },
@@ -851,19 +851,19 @@
           "title": "Jobs and gigs",
           "paragraphs": [
             "Company job offers are checked by the team before they are published. Never pay to apply for a job or to get a gig.",
-            "Money for a gig is exchanged outside Zetsu, between members. Report any suspicious request."
+            "Money for a gig is exchanged outside Dɛmɛ, between members. Report any suspicious request."
           ]
         }
       ]
     },
     "terms": {
       "title": "Terms of use",
-      "intro": "These terms apply to anyone who uses Zetsu. By creating an account, you accept them, along with the community rules.",
+      "intro": "These terms apply to anyone who uses Dɛmɛ. By creating an account, you accept them, along with the community rules.",
       "sections": [
         {
           "title": "The service",
           "paragraphs": [
-            "Zetsu is an exchange platform for developers: questions and answers, job offers, gigs between peers, projects, challenges and reputation. It is built by the Zetsu Labs team for CADev 2026."
+            "Dɛmɛ is an exchange platform for developers: questions and answers, job offers, gigs between peers, projects, challenges and reputation. It is built by the Dɛmɛ Labs team for CADev 2026."
           ]
         },
         {
@@ -876,14 +876,14 @@
         {
           "title": "Your content",
           "paragraphs": [
-            "You remain the author of your questions, answers and projects. You allow Zetsu to display them, adapt them for mobile reading and keep them anonymously if you delete your account.",
+            "You remain the author of your questions, answers and projects. You allow Dɛmɛ to display them, adapt them for mobile reading and keep them anonymously if you delete your account.",
             "Only post content you have the right to share, with no third-party personal data and no secrets."
           ]
         },
         {
           "title": "Jobs and gigs",
           "paragraphs": [
-            "Zetsu connects members and companies. Zetsu is not a party to any employment or gig contract, and handles no payment.",
+            "Dɛmɛ connects members and companies. Dɛmɛ is not a party to any employment or gig contract, and handles no payment.",
             "Offers are checked before publication, but stay alert and report any doubtful offer."
           ]
         },
@@ -909,7 +909,7 @@
     },
     "privacy": {
       "title": "Privacy",
-      "intro": "Here is the data Zetsu collects, what we do with it and how you stay in control.",
+      "intro": "Here is the data Dɛmɛ collects, what we do with it and how you stay in control.",
       "sections": [
         {
           "title": "Data we collect",
@@ -929,7 +929,7 @@
         {
           "title": "What we do not do",
           "paragraphs": [
-            "We do not sell your data and show no advertising. There is no advertising tracker on Zetsu.",
+            "We do not sell your data and show no advertising. There is no advertising tracker on Dɛmɛ.",
             "Your theme and language are stored in your browser, not on our servers."
           ]
         },
@@ -955,7 +955,7 @@
           "title": "Your rights",
           "paragraphs": [
             "You can view and correct your information in your settings, and delete your account at any time. For any other request to access, correct or object, write to the team.",
-            "Zetsu applies the Burkina Faso law on personal data protection. You can also contact the Commission de l’informatique et des libertés (CIL)."
+            "Dɛmɛ applies the Burkina Faso law on personal data protection. You can also contact the Commission de l’informatique et des libertés (CIL)."
           ]
         }
       ]
@@ -971,7 +971,7 @@
     "empty": "No job matches these filters yet.",
     "published": "Posted",
     "technologies": "Technologies",
-    "pendingNotice": "This offer is waiting for review by the Zetsu team. Only you can see it.",
+    "pendingNotice": "This offer is waiting for review by the Dɛmɛ team. Only you can see it.",
     "contract": {
       "PERMANENT": "Permanent",
       "REMOTE": "Remote",
@@ -999,7 +999,7 @@
       "apply": "Filter"
     },
     "applyBox": {
-      "title": "Apply with your Zetsu profile",
+      "title": "Apply with your Dɛmɛ profile",
       "text": "Your reputation, answers and challenges are sent with your message.",
       "button": "Apply"
     },
@@ -1033,7 +1033,7 @@
     },
     "new": {
       "pageTitle": "Post a job",
-      "lead": "Describe the position. The Zetsu team checks every offer before publishing it, usually within 24 hours.",
+      "lead": "Describe the position. The Dɛmɛ team checks every offer before publishing it, usually within 24 hours.",
       "title": "Job title",
       "company": "Company",
       "website": "Company website",
@@ -1055,7 +1055,7 @@
         "technologies": "Enter at least one technology.",
         "description": "Describe the position in at least 100 characters."
       },
-      "recruiterOnly": "Posting a job is for recruiter accounts. Write to the Zetsu team to have your company verified.",
+      "recruiterOnly": "Posting a job is for recruiter accounts. Write to the Dɛmɛ team to have your company verified.",
       "backToJobs": "See jobs"
     },
     "subnav": {
@@ -1069,8 +1069,8 @@
       "REJECTED": "Rejected",
       "CLOSED": "Closed"
     },
-    "rejectedNotice": "The Zetsu team did not approve this job.",
-    "rejectedNoticeReason": "The Zetsu team did not approve this job: {{reason}}",
+    "rejectedNotice": "The Dɛmɛ team did not approve this job.",
+    "rejectedNoticeReason": "The Dɛmɛ team did not approve this job: {{reason}}",
     "closedNotice": "This job is closed: it no longer accepts applications.",
     "owner": {
       "title": "Your job",
@@ -1102,7 +1102,7 @@
     },
     "edit": {
       "pageTitle": "Edit the job",
-      "lead": "Fix what needs fixing. The Zetsu team will review the job again before republishing it.",
+      "lead": "Fix what needs fixing. The Dɛmɛ team will review the job again before republishing it.",
       "notice": "After editing, the job goes back to « Pending » until it is approved again.",
       "submit": "Save and send for review",
       "saved": "Job updated, pending review",
@@ -1147,7 +1147,7 @@
     "offerCount_one": "{{count}} proposal",
     "offerCount_other": "{{count}} proposals",
     "yours": "You posted this gig. Proposals you receive are listed on the page.",
-    "paymentNotice": "Zetsu handles no payment. Agree directly with each other, and never pay to get a gig.",
+    "paymentNotice": "Dɛmɛ handles no payment. Agree directly with each other, and never pay to get a gig.",
     "kind": {
       "TROUBLESHOOTING": "Fix",
       "INTEGRATION": "Integration",
@@ -1200,7 +1200,7 @@
       "description": "Description",
       "descriptionHint": "The context, what is expected and how you will know it is done. Markdown accepted.",
       "budget": "Indicative budget",
-      "budgetHint": "Indicative amount: no payment goes through Zetsu.",
+      "budgetHint": "Indicative amount: no payment goes through Dɛmɛ.",
       "currency": "Currency",
       "delay": "Desired timeline (days)",
       "delayHint": "Between 1 and {{max}} days.",
@@ -1333,13 +1333,13 @@
     "topMembers": "Most helpful this month",
     "nobody": "Nobody yet.",
     "noRules": "No specific rule: the general rules are enough.",
-    "generalRules": "The general Zetsu rules also apply.",
+    "generalRules": "The general Dɛmɛ rules also apply.",
     "rulesLink": "Read the rules",
     "propose": {
       "button": "Propose a community",
       "note": "Referents (1,500 points) can propose a community, then reviewed by the team.",
       "pageTitle": "Propose a community",
-      "lead": "Your proposal is reviewed by the Zetsu team, like a job offer. First check that a similar community does not already exist.",
+      "lead": "Your proposal is reviewed by the Dɛmɛ team, like a job offer. First check that a similar community does not already exist.",
       "referentsOnly": "Only Referents (1,500 reputation points) can propose a community. Meanwhile, join the existing ones and help their members.",
       "back": "See communities",
       "kind": "Community type",
@@ -1351,7 +1351,7 @@
       "description": "Description",
       "descriptionHint": "Who it is for, and what it is about. 30 to 200 characters.",
       "rules": "Specific rules",
-      "rulesHint": "One rule per line, 5 at most. The general Zetsu rules already apply.",
+      "rulesHint": "One rule per line, 5 at most. The general Dɛmɛ rules already apply.",
       "submit": "Send the proposal",
       "busy": "Sending",
       "sent": "Proposal sent. The team will answer with a notification.",
@@ -1386,7 +1386,7 @@
   },
   "myModeration": {
     "pageTitle": "My reported content",
-    "lead": "Content that members reported, and what was decided. You can appeal a hidden post once, to the Zetsu team.",
+    "lead": "Content that members reported, and what was decided. You can appeal a hidden post once, to the Dɛmɛ team.",
     "empty": "None of your content has been reported.",
     "updated": "Updated",
     "kind": {
@@ -1560,7 +1560,7 @@
     "pageTitle": "Home",
     "title": "Home",
     "greeting": "Hello {{name}}",
-    "lead": "A look at everything happening on Zetsu.",
+    "lead": "A look at everything happening on Dɛmɛ.",
     "seeMore": "See all {{count}}",
     "sections": {
       "challenge": "Current challenge",

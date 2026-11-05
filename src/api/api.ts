@@ -1,5 +1,5 @@
 /**
- * Client de l'API Zetsu. Seul fichier autorisé à appeler `fetch`.
+ * Client de l'API Dɛmɛ. Seul fichier autorisé à appeler `fetch`.
  *
  * - Mode `mock` : lit les exemples de src/mocks (copie des mocks du back-end).
  *   Nom du fichier : MÉTHODE_chemin, les identifiants numériques devenant `id`

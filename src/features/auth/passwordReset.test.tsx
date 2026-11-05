@@ -57,7 +57,7 @@ describe('Mot de passe oublié (AUTH-4)', () => {
 
     type(/^Adresse email|^Email/, 'aminata.ouedraogo@example.com');
     fireEvent.click(screen.getByRole('button', { name: 'Envoyer le lien' }));
-    expect(await screen.findByText(/Si un compte Zetsu existe pour/)).toBeTruthy();
+    expect(await screen.findByText(/Si un compte Dɛmɛ existe pour/)).toBeTruthy();
     expect(request).toHaveBeenCalledWith('aminata.ouedraogo@example.com');
   });
 });

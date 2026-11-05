@@ -33,7 +33,7 @@ export type QuestionAssistRequest = {
 
 export type QuestionAssist = {
   title: string | null; // null si le titre est déjà clair
-  tags: { name: string; isNew: boolean }[]; // 1 à 4 ; isNew : le tag n'existe pas encore sur Zetsu
+  tags: { name: string; isNew: boolean }[]; // 1 à 4 ; isNew : le tag n'existe pas encore sur Dɛmɛ
   context: QuestionContext; // contexte africain détecté, null pour ce qui n'est pas détecté
   missing: MissingInfo[];
 };

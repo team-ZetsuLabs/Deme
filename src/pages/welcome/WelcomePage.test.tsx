@@ -63,7 +63,7 @@ describe("parcours d'accueil (AUTH-5)", () => {
 
     renderFlow();
 
-    expect(await screen.findByText(/Bienvenue sur Zetsu, Koffi/)).toBeTruthy();
+    expect(await screen.findByText(/Bienvenue sur Dɛmɛ, Koffi/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'flutter' }));
     fireEvent.click(screen.getByRole('button', { name: 'mobile-money' }));
     fireEvent.click(screen.getByRole('button', { name: "C'est parti" }));

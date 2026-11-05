@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "Zetsu",
-    "home": "Zetsu, início",
+    "name": "Dɛmɛ",
+    "home": "Dɛmɛ, início",
     "skipToContent": "Ir para o conteúdo"
   },
   "nav": {
@@ -73,11 +73,11 @@
     "VALIDATION_ERROR": "Alguns campos precisam de ser corrigidos.",
     "INVALID_CREDENTIALS": "Email ou palavra-passe incorretos.",
     "TOO_MANY_ATTEMPTS": "Demasiadas tentativas. Tente novamente dentro de 15 minutos.",
-    "ACCOUNT_SUSPENDED": "Esta conta está suspensa. Contacte a equipa Zetsu se achar que é um erro.",
+    "ACCOUNT_SUSPENDED": "Esta conta está suspensa. Contacte a equipa Dɛmɛ se achar que é um erro.",
     "ALREADY_REPORTED": "Já denunciou este conteúdo.",
     "ALREADY_SUBMITTED": "Já enviou um trabalho para este desafio.",
     "ALREADY_APPEALED": "Já contestou esta decisão.",
-    "MAINTENANCE": "O Zetsu está em manutenção. Tente novamente dentro de alguns minutos.",
+    "MAINTENANCE": "O Dɛmɛ está em manutenção. Tente novamente dentro de alguns minutos.",
     "EMAIL_TAKEN": "Este endereço não pode ser utilizado. Se já tem conta, inicie sessão.",
     "LOGIN_LOCKED": "Demasiadas tentativas falhadas. O início de sessão está bloqueado durante 15 minutos.",
     "RATE_LIMITED": "Demasiadas ações em pouco tempo. Aguarde um instante antes de tentar novamente.",
@@ -103,7 +103,7 @@
     "ACTION_NOT_ALLOWED": "Esta ação não é permitida.",
     "ALREADY_APPLIED": "Já se candidatou.",
     "ALREADY_LINKED": "Esta conta já está associada.",
-    "ALREADY_LINKED_ELSEWHERE": "Esta conta já pertence a outro membro do Zetsu.",
+    "ALREADY_LINKED_ELSEWHERE": "Esta conta já pertence a outro membro do Dɛmɛ.",
     "APPLICATION_NOT_FOUND": "Candidatura não encontrada.",
     "CANNOT_APPLY_OWN": "Não pode candidatar-se ao seu próprio anúncio.",
     "CANNOT_MODERATE_OWN": "Não pode moderar o seu próprio conteúdo.",
@@ -215,7 +215,7 @@
       "submit": "Enviar o link",
       "busy": "A enviar",
       "sentTitle": "Verifique o seu email",
-      "sentText": "Se existir uma conta Zetsu para {{email}}, acabámos de lhe enviar um link. Não se esqueça de ver no spam."
+      "sentText": "Se existir uma conta Dɛmɛ para {{email}}, acabámos de lhe enviar um link. Não se esqueça de ver no spam."
     },
     "reset": {
       "pageTitle": "Nova palavra-passe",
@@ -434,12 +434,12 @@
   },
   "maintenance": {
     "code": "Manutenção",
-    "title": "O Zetsu está em manutenção",
+    "title": "O Dɛmɛ está em manutenção",
     "text": "Estamos a melhorar a plataforma e voltamos dentro de alguns minutos. As suas perguntas e respostas são conservadas."
   },
   "welcome": {
     "pageTitle": "Bem-vindo",
-    "title": "Bem-vindo ao Zetsu, {{name}}",
+    "title": "Bem-vindo ao Dɛmɛ, {{name}}",
     "lead": "Três informações para lhe propor perguntas, vagas e missões à sua medida. Poderá alterá-las mais tarde nas definições.",
     "stack": {
       "legend": "A sua stack",
@@ -492,17 +492,17 @@
     "onlyYou": "Só você o vê.",
     "appeal": "Contestar a decisão",
     "rules": "Reler as regras",
-    "pending": "Contestação enviada: a equipa Zetsu está a analisá-la.",
+    "pending": "Contestação enviada: a equipa Dɛmɛ está a analisá-la.",
     "rejected": "A equipa analisou a sua contestação e manteve a decisão.",
     "dialogTitle": "Contestar a decisão",
-    "dialogLead": "A sua contestação é analisada pela equipa Zetsu, não pelo Referente que tomou a decisão. Explique porque é que este conteúdo respeita as regras.",
+    "dialogLead": "A sua contestação é analisada pela equipa Dɛmɛ, não pelo Referente que tomou a decisão. Explique porque é que este conteúdo respeita as regras.",
     "message": "A sua explicação",
     "messageHint": "Entre {{min}} e {{max}} caracteres.",
     "messageLength": "Explique em pelo menos {{min}} caracteres.",
     "submit": "Enviar a contestação",
     "busy": "A enviar",
     "sent": "Contestação enviada. Será notificado da decisão.",
-    "byTeam": "A equipa Zetsu ocultou este conteúdo.",
+    "byTeam": "A equipa Dɛmɛ ocultou este conteúdo.",
     "note": "Motivo: {{note}}."
   },
   "profile": {
@@ -703,7 +703,7 @@
     "emptyUnread": "Já leu tudo."
   },
   "home": {
-    "pageTitle": "Zetsu, a entreajuda entre programadores africanos",
+    "pageTitle": "Dɛmɛ, a entreajuda entre programadores africanos",
     "title": "A entreajuda entre programadores africanos",
     "lead": "Coloque as suas perguntas com o seu contexto: país, operadora de mobile money, qualidade da rede. Responda, encontre missões entre pares e faça reconhecer o seu trabalho com uma reputação verificável.",
     "cta": {
@@ -788,7 +788,7 @@
   },
   "footer": {
     "label": "Links do site",
-    "about": "Zetsu, pela Zetsu Labs para a CADev 2026.",
+    "about": "Dɛmɛ, pela Dɛmɛ Labs para a CADev 2026.",
     "rules": "Regras da comunidade",
     "terms": "Termos de utilização",
     "privacy": "Privacidade"
@@ -800,10 +800,10 @@
     "contact": "Uma dúvida sobre este documento? Escreva-nos:",
     "rules": {
       "title": "Regras da comunidade",
-      "intro": "O Zetsu é feito pelos programadores, para os programadores. Estas regras mantêm a plataforma útil e respeitosa. Os Referentes e a equipa apoiam-se nelas para moderar.",
+      "intro": "O Dɛmɛ é feito pelos programadores, para os programadores. Estas regras mantêm a plataforma útil e respeitosa. Os Referentes e a equipa apoiam-se nelas para moderar.",
       "sections": [
         {
-          "title": "O espírito do Zetsu",
+          "title": "O espírito do Dɛmɛ",
           "paragraphs": [
             "Viemos aqui para aprender e para ajudar. Cada pergunta merece uma resposta séria, seja qual for o nível de quem a coloca.",
             "Critique o código, nunca a pessoa. Uma resposta seca desencoraja mais do que ajuda."
@@ -843,7 +843,7 @@
           "title": "Denúncias e moderação",
           "paragraphs": [
             "A partir do nível Membro, pode denunciar um conteúdo que infrinja estas regras. Após 5 denúncias de membros diferentes, é ocultado enquanto aguarda uma decisão. O seu autor continua a vê-lo.",
-            "Os Referentes tratam das denúncias: ignoram ou ocultam o conteúdo. Cada decisão é registada, e o autor pode contestá-la junto da equipa Zetsu, que decide em último recurso.",
+            "Os Referentes tratam das denúncias: ignoram ou ocultam o conteúdo. Cada decisão é registada, e o autor pode contestá-la junto da equipa Dɛmɛ, que decide em último recurso.",
             "Em caso de abusos repetidos, a equipa pode avisar e depois suspender uma conta."
           ]
         },
@@ -851,19 +851,19 @@
           "title": "Emprego e missões",
           "paragraphs": [
             "As vagas de empresas são validadas pela equipa antes da publicação. Nunca pague para se candidatar a uma vaga ou obter uma missão.",
-            "As trocas de dinheiro por uma missão fazem-se fora do Zetsu, entre os membros. Denuncie qualquer pedido suspeito."
+            "As trocas de dinheiro por uma missão fazem-se fora do Dɛmɛ, entre os membros. Denuncie qualquer pedido suspeito."
           ]
         }
       ]
     },
     "terms": {
       "title": "Termos de utilização",
-      "intro": "Estes termos aplicam-se a qualquer pessoa que utilize o Zetsu. Ao criar uma conta, aceita-os, bem como as regras da comunidade.",
+      "intro": "Estes termos aplicam-se a qualquer pessoa que utilize o Dɛmɛ. Ao criar uma conta, aceita-os, bem como as regras da comunidade.",
       "sections": [
         {
           "title": "O serviço",
           "paragraphs": [
-            "O Zetsu é uma plataforma de troca entre programadores: perguntas e respostas, vagas de emprego, missões entre pares, projetos, desafios e reputação. É desenvolvida pela equipa Zetsu Labs no âmbito da CADev 2026."
+            "O Dɛmɛ é uma plataforma de troca entre programadores: perguntas e respostas, vagas de emprego, missões entre pares, projetos, desafios e reputação. É desenvolvida pela equipa Dɛmɛ Labs no âmbito da CADev 2026."
           ]
         },
         {
@@ -876,14 +876,14 @@
         {
           "title": "Os seus conteúdos",
           "paragraphs": [
-            "Continua a ser autor das suas perguntas, respostas e projetos. Autoriza o Zetsu a apresentá-los, a adaptá-los para a leitura em dispositivos móveis e a conservá-los de forma anónima se eliminar a sua conta.",
+            "Continua a ser autor das suas perguntas, respostas e projetos. Autoriza o Dɛmɛ a apresentá-los, a adaptá-los para a leitura em dispositivos móveis e a conservá-los de forma anónima se eliminar a sua conta.",
             "Só publica conteúdos que tem o direito de partilhar, sem dados pessoais de terceiros nem segredos."
           ]
         },
         {
           "title": "Emprego e missões",
           "paragraphs": [
-            "O Zetsu põe em contacto membros e empresas. O Zetsu não é parte em nenhum contrato de trabalho ou de missão, e não gere qualquer pagamento.",
+            "O Dɛmɛ põe em contacto membros e empresas. O Dɛmɛ não é parte em nenhum contrato de trabalho ou de missão, e não gere qualquer pagamento.",
             "As vagas são verificadas antes da publicação, mas mantenha-se atento e denuncie qualquer vaga duvidosa."
           ]
         },
@@ -909,7 +909,7 @@
     },
     "privacy": {
       "title": "Privacidade",
-      "intro": "Eis os dados que o Zetsu recolhe, o que fazemos com eles e como mantém o controlo sobre eles.",
+      "intro": "Eis os dados que o Dɛmɛ recolhe, o que fazemos com eles e como mantém o controlo sobre eles.",
       "sections": [
         {
           "title": "Os dados recolhidos",
@@ -929,7 +929,7 @@
         {
           "title": "O que não fazemos",
           "paragraphs": [
-            "Não vendemos os seus dados e não apresentamos publicidade. Não há qualquer rastreador publicitário no Zetsu.",
+            "Não vendemos os seus dados e não apresentamos publicidade. Não há qualquer rastreador publicitário no Dɛmɛ.",
             "O seu tema e o seu idioma são memorizados no seu navegador, não nos nossos servidores."
           ]
         },
@@ -955,7 +955,7 @@
           "title": "Os seus direitos",
           "paragraphs": [
             "Pode consultar e corrigir as suas informações nas suas definições, e eliminar a sua conta a qualquer momento. Para qualquer outro pedido de acesso, correção ou oposição, escreva à equipa.",
-            "O Zetsu aplica a lei do Burquina Faso sobre a proteção de dados pessoais. Pode também recorrer à Comissão da Informática e das Liberdades (CIL)."
+            "O Dɛmɛ aplica a lei do Burquina Faso sobre a proteção de dados pessoais. Pode também recorrer à Comissão da Informática e das Liberdades (CIL)."
           ]
         }
       ]
@@ -971,7 +971,7 @@
     "empty": "Nenhuma vaga corresponde a estes filtros de momento.",
     "published": "Publicada",
     "technologies": "Tecnologias",
-    "pendingNotice": "Esta vaga aguarda validação pela equipa Zetsu. Só é visível para si.",
+    "pendingNotice": "Esta vaga aguarda validação pela equipa Dɛmɛ. Só é visível para si.",
     "contract": {
       "PERMANENT": "Efetivo",
       "REMOTE": "Remoto",
@@ -999,7 +999,7 @@
       "apply": "Filtrar"
     },
     "applyBox": {
-      "title": "Candidatar-se com o seu perfil Zetsu",
+      "title": "Candidatar-se com o seu perfil Dɛmɛ",
       "text": "A sua reputação, as suas respostas e os seus desafios são transmitidos com a sua mensagem.",
       "button": "Candidatar-se"
     },
@@ -1033,7 +1033,7 @@
     },
     "new": {
       "pageTitle": "Publicar uma vaga",
-      "lead": "Descreva o posto. A equipa Zetsu verifica cada vaga antes de a publicar, em geral em menos de 24 horas.",
+      "lead": "Descreva o posto. A equipa Dɛmɛ verifica cada vaga antes de a publicar, em geral em menos de 24 horas.",
       "title": "Designação do posto",
       "company": "Empresa",
       "website": "Site da empresa",
@@ -1055,7 +1055,7 @@
         "technologies": "Indique pelo menos uma tecnologia.",
         "description": "Descreva o posto em pelo menos 100 caracteres."
       },
-      "recruiterOnly": "Publicar uma vaga é reservado a contas de recrutador. Escreva à equipa Zetsu para verificar a sua empresa.",
+      "recruiterOnly": "Publicar uma vaga é reservado a contas de recrutador. Escreva à equipa Dɛmɛ para verificar a sua empresa.",
       "backToJobs": "Ver as vagas"
     },
     "subnav": {
@@ -1069,8 +1069,8 @@
       "REJECTED": "Recusada",
       "CLOSED": "Encerrada"
     },
-    "rejectedNotice": "A equipa Zetsu não validou esta vaga.",
-    "rejectedNoticeReason": "A equipa Zetsu não validou esta vaga: {{reason}}",
+    "rejectedNotice": "A equipa Dɛmɛ não validou esta vaga.",
+    "rejectedNoticeReason": "A equipa Dɛmɛ não validou esta vaga: {{reason}}",
     "closedNotice": "Esta vaga está encerrada: já não aceita candidaturas.",
     "owner": {
       "title": "A sua vaga",
@@ -1102,7 +1102,7 @@
     },
     "edit": {
       "pageTitle": "Modificar a vaga",
-      "lead": "Corrija o que for necessário. A equipa Zetsu revalidará a vaga antes de a republicar.",
+      "lead": "Corrija o que for necessário. A equipa Dɛmɛ revalidará a vaga antes de a republicar.",
       "notice": "Após a modificação, a vaga volta a «Em espera» até à nova validação.",
       "submit": "Guardar e reenviar para validação",
       "saved": "Vaga modificada, a aguardar validação",
@@ -1147,7 +1147,7 @@
     "offerCount_one": "{{count}} proposta",
     "offerCount_other": "{{count}} propostas",
     "yours": "Publicou esta missão. As propostas recebidas estão listadas na página.",
-    "paymentNotice": "O Zetsu não gere qualquer pagamento. Entrem em acordo diretamente, e nunca pague para obter uma missão.",
+    "paymentNotice": "O Dɛmɛ não gere qualquer pagamento. Entrem em acordo diretamente, e nunca pague para obter uma missão.",
     "kind": {
       "TROUBLESHOOTING": "Reparação",
       "INTEGRATION": "Integração",
@@ -1200,7 +1200,7 @@
       "description": "Descrição",
       "descriptionHint": "O contexto, o que se espera e como saberá que está terminado. Markdown aceite.",
       "budget": "Orçamento indicativo",
-      "budgetHint": "Montante indicativo: nenhum pagamento passa pelo Zetsu.",
+      "budgetHint": "Montante indicativo: nenhum pagamento passa pelo Dɛmɛ.",
       "currency": "Moeda",
       "delay": "Prazo pretendido (dias)",
       "delayHint": "Entre 1 e {{max}} dias.",
@@ -1333,13 +1333,13 @@
     "topMembers": "Os mais úteis este mês",
     "nobody": "Ninguém de momento.",
     "noRules": "Sem regras específicas: as regras gerais chegam.",
-    "generalRules": "As regras gerais do Zetsu também se aplicam.",
+    "generalRules": "As regras gerais do Dɛmɛ também se aplicam.",
     "rulesLink": "Reler as regras",
     "propose": {
       "button": "Propor uma comunidade",
       "note": "Os Referentes (1 500 pontos) podem propor uma comunidade, validada depois pela equipa.",
       "pageTitle": "Propor uma comunidade",
-      "lead": "A sua proposta é analisada pela equipa Zetsu, como uma vaga de emprego. Verifique primeiro se já não existe uma comunidade semelhante.",
+      "lead": "A sua proposta é analisada pela equipa Dɛmɛ, como uma vaga de emprego. Verifique primeiro se já não existe uma comunidade semelhante.",
       "referentsOnly": "Apenas os Referentes (1 500 pontos de reputação) podem propor uma comunidade. Entretanto, junte-se às que existem e ajude os seus membros.",
       "back": "Ver as comunidades",
       "kind": "Tipo de comunidade",
@@ -1351,7 +1351,7 @@
       "description": "Descrição",
       "descriptionHint": "Para quem, e para falar de quê. 30 a 200 caracteres.",
       "rules": "Regras próprias",
-      "rulesHint": "Uma regra por linha, no máximo 5. As regras gerais do Zetsu já se aplicam.",
+      "rulesHint": "Uma regra por linha, no máximo 5. As regras gerais do Dɛmɛ já se aplicam.",
       "submit": "Enviar a proposta",
       "busy": "A enviar",
       "sent": "Proposta enviada. A equipa responder-lhe-á por notificação.",
@@ -1386,7 +1386,7 @@
   },
   "myModeration": {
     "pageTitle": "Os meus conteúdos denunciados",
-    "lead": "Os conteúdos que membros denunciaram, e o que foi decidido. Pode contestar uma ocultação uma vez, junto da equipa Zetsu.",
+    "lead": "Os conteúdos que membros denunciaram, e o que foi decidido. Pode contestar uma ocultação uma vez, junto da equipa Dɛmɛ.",
     "empty": "Nenhum dos seus conteúdos foi denunciado.",
     "updated": "Atualizado",
     "kind": {
@@ -1560,7 +1560,7 @@
     "pageTitle": "Início",
     "title": "Início",
     "greeting": "Olá {{name}}",
-    "lead": "Uma vista de tudo o que se passa no Zetsu.",
+    "lead": "Uma vista de tudo o que se passa no Dɛmɛ.",
     "seeMore": "Ver as {{count}}",
     "sections": {
       "challenge": "Desafio em curso",

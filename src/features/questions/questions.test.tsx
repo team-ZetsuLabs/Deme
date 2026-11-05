@@ -230,7 +230,7 @@ describe('HiddenNotice (MOD-3)', () => {
     fireEvent.change(textarea, { target: { value: message } });
     fireEvent.click(screen.getByRole('button', { name: 'Envoyer la contestation' }));
     await waitFor(() => expect(create).toHaveBeenCalledWith(21, message));
-    expect(await screen.findByText(/l'équipe Zetsu l'examine/)).toBeTruthy();
+    expect(await screen.findByText(/l'équipe Dɛmɛ l'examine/)).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Contester la décision' })).toBeNull();
   });
 });

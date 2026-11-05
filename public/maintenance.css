@@ -50,10 +50,9 @@ header {
 }
 
 .mark {
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
   border-radius: 6px;
-  background: var(--green);
 }
 
 main {

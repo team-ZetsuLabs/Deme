@@ -23,7 +23,7 @@ const EXCHANGES = [
 ] as const;
 const DIFFERENCES = ['context', 'light', 'community'] as const;
 
-/** Page d'accueil publique : comprendre Zetsu en 10 secondes (cahier, section 12). */
+/** Page d'accueil publique : comprendre Dɛmɛ en 10 secondes (cahier, section 12). */
 export default function HomePage() {
   const { t } = useTranslation();
   const { status } = useSession();
