@@ -38,8 +38,11 @@ export default function AuthPage({ mode }: AuthPageProps) {
   }
   if (status === 'authenticated') return <Navigate to={returnTo} replace />;
 
-  // Après une inscription, le parcours d'accueil (AUTH-5) remplacera cette destination.
   const onSignedIn = () => navigate(returnTo, { replace: true });
+  // Seule l'inscription par email propose le parcours d'accueil (AUTH-5, stack/pays/langue).
+  // La connexion et GitHub/Google vont directement à destination : un compte qui se connecte
+  // a déjà un profil, on ne lui réaffiche pas la page de bienvenue.
+  const onRegistered = () => navigate('/welcome', { state: { from: returnTo }, replace: true });
 
   return (
     <AuthShell title={t(`auth.${mode}.title`)} lead={t(`auth.${mode}.lead`)}>
@@ -55,7 +58,7 @@ export default function AuthPage({ mode }: AuthPageProps) {
       <OAuthButtons mode={mode} onSignedIn={onSignedIn} />
 
       {isRegister ? (
-        <RegisterForm key="register" onSignedIn={onSignedIn} />
+        <RegisterForm key="register" onSignedIn={onRegistered} />
       ) : (
         <LoginForm key="login" onSignedIn={onSignedIn} />
       )}

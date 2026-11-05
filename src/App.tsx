@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { IconSprite } from './components/IconSprite';
 import { ToastProvider } from './components/ToastProvider';
-import { OnboardingGuard } from './features/auth/OnboardingGuard';
+import { AuthPageFallback } from './pages/auth/AuthPageFallback';
 import { RequireAuth } from './features/auth/RequireAuth';
 import { SessionProvider } from './features/auth/SessionProvider';
 import { UnreadProvider } from './features/notifications/UnreadProvider';
@@ -64,19 +64,27 @@ export function App() {
                     <Routes>
                       {/* Accueil public ; un membre connecté est envoyé vers les questions. */}
                       <Route index element={<HomePage />} />
-                      <Route path="login" element={<AuthPage mode="login" />} />
-                      <Route path="register" element={<AuthPage mode="register" />} />
+                      <Route
+                        path="login"
+                        element={
+                          <Suspense fallback={<AuthPageFallback mode="login" />}>
+                            <AuthPage mode="login" />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path="register"
+                        element={
+                          <Suspense fallback={<AuthPageFallback mode="register" />}>
+                            <AuthPage mode="register" />
+                          </Suspense>
+                        }
+                      />
                       <Route path="forgot-password" element={<ForgotPasswordPage />} />
                       <Route path="reset-password" element={<ResetPasswordPage />} />
                       <Route path="verify-email" element={<VerifyEmailPage />} />
                       <Route path="welcome" element={<WelcomePage />} />
-                      <Route
-                        element={
-                          <OnboardingGuard>
-                            <AppLayout />
-                          </OnboardingGuard>
-                        }
-                      >
+                      <Route element={<AppLayout />}>
                         <Route
                           path="feed"
                           element={

@@ -1,12 +1,12 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Navigate, Route, Routes } from 'react-router-dom';
 import i18n from '../../i18n';
 import type { Me } from '../../api/types';
 import { ToastProvider } from '../../components/ToastProvider';
 import { authApi } from '../../features/auth/authApi';
-import { OnboardingGuard } from '../../features/auth/OnboardingGuard';
 import { SessionProvider } from '../../features/auth/SessionProvider';
+import { useSession } from '../../features/auth/useSession';
 import WelcomePage from './WelcomePage';
 import { demoMe } from '../../test/fixtures';
 
@@ -22,21 +22,25 @@ const newMember: Me = demoMe({
   onboardingCompleted: false,
 });
 
-const renderAt = (path: string) =>
+/**
+ * Comme dans l'appli réelle, on arrive sur /welcome une fois la session chargée
+ * (après inscription), pas pendant : la page peut alors pré-remplir depuis le profil.
+ */
+function GateToWelcome() {
+  const { status } = useSession();
+  if (status === 'loading') return null;
+  return <Navigate to="/welcome" replace state={{ from: '/questions' }} />;
+}
+
+const renderFlow = () =>
   render(
-    <MemoryRouter initialEntries={[path]}>
+    <MemoryRouter initialEntries={['/']}>
       <SessionProvider>
         <ToastProvider>
           <Routes>
+            <Route path="/" element={<GateToWelcome />} />
             <Route path="/welcome" element={<WelcomePage />} />
-            <Route
-              path="/questions"
-              element={
-                <OnboardingGuard>
-                  <h1>Fil des questions</h1>
-                </OnboardingGuard>
-              }
-            />
+            <Route path="/questions" element={<h1>Fil des questions</h1>} />
           </Routes>
         </ToastProvider>
       </SessionProvider>
@@ -53,11 +57,11 @@ afterEach(() => {
 });
 
 describe("parcours d'accueil (AUTH-5)", () => {
-  it('envoie un nouveau membre vers /welcome, puis le ramène où il allait', async () => {
+  it('laisse le nouveau membre compléter son profil, puis le ramène où il allait', async () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(newMember);
     const complete = vi.spyOn(authApi, 'completeOnboarding');
 
-    renderAt('/questions');
+    renderFlow();
 
     expect(await screen.findByText(/Bienvenue sur Zetsu, Koffi/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'flutter' }));
@@ -77,7 +81,7 @@ describe("parcours d'accueil (AUTH-5)", () => {
   it('demande un pays avant de terminer, et « Plus tard » laisse passer', async () => {
     vi.spyOn(authApi, 'me').mockResolvedValue({ ...newMember, countryCode: null });
     const complete = vi.spyOn(authApi, 'completeOnboarding');
-    renderAt('/questions');
+    renderFlow();
 
     fireEvent.click(await screen.findByRole('button', { name: "C'est parti" }));
     expect(await screen.findByText('Choisissez votre pays pour continuer.')).toBeTruthy();
@@ -90,7 +94,7 @@ describe("parcours d'accueil (AUTH-5)", () => {
 
   it('ajoute une technologie saisie et refuse un nom invalide', async () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(newMember);
-    renderAt('/welcome');
+    renderFlow();
 
     const input = await screen.findByLabelText('Ajouter une autre technologie');
     fireEvent.change(input, { target: { value: 'Spring Boot' } });
