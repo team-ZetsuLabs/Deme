@@ -106,8 +106,8 @@
   --r-full: 999px;
 
   /* Typographie */
-  --f-sans: 'Geist', system-ui, sans-serif;
-  --f-mono: 'Geist Mono', ui-monospace, monospace;
+  --f-sans: 'Hanken Grotesk', system-ui, sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, monospace;
   --fs-xs: 12px;
   --fs-sm: 13px;
   --fs-md: 14px;
