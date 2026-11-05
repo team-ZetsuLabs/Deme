@@ -15,47 +15,19 @@ export function SessionProvider({ children }: SessionProviderProps) {
 
   useEffect(() => {
     let active = true;
-
-    // `initial` : premier chargement, on bascule vers « anonyme » si la session est absente.
-    // Une relecture (retour sur l'onglet, retour d'une connexion GitHub/Google) ne fait que
-    // confirmer une session valide ; elle ne déconnecte jamais sur une erreur passagère.
-    const check = (initial: boolean, attempt = 0) => {
-      authApi
-        .me()
-        .then((me) => {
-          if (!active) return;
-          setUser(me);
-          setStatus('authenticated');
-        })
-        .catch(() => {
-          if (!active) return;
-          // Au tout premier chargement après une redirection OAuth, le cookie de session peut
-          // arriver juste après la requête : on réessaie une fois avant de conclure « anonyme ».
-          if (initial && attempt === 0) {
-            window.setTimeout(() => {
-              if (active) check(true, 1);
-            }, 600);
-          } else if (initial) {
-            setStatus('anonymous');
-          }
-        });
-    };
-
-    check(true);
-
-    // Retour sur la page (connexion GitHub/Google faite dans le même onglet, retour d'onglet,
-    // restauration depuis le cache de navigation) : on reconfirme la session sans tout bloquer.
-    const recheck = () => {
-      if (document.visibilityState === 'visible') check(false);
-    };
-    window.addEventListener('pageshow', recheck);
-    window.addEventListener('focus', recheck);
-    document.addEventListener('visibilitychange', recheck);
+    authApi
+      .me()
+      .then((me) => {
+        if (!active) return;
+        setUser(me);
+        setStatus('authenticated');
+      })
+      .catch(() => {
+        // 401 attendu quand personne n'est connecté (ou exemple absent en mode mock)
+        if (active) setStatus('anonymous');
+      });
     return () => {
       active = false;
-      window.removeEventListener('pageshow', recheck);
-      window.removeEventListener('focus', recheck);
-      document.removeEventListener('visibilitychange', recheck);
     };
   }, []);
 

@@ -5,7 +5,7 @@ import { OAuthButtons } from '../../features/auth/OAuthButtons';
 import { RegisterForm } from '../../features/auth/RegisterForm';
 import { useSession } from '../../features/auth/useSession';
 import { usePageTitle } from '../../hooks/usePageTitle';
-import { PageLoader } from '../../layout/PageLoader';
+import { AuthFormSkeleton } from './AuthFormSkeleton';
 import { AuthShell } from './AuthShell';
 import styles from './AuthPage.module.css';
 
@@ -29,7 +29,13 @@ export default function AuthPage({ mode }: AuthPageProps) {
   const isRegister = mode === 'register';
   usePageTitle(t(`auth.${mode}.pageTitle`));
 
-  if (status === 'loading') return <PageLoader />;
+  if (status === 'loading') {
+    return (
+      <AuthShell title={t(`auth.${mode}.title`)} lead={t(`auth.${mode}.lead`)}>
+        <AuthFormSkeleton />
+      </AuthShell>
+    );
+  }
   if (status === 'authenticated') return <Navigate to={returnTo} replace />;
 
   // Après une inscription, le parcours d'accueil (AUTH-5) remplacera cette destination.
