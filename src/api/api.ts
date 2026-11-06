@@ -63,7 +63,14 @@ const MOCK_DELAY_MS =
 type MockModule = { default: unknown };
 type MockLoaders = Record<string, () => Promise<MockModule>>;
 
-const defaultMocks = import.meta.glob<MockModule>('../mocks/*.json') as MockLoaders;
+// En mode live, les exemples ne servent jamais : on garde le glob hors du build
+// pour que Vite n'émette pas un chunk par fichier mock (sinon le service worker
+// les précharge tous, ~1 Mo inutiles en 3G). VITE_API_MODE est figé au build,
+// donc la branche morte — et ses import() — est éliminée du bundle live.
+const defaultMocks: MockLoaders =
+  import.meta.env.VITE_API_MODE === 'live'
+    ? {}
+    : (import.meta.glob<MockModule>('../mocks/*.json') as MockLoaders);
 
 /** Segments identifiés par un texte et non un nombre : /users/{username}, /communities/{slug}. */
 const SLUG_SEGMENTS: Record<string, string> = { users: 'username', communities: 'slug' };
