@@ -12,6 +12,7 @@ export type NavItem = {
 
 /** Espaces principaux, partagés par le menu latéral et la barre d'onglets mobile. */
 export const NAV_ITEMS: NavItem[] = [
+  { to: '/feed', labelKey: 'nav.feed', icon: 'home' },
   { to: '/questions', labelKey: 'nav.questions', icon: 'help' },
   { to: '/jobs', labelKey: 'nav.jobs', icon: 'jobs', alsoActive: ['/applications'] },
   { to: '/missions', labelKey: 'nav.missions', icon: 'mission' },

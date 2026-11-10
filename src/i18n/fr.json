@@ -167,6 +167,7 @@
     "skipToContent": "Aller au contenu"
   },
   "nav": {
+    "feed": "Accueil",
     "label": "Navigation principale",
     "spaces": "Espaces",
     "questions": "Aide",

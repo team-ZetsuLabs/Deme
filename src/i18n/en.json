@@ -167,6 +167,7 @@
     "skipToContent": "Skip to content"
   },
   "nav": {
+    "feed": "Home",
     "label": "Main navigation",
     "spaces": "Spaces",
     "questions": "Help",
