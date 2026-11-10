@@ -55,6 +55,13 @@ public interface ReputationEventRepository extends JpaRepository<ReputationEvent
 
     @Query(value = """
             select coalesce(sum(delta), 0) from reputation_events
+            where user_id = :userId and reason = :reason and test_participation_id = :participationId
+            """, nativeQuery = true)
+    int netForPlaytest(@Param("userId") Long userId, @Param("reason") String reason,
+                       @Param("participationId") Long participationId);
+
+    @Query(value = """
+            select coalesce(sum(delta), 0) from reputation_events
             where user_id = :userId and delta > 0 and reason in (:reasons) and created_at >= :since
             """, nativeQuery = true)
     int gainedSince(@Param("userId") Long userId, @Param("reasons") Collection<String> reasons,

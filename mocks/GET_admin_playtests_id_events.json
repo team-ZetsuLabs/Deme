@@ -1,0 +1,95 @@
+{
+  "items": [
+    {
+      "id": 120,
+      "action": "REMOVED",
+      "actor": {
+        "username": "chinedu_o",
+        "displayName": "Chinedu Okafor",
+        "avatarUrl": null,
+        "countryCode": "NG",
+        "reputation": 318,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "participationId": 53,
+      "note": "Absente de la liste des testeurs de la Play Console",
+      "createdAt": "2026-11-10T12:00:00Z"
+    },
+    {
+      "id": 118,
+      "action": "REPLACED",
+      "actor": {
+        "username": "moussa_s",
+        "displayName": "Moussa Sow",
+        "avatarUrl": null,
+        "countryCode": "ML",
+        "reputation": 64,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "participationId": 58,
+      "note": null,
+      "createdAt": "2026-11-09T20:15:00Z"
+    },
+    {
+      "id": 112,
+      "action": "EXPIRED",
+      "actor": null,
+      "participationId": 55,
+      "note": "Installation non déclarée sous 48 heures",
+      "createdAt": "2026-11-08T12:00:00Z"
+    },
+    {
+      "id": 90,
+      "action": "APPROVED",
+      "actor": {
+        "username": "rimvie",
+        "displayName": "Rimvie",
+        "avatarUrl": null,
+        "countryCode": "BF",
+        "reputation": 150,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "participationId": null,
+      "note": null,
+      "createdAt": "2026-11-02T10:02:00Z"
+    },
+    {
+      "id": 88,
+      "action": "SUBMITTED",
+      "actor": {
+        "username": "chinedu_o",
+        "displayName": "Chinedu Okafor",
+        "avatarUrl": null,
+        "countryCode": "NG",
+        "reputation": 318,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "participationId": null,
+      "note": null,
+      "createdAt": "2026-11-02T09:40:00Z"
+    },
+    {
+      "id": 87,
+      "action": "CREATED",
+      "actor": {
+        "username": "chinedu_o",
+        "displayName": "Chinedu Okafor",
+        "avatarUrl": null,
+        "countryCode": "NG",
+        "reputation": 318,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "participationId": null,
+      "note": null,
+      "createdAt": "2026-11-02T09:14:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 6
+}

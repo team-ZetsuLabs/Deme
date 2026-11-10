@@ -9,6 +9,8 @@ public enum ReputationReason {
     ACCEPTED_AN_ANSWER(2),
     CHALLENGE_VALIDATED(20),
     PROJECT_COMPLETED(10),
+    /** Participation à un test fermé terminée (TST-3). */
+    PLAYTEST_COMPLETED(5),
     SPAM_REMOVED(-50);
 
     private final int points;

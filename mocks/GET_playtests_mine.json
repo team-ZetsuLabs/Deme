@@ -1,0 +1,36 @@
+{
+  "items": [
+    {
+      "id": 7,
+      "appName": "Kobo Split",
+      "packageName": "ng.kobosplit.app",
+      "platform": "GOOGLE_PLAY",
+      "iconUrl": "https://res.cloudinary.com/demo/image/upload/c_fill,w_128,h_128/f_auto,q_auto/v1/zetsu/playtests/5b0f6c3e-2a71-4f0e-9d0b-8f1e0c2b7a41.png",
+      "owner": {
+        "username": "chinedu_o",
+        "displayName": "Chinedu Okafor",
+        "avatarUrl": null,
+        "countryCode": "NG",
+        "reputation": 318,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "status": "ACTIVE",
+      "testersTarget": 14,
+      "requiredDays": 14,
+      "spotsLeft": 1,
+      "progress": {
+        "percent": 46,
+        "completed": 0,
+        "verified": 9,
+        "declared": 3,
+        "joined": 1
+      },
+      "createdAt": "2026-11-02T09:14:00Z",
+      "startedAt": "2026-11-02T10:02:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 1
+}

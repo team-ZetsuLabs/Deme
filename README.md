@@ -117,6 +117,19 @@ Espace Projets (PRJ-1 à PRJ-6) : un projet a de 1 à 6 rôles, un membre par r�
 
 Nouveaux types de notification : `COMMUNITY_PROPOSAL_DECISION`, `PROJECT_REQUEST_RECEIVED`, `PROJECT_REQUEST_DECIDED`, `PROJECT_MEMBER_REMOVED`, `PROJECT_CLOSED`, et la cible `PROJECT`. Un projet se signale avec `targetType: PROJECT`.
 
+## Tests fermés Google Play (TST, idée de l'équipe hors cahier)
+
+Conception complète : `docs/conception-tests-fermes.md`. Un développeur doit réunir 12 testeurs pendant 14 jours avant de publier sur Google Play ; Zetsu organise l'entraide. Google ne donne aucune API pour lire la liste des testeurs : rien n'est vérifié automatiquement, et chaque compteur affiche son niveau de preuve (`DECLARED` par le testeur, `VERIFIED` par le porteur dans la Play Console, `COMPLETED` après les 14 jours).
+
+Une campagne naît en `DRAFT`, puis passe `ACTIVE` tout de suite si le porteur a 50 points ou plus, sinon `PENDING_REVIEW` jusqu'à la décision de l'équipe (`REJECTED` avec un motif, corrigeable). L'équipe peut la suspendre (`SUSPENDED`) ; elle devient `COMPLETED` quand toutes les places ont tenu 14 jours, ou à la clôture par le porteur. Une seule campagne en cours par application. Rejoindre prend une place sous verrou de la campagne ; l'installation se déclare sous 48 heures, sinon la place se libère et sera reprise par le suivant. Le lien d'inscription au test n'est donné qu'après avoir rejoint. Une tâche horaire envoie les rappels (installation, « toujours inscrit », fin proche), termine les participations arrivées au bout (+5 de réputation, `PLAYTEST_COMPLETED`) et efface les adresses Google 30 jours après la fin.
+
+| Domaine | Points d'entrée |
+| --- | --- |
+| `playtest` | `GET` et `POST /playtests`, `GET /playtests/mine`, `GET` et `PUT /playtests/{id}`, `PUT /playtests/{id}/icon`, `POST /playtests/{id}/submit`, `POST /playtests/{id}/close`, `GET` et `POST /playtests/{id}/participations`, `POST /playtests/{id}/participations/me/confirm`, `/check-in` et `/withdraw`, `POST /playtests/{id}/participations/{participationId}/verify` et `/remove`, `GET /users/me/playtest-participations` |
+| `admin` (tests fermés) | `GET /admin/playtests?status&problem=INACTIVE\|STALLED\|REPORTED`, `GET /admin/playtests/stats`, `POST /admin/playtests/{id}/review`, `/suspend` et `/reactivate`, `GET /admin/playtests/{id}/participations`, `POST /admin/playtests/{id}/participations/{participationId}/remove`, `GET /admin/playtests/{id}/events` |
+
+Nouveaux types de notification : `PLAYTEST_NEW_CAMPAIGN`, `PLAYTEST_JOINED`, `PLAYTEST_INSTALL_REMINDER`, `PLAYTEST_STAY_REMINDER`, `PLAYTEST_ENDING_SOON`, `PLAYTEST_PARTICIPATION_DONE`, `PLAYTEST_TESTER_LEFT`, `PLAYTEST_TESTER_REPLACED`, `PLAYTEST_CAMPAIGN_FULL`, `PLAYTEST_CAMPAIGN_REVIEWED`, `PLAYTEST_REMOVED`, et la cible `PLAYTEST`. Une campagne se signale avec `targetType: PLAYTEST`.
+
 ## Données de démo
 
 Les scripts de `seed/` remplissent une base avec des membres, des questions, des réponses, des communautés, des badges, des projets et des photos de profil dessinées, tous réalistes et africains. Le compte du jury n'a ni email ni mot de passe dans le dépôt : ils sont passés en variables au lancement. Ordre, commandes et scénarios de démo : `seed/README.md`.
@@ -139,4 +152,4 @@ Un exemple de réponse par point d'entrée se trouve dans `mocks/` (`GET_questio
 - Un compte GitHub ou Google n'est jamais rattaché automatiquement à un compte email existant, même avec la même adresse : l'email d'inscription n'est pas vérifié, ce serait une porte ouverte au vol de compte.
 - La limitation de débit est en mémoire (une seule instance). Les sessions aussi : un redémarrage déconnecte tout le monde.
 - Les compteurs des badges et la recherche des questions similaires sont faits en SQL (`BadgeService`, `QuestionSearch`) : pas de compteur à tenir à jour, pas de service de recherche externe.
-- Les migrations Flyway ne se modifient jamais une fois fusionnées ; la dernière est `V14__projets.sql`.
+- Les migrations Flyway ne se modifient jamais une fois fusionnées ; la dernière est `V17__tests_fermes.sql` (V16, suppression des questions, arrive avec la PR #24 et doit être fusionnée avant).

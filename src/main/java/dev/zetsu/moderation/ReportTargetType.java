@@ -7,5 +7,7 @@ public enum ReportTargetType {
     JOB,
     MISSION,
     USER,
-    PROJECT
+    PROJECT,
+    /** Une campagne de test fermé (TST). */
+    PLAYTEST
 }

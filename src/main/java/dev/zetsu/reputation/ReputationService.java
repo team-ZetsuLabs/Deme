@@ -110,6 +110,19 @@ public class ReputationService {
         }
     }
 
+    /**
+     * TST-3 : +5 par participation à un test fermé terminée, une seule fois. Pas de plafond quotidien : la
+     * participation a demandé 14 jours, et plusieurs peuvent se terminer le même jour.
+     */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void grantForPlaytest(Long userId, Long participationId) {
+        ReputationReason reason = ReputationReason.PLAYTEST_COMPLETED;
+        if (events.netForPlaytest(userId, reason.name(), participationId) == 0) {
+            events.saveAndFlush(ReputationEvent.forPlaytest(userId, reason.points(), reason, participationId));
+            users.addReputation(userId, reason.points());
+        }
+    }
+
     /** Un dépôt validé puis refusé perd ce qu'il avait rapporté. */
     @Transactional(propagation = Propagation.MANDATORY)
     public void revokeForSubmission(Long userId, Long submissionId) {

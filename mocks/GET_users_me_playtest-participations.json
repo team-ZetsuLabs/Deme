@@ -1,0 +1,107 @@
+{
+  "items": [
+    {
+      "campaign": {
+        "id": 7,
+        "appName": "Kobo Split",
+        "packageName": "ng.kobosplit.app",
+        "platform": "GOOGLE_PLAY",
+        "iconUrl": "https://res.cloudinary.com/demo/image/upload/c_fill,w_128,h_128/f_auto,q_auto/v1/zetsu/playtests/5b0f6c3e-2a71-4f0e-9d0b-8f1e0c2b7a41.png",
+        "owner": {
+          "username": "chinedu_o",
+          "displayName": "Chinedu Okafor",
+          "avatarUrl": null,
+          "countryCode": "NG",
+          "reputation": 318,
+          "level": "CONTRIBUTOR",
+          "deleted": false
+        },
+        "status": "ACTIVE",
+        "testersTarget": 14,
+        "requiredDays": 14,
+        "spotsLeft": 1,
+        "progress": {
+          "percent": 46,
+          "completed": 0,
+          "verified": 9,
+          "declared": 3,
+          "joined": 1
+        },
+        "createdAt": "2026-11-02T09:14:00Z",
+        "startedAt": "2026-11-02T10:02:00Z"
+      },
+      "participation": {
+        "id": 51,
+        "status": "VERIFIED",
+        "proofLevel": "VERIFIED",
+        "daysDone": 6,
+        "requiredDays": 14,
+        "joinedAt": "2026-11-03T18:20:00Z",
+        "confirmBefore": null,
+        "confirmedAt": "2026-11-04T07:45:00Z",
+        "verifiedAt": "2026-11-04T21:10:00Z",
+        "endsAt": "2026-11-18T07:45:00Z",
+        "lastCheckInAt": "2026-11-10T08:02:00Z",
+        "checkedInToday": true,
+        "needsAttention": false,
+        "googleEmail": "kwame.asante.test@gmail.com",
+        "completedAt": null,
+        "droppedAt": null,
+        "dropReason": null
+      }
+    },
+    {
+      "campaign": {
+        "id": 9,
+        "appName": "Wari Stock",
+        "packageName": "sn.waristock.app",
+        "platform": "GOOGLE_PLAY",
+        "iconUrl": null,
+        "owner": {
+          "username": "aminata_dev",
+          "displayName": "Aminata Diallo",
+          "avatarUrl": null,
+          "countryCode": "SN",
+          "reputation": 1240,
+          "level": "REFERENT",
+          "deleted": false
+        },
+        "status": "ACTIVE",
+        "testersTarget": 12,
+        "requiredDays": 14,
+        "spotsLeft": 0,
+        "progress": {
+          "percent": 71,
+          "completed": 0,
+          "verified": 12,
+          "declared": 0,
+          "joined": 0
+        },
+        "createdAt": "2026-10-29T16:40:00Z",
+        "startedAt": "2026-10-29T16:41:00Z"
+      },
+      "participation": {
+        "id": 44,
+        "status": "COMPLETED",
+        "proofLevel": "COMPLETED",
+        "daysDone": 14,
+        "requiredDays": 14,
+        "joinedAt": "2026-10-20T10:00:00Z",
+        "confirmBefore": null,
+        "confirmedAt": "2026-10-20T12:00:00Z",
+        "verifiedAt": "2026-10-21T08:00:00Z",
+        "endsAt": "2026-11-03T12:00:00Z",
+        "lastCheckInAt": "2026-11-03T07:00:00Z",
+        "checkedInToday": false,
+        "needsAttention": false,
+        "googleEmail": "kwame.asante.test@gmail.com",
+        "completedAt": "2026-11-03T13:00:00Z",
+        "droppedAt": null,
+        "dropReason": null
+      }
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 2
+}
