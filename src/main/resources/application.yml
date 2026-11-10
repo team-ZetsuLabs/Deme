@@ -51,8 +51,14 @@ server:
 zetsu:
   front-url: ${FRONT_URL:/}
   cookie-secure: ${COOKIE_SECURE:true}
-  # Téléversements (CV), hors de tout dossier servi au public.
+  # Téléversements (photos, CV) sur le disque, hors de tout dossier servi au public, quand Cloudinary n'est pas configuré.
   uploads-dir: ${UPLOADS_DIR:data/uploads}
+  # Photos de profil (publiques, CDN) et CV (privés) chez Cloudinary. Sans ces trois valeurs, tout reste sur le disque.
+  cloudinary:
+    cloud-name: ${CLOUDINARY_CLOUD_NAME:}
+    api-key: ${CLOUDINARY_API_KEY:}
+    api-secret: ${CLOUDINARY_API_SECRET:}
+    folder: ${CLOUDINARY_FOLDER:zetsu}
   # Section 8 du cahier des charges. Seuils abaissés par le profil « demo ».
   reputation:
     member-threshold: 50

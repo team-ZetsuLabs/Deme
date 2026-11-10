@@ -19,6 +19,8 @@ Les variables d'environnement sont décrites dans `.env.example`. Spring ne lit 
 
 Pour la connexion GitHub et Google, on ajoute le profil `oauth` (`SPRING_PROFILES_ACTIVE=local,oauth`) et les quatre identifiants. Sans ce profil, seule l'inscription par email est active et `GET /api/v1/auth/providers` renvoie une liste vide.
 
+Pour les photos de profil et les CV, on renseigne `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` et `CLOUDINARY_API_SECRET` (console Cloudinary, rubrique « API Keys »). Sans elles, les fichiers restent sur le disque, dans `UPLOADS_DIR` : c'est le cas en local et dans les tests.
+
 Pour l'assistant IA, on renseigne `AI_API_KEY` (clé Gemini gratuite sur https://aistudio.google.com/apikey). Sans clé, l'assistant répond `503 AI_UNAVAILABLE` et tout le reste marche.
 
 Le profil `demo` abaisse les seuils des niveaux et des badges pour que les privilèges soient visibles pendant la démo (`SPRING_PROFILES_ACTIVE=local,demo`).
@@ -77,7 +79,7 @@ Back office (codé) : l'équipe peut revenir sur la décision d'un Référent. P
 
 Défis (codés) : un seul défi à la fois, l'équipe ne peut pas en créer deux sur la même période. Un défi qui n'a pas commencé n'est visible que dans le back office. Au début du défi, tous les membres actifs reçoivent `CHALLENGE_STARTED` (vérification chaque minute). Un dépôt validé rapporte +20 une seule fois ; une note corrigée ne change pas les points, et un dépôt refusé après coup les perd. Dans le classement, deux notes égales partagent le même rang.
 
-Photo de profil (codée) : le format est lu dans les premiers octets du fichier, jamais dans son nom. Les fichiers sont rangés dans `UPLOADS_DIR/avatars` sous un nom régénéré. Une photo n'est servie que tant qu'elle est celle du profil : l'ancienne est effacée quand on en met une nouvelle, quand on la retire, ou quand le compte est supprimé.
+Photo de profil (codée) : le format est lu dans les premiers octets du fichier, jamais dans son nom. Avec Cloudinary, la photo est publique sur son CDN et `avatarUrl` pointe vers une version recadrée en 256 px au format le plus léger (`f_auto,q_auto`). Sans Cloudinary, les fichiers sont rangés dans `UPLOADS_DIR/avatars` sous un nom régénéré. Les CV vont chez Cloudinary en fichiers privés (`authenticated`) : aucune adresse publique, le serveur les relit par une requête signée pour `GET /applications/{id}/cv`, après les mêmes contrôles d'accès. Les fichiers enregistrés sur le disque avant l'activation de Cloudinary restent lisibles. Une photo n'est servie que tant qu'elle est celle du profil : l'ancienne est effacée quand on en met une nouvelle, quand on la retire, ou quand le compte est supprimé.
 
 Comptes connectés (codés) : `POST /users/me/connections/{provider}` est protégé par CSRF. Il note dans la session que le prochain retour de GitHub ou Google, dans les 10 minutes, doit être rattaché au membre connecté. Le front navigue ensuite vers `authorizationUrl`. Au retour, le serveur renvoie vers `FRONT_URL/settings?linked=github`, ou vers `?linkError=CODE` (`ALREADY_LINKED_ELSEWHERE`, `ALREADY_LINKED`). Un compte externe déjà lié à un autre membre n'est jamais déplacé. On ne délie jamais le dernier moyen de connexion.
 

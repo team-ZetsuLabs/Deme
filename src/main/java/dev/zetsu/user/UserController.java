@@ -112,6 +112,7 @@ public class UserController {
                     + "change à chaque nouvelle photo, on peut donc la garder en cache.")
     @ApiResponse(responseCode = "200", description = "Profil à jour, avatarUrl pointe vers la nouvelle photo")
     @ApiResponse(responseCode = "400", description = "PHOTO_REQUIRED, PHOTO_TYPE, PHOTO_TOO_LARGE, FILE_TOO_LARGE (plus de 5 Mo)", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "503", description = "STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "429", description = "RATE_LIMITED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(
