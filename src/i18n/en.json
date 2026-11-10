@@ -1,4 +1,124 @@
 {
+  "playtests": {
+    "pageTitle": "Closed tests",
+    "title": "Google Play closed tests",
+    "lead": "Find testers for your app, and test other members' apps in return.",
+    "publish": "Start a campaign",
+    "mine": "My campaigns",
+    "mineLead": "Your test campaigns, drafts included.",
+    "mineEmpty": "You don't have any campaign yet.",
+    "empty": "No campaign for now.",
+    "full": "Full",
+    "spotsLeft_one": "{{count}} spot of {{target}}",
+    "spotsLeft_other": "{{count}} spots of {{target}}",
+    "instructions": "Instructions for testers",
+    "disclaimer": "Counters rely on testers' own declarations: they are not proof of Google Play compliance.",
+    "filters": {
+      "status": "Status",
+      "active": "Running",
+      "completed": "Finished",
+      "availability": "Spots",
+      "open": "With spots",
+      "full": "Full"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "PENDING_REVIEW": "Under review",
+      "REJECTED": "Rejected",
+      "ACTIVE": "Active",
+      "SUSPENDED": "Suspended",
+      "COMPLETED": "Finished"
+    },
+    "statusNotice": {
+      "DRAFT": "This draft is only visible to you. Publish it to recruit testers.",
+      "PENDING_REVIEW": "This campaign is awaiting the team's review.",
+      "REJECTED": "This campaign was rejected.",
+      "SUSPENDED": "This campaign is suspended."
+    },
+    "progress": { "label": "Progress" },
+    "facts": { "testers": "Testers wanted", "days": "Days required", "spots": "Spots left" },
+    "owner": {
+      "yours": "Your campaign.",
+      "edit": "Edit",
+      "submit": "Publish the campaign",
+      "submitted": "Campaign published",
+      "closed": "Campaign closed",
+      "close": {
+        "button": "Close the campaign",
+        "title": "Close this campaign?",
+        "text": "It stops accepting new testers. Those in progress finish their days.",
+        "confirm": "Close"
+      }
+    },
+    "join": {
+      "title": "Become a tester",
+      "loginText": "Sign in to join this campaign.",
+      "login": "Sign in",
+      "text": "Install the app and keep it for {{days}} days: you help another developer publish theirs.",
+      "cta": "Join the test"
+    },
+    "participation": {
+      "joinedTitle": "Over to you",
+      "step1": "Open the test opt-in link.",
+      "step2": "Join the programme and install the app.",
+      "step3": "Come back here to declare your install.",
+      "openOptIn": "Open the Google Play test",
+      "googleEmail": "Google address (optional)",
+      "googleEmailHint": "Useful if the owner tracks testers by address. Visible to them only.",
+      "confirm": "I installed the app",
+      "withdraw": "Withdraw",
+      "withdrawConfirm": "Your spot will be freed and you won't be able to join this campaign again.",
+      "withdrawYes": "Withdraw",
+      "runningTitle": "Your test is running",
+      "daysOf": "days of {{total}}",
+      "verified": "The owner confirmed your presence in the Play Console.",
+      "declared": "Install declared. Come back each day to confirm you're still enrolled.",
+      "needsAttention": "You haven't confirmed in 3 days: remember to stay enrolled.",
+      "checkIn": "I'm still enrolled",
+      "checkedIn": "Confirmed for today",
+      "completedTitle": "Test finished, thank you!",
+      "completedText": "You kept your {{days}} days. Your reputation went up.",
+      "dropped": "You withdrew from this campaign.",
+      "removed": "The owner removed you from this campaign.",
+      "reason": "Reason"
+    },
+    "new": {
+      "pageTitle": "New campaign",
+      "lead": "Describe your app and the closed test to join.",
+      "appName": "App name",
+      "appNamePlaceholder": "Tontine Cash",
+      "packageName": "Package name",
+      "packageNameHint": "The Android identifier, e.g. sn.myapp.app.",
+      "description": "Description",
+      "descriptionHint": "What the app does, what testers should look at.",
+      "optInUrl": "Test opt-in link",
+      "optInUrlHint": "The Google Play link (play.google.com/apps/testing/…) or the Google group.",
+      "testersTarget": "Testers wanted",
+      "testersTargetHint": "From {{min}} to {{max}}; Google requires {{min}}.",
+      "desiredStart": "Preferred start date",
+      "instructions": "Instructions for testers (optional)",
+      "instructionsHint": "What to test first, where to report bugs.",
+      "notice": "Your campaign is created as a draft: you'll publish it next.",
+      "submit": "Create the draft",
+      "busy": "Creating",
+      "saved": "Draft created",
+      "errors": {
+        "appName": "The name must be 2 to 80 characters.",
+        "packageName": "Enter a valid package name, e.g. sn.myapp.app.",
+        "description": "The description must be at least 30 characters.",
+        "optInUrl": "Enter a valid Google Play test link.",
+        "testersTarget": "Enter a number of testers between 12 and 100."
+      }
+    },
+    "edit": {
+      "pageTitle": "Edit the campaign",
+      "lead": "Editable while the campaign is a draft or rejected.",
+      "submit": "Save changes",
+      "saved": "Campaign updated",
+      "notAllowed": "This campaign can no longer be edited.",
+      "back": "Back to the campaign"
+    }
+  },
   "app": {
     "name": "Dɛmɛ",
     "home": "Dɛmɛ, home",
@@ -10,6 +130,8 @@
     "questions": "Help",
     "jobs": "Jobs",
     "missions": "Gigs",
+    "playtests": "Closed tests",
+    "playtestsShort": "Tests",
     "challenges": "Challenges",
     "account": "Account",
     "profile": "My profile",

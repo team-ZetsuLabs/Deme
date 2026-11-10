@@ -6,8 +6,8 @@ import { Dialog } from '../../components/Dialog';
 import styles from './CloseListingButton.module.css';
 
 export type CloseListingButtonProps = {
-  /** Préfixe des textes : clôture d'une offre ou d'une mission. */
-  labels: 'jobs.close' | 'missions.close';
+  /** Préfixe des textes : clôture d'une offre, d'une mission ou d'une campagne de test. */
+  labels: 'jobs.close' | 'missions.close' | 'playtests.owner.close';
   /** Appel au serveur ; l'écran se met à jour avec la réponse. */
   onConfirm: () => Promise<void>;
 };

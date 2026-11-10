@@ -48,6 +48,8 @@ export function notificationLink(target: NotificationTarget, type?: Notification
       return '/applications';
     case 'COMMUNITY_PROPOSAL':
       return '/communities/new';
+    case 'PLAYTEST':
+      return `/playtests/${id}`;
     case 'USER':
       return '/settings';
   }

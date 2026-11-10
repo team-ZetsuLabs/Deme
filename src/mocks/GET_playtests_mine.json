@@ -1,0 +1,53 @@
+{
+  "items": [
+    {
+      "id": 7,
+      "appName": "Tontine Cash",
+      "packageName": "sn.tontinecash.app",
+      "platform": "GOOGLE_PLAY",
+      "iconUrl": null,
+      "owner": {
+        "username": "aminata_dev",
+        "displayName": "Aminata Diallo",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 342,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "status": "ACTIVE",
+      "testersTarget": 14,
+      "requiredDays": 14,
+      "spotsLeft": 5,
+      "progress": { "percent": 38, "completed": 2, "verified": 4, "declared": 3, "joined": 0 },
+      "createdAt": "2026-11-03T09:00:00Z",
+      "startedAt": "2026-11-03T12:00:00Z"
+    },
+    {
+      "id": 21,
+      "appName": "Djamono Sutura",
+      "packageName": "sn.djamono.sutura",
+      "platform": "GOOGLE_PLAY",
+      "iconUrl": null,
+      "owner": {
+        "username": "aminata_dev",
+        "displayName": "Aminata Diallo",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 342,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "status": "DRAFT",
+      "testersTarget": 14,
+      "requiredDays": 14,
+      "spotsLeft": 14,
+      "progress": { "percent": 0, "completed": 0, "verified": 0, "declared": 0, "joined": 0 },
+      "createdAt": "2026-11-10T11:20:00Z",
+      "startedAt": null
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 2
+}

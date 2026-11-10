@@ -15,6 +15,12 @@ export const NAV_ITEMS: NavItem[] = [
   { to: '/questions', labelKey: 'nav.questions', icon: 'help' },
   { to: '/jobs', labelKey: 'nav.jobs', icon: 'jobs', alsoActive: ['/applications'] },
   { to: '/missions', labelKey: 'nav.missions', icon: 'mission' },
+  {
+    to: '/playtests',
+    labelKey: 'nav.playtests',
+    shortLabelKey: 'nav.playtestsShort',
+    icon: 'install',
+  },
   { to: '/challenges', labelKey: 'nav.challenges', icon: 'trophy' },
   { to: '/projects', labelKey: 'nav.projects', icon: 'projects' },
   {

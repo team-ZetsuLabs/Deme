@@ -42,6 +42,11 @@ const MissionsPage = lazy(() => import('./pages/missions/MissionsPage'));
 const MissionPage = lazy(() => import('./pages/mission/MissionPage'));
 const NewMissionPage = lazy(() => import('./pages/mission-new/NewMissionPage'));
 const EditMissionPage = lazy(() => import('./pages/mission-edit/EditMissionPage'));
+const PlaytestsPage = lazy(() => import('./pages/playtests/PlaytestsPage'));
+const MyPlaytestsPage = lazy(() => import('./pages/playtests-mine/MyPlaytestsPage'));
+const PlaytestPage = lazy(() => import('./pages/playtest/PlaytestPage'));
+const NewPlaytestPage = lazy(() => import('./pages/playtest-new/NewPlaytestPage'));
+const EditPlaytestPage = lazy(() => import('./pages/playtest-edit/EditPlaytestPage'));
 const ChallengesPage = lazy(() => import('./pages/challenges/ChallengesPage'));
 const ProjectsPage = lazy(() => import('./pages/projects/ProjectsPage'));
 const ProjectPage = lazy(() => import('./pages/project/ProjectPage'));
@@ -194,6 +199,32 @@ export function App() {
                           element={
                             <RequireAuth>
                               <EditMissionPage />
+                            </RequireAuth>
+                          }
+                        />
+                        <Route path="playtests" element={<PlaytestsPage />} />
+                        <Route
+                          path="playtests/new"
+                          element={
+                            <RequireAuth>
+                              <NewPlaytestPage />
+                            </RequireAuth>
+                          }
+                        />
+                        <Route
+                          path="playtests/mine"
+                          element={
+                            <RequireAuth>
+                              <MyPlaytestsPage />
+                            </RequireAuth>
+                          }
+                        />
+                        <Route path="playtests/:id" element={<PlaytestPage />} />
+                        <Route
+                          path="playtests/:id/edit"
+                          element={
+                            <RequireAuth>
+                              <EditPlaytestPage />
                             </RequireAuth>
                           }
                         />

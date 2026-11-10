@@ -1,4 +1,128 @@
 {
+  "playtests": {
+    "pageTitle": "Testes fechados",
+    "title": "Testes fechados do Google Play",
+    "lead": "Encontre testadores para a sua aplicação e teste as dos outros membros.",
+    "publish": "Propor uma campanha",
+    "mine": "As minhas campanhas",
+    "mineLead": "As suas campanhas de teste, rascunhos incluídos.",
+    "mineEmpty": "Ainda não tem nenhuma campanha.",
+    "empty": "Nenhuma campanha de momento.",
+    "full": "Completa",
+    "spotsLeft_one": "{{count}} vaga de {{target}}",
+    "spotsLeft_other": "{{count}} vagas de {{target}}",
+    "instructions": "Instruções para os testadores",
+    "disclaimer": "Os contadores baseiam-se nas declarações dos testadores: não comprovam a conformidade com o Google Play.",
+    "filters": {
+      "status": "Estado",
+      "active": "Em curso",
+      "completed": "Terminadas",
+      "availability": "Vagas",
+      "open": "Com vaga",
+      "full": "Completas"
+    },
+    "status": {
+      "DRAFT": "Rascunho",
+      "PENDING_REVIEW": "Em validação",
+      "REJECTED": "Recusada",
+      "ACTIVE": "Ativa",
+      "SUSPENDED": "Suspensa",
+      "COMPLETED": "Terminada"
+    },
+    "statusNotice": {
+      "DRAFT": "Este rascunho só é visível para si. Publique-o para recrutar testadores.",
+      "PENDING_REVIEW": "Esta campanha aguarda a validação da equipa.",
+      "REJECTED": "Esta campanha foi recusada.",
+      "SUSPENDED": "Esta campanha está suspensa."
+    },
+    "progress": { "label": "Progresso" },
+    "facts": {
+      "testers": "Testadores desejados",
+      "days": "Dias exigidos",
+      "spots": "Vagas livres"
+    },
+    "owner": {
+      "yours": "A sua campanha.",
+      "edit": "Editar",
+      "submit": "Publicar a campanha",
+      "submitted": "Campanha publicada",
+      "closed": "Campanha encerrada",
+      "close": {
+        "button": "Encerrar a campanha",
+        "title": "Encerrar esta campanha?",
+        "text": "Deixa de aceitar novos testadores. Os que estão em curso terminam os seus dias.",
+        "confirm": "Encerrar"
+      }
+    },
+    "join": {
+      "title": "Tornar-se testador",
+      "loginText": "Inicie sessão para se juntar a esta campanha.",
+      "login": "Iniciar sessão",
+      "text": "Instale a aplicação e mantenha-a {{days}} dias: ajuda outro programador a publicar a dele.",
+      "cta": "Juntar-me ao teste"
+    },
+    "participation": {
+      "joinedTitle": "É a sua vez",
+      "step1": "Abra o link de inscrição no teste.",
+      "step2": "Junte-se ao programa e instale a aplicação.",
+      "step3": "Volte aqui para declarar a sua instalação.",
+      "openOptIn": "Abrir o teste do Google Play",
+      "googleEmail": "Endereço Google (opcional)",
+      "googleEmailHint": "Útil se o autor gere os testadores por endereço. Visível só para ele.",
+      "confirm": "Instalei a aplicação",
+      "withdraw": "Desistir",
+      "withdrawConfirm": "A sua vaga será libertada e não poderá voltar a juntar-se a esta campanha.",
+      "withdrawYes": "Desistir",
+      "runningTitle": "O seu teste está em curso",
+      "daysOf": "dias de {{total}}",
+      "verified": "O autor confirmou a sua presença na Play Console.",
+      "declared": "Instalação declarada. Volte todos os dias para confirmar que continua inscrito.",
+      "needsAttention": "Não confirma há 3 dias: lembre-se de continuar inscrito.",
+      "checkIn": "Continuo inscrito",
+      "checkedIn": "Confirmado por hoje",
+      "completedTitle": "Teste terminado, obrigado!",
+      "completedText": "Cumpriu os seus {{days}} dias. A sua reputação subiu.",
+      "dropped": "Desistiu desta campanha.",
+      "removed": "O autor retirou-o desta campanha.",
+      "reason": "Motivo"
+    },
+    "new": {
+      "pageTitle": "Nova campanha",
+      "lead": "Descreva a sua aplicação e o teste fechado a juntar-se.",
+      "appName": "Nome da aplicação",
+      "appNamePlaceholder": "Tontine Cash",
+      "packageName": "Nome do pacote",
+      "packageNameHint": "O identificador Android, por exemplo sn.minhaapp.app.",
+      "description": "Descrição",
+      "descriptionHint": "Para que serve a aplicação, o que os testadores devem observar.",
+      "optInUrl": "Link de inscrição no teste",
+      "optInUrlHint": "O link do Google Play (play.google.com/apps/testing/…) ou o grupo Google.",
+      "testersTarget": "Testadores procurados",
+      "testersTargetHint": "De {{min}} a {{max}}; o Google exige {{min}}.",
+      "desiredStart": "Data de início desejada",
+      "instructions": "Instruções para os testadores (opcional)",
+      "instructionsHint": "O que testar primeiro, onde reportar os erros.",
+      "notice": "A sua campanha é criada como rascunho: publica-a a seguir.",
+      "submit": "Criar o rascunho",
+      "busy": "A criar",
+      "saved": "Rascunho criado",
+      "errors": {
+        "appName": "O nome deve ter de 2 a 80 caracteres.",
+        "packageName": "Introduza um nome de pacote válido, por exemplo sn.minhaapp.app.",
+        "description": "A descrição deve ter pelo menos 30 caracteres.",
+        "optInUrl": "Introduza um link de teste do Google Play válido.",
+        "testersTarget": "Indique um número de testadores entre 12 e 100."
+      }
+    },
+    "edit": {
+      "pageTitle": "Editar a campanha",
+      "lead": "Editável enquanto a campanha for rascunho ou estiver recusada.",
+      "submit": "Guardar as alterações",
+      "saved": "Campanha atualizada",
+      "notAllowed": "Esta campanha já não pode ser editada.",
+      "back": "Voltar à campanha"
+    }
+  },
   "app": {
     "name": "Dɛmɛ",
     "home": "Dɛmɛ, início",
@@ -10,6 +134,8 @@
     "questions": "Ajuda",
     "jobs": "Emprego",
     "missions": "Missões",
+    "playtests": "Testes fechados",
+    "playtestsShort": "Testes",
     "challenges": "Desafios",
     "account": "Conta",
     "profile": "O meu perfil",

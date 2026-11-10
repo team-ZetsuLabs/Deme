@@ -139,6 +139,21 @@ export type ModerationDecision = Schemas['ModerationDecision'];
 export type CaseDecisionRequest = Schemas['CaseDecisionRequest'];
 export type MyModeratedContent = Schemas['MyModeratedContent'];
 
+// Tests fermés Google Play (TST)
+export type PlaytestStatus = Schemas['PlaytestSummary']['status'];
+export type PlaytestAvailability = 'OPEN' | 'FULL';
+export type PlaytestSummary = Schemas['PlaytestSummary'];
+export type PlaytestDetail = Schemas['PlaytestDetail'];
+export type PlaytestRequest = Schemas['PlaytestRequest'];
+export type PlaytestProgress = Schemas['PlaytestProgress'];
+export type MyPlaytestParticipation = Schemas['MyPlaytestParticipation'];
+export type PlaytestParticipationStatus = MyPlaytestParticipation['status'];
+export type PlaytestParticipation = Schemas['PlaytestParticipation'];
+export type MyPlaytestEntry = Schemas['MyPlaytestEntry'];
+export type PlaytestConfirmRequest = Schemas['PlaytestConfirmRequest'];
+export type PlaytestWithdrawRequest = Schemas['PlaytestWithdrawRequest'];
+export type PlaytestRemoveRequest = Schemas['PlaytestRemoveRequest'];
+
 // Communautés
 export type CommunityKind = Schemas['CommunitySummary']['kind'];
 export type CommunitySummary = Schemas['CommunitySummary'];

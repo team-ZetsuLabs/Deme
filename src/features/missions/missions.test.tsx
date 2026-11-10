@@ -13,7 +13,7 @@ import { SessionProvider } from '../auth/SessionProvider';
 import { MissionForm } from './MissionForm';
 import { missionsApi } from './missionsApi';
 import { formatMoney } from './money';
-import { author, demoMe } from '../../test/fixtures';
+import { author, demoMe, publicProfile } from '../../test/fixtures';
 
 const member: Me = demoMe({ technologies: ['php', 'mobile-money'] });
 
@@ -99,19 +99,16 @@ describe('MissionPage (JOB-5)', () => {
     const offer: ReceivedApplication = {
       id: 301,
       target: { type: 'MISSION', id: 1, title: detail.title },
-      candidate: {
+      candidate: publicProfile({
         username: 'moussa_t',
         displayName: 'Moussa Traoré',
         countryCode: 'ML',
-        role: 'MEMBER',
         reputation: 310,
-        level: 'MEMBER',
-        visibleToRecruiters: false,
         technologies: ['php'],
         questionCount: 2,
         answerCount: 14,
         createdAt: '2026-09-01T08:00:00Z',
-      },
+      }),
       message: 'Je peux commencer demain.',
       hasCv: false,
       proposedBudget: { amount: 70000, currency: 'XOF' },

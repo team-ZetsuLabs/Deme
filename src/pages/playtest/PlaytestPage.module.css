@@ -1,0 +1,88 @@
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s4);
+}
+
+.header > div {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-tight);
+}
+
+.pkg {
+  margin: var(--s1) 0 0;
+  font-family: var(--f-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+  overflow-wrap: anywhere;
+}
+
+.owner {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  margin: var(--s4) 0;
+  color: var(--text-2);
+}
+
+.owner a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.owner a:hover {
+  text-decoration: underline;
+}
+
+.instructions {
+  margin: 0;
+  padding: var(--s4);
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  white-space: pre-wrap;
+  color: var(--text);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s3);
+  margin: 0 0 var(--s4);
+}
+
+.facts div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.facts dt {
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+
+.facts dd {
+  margin: 0;
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.yours {
+  margin: 0 0 var(--s3);
+  font-weight: 600;
+}
+
+.notice {
+  margin: var(--s3) 0 0;
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}

@@ -18,7 +18,7 @@ import { MissionRow } from '../features/missions/MissionRow';
 import { HiddenNotice } from '../features/moderation/HiddenNotice';
 import { NotificationItem } from '../features/notifications/NotificationItem';
 import { QuestionRow } from '../features/questions/QuestionRow';
-import { author } from './fixtures';
+import { author, publicProfile } from './fixtures';
 
 /**
  * Contenus piégés (CLAUDE.md, « Tests et qualité ») : chaque texte écrit par un membre reçoit
@@ -112,19 +112,16 @@ describe.each(PAYLOADS)('contenu piégé %s', (payload) => {
     const application: ReceivedApplication = {
       id: 9,
       target: { type: 'JOB', id: 1, title: payload },
-      candidate: {
+      candidate: publicProfile({
         username: 'piege',
         displayName: payload,
         bio: payload,
-        role: 'MEMBER',
         reputation: 1,
         level: 'NEWCOMER',
         visibleToRecruiters: true,
         technologies: [payload],
-        questionCount: 0,
-        answerCount: 0,
         createdAt: '2026-10-20T10:00:00Z',
-      },
+      }),
       message: payload,
       hasCv: false,
       status: 'SENT',

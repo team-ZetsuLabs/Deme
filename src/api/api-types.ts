@@ -99,6 +99,78 @@ export interface paths {
         /** Modifier sa question */
         put: operations["questionUpdate"];
         post?: never;
+        /**
+         * Supprimer sa question (QA-3)
+         * @description Seulement tant qu'elle n'a aucune réponse (canDelete sur la question). Les points qu'elle a rapportés             (question posée, votes reçus) sont retirés ; elle disparaît des listes, de la recherche et des             notifications.
+         */
+        delete: operations["questionDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Page d'un projet (PRJ-5)
+         * @description Équipe, rôles pourvus et ouverts. Le fil : GET /projects/{id}/updates.
+         */
+        get: operations["projectGet"];
+        /**
+         * Modifier son projet
+         * @description Sans les rôles, qui se gèrent à part. Relance un projet en pause.
+         */
+        put: operations["projectEdit"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Page d'une campagne
+         * @description optInUrl et instructions ne sont donnés qu'au porteur, à l'équipe et aux testeurs inscrits : on rejoint d'abord sur Zetsu, puis on suit le lien. Un brouillon, une campagne suspendue ou masquée n'existe que pour le porteur, l'équipe et ses testeurs (404 pour les autres).
+         */
+        get: operations["playtestGet"];
+        /**
+         * Modifier sa campagne
+         * @description En brouillon ou refusée seulement. Une campagne refusée redevient un brouillon, à renvoyer.
+         */
+        put: operations["playtestEdit"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/icon": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Icône de l'application
+         * @description Formulaire multipart, champ photo : PNG, JPG ou WebP de 2 Mo maximum, vérifié par son contenu. Recadrée en 128 px. Impossible sur une campagne terminée.
+         */
+        put: operations["playtestIcon"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -348,6 +420,346 @@ export interface paths {
         put?: never;
         /** Répondre à une question */
         post: operations["answerCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Liste des projets (PRJ-2)
+         * @description Par défaut tous les projets sauf les clôturés, les plus actifs d'abord. member liste les projets d'un membre (porteur ou membre accepté), clôturés compris, pour son profil.
+         */
+        get: operations["projectList"];
+        put?: never;
+        /**
+         * Publier un projet (PRJ-1)
+         * @description Ouvert à tout membre connecté, de 1 à 6 rôles.
+         */
+        post: operations["projectCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{id}/updates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fil de mises à jour (PRJ-5)
+         * @description Plus récentes d'abord.
+         */
+        get: operations["projectUpdates"];
+        put?: never;
+        /**
+         * Écrire dans le fil
+         * @description Porteur et membres acceptés. Relance un projet en pause.
+         */
+        post: operations["projectPostUpdate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{id}/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ajouter un rôle recherché
+         * @description 6 rôles au plus par projet.
+         */
+        post: operations["projectAddRole"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{id}/requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Demandes reçues sur son projet
+         * @description Plus récentes d'abord ; status filtre.
+         */
+        get: operations["projectRequests"];
+        put?: never;
+        /**
+         * Demander à rejoindre un rôle (PRJ-3)
+         * @description Une seule demande en attente par membre et par projet. Le porteur est notifié.
+         */
+        post: operations["projectRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{id}/members/{username}/remove": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Retirer un membre de l'équipe
+         * @description Avec un motif, montré au membre. Le rôle se rouvre.
+         */
+        post: operations["projectRemoveMember"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{id}/leave": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Quitter l'équipe
+         * @description Le rôle se rouvre.
+         */
+        post: operations["projectLeave"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Clôturer son projet (PRJ-6)
+         * @description Définitif. Chaque membre accepté gagne 10 points et le projet reste sur son profil ; les demandes en attente sont refusées.
+         */
+        post: operations["projectClose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Campagnes de test fermé (TST-1)
+         * @description Actives par défaut, les plus récentes d'abord ; status=COMPLETED pour les terminées. availability=OPEN : avec une place libre ; FULL : complètes.
+         */
+        get: operations["playtestList"];
+        put?: never;
+        /**
+         * Créer une campagne (TST-1)
+         * @description Toujours en brouillon : POST /playtests/{id}/submit pour la publier.
+         */
+        post: operations["playtestCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Publier sa campagne
+         * @description Un porteur de niveau Membre (50 points) ou plus est publié tout de suite (ACTIVE) ; sinon la campagne attend l'équipe (PENDING_REVIEW). Une seule campagne en cours par application.
+         */
+        post: operations["playtestSubmit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/participations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Testeurs de sa campagne
+         * @description Pour le porteur : jours effectués, niveau de preuve, « à confirmer » (needsAttention), adresse Google déclarée. Dans l'ordre d'arrivée.
+         */
+        get: operations["playtestParticipations"];
+        put?: never;
+        /**
+         * Rejoindre une campagne (TST-2)
+         * @description Prend une place tout de suite et donne optInUrl. L'installation est à déclarer sous 48 heures, sinon la place se libère. On ne rejoint qu'une fois une campagne, même après un départ.
+         */
+        post: operations["playtestJoin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/participations/{participationId}/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Testeur vérifié dans la Play Console
+         * @description Par le porteur, sur une installation déclarée.
+         */
+        post: operations["playtestVerify"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/participations/{participationId}/remove": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Retirer un testeur
+         * @description Par le porteur, avec un motif montré au testeur. La place se libère.
+         */
+        post: operations["playtestRemove"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/participations/me/withdraw": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Se désister
+         * @description La place se libère pour un autre testeur. Motif facultatif.
+         */
+        post: operations["playtestWithdraw"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/participations/me/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Déclarer l'installation
+         * @description Le décompte des jours commence maintenant. Adresse Google facultative.
+         */
+        post: operations["playtestConfirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/participations/me/check-in": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * « Toujours inscrit »
+         * @description Une fois par jour (UTC). Sert à repérer les décrochages, pas de preuve.
+         */
+        post: operations["playtestCheckIn"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Clôturer sa campagne
+         * @description Plus de nouveaux testeurs ; ceux en cours vont au bout de leurs jours et gagnent leurs points.
+         */
+        post: operations["playtestClose"];
         delete?: never;
         options?: never;
         head?: never;
@@ -675,6 +1087,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/ai/question-assist": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Améliorer un brouillon de question (IA-1)
+         * @description Propose un titre plus clair, des étiquettes, le contexte africain détecté et les informations manquantes. Rien n'est enregistré ni modifié. 10 appels par membre et par heure ; un même brouillon est servi depuis un cache de 24 heures. Le front abandonne au bout de 8 secondes : sur toute erreur, il masque le bouton et le formulaire continue de marcher.
+         */
+        post: operations["aiQuestionAssist"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/users/{id}/suspend": {
         parameters: {
             query?: never;
@@ -770,6 +1202,83 @@ export interface paths {
          * @description Note sur 100 et validation. Un dépôt validé rapporte +20 de réputation (CHALLENGE_VALIDATED), une seule fois ; une note corrigée plus tard ne change pas les points, un passage de VALIDATED à REJECTED les retire. Le membre est notifié.
          */
         post: operations["challengeAdminReview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/playtests/{id}/suspend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Suspendre une campagne
+         * @description Motif obligatoire. Plus de nouveaux testeurs ; le décompte de ceux en cours continue.
+         */
+        post: operations["playtestAdminSuspend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/playtests/{id}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Valider ou refuser une campagne
+         * @description Motif obligatoire pour REJECT, montré au porteur. Validée, la campagne est annoncée aux membres qui font du mobile.
+         */
+        post: operations["playtestAdminReview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/playtests/{id}/reactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Réactiver une campagne suspendue */
+        post: operations["playtestAdminReactivate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/playtests/{id}/participations/{participationId}/remove": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Retirer un testeur
+         * @description Motif montré au testeur ; le porteur est prévenu. Pour « réaffecter » un testeur, on le retire ici puis il rejoint une autre campagne : un compteur ne passe jamais d'une application à une autre.
+         */
+        post: operations["playtestAdminRemove"];
         delete?: never;
         options?: never;
         head?: never;
@@ -921,6 +1430,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{id}/requests/{requestId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Retirer sa demande
+         * @description Seulement tant qu'elle est en attente.
+         */
+        delete: operations["projectWithdraw"];
+        options?: never;
+        head?: never;
+        /**
+         * Accepter ou refuser une demande (PRJ-4)
+         * @description Le candidat est notifié. Acceptée, le rôle passe « Pourvu » et les autres demandes en attente sur ce rôle sont refusées.
+         */
+        patch: operations["projectDecide"];
+        trace?: never;
+    };
     "/api/v1/applications/{id}": {
         parameters: {
             query?: never;
@@ -975,6 +1508,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/users/{username}/badges": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Badges d'un membre et sa progression (REP-4)
+         * @description Toujours les six badges, dans le même ordre. Un badge gagné ne se perd pas.
+         */
+        get: operations["userBadges"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/users/{username}/avatar/{file}": {
         parameters: {
             query?: never;
@@ -987,6 +1540,46 @@ export interface paths {
          * @description Ne pas construire cette adresse : utiliser avatarUrl. Réponse image/png, image/jpeg ou image/webp, en cache un an (le nom change avec la photo).
          */
         get: operations["userAvatar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/project-requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mes demandes pour rejoindre des projets
+         * @description Plus récentes d'abord.
+         */
+        get: operations["projectMyRequests"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/playtest-participations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mes participations à des tests fermés
+         * @description Les plus récentes d'abord, avec leurs compteurs.
+         */
+        get: operations["playtestMyParticipations"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1104,6 +1697,83 @@ export interface paths {
         };
         /** Étiquettes les plus utilisées, filtrables par début de nom (autocomplétion) */
         get: operations["tagList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Chiffres de la page d'accueil, publics, mis en cache 5 minutes par le navigateur */
+        get: operations["statsHome"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/questions/similar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Questions similaires (QA-8)
+         * @description À appeler pendant la saisie du titre, après une courte pause. Plein texte en français et en anglais ; un titre de moins de 10 caractères renvoie une liste vide. exclude écarte la question en cours de modification.
+         */
+        get: operations["questionSimilar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/icon/{file}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Icône gardée sur le serveur
+         * @description Ne pas construire cette adresse : utiliser iconUrl. En cache un an.
+         */
+        get: operations["playtestIconFile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mes campagnes
+         * @description Tous statuts, brouillons compris, les plus récentes d'abord.
+         */
+        get: operations["playtestMine"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1383,6 +2053,83 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/playtests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Campagnes de test fermé (TST-5)
+         * @description Toutes sauf les brouillons, celles en attente de validation d'abord. problem=INACTIVE : active sans participation depuis 7 jours ; STALLED : plus de 30 % des testeurs en cours « à confirmer » ; REPORTED : masquée par la modération.
+         */
+        get: operations["playtestAdminList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/playtests/{id}/participations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Testeurs d'une campagne
+         * @description Adresses Google comprises.
+         */
+        get: operations["playtestAdminParticipations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/playtests/{id}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Historique d'une campagne
+         * @description Plus récent d'abord.
+         */
+        get: operations["playtestAdminEvents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/playtests/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Indicateurs des tests fermés (TST-6) */
+        get: operations["playtestAdminStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/jobs": {
         parameters: {
             query?: never;
@@ -1463,6 +2210,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{id}/roles/{roleId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Retirer un rôle ouvert
+         * @description Les demandes en attente sur ce rôle sont refusées.
+         */
+        delete: operations["projectRemoveRole"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/tags/{name}": {
         parameters: {
             query?: never;
@@ -1507,7 +2274,7 @@ export interface components {
             countryCode?: string;
             city?: string;
             /** @enum {string} */
-            language: "fr" | "en";
+            language: "fr" | "en" | "pt" | "ar";
             visibleToRecruiters: boolean;
             /** @description Stack du membre. Absent ou null : inchangée. Liste vide : effacée. */
             technologies?: string[];
@@ -1535,6 +2302,8 @@ export interface components {
             displayName: string;
             /** @example aminata@exemple.sn */
             email?: string;
+            /** @description Vrai pour un email venu de GitHub ou Google, ou confirmé par le lien envoyé (AUTH-4) */
+            emailVerified: boolean;
             avatarUrl?: string;
             bio?: string;
             /** @example SN */
@@ -1542,7 +2311,7 @@ export interface components {
             /** @example Dakar */
             city?: string;
             /** @enum {string} */
-            language: "fr" | "en";
+            language: "fr" | "en" | "pt" | "ar";
             /** @description Profil visible par les recruteurs (désactivé par défaut) */
             visibleToRecruiters: boolean;
             /** @enum {string} */
@@ -1577,7 +2346,7 @@ export interface components {
             /** @example SN */
             countryCode: string;
             /** @enum {string} */
-            language: "fr" | "en";
+            language: "fr" | "en" | "pt" | "ar";
         };
         /** @description Formulaire multipart de photo de profil (SET-1) */
         AvatarForm: {
@@ -1649,6 +2418,8 @@ export interface components {
             createdAt: string;
             /** Format: date-time */
             updatedAt: string;
+            /** @description Vrai si le membre connecté peut supprimer la question : la sienne, sans réponse */
+            canDelete: boolean;
         };
         /** @description Création ou modification complète d'une question (QA-1) */
         QuestionRequest: {
@@ -1666,6 +2437,239 @@ export interface components {
              */
             tags: string[];
             context?: components["schemas"]["QuestionContext"];
+        };
+        /** @description Modification d'un projet ; les rôles se gèrent à part */
+        ProjectEditRequest: {
+            title: string;
+            description: string;
+            /** @enum {string} */
+            type: "OPEN_SOURCE" | "STUDY" | "STARTUP" | "VOLUNTEER";
+            technologies?: string[];
+            githubUrl?: string;
+            contactUrl?: string;
+        };
+        /** @description Dernière demande du membre connecté sur ce projet */
+        MyProjectRequestRef: {
+            /** Format: int64 */
+            id: number;
+            /**
+             * Format: int64
+             * @description Null si le rôle a été retiré depuis
+             */
+            roleId?: number;
+            /** @enum {string} */
+            status: "PENDING" | "ACCEPTED" | "REFUSED" | "LEFT";
+        };
+        /** @description Page d'un projet (PRJ-5) */
+        ProjectDetail: {
+            /** Format: int64 */
+            id: number;
+            title: string;
+            /** @description Markdown d'origine, pour pré-remplir le formulaire d'édition */
+            descriptionMarkdown: string;
+            /** @description HTML nettoyé côté serveur, à afficher avec MemberContent */
+            descriptionHtml: string;
+            /** @enum {string} */
+            type: "OPEN_SOURCE" | "STUDY" | "STARTUP" | "VOLUNTEER";
+            technologies: string[];
+            githubUrl?: string;
+            contactUrl?: string;
+            /** @enum {string} */
+            status: "OPEN" | "IN_PROGRESS" | "PAUSED" | "CLOSED";
+            owner: components["schemas"]["AuthorSummary"];
+            /** @description Rôles ouverts et pourvus */
+            roles: components["schemas"]["ProjectRole"][];
+            /** @description Porteur d'abord, puis les membres par date d'arrivée */
+            team: components["schemas"]["ProjectTeamMember"][];
+            /** @description Null si le membre connecté n'a jamais demandé à rejoindre */
+            myRequest?: components["schemas"]["MyProjectRequestRef"];
+            /** @description Vrai si le membre connecté est le porteur et le projet n'est pas clôturé */
+            canEdit: boolean;
+            /** @description Vrai si le membre connecté peut écrire dans le fil */
+            canPostUpdate: boolean;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+            /** Format: date-time */
+            lastActivityAt: string;
+        };
+        ProjectRole: {
+            /** Format: int64 */
+            id: number;
+            title: string;
+            technologies: string[];
+            /** @enum {string} */
+            status: "OPEN" | "FILLED";
+            /** @description Membre qui occupe le rôle, null s'il est ouvert */
+            member?: components["schemas"]["AuthorSummary"];
+        };
+        ProjectTeamMember: {
+            member: components["schemas"]["AuthorSummary"];
+            /**
+             * @description Null pour le porteur
+             * @example Développeur mobile Flutter
+             */
+            roleTitle?: string;
+            owner: boolean;
+            /** Format: date-time */
+            joinedAt: string;
+        };
+        /** @description Création ou modification d'une campagne (brouillon ou refusée) */
+        PlaytestRequest: {
+            /** @example Tontine Cash */
+            appName: string;
+            /** @example sn.tontinecash.app */
+            packageName: string;
+            /** @description Markdown. Le HTML brut est ignoré. */
+            description: string;
+            /** @example https://play.google.com/apps/testing/sn.tontinecash.app */
+            optInUrl: string;
+            /**
+             * Format: int32
+             * @description 14 par défaut ; Google en exige 12
+             * @example 14
+             */
+            testersTarget?: number;
+            /**
+             * Format: date
+             * @description Date de début souhaitée, à titre indicatif
+             * @example 2026-11-17
+             */
+            desiredStart?: string;
+            /**
+             * @description Consignes aux testeurs, texte brut
+             * @example Créez une tontine de test et invitez un ami. Signalez tout plantage dans le groupe.
+             */
+            instructions?: string;
+        };
+        /** @description Ma participation à une campagne */
+        MyPlaytestParticipation: {
+            /** Format: int64 */
+            id: number;
+            /** @enum {string} */
+            status: "JOINED" | "CONFIRMED" | "VERIFIED" | "COMPLETED" | "DROPPED" | "REMOVED";
+            /**
+             * @description Null tant que l'installation n'est pas déclarée, et après un départ
+             * @enum {string}
+             */
+            proofLevel?: "DECLARED" | "VERIFIED" | "COMPLETED";
+            /** Format: int32 */
+            daysDone: number;
+            /** Format: int32 */
+            requiredDays: number;
+            /** Format: date-time */
+            joinedAt: string;
+            /**
+             * Format: date-time
+             * @description Avant cette date, l'installation doit être déclarée, sinon la place se libère
+             */
+            confirmBefore?: string;
+            /** Format: date-time */
+            confirmedAt?: string;
+            /** Format: date-time */
+            verifiedAt?: string;
+            /** Format: date-time */
+            endsAt?: string;
+            /** Format: date-time */
+            lastCheckInAt?: string;
+            /** @description « Toujours inscrit » déjà fait aujourd'hui (UTC) */
+            checkedInToday: boolean;
+            /** @description 3 jours sans « toujours inscrit » */
+            needsAttention: boolean;
+            googleEmail?: string;
+            /** Format: date-time */
+            completedAt?: string;
+            /** Format: date-time */
+            droppedAt?: string;
+            /** @description Motif d'un désistement ou d'un retrait */
+            dropReason?: string;
+        };
+        /** @description Page d'une campagne */
+        PlaytestDetail: {
+            /** Format: int64 */
+            id: number;
+            appName: string;
+            packageName: string;
+            /** @example GOOGLE_PLAY */
+            platform: string;
+            iconUrl?: string;
+            descriptionMarkdown: string;
+            /** @description HTML nettoyé côté serveur, à afficher avec MemberContent */
+            descriptionHtml: string;
+            /** @description Lien d'inscription au test : seulement pour le porteur, l'équipe et les testeurs en cours. À ouvrir dans un nouvel onglet. */
+            optInUrl?: string;
+            /** @description Seulement pour le porteur, l'équipe et les testeurs */
+            instructions?: string;
+            owner: components["schemas"]["AuthorSummary"];
+            /** @enum {string} */
+            status: "DRAFT" | "PENDING_REVIEW" | "REJECTED" | "ACTIVE" | "SUSPENDED" | "COMPLETED";
+            /** @description Motif d'un refus ou d'une suspension : seulement pour le porteur et l'équipe */
+            reviewNote?: string;
+            /** Format: int32 */
+            testersTarget: number;
+            /** Format: int32 */
+            requiredDays: number;
+            /** Format: int32 */
+            spotsLeft: number;
+            progress: components["schemas"]["PlaytestProgress"];
+            /**
+             * Format: date-time
+             * @description Quand toutes les places sont prises par des installations déclarées : fin du dernier testeur. Null sinon.
+             */
+            estimatedEndAt?: string;
+            /** Format: date */
+            desiredStart?: string;
+            /** @description Null si je ne participe pas (ou si je ne suis pas connecté) */
+            myParticipation?: components["schemas"]["MyPlaytestParticipation"];
+            /** @description Brouillon ou refusée, et je suis le porteur */
+            canEdit: boolean;
+            /** @description Brouillon, et je suis le porteur */
+            canSubmit: boolean;
+            /** @description Active ou suspendue, et je suis le porteur */
+            canClose: boolean;
+            /** @description Active, une place libre, je ne suis pas le porteur et je n'ai jamais rejoint. Faux aussi pour un visiteur non connecté : le front l'invite alors à se connecter. */
+            canJoin: boolean;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+            /** Format: date-time */
+            startedAt?: string;
+            /** Format: date-time */
+            completedAt?: string;
+        };
+        /** @description Avancement : percent = jours effectués par les testeurs en cours et terminés, rapportés à testersTarget × requiredDays. Ce ne sont que des déclarations : jamais une conformité Google Play. */
+        PlaytestProgress: {
+            /**
+             * Format: int32
+             * @example 42
+             */
+            percent: number;
+            /**
+             * Format: int32
+             * @description Participations terminées
+             * @example 3
+             */
+            completed: number;
+            /**
+             * Format: int32
+             * @description En cours, vérifiées par le porteur
+             * @example 5
+             */
+            verified: number;
+            /**
+             * Format: int32
+             * @description En cours, déclarées par le testeur seulement
+             * @example 4
+             */
+            declared: number;
+            /**
+             * Format: int32
+             * @description Ont rejoint, installation pas encore déclarée
+             * @example 1
+             */
+            joined: number;
         };
         Budget: {
             /**
@@ -2044,7 +3048,7 @@ export interface components {
         /** @description Signaler un contenu (MOD-1), à partir du niveau Membre */
         ReportRequest: {
             /** @enum {string} */
-            targetType: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER";
+            targetType: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER" | "PROJECT" | "PLAYTEST";
             /**
              * Format: int64
              * @example 42
@@ -2084,6 +3088,146 @@ export interface components {
              * @description Vote du membre après l'opération : 1, -1 ou null
              */
             myVote?: number;
+        };
+        /** @description Publication d'un projet avec ses rôles (PRJ-1) */
+        ProjectCreateRequest: {
+            /** @example Application de cotisation de tontine en mobile money */
+            title: string;
+            /** @description Markdown. Le HTML brut est ignoré. */
+            description: string;
+            /** @enum {string} */
+            type: "OPEN_SOURCE" | "STUDY" | "STARTUP" | "VOLUNTEER";
+            /**
+             * @example [
+             *       "flutter",
+             *       "firebase",
+             *       "orange-money"
+             *     ]
+             */
+            technologies?: string[];
+            roles: components["schemas"]["ProjectRoleRequest"][];
+            /** @example https://github.com/tontine-cash/app */
+            githubUrl?: string;
+            /**
+             * @description Discord, Telegram… Pas de messagerie interne : les échanges passent par ce lien.
+             * @example https://discord.gg/tontinecash
+             */
+            contactUrl?: string;
+        };
+        /** @description Rôle recherché (PRJ-1) */
+        ProjectRoleRequest: {
+            /** @example Développeur mobile Flutter */
+            title: string;
+            /**
+             * @example [
+             *       "flutter",
+             *       "dart"
+             *     ]
+             */
+            technologies?: string[];
+        };
+        /** @description Message du fil de mises à jour (PRJ-5) */
+        ProjectUpdateRequest: {
+            /** @description Texte brut */
+            text: string;
+        };
+        ProjectUpdate: {
+            /** Format: int64 */
+            id: number;
+            author: components["schemas"]["AuthorSummary"];
+            /** @description Texte brut, à afficher échappé */
+            text: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        /** @description Demande pour rejoindre un rôle (PRJ-3) */
+        ProjectJoinRequest: {
+            /** Format: int64 */
+            roleId: number;
+            /**
+             * @description Texte brut, affiché tel quel au porteur
+             * @example Je fais du Flutter depuis deux ans, j'ai déjà intégré Wave et Orange Money.
+             */
+            message: string;
+        };
+        /** @description Demande envoyée par le membre connecté */
+        MyProjectRequest: {
+            /** Format: int64 */
+            id: number;
+            /** Format: int64 */
+            projectId: number;
+            projectTitle: string;
+            roleTitle: string;
+            message: string;
+            /** @enum {string} */
+            status: "PENDING" | "ACCEPTED" | "REFUSED" | "LEFT";
+            /** @description Motif donné par le porteur s'il a retiré le membre */
+            removalReason?: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            decidedAt?: string;
+            /** Format: date-time */
+            leftAt?: string;
+        };
+        ProjectMemberRemoval: {
+            /** @description Motif, montré au membre retiré */
+            reason: string;
+        };
+        /** @description Testeur vu par le porteur ou l'équipe */
+        PlaytestParticipation: {
+            /** Format: int64 */
+            id: number;
+            tester: components["schemas"]["AuthorSummary"];
+            /** @enum {string} */
+            status: "JOINED" | "CONFIRMED" | "VERIFIED" | "COMPLETED" | "DROPPED" | "REMOVED";
+            /** @enum {string} */
+            proofLevel?: "DECLARED" | "VERIFIED" | "COMPLETED";
+            /** Format: int32 */
+            daysDone: number;
+            /** Format: date-time */
+            joinedAt: string;
+            /** Format: date-time */
+            confirmedAt?: string;
+            /** Format: date-time */
+            verifiedAt?: string;
+            /** Format: date-time */
+            endsAt?: string;
+            /** Format: date-time */
+            lastCheckInAt?: string;
+            /** @description « À confirmer » : 3 jours sans « toujours inscrit » */
+            needsAttention: boolean;
+            /** @description Adresse Google déclarée, effacée 30 jours après la fin */
+            googleEmail?: string;
+            /** Format: date-time */
+            completedAt?: string;
+            /** Format: date-time */
+            droppedAt?: string;
+            dropReason?: string;
+            /**
+             * Format: int64
+             * @description Participation dont ce testeur a repris la place
+             */
+            replacesId?: number;
+        };
+        /** @description Retrait d'un testeur, avec un motif montré au testeur */
+        PlaytestRemoveRequest: {
+            /** @example Absent de la liste des testeurs de la Play Console */
+            reason: string;
+        };
+        /** @description Désistement, motif facultatif */
+        PlaytestWithdrawRequest: {
+            /** @example Mon téléphone est en panne */
+            reason?: string;
+        };
+        /** @description Déclaration d'installation */
+        PlaytestConfirmRequest: {
+            /**
+             * Format: email
+             * @description Adresse du compte Google utilisé sur le téléphone, si le porteur gère sa liste de testeurs par adresse. Visible du porteur et de l'équipe seulement, effacée 30 jours après la fin.
+             * @example aminata.diallo@gmail.com
+             */
+            googleEmail?: string;
         };
         MarkReadRequest: {
             /**
@@ -2152,7 +3296,7 @@ export interface components {
         /** @description Contenu signalé, pour construire le lien et l'aperçu côté front */
         ModerationTarget: {
             /** @enum {string} */
-            type: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER";
+            type: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER" | "PROJECT" | "PLAYTEST";
             /** Format: int64 */
             id: number;
             /** @description Titre de la question, de l'offre, de la mission ; début de la réponse ; pseudo pour un profil */
@@ -2290,6 +3434,41 @@ export interface components {
             email: string;
             password: string;
         };
+        /** @description Brouillon de question à améliorer (IA-1). Rien n'est enregistré. */
+        QuestionAssistRequest: {
+            /** @example ça marche pas */
+            title: string;
+            /** @description Markdown, tel que saisi */
+            body?: string;
+            /** @description Code facultatif, en texte brut */
+            code?: string;
+            /**
+             * @description Étiquettes déjà choisies
+             * @example [
+             *       "flutter"
+             *     ]
+             */
+            tags?: string[];
+            /** @description Contexte déjà rempli */
+            context?: components["schemas"]["QuestionContext"];
+        };
+        /** @description Suggestions de l'assistant (IA-1), à afficher avec l'étiquette « Suggéré par l'IA ». Chacune s'applique d'un clic ou s'ignore ; rien n'est modifié sans l'accord du membre. */
+        QuestionAssistResponse: {
+            /** @description Titre plus clair, entre 15 et 150 caractères ; null si le titre convient déjà */
+            title?: string;
+            /** @description De 0 à 4 étiquettes, sans celles déjà choisies */
+            tags: components["schemas"]["SuggestedTag"][];
+            /** @description Contexte africain détecté dans le texte ; chaque champ est null s'il n'est pas détecté ou déjà rempli */
+            context: components["schemas"]["QuestionContext"];
+            /** @description Informations manquantes, à traduire côté front */
+            missing: ("ERROR_MESSAGE" | "CODE" | "TECH_VERSION" | "EXPECTED_RESULT" | "ATTEMPTS" | "ENVIRONMENT")[];
+        };
+        SuggestedTag: {
+            /** @example spring-boot */
+            name: string;
+            /** @description Faux si l'étiquette sera créée à la publication */
+            existing: boolean;
+        };
         /** @description Suspension d'un compte : ses sessions ouvertes sont fermées */
         SuspendRequest: {
             /** @example Offres frauduleuses répétées malgré un avertissement */
@@ -2372,6 +3551,18 @@ export interface components {
             /** Format: date-time */
             reviewedAt?: string;
         };
+        /** @description Suspension ou réactivation ; motif obligatoire pour suspendre */
+        PlaytestNoteRequest: {
+            /** @example Plusieurs testeurs signalent une application qui demande des accès abusifs */
+            note?: string;
+        };
+        /** @description Décision de l'équipe ; motif obligatoire pour REJECT */
+        PlaytestReviewRequest: {
+            /** @enum {string} */
+            decision: "APPROVE" | "REJECT";
+            /** @example Le lien d'inscription ne mène pas à un test fermé */
+            note?: string;
+        };
         /** @description Décision de l'équipe sur une offre en attente (JOB-4) */
         JobReviewRequest: {
             /** @enum {string} */
@@ -2413,12 +3604,41 @@ export interface components {
             /** Format: date-time */
             reviewedAt?: string;
         };
+        /** @description Décision du porteur (PRJ-4) */
+        ProjectRequestDecision: {
+            /** @enum {string} */
+            status: "ACCEPTED" | "REFUSED";
+        };
+        /** @description Demande reçue par le porteur */
+        ReceivedProjectRequest: {
+            /** Format: int64 */
+            id: number;
+            /**
+             * Format: int64
+             * @description Null si le rôle a été retiré depuis
+             */
+            roleId?: number;
+            roleTitle: string;
+            candidate: components["schemas"]["AuthorSummary"];
+            message: string;
+            /** @enum {string} */
+            status: "PENDING" | "ACCEPTED" | "REFUSED" | "LEFT";
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            decidedAt?: string;
+        };
         /** @description Retenir ou refuser une candidature reçue */
         ApplicationDecisionRequest: {
             /** @enum {string} */
             status: "SHORTLISTED" | "REJECTED";
         };
         PublicProfile: {
+            /**
+             * Format: int64
+             * @description Identifiant du membre, cible d'un signalement de profil
+             */
+            id: number;
             username: string;
             displayName: string;
             avatarUrl?: string;
@@ -2431,6 +3651,12 @@ export interface components {
             reputation: number;
             /** @enum {string} */
             level: "NEWCOMER" | "MEMBER" | "CONTRIBUTOR" | "REFERENT";
+            /**
+             * Format: int32
+             * @description Réputation à atteindre pour le niveau suivant ; null au niveau Référent
+             * @example 500
+             */
+            nextLevelAt?: number;
             visibleToRecruiters: boolean;
             /**
              * @example [
@@ -2444,8 +3670,15 @@ export interface components {
             questionCount: number;
             /** Format: int64 */
             answerCount: number;
+            /**
+             * Format: int64
+             * @description Réponses acceptées comme solution, hors réponses masquées
+             */
+            acceptedCount: number;
             /** Format: date-time */
             createdAt: string;
+            /** @description Badges gagnés (REP-4), du plus ancien au plus récent. La progression : GET /users/{username}/badges */
+            badges: ("FIRST_STEP" | "HELPER" | "SOLVER" | "CHALLENGER" | "POLYGLOT" | "LOCAL_HELP")[];
         };
         /** @description Candidature ou proposition reçue par le recruteur ou l'auteur de la mission */
         ReceivedApplication: {
@@ -2490,13 +3723,103 @@ export interface components {
              */
             delta: number;
             /** @enum {string} */
-            reason: "QUESTION_ASKED" | "QUESTION_UPVOTED" | "ANSWER_UPVOTED" | "ANSWER_ACCEPTED" | "ACCEPTED_AN_ANSWER" | "CHALLENGE_VALIDATED" | "PROJECT_COMPLETED" | "SPAM_REMOVED";
+            reason: "QUESTION_ASKED" | "QUESTION_UPVOTED" | "ANSWER_UPVOTED" | "ANSWER_ACCEPTED" | "ACCEPTED_AN_ANSWER" | "CHALLENGE_VALIDATED" | "PROJECT_COMPLETED" | "PLAYTEST_COMPLETED" | "SPAM_REMOVED";
             /** Format: int64 */
             questionId?: number;
             /** Format: int64 */
             answerId?: number;
             /** Format: date-time */
             createdAt: string;
+        };
+        /** @description Un badge (REP-4) et la progression du membre vers lui */
+        BadgeProgress: {
+            /** @enum {string} */
+            badge: "FIRST_STEP" | "HELPER" | "SOLVER" | "CHALLENGER" | "POLYGLOT" | "LOCAL_HELP";
+            earned: boolean;
+            /**
+             * Format: date-time
+             * @description Date d'obtention, null si pas encore gagné
+             */
+            awardedAt?: string;
+            /**
+             * Format: int32
+             * @description Avancement, plafonné à target
+             * @example 3
+             */
+            progress: number;
+            /**
+             * Format: int32
+             * @example 10
+             */
+            target: number;
+        };
+        PageResponseMyProjectRequest: {
+            items: components["schemas"]["MyProjectRequest"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        /** @description Une de mes participations, avec sa campagne */
+        MyPlaytestEntry: {
+            campaign: components["schemas"]["PlaytestSummary"];
+            participation: components["schemas"]["MyPlaytestParticipation"];
+        };
+        PageResponseMyPlaytestEntry: {
+            items: components["schemas"]["MyPlaytestEntry"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        /** @description Campagne dans une liste */
+        PlaytestSummary: {
+            /** Format: int64 */
+            id: number;
+            appName: string;
+            packageName: string;
+            /** @example GOOGLE_PLAY */
+            platform: string;
+            iconUrl?: string;
+            owner: components["schemas"]["AuthorSummary"];
+            /** @enum {string} */
+            status: "DRAFT" | "PENDING_REVIEW" | "REJECTED" | "ACTIVE" | "SUSPENDED" | "COMPLETED";
+            /** Format: int32 */
+            testersTarget: number;
+            /** Format: int32 */
+            requiredDays: number;
+            /**
+             * Format: int32
+             * @description Places libres ; 0 : campagne complète
+             */
+            spotsLeft: number;
+            progress: components["schemas"]["PlaytestProgress"];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            startedAt?: string;
         };
         PageResponseMyModeratedContent: {
             items: components["schemas"]["MyModeratedContent"][];
@@ -2594,6 +3917,56 @@ export interface components {
              */
             questionCount: number;
         };
+        HomeStats: {
+            /**
+             * Format: int64
+             * @description Questions visibles
+             * @example 1284
+             */
+            questions: number;
+            /**
+             * Format: int64
+             * @description Réponses visibles
+             * @example 3410
+             */
+            answers: number;
+            /**
+             * Format: double
+             * @description Part des questions visibles qui ont une réponse acceptée, de 0 à 1, arrondie à deux décimales
+             * @example 0.68
+             */
+            solvedRate: number;
+            /**
+             * Format: int64
+             * @description Membres actifs (ni suspendus ni supprimés)
+             * @example 2150
+             */
+            members: number;
+            /**
+             * Format: int64
+             * @description Pays distincts renseignés par ces membres
+             * @example 18
+             */
+            countries: number;
+            levels: components["schemas"]["LevelCounts"];
+        };
+        LevelCounts: {
+            /**
+             * Format: int64
+             * @example 640
+             */
+            MEMBER: number;
+            /**
+             * Format: int64
+             * @example 85
+             */
+            CONTRIBUTOR: number;
+            /**
+             * Format: int64
+             * @example 12
+             */
+            REFERENT: number;
+        };
         PageResponseQuestionSummary: {
             items: components["schemas"]["QuestionSummary"][];
             /**
@@ -2649,11 +4022,123 @@ export interface components {
              */
             total: number;
         };
+        /** @description Question proche du titre en cours de saisie (QA-8), version légère */
+        SimilarQuestion: {
+            /** Format: int64 */
+            id: number;
+            title: string;
+            /** Format: int32 */
+            score: number;
+            /** Format: int32 */
+            answerCount: number;
+            /** @description Vrai si une réponse est acceptée (question résolue) */
+            hasAcceptedAnswer: boolean;
+        };
+        PageResponseProjectSummary: {
+            items: components["schemas"]["ProjectSummary"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        /** @description Projet tel qu'affiché dans une liste (PRJ-2) */
+        ProjectSummary: {
+            /** Format: int64 */
+            id: number;
+            title: string;
+            /** @enum {string} */
+            type: "OPEN_SOURCE" | "STUDY" | "STARTUP" | "VOLUNTEER";
+            technologies: string[];
+            /** @enum {string} */
+            status: "OPEN" | "IN_PROGRESS" | "PAUSED" | "CLOSED";
+            owner: components["schemas"]["AuthorSummary"];
+            /**
+             * @example [
+             *       "Développeur mobile Flutter",
+             *       "Designer UX"
+             *     ]
+             */
+            openRoles: string[];
+            /**
+             * Format: int32
+             * @description Porteur compris
+             */
+            teamSize: number;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            lastActivityAt: string;
+        };
+        PageResponseProjectUpdate: {
+            items: components["schemas"]["ProjectUpdate"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        PageResponseReceivedProjectRequest: {
+            items: components["schemas"]["ReceivedProjectRequest"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        PageResponsePlaytestSummary: {
+            items: components["schemas"]["PlaytestSummary"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
         Notification: {
             /** Format: int64 */
             id: number;
             /** @enum {string} */
-            type: "ANSWER_POSTED" | "ANSWER_ACCEPTED" | "VOTE_RECEIVED" | "JOB_MATCH" | "MISSION_MATCH" | "APPLICATION_RECEIVED" | "APPLICATION_DECIDED" | "JOB_REVIEWED" | "CHALLENGE_STARTED" | "PROJECT_REQUEST_DECIDED" | "CONTENT_HIDDEN" | "CONTENT_RESTORED" | "ACCOUNT_WARNED" | "SUBMISSION_REVIEWED" | "COMMUNITY_PROPOSAL_DECISION";
+            type: "ANSWER_POSTED" | "ANSWER_ACCEPTED" | "VOTE_RECEIVED" | "JOB_MATCH" | "MISSION_MATCH" | "APPLICATION_RECEIVED" | "APPLICATION_DECIDED" | "JOB_REVIEWED" | "CHALLENGE_STARTED" | "PROJECT_REQUEST_DECIDED" | "CONTENT_HIDDEN" | "CONTENT_RESTORED" | "ACCOUNT_WARNED" | "SUBMISSION_REVIEWED" | "COMMUNITY_PROPOSAL_DECISION" | "PROJECT_REQUEST_RECEIVED" | "PROJECT_MEMBER_REMOVED" | "PROJECT_CLOSED" | "PLAYTEST_NEW_CAMPAIGN" | "PLAYTEST_JOINED" | "PLAYTEST_INSTALL_REMINDER" | "PLAYTEST_STAY_REMINDER" | "PLAYTEST_ENDING_SOON" | "PLAYTEST_PARTICIPATION_DONE" | "PLAYTEST_TESTER_LEFT" | "PLAYTEST_TESTER_REPLACED" | "PLAYTEST_CAMPAIGN_FULL" | "PLAYTEST_CAMPAIGN_REVIEWED" | "PLAYTEST_REMOVED";
             read: boolean;
             /** @description Membre à l'origine de l'événement ; null pour un événement de la plateforme */
             actor?: components["schemas"]["AuthorSummary"];
@@ -2669,7 +4154,7 @@ export interface components {
         /** @description Contenu concerné, pour construire le lien côté front */
         NotificationTarget: {
             /** @enum {string} */
-            type: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "APPLICATION" | "CHALLENGE" | "PROJECT" | "USER" | "COMMUNITY_PROPOSAL";
+            type: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "APPLICATION" | "CHALLENGE" | "PROJECT" | "USER" | "COMMUNITY_PROPOSAL" | "PLAYTEST";
             /** Format: int64 */
             id: number;
             /** @description Titre de la question, de l'offre, de la mission, du défi… */
@@ -2944,6 +4429,90 @@ export interface components {
              * @example 134
              */
             total: number;
+        };
+        /** @description Campagne dans le back office, avec ses signaux d'alerte */
+        AdminPlaytestSummary: {
+            campaign: components["schemas"]["PlaytestSummary"];
+            hidden: boolean;
+            /** @description Active, aucune participation depuis 7 jours */
+            inactive: boolean;
+            /** @description Plus de 30 % des testeurs en cours « à confirmer » */
+            stalled: boolean;
+            reviewNote?: string;
+        };
+        PageResponseAdminPlaytestSummary: {
+            items: components["schemas"]["AdminPlaytestSummary"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        PageResponsePlaytestEvent: {
+            items: components["schemas"]["PlaytestEvent"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        /** @description Ligne de l'historique d'une campagne */
+        PlaytestEvent: {
+            /** Format: int64 */
+            id: number;
+            /** @enum {string} */
+            action: "CREATED" | "EDITED" | "SUBMITTED" | "APPROVED" | "AUTO_APPROVED" | "REJECTED" | "SUSPENDED" | "REACTIVATED" | "CLOSED" | "COMPLETED" | "JOINED" | "REPLACED" | "CONFIRMED" | "VERIFIED" | "WITHDRAWN" | "EXPIRED" | "REMOVED" | "PARTICIPATION_COMPLETED";
+            /** @description Null pour une action automatique de la plateforme */
+            actor?: components["schemas"]["AuthorSummary"];
+            /** Format: int64 */
+            participationId?: number;
+            note?: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        /** @description Indicateurs du back office, calculés à la demande */
+        PlaytestStats: {
+            /** Format: int64 */
+            campaigns: number;
+            /** Format: int64 */
+            pendingReview: number;
+            /** Format: int64 */
+            active: number;
+            /** Format: int64 */
+            completed: number;
+            /**
+             * Format: int64
+             * @description Campagnes dont toutes les places ont été tenues 14 jours
+             */
+            targetReached: number;
+            /** Format: int64 */
+            owners: number;
+            /** Format: int64 */
+            testers: number;
+            /** Format: int64 */
+            participationsRunning: number;
+            /** Format: int64 */
+            participationsCompleted: number;
         };
         PageResponseJobDetail: {
             items: components["schemas"]["JobDetail"][];
@@ -3224,6 +4793,15 @@ export interface operations {
                     "application/json": components["schemas"]["ApiError"];
                 };
             };
+            /** @description STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
         };
     };
     userDeleteAvatar: {
@@ -3414,6 +4992,328 @@ export interface operations {
             };
             /** @description QUESTION_NOT_FOUND */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    questionDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Question supprimée */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_QUESTION_AUTHOR */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description QUESTION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description QUESTION_HAS_ANSWERS */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Le projet */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description PROJECT_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectEdit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectEditRequest"];
+            };
+        };
+        responses: {
+            /** @description Projet modifié */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_TAG */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PROJECT_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_CLOSED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description La campagne */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestEdit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaytestRequest"];
+            };
+        };
+        responses: {
+            /** @description Campagne modifiée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_EDITABLE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestIcon: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["AvatarForm"];
+            };
+        };
+        responses: {
+            /** @description Campagne à jour, iconUrl pointe vers la nouvelle icône */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description PHOTO_REQUIRED, PHOTO_TYPE, PHOTO_TOO_LARGE, FILE_TOO_LARGE */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_COMPLETED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -4409,6 +6309,1110 @@ export interface operations {
             };
         };
     };
+    projectList: {
+        parameters: {
+            query?: {
+                status?: "OPEN" | "IN_PROGRESS" | "PAUSED" | "CLOSED";
+                type?: "OPEN_SOURCE" | "STUDY" | "STARTUP" | "VOLUNTEER";
+                /** @description Nom de technologie exact, du projet ou d'un rôle */
+                technology?: string;
+                /** @description Texte cherché dans l'intitulé des rôles ouverts */
+                role?: string;
+                /** @description Seulement les projets qui recrutent */
+                openRoles?: boolean;
+                /** @description Pseudo d'un membre : ses projets */
+                member?: string;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de projets */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseProjectSummary"];
+                };
+            };
+            /** @description INVALID_PAGE, INVALID_PAGE_SIZE, INVALID_PARAMETER */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Projet publié */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_TAG */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectUpdates: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de mises à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseProjectUpdate"];
+                };
+            };
+            /** @description PROJECT_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectPostUpdate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description Mise à jour publiée */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectUpdate"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PROJECT_MEMBER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_CLOSED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectAddRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectRoleRequest"];
+            };
+        };
+        responses: {
+            /** @description Projet avec le nouveau rôle */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_TAG */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PROJECT_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_CLOSED, TOO_MANY_ROLES */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectRequests: {
+        parameters: {
+            query?: {
+                status?: "PENDING" | "ACCEPTED" | "REFUSED" | "LEFT";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de demandes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseReceivedProjectRequest"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PROJECT_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectJoinRequest"];
+            };
+        };
+        responses: {
+            /** @description Demande envoyée */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyProjectRequest"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CANNOT_JOIN_OWN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_NOT_FOUND, ROLE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_NOT_OPEN, ROLE_FILLED, ALREADY_REQUESTED, ALREADY_MEMBER */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectRemoveMember: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                username: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectMemberRemoval"];
+            };
+        };
+        responses: {
+            /** @description Projet à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PROJECT_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_NOT_FOUND, MEMBER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_CLOSED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectLeave: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Projet à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description PROJECT_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_CLOSED, NOT_PROJECT_MEMBER */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectClose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Projet clôturé */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description NOT_PROJECT_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_CLOSED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestList: {
+        parameters: {
+            query?: {
+                /** @description ACTIVE (par défaut) ou COMPLETED */
+                status?: "DRAFT" | "PENDING_REVIEW" | "REJECTED" | "ACTIVE" | "SUSPENDED" | "COMPLETED";
+                availability?: "OPEN" | "FULL";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de campagnes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponsePlaytestSummary"];
+                };
+            };
+            /** @description INVALID_PAGE, INVALID_PAGE_SIZE, INVALID_STATUS, INVALID_PARAMETER */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaytestRequest"];
+            };
+        };
+        responses: {
+            /** @description Brouillon créé */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestSubmit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Campagne envoyée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_DRAFT, PACKAGE_ALREADY_RUNNING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestParticipations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Tous les testeurs, partis compris */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestParticipation"][];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestJoin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Campagne avec myParticipation */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CANNOT_JOIN_OWN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_ACTIVE, ALREADY_JOINED, CAMPAIGN_FULL */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestVerify: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                participationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Testeurs à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestParticipation"][];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND, PARTICIPATION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_CONFIRMED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestRemove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                participationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaytestRemoveRequest"];
+            };
+        };
+        responses: {
+            /** @description Testeurs à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestParticipation"][];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND, PARTICIPATION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_RUNNING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestWithdraw: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PlaytestWithdrawRequest"];
+            };
+        };
+        responses: {
+            /** @description Campagne avec myParticipation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_RUNNING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestConfirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PlaytestConfirmRequest"];
+            };
+        };
+        responses: {
+            /** @description Campagne avec myParticipation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_JOINED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestCheckIn: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Campagne avec myParticipation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_RUNNING, ALREADY_CHECKED_IN */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestClose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Campagne terminée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_ACTIVE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     notificationMarkRead: {
         parameters: {
             query?: never;
@@ -5125,6 +8129,15 @@ export interface operations {
                     "application/json": components["schemas"]["ApiError"];
                 };
             };
+            /** @description STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
         };
     };
     communityPropose: {
@@ -5551,6 +8564,66 @@ export interface operations {
             };
         };
     };
+    aiQuestionAssist: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["QuestionAssistRequest"];
+            };
+        };
+        responses: {
+            /** @description Suggestions */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QuestionAssistResponse"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description AI_UNAVAILABLE : fournisseur coupé, trop lent ou non configuré */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     userAdminSuspend: {
         parameters: {
             query?: never;
@@ -5907,6 +8980,246 @@ export interface operations {
             };
             /** @description SUBMISSION_NOT_FOUND */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminSuspend: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaytestNoteRequest"];
+            };
+        };
+        responses: {
+            /** @description Campagne suspendue */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR, NOTE_REQUIRED */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_ACTIVE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminReview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaytestReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Campagne à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR, NOTE_REQUIRED */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_PENDING, PACKAGE_ALREADY_RUNNING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminReactivate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PlaytestNoteRequest"];
+            };
+        };
+        responses: {
+            /** @description Campagne active */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_SUSPENDED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminRemove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                participationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaytestRemoveRequest"];
+            };
+        };
+        responses: {
+            /** @description Testeurs à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestParticipation"][];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND, PARTICIPATION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_RUNNING */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -6425,6 +9738,117 @@ export interface operations {
             };
         };
     };
+    projectWithdraw: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                requestId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Demande retirée */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description NOT_REQUEST_AUTHOR */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description REQUEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description REQUEST_NOT_PENDING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectDecide: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                requestId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProjectRequestDecision"];
+            };
+        };
+        responses: {
+            /** @description Demande décidée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceivedProjectRequest"];
+                };
+            };
+            /** @description VALIDATION_ERROR, INVALID_STATUS */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PROJECT_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_NOT_FOUND, REQUEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_CLOSED, REQUEST_NOT_PENDING, ROLE_FILLED, TEAM_FULL */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     applicationDecide: {
         parameters: {
             query?: never;
@@ -6552,6 +9976,37 @@ export interface operations {
             };
         };
     };
+    userBadges: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                username: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Les six badges */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BadgeProgress"][];
+                };
+            };
+            /** @description USER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     userAvatar: {
         parameters: {
             query?: never;
@@ -6577,6 +10032,70 @@ export interface operations {
             };
             /** @description AVATAR_NOT_FOUND */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectMyRequests: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de demandes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseMyProjectRequest"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestMyParticipations: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de participations */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseMyPlaytestEntry"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -6762,6 +10281,128 @@ export interface operations {
             };
         };
     };
+    statsHome: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HomeStats"];
+                };
+            };
+        };
+    };
+    questionSimilar: {
+        parameters: {
+            query: {
+                /** @description Titre en cours de saisie */
+                title: string;
+                /** @description Identifiant de la question modifiée */
+                exclude?: number;
+                /** @description De 1 à 10 */
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Jusqu'à limit questions, les plus proches d'abord */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimilarQuestion"][];
+                };
+            };
+            /** @description INVALID_LIMIT, INVALID_PARAMETER */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestIconFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                file: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description L'image */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/png": unknown;
+                    "image/jpeg": unknown;
+                    "image/webp": unknown;
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND, ICON_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestMine: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de campagnes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponsePlaytestSummary"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     notificationList: {
         parameters: {
             query?: {
@@ -6827,7 +10468,7 @@ export interface operations {
     moderationQueue: {
         parameters: {
             query?: {
-                targetType?: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER";
+                targetType?: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER" | "PROJECT" | "PLAYTEST";
                 page?: number;
                 size?: number;
             };
@@ -7174,6 +10815,15 @@ export interface operations {
                     "application/json": components["schemas"]["ApiError"];
                 };
             };
+            /** @description STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
         };
     };
     userAdminList: {
@@ -7207,6 +10857,161 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminList: {
+        parameters: {
+            query?: {
+                status?: "DRAFT" | "PENDING_REVIEW" | "REJECTED" | "ACTIVE" | "SUSPENDED" | "COMPLETED";
+                problem?: "INACTIVE" | "STALLED" | "REPORTED";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de campagnes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseAdminPlaytestSummary"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminParticipations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Tous les testeurs, partis compris */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestParticipation"][];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminEvents: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page d'événements */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponsePlaytestEvent"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminStats: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Indicateurs */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestStats"];
                 };
             };
             /** @description FORBIDDEN */
@@ -7361,7 +11166,7 @@ export interface operations {
         parameters: {
             query?: {
                 status?: "OPEN" | "DISMISSED" | "HIDDEN" | "APPEALED" | "RESTORED";
-                targetType?: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER";
+                targetType?: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER" | "PROJECT" | "PLAYTEST";
                 page?: number;
                 size?: number;
             };
@@ -7391,6 +11196,56 @@ export interface operations {
             };
             /** @description FORBIDDEN */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectRemoveRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                roleId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Projet sans ce rôle */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description NOT_PROJECT_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_NOT_FOUND, ROLE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PROJECT_CLOSED, ROLE_FILLED */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

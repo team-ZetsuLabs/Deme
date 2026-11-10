@@ -1,0 +1,90 @@
+.card {
+  display: flex;
+  gap: var(--s4);
+  padding: var(--s4);
+  border-block-end: 1px solid var(--line);
+}
+
+.card:last-child {
+  border-block-end: none;
+}
+
+.body {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s3);
+}
+
+.title {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  margin: 0;
+  line-height: var(--lh-tight);
+}
+
+.title a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.title a:hover {
+  color: var(--green-text);
+}
+
+.pkg {
+  margin: 0;
+  font-family: var(--f-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+  overflow-wrap: anywhere;
+}
+
+.who {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.status {
+  flex-shrink: 0;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  padding: 2px var(--s2);
+  border-radius: var(--r-full);
+  background: var(--surface-3);
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.active {
+  background: var(--green-wash);
+  color: var(--green-text);
+}
+
+.completed {
+  background: var(--surface-3);
+  color: var(--text-3);
+}
+
+.draft,
+.pending_review {
+  background: var(--gold-wash, var(--surface-3));
+  color: var(--gold-text);
+}
+
+.rejected,
+.suspended {
+  background: var(--red-wash);
+  color: var(--red);
+}

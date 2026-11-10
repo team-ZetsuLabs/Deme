@@ -1,4 +1,124 @@
 {
+  "playtests": {
+    "pageTitle": "Tests fermés",
+    "title": "Tests fermés Google Play",
+    "lead": "Trouvez des testeurs pour votre application, et testez celles des autres membres.",
+    "publish": "Proposer une campagne",
+    "mine": "Mes campagnes",
+    "mineLead": "Vos campagnes de test, brouillons compris.",
+    "mineEmpty": "Vous n'avez pas encore de campagne.",
+    "empty": "Aucune campagne pour le moment.",
+    "full": "Complète",
+    "spotsLeft_one": "{{count}} place sur {{target}}",
+    "spotsLeft_other": "{{count}} places sur {{target}}",
+    "instructions": "Consignes aux testeurs",
+    "disclaimer": "Les compteurs reposent sur les déclarations des testeurs : ils n'attestent pas de la conformité Google Play.",
+    "filters": {
+      "status": "État",
+      "active": "En cours",
+      "completed": "Terminées",
+      "availability": "Places",
+      "open": "Avec place",
+      "full": "Complètes"
+    },
+    "status": {
+      "DRAFT": "Brouillon",
+      "PENDING_REVIEW": "En validation",
+      "REJECTED": "Refusée",
+      "ACTIVE": "Active",
+      "SUSPENDED": "Suspendue",
+      "COMPLETED": "Terminée"
+    },
+    "statusNotice": {
+      "DRAFT": "Ce brouillon n'est visible que par vous. Publiez-le pour recruter des testeurs.",
+      "PENDING_REVIEW": "Cette campagne attend la validation de l'équipe.",
+      "REJECTED": "Cette campagne a été refusée.",
+      "SUSPENDED": "Cette campagne est suspendue."
+    },
+    "progress": { "label": "Avancement" },
+    "facts": { "testers": "Testeurs visés", "days": "Jours requis", "spots": "Places libres" },
+    "owner": {
+      "yours": "Votre campagne.",
+      "edit": "Modifier",
+      "submit": "Publier la campagne",
+      "submitted": "Campagne publiée",
+      "closed": "Campagne clôturée",
+      "close": {
+        "button": "Clôturer la campagne",
+        "title": "Clôturer cette campagne ?",
+        "text": "Elle n'accepte plus de nouveaux testeurs. Ceux en cours vont au bout de leurs jours.",
+        "confirm": "Clôturer"
+      }
+    },
+    "join": {
+      "title": "Devenir testeur",
+      "loginText": "Connectez-vous pour rejoindre cette campagne.",
+      "login": "Se connecter",
+      "text": "Installez l'application et gardez-la {{days}} jours : vous aidez un autre développeur à publier la sienne.",
+      "cta": "Rejoindre le test"
+    },
+    "participation": {
+      "joinedTitle": "À vous de jouer",
+      "step1": "Ouvrez le lien d'inscription au test.",
+      "step2": "Rejoignez le programme et installez l'application.",
+      "step3": "Revenez ici déclarer votre installation.",
+      "openOptIn": "Ouvrir le test Google Play",
+      "googleEmail": "Adresse Google (facultatif)",
+      "googleEmailHint": "Utile si le porteur gère ses testeurs par adresse. Visible de lui seul.",
+      "confirm": "J'ai installé l'application",
+      "withdraw": "Me désister",
+      "withdrawConfirm": "Votre place sera libérée et vous ne pourrez pas rejoindre à nouveau cette campagne.",
+      "withdrawYes": "Me désister",
+      "runningTitle": "Votre test est en cours",
+      "daysOf": "jours sur {{total}}",
+      "verified": "Le porteur a confirmé votre présence dans la Play Console.",
+      "declared": "Installation déclarée. Revenez chaque jour confirmer que vous êtes toujours inscrit.",
+      "needsAttention": "Vous n'avez pas confirmé depuis 3 jours : pensez à rester inscrit.",
+      "checkIn": "Je suis toujours inscrit",
+      "checkedIn": "Confirmé pour aujourd'hui",
+      "completedTitle": "Test terminé, merci !",
+      "completedText": "Vous avez tenu vos {{days}} jours. Votre réputation a augmenté.",
+      "dropped": "Vous vous êtes désisté de cette campagne.",
+      "removed": "Le porteur vous a retiré de cette campagne.",
+      "reason": "Motif"
+    },
+    "new": {
+      "pageTitle": "Nouvelle campagne",
+      "lead": "Décrivez votre application et le test fermé à rejoindre.",
+      "appName": "Nom de l'application",
+      "appNamePlaceholder": "Tontine Cash",
+      "packageName": "Nom du paquet",
+      "packageNameHint": "L'identifiant Android, par exemple sn.monappli.app.",
+      "description": "Description",
+      "descriptionHint": "À quoi sert l'application, ce que les testeurs doivent regarder.",
+      "optInUrl": "Lien d'inscription au test",
+      "optInUrlHint": "Le lien Google Play (play.google.com/apps/testing/…) ou le groupe Google.",
+      "testersTarget": "Testeurs recherchés",
+      "testersTargetHint": "De {{min}} à {{max}} ; Google en exige {{min}}.",
+      "desiredStart": "Date de début souhaitée",
+      "instructions": "Consignes aux testeurs (facultatif)",
+      "instructionsHint": "Ce qu'il faut tester en priorité, où signaler les bugs.",
+      "notice": "Votre campagne est créée en brouillon : vous la publierez ensuite.",
+      "submit": "Créer le brouillon",
+      "busy": "Création en cours",
+      "saved": "Brouillon créé",
+      "errors": {
+        "appName": "Le nom doit faire de 2 à 80 caractères.",
+        "packageName": "Entrez un nom de paquet valide, par exemple sn.monappli.app.",
+        "description": "La description doit faire au moins 30 caractères.",
+        "optInUrl": "Entrez un lien de test Google Play valide.",
+        "testersTarget": "Indiquez un nombre de testeurs entre 12 et 100."
+      }
+    },
+    "edit": {
+      "pageTitle": "Modifier la campagne",
+      "lead": "Modifiable tant que la campagne est en brouillon ou refusée.",
+      "submit": "Enregistrer les modifications",
+      "saved": "Campagne mise à jour",
+      "notAllowed": "Cette campagne ne peut plus être modifiée.",
+      "back": "Revenir à la campagne"
+    }
+  },
   "app": {
     "name": "Dɛmɛ",
     "home": "Dɛmɛ, accueil",
@@ -10,6 +130,8 @@
     "questions": "Aide",
     "jobs": "Emploi",
     "missions": "Missions",
+    "playtests": "Tests fermés",
+    "playtestsShort": "Tests",
     "challenges": "Défis",
     "account": "Compte",
     "profile": "Mon profil",
