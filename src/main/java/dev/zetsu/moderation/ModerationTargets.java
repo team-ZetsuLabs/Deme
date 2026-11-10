@@ -65,7 +65,9 @@ public class ModerationTargets {
             case USER -> "users";
             case PROJECT -> "projects";
         };
-        jdbc.update("update " + table + " set hidden = :hidden where id = :id",
+        // Une question supprimée par son auteur (QA-3) reste masquée, quelle que soit la décision.
+        String notDeleted = type == ReportTargetType.QUESTION ? " and deleted_at is null" : "";
+        jdbc.update("update " + table + " set hidden = :hidden where id = :id" + notDeleted,
                 new MapSqlParameterSource("id", id).addValue("hidden", hidden));
     }
 

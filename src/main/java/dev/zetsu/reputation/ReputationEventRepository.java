@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.List;
 
 public interface ReputationEventRepository extends JpaRepository<ReputationEvent, Long> {
 
@@ -29,6 +30,14 @@ public interface ReputationEventRepository extends JpaRepository<ReputationEvent
             """, nativeQuery = true)
     int net(@Param("userId") Long userId, @Param("reason") String reason, @Param("questionId") Long questionId,
             @Param("answerId") Long answerId, @Param("sourceUserId") Long sourceUserId);
+
+    /** Causes encore créditées sur une question elle-même (hors réponses) : user_id, reason, source_user_id. */
+    @Query(value = """
+            select user_id, reason, source_user_id from reputation_events
+            where question_id = :questionId and answer_id is null
+            group by user_id, reason, source_user_id having sum(delta) <> 0
+            """, nativeQuery = true)
+    List<Object[]> openCausesOnQuestion(@Param("questionId") Long questionId);
 
     @Query(value = """
             select coalesce(sum(delta), 0) from reputation_events

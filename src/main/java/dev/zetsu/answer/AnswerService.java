@@ -72,7 +72,10 @@ public class AnswerService {
         a.setBody(req.body(), markdown.toSafeHtml(req.body()));
         a.setCode(blankToNull(req.code()));
         answers.saveAndFlush(a);
-        questions.addAnswerCount(q.getId(), 1);
+        if (questions.addAnswerCount(q.getId(), 1) == 0) {
+            // Supprimée entre la lecture et l'écriture : la transaction est annulée, la réponse avec.
+            throw ApiException.notFound("QUESTION_NOT_FOUND", "Question introuvable");
+        }
         notifications.notify(q.getAuthor().getId(), NotificationType.ANSWER_POSTED, me.id(),
                 NotificationService.answer(a.getId(), q.getTitle(), q.getId()), null);
         // Une réponse ne rapporte pas de points mais compte pour Premier pas, Entraide et Aide locale (REP-4).

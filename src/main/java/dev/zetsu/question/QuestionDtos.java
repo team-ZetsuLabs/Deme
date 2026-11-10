@@ -89,7 +89,10 @@ public final class QuestionDtos {
             @Schema(requiredMode = REQUIRED, description = "Vrai si le membre connecté peut modifier la question")
             boolean canEdit,
             @Schema(requiredMode = REQUIRED) Instant createdAt,
-            @Schema(requiredMode = REQUIRED) Instant updatedAt) {
+            @Schema(requiredMode = REQUIRED) Instant updatedAt,
+            @Schema(requiredMode = REQUIRED,
+                    description = "Vrai si le membre connecté peut supprimer la question : la sienne, sans réponse")
+            boolean canDelete) {
     }
 
     @Schema(name = "SimilarQuestion", description = "Question proche du titre en cours de saisie (QA-8), version légère")
