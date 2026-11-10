@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -120,5 +121,18 @@ public class QuestionController {
     public QuestionDetail update(@PathVariable Long id, @Valid @RequestBody QuestionRequest req,
                                  @AuthenticationPrincipal ZetsuPrincipal me) {
         return questionService.update(id, req, me);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Supprimer sa question (QA-3)", description = """
+            Seulement tant qu'elle n'a aucune réponse (canDelete sur la question). Les points qu'elle a rapportés             (question posée, votes reçus) sont retirés ; elle disparaît des listes, de la recherche et des             notifications.""")
+    @ApiResponse(responseCode = "204", description = "Question supprimée")
+    @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "403", description = "NOT_QUESTION_AUTHOR", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "404", description = "QUESTION_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "409", description = "QUESTION_HAS_ANSWERS", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    public void delete(@PathVariable Long id, @AuthenticationPrincipal ZetsuPrincipal me) {
+        questionService.delete(id, me);
     }
 }

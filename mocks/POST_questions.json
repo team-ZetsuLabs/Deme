@@ -28,5 +28,6 @@
   "myVote": null,
   "canEdit": true,
   "createdAt": "2026-10-21T10:15:00Z",
-  "updatedAt": "2026-10-21T10:15:00Z"
+  "updatedAt": "2026-10-21T10:15:00Z",
+  "canDelete": true
 }

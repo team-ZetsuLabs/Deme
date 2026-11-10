@@ -79,7 +79,7 @@ public class UserService {
                 u.getCountryCode(), u.getCity(), u.getRole(), u.getReputation(),
                 reputation.levelOf(u.getReputation()), reputation.nextLevelAt(u.getReputation()),
                 u.isVisibleToRecruiters(), UserDtos.technologyNames(u),
-                questions.countByAuthorId(u.getId()), answers.countByAuthorId(u.getId()),
+                questions.countByAuthorIdAndDeletedAtIsNull(u.getId()), answers.countByAuthorId(u.getId()),
                 answers.countAcceptedByAuthorId(u.getId()), u.getCreatedAt(),
                 badges.earned(u.getId()));
     }

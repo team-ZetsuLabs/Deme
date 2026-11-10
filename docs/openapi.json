@@ -493,6 +493,66 @@
             }
           }
         }
+      },
+      "delete" : {
+        "tags" : [ "questions" ],
+        "summary" : "Supprimer sa question (QA-3)",
+        "description" : "Seulement tant qu'elle n'a aucune réponse (canDelete sur la question). Les points qu'elle a rapportés             (question posée, votes reçus) sont retirés ; elle disparaît des listes, de la recherche et des             notifications.",
+        "operationId" : "questionDelete",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Question supprimée"
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_QUESTION_AUTHOR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "QUESTION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "QUESTION_HAS_ANSWERS",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/v1/projects/{id}" : {
@@ -7499,9 +7559,13 @@
           "updatedAt" : {
             "type" : "string",
             "format" : "date-time"
+          },
+          "canDelete" : {
+            "type" : "boolean",
+            "description" : "Vrai si le membre connecté peut supprimer la question : la sienne, sans réponse"
           }
         },
-        "required" : [ "answerCount", "author", "bodyHtml", "bodyMarkdown", "canEdit", "context", "createdAt", "id", "score", "tags", "title", "updatedAt" ]
+        "required" : [ "answerCount", "author", "bodyHtml", "bodyMarkdown", "canDelete", "canEdit", "context", "createdAt", "id", "score", "tags", "title", "updatedAt" ]
       },
       "QuestionRequest" : {
         "type" : "object",
