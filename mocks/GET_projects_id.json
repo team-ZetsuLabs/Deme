@@ -4,7 +4,11 @@
   "descriptionMarkdown": "Une application pour gérer les cotisations d'une tontine entre collègues : rappels par SMS, paiement par **Orange Money** ou **Wave**, historique partagé.",
   "descriptionHtml": "<p>Une application pour gérer les cotisations d'une tontine entre collègues : rappels par SMS, paiement par <strong>Orange Money</strong> ou <strong>Wave</strong>, historique partagé.</p>",
   "type": "STARTUP",
-  "technologies": ["flutter", "firebase", "orange-money"],
+  "technologies": [
+    "flutter",
+    "firebase",
+    "orange-money"
+  ],
   "githubUrl": "https://github.com/tontine-cash/app",
   "contactUrl": "https://discord.gg/tontinecash",
   "status": "OPEN",
@@ -21,7 +25,10 @@
     {
       "id": 31,
       "title": "Développeur mobile Flutter",
-      "technologies": ["flutter", "dart"],
+      "technologies": [
+        "flutter",
+        "dart"
+      ],
       "status": "FILLED",
       "member": {
         "username": "kofi_mensah",
@@ -36,7 +43,9 @@
     {
       "id": 32,
       "title": "Designer UX",
-      "technologies": ["figma"],
+      "technologies": [
+        "figma"
+      ],
       "status": "OPEN",
       "member": null
     }
@@ -71,7 +80,14 @@
       "joinedAt": "2026-10-05T16:20:00Z"
     }
   ],
-  "myRequest": null,
+  "myRequest": {
+    "id": 87,
+    "roleId": 32,
+    "status": "PENDING",
+    "roleTitle": "Designer UX",
+    "message": "Je conçois des parcours de paiement mobile depuis trois ans à Abidjan, voici mon portfolio Behance.",
+    "createdAt": "2026-10-27T10:02:00Z"
+  },
   "canEdit": false,
   "canPostUpdate": false,
   "createdAt": "2026-10-02T09:15:00Z",

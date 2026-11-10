@@ -79,6 +79,19 @@ public class ProjectController {
                 technology == null ? null : TagService.normalize(technology), roleText, openRoles, member), page, size);
     }
 
+    @GetMapping("/projects/mine")
+    @Operation(summary = "Mes projets", description = """
+            Projets dont le membre connecté est porteur ou membre accepté, clôturés compris, les plus actifs             d'abord. Même résultat que GET /projects?member=<mon pseudo>.""")
+    @ApiResponse(responseCode = "200", description = "Page de projets")
+    @ApiResponse(responseCode = "400", description = "INVALID_PAGE, INVALID_PAGE_SIZE", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    public PageResponse<ProjectSummary> mine(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "20") int size,
+                                             @AuthenticationPrincipal ZetsuPrincipal me) {
+        return projectService.list(new ProjectSearch.Criteria(null, null, null, null, false, me.getUsername()),
+                page, size);
+    }
+
     @GetMapping("/projects/{id}")
     @Operation(summary = "Page d'un projet (PRJ-5)", description = "Équipe, rôles pourvus et ouverts. Le fil : GET /projects/{id}/updates.")
     @ApiResponse(responseCode = "200", description = "Le projet")
@@ -191,6 +204,17 @@ public class ProjectController {
     public ReceivedRequest decide(@PathVariable Long id, @PathVariable Long requestId,
                                   @Valid @RequestBody DecisionRequest req, @AuthenticationPrincipal ZetsuPrincipal me) {
         return requestService.decide(id, requestId, req.status(), me);
+    }
+
+    @DeleteMapping("/projects/{id}/requests/me")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Retirer sa demande en attente sur ce projet",
+            description = "Comme DELETE /projects/{id}/requests/{requestId}, sans avoir à connaître l'identifiant.")
+    @ApiResponse(responseCode = "204", description = "Demande retirée")
+    @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "404", description = "REQUEST_NOT_FOUND : aucune demande en attente", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    public void withdrawMine(@PathVariable Long id, @AuthenticationPrincipal ZetsuPrincipal me) {
+        requestService.withdrawMine(id, me);
     }
 
     @DeleteMapping("/projects/{id}/requests/{requestId}")
