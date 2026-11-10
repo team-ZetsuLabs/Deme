@@ -383,6 +383,15 @@
       "tagFormat": "Un tag ne contient que des lettres minuscules, des chiffres, des tirets ou des points."
     },
     "posted": "Question publiée",
+    "edit": {
+      "pageTitle": "Modifier la question",
+      "lead": "Précisez le titre, le détail, les étiquettes ou le contexte.",
+      "submit": "Enregistrer les modifications",
+      "busy": "Enregistrement en cours",
+      "saved": "Question mise à jour",
+      "notAllowed": "Seul l'auteur de la question peut la modifier.",
+      "back": "Revenir à la question"
+    },
     "ai": {
       "title": "Assistant de rédaction",
       "lead": "Il propose un titre plus clair, des tags et le contexte détecté, et signale ce qui manque. Rien ne change sans votre accord.",

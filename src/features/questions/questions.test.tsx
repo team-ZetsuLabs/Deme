@@ -7,11 +7,13 @@ import { ToastProvider } from '../../components/ToastProvider';
 import { authApi } from '../auth/authApi';
 import { appealsApi } from '../moderation/appealsApi';
 import { HiddenNotice } from '../moderation/HiddenNotice';
-import type { Answer, MyModeratedContent, Page } from '../../api/types';
+import type { Answer, MyModeratedContent, Page, QuestionDetail } from '../../api/types';
 import answersMock from '../../mocks/GET_questions_id_answers.json';
+import questionMock from '../../mocks/GET_questions_id.json';
 import { author, demoMe } from '../../test/fixtures';
 import { SessionProvider } from '../auth/SessionProvider';
 import QuestionPage from '../../pages/question/QuestionPage';
+import EditQuestionPage from '../../pages/question-edit/EditQuestionPage';
 import { AskForm } from './AskForm';
 import { questionsApi } from './questionsApi';
 import { parseTags, validateTags, validateTitle } from './validation';
@@ -176,17 +178,68 @@ describe('QuestionPage, vote (QA-4)', () => {
     expect(answer.querySelector('button[aria-pressed="true"]')).toBeTruthy();
   });
 
-  it('refuse de voter pour son propre contenu sans appeler le serveur', async () => {
+  it('grise le vote sur son propre contenu, avec une infobulle qui explique', async () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(demoMe({ username: 'njeri_w' }));
     const vote = vi.spyOn(questionsApi, 'vote');
     renderQuestion();
     await screen.findByRole('heading', { level: 1 });
     const answer = document.getElementById('answer-518') as HTMLElement;
-    fireEvent.click(answer.querySelector('button[aria-pressed]') as HTMLButtonElement);
-    expect(
-      await screen.findByText('Vous ne pouvez pas voter pour votre propre contenu.'),
-    ).toBeTruthy();
+    const button = answer.querySelector('button[aria-pressed]') as HTMLButtonElement;
+    await waitFor(() => expect(button.disabled).toBe(true));
+    expect(button.title).toBe('Vous ne pouvez pas voter pour votre propre contenu.');
+    fireEvent.click(button);
     expect(vote).not.toHaveBeenCalled();
+  });
+});
+
+describe('modifier sa question (QA-3)', () => {
+  const mine = { ...(questionMock as unknown as QuestionDetail), canEdit: true };
+  const renderEdit = () =>
+    wrap(
+      <Routes>
+        <Route path="/questions/:id/edit" element={<EditQuestionPage />} />
+        <Route path="/questions/:id" element={<h1>Détail de la question</h1>} />
+      </Routes>,
+      '/questions/101/edit',
+    );
+
+  it("préremplit le formulaire de l'auteur et enregistre, puis revient à la question", async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe({ username: 'aminata_dev' }));
+    vi.spyOn(questionsApi, 'get').mockResolvedValue(mine);
+    const update = vi.spyOn(questionsApi, 'update').mockResolvedValue(mine);
+    renderEdit();
+
+    const title = (await screen.findByLabelText(/^Titre/)) as HTMLInputElement;
+    expect(title.value).toBe(mine.title);
+    fireEvent.change(title, {
+      target: { value: 'Comment vérifier un paiement Wave côté serveur ?' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Enregistrer les modifications' }));
+
+    await waitFor(() =>
+      expect(update).toHaveBeenCalledWith(
+        mine.id,
+        expect.objectContaining({ title: 'Comment vérifier un paiement Wave côté serveur ?' }),
+      ),
+    );
+    expect(await screen.findByRole('heading', { name: 'Détail de la question' })).toBeTruthy();
+  });
+
+  it("explique qu'un autre membre ne peut pas modifier la question", async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe({ username: 'koffi_m' }));
+    // L'exemple du contrat répond canEdit: false (le lecteur n'est pas l'auteur).
+    const update = vi.spyOn(questionsApi, 'update');
+    renderEdit();
+    expect(await screen.findByText("Seul l'auteur de la question peut la modifier.")).toBeTruthy();
+    expect(screen.queryByLabelText(/^Titre/)).toBeNull();
+    expect(update).not.toHaveBeenCalled();
+  });
+
+  it("montre le bouton Modifier à l'auteur sur la page de la question", async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe({ username: 'aminata_dev' }));
+    vi.spyOn(questionsApi, 'get').mockResolvedValue(mine);
+    renderQuestion();
+    expect(await screen.findByRole('link', { name: 'Modifier' })).toBeTruthy();
   });
 });
 

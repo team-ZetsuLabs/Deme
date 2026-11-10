@@ -130,6 +130,15 @@ function QuestionView({ id }: { id: number }) {
           <h1 className={styles.title}>{q.title}</h1>
           <div className={styles.headActions}>
             <ShareButton title={q.title} path={`/questions/${q.id}`} />
+            {/* Modifier sa question (QA-3) : le serveur dit qui est l'auteur. */}
+            {q.canEdit && (
+              <Link
+                to={`/questions/${q.id}/edit`}
+                className={buttonClass({ variant: 'secondary' })}
+              >
+                {t('question.edit')}
+              </Link>
+            )}
             <Link to="/questions/ask" className={buttonClass({ variant: 'primary' })}>
               {t('question.askQuestion')}
             </Link>

@@ -38,13 +38,15 @@ export function VoteControl({
   const location = useLocation();
   const [pending, setPending] = useState(false);
   const voted = myVote === 1;
+  // Grisé plutôt que refusé après coup : on ne vote pas pour son propre contenu.
+  const own = !!user && user.username === authorUsername;
 
   const onClick = async () => {
     if (!user) {
       navigate('/login', { state: { from: location.pathname } });
       return;
     }
-    if (user.username === authorUsername) return toast(t('question.voteOwn'));
+    if (own) return;
     if (user.level === 'NEWCOMER') return toast(t('question.voteLevel'));
 
     // Mise à jour immédiate, annulée si le serveur refuse.
@@ -71,9 +73,14 @@ export function VoteControl({
         className={styles.vote}
         aria-pressed={voted}
         aria-label={
-          voted ? t('question.unvote', { count: score }) : t('question.vote', { count: score })
+          own
+            ? t('question.voteOwn')
+            : voted
+              ? t('question.unvote', { count: score })
+              : t('question.vote', { count: score })
         }
-        disabled={pending}
+        title={own ? t('question.voteOwn') : undefined}
+        disabled={pending || own}
         onClick={onClick}
       >
         <Icon name="up" size={12} />

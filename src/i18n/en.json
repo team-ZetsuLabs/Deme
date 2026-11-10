@@ -383,6 +383,15 @@
       "tagFormat": "A tag only contains lowercase letters, digits, hyphens or dots."
     },
     "posted": "Question posted",
+    "edit": {
+      "pageTitle": "Edit the question",
+      "lead": "Refine the title, the details, the tags or the context.",
+      "submit": "Save changes",
+      "busy": "Saving",
+      "saved": "Question updated",
+      "notAllowed": "Only the question's author can edit it.",
+      "back": "Back to the question"
+    },
     "ai": {
       "title": "Writing assistant",
       "lead": "It suggests a clearer title, tags and the detected context, and points out what is missing. Nothing changes without your approval.",

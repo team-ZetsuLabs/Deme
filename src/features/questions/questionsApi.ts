@@ -63,6 +63,8 @@ export const questionsApi = {
       query: { page: 0, size: ANSWERS_PAGE_SIZE },
     }),
   create: (body: QuestionRequest) => api.post<QuestionDetail>('/questions', body),
+  /** Modifier sa question (QA-3). Le serveur vérifie que le membre en est l'auteur. */
+  update: (id: number, body: QuestionRequest) => api.put<QuestionDetail>(`/questions/${id}`, body),
   answer: (questionId: number, body: AnswerRequest) =>
     api.post<Answer>(`/questions/${questionId}/answers`, body),
   updateAnswer: (answerId: number, body: AnswerRequest) =>

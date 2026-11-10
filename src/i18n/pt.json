@@ -383,6 +383,15 @@
       "tagFormat": "Uma tag só pode conter letras minúsculas, algarismos, hífenes ou pontos."
     },
     "posted": "Pergunta publicada",
+    "edit": {
+      "pageTitle": "Editar a pergunta",
+      "lead": "Afine o título, os detalhes, as etiquetas ou o contexto.",
+      "submit": "Guardar as alterações",
+      "busy": "A guardar",
+      "saved": "Pergunta atualizada",
+      "notAllowed": "Só o autor da pergunta pode editá-la.",
+      "back": "Voltar à pergunta"
+    },
     "ai": {
       "title": "Assistente de redação",
       "lead": "Propõe um título mais claro, tags e o contexto detetado, e assinala o que falta. Nada muda sem a sua autorização.",

@@ -32,35 +32,47 @@ const IDS: Record<keyof AskValues, string> = {
 };
 
 export type AskFormProps = {
-  initialTitle: string;
+  initialTitle?: string;
   /** Étiquettes préremplies (depuis une communauté de techno). */
   initialTags?: string;
-  defaultCountry: string | null;
+  defaultCountry?: string | null;
+  /** Question existante : le formulaire passe en modification (QA-3). */
+  question?: QuestionDetail;
   onPosted: (question: QuestionDetail) => void;
 };
 
-/** Poser une question (QA-1) avec son contexte africain (QA-2). */
+/** Poser une question (QA-1) avec son contexte africain (QA-2), ou modifier la sienne (QA-3). */
 export function AskForm({
-  initialTitle,
+  initialTitle = '',
   initialTags = '',
-  defaultCountry,
+  defaultCountry = null,
+  question,
   onPosted,
 }: AskFormProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
   const form = useValidatedForm<AskValues>(
-    { title: initialTitle, body: '', tags: initialTags },
+    {
+      title: question?.title ?? initialTitle,
+      body: question?.bodyMarkdown ?? '',
+      tags: question ? question.tags.join(', ') : initialTags,
+    },
     VALIDATORS,
   );
   const submitError = useSubmitError(form.setServerErrors);
-  const [code, setCode] = useState('');
-  const [country, setCountry] = useState(
-    defaultCountry && defaultCountry !== OTHER_COUNTRY ? defaultCountry : '',
+  const [code, setCode] = useState(question?.code ?? '');
+  const [country, setCountry] = useState(() => {
+    if (question) return question.context?.countryCode ?? '';
+    return defaultCountry && defaultCountry !== OTHER_COUNTRY ? defaultCountry : '';
+  });
+  const [operator, setOperator] = useState<MobileMoneyOperator | ''>(
+    question?.context?.mobileMoneyOperator ?? '',
   );
-  const [operator, setOperator] = useState<MobileMoneyOperator | ''>('');
-  const [network, setNetwork] = useState<NetworkQuality | ''>('');
-  const [techVersion, setTechVersion] = useState('');
+  const [network, setNetwork] = useState<NetworkQuality | ''>(
+    question?.context?.networkQuality ?? '',
+  );
+  const [techVersion, setTechVersion] = useState(question?.context?.techVersion ?? '');
   const { values, errors } = form;
   const context = {
     countryCode: country || null,
@@ -79,14 +91,16 @@ export function AskForm({
     }
     setBusy(true);
     try {
-      const question = await questionsApi.create({
+      const body = {
         title: values.title.trim(),
         body: values.body.trim(),
         code: code.trim() || null,
         tags: parseTags(values.tags),
         context,
-      });
-      onPosted(question);
+      };
+      onPosted(
+        question ? await questionsApi.update(question.id, body) : await questionsApi.create(body),
+      );
     } catch (error) {
       submitError.report(error);
       setBusy(false);
@@ -128,7 +142,8 @@ export function AskForm({
         />
       </Field>
 
-      <SimilarQuestions title={values.title} />
+      {/* En modification, inutile de proposer des questions semblables à la sienne. */}
+      {!question && <SimilarQuestions title={values.title} />}
 
       <Field
         id={IDS.body}
@@ -263,7 +278,13 @@ export function AskForm({
           {t('ask.cancel')}
         </Button>
         <Button type="submit" variant="primary" busy={busy}>
-          {busy ? t('ask.busy') : t('ask.submit')}
+          {question
+            ? busy
+              ? t('ask.edit.busy')
+              : t('ask.edit.submit')
+            : busy
+              ? t('ask.busy')
+              : t('ask.submit')}
         </Button>
       </div>
     </form>

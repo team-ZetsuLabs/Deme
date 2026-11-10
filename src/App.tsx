@@ -24,6 +24,7 @@ const CommunitiesPage = lazy(() => import('./pages/communities/CommunitiesPage')
 const CommunityPage = lazy(() => import('./pages/community/CommunityPage'));
 const NewCommunityPage = lazy(() => import('./pages/community-new/NewCommunityPage'));
 const QuestionPage = lazy(() => import('./pages/question/QuestionPage'));
+const EditQuestionPage = lazy(() => import('./pages/question-edit/EditQuestionPage'));
 const AskPage = lazy(() => import('./pages/ask/AskPage'));
 const WelcomePage = lazy(() => import('./pages/welcome/WelcomePage'));
 const ProfilePage = lazy(() => import('./pages/profile/ProfilePage'));
@@ -103,6 +104,14 @@ export function App() {
                           }
                         />
                         <Route path="questions/:id" element={<QuestionPage />} />
+                        <Route
+                          path="questions/:id/edit"
+                          element={
+                            <RequireAuth>
+                              <EditQuestionPage />
+                            </RequireAuth>
+                          }
+                        />
                         <Route path="users/:username" element={<ProfilePage />} />
                         <Route
                           path="profile/edit"
