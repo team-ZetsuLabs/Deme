@@ -3,6 +3,7 @@
   "appName": "Kobo Split",
   "packageName": "ng.kobosplit.app",
   "platform": "GOOGLE_PLAY",
+  "tracking": "DAILY",
   "iconUrl": null,
   "descriptionMarkdown": "**Kobo Split** partage une note de restaurant entre amis et envoie à chacun sa part par **Paystack** ou par virement. Pensée pour les réseaux lents : tout marche hors ligne et se synchronise au retour de la 3G.",
   "descriptionHtml": "<p><strong>Kobo Split</strong> partage une note de restaurant entre amis et envoie à chacun sa part par <strong>Paystack</strong> ou par virement. Pensée pour les réseaux lents : tout marche hors ligne et se synchronise au retour de la 3G.</p>",

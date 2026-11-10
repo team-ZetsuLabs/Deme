@@ -89,13 +89,18 @@ public class TestParticipation {
         this.joinedAt = now;
     }
 
-    /** Déclaration d'installation : le décompte des jours part d'ici. */
+    /** Déclaration d'installation : le décompte des jours part d'ici. Sans décompte (web), pas de date de fin. */
     void confirm(String googleEmail, Instant now) {
         this.status = ParticipationStatus.CONFIRMED;
         this.googleEmail = googleEmail;
         this.confirmedAt = now;
         this.lastCheckInAt = now;
-        this.endsAt = now.plus(Duration.ofDays(campaign.getRequiredDays()));
+        this.endsAt = tracked() ? now.plus(Duration.ofDays(campaign.getRequiredDays())) : null;
+    }
+
+    /** Campagne avec décompte jour par jour (Google Play, App Store). */
+    boolean tracked() {
+        return campaign.getTracking() == Tracking.DAILY;
     }
 
     void verify(Long ownerId, Instant now) {
@@ -132,10 +137,17 @@ public class TestParticipation {
         this.endingNotified = true;
     }
 
-    /** Jours entiers effectués depuis la déclaration d'installation, plafonnés aux jours requis. */
+    /**
+     * Jours entiers effectués depuis la déclaration d'installation, plafonnés aux jours requis. Sans décompte (web) :
+     * jours entre l'installation et la fin de la participation, sans plafond.
+     */
     public int daysDone(Instant now) {
         if (confirmedAt == null) {
             return 0;
+        }
+        if (!tracked()) {
+            Instant until = completedAt != null ? completedAt : droppedAt != null ? droppedAt : now;
+            return (int) Math.max(0, Duration.between(confirmedAt, until).toDays());
         }
         if (status == ParticipationStatus.COMPLETED) {
             return campaign.getRequiredDays();
@@ -156,7 +168,7 @@ public class TestParticipation {
 
     /** Sans « toujours inscrit » depuis 3 jours : signalée « à confirmer » au porteur. */
     public boolean needsAttention(Instant now) {
-        return status.counting() && lastCheckInAt != null
+        return tracked() && status.counting() && lastCheckInAt != null
                 && lastCheckInAt.isBefore(now.minus(PlaytestRules.STAY_REMINDER_AFTER));
     }
 

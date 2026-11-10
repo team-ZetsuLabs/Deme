@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
@@ -15,7 +14,7 @@ import java.time.LocalDate;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
-/** Tests fermés Google Play (TST-1 à TST-6). */
+/** Tests fermés : Google Play, App Store (TestFlight) et applications web (TST-1 à TST-7). */
 public final class PlaytestDtos {
 
     private PlaytestDtos() {
@@ -23,30 +22,51 @@ public final class PlaytestDtos {
 
     /** Identifiant d'application Android : au moins deux segments, chacun commence par une lettre. */
     static final String PACKAGE_NAME = "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+$";
+    /** Bundle ID Apple : au moins deux segments de lettres, chiffres et tirets. */
+    static final String BUNDLE_ID = "^[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)+$";
     /** Lien d'inscription au test : page de test Google Play ou groupe Google. Jamais suivi par le serveur. */
     static final String OPT_IN_URL =
             "^https://(play\\.google\\.com/apps/testing/|groups\\.google\\.com/)[^\\s<>\"']*$";
+    /** Lien public TestFlight. */
+    static final String TESTFLIGHT_URL = "^https://testflight\\.apple\\.com/join/[A-Za-z0-9]+$";
+    /** Adresse d'une application web : https seulement, avec un vrai nom de domaine. */
+    static final String WEB_URL = "^https://[A-Za-z0-9.-]+\\.[A-Za-z]{2,}(:[0-9]{1,5})?(/[^\\s<>\"']*)?$";
 
-    @Schema(name = "PlaytestRequest", description = "Création ou modification d'une campagne (brouillon ou refusée)")
+    @Schema(name = "PlaytestRequest", description = """
+            Création ou modification d'une campagne (brouillon ou refusée). Les règles dépendent de platform. \
+            GOOGLE_PLAY : packageName Android obligatoire ; optInUrl https://play.google.com/apps/testing/… ou \
+            https://groups.google.com/… ; testersTarget de 12 à 100 (14 par défaut) ; requiredDays de 14 à 60 (14). \
+            APP_STORE : packageName = Bundle ID obligatoire ; optInUrl https://testflight.apple.com/join/… ; \
+            testersTarget de 1 à 100 (10) ; requiredDays de 1 à 60 (7). \
+            WEB : packageName ignoré (toujours null) ; optInUrl = adresse https du site à tester ; testersTarget de 1 \
+            à 100 (10) ; requiredDays ignoré (toujours 0, pas de décompte) ; toujours relue par l'équipe. \
+            Une règle non respectée revient en VALIDATION_ERROR avec le champ en cause dans fields.""")
     public record PlaytestRequest(
+            @NotNull(message = "Obligatoire")
+            @Schema(requiredMode = REQUIRED, example = "GOOGLE_PLAY") Platform platform,
+
             @NotBlank(message = "Obligatoire") @Size(min = 2, max = 80, message = "Entre 2 et 80 caractères")
             @Schema(requiredMode = REQUIRED, example = "Tontine Cash") String appName,
 
-            @NotBlank(message = "Obligatoire") @Size(max = 150, message = "150 caractères maximum")
-            @Pattern(regexp = PACKAGE_NAME, message = "Identifiant d'application attendu (com.exemple.app)")
-            @Schema(requiredMode = REQUIRED, example = "sn.tontinecash.app") String packageName,
+            @Size(max = 150, message = "150 caractères maximum")
+            @Schema(description = "Obligatoire pour GOOGLE_PLAY (com.exemple.app) et APP_STORE (Bundle ID), "
+                    + "ignoré pour WEB", example = "sn.tontinecash.app") String packageName,
 
             @NotBlank(message = "Obligatoire") @Size(min = 30, max = 5000, message = "Entre 30 et 5000 caractères")
             @Schema(requiredMode = REQUIRED, description = "Markdown. Le HTML brut est ignoré.") String description,
 
             @NotBlank(message = "Obligatoire") @Size(max = 300, message = "300 caractères maximum")
-            @Pattern(regexp = OPT_IN_URL,
-                    message = "Lien https://play.google.com/apps/testing/… ou https://groups.google.com/… attendu")
-            @Schema(requiredMode = REQUIRED, example = "https://play.google.com/apps/testing/sn.tontinecash.app")
+            @Schema(requiredMode = REQUIRED, description = "Format selon platform (voir PlaytestRequest)",
+                    example = "https://play.google.com/apps/testing/sn.tontinecash.app")
             String optInUrl,
 
-            @Min(value = 12, message = "12 testeurs au moins") @Max(value = 100, message = "100 testeurs au plus")
-            @Schema(description = "14 par défaut ; Google en exige 12", example = "14") Integer testersTarget,
+            @Min(value = 1, message = "1 testeur au moins") @Max(value = 100, message = "100 testeurs au plus")
+            @Schema(description = "Minimum et défaut selon platform ; Google en exige 12", example = "14")
+            Integer testersTarget,
+
+            @Min(value = 0, message = "0 jour au moins") @Max(value = 60, message = "60 jours au plus")
+            @Schema(description = "Jours de test par testeur. Bornes et défaut selon platform ; ignoré pour WEB",
+                    example = "14") Integer requiredDays,
 
             @Schema(description = "Date de début souhaitée, à titre indicatif", example = "2026-11-17")
             LocalDate desiredStart,
@@ -95,8 +115,9 @@ public final class PlaytestDtos {
     }
 
     @Schema(name = "PlaytestProgress", description = """
-            Avancement : percent = jours effectués par les testeurs en cours et terminés, rapportés à \
-            testersTarget × requiredDays. Ce ne sont que des déclarations : jamais une conformité Google Play.""")
+            Avancement. DAILY : percent = jours effectués par les testeurs en cours et terminés, rapportés à \
+            testersTarget × requiredDays. NONE : testeurs qui ont déclaré l'installation (en cours et terminés), \
+            rapportés à testersTarget. Ce ne sont que des déclarations : jamais une conformité d'un store.""")
     public record Progress(
             @Schema(requiredMode = REQUIRED, example = "42") int percent,
             @Schema(requiredMode = REQUIRED, description = "Participations terminées", example = "3") int completed,
@@ -112,13 +133,14 @@ public final class PlaytestDtos {
     public record PlaytestSummary(
             @Schema(requiredMode = REQUIRED) Long id,
             @Schema(requiredMode = REQUIRED) String appName,
-            @Schema(requiredMode = REQUIRED) String packageName,
-            @Schema(requiredMode = REQUIRED, example = "GOOGLE_PLAY") String platform,
+            @Schema(description = "Identifiant Android ou Bundle ID ; null pour WEB") String packageName,
+            @Schema(requiredMode = REQUIRED) Platform platform,
+            @Schema(requiredMode = REQUIRED, description = "Déduit de platform : NONE pour WEB") Tracking tracking,
             String iconUrl,
             @Schema(requiredMode = REQUIRED) AuthorSummary owner,
             @Schema(requiredMode = REQUIRED) CampaignStatus status,
             @Schema(requiredMode = REQUIRED) int testersTarget,
-            @Schema(requiredMode = REQUIRED) int requiredDays,
+            @Schema(requiredMode = REQUIRED, description = "0 quand tracking vaut NONE") int requiredDays,
             @Schema(requiredMode = REQUIRED, description = "Places libres ; 0 : campagne complète") int spotsLeft,
             @Schema(requiredMode = REQUIRED) Progress progress,
             @Schema(requiredMode = REQUIRED) Instant createdAt,
@@ -131,8 +153,10 @@ public final class PlaytestDtos {
             @Schema(requiredMode = REQUIRED) ParticipationStatus status,
             @Schema(description = "Null tant que l'installation n'est pas déclarée, et après un départ")
             ProofLevel proofLevel,
-            @Schema(requiredMode = REQUIRED) int daysDone,
-            @Schema(requiredMode = REQUIRED) int requiredDays,
+            @Schema(requiredMode = REQUIRED, description = "Sans décompte (NONE) : jours depuis l'installation")
+            int daysDone,
+            @Schema(requiredMode = REQUIRED, description = "0 quand la campagne n'a pas de décompte")
+            int requiredDays,
             @Schema(requiredMode = REQUIRED) Instant joinedAt,
             @Schema(description = "Avant cette date, l'installation doit être déclarée, sinon la place se libère")
             Instant confirmBefore,
@@ -153,8 +177,9 @@ public final class PlaytestDtos {
     public record PlaytestDetail(
             @Schema(requiredMode = REQUIRED) Long id,
             @Schema(requiredMode = REQUIRED) String appName,
-            @Schema(requiredMode = REQUIRED) String packageName,
-            @Schema(requiredMode = REQUIRED, example = "GOOGLE_PLAY") String platform,
+            @Schema(description = "Identifiant Android ou Bundle ID ; null pour WEB") String packageName,
+            @Schema(requiredMode = REQUIRED) Platform platform,
+            @Schema(requiredMode = REQUIRED, description = "Déduit de platform : NONE pour WEB") Tracking tracking,
             String iconUrl,
             @Schema(requiredMode = REQUIRED) String descriptionMarkdown,
             @Schema(requiredMode = REQUIRED, description = "HTML nettoyé côté serveur, à afficher avec MemberContent")
@@ -167,7 +192,7 @@ public final class PlaytestDtos {
             @Schema(description = "Motif d'un refus ou d'une suspension : seulement pour le porteur et l'équipe")
             String reviewNote,
             @Schema(requiredMode = REQUIRED) int testersTarget,
-            @Schema(requiredMode = REQUIRED) int requiredDays,
+            @Schema(requiredMode = REQUIRED, description = "0 quand tracking vaut NONE") int requiredDays,
             @Schema(requiredMode = REQUIRED) int spotsLeft,
             @Schema(requiredMode = REQUIRED) Progress progress,
             @Schema(description = "Quand toutes les places sont prises par des installations déclarées : fin du "
@@ -242,7 +267,7 @@ public final class PlaytestDtos {
             @Schema(requiredMode = REQUIRED) long pendingReview,
             @Schema(requiredMode = REQUIRED) long active,
             @Schema(requiredMode = REQUIRED) long completed,
-            @Schema(requiredMode = REQUIRED, description = "Campagnes dont toutes les places ont été tenues 14 jours")
+            @Schema(requiredMode = REQUIRED, description = "Campagnes dont toutes les places ont été tenues jusqu'au bout")
             long targetReached,
             @Schema(requiredMode = REQUIRED) long owners,
             @Schema(requiredMode = REQUIRED) long testers,

@@ -54,11 +54,12 @@ public interface TestCampaignRepository extends JpaRepository<TestCampaign, Long
 
     @Query("""
             select count(c) > 0 from TestCampaign c
-            where lower(c.packageName) = lower(:packageName) and c.id <> :id
+            where c.platform = :platform and lower(c.packageName) = lower(:packageName) and c.id <> :id
               and c.status in (dev.zetsu.playtest.CampaignStatus.PENDING_REVIEW, dev.zetsu.playtest.CampaignStatus.ACTIVE,
                                dev.zetsu.playtest.CampaignStatus.SUSPENDED)
             """)
-    boolean packageRunningElsewhere(@Param("packageName") String packageName, @Param("id") Long id);
+    boolean packageRunningElsewhere(@Param("platform") Platform platform, @Param("packageName") String packageName,
+                                    @Param("id") Long id);
 
     /** AUTH-6 : les campagnes non terminées d'un compte supprimé sont clôturées. */
     @Modifying

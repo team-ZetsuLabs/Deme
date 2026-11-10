@@ -6,6 +6,7 @@
         "appName": "Jollof Rider",
         "packageName": "gh.jollofrider.app",
         "platform": "GOOGLE_PLAY",
+        "tracking": "DAILY",
         "iconUrl": null,
         "owner": {
           "username": "fatou_n",
@@ -41,6 +42,7 @@
         "appName": "Kobo Split",
         "packageName": "ng.kobosplit.app",
         "platform": "GOOGLE_PLAY",
+        "tracking": "DAILY",
         "iconUrl": "https://res.cloudinary.com/demo/image/upload/c_fill,w_128,h_128/f_auto,q_auto/v1/zetsu/playtests/5b0f6c3e-2a71-4f0e-9d0b-8f1e0c2b7a41.png",
         "owner": {
           "username": "chinedu_o",
@@ -76,6 +78,7 @@
         "appName": "Wari Stock",
         "packageName": "sn.waristock.app",
         "platform": "GOOGLE_PLAY",
+        "tracking": "DAILY",
         "iconUrl": null,
         "owner": {
           "username": "aminata_dev",
