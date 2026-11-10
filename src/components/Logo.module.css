@@ -1,30 +1,5 @@
 .logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  font-size: 17px;
-  letter-spacing: -0.02em;
-  color: var(--text);
-}
-
-.mark {
+  display: block;
   flex: none;
-}
-
-.frame {
-  fill: var(--surface);
-  stroke: var(--line-strong);
-}
-
-.green {
-  fill: var(--green);
-}
-
-.gold {
-  fill: var(--logo-gold);
-}
-
-.gap {
-  fill: var(--surface);
+  color: var(--text);
 }

@@ -1,7 +1,7 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
-const STORAGE_KEY = 'zetsu-bo-lang'
+const STORAGE_KEY = 'deme-bo-lang'
 
 type Messages = Record<string, unknown>
 

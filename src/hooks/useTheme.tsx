@@ -5,7 +5,7 @@ export type Theme = 'light' | 'dark'
 
 type ThemeContextValue = { theme: Theme; setTheme: (theme: Theme) => void }
 
-const STORAGE_KEY = 'zetsu-bo-theme'
+const STORAGE_KEY = 'deme-bo-theme'
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 
 function readStoredTheme(): Theme {

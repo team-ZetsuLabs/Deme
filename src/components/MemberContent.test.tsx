@@ -12,8 +12,8 @@ describe('MemberContent', () => {
   it('refuse les liens javascript: et garde les liens https avec rel sécurisé', () => {
     const bad = sanitizeMemberHtml('<a href="javascript:alert(1)">piège</a>')
     expect(bad).not.toContain('javascript:')
-    const good = sanitizeMemberHtml('<a href="https://zetsu.example/doc">doc</a>')
-    expect(good).toContain('href="https://zetsu.example/doc"')
+    const good = sanitizeMemberHtml('<a href="https://deme.example/doc">doc</a>')
+    expect(good).toContain('href="https://deme.example/doc"')
     expect(good).toContain('rel="noopener noreferrer nofollow"')
   })
 

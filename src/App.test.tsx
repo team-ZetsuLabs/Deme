@@ -9,7 +9,7 @@ const page = { items: [], page: 0, size: 20, total: 0 }
 const member = (role: string, level = 'MEMBER') => ({
   id: 1,
   username: 'equipe',
-  displayName: 'Équipe Zetsu',
+  displayName: 'Équipe Dɛmɛ',
   language: 'fr',
   visibleToRecruiters: false,
   role,
@@ -49,7 +49,7 @@ function mockBackend(loggedInAs: ReturnType<typeof member>) {
 }
 
 async function signIn() {
-  await userEvent.type(await screen.findByLabelText('Adresse email'), 'equipe@zetsu.dev')
+  await userEvent.type(await screen.findByLabelText('Adresse email'), 'equipe@deme.dev')
   await userEvent.type(screen.getByLabelText('Mot de passe'), 'un-mot-de-passe')
   await userEvent.click(screen.getByRole('button', { name: 'Se connecter' }))
 }
@@ -78,7 +78,7 @@ test("la connexion ouvre le tableau de bord d'un administrateur", async () => {
   expect(screen.getByRole('link', { name: /Signalements/ })).toBeInTheDocument()
   const login = fetchMock.mock.calls.find(([url]) => String(url).endsWith('/auth/login'))
   expect(JSON.parse(String(login?.[1]?.body))).toEqual({
-    email: 'equipe@zetsu.dev',
+    email: 'equipe@deme.dev',
     password: 'un-mot-de-passe',
   })
   expect((login?.[1]?.headers as Record<string, string>)['X-XSRF-TOKEN']).toBe('t')

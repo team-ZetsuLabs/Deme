@@ -1,4 +1,4 @@
-# Zetsu : instructions communes de l'équipe
+# Dɛmɛ : instructions communes de l'équipe
 
 Ce fichier est lu par chaque membre de l'équipe et par son assistant Claude. Il fixe ce qui doit être identique pour tout le monde. En cas de doute, on suit ce fichier ; s'il est faux ou incomplet, on le corrige par une pull request relue, jamais en local.
 
@@ -6,7 +6,7 @@ Le détail des fonctionnalités et du planning est dans le cahier des charges (o
 
 ## Le projet
 
-- **Zetsu** : plateforme d'échange africaine pour les développeurs. Entraide (questions et réponses), emploi et missions entre pairs, défis, réputation, modération communautaire.
+- **Dɛmɛ** : plateforme d'échange africaine pour les développeurs. Entraide (questions et réponses), emploi et missions entre pairs, défis, réputation, modération communautaire.
 - **Concours** : CADev 2026 de Systalink. Livrables : dépôt Git et démo en ligne.
 - **Dates** : gel des fonctionnalités le 11 novembre au soir, soumission le 14 novembre, échéance le 15 novembre 2026.
 - **Ce qui nous distingue** : le contexte africain sur chaque question (pays, opérateur mobile money, qualité du réseau), un site léger qui marche en 3G, la modération par des membres de confiance (Référents).

@@ -1,8 +1,9 @@
-# Zetsu, back office
+# Dɛmɛ, back office
 
-Back office de Zetsu (modération et administration), servi sous `/admin`.
+Back office de Dɛmɛ (modération et administration), servi sous `/admin`.
 React 18, Vite, TypeScript, CSS Modules. Les règles de l'équipe sont dans `CLAUDE.md`.
 Le design reprend la maquette `zetsu-backoffice.html` : thème vert, clair par défaut, sombre au choix, polices Geist installées par npm.
+Logo et icônes : kit `deme-logo-kit` (D coupé en deux et nom dessiné en formes pleines). Le composant `Logo` en reprend les tracés et suit la couleur du texte, donc le thème ; les icônes sont dans `public/icons/`. Le back office n'est pas une PWA : pas de manifeste.
 
 ## Lancer en local
 

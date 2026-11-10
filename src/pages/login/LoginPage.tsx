@@ -61,7 +61,7 @@ export default function LoginPage() {
       </div>
       <div className={styles.card}>
         <div className={styles.logo}>
-          <Logo />
+          <Logo height={36} />
           <span className={styles.env}>admin</span>
         </div>
         <h1>{t('login.title')}</h1>

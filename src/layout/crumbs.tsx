@@ -13,6 +13,6 @@ export function useCrumbs(crumbs: Crumb[]) {
     const parsed = JSON.parse(key) as Crumb[]
     set(parsed)
     const last = parsed.at(-1)
-    if (last) document.title = `${last.label} · Zetsu Admin`
+    if (last) document.title = `${last.label} · Dɛmɛ Admin`
   }, [key, set])
 }

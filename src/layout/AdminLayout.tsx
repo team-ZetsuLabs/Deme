@@ -99,7 +99,7 @@ export default function AdminLayout() {
         >
           <div className={styles.sidebarHead}>
             <Link to="/tableau-de-bord" className={styles.logoLink}>
-              <Logo />
+              <Logo height={32} />
             </Link>
             <span className={styles.env}>admin</span>
           </div>

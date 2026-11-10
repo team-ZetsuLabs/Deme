@@ -1,6 +1,6 @@
 # Données de démonstration
 
-Script rejouable qui remplit une instance de Zetsu avec du contenu réaliste et africain : membres de plusieurs pays,
+Script rejouable qui remplit une instance de Dɛmɛ avec du contenu réaliste et africain : membres de plusieurs pays,
 40 questions environ avec réponses acceptées et votes, scénarios de modération (spam masqué automatiquement puis contesté,
 signalements en attente, profil usurpé), offres d'emploi (approuvées, refusées, en attente dont une arnaque), missions, projets,
 défis avec dépôts notés ou à évaluer, communautés et étiquettes inutilisées.

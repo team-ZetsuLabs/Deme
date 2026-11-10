@@ -72,7 +72,7 @@ export default function UsersPage() {
   function exportCsv(rows: AdminUser[]) {
     const list = selected.size ? rows.filter((u) => selected.has(u.id)) : rows
     downloadCsv(
-      'utilisateurs-zetsu.csv',
+      'utilisateurs-deme.csv',
       toCsv(
         ['username', 'name', 'email', 'country', 'role', 'level', 'reputation', 'status'],
         list.map((u) => [

@@ -468,7 +468,7 @@ export const JOBS = [
     description:
       "Poste de commercial pour vendre du crédit téléphonique en porte à porte dans les quartiers de la ville. Aucune compétence en développement n'est demandée, la rémunération se fait à la commission sur chaque recharge vendue chaque jour.",
     decision: 'REJECT',
-    reason: "L'offre n'est pas liée au développement logiciel : elle ne correspond pas à Zetsu.",
+    reason: "L'offre n'est pas liée au développement logiciel : elle ne correspond pas à Dɛmɛ.",
   },
   {
     recruiter: 1,
@@ -566,7 +566,7 @@ export const PROJECTS = [
       { title: 'Développeur front-end React', technologies: ['react', 'typescript'] },
       { title: 'Développeur back-end Node.js', technologies: ['node.js', 'postgresql'] },
     ],
-    githubUrl: 'https://github.com/zetsu-demo/annuaire-dev-afrique',
+    githubUrl: 'https://github.com/deme-demo/annuaire-dev-afrique',
   },
   {
     author: 'seydou.ouedraogo',
@@ -588,7 +588,7 @@ export const PROJECTS = [
     type: 'STUDY',
     technologies: ['node.js', 'mobile-money'],
     roles: [{ title: 'Développeur Node.js', technologies: ['node.js'] }],
-    githubUrl: 'https://github.com/zetsu-demo/simulateur-paiement',
+    githubUrl: 'https://github.com/deme-demo/simulateur-paiement',
   },
 ]
 

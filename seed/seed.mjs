@@ -1,4 +1,4 @@
-// Données de démonstration de Zetsu, créées par l'API (jamais directement en base) pour que
+// Données de démonstration de Dɛmɛ, créées par l'API (jamais directement en base) pour que
 // la réputation, les niveaux, le masquage automatique et les notifications suivent les vraies règles.
 // Rejouable : un compte, une question ou une offre déjà présents sont reconnus et sautés.
 //

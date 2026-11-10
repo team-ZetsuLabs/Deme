@@ -22,7 +22,7 @@ test('le thème clair est celui par défaut, le sombre se choisit et se mémoris
   setup()
   await userEvent.click(screen.getByRole('button', { name: 'Passer en mode sombre' }))
   expect(document.documentElement.dataset.theme).toBe('dark')
-  expect(localStorage.getItem('zetsu-bo-theme')).toBe('dark')
+  expect(localStorage.getItem('deme-bo-theme')).toBe('dark')
   expect(screen.getByRole('button', { name: 'Passer en mode clair' })).toBeInTheDocument()
 })
 
@@ -32,5 +32,5 @@ test("la langue bascule entre français et anglais et met à jour l'attribut lan
   expect(i18n.language).toBe('en')
   expect(document.documentElement.lang).toBe('en')
   expect(screen.getByRole('button', { name: 'Switch to dark mode' })).toBeInTheDocument()
-  expect(localStorage.getItem('zetsu-bo-lang')).toBe('en')
+  expect(localStorage.getItem('deme-bo-lang')).toBe('en')
 })
