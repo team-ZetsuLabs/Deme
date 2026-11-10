@@ -71,6 +71,7 @@ public class ApplicationController {
     @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "403", description = "FORBIDDEN", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "404", description = "APPLICATION_NOT_FOUND, CV_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "503", description = "STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public ResponseEntity<Resource> cv(@PathVariable Long id, @AuthenticationPrincipal ZetsuPrincipal me) {
         var download = applicationService.cv(id, me);
         return ResponseEntity.ok()

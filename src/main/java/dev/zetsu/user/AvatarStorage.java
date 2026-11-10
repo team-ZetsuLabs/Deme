@@ -1,6 +1,7 @@
 package dev.zetsu.user;
 
 import dev.zetsu.common.ApiException;
+import dev.zetsu.common.CloudinaryClient;
 import dev.zetsu.config.ZetsuProperties;
 import org.springframework.core.io.PathResource;
 import org.springframework.core.io.Resource;
@@ -16,11 +17,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Photos de profil (SET-1), hors de tout dossier servi au public. Le type est lu dans les premiers octets du
- * fichier, jamais dans son nom ni dans l'en-tête envoyé par le navigateur ; le nom enregistré est régénéré.
+ * Photos de profil (SET-1). Le type est lu dans les premiers octets du fichier, jamais dans son nom ni dans
+ * l'en-tête envoyé par le navigateur ; le nom enregistré est régénéré.
+ * <p>
+ * Avec Cloudinary configuré, la photo part sur son CDN et avatarUrl pointe vers une version recadrée en 256 px,
+ * au format le plus léger que le navigateur sait lire. Sinon elle reste sur le disque, hors de tout dossier public,
+ * et le serveur la sert lui-même. Les photos déjà sur le disque restent servies après le passage à Cloudinary.
  */
 @Component
 public class AvatarStorage {
@@ -31,15 +37,73 @@ public class AvatarStorage {
     private static final byte[] RIFF = "RIFF".getBytes(StandardCharsets.US_ASCII);
     private static final byte[] WEBP = "WEBP".getBytes(StandardCharsets.US_ASCII);
     private static final Pattern STORED_NAME = Pattern.compile("^[0-9a-f-]{36}\\.(png|jpg|webp)$");
+    /** Recadrage carré et format automatique (WebP, AVIF…) : quelques Ko par photo, pour la 3G. */
+    static final String TRANSFORMATION = "c_fill,w_256,h_256/f_auto,q_auto";
+    private static final String LOCAL_PREFIX = "/api/v1/users/";
+    private static final String CLOUD = "cloudinary:";
+    private static final Pattern CLOUD_ID = Pattern.compile("/v\\d+/(.+)/([0-9a-f-]{36})\\.[a-z0-9]+$");
 
-    private final Path dir;
-
-    public AvatarStorage(ZetsuProperties props) {
-        this.dir = Path.of(props.uploadsDir(), "avatars").toAbsolutePath().normalize();
+    /** Photo enregistrée : {@code ref} sert à la supprimer, {@code url} va dans avatarUrl. */
+    public record Stored(String ref, String url) {
     }
 
-    /** Vérifie puis enregistre l'image ; renvoie le nom à garder. */
-    public String store(MultipartFile file) {
+    private final Path dir;
+    private final CloudinaryClient cloudinary;
+
+    public AvatarStorage(ZetsuProperties props, CloudinaryClient cloudinary) {
+        this.dir = Path.of(props.uploadsDir(), "avatars").toAbsolutePath().normalize();
+        this.cloudinary = cloudinary;
+    }
+
+    /** Vérifie puis enregistre l'image, chez Cloudinary s'il est configuré, sinon sur le disque. */
+    public Stored store(MultipartFile file, String username) {
+        String name = check(file);
+        if (cloudinary.enabled()) {
+            String publicId = cloudinary.folder("avatars") + "/" + name.substring(0, name.indexOf('.'));
+            CloudinaryClient.Upload up = cloudinary.upload(bytes(file), publicId, "image", CloudinaryClient.PUBLIC);
+            String extension = up.format() == null ? name.substring(name.indexOf('.') + 1) : up.format();
+            return new Stored(CLOUD + up.publicId(), cloudPrefix() + TRANSFORMATION + "/v" + up.version() + "/"
+                    + up.publicId() + "." + extension);
+        }
+        writeLocal(file, name);
+        return new Stored(name, LOCAL_PREFIX + username + "/avatar/" + name);
+    }
+
+    /**
+     * Retrouve la référence d'une photo enregistrée par Zetsu à partir d'avatarUrl ; null pour une photo venue de
+     * GitHub ou Google, ou pour une adresse qui ne vient pas de nous.
+     */
+    public String refOf(String avatarUrl) {
+        if (avatarUrl == null) {
+            return null;
+        }
+        if (avatarUrl.startsWith(LOCAL_PREFIX)) {
+            String name = avatarUrl.substring(avatarUrl.lastIndexOf('/') + 1);
+            return isStoredName(name) ? name : null;
+        }
+        if (cloudinary.enabled() && avatarUrl.startsWith(cloudPrefix())) {
+            Matcher m = CLOUD_ID.matcher(avatarUrl);
+            if (m.find() && m.group(1).equals(cloudinary.folder("avatars"))) {
+                return CLOUD + m.group(1) + "/" + m.group(2);
+            }
+        }
+        return null;
+    }
+
+    private String cloudPrefix() {
+        return "https://res.cloudinary.com/" + cloudinary.cloudName() + "/image/upload/";
+    }
+
+    private static byte[] bytes(MultipartFile file) {
+        try {
+            return file.getBytes();
+        } catch (IOException e) {
+            throw new UncheckedIOException("Lecture de la photo impossible", e);
+        }
+    }
+
+    /** Vérifie taille et type réel ; renvoie un nom régénéré avec la bonne extension. */
+    private static String check(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw ApiException.badRequest("PHOTO_REQUIRED", "Choisissez une photo");
         }
@@ -55,12 +119,18 @@ public class AvatarStorage {
             if (extension == null) {
                 throw ApiException.badRequest("PHOTO_TYPE", "La photo doit être au format PNG, JPG ou WebP");
             }
-            String name = UUID.randomUUID() + "." + extension;
+            return UUID.randomUUID() + "." + extension;
+        } catch (IOException e) {
+            throw new UncheckedIOException("Lecture de la photo impossible", e);
+        }
+    }
+
+    private void writeLocal(MultipartFile file, String name) {
+        try {
             Files.createDirectories(dir);
             try (InputStream in = file.getInputStream()) {
                 Files.copy(in, dir.resolve(name));
             }
-            return name;
         } catch (IOException e) {
             throw new UncheckedIOException("Enregistrement de la photo impossible", e);
         }
@@ -81,9 +151,14 @@ public class AvatarStorage {
         return name.endsWith(".jpg") ? MediaType.IMAGE_JPEG : MediaType.parseMediaType("image/webp");
     }
 
-    public void delete(String name) {
+    /** Supprime une photo à partir de sa référence ({@link #refOf}). */
+    public void delete(String ref) {
+        if (ref.startsWith(CLOUD)) {
+            cloudinary.destroy(ref.substring(CLOUD.length()), "image", CloudinaryClient.PUBLIC);
+            return;
+        }
         try {
-            Files.deleteIfExists(resolve(name));
+            Files.deleteIfExists(resolve(ref));
         } catch (IOException e) {
             throw new UncheckedIOException("Suppression de la photo impossible", e);
         }

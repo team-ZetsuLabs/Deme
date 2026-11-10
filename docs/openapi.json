@@ -236,6 +236,16 @@
               }
             }
           },
+          "503" : {
+            "description" : "STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
           "401" : {
             "description" : "UNAUTHENTICATED",
             "content" : {
@@ -3637,6 +3647,16 @@
               }
             }
           },
+          "503" : {
+            "description" : "STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
           "401" : {
             "description" : "UNAUTHENTICATED",
             "content" : {
@@ -6713,6 +6733,16 @@
           },
           "404" : {
             "description" : "APPLICATION_NOT_FOUND, CV_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer",
             "content" : {
               "application/json" : {
                 "schema" : {
