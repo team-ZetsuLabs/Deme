@@ -1,5 +1,4 @@
 {
-  "title": "Administration sign-in",
   "lead": "Access reserved for the moderation team and administrators.",
   "email": "Email address",
   "password": "Password",
@@ -8,5 +7,20 @@
   "emailError": "Enter a valid email address.",
   "passwordError": "Enter your password.",
   "welcome": "Signed in",
-  "attempts": "After 5 failed attempts, the account is locked for 15 minutes."
+  "attempts": "After 5 failed attempts, the account is locked for 15 minutes.",
+  "brandTitle": "Moderate the community",
+  "brandAccent": "with confidence.",
+  "brandLead": "Handle reports, approve job offers and grade challenges from one place, built for the Dɛmɛ team.",
+  "points": [
+    "Reports and appeals in one place",
+    "Decisions can be undone for 6 seconds",
+    "Permissions checked by the server on every action"
+  ],
+  "note": "Only team accounts can access this area.",
+  "noteSource": "Dɛmɛ, administration area",
+  "greeting": "Welcome back!",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "footer": "© 2026 Dɛmɛ. All rights reserved.",
+  "emailPlaceholder": "name@example.com"
 }

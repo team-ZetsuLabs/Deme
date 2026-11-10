@@ -87,4 +87,10 @@
   --f-sans: 'Geist Variable', system-ui, sans-serif;
   --f-mono: 'Geist Mono Variable', ui-monospace, monospace;
   --sidebar: 248px;
+  --brand-bg: #0b0c0c;
+  --brand-surface: #121414;
+  --brand-line: #262b2b;
+  --brand-text: #eef1f0;
+  --brand-muted: #a9b2af;
+  --brand-accent: #00e599;
 }

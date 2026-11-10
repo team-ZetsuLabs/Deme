@@ -64,9 +64,7 @@ test('sans session, on arrive sur la connexion', async () => {
   mockBackend(member('ADMIN'))
   at('signalements')
   render(<App />)
-  expect(
-    await screen.findByRole('heading', { name: "Connexion à l'administration" }),
-  ).toBeInTheDocument()
+  expect(await screen.findByRole('heading', { name: 'Bon retour !' })).toBeInTheDocument()
 })
 
 test("la connexion ouvre le tableau de bord d'un administrateur", async () => {
@@ -110,4 +108,16 @@ test('les champs invalides sont signalés avant tout appel', async () => {
   await userEvent.click(await screen.findByRole('button', { name: 'Se connecter' }))
   expect(screen.getByText('Entrez une adresse email valide.')).toBeInTheDocument()
   expect(fetchMock.mock.calls.some(([url]) => String(url).endsWith('/auth/login'))).toBe(false)
+})
+
+test('le mot de passe peut être affiché puis masqué', async () => {
+  mockBackend(member('ADMIN'))
+  at('connexion')
+  render(<App />)
+  const field = await screen.findByLabelText('Mot de passe')
+  expect(field).toHaveAttribute('type', 'password')
+  await userEvent.click(screen.getByRole('button', { name: 'Afficher le mot de passe' }))
+  expect(field).toHaveAttribute('type', 'text')
+  await userEvent.click(screen.getByRole('button', { name: 'Masquer le mot de passe' }))
+  expect(field).toHaveAttribute('type', 'password')
 })
