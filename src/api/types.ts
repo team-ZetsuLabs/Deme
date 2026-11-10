@@ -22,12 +22,27 @@ export type AdminCommunity = Schemas['AdminCommunity']
 export type CommunityRequest = Schemas['CommunityRequest']
 export type AdminCommunityProposal = Schemas['AdminCommunityProposal']
 
+export type ProjectSummary = Schemas['ProjectSummary']
+export type ProjectDetail = Schemas['ProjectDetail']
+export type ProjectStatus = ProjectSummary['status']
+export type ProjectType = ProjectSummary['type']
+export type PublicProfile = Schemas['PublicProfile']
+export type BadgeProgress = Schemas['BadgeProgress']
+export type ReputationEntry = Schemas['ReputationEntry']
+export type QuestionSummary = Schemas['QuestionSummary']
+export type MissionSummary = Schemas['MissionSummary']
+export type ProjectUpdate = Schemas['ProjectUpdate']
+
 export type Page<T> = { items: T[]; page: number; size: number; total: number }
 
 type Query<P extends keyof paths> = paths[P] extends { get: { parameters: { query?: infer Q } } }
   ? NonNullable<Q>
   : never
 
+export type ProjectsQuery = Query<'/api/v1/projects'>
+export type ReputationQuery = Query<'/api/v1/users/{username}/reputation'>
+export type QuestionsQuery = Query<'/api/v1/questions'>
+export type MissionsQuery = Query<'/api/v1/missions'>
 export type UsersQuery = Query<'/api/v1/admin/users'>
 export type TagsQuery = Query<'/api/v1/admin/tags'>
 export type CasesQuery = Query<'/api/v1/admin/cases'>

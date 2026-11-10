@@ -17,6 +17,7 @@ export const cell = {
   title: styles.cellTitle,
   rowActions: styles.rowActions,
   mono: styles.mono,
+  sub: styles.sub,
 }
 
 export function Who({ avatar, name, sub }: { avatar: ReactNode; name: string; sub?: string }) {

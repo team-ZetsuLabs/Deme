@@ -31,7 +31,9 @@ export function useQuery<T>(
     const controller = new AbortController()
     latest
       .current(controller.signal)
-      .then((data) => setState({ key, data }))
+      .then((data) => {
+        if (!controller.signal.aborted) setState({ key, data })
+      })
       .catch((error: unknown) => {
         if (controller.signal.aborted) return
         setState((previous) => ({ key, data: previous.data, error }))

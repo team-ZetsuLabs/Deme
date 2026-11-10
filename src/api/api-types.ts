@@ -99,7 +99,11 @@ export interface paths {
         /** Modifier sa question */
         put: operations["questionUpdate"];
         post?: never;
-        delete?: never;
+        /**
+         * Supprimer sa question (QA-3)
+         * @description Seulement tant qu'elle n'a aucune réponse (canDelete sur la question). Les points qu'elle a rapportés             (question posée, votes reçus) sont retirés ; elle disparaît des listes, de la recherche et des             notifications.
+         */
+        delete: operations["questionDelete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -122,6 +126,50 @@ export interface paths {
          * @description Sans les rôles, qui se gèrent à part. Relance un projet en pause.
          */
         put: operations["projectEdit"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Page d'une campagne
+         * @description optInUrl et instructions ne sont donnés qu'au porteur, à l'équipe et aux testeurs inscrits : on rejoint d'abord sur Zetsu, puis on suit le lien. Un brouillon, une campagne suspendue ou masquée n'existe que pour le porteur, l'équipe et ses testeurs (404 pour les autres).
+         */
+        get: operations["playtestGet"];
+        /**
+         * Modifier sa campagne
+         * @description En brouillon ou refusée seulement. Une campagne refusée redevient un brouillon, à renvoyer.
+         */
+        put: operations["playtestEdit"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/icon": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Icône de l'application
+         * @description Formulaire multipart, champ photo : PNG, JPG ou WebP de 2 Mo maximum, vérifié par son contenu. Recadrée en 128 px. Impossible sur une campagne terminée.
+         */
+        put: operations["playtestIcon"];
         post?: never;
         delete?: never;
         options?: never;
@@ -524,6 +572,194 @@ export interface paths {
          * @description Définitif. Chaque membre accepté gagne 10 points et le projet reste sur son profil ; les demandes en attente sont refusées.
          */
         post: operations["projectClose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Campagnes de test fermé (TST-1)
+         * @description Actives par défaut, les plus récentes d'abord ; status=COMPLETED pour les terminées. availability=OPEN : avec une place libre ; FULL : complètes.
+         */
+        get: operations["playtestList"];
+        put?: never;
+        /**
+         * Créer une campagne (TST-1)
+         * @description Toujours en brouillon : POST /playtests/{id}/submit pour la publier. Règles de chaque plateforme : voir le schéma PlaytestRequest.
+         */
+        post: operations["playtestCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Publier sa campagne
+         * @description Un porteur de niveau Membre (50 points) ou plus est publié tout de suite (ACTIVE) ; sinon la campagne attend l'équipe (PENDING_REVIEW). Une campagne WEB attend toujours l'équipe. Une seule campagne en cours par application et par plateforme.
+         */
+        post: operations["playtestSubmit"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/participations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Testeurs de sa campagne
+         * @description Pour le porteur : jours effectués, niveau de preuve, « à confirmer » (needsAttention), adresse Google déclarée. Dans l'ordre d'arrivée.
+         */
+        get: operations["playtestParticipations"];
+        put?: never;
+        /**
+         * Rejoindre une campagne (TST-2)
+         * @description Prend une place tout de suite et donne optInUrl. L'installation est à déclarer sous 48 heures, sinon la place se libère. On ne rejoint qu'une fois une campagne, même après un départ.
+         */
+        post: operations["playtestJoin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/participations/{participationId}/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Testeur vérifié dans la Play Console
+         * @description Par le porteur, sur une installation déclarée.
+         */
+        post: operations["playtestVerify"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/participations/{participationId}/remove": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Retirer un testeur
+         * @description Par le porteur, avec un motif montré au testeur. La place se libère.
+         */
+        post: operations["playtestRemove"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/participations/me/withdraw": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Se désister
+         * @description La place se libère pour un autre testeur. Motif facultatif.
+         */
+        post: operations["playtestWithdraw"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/participations/me/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Déclarer l'installation
+         * @description Le décompte des jours commence maintenant (rien à décompter pour une campagne web). Adresse Google facultative.
+         */
+        post: operations["playtestConfirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/participations/me/check-in": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * « Toujours inscrit »
+         * @description Une fois par jour (UTC). Sert à repérer les décrochages, pas de preuve.
+         */
+        post: operations["playtestCheckIn"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Clôturer sa campagne
+         * @description Plus de nouveaux testeurs ; ceux en cours vont au bout de leurs jours et gagnent leurs points. Campagne web (tracking NONE) : les testeurs installés depuis 24 heures terminent tout de suite et gagnent leurs points, les autres partent.
+         */
+        post: operations["playtestClose"];
         delete?: never;
         options?: never;
         head?: never;
@@ -972,6 +1208,83 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/playtests/{id}/suspend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Suspendre une campagne
+         * @description Motif obligatoire. Plus de nouveaux testeurs ; le décompte de ceux en cours continue.
+         */
+        post: operations["playtestAdminSuspend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/playtests/{id}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Valider ou refuser une campagne
+         * @description Motif obligatoire pour REJECT, montré au porteur. Validée, la campagne est annoncée aux membres qui font du mobile.
+         */
+        post: operations["playtestAdminReview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/playtests/{id}/reactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Réactiver une campagne suspendue */
+        post: operations["playtestAdminReactivate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/playtests/{id}/participations/{participationId}/remove": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Retirer un testeur
+         * @description Motif montré au testeur ; le porteur est prévenu. Pour « réaffecter » un testeur, on le retire ici puis il rejoint une autre campagne : un compteur ne passe jamais d'une application à une autre.
+         */
+        post: operations["playtestAdminRemove"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/jobs/{id}/decision": {
         parameters: {
             query?: never;
@@ -1255,6 +1568,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/users/me/playtest-participations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mes participations à des tests fermés
+         * @description Les plus récentes d'abord, avec leurs compteurs.
+         */
+        get: operations["playtestMyParticipations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/users/me/moderation": {
         parameters: {
             query?: never;
@@ -1372,6 +1705,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Chiffres de la page d'accueil, publics, mis en cache 5 minutes par le navigateur */
+        get: operations["statsHome"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/questions/similar": {
         parameters: {
             query?: never;
@@ -1384,6 +1734,46 @@ export interface paths {
          * @description À appeler pendant la saisie du titre, après une courte pause. Plein texte en français et en anglais ; un titre de moins de 10 caractères renvoie une liste vide. exclude écarte la question en cours de modification.
          */
         get: operations["questionSimilar"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/icon/{file}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Icône gardée sur le serveur
+         * @description Ne pas construire cette adresse : utiliser iconUrl. En cache un an.
+         */
+        get: operations["playtestIconFile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mes campagnes
+         * @description Tous statuts, brouillons compris, les plus récentes d'abord.
+         */
+        get: operations["playtestMine"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1663,6 +2053,83 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/playtests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Campagnes de test fermé (TST-5)
+         * @description Toutes sauf les brouillons, celles en attente de validation d'abord. problem=INACTIVE : active sans participation depuis 7 jours ; STALLED : plus de 30 % des testeurs en cours « à confirmer » ; REPORTED : masquée par la modération.
+         */
+        get: operations["playtestAdminList"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/playtests/{id}/participations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Testeurs d'une campagne
+         * @description Adresses Google comprises.
+         */
+        get: operations["playtestAdminParticipations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/playtests/{id}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Historique d'une campagne
+         * @description Plus récent d'abord.
+         */
+        get: operations["playtestAdminEvents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/playtests/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Indicateurs des tests fermés (TST-6) */
+        get: operations["playtestAdminStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/jobs": {
         parameters: {
             query?: never;
@@ -1807,7 +2274,7 @@ export interface components {
             countryCode?: string;
             city?: string;
             /** @enum {string} */
-            language: "fr" | "en";
+            language: "fr" | "en" | "pt" | "ar";
             visibleToRecruiters: boolean;
             /** @description Stack du membre. Absent ou null : inchangée. Liste vide : effacée. */
             technologies?: string[];
@@ -1835,6 +2302,8 @@ export interface components {
             displayName: string;
             /** @example aminata@exemple.sn */
             email?: string;
+            /** @description Vrai pour un email venu de GitHub ou Google, ou confirmé par le lien envoyé (AUTH-4) */
+            emailVerified: boolean;
             avatarUrl?: string;
             bio?: string;
             /** @example SN */
@@ -1842,7 +2311,7 @@ export interface components {
             /** @example Dakar */
             city?: string;
             /** @enum {string} */
-            language: "fr" | "en";
+            language: "fr" | "en" | "pt" | "ar";
             /** @description Profil visible par les recruteurs (désactivé par défaut) */
             visibleToRecruiters: boolean;
             /** @enum {string} */
@@ -1877,7 +2346,7 @@ export interface components {
             /** @example SN */
             countryCode: string;
             /** @enum {string} */
-            language: "fr" | "en";
+            language: "fr" | "en" | "pt" | "ar";
         };
         /** @description Formulaire multipart de photo de profil (SET-1) */
         AvatarForm: {
@@ -1949,6 +2418,8 @@ export interface components {
             createdAt: string;
             /** Format: date-time */
             updatedAt: string;
+            /** @description Vrai si le membre connecté peut supprimer la question : la sienne, sans réponse */
+            canDelete: boolean;
         };
         /** @description Création ou modification complète d'une question (QA-1) */
         QuestionRequest: {
@@ -2043,6 +2514,194 @@ export interface components {
             owner: boolean;
             /** Format: date-time */
             joinedAt: string;
+        };
+        /** @description Création ou modification d'une campagne (brouillon ou refusée). Les règles dépendent de platform. GOOGLE_PLAY : packageName Android obligatoire ; optInUrl https://play.google.com/apps/testing/… ou https://groups.google.com/… ; testersTarget de 12 à 100 (14 par défaut) ; requiredDays de 14 à 60 (14). APP_STORE : packageName = Bundle ID obligatoire ; optInUrl https://testflight.apple.com/join/… ; testersTarget de 1 à 100 (10) ; requiredDays de 1 à 60 (7). WEB : packageName ignoré (toujours null) ; optInUrl = adresse https du site à tester ; testersTarget de 1 à 100 (10) ; requiredDays ignoré (toujours 0, pas de décompte) ; toujours relue par l'équipe. Une règle non respectée revient en VALIDATION_ERROR avec le champ en cause dans fields. */
+        PlaytestRequest: {
+            /**
+             * @example GOOGLE_PLAY
+             * @enum {string}
+             */
+            platform: "GOOGLE_PLAY" | "APP_STORE" | "WEB";
+            /** @example Tontine Cash */
+            appName: string;
+            /**
+             * @description Obligatoire pour GOOGLE_PLAY (com.exemple.app) et APP_STORE (Bundle ID), ignoré pour WEB
+             * @example sn.tontinecash.app
+             */
+            packageName?: string;
+            /** @description Markdown. Le HTML brut est ignoré. */
+            description: string;
+            /**
+             * @description Format selon platform (voir PlaytestRequest)
+             * @example https://play.google.com/apps/testing/sn.tontinecash.app
+             */
+            optInUrl: string;
+            /**
+             * Format: int32
+             * @description Minimum et défaut selon platform ; Google en exige 12
+             * @example 14
+             */
+            testersTarget?: number;
+            /**
+             * Format: int32
+             * @description Jours de test par testeur. Bornes et défaut selon platform ; ignoré pour WEB
+             * @example 14
+             */
+            requiredDays?: number;
+            /**
+             * Format: date
+             * @description Date de début souhaitée, à titre indicatif
+             * @example 2026-11-17
+             */
+            desiredStart?: string;
+            /**
+             * @description Consignes aux testeurs, texte brut
+             * @example Créez une tontine de test et invitez un ami. Signalez tout plantage dans le groupe.
+             */
+            instructions?: string;
+        };
+        /** @description Ma participation à une campagne */
+        MyPlaytestParticipation: {
+            /** Format: int64 */
+            id: number;
+            /** @enum {string} */
+            status: "JOINED" | "CONFIRMED" | "VERIFIED" | "COMPLETED" | "DROPPED" | "REMOVED";
+            /**
+             * @description Null tant que l'installation n'est pas déclarée, et après un départ
+             * @enum {string}
+             */
+            proofLevel?: "DECLARED" | "VERIFIED" | "COMPLETED";
+            /**
+             * Format: int32
+             * @description Sans décompte (NONE) : jours depuis l'installation
+             */
+            daysDone: number;
+            /**
+             * Format: int32
+             * @description 0 quand la campagne n'a pas de décompte
+             */
+            requiredDays: number;
+            /** Format: date-time */
+            joinedAt: string;
+            /**
+             * Format: date-time
+             * @description Avant cette date, l'installation doit être déclarée, sinon la place se libère
+             */
+            confirmBefore?: string;
+            /** Format: date-time */
+            confirmedAt?: string;
+            /** Format: date-time */
+            verifiedAt?: string;
+            /** Format: date-time */
+            endsAt?: string;
+            /** Format: date-time */
+            lastCheckInAt?: string;
+            /** @description « Toujours inscrit » déjà fait aujourd'hui (UTC) */
+            checkedInToday: boolean;
+            /** @description 3 jours sans « toujours inscrit » */
+            needsAttention: boolean;
+            googleEmail?: string;
+            /** Format: date-time */
+            completedAt?: string;
+            /** Format: date-time */
+            droppedAt?: string;
+            /** @description Motif d'un désistement ou d'un retrait */
+            dropReason?: string;
+        };
+        /** @description Page d'une campagne */
+        PlaytestDetail: {
+            /** Format: int64 */
+            id: number;
+            appName: string;
+            /** @description Identifiant Android ou Bundle ID ; null pour WEB */
+            packageName?: string;
+            /** @enum {string} */
+            platform: "GOOGLE_PLAY" | "APP_STORE" | "WEB";
+            /**
+             * @description Déduit de platform : NONE pour WEB
+             * @enum {string}
+             */
+            tracking: "DAILY" | "NONE";
+            iconUrl?: string;
+            descriptionMarkdown: string;
+            /** @description HTML nettoyé côté serveur, à afficher avec MemberContent */
+            descriptionHtml: string;
+            /** @description Lien d'inscription au test : seulement pour le porteur, l'équipe et les testeurs en cours. À ouvrir dans un nouvel onglet. */
+            optInUrl?: string;
+            /** @description Seulement pour le porteur, l'équipe et les testeurs */
+            instructions?: string;
+            owner: components["schemas"]["AuthorSummary"];
+            /** @enum {string} */
+            status: "DRAFT" | "PENDING_REVIEW" | "REJECTED" | "ACTIVE" | "SUSPENDED" | "COMPLETED";
+            /** @description Motif d'un refus ou d'une suspension : seulement pour le porteur et l'équipe */
+            reviewNote?: string;
+            /** Format: int32 */
+            testersTarget: number;
+            /**
+             * Format: int32
+             * @description 0 quand tracking vaut NONE
+             */
+            requiredDays: number;
+            /** Format: int32 */
+            spotsLeft: number;
+            progress: components["schemas"]["PlaytestProgress"];
+            /**
+             * Format: date-time
+             * @description Quand toutes les places sont prises par des installations déclarées : fin du dernier testeur. Null sinon.
+             */
+            estimatedEndAt?: string;
+            /** Format: date */
+            desiredStart?: string;
+            /** @description Null si je ne participe pas (ou si je ne suis pas connecté) */
+            myParticipation?: components["schemas"]["MyPlaytestParticipation"];
+            /** @description Brouillon ou refusée, et je suis le porteur */
+            canEdit: boolean;
+            /** @description Brouillon, et je suis le porteur */
+            canSubmit: boolean;
+            /** @description Active ou suspendue, et je suis le porteur */
+            canClose: boolean;
+            /** @description Active, une place libre, je ne suis pas le porteur et je n'ai jamais rejoint. Faux aussi pour un visiteur non connecté : le front l'invite alors à se connecter. */
+            canJoin: boolean;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+            /** Format: date-time */
+            startedAt?: string;
+            /** Format: date-time */
+            completedAt?: string;
+        };
+        /** @description Avancement. DAILY : percent = jours effectués par les testeurs en cours et terminés, rapportés à testersTarget × requiredDays. NONE : testeurs qui ont déclaré l'installation (en cours et terminés), rapportés à testersTarget. Ce ne sont que des déclarations : jamais une conformité d'un store. */
+        PlaytestProgress: {
+            /**
+             * Format: int32
+             * @example 42
+             */
+            percent: number;
+            /**
+             * Format: int32
+             * @description Participations terminées
+             * @example 3
+             */
+            completed: number;
+            /**
+             * Format: int32
+             * @description En cours, vérifiées par le porteur
+             * @example 5
+             */
+            verified: number;
+            /**
+             * Format: int32
+             * @description En cours, déclarées par le testeur seulement
+             * @example 4
+             */
+            declared: number;
+            /**
+             * Format: int32
+             * @description Ont rejoint, installation pas encore déclarée
+             * @example 1
+             */
+            joined: number;
         };
         Budget: {
             /**
@@ -2421,7 +3080,7 @@ export interface components {
         /** @description Signaler un contenu (MOD-1), à partir du niveau Membre */
         ReportRequest: {
             /** @enum {string} */
-            targetType: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER" | "PROJECT";
+            targetType: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER" | "PROJECT" | "PLAYTEST";
             /**
              * Format: int64
              * @example 42
@@ -2547,6 +3206,61 @@ export interface components {
             /** @description Motif, montré au membre retiré */
             reason: string;
         };
+        /** @description Testeur vu par le porteur ou l'équipe */
+        PlaytestParticipation: {
+            /** Format: int64 */
+            id: number;
+            tester: components["schemas"]["AuthorSummary"];
+            /** @enum {string} */
+            status: "JOINED" | "CONFIRMED" | "VERIFIED" | "COMPLETED" | "DROPPED" | "REMOVED";
+            /** @enum {string} */
+            proofLevel?: "DECLARED" | "VERIFIED" | "COMPLETED";
+            /** Format: int32 */
+            daysDone: number;
+            /** Format: date-time */
+            joinedAt: string;
+            /** Format: date-time */
+            confirmedAt?: string;
+            /** Format: date-time */
+            verifiedAt?: string;
+            /** Format: date-time */
+            endsAt?: string;
+            /** Format: date-time */
+            lastCheckInAt?: string;
+            /** @description « À confirmer » : 3 jours sans « toujours inscrit » */
+            needsAttention: boolean;
+            /** @description Adresse Google déclarée, effacée 30 jours après la fin */
+            googleEmail?: string;
+            /** Format: date-time */
+            completedAt?: string;
+            /** Format: date-time */
+            droppedAt?: string;
+            dropReason?: string;
+            /**
+             * Format: int64
+             * @description Participation dont ce testeur a repris la place
+             */
+            replacesId?: number;
+        };
+        /** @description Retrait d'un testeur, avec un motif montré au testeur */
+        PlaytestRemoveRequest: {
+            /** @example Absent de la liste des testeurs de la Play Console */
+            reason: string;
+        };
+        /** @description Désistement, motif facultatif */
+        PlaytestWithdrawRequest: {
+            /** @example Mon téléphone est en panne */
+            reason?: string;
+        };
+        /** @description Déclaration d'installation */
+        PlaytestConfirmRequest: {
+            /**
+             * Format: email
+             * @description Adresse du compte Google utilisé sur le téléphone, si le porteur gère sa liste de testeurs par adresse. Visible du porteur et de l'équipe seulement, effacée 30 jours après la fin.
+             * @example aminata.diallo@gmail.com
+             */
+            googleEmail?: string;
+        };
         MarkReadRequest: {
             /**
              * @description Notifications à marquer comme lues ; absent ou null : toutes (« Tout marquer comme lu »)
@@ -2614,7 +3328,7 @@ export interface components {
         /** @description Contenu signalé, pour construire le lien et l'aperçu côté front */
         ModerationTarget: {
             /** @enum {string} */
-            type: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER" | "PROJECT";
+            type: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER" | "PROJECT" | "PLAYTEST";
             /** Format: int64 */
             id: number;
             /** @description Titre de la question, de l'offre, de la mission ; début de la réponse ; pseudo pour un profil */
@@ -2869,6 +3583,18 @@ export interface components {
             /** Format: date-time */
             reviewedAt?: string;
         };
+        /** @description Suspension ou réactivation ; motif obligatoire pour suspendre */
+        PlaytestNoteRequest: {
+            /** @example Plusieurs testeurs signalent une application qui demande des accès abusifs */
+            note?: string;
+        };
+        /** @description Décision de l'équipe ; motif obligatoire pour REJECT */
+        PlaytestReviewRequest: {
+            /** @enum {string} */
+            decision: "APPROVE" | "REJECT";
+            /** @example Le lien d'inscription ne mène pas à un test fermé */
+            note?: string;
+        };
         /** @description Décision de l'équipe sur une offre en attente (JOB-4) */
         JobReviewRequest: {
             /** @enum {string} */
@@ -2940,6 +3666,11 @@ export interface components {
             status: "SHORTLISTED" | "REJECTED";
         };
         PublicProfile: {
+            /**
+             * Format: int64
+             * @description Identifiant du membre, cible d'un signalement de profil
+             */
+            id: number;
             username: string;
             displayName: string;
             avatarUrl?: string;
@@ -2952,6 +3683,12 @@ export interface components {
             reputation: number;
             /** @enum {string} */
             level: "NEWCOMER" | "MEMBER" | "CONTRIBUTOR" | "REFERENT";
+            /**
+             * Format: int32
+             * @description Réputation à atteindre pour le niveau suivant ; null au niveau Référent
+             * @example 500
+             */
+            nextLevelAt?: number;
             visibleToRecruiters: boolean;
             /**
              * @example [
@@ -2965,6 +3702,11 @@ export interface components {
             questionCount: number;
             /** Format: int64 */
             answerCount: number;
+            /**
+             * Format: int64
+             * @description Réponses acceptées comme solution, hors réponses masquées
+             */
+            acceptedCount: number;
             /** Format: date-time */
             createdAt: string;
             /** @description Badges gagnés (REP-4), du plus ancien au plus récent. La progression : GET /users/{username}/badges */
@@ -3013,7 +3755,7 @@ export interface components {
              */
             delta: number;
             /** @enum {string} */
-            reason: "QUESTION_ASKED" | "QUESTION_UPVOTED" | "ANSWER_UPVOTED" | "ANSWER_ACCEPTED" | "ACCEPTED_AN_ANSWER" | "CHALLENGE_VALIDATED" | "PROJECT_COMPLETED" | "SPAM_REMOVED";
+            reason: "QUESTION_ASKED" | "QUESTION_UPVOTED" | "ANSWER_UPVOTED" | "ANSWER_ACCEPTED" | "ACCEPTED_AN_ANSWER" | "CHALLENGE_VALIDATED" | "PROJECT_COMPLETED" | "PLAYTEST_COMPLETED" | "SPAM_REMOVED";
             /** Format: int64 */
             questionId?: number;
             /** Format: int64 */
@@ -3060,6 +3802,65 @@ export interface components {
              * @example 134
              */
             total: number;
+        };
+        /** @description Une de mes participations, avec sa campagne */
+        MyPlaytestEntry: {
+            campaign: components["schemas"]["PlaytestSummary"];
+            participation: components["schemas"]["MyPlaytestParticipation"];
+        };
+        PageResponseMyPlaytestEntry: {
+            items: components["schemas"]["MyPlaytestEntry"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        /** @description Campagne dans une liste */
+        PlaytestSummary: {
+            /** Format: int64 */
+            id: number;
+            appName: string;
+            /** @description Identifiant Android ou Bundle ID ; null pour WEB */
+            packageName?: string;
+            /** @enum {string} */
+            platform: "GOOGLE_PLAY" | "APP_STORE" | "WEB";
+            /**
+             * @description Déduit de platform : NONE pour WEB
+             * @enum {string}
+             */
+            tracking: "DAILY" | "NONE";
+            iconUrl?: string;
+            owner: components["schemas"]["AuthorSummary"];
+            /** @enum {string} */
+            status: "DRAFT" | "PENDING_REVIEW" | "REJECTED" | "ACTIVE" | "SUSPENDED" | "COMPLETED";
+            /** Format: int32 */
+            testersTarget: number;
+            /**
+             * Format: int32
+             * @description 0 quand tracking vaut NONE
+             */
+            requiredDays: number;
+            /**
+             * Format: int32
+             * @description Places libres ; 0 : campagne complète
+             */
+            spotsLeft: number;
+            progress: components["schemas"]["PlaytestProgress"];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            startedAt?: string;
         };
         PageResponseMyModeratedContent: {
             items: components["schemas"]["MyModeratedContent"][];
@@ -3156,6 +3957,56 @@ export interface components {
              * @example 42
              */
             questionCount: number;
+        };
+        HomeStats: {
+            /**
+             * Format: int64
+             * @description Questions visibles
+             * @example 1284
+             */
+            questions: number;
+            /**
+             * Format: int64
+             * @description Réponses visibles
+             * @example 3410
+             */
+            answers: number;
+            /**
+             * Format: double
+             * @description Part des questions visibles qui ont une réponse acceptée, de 0 à 1, arrondie à deux décimales
+             * @example 0.68
+             */
+            solvedRate: number;
+            /**
+             * Format: int64
+             * @description Membres actifs (ni suspendus ni supprimés)
+             * @example 2150
+             */
+            members: number;
+            /**
+             * Format: int64
+             * @description Pays distincts renseignés par ces membres
+             * @example 18
+             */
+            countries: number;
+            levels: components["schemas"]["LevelCounts"];
+        };
+        LevelCounts: {
+            /**
+             * Format: int64
+             * @example 640
+             */
+            MEMBER: number;
+            /**
+             * Format: int64
+             * @example 85
+             */
+            CONTRIBUTOR: number;
+            /**
+             * Format: int64
+             * @example 12
+             */
+            REFERENT: number;
         };
         PageResponseQuestionSummary: {
             items: components["schemas"]["QuestionSummary"][];
@@ -3306,11 +4157,29 @@ export interface components {
              */
             total: number;
         };
+        PageResponsePlaytestSummary: {
+            items: components["schemas"]["PlaytestSummary"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
         Notification: {
             /** Format: int64 */
             id: number;
             /** @enum {string} */
-            type: "ANSWER_POSTED" | "ANSWER_ACCEPTED" | "VOTE_RECEIVED" | "JOB_MATCH" | "MISSION_MATCH" | "APPLICATION_RECEIVED" | "APPLICATION_DECIDED" | "JOB_REVIEWED" | "CHALLENGE_STARTED" | "PROJECT_REQUEST_DECIDED" | "CONTENT_HIDDEN" | "CONTENT_RESTORED" | "ACCOUNT_WARNED" | "SUBMISSION_REVIEWED" | "COMMUNITY_PROPOSAL_DECISION" | "PROJECT_REQUEST_RECEIVED" | "PROJECT_MEMBER_REMOVED" | "PROJECT_CLOSED";
+            type: "ANSWER_POSTED" | "ANSWER_ACCEPTED" | "VOTE_RECEIVED" | "JOB_MATCH" | "MISSION_MATCH" | "APPLICATION_RECEIVED" | "APPLICATION_DECIDED" | "JOB_REVIEWED" | "CHALLENGE_STARTED" | "PROJECT_REQUEST_DECIDED" | "CONTENT_HIDDEN" | "CONTENT_RESTORED" | "ACCOUNT_WARNED" | "SUBMISSION_REVIEWED" | "COMMUNITY_PROPOSAL_DECISION" | "PROJECT_REQUEST_RECEIVED" | "PROJECT_MEMBER_REMOVED" | "PROJECT_CLOSED" | "PLAYTEST_NEW_CAMPAIGN" | "PLAYTEST_JOINED" | "PLAYTEST_INSTALL_REMINDER" | "PLAYTEST_STAY_REMINDER" | "PLAYTEST_ENDING_SOON" | "PLAYTEST_PARTICIPATION_DONE" | "PLAYTEST_TESTER_LEFT" | "PLAYTEST_TESTER_REPLACED" | "PLAYTEST_CAMPAIGN_FULL" | "PLAYTEST_CAMPAIGN_REVIEWED" | "PLAYTEST_REMOVED";
             read: boolean;
             /** @description Membre à l'origine de l'événement ; null pour un événement de la plateforme */
             actor?: components["schemas"]["AuthorSummary"];
@@ -3326,7 +4195,7 @@ export interface components {
         /** @description Contenu concerné, pour construire le lien côté front */
         NotificationTarget: {
             /** @enum {string} */
-            type: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "APPLICATION" | "CHALLENGE" | "PROJECT" | "USER" | "COMMUNITY_PROPOSAL";
+            type: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "APPLICATION" | "CHALLENGE" | "PROJECT" | "USER" | "COMMUNITY_PROPOSAL" | "PLAYTEST";
             /** Format: int64 */
             id: number;
             /** @description Titre de la question, de l'offre, de la mission, du défi… */
@@ -3601,6 +4470,90 @@ export interface components {
              * @example 134
              */
             total: number;
+        };
+        /** @description Campagne dans le back office, avec ses signaux d'alerte */
+        AdminPlaytestSummary: {
+            campaign: components["schemas"]["PlaytestSummary"];
+            hidden: boolean;
+            /** @description Active, aucune participation depuis 7 jours */
+            inactive: boolean;
+            /** @description Plus de 30 % des testeurs en cours « à confirmer » */
+            stalled: boolean;
+            reviewNote?: string;
+        };
+        PageResponseAdminPlaytestSummary: {
+            items: components["schemas"]["AdminPlaytestSummary"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        PageResponsePlaytestEvent: {
+            items: components["schemas"]["PlaytestEvent"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
+        /** @description Ligne de l'historique d'une campagne */
+        PlaytestEvent: {
+            /** Format: int64 */
+            id: number;
+            /** @enum {string} */
+            action: "CREATED" | "EDITED" | "SUBMITTED" | "APPROVED" | "AUTO_APPROVED" | "REJECTED" | "SUSPENDED" | "REACTIVATED" | "CLOSED" | "COMPLETED" | "JOINED" | "REPLACED" | "CONFIRMED" | "VERIFIED" | "WITHDRAWN" | "EXPIRED" | "REMOVED" | "PARTICIPATION_COMPLETED";
+            /** @description Null pour une action automatique de la plateforme */
+            actor?: components["schemas"]["AuthorSummary"];
+            /** Format: int64 */
+            participationId?: number;
+            note?: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        /** @description Indicateurs du back office, calculés à la demande */
+        PlaytestStats: {
+            /** Format: int64 */
+            campaigns: number;
+            /** Format: int64 */
+            pendingReview: number;
+            /** Format: int64 */
+            active: number;
+            /** Format: int64 */
+            completed: number;
+            /**
+             * Format: int64
+             * @description Campagnes dont toutes les places ont été tenues jusqu'au bout
+             */
+            targetReached: number;
+            /** Format: int64 */
+            owners: number;
+            /** Format: int64 */
+            testers: number;
+            /** Format: int64 */
+            participationsRunning: number;
+            /** Format: int64 */
+            participationsCompleted: number;
         };
         PageResponseJobDetail: {
             items: components["schemas"]["JobDetail"][];
@@ -3881,6 +4834,15 @@ export interface operations {
                     "application/json": components["schemas"]["ApiError"];
                 };
             };
+            /** @description STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
         };
     };
     userDeleteAvatar: {
@@ -4080,6 +5042,62 @@ export interface operations {
             };
         };
     };
+    questionDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Question supprimée */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_QUESTION_AUTHOR */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description QUESTION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description QUESTION_HAS_ANSWERS */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     projectGet: {
         parameters: {
             query?: never;
@@ -4164,6 +5182,179 @@ export interface operations {
             };
             /** @description PROJECT_CLOSED */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description La campagne */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestEdit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaytestRequest"];
+            };
+        };
+        responses: {
+            /** @description Campagne modifiée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_EDITABLE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestIcon: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["AvatarForm"];
+            };
+        };
+        responses: {
+            /** @description Campagne à jour, iconUrl pointe vers la nouvelle icône */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description PHOTO_REQUIRED, PHOTO_TYPE, PHOTO_TOO_LARGE, FILE_TOO_LARGE */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_COMPLETED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -5704,6 +6895,565 @@ export interface operations {
             };
         };
     };
+    playtestList: {
+        parameters: {
+            query?: {
+                /** @description ACTIVE (par défaut) ou COMPLETED */
+                status?: "DRAFT" | "PENDING_REVIEW" | "REJECTED" | "ACTIVE" | "SUSPENDED" | "COMPLETED";
+                availability?: "OPEN" | "FULL";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de campagnes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponsePlaytestSummary"];
+                };
+            };
+            /** @description INVALID_PAGE, INVALID_PAGE_SIZE, INVALID_STATUS, INVALID_PARAMETER */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestCreate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaytestRequest"];
+            };
+        };
+        responses: {
+            /** @description Brouillon créé */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestSubmit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Campagne envoyée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_DRAFT, PACKAGE_ALREADY_RUNNING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestParticipations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Tous les testeurs, partis compris */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestParticipation"][];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestJoin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Campagne avec myParticipation */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description CANNOT_JOIN_OWN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_ACTIVE, ALREADY_JOINED, CAMPAIGN_FULL */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestVerify: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                participationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Testeurs à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestParticipation"][];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND, PARTICIPATION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_CONFIRMED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestRemove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                participationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaytestRemoveRequest"];
+            };
+        };
+        responses: {
+            /** @description Testeurs à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestParticipation"][];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND, PARTICIPATION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_RUNNING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestWithdraw: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PlaytestWithdrawRequest"];
+            };
+        };
+        responses: {
+            /** @description Campagne avec myParticipation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_RUNNING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestConfirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PlaytestConfirmRequest"];
+            };
+        };
+        responses: {
+            /** @description Campagne avec myParticipation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_JOINED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestCheckIn: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Campagne avec myParticipation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_RUNNING, ALREADY_CHECKED_IN, CHECK_IN_NOT_TRACKED (campagne web) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestClose: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Campagne terminée */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_ACTIVE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     notificationMarkRead: {
         parameters: {
             query?: never;
@@ -6413,6 +8163,15 @@ export interface operations {
             };
             /** @description RATE_LIMITED */
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -7271,6 +9030,246 @@ export interface operations {
             };
         };
     };
+    playtestAdminSuspend: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaytestNoteRequest"];
+            };
+        };
+        responses: {
+            /** @description Campagne suspendue */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR, NOTE_REQUIRED */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_ACTIVE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminReview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaytestReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description Campagne à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description VALIDATION_ERROR, NOTE_REQUIRED */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_PENDING, PACKAGE_ALREADY_RUNNING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminReactivate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PlaytestNoteRequest"];
+            };
+        };
+        responses: {
+            /** @description Campagne active */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestDetail"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_SUSPENDED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminRemove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                participationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaytestRemoveRequest"];
+            };
+        };
+        responses: {
+            /** @description Testeurs à jour */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestParticipation"][];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND, PARTICIPATION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PARTICIPATION_NOT_RUNNING */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     jobAdminDecide: {
         parameters: {
             query?: never;
@@ -8115,6 +10114,38 @@ export interface operations {
             };
         };
     };
+    playtestMyParticipations: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de participations */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseMyPlaytestEntry"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     moderationMine: {
         parameters: {
             query?: {
@@ -8291,6 +10322,26 @@ export interface operations {
             };
         };
     };
+    statsHome: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HomeStats"];
+                };
+            };
+        };
+    };
     questionSimilar: {
         parameters: {
             query: {
@@ -8318,6 +10369,72 @@ export interface operations {
             };
             /** @description INVALID_LIMIT, INVALID_PARAMETER */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestIconFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+                file: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description L'image */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/png": unknown;
+                    "image/jpeg": unknown;
+                    "image/webp": unknown;
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND, ICON_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestMine: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de campagnes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponsePlaytestSummary"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -8392,7 +10509,7 @@ export interface operations {
     moderationQueue: {
         parameters: {
             query?: {
-                targetType?: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER" | "PROJECT";
+                targetType?: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER" | "PROJECT" | "PLAYTEST";
                 page?: number;
                 size?: number;
             };
@@ -8739,6 +10856,15 @@ export interface operations {
                     "application/json": components["schemas"]["ApiError"];
                 };
             };
+            /** @description STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
         };
     };
     userAdminList: {
@@ -8772,6 +10898,161 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminList: {
+        parameters: {
+            query?: {
+                status?: "DRAFT" | "PENDING_REVIEW" | "REJECTED" | "ACTIVE" | "SUSPENDED" | "COMPLETED";
+                problem?: "INACTIVE" | "STALLED" | "REPORTED";
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de campagnes */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseAdminPlaytestSummary"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminParticipations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Tous les testeurs, partis compris */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestParticipation"][];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminEvents: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page d'événements */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponsePlaytestEvent"];
+                };
+            };
+            /** @description FORBIDDEN */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestAdminStats: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Indicateurs */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestStats"];
                 };
             };
             /** @description FORBIDDEN */
@@ -8926,7 +11207,7 @@ export interface operations {
         parameters: {
             query?: {
                 status?: "OPEN" | "DISMISSED" | "HIDDEN" | "APPEALED" | "RESTORED";
-                targetType?: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER" | "PROJECT";
+                targetType?: "QUESTION" | "ANSWER" | "JOB" | "MISSION" | "USER" | "PROJECT" | "PLAYTEST";
                 page?: number;
                 size?: number;
             };

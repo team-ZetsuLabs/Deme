@@ -1,0 +1,11 @@
+{
+  "QUESTION_ASKED": "Question posée",
+  "QUESTION_UPVOTED": "Vote positif sur une question",
+  "ANSWER_UPVOTED": "Vote positif sur une réponse",
+  "ANSWER_ACCEPTED": "Réponse acceptée",
+  "ACCEPTED_AN_ANSWER": "A accepté une réponse",
+  "CHALLENGE_VALIDATED": "Défi validé",
+  "PROJECT_COMPLETED": "Projet clôturé",
+  "PLAYTEST_COMPLETED": "Test fermé terminé",
+  "SPAM_REMOVED": "Contenu supprimé pour spam"
+}

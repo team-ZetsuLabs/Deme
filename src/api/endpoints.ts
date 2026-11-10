@@ -15,6 +15,18 @@ import type {
   JobDetail,
   JobsQuery,
   Me,
+  BadgeProgress,
+  MissionSummary,
+  MissionsQuery,
+  ProjectDetail,
+  ProjectSummary,
+  ProjectUpdate,
+  ProjectsQuery,
+  PublicProfile,
+  QuestionSummary,
+  QuestionsQuery,
+  ReputationEntry,
+  ReputationQuery,
   ModerationCase,
   Page,
   ProposalsQuery,
@@ -96,4 +108,26 @@ export const referentApi = {
     api.get<Page<ModerationCase>>('/moderation/cases', { query, ...options }),
   decideCase: (id: number, body: CaseDecisionRequest) =>
     api.post<ModerationCase>(`/moderation/cases/${id}/decision`, { body }),
+}
+
+/** Lectures publiques du site, utiles à l'administration (projets, fiche d'un membre). */
+export const publicApi = {
+  listProjects: (query: ProjectsQuery, options?: Signal) =>
+    api.get<Page<ProjectSummary>>('/projects', { query, ...options }),
+  project: (id: number, options?: Signal) => api.get<ProjectDetail>(`/projects/${id}`, options),
+  projectUpdates: (id: number, options?: Signal) =>
+    api.get<Page<ProjectUpdate>>(`/projects/${id}/updates`, { query: { size: 20 }, ...options }),
+  profile: (username: string, options?: Signal) =>
+    api.get<PublicProfile>(`/users/${encodeURIComponent(username)}`, options),
+  badges: (username: string, options?: Signal) =>
+    api.get<BadgeProgress[]>(`/users/${encodeURIComponent(username)}/badges`, options),
+  reputation: (username: string, query: ReputationQuery, options?: Signal) =>
+    api.get<Page<ReputationEntry>>(`/users/${encodeURIComponent(username)}/reputation`, {
+      query,
+      ...options,
+    }),
+  listQuestions: (query: QuestionsQuery, options?: Signal) =>
+    api.get<Page<QuestionSummary>>('/questions', { query, ...options }),
+  listMissions: (query: MissionsQuery, options?: Signal) =>
+    api.get<Page<MissionSummary>>('/missions', { query, ...options }),
 }

@@ -16,6 +16,7 @@ import QueryState from '../../components/QueryState'
 import { Status } from '../../components/Status'
 import { useToast } from '../../components/ToastProvider'
 import { fmt, formatDate } from '../../features/admin/format'
+import MemberTabs from '../../features/members/MemberTabs'
 import { useAuth } from '../../hooks/useAuth'
 import { useCrumbs } from '../../layout/crumbs'
 import styles from './UserDetailPage.module.css'
@@ -169,36 +170,41 @@ function UserDetail({ user, reload }: { user: AdminUser; reload: () => void }) {
         </div>
       </Panel>
 
-      <Panel className={styles.below} style={{ maxWidth: 560 }}>
-        <PanelHead title={t('users.manage.title')} />
-        <PanelBody>
-          <Field
-            label={t('users.col.role')}
-            hint={isAdmin ? t('users.manage.roleHint') : t('users.manage.adminOnly')}
-            select
-          >
-            {(control) => (
-              <select
-                {...control}
-                value={user.role}
-                disabled={!isAdmin || self}
-                onChange={(event) => changeRole(event.target.value as Role)}
-              >
-                {ROLES.map((r) => (
-                  <option key={r} value={r}>
-                    {t(`roles.${r}`)}
-                  </option>
-                ))}
-              </select>
-            )}
-          </Field>
-          {user.suspensionReason && (
-            <p style={{ fontSize: 14 }}>
-              <b>{t('users.suspensionReason')}</b> {user.suspensionReason}
-            </p>
-          )}
-        </PanelBody>
+      <Panel className={styles.below}>
+        <MemberTabs username={user.username} />
       </Panel>
+      <div className={styles.below} style={{ maxWidth: 560 }}>
+        <Panel>
+          <PanelHead title={t('users.manage.title')} />
+          <PanelBody>
+            <Field
+              label={t('users.col.role')}
+              hint={isAdmin ? t('users.manage.roleHint') : t('users.manage.adminOnly')}
+              select
+            >
+              {(control) => (
+                <select
+                  {...control}
+                  value={user.role}
+                  disabled={!isAdmin || self}
+                  onChange={(event) => changeRole(event.target.value as Role)}
+                >
+                  {ROLES.map((r) => (
+                    <option key={r} value={r}>
+                      {t(`roles.${r}`)}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </Field>
+            {user.suspensionReason && (
+              <p style={{ fontSize: 14 }}>
+                <b>{t('users.suspensionReason')}</b> {user.suspensionReason}
+              </p>
+            )}
+          </PanelBody>
+        </Panel>
+      </div>
 
       <NoteDialog
         open={suspending}

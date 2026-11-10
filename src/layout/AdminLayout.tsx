@@ -38,6 +38,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
     group: 'community',
     items: [
       { to: '/utilisateurs', key: 'users', icon: 'users' },
+      { to: '/projets', key: 'projects', icon: 'folder' },
       { to: '/offres', key: 'jobs', icon: 'jobs', count: 'jobs' },
       { to: '/challenges', key: 'challenges', icon: 'trophy' },
       { to: '/communautes', key: 'communities', icon: 'globe', count: 'proposals' },

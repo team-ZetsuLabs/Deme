@@ -1,0 +1,105 @@
+.head {
+  display: flex;
+  gap: var(--s4);
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.head h1 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+
+.sub {
+  margin-top: 4px;
+  color: var(--text-3);
+  font-size: 14px;
+}
+
+.below {
+  margin-top: var(--s5);
+}
+
+.column {
+  display: grid;
+  gap: var(--s5);
+  align-content: start;
+  min-width: 0;
+}
+
+.subtitle {
+  margin: var(--s5) 0 var(--s2);
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.links {
+  list-style: none;
+  display: grid;
+  gap: var(--s2);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.timeline,
+.team,
+.roles {
+  list-style: none;
+}
+
+.timeline li {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  gap: var(--s4);
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.timeline li:first-child {
+  border-top: none;
+}
+
+.timeline time {
+  color: var(--text-3);
+  font-size: 13px;
+}
+
+.team li {
+  padding: var(--s2) 0;
+}
+
+.roles li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s3);
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.roles li:first-child {
+  border-top: none;
+}
+
+.roles small {
+  display: block;
+  font-size: 13px;
+}
+
+.note {
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+@media (max-width: 640px) {
+  .timeline li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+}
