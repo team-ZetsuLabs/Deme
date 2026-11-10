@@ -133,6 +133,7 @@ public class JobController {
                     + "Le profil Zetsu du membre est transmis au recruteur. Une seule candidature par offre.")
     @ApiResponse(responseCode = "201", description = "Candidature envoyée")
     @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR, CV_NOT_PDF, CV_TOO_LARGE, FILE_TOO_LARGE (plus de 5 Mo)", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "503", description = "STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "403", description = "CANNOT_APPLY_OWN", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "404", description = "JOB_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))

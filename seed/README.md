@@ -45,6 +45,18 @@ docker compose -f compose.dev.yaml exec -T db psql -U zetsu -d zetsu \
 
 En production, les images vont dans le volume des téléversements du conteneur de l'application, par exemple `docker compose cp seed/avatars/. app:<UPLOADS_DIR>/avatars/`, avant de lancer `photos.sql` sur la base.
 
+### Photos avec Cloudinary (serveur sans disque durable)
+
+Si le back-end tourne avec Cloudinary (variables `CLOUDINARY_*`), on n'utilise pas la copie dans `UPLOADS_DIR` : elle disparaît au redéploiement. Les avatars vont une fois pour toutes chez Cloudinary, puis les profils de démo pointent vers eux.
+
+```sh
+set -a; . ./.env; set +a          # CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_FOLDER
+bash seed/avatars-cloudinary.sh   # envoie les 9 avatars ; rejouable, une image renvoyée est écrasée
+psql "$DATABASE_URL" -v demo_username=aminata_dev   -v cloud_name="$CLOUDINARY_CLOUD_NAME" -v folder="${CLOUDINARY_FOLDER:-zetsu}" < seed/photos-cloudinary.sql
+```
+
+`photos-cloudinary.sql` est rejouable. Il ne change qu'un profil sans photo, ou qui pointe encore vers l'avatar de démo posé sur le disque par `photos.sql` : on peut donc le lancer sur une base déjà remplie avec l'ancienne méthode. Une photo mise par le membre, ou venue de GitHub ou Google, n'est jamais touchée. Le script `.sh` demande `bash`, `curl` et `sha1sum` (présents dans Git Bash sous Windows) ; le secret sert seulement à signer sur la machine, il n'est jamais envoyé.
+
 Sur une autre base, la même commande avec `psql "$DATABASE_URL"` (forme `postgresql://`, pas `jdbc:`).
 
 Le script active l'extension `pgcrypto` pour hacher le mot de passe en bcrypt. Il faut donc que l'utilisateur de la base ait le droit de la créer ; c'est le cas du propriétaire de la base dans `compose.dev.yaml`.
