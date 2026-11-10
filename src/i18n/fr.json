@@ -35,8 +35,14 @@
       "REJECTED": "Cette campagne a été refusée.",
       "SUSPENDED": "Cette campagne est suspendue."
     },
-    "progress": { "label": "Avancement" },
-    "facts": { "testers": "Testeurs visés", "days": "Jours requis", "spots": "Places libres" },
+    "progress": {
+      "label": "Avancement"
+    },
+    "facts": {
+      "testers": "Testeurs visés",
+      "days": "Jours requis",
+      "spots": "Places libres"
+    },
     "owner": {
       "yours": "Votre campagne.",
       "edit": "Modifier",
@@ -80,21 +86,30 @@
       "completedText": "Vous avez tenu vos {{days}} jours. Votre réputation a augmenté.",
       "dropped": "Vous vous êtes désisté de cette campagne.",
       "removed": "Le porteur vous a retiré de cette campagne.",
-      "reason": "Motif"
+      "reason": "Motif",
+      "daysInstalled": "jours depuis l’installation",
+      "web": "Gardez l’application installée et envoyez vos retours au porteur. Pas de décompte imposé."
     },
     "new": {
       "pageTitle": "Nouvelle campagne",
       "lead": "Décrivez votre application et le test fermé à rejoindre.",
       "appName": "Nom de l'application",
       "appNamePlaceholder": "Tontine Cash",
-      "packageName": "Nom du paquet",
-      "packageNameHint": "L'identifiant Android, par exemple sn.monappli.app.",
+      "packageName": "Identifiant de l'application",
+      "packageNameHint": {
+        "android": "L’identifiant Android, par exemple sn.monappli.app.",
+        "bundle": "Le Bundle ID iOS, par exemple com.monappli.ios."
+      },
       "description": "Description",
       "descriptionHint": "À quoi sert l'application, ce que les testeurs doivent regarder.",
       "optInUrl": "Lien d'inscription au test",
-      "optInUrlHint": "Le lien Google Play (play.google.com/apps/testing/…) ou le groupe Google.",
+      "optInUrlHint": {
+        "GOOGLE_PLAY": "Le lien Google Play (play.google.com/apps/testing/…) ou le groupe Google.",
+        "APP_STORE": "Le lien TestFlight (testflight.apple.com/join/…).",
+        "WEB": "L’adresse https:// du site à tester."
+      },
       "testersTarget": "Testeurs recherchés",
-      "testersTargetHint": "De {{min}} à {{max}} ; Google en exige {{min}}.",
+      "testersTargetHint": "De {{min}} à {{max}} testeurs.",
       "desiredStart": "Date de début souhaitée",
       "instructions": "Consignes aux testeurs (facultatif)",
       "instructionsHint": "Ce qu'il faut tester en priorité, où signaler les bugs.",
@@ -104,11 +119,20 @@
       "saved": "Brouillon créé",
       "errors": {
         "appName": "Le nom doit faire de 2 à 80 caractères.",
-        "packageName": "Entrez un nom de paquet valide, par exemple sn.monappli.app.",
+        "packageName": {
+          "android": "Entrez un identifiant Android valide, par exemple sn.monappli.app.",
+          "bundle": "Entrez un Bundle ID iOS valide, par exemple com.monappli.ios."
+        },
         "description": "La description doit faire au moins 30 caractères.",
-        "optInUrl": "Entrez un lien de test Google Play valide.",
+        "optInUrl": {
+          "GOOGLE_PLAY": "Entrez un lien de test Google Play valide.",
+          "APP_STORE": "Entrez un lien TestFlight valide (testflight.apple.com/join/…).",
+          "WEB": "Entrez une adresse https:// valide."
+        },
         "testersTarget": "Indiquez un nombre de testeurs entre 12 et 100."
-      }
+      },
+      "platform": "Plateforme",
+      "noticeWeb": "Campagne web : pas de décompte de jours, mais chaque campagne web est relue par l’équipe avant publication."
     },
     "edit": {
       "pageTitle": "Modifier la campagne",
@@ -117,6 +141,16 @@
       "saved": "Campagne mise à jour",
       "notAllowed": "Cette campagne ne peut plus être modifiée.",
       "back": "Revenir à la campagne"
+    },
+    "platform": {
+      "GOOGLE_PLAY": "Google Play (Android)",
+      "APP_STORE": "App Store (iOS)",
+      "WEB": "Application web"
+    },
+    "platformHint": {
+      "GOOGLE_PLAY": "Test fermé via la Play Console.",
+      "APP_STORE": "Test via TestFlight.",
+      "WEB": "Un site à tester, sans store."
     }
   },
   "app": {

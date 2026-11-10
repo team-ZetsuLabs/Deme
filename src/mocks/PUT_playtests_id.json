@@ -22,7 +22,13 @@
   "testersTarget": 14,
   "requiredDays": 14,
   "spotsLeft": 14,
-  "progress": { "percent": 0, "completed": 0, "verified": 0, "declared": 0, "joined": 0 },
+  "progress": {
+    "percent": 0,
+    "completed": 0,
+    "verified": 0,
+    "declared": 0,
+    "joined": 0
+  },
   "estimatedEndAt": null,
   "desiredStart": "2026-11-17",
   "myParticipation": null,
@@ -33,5 +39,6 @@
   "createdAt": "2026-11-10T11:20:00Z",
   "updatedAt": "2026-11-10T11:25:00Z",
   "startedAt": null,
-  "completedAt": null
+  "completedAt": null,
+  "tracking": "DAILY"
 }

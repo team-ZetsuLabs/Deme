@@ -27,7 +27,8 @@
         "joined": 0
       },
       "createdAt": "2026-11-03T09:00:00Z",
-      "startedAt": "2026-11-03T12:00:00Z"
+      "startedAt": "2026-11-03T12:00:00Z",
+      "tracking": "DAILY"
     },
     {
       "id": 8,
@@ -56,7 +57,8 @@
         "joined": 0
       },
       "createdAt": "2026-11-01T08:30:00Z",
-      "startedAt": "2026-11-01T10:00:00Z"
+      "startedAt": "2026-11-01T10:00:00Z",
+      "tracking": "DAILY"
     },
     {
       "id": 5,
@@ -85,10 +87,41 @@
         "joined": 0
       },
       "createdAt": "2026-11-07T14:00:00Z",
-      "startedAt": "2026-11-07T15:00:00Z"
+      "startedAt": "2026-11-07T15:00:00Z",
+      "tracking": "DAILY"
+    },
+    {
+      "id": 9,
+      "appName": "SamaDaara",
+      "packageName": null,
+      "platform": "WEB",
+      "iconUrl": null,
+      "owner": {
+        "username": "fatou_ndiaye",
+        "displayName": "Fatou Ndiaye",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 210,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "status": "ACTIVE",
+      "testersTarget": 10,
+      "requiredDays": 0,
+      "spotsLeft": 6,
+      "progress": {
+        "percent": 0,
+        "completed": 0,
+        "verified": 0,
+        "declared": 4,
+        "joined": 0
+      },
+      "createdAt": "2026-11-08T09:00:00Z",
+      "startedAt": "2026-11-08T09:30:00Z",
+      "tracking": "NONE"
     }
   ],
   "page": 0,
   "size": 20,
-  "total": 3
+  "total": 4
 }

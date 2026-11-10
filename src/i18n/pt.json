@@ -35,7 +35,9 @@
       "REJECTED": "Esta campanha foi recusada.",
       "SUSPENDED": "Esta campanha está suspensa."
     },
-    "progress": { "label": "Progresso" },
+    "progress": {
+      "label": "Progresso"
+    },
     "facts": {
       "testers": "Testadores desejados",
       "days": "Dias exigidos",
@@ -84,21 +86,30 @@
       "completedText": "Cumpriu os seus {{days}} dias. A sua reputação subiu.",
       "dropped": "Desistiu desta campanha.",
       "removed": "O autor retirou-o desta campanha.",
-      "reason": "Motivo"
+      "reason": "Motivo",
+      "daysInstalled": "dias desde a instalação",
+      "web": "Mantenha a aplicação instalada e envie os seus comentários ao autor. Sem contagem obrigatória."
     },
     "new": {
       "pageTitle": "Nova campanha",
       "lead": "Descreva a sua aplicação e o teste fechado a juntar-se.",
       "appName": "Nome da aplicação",
       "appNamePlaceholder": "Tontine Cash",
-      "packageName": "Nome do pacote",
-      "packageNameHint": "O identificador Android, por exemplo sn.minhaapp.app.",
+      "packageName": "Identificador da aplicação",
+      "packageNameHint": {
+        "android": "O identificador Android, por exemplo sn.minhaapp.app.",
+        "bundle": "O Bundle ID iOS, por exemplo com.minhaapp.ios."
+      },
       "description": "Descrição",
       "descriptionHint": "Para que serve a aplicação, o que os testadores devem observar.",
       "optInUrl": "Link de inscrição no teste",
-      "optInUrlHint": "O link do Google Play (play.google.com/apps/testing/…) ou o grupo Google.",
+      "optInUrlHint": {
+        "GOOGLE_PLAY": "O link do Google Play (play.google.com/apps/testing/…) ou o grupo Google.",
+        "APP_STORE": "O link do TestFlight (testflight.apple.com/join/…).",
+        "WEB": "O endereço https:// do site a testar."
+      },
       "testersTarget": "Testadores procurados",
-      "testersTargetHint": "De {{min}} a {{max}}; o Google exige {{min}}.",
+      "testersTargetHint": "De {{min}} a {{max}} testadores.",
       "desiredStart": "Data de início desejada",
       "instructions": "Instruções para os testadores (opcional)",
       "instructionsHint": "O que testar primeiro, onde reportar os erros.",
@@ -108,11 +119,20 @@
       "saved": "Rascunho criado",
       "errors": {
         "appName": "O nome deve ter de 2 a 80 caracteres.",
-        "packageName": "Introduza um nome de pacote válido, por exemplo sn.minhaapp.app.",
+        "packageName": {
+          "android": "Introduza um identificador Android válido, por exemplo sn.minhaapp.app.",
+          "bundle": "Introduza um Bundle ID iOS válido, por exemplo com.minhaapp.ios."
+        },
         "description": "A descrição deve ter pelo menos 30 caracteres.",
-        "optInUrl": "Introduza um link de teste do Google Play válido.",
+        "optInUrl": {
+          "GOOGLE_PLAY": "Introduza um link de teste do Google Play válido.",
+          "APP_STORE": "Introduza um link do TestFlight válido (testflight.apple.com/join/…).",
+          "WEB": "Introduza um endereço https:// válido."
+        },
         "testersTarget": "Indique um número de testadores entre 12 e 100."
-      }
+      },
+      "platform": "Plataforma",
+      "noticeWeb": "Campanha web: sem contagem de dias, mas cada campanha web é revista pela equipa antes de publicar."
     },
     "edit": {
       "pageTitle": "Editar a campanha",
@@ -121,6 +141,16 @@
       "saved": "Campanha atualizada",
       "notAllowed": "Esta campanha já não pode ser editada.",
       "back": "Voltar à campanha"
+    },
+    "platform": {
+      "GOOGLE_PLAY": "Google Play (Android)",
+      "APP_STORE": "App Store (iOS)",
+      "WEB": "Aplicação web"
+    },
+    "platformHint": {
+      "GOOGLE_PLAY": "Teste fechado via Play Console.",
+      "APP_STORE": "Teste via TestFlight.",
+      "WEB": "Um site para testar, sem loja."
     }
   },
   "app": {

@@ -24,7 +24,7 @@ export function PlaytestCard({ playtest: p }: PlaytestCardProps) {
             {t(`playtests.status.${p.status}`)}
           </span>
         </div>
-        <p className={styles.pkg}>{p.packageName}</p>
+        <p className={styles.pkg}>{p.packageName ?? t(`playtests.platform.${p.platform}`)}</p>
         <div className={styles.who}>
           <Avatar name={p.owner.displayName} photoUrl={p.owner.avatarUrl ?? null} size={20} />
           <span>{p.owner.displayName}</span>

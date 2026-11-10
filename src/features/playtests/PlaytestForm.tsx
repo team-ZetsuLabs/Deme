@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { PlaytestDetail } from '../../api/types';
+import type { PlaytestDetail, PlaytestPlatform, PlaytestRequest } from '../../api/types';
 import { Button } from '../../components/Button';
 import { buttonClass } from '../../components/buttonClass';
 import { Field } from '../../components/Field';
@@ -9,10 +9,12 @@ import { describedBy } from '../../components/fieldIds';
 import { fieldErrorText } from '../../hooks/fieldErrorText';
 import { useSubmitError } from '../../hooks/useSubmitError';
 import { useValidatedForm, type Validators } from '../../hooks/useValidatedForm';
+import { PLATFORMS, PLATFORM_CONFIG, validatePackageId } from './platforms';
 import { playtestsApi } from './playtestsApi';
 import styles from '../missions/MissionForm.module.css';
 
 type PlaytestValues = {
+  platform: string;
   appName: string;
   packageName: string;
   description: string;
@@ -22,21 +24,28 @@ type PlaytestValues = {
   instructions: string;
 };
 
-export const TESTERS_MIN = 12;
-export const TESTERS_MAX = 100;
-
-const PACKAGE_RE = /^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z][A-Za-z0-9_]*)+$/;
-const OPT_IN_RE = /^https:\/\/(play\.google\.com\/apps\/testing\/|groups\.google\.com\/)/;
+const asPlatform = (v: string): PlaytestPlatform => v as PlaytestPlatform;
 
 const VALIDATORS: Validators<PlaytestValues> = {
+  platform: () => null,
   appName: (v) =>
     v.trim().length < 2 || v.trim().length > 80 ? 'playtests.new.errors.appName' : null,
-  packageName: (v) => (PACKAGE_RE.test(v.trim()) ? null : 'playtests.new.errors.packageName'),
+  packageName: (v, vals) => {
+    const kind = PLATFORM_CONFIG[asPlatform(vals.platform)].packageKind;
+    if (!kind) return null;
+    return validatePackageId(asPlatform(vals.platform), v)
+      ? null
+      : `playtests.new.errors.packageName.${kind}`;
+  },
   description: (v) => (v.trim().length < 30 ? 'playtests.new.errors.description' : null),
-  optInUrl: (v) => (OPT_IN_RE.test(v.trim()) ? null : 'playtests.new.errors.optInUrl'),
-  testersTarget: (v) => {
+  optInUrl: (v, vals) =>
+    PLATFORM_CONFIG[asPlatform(vals.platform)].optInRe.test(v.trim())
+      ? null
+      : `playtests.new.errors.optInUrl.${vals.platform}`,
+  testersTarget: (v, vals) => {
+    const c = PLATFORM_CONFIG[asPlatform(vals.platform)];
     const n = Number(v);
-    return Number.isInteger(n) && n >= TESTERS_MIN && n <= TESTERS_MAX
+    return Number.isInteger(n) && n >= c.testersMin && n <= c.testersMax
       ? null
       : 'playtests.new.errors.testersTarget';
   },
@@ -45,6 +54,7 @@ const VALIDATORS: Validators<PlaytestValues> = {
 };
 
 const IDS: Record<keyof PlaytestValues, string> = {
+  platform: 'pt-platform',
   appName: 'pt-app-name',
   packageName: 'pt-package',
   description: 'pt-description',
@@ -60,16 +70,20 @@ export type PlaytestFormProps = {
   onSaved: (playtest: PlaytestDetail) => void;
 };
 
-/** Créer ou modifier une campagne de test fermé (TST-1). Toujours créée en brouillon. */
+/** Créer ou modifier une campagne de test fermé (TST-1, TST-7). Toujours créée en brouillon. */
 export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
   const { t } = useTranslation();
+  const initialPlatform: PlaytestPlatform = initial?.platform ?? 'GOOGLE_PLAY';
   const form = useValidatedForm<PlaytestValues>(
     {
+      platform: initialPlatform,
       appName: initial?.appName ?? '',
       packageName: initial?.packageName ?? '',
       description: initial?.descriptionMarkdown ?? '',
       optInUrl: initial?.optInUrl ?? '',
-      testersTarget: String(initial?.testersTarget ?? 14),
+      testersTarget: String(
+        initial?.testersTarget ?? PLATFORM_CONFIG[initialPlatform].testersDefault,
+      ),
       desiredStart: initial?.desiredStart ?? '',
       instructions: initial?.instructions ?? '',
     },
@@ -78,6 +92,13 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
   const submitError = useSubmitError(form.setServerErrors);
   const [busy, setBusy] = useState(false);
   const { values, errors } = form;
+  const platform = asPlatform(values.platform);
+  const config = PLATFORM_CONFIG[platform];
+
+  // Un seul setValue : enchaîner plusieurs setValue lirait des valeurs périmées et
+  // écraserait le changement. L'identifiant masqué en web n'est de toute façon pas
+  // envoyé (packageName null à la soumission), et les bornes de testeurs s'adaptent.
+  const onPlatform = (next: PlaytestPlatform) => form.setValue('platform', next);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -89,14 +110,16 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
     }
     setBusy(true);
     try {
-      const body = {
+      // packageName est ignoré par le serveur en web : on ne l'envoie que s'il s'applique.
+      const body: PlaytestRequest = {
+        platform,
         appName: values.appName.trim(),
-        packageName: values.packageName.trim(),
         description: values.description.trim(),
         optInUrl: values.optInUrl.trim(),
         testersTarget: Number(values.testersTarget),
-        desiredStart: values.desiredStart || undefined,
-        instructions: values.instructions.trim() || undefined,
+        ...(config.packageKind ? { packageName: values.packageName.trim() } : {}),
+        ...(values.desiredStart ? { desiredStart: values.desiredStart } : {}),
+        ...(values.instructions.trim() ? { instructions: values.instructions.trim() } : {}),
       };
       onSaved(
         initial ? await playtestsApi.update(initial.id, body) : await playtestsApi.create(body),
@@ -125,6 +148,26 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
         </div>
       )}
 
+      <fieldset className={styles.fieldset}>
+        <legend className={styles.legend}>{t('playtests.new.platform')}</legend>
+        <div className={styles.kinds}>
+          {PLATFORMS.map((value) => (
+            <label key={value} className={styles.kind}>
+              <input
+                type="radio"
+                name="pt-platform"
+                checked={platform === value}
+                onChange={() => onPlatform(value)}
+              />
+              <span>
+                <b>{t(`playtests.platform.${value}`)}</b>
+                <small>{t(`playtests.platformHint.${value}`)}</small>
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
       <Field id={IDS.appName} label={t('playtests.new.appName')} error={err('appName')}>
         <input
           maxLength={80}
@@ -133,19 +176,21 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
         />
       </Field>
 
-      <Field
-        id={IDS.packageName}
-        label={t('playtests.new.packageName')}
-        hint={t('playtests.new.packageNameHint')}
-        error={err('packageName')}
-      >
-        <input
-          autoCapitalize="none"
-          spellCheck={false}
-          placeholder="sn.monappli.app"
-          {...bind('packageName', true)}
-        />
-      </Field>
+      {config.packageKind && (
+        <Field
+          id={IDS.packageName}
+          label={t('playtests.new.packageName')}
+          hint={t(`playtests.new.packageNameHint.${config.packageKind}`)}
+          error={err('packageName')}
+        >
+          <input
+            autoCapitalize="none"
+            spellCheck={false}
+            placeholder={config.packageKind === 'bundle' ? 'com.monappli.ios' : 'sn.monappli.app'}
+            {...bind('packageName', true)}
+          />
+        </Field>
+      )}
 
       <Field
         id={IDS.description}
@@ -159,7 +204,7 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
       <Field
         id={IDS.optInUrl}
         label={t('playtests.new.optInUrl')}
-        hint={t('playtests.new.optInUrlHint')}
+        hint={t(`playtests.new.optInUrlHint.${platform}`)}
         error={err('optInUrl')}
       >
         <input
@@ -167,7 +212,7 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
           inputMode="url"
           autoCapitalize="none"
           spellCheck={false}
-          placeholder="https://play.google.com/apps/testing/..."
+          placeholder="https://"
           {...bind('optInUrl', true)}
         />
       </Field>
@@ -176,14 +221,17 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
         <Field
           id={IDS.testersTarget}
           label={t('playtests.new.testersTarget')}
-          hint={t('playtests.new.testersTargetHint', { min: TESTERS_MIN, max: TESTERS_MAX })}
+          hint={t('playtests.new.testersTargetHint', {
+            min: config.testersMin,
+            max: config.testersMax,
+          })}
           error={err('testersTarget')}
         >
           <input
             type="number"
             inputMode="numeric"
-            min={TESTERS_MIN}
-            max={TESTERS_MAX}
+            min={config.testersMin}
+            max={config.testersMax}
             {...bind('testersTarget', true)}
           />
         </Field>
@@ -205,7 +253,9 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
         <textarea rows={3} {...bind('instructions', true)} />
       </Field>
 
-      <p className={styles.notice}>{t('playtests.new.notice')}</p>
+      <p className={styles.notice}>
+        {config.tracking === 'NONE' ? t('playtests.new.noticeWeb') : t('playtests.new.notice')}
+      </p>
       <div className={styles.actions}>
         {initial && (
           <Link to={`/playtests/${initial.id}`} className={buttonClass({ variant: 'secondary' })}>

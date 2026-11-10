@@ -163,32 +163,43 @@ export function ParticipationPanel({ playtest: p, onChange }: ParticipationPanel
     );
   }
 
-  // CONFIRMED ou VERIFIED : décompte en cours.
+  // CONFIRMED ou VERIFIED : test en cours. En web (tracking NONE), pas de décompte.
   const verified = mine.status === 'VERIFIED';
+  const noTracking = p.tracking === 'NONE';
   return (
     <section className={styles.panel}>
       <h2 className={styles.title}>{t('playtests.participation.runningTitle')}</h2>
       <div className={styles.counter}>
         <strong>{mine.daysDone}</strong>
-        <span>{t('playtests.participation.daysOf', { total: mine.requiredDays })}</span>
+        <span>
+          {noTracking
+            ? t('playtests.participation.daysInstalled')
+            : t('playtests.participation.daysOf', { total: mine.requiredDays })}
+        </span>
       </div>
       <p className={styles.lead}>
-        {verified ? t('playtests.participation.verified') : t('playtests.participation.declared')}
+        {noTracking
+          ? t('playtests.participation.web')
+          : verified
+            ? t('playtests.participation.verified')
+            : t('playtests.participation.declared')}
       </p>
-      {mine.needsAttention && (
+      {!noTracking && mine.needsAttention && (
         <p className={styles.warn}>{t('playtests.participation.needsAttention')}</p>
       )}
       <div className={styles.actions}>
-        <Button
-          variant="primary"
-          busy={busy}
-          disabled={mine.checkedInToday}
-          onClick={() => run(() => playtestsApi.checkIn(p.id))}
-        >
-          {mine.checkedInToday
-            ? t('playtests.participation.checkedIn')
-            : t('playtests.participation.checkIn')}
-        </Button>
+        {!noTracking && (
+          <Button
+            variant="primary"
+            busy={busy}
+            disabled={mine.checkedInToday}
+            onClick={() => run(() => playtestsApi.checkIn(p.id))}
+          >
+            {mine.checkedInToday
+              ? t('playtests.participation.checkedIn')
+              : t('playtests.participation.checkIn')}
+          </Button>
+        )}
         <Button variant="ghost" disabled={busy} onClick={() => setConfirmingWithdraw(true)}>
           {t('playtests.participation.withdraw')}
         </Button>

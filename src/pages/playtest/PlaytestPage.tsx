@@ -67,7 +67,10 @@ function PlaytestView({ id }: { id: number }) {
           <Avatar name={p.appName} photoUrl={p.iconUrl ?? null} size={56} square />
           <div>
             <h1 className={own.title}>{p.appName}</h1>
-            <p className={own.pkg}>{p.packageName}</p>
+            <p className={own.pkg}>
+              {t(`playtests.platform.${p.platform}`)}
+              {p.packageName ? ` · ${p.packageName}` : ''}
+            </p>
           </div>
           <ShareButton title={p.appName} path={`/playtests/${p.id}`} />
         </div>

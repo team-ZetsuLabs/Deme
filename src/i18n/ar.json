@@ -39,7 +39,9 @@
       "REJECTED": "رُفضت هذه الحملة.",
       "SUSPENDED": "هذه الحملة موقوفة."
     },
-    "progress": { "label": "التقدم" },
+    "progress": {
+      "label": "التقدم"
+    },
     "facts": {
       "testers": "المختبِرون المطلوبون",
       "days": "الأيام المطلوبة",
@@ -88,21 +90,30 @@
       "completedText": "أكملت أيامك الـ{{days}}. ارتفعت سمعتك.",
       "dropped": "انسحبت من هذه الحملة.",
       "removed": "أزالك صاحب الحملة من هذه الحملة.",
-      "reason": "السبب"
+      "reason": "السبب",
+      "daysInstalled": "يومًا منذ التثبيت",
+      "web": "أبقِ التطبيق مثبّتًا وأرسل ملاحظاتك إلى صاحب الحملة. لا عدّ إلزامي."
     },
     "new": {
       "pageTitle": "حملة جديدة",
       "lead": "صف تطبيقك والاختبار المغلق المطلوب الانضمام إليه.",
       "appName": "اسم التطبيق",
       "appNamePlaceholder": "Tontine Cash",
-      "packageName": "اسم الحزمة",
-      "packageNameHint": "معرّف أندرويد، مثل sn.myapp.app.",
+      "packageName": "معرّف التطبيق",
+      "packageNameHint": {
+        "android": "معرّف أندرويد، مثل sn.myapp.app.",
+        "bundle": "معرّف الحزمة iOS، مثل com.myapp.ios."
+      },
       "description": "الوصف",
       "descriptionHint": "ماذا يفعل التطبيق، وما الذي ينبغي أن ينظر إليه المختبِرون.",
       "optInUrl": "رابط التسجيل في الاختبار",
-      "optInUrlHint": "رابط Google Play ‏(play.google.com/apps/testing/…) أو مجموعة Google.",
+      "optInUrlHint": {
+        "GOOGLE_PLAY": "رابط Google Play ‏(play.google.com/apps/testing/…) أو مجموعة Google.",
+        "APP_STORE": "رابط TestFlight ‏(testflight.apple.com/join/…).",
+        "WEB": "عنوان https:// للموقع المراد اختباره."
+      },
       "testersTarget": "عدد المختبِرين المطلوب",
-      "testersTargetHint": "من {{min}} إلى {{max}}؛ يشترط Google ‏{{min}}.",
+      "testersTargetHint": "من {{min}} إلى {{max}} مختبِرًا.",
       "desiredStart": "تاريخ البدء المفضّل",
       "instructions": "تعليمات للمختبِرين (اختياري)",
       "instructionsHint": "ما الذي يُختبَر أولًا، وأين تُبلَّغ الأعطال.",
@@ -112,11 +123,20 @@
       "saved": "أُنشئت المسودة",
       "errors": {
         "appName": "يجب أن يكون الاسم من 2 إلى 80 حرفًا.",
-        "packageName": "أدخل اسم حزمة صالحًا، مثل sn.myapp.app.",
+        "packageName": {
+          "android": "أدخل معرّف أندرويد صالحًا، مثل sn.myapp.app.",
+          "bundle": "أدخل معرّف حزمة iOS صالحًا، مثل com.myapp.ios."
+        },
         "description": "يجب أن يكون الوصف 30 حرفًا على الأقل.",
-        "optInUrl": "أدخل رابط اختبار Google Play صالحًا.",
+        "optInUrl": {
+          "GOOGLE_PLAY": "أدخل رابط اختبار Google Play صالحًا.",
+          "APP_STORE": "أدخل رابط TestFlight صالحًا ‏(testflight.apple.com/join/…).",
+          "WEB": "أدخل عنوان https:// صالحًا."
+        },
         "testersTarget": "أدخل عدد مختبِرين بين 12 و100."
-      }
+      },
+      "platform": "المنصة",
+      "noticeWeb": "حملة ويب: لا عدّاد للأيام، لكن تُراجَع كل حملة ويب من الفريق قبل النشر."
     },
     "edit": {
       "pageTitle": "تعديل الحملة",
@@ -125,6 +145,16 @@
       "saved": "حُدِّثت الحملة",
       "notAllowed": "لم يعد من الممكن تعديل هذه الحملة.",
       "back": "العودة إلى الحملة"
+    },
+    "platform": {
+      "GOOGLE_PLAY": "Google Play (أندرويد)",
+      "APP_STORE": "App Store (iOS)",
+      "WEB": "تطبيق ويب"
+    },
+    "platformHint": {
+      "GOOGLE_PLAY": "اختبار مغلق عبر Play Console.",
+      "APP_STORE": "اختبار عبر TestFlight.",
+      "WEB": "موقع لاختباره، دون متجر."
     }
   },
   "app": {

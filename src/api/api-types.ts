@@ -593,7 +593,7 @@ export interface paths {
         put?: never;
         /**
          * Créer une campagne (TST-1)
-         * @description Toujours en brouillon : POST /playtests/{id}/submit pour la publier.
+         * @description Toujours en brouillon : POST /playtests/{id}/submit pour la publier. Règles de chaque plateforme : voir le schéma PlaytestRequest.
          */
         post: operations["playtestCreate"];
         delete?: never;
@@ -613,7 +613,7 @@ export interface paths {
         put?: never;
         /**
          * Publier sa campagne
-         * @description Un porteur de niveau Membre (50 points) ou plus est publié tout de suite (ACTIVE) ; sinon la campagne attend l'équipe (PENDING_REVIEW). Une seule campagne en cours par application.
+         * @description Un porteur de niveau Membre (50 points) ou plus est publié tout de suite (ACTIVE) ; sinon la campagne attend l'équipe (PENDING_REVIEW). Une campagne WEB attend toujours l'équipe. Une seule campagne en cours par application et par plateforme.
          */
         post: operations["playtestSubmit"];
         delete?: never;
@@ -717,7 +717,7 @@ export interface paths {
         put?: never;
         /**
          * Déclarer l'installation
-         * @description Le décompte des jours commence maintenant. Adresse Google facultative.
+         * @description Le décompte des jours commence maintenant (rien à décompter pour une campagne web). Adresse Google facultative.
          */
         post: operations["playtestConfirm"];
         delete?: never;
@@ -757,7 +757,7 @@ export interface paths {
         put?: never;
         /**
          * Clôturer sa campagne
-         * @description Plus de nouveaux testeurs ; ceux en cours vont au bout de leurs jours et gagnent leurs points.
+         * @description Plus de nouveaux testeurs ; ceux en cours vont au bout de leurs jours et gagnent leurs points. Campagne web (tracking NONE) : les testeurs installés depuis 24 heures terminent tout de suite et gagnent leurs points, les autres partent.
          */
         post: operations["playtestClose"];
         delete?: never;
@@ -2515,22 +2515,39 @@ export interface components {
             /** Format: date-time */
             joinedAt: string;
         };
-        /** @description Création ou modification d'une campagne (brouillon ou refusée) */
+        /** @description Création ou modification d'une campagne (brouillon ou refusée). Les règles dépendent de platform. GOOGLE_PLAY : packageName Android obligatoire ; optInUrl https://play.google.com/apps/testing/… ou https://groups.google.com/… ; testersTarget de 12 à 100 (14 par défaut) ; requiredDays de 14 à 60 (14). APP_STORE : packageName = Bundle ID obligatoire ; optInUrl https://testflight.apple.com/join/… ; testersTarget de 1 à 100 (10) ; requiredDays de 1 à 60 (7). WEB : packageName ignoré (toujours null) ; optInUrl = adresse https du site à tester ; testersTarget de 1 à 100 (10) ; requiredDays ignoré (toujours 0, pas de décompte) ; toujours relue par l'équipe. Une règle non respectée revient en VALIDATION_ERROR avec le champ en cause dans fields. */
         PlaytestRequest: {
+            /**
+             * @example GOOGLE_PLAY
+             * @enum {string}
+             */
+            platform: "GOOGLE_PLAY" | "APP_STORE" | "WEB";
             /** @example Tontine Cash */
             appName: string;
-            /** @example sn.tontinecash.app */
-            packageName: string;
+            /**
+             * @description Obligatoire pour GOOGLE_PLAY (com.exemple.app) et APP_STORE (Bundle ID), ignoré pour WEB
+             * @example sn.tontinecash.app
+             */
+            packageName?: string;
             /** @description Markdown. Le HTML brut est ignoré. */
             description: string;
-            /** @example https://play.google.com/apps/testing/sn.tontinecash.app */
+            /**
+             * @description Format selon platform (voir PlaytestRequest)
+             * @example https://play.google.com/apps/testing/sn.tontinecash.app
+             */
             optInUrl: string;
             /**
              * Format: int32
-             * @description 14 par défaut ; Google en exige 12
+             * @description Minimum et défaut selon platform ; Google en exige 12
              * @example 14
              */
             testersTarget?: number;
+            /**
+             * Format: int32
+             * @description Jours de test par testeur. Bornes et défaut selon platform ; ignoré pour WEB
+             * @example 14
+             */
+            requiredDays?: number;
             /**
              * Format: date
              * @description Date de début souhaitée, à titre indicatif
@@ -2554,9 +2571,15 @@ export interface components {
              * @enum {string}
              */
             proofLevel?: "DECLARED" | "VERIFIED" | "COMPLETED";
-            /** Format: int32 */
+            /**
+             * Format: int32
+             * @description Sans décompte (NONE) : jours depuis l'installation
+             */
             daysDone: number;
-            /** Format: int32 */
+            /**
+             * Format: int32
+             * @description 0 quand la campagne n'a pas de décompte
+             */
             requiredDays: number;
             /** Format: date-time */
             joinedAt: string;
@@ -2590,9 +2613,15 @@ export interface components {
             /** Format: int64 */
             id: number;
             appName: string;
-            packageName: string;
-            /** @example GOOGLE_PLAY */
-            platform: string;
+            /** @description Identifiant Android ou Bundle ID ; null pour WEB */
+            packageName?: string;
+            /** @enum {string} */
+            platform: "GOOGLE_PLAY" | "APP_STORE" | "WEB";
+            /**
+             * @description Déduit de platform : NONE pour WEB
+             * @enum {string}
+             */
+            tracking: "DAILY" | "NONE";
             iconUrl?: string;
             descriptionMarkdown: string;
             /** @description HTML nettoyé côté serveur, à afficher avec MemberContent */
@@ -2608,7 +2637,10 @@ export interface components {
             reviewNote?: string;
             /** Format: int32 */
             testersTarget: number;
-            /** Format: int32 */
+            /**
+             * Format: int32
+             * @description 0 quand tracking vaut NONE
+             */
             requiredDays: number;
             /** Format: int32 */
             spotsLeft: number;
@@ -2639,7 +2671,7 @@ export interface components {
             /** Format: date-time */
             completedAt?: string;
         };
-        /** @description Avancement : percent = jours effectués par les testeurs en cours et terminés, rapportés à testersTarget × requiredDays. Ce ne sont que des déclarations : jamais une conformité Google Play. */
+        /** @description Avancement. DAILY : percent = jours effectués par les testeurs en cours et terminés, rapportés à testersTarget × requiredDays. NONE : testeurs qui ont déclaré l'installation (en cours et terminés), rapportés à testersTarget. Ce ne sont que des déclarations : jamais une conformité d'un store. */
         PlaytestProgress: {
             /**
              * Format: int32
@@ -3799,16 +3831,25 @@ export interface components {
             /** Format: int64 */
             id: number;
             appName: string;
-            packageName: string;
-            /** @example GOOGLE_PLAY */
-            platform: string;
+            /** @description Identifiant Android ou Bundle ID ; null pour WEB */
+            packageName?: string;
+            /** @enum {string} */
+            platform: "GOOGLE_PLAY" | "APP_STORE" | "WEB";
+            /**
+             * @description Déduit de platform : NONE pour WEB
+             * @enum {string}
+             */
+            tracking: "DAILY" | "NONE";
             iconUrl?: string;
             owner: components["schemas"]["AuthorSummary"];
             /** @enum {string} */
             status: "DRAFT" | "PENDING_REVIEW" | "REJECTED" | "ACTIVE" | "SUSPENDED" | "COMPLETED";
             /** Format: int32 */
             testersTarget: number;
-            /** Format: int32 */
+            /**
+             * Format: int32
+             * @description 0 quand tracking vaut NONE
+             */
             requiredDays: number;
             /**
              * Format: int32
@@ -4502,7 +4543,7 @@ export interface components {
             completed: number;
             /**
              * Format: int64
-             * @description Campagnes dont toutes les places ont été tenues 14 jours
+             * @description Campagnes dont toutes les places ont été tenues jusqu'au bout
              */
             targetReached: number;
             /** Format: int64 */
@@ -7353,7 +7394,7 @@ export interface operations {
                     "application/json": components["schemas"]["ApiError"];
                 };
             };
-            /** @description PARTICIPATION_NOT_RUNNING, ALREADY_CHECKED_IN */
+            /** @description PARTICIPATION_NOT_RUNNING, ALREADY_CHECKED_IN, CHECK_IN_NOT_TRACKED (campagne web) */
             409: {
                 headers: {
                     [name: string]: unknown;

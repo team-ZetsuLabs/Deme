@@ -139,11 +139,16 @@ export type ModerationDecision = Schemas['ModerationDecision'];
 export type CaseDecisionRequest = Schemas['CaseDecisionRequest'];
 export type MyModeratedContent = Schemas['MyModeratedContent'];
 
-// Tests fermés Google Play (TST)
+// Tests fermés Google Play, App Store, Web (TST, TST-7)
 export type PlaytestStatus = Schemas['PlaytestSummary']['status'];
 export type PlaytestAvailability = 'OPEN' | 'FULL';
+/** Plateforme d'une campagne (TST-7). */
+export type PlaytestPlatform = NonNullable<Schemas['PlaytestSummary']['platform']>;
+/** Suivi : DAILY (Play, App Store) ou NONE (web, pas de décompte). */
+export type PlaytestTracking = NonNullable<Schemas['PlaytestSummary']['tracking']>;
 export type PlaytestSummary = Schemas['PlaytestSummary'];
 export type PlaytestDetail = Schemas['PlaytestDetail'];
+/** Création/modification : platform obligatoire, packageName ignoré en web (TST-7). */
 export type PlaytestRequest = Schemas['PlaytestRequest'];
 export type PlaytestProgress = Schemas['PlaytestProgress'];
 export type MyPlaytestParticipation = Schemas['MyPlaytestParticipation'];

@@ -45,7 +45,7 @@ export const playtestsApi = {
       query: { page, size: PLAYTESTS_PAGE_SIZE },
     }),
   get: (id: number) => api.get<PlaytestDetail>(`/playtests/${id}`),
-  /** Crée un brouillon (TST-1). Publier ensuite avec submit. */
+  /** Crée un brouillon (TST-1). Publier ensuite avec submit. platform obligatoire (TST-7). */
   create: (body: PlaytestRequest) => api.post<PlaytestDetail>('/playtests', body),
   /** Modifier une campagne en brouillon ou refusée. 409 PLAYTEST_NOT_EDITABLE. */
   update: (id: number, body: PlaytestRequest) => api.put<PlaytestDetail>(`/playtests/${id}`, body),

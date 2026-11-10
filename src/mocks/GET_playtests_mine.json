@@ -19,9 +19,16 @@
       "testersTarget": 14,
       "requiredDays": 14,
       "spotsLeft": 5,
-      "progress": { "percent": 38, "completed": 2, "verified": 4, "declared": 3, "joined": 0 },
+      "progress": {
+        "percent": 38,
+        "completed": 2,
+        "verified": 4,
+        "declared": 3,
+        "joined": 0
+      },
       "createdAt": "2026-11-03T09:00:00Z",
-      "startedAt": "2026-11-03T12:00:00Z"
+      "startedAt": "2026-11-03T12:00:00Z",
+      "tracking": "DAILY"
     },
     {
       "id": 21,
@@ -42,9 +49,16 @@
       "testersTarget": 14,
       "requiredDays": 14,
       "spotsLeft": 14,
-      "progress": { "percent": 0, "completed": 0, "verified": 0, "declared": 0, "joined": 0 },
+      "progress": {
+        "percent": 0,
+        "completed": 0,
+        "verified": 0,
+        "declared": 0,
+        "joined": 0
+      },
       "createdAt": "2026-11-10T11:20:00Z",
-      "startedAt": null
+      "startedAt": null,
+      "tracking": "DAILY"
     }
   ],
   "page": 0,

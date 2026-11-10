@@ -57,5 +57,6 @@
   "createdAt": "2026-11-03T09:00:00Z",
   "updatedAt": "2026-11-10T11:15:00Z",
   "startedAt": "2026-11-03T12:00:00Z",
-  "completedAt": null
+  "completedAt": null,
+  "tracking": "DAILY"
 }
