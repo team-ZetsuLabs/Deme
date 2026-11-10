@@ -35,9 +35,15 @@ export function Countdown({ endsAt }: CountdownProps) {
   return (
     <div>
       <p className={styles.caption}>{t('challenges.closesIn')}</p>
-      {/* Lu une fois en phrase entière ; les chiffres ne sont pas annoncés à chaque mise à jour. */}
+      {/* Lu une fois en phrase entière ; les chiffres ne sont pas annoncés à chaque mise à jour.
+          Chaque unité est accordée à part (« 1 jour », « 2 jours ») : une phrase avec trois
+          nombres ne peut pas s'accorder avec un seul `count`. */}
       <p className="sr-only">
-        {t('challenges.closesInFull', { days: r.days, hours: r.hours, minutes: r.minutes })}
+        {t('challenges.closesInFull', {
+          days: t('challenges.unitsFull.days', { count: r.days }),
+          hours: t('challenges.unitsFull.hours', { count: r.hours }),
+          minutes: t('challenges.unitsFull.minutes', { count: r.minutes }),
+        })}
       </p>
       <div className={styles.clock} aria-hidden="true">
         {parts.map((p) => (

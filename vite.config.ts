@@ -1,11 +1,51 @@
 /// <reference types="vitest/config" />
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+
+/**
+ * Politique de sécurité du contenu (CSP, voir CLAUDE.md). Posée en <meta> car le front
+ * est servi en statique : tant que Caddy n'est pas devant, aucun en-tête HTTP n'est à nous.
+ * Elle bloque les scripts inline et étrangers (XSS), comme la CSP Caddy prévue.
+ */
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self'",
+  // React pose des styles en attribut style= (Avatar, squelettes…) : il faut unsafe-inline.
+  "style-src 'self' 'unsafe-inline'",
+  // https: pour les photos de profil GitHub/Google ; blob: pour l'aperçu d'avatar en mode mock.
+  "img-src 'self' data: blob: https:",
+  "font-src 'self'",
+  "connect-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-src 'none'",
+].join('; ');
+
+/**
+ * Ajoutée au build seulement : en dev, le rafraîchissement à chaud de React injecte un
+ * script inline que script-src 'self' bloquerait. frame-ancestors et X-Content-Type-Options
+ * ne marchent pas en <meta> : à poser côté hébergeur (en-têtes Render, puis Caddy).
+ */
+const securityMeta: Plugin = {
+  name: 'security-meta',
+  apply: 'build',
+  transformIndexHtml() {
+    return [
+      {
+        tag: 'meta',
+        attrs: { 'http-equiv': 'Content-Security-Policy', content: CSP },
+        injectTo: 'head-prepend',
+      },
+    ];
+  },
+};
 
 export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
+    securityMeta,
     VitePWA({
       registerType: 'autoUpdate',
       // Enregistrement du service worker après l'analyse de la page : il ne bloque plus l'affichage.

@@ -1239,7 +1239,15 @@
     "reward": "+{{points}} pontos por um trabalho validado",
     "none": "Nenhum desafio em curso de momento. O próximo será anunciado nas suas notificações.",
     "closesIn": "Encerra em",
-    "closesInFull": "Encerra em {{days}} dias, {{hours}} horas e {{minutes}} minutos.",
+    "closesInFull": "Encerra em {{days}}, {{hours}} e {{minutes}}.",
+    "unitsFull": {
+      "days_one": "{{count}} dia",
+      "days_other": "{{count}} dias",
+      "hours_one": "{{count}} hora",
+      "hours_other": "{{count}} horas",
+      "minutes_one": "{{count}} minuto",
+      "minutes_other": "{{count}} minutos"
+    },
     "ended": "Este desafio está encerrado. Os trabalhos estão a ser avaliados.",
     "units": {
       "days_one": "dia",

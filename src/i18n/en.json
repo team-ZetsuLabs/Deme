@@ -1239,7 +1239,15 @@
     "reward": "+{{points}} points for an accepted submission",
     "none": "No challenge is running right now. The next one will be announced in your notifications.",
     "closesIn": "Closes in",
-    "closesInFull": "Closes in {{days}} days, {{hours}} hours and {{minutes}} minutes.",
+    "closesInFull": "Closes in {{days}}, {{hours}} and {{minutes}}.",
+    "unitsFull": {
+      "days_one": "{{count}} day",
+      "days_other": "{{count}} days",
+      "hours_one": "{{count}} hour",
+      "hours_other": "{{count}} hours",
+      "minutes_one": "{{count}} minute",
+      "minutes_other": "{{count}} minutes"
+    },
     "ended": "This challenge is closed. Submissions are being graded.",
     "units": {
       "days_one": "day",

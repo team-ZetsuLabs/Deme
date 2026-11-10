@@ -1239,7 +1239,15 @@
     "reward": "+{{points}} points pour un dépôt validé",
     "none": "Pas de défi en cours pour le moment. Le prochain sera annoncé dans vos notifications.",
     "closesIn": "Clôture dans",
-    "closesInFull": "Clôture dans {{days}} jours, {{hours}} heures et {{minutes}} minutes.",
+    "closesInFull": "Clôture dans {{days}}, {{hours}} et {{minutes}}.",
+    "unitsFull": {
+      "days_one": "{{count}} jour",
+      "days_other": "{{count}} jours",
+      "hours_one": "{{count}} heure",
+      "hours_other": "{{count}} heures",
+      "minutes_one": "{{count}} minute",
+      "minutes_other": "{{count}} minutes"
+    },
     "ended": "Ce défi est clôturé. Les dépôts sont en cours de notation.",
     "units": {
       "days_one": "jour",

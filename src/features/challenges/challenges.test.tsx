@@ -1,4 +1,4 @@
-import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import i18n from '../../i18n';
@@ -33,6 +33,12 @@ beforeAll(async () => {
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
+});
+
+// Le défi de l'exemple se termine le 9 novembre 2026 : sans horloge figée pendant le
+// défi, la page l'affiche « clôturé » dès que la vraie date passe et le test casse.
+beforeEach(() => {
+  vi.spyOn(Date, 'now').mockReturnValue(new Date('2026-11-05T12:00:00Z').getTime());
 });
 
 describe('compte à rebours (CH-1)', () => {
