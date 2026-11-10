@@ -73,6 +73,10 @@ class CloudinaryStorageTest {
                 + "0b9d6f2e-1c1a-4f7e-9a51-3f3c1d0e2a11.png")).isNull();
         assertThat(avatars.refOf("https://res.cloudinary.com/demo/image/upload/v1/autre-dossier/avatars/"
                 + "0b9d6f2e-1c1a-4f7e-9a51-3f3c1d0e2a11.png")).isNull();
+        // Un avatar de démo posé par seed/photos-cloudinary.sql est reconnu, donc retiré si le membre en change.
+        assertThat(avatars.refOf("https://res.cloudinary.com/demo/image/upload/c_fill,w_256,h_256/f_auto,q_auto/v1/"
+                + "zetsu/avatars/d5d75ee1-0550-5f0a-a590-fbb182e1a12f.webp"))
+                .isEqualTo("cloudinary:zetsu/avatars/d5d75ee1-0550-5f0a-a590-fbb182e1a12f");
         // Une photo restée sur le disque avant le passage à Cloudinary reste reconnue.
         assertThat(avatars.refOf("/api/v1/users/awa/avatar/0b9d6f2e-1c1a-4f7e-9a51-3f3c1d0e2a11.png"))
                 .isEqualTo("0b9d6f2e-1c1a-4f7e-9a51-3f3c1d0e2a11.png");
