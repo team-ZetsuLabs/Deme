@@ -45,6 +45,8 @@ public class ModerationTargets {
                     + " from users where id = :id and status <> 'DELETED'";
             case PROJECT -> "select owner_id as author_id, title, description_html as html, null as question_id, hidden"
                     + " from projects where id = :id";
+            case PLAYTEST -> "select owner_id as author_id, app_name as title, description_html as html,"
+                    + " null as question_id, hidden from test_campaigns where id = :id";
         };
         List<Target> rows = jdbc.query(sql, new MapSqlParameterSource("id", id), (rs, i) -> {
             String text = rs.getString("html") == null ? "" : Jsoup.parse(rs.getString("html")).text();
@@ -64,6 +66,7 @@ public class ModerationTargets {
             case MISSION -> "missions";
             case USER -> "users";
             case PROJECT -> "projects";
+            case PLAYTEST -> "test_campaigns";
         };
         jdbc.update("update " + table + " set hidden = :hidden where id = :id",
                 new MapSqlParameterSource("id", id).addValue("hidden", hidden));

@@ -1,0 +1,112 @@
+{
+  "items": [
+    {
+      "campaign": {
+        "id": 11,
+        "appName": "Jollof Rider",
+        "packageName": "gh.jollofrider.app",
+        "platform": "GOOGLE_PLAY",
+        "iconUrl": null,
+        "owner": {
+          "username": "fatou_n",
+          "displayName": "Fatou Ndiaye",
+          "avatarUrl": null,
+          "countryCode": "SN",
+          "reputation": 27,
+          "level": "NEWCOMER",
+          "deleted": false
+        },
+        "status": "PENDING_REVIEW",
+        "testersTarget": 12,
+        "requiredDays": 14,
+        "spotsLeft": 12,
+        "progress": {
+          "percent": 0,
+          "completed": 0,
+          "verified": 0,
+          "declared": 0,
+          "joined": 0
+        },
+        "createdAt": "2026-11-02T09:14:00Z",
+        "startedAt": null
+      },
+      "hidden": false,
+      "inactive": false,
+      "stalled": false,
+      "reviewNote": null
+    },
+    {
+      "campaign": {
+        "id": 7,
+        "appName": "Kobo Split",
+        "packageName": "ng.kobosplit.app",
+        "platform": "GOOGLE_PLAY",
+        "iconUrl": "https://res.cloudinary.com/demo/image/upload/c_fill,w_128,h_128/f_auto,q_auto/v1/zetsu/playtests/5b0f6c3e-2a71-4f0e-9d0b-8f1e0c2b7a41.png",
+        "owner": {
+          "username": "chinedu_o",
+          "displayName": "Chinedu Okafor",
+          "avatarUrl": null,
+          "countryCode": "NG",
+          "reputation": 318,
+          "level": "CONTRIBUTOR",
+          "deleted": false
+        },
+        "status": "ACTIVE",
+        "testersTarget": 14,
+        "requiredDays": 14,
+        "spotsLeft": 1,
+        "progress": {
+          "percent": 46,
+          "completed": 0,
+          "verified": 9,
+          "declared": 3,
+          "joined": 1
+        },
+        "createdAt": "2026-11-02T09:14:00Z",
+        "startedAt": "2026-11-02T10:02:00Z"
+      },
+      "hidden": false,
+      "inactive": false,
+      "stalled": false,
+      "reviewNote": null
+    },
+    {
+      "campaign": {
+        "id": 9,
+        "appName": "Wari Stock",
+        "packageName": "sn.waristock.app",
+        "platform": "GOOGLE_PLAY",
+        "iconUrl": null,
+        "owner": {
+          "username": "aminata_dev",
+          "displayName": "Aminata Diallo",
+          "avatarUrl": null,
+          "countryCode": "SN",
+          "reputation": 1240,
+          "level": "REFERENT",
+          "deleted": false
+        },
+        "status": "ACTIVE",
+        "testersTarget": 12,
+        "requiredDays": 14,
+        "spotsLeft": 0,
+        "progress": {
+          "percent": 71,
+          "completed": 0,
+          "verified": 12,
+          "declared": 0,
+          "joined": 0
+        },
+        "createdAt": "2026-10-29T16:40:00Z",
+        "startedAt": "2026-10-29T16:41:00Z"
+      },
+      "hidden": false,
+      "inactive": true,
+      "stalled": false,
+      "reviewNote": null
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 3
+}

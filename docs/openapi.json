@@ -49,6 +49,9 @@
     "name" : "communities",
     "description" : "Communautés par pays ou par technologie"
   }, {
+    "name" : "playtests",
+    "description" : "Tests fermés Google Play : trouver des testeurs, tester les applications des autres"
+  }, {
     "name" : "challenges",
     "description" : "Défis, dépôts et classement"
   }, {
@@ -610,6 +613,221 @@
           },
           "409" : {
             "description" : "PROJECT_CLOSED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playtests/{id}" : {
+      "get" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Page d'une campagne",
+        "description" : "optInUrl et instructions ne sont donnés qu'au porteur, à l'équipe et aux testeurs inscrits : on rejoint d'abord sur Zetsu, puis on suit le lien. Un brouillon, une campagne suspendue ou masquée n'existe que pour le porteur, l'équipe et ses testeurs (404 pour les autres).",
+        "operationId" : "playtestGet",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "La campagne",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestDetail"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Modifier sa campagne",
+        "description" : "En brouillon ou refusée seulement. Une campagne refusée redevient un brouillon, à renvoyer.",
+        "operationId" : "playtestEdit",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PlaytestRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Campagne modifiée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PLAYTEST_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PLAYTEST_NOT_EDITABLE",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playtests/{id}/icon" : {
+      "put" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Icône de l'application",
+        "description" : "Formulaire multipart, champ photo : PNG, JPG ou WebP de 2 Mo maximum, vérifié par son contenu. Recadrée en 128 px. Impossible sur une campagne terminée.",
+        "operationId" : "playtestIcon",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AvatarForm"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Campagne à jour, iconUrl pointe vers la nouvelle icône",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "PHOTO_REQUIRED, PHOTO_TYPE, PHOTO_TOO_LARGE, FILE_TOO_LARGE",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PLAYTEST_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PLAYTEST_COMPLETED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -2662,6 +2880,732 @@
         }
       }
     },
+    "/api/v1/playtests" : {
+      "get" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Campagnes de test fermé (TST-1)",
+        "description" : "Actives par défaut, les plus récentes d'abord ; status=COMPLETED pour les terminées. availability=OPEN : avec une place libre ; FULL : complètes.",
+        "operationId" : "playtestList",
+        "parameters" : [ {
+          "name" : "status",
+          "in" : "query",
+          "description" : "ACTIVE (par défaut) ou COMPLETED",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "DRAFT", "PENDING_REVIEW", "REJECTED", "ACTIVE", "SUSPENDED", "COMPLETED" ]
+          }
+        }, {
+          "name" : "availability",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "OPEN", "FULL" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de campagnes",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponsePlaytestSummary"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "INVALID_PAGE, INVALID_PAGE_SIZE, INVALID_STATUS, INVALID_PARAMETER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Créer une campagne (TST-1)",
+        "description" : "Toujours en brouillon : POST /playtests/{id}/submit pour la publier.",
+        "operationId" : "playtestCreate",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PlaytestRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Brouillon créé",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playtests/{id}/submit" : {
+      "post" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Publier sa campagne",
+        "description" : "Un porteur de niveau Membre (50 points) ou plus est publié tout de suite (ACTIVE) ; sinon la campagne attend l'équipe (PENDING_REVIEW). Une seule campagne en cours par application.",
+        "operationId" : "playtestSubmit",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Campagne envoyée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestDetail"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PLAYTEST_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PLAYTEST_NOT_DRAFT, PACKAGE_ALREADY_RUNNING",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playtests/{id}/participations" : {
+      "get" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Testeurs de sa campagne",
+        "description" : "Pour le porteur : jours effectués, niveau de preuve, « à confirmer » (needsAttention), adresse Google déclarée. Dans l'ordre d'arrivée.",
+        "operationId" : "playtestParticipations",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Tous les testeurs, partis compris",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PlaytestParticipation"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PLAYTEST_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Rejoindre une campagne (TST-2)",
+        "description" : "Prend une place tout de suite et donne optInUrl. L'installation est à déclarer sous 48 heures, sinon la place se libère. On ne rejoint qu'une fois une campagne, même après un départ.",
+        "operationId" : "playtestJoin",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "Campagne avec myParticipation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestDetail"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "CANNOT_JOIN_OWN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PLAYTEST_NOT_ACTIVE, ALREADY_JOINED, CAMPAIGN_FULL",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playtests/{id}/participations/{participationId}/verify" : {
+      "post" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Testeur vérifié dans la Play Console",
+        "description" : "Par le porteur, sur une installation déclarée.",
+        "operationId" : "playtestVerify",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "participationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Testeurs à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PlaytestParticipation"
+                  }
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PLAYTEST_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND, PARTICIPATION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PARTICIPATION_NOT_CONFIRMED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playtests/{id}/participations/{participationId}/remove" : {
+      "post" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Retirer un testeur",
+        "description" : "Par le porteur, avec un motif montré au testeur. La place se libère.",
+        "operationId" : "playtestRemove",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "participationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PlaytestRemoveRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Testeurs à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PlaytestParticipation"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PLAYTEST_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND, PARTICIPATION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PARTICIPATION_NOT_RUNNING",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playtests/{id}/participations/me/withdraw" : {
+      "post" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Se désister",
+        "description" : "La place se libère pour un autre testeur. Motif facultatif.",
+        "operationId" : "playtestWithdraw",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PlaytestWithdrawRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Campagne avec myParticipation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PARTICIPATION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PARTICIPATION_NOT_RUNNING",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playtests/{id}/participations/me/confirm" : {
+      "post" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Déclarer l'installation",
+        "description" : "Le décompte des jours commence maintenant. Adresse Google facultative.",
+        "operationId" : "playtestConfirm",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PlaytestConfirmRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Campagne avec myParticipation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PARTICIPATION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PARTICIPATION_NOT_JOINED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playtests/{id}/participations/me/check-in" : {
+      "post" : {
+        "tags" : [ "playtests" ],
+        "summary" : "« Toujours inscrit »",
+        "description" : "Une fois par jour (UTC). Sert à repérer les décrochages, pas de preuve.",
+        "operationId" : "playtestCheckIn",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Campagne avec myParticipation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestDetail"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PARTICIPATION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PARTICIPATION_NOT_RUNNING, ALREADY_CHECKED_IN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playtests/{id}/close" : {
+      "post" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Clôturer sa campagne",
+        "description" : "Plus de nouveaux testeurs ; ceux en cours vont au bout de leurs jours et gagnent leurs points.",
+        "operationId" : "playtestClose",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Campagne terminée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestDetail"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PLAYTEST_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PLAYTEST_NOT_ACTIVE",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/notifications/read" : {
       "post" : {
         "tags" : [ "notifications" ],
@@ -4694,6 +5638,321 @@
         }
       }
     },
+    "/api/v1/admin/playtests/{id}/suspend" : {
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Suspendre une campagne",
+        "description" : "Motif obligatoire. Plus de nouveaux testeurs ; le décompte de ceux en cours continue.",
+        "operationId" : "playtestAdminSuspend",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PlaytestNoteRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Campagne suspendue",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, NOTE_REQUIRED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PLAYTEST_NOT_ACTIVE",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/playtests/{id}/review" : {
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Valider ou refuser une campagne",
+        "description" : "Motif obligatoire pour REJECT, montré au porteur. Validée, la campagne est annoncée aux membres qui font du mobile.",
+        "operationId" : "playtestAdminReview",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PlaytestReviewRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Campagne à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestDetail"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR, NOTE_REQUIRED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PLAYTEST_NOT_PENDING, PACKAGE_ALREADY_RUNNING",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/playtests/{id}/reactivate" : {
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Réactiver une campagne suspendue",
+        "operationId" : "playtestAdminReactivate",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PlaytestNoteRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Campagne active",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestDetail"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PLAYTEST_NOT_SUSPENDED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/playtests/{id}/participations/{participationId}/remove" : {
+      "post" : {
+        "tags" : [ "admin" ],
+        "summary" : "Retirer un testeur",
+        "description" : "Motif montré au testeur ; le porteur est prévenu. Pour « réaffecter » un testeur, on le retire ici puis il rejoint une autre campagne : un compteur ne passe jamais d'une application à une autre.",
+        "operationId" : "playtestAdminRemove",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "participationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PlaytestRemoveRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Testeurs à jour",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PlaytestParticipation"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND, PARTICIPATION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409" : {
+            "description" : "PARTICIPATION_NOT_RUNNING",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/admin/jobs/{id}/decision" : {
       "post" : {
         "tags" : [ "admin" ],
@@ -5801,6 +7060,55 @@
         }
       }
     },
+    "/api/v1/users/me/playtest-participations" : {
+      "get" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Mes participations à des tests fermés",
+        "description" : "Les plus récentes d'abord, avec leurs compteurs.",
+        "operationId" : "playtestMyParticipations",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de participations",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseMyPlaytestEntry"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/users/me/moderation" : {
       "get" : {
         "tags" : [ "moderation" ],
@@ -6130,6 +7438,99 @@
         }
       }
     },
+    "/api/v1/playtests/{id}/icon/{file}" : {
+      "get" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Icône gardée sur le serveur",
+        "description" : "Ne pas construire cette adresse : utiliser iconUrl. En cache un an.",
+        "operationId" : "playtestIconFile",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "file",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "L'image",
+            "content" : {
+              "image/png" : { },
+              "image/jpeg" : { },
+              "image/webp" : { }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND, ICON_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/playtests/mine" : {
+      "get" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Mes campagnes",
+        "description" : "Tous statuts, brouillons compris, les plus récentes d'abord.",
+        "operationId" : "playtestMine",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de campagnes",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponsePlaytestSummary"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/notifications" : {
       "get" : {
         "tags" : [ "notifications" ],
@@ -6229,7 +7630,7 @@
           "required" : false,
           "schema" : {
             "type" : "string",
-            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER", "PROJECT" ]
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER", "PROJECT", "PLAYTEST" ]
           }
         }, {
           "name" : "page",
@@ -6776,6 +8177,229 @@
         }
       }
     },
+    "/api/v1/admin/playtests" : {
+      "get" : {
+        "tags" : [ "admin" ],
+        "summary" : "Campagnes de test fermé (TST-5)",
+        "description" : "Toutes sauf les brouillons, celles en attente de validation d'abord. problem=INACTIVE : active sans participation depuis 7 jours ; STALLED : plus de 30 % des testeurs en cours « à confirmer » ; REPORTED : masquée par la modération.",
+        "operationId" : "playtestAdminList",
+        "parameters" : [ {
+          "name" : "status",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "DRAFT", "PENDING_REVIEW", "REJECTED", "ACTIVE", "SUSPENDED", "COMPLETED" ]
+          }
+        }, {
+          "name" : "problem",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "INACTIVE", "STALLED", "REPORTED" ]
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de campagnes",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponseAdminPlaytestSummary"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/playtests/{id}/participations" : {
+      "get" : {
+        "tags" : [ "admin" ],
+        "summary" : "Testeurs d'une campagne",
+        "description" : "Adresses Google comprises.",
+        "operationId" : "playtestAdminParticipations",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Tous les testeurs, partis compris",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/PlaytestParticipation"
+                  }
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/playtests/{id}/events" : {
+      "get" : {
+        "tags" : [ "admin" ],
+        "summary" : "Historique d'une campagne",
+        "description" : "Plus récent d'abord.",
+        "operationId" : "playtestAdminEvents",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page d'événements",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponsePlaytestEvent"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/playtests/stats" : {
+      "get" : {
+        "tags" : [ "admin" ],
+        "summary" : "Indicateurs des tests fermés (TST-6)",
+        "operationId" : "playtestAdminStats",
+        "responses" : {
+          "200" : {
+            "description" : "Indicateurs",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestStats"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "FORBIDDEN",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/admin/jobs" : {
       "get" : {
         "tags" : [ "admin" ],
@@ -7018,7 +8642,7 @@
           "required" : false,
           "schema" : {
             "type" : "string",
-            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER", "PROJECT" ]
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER", "PROJECT", "PLAYTEST" ]
           }
         }, {
           "name" : "page",
@@ -7762,6 +9386,282 @@
         },
         "required" : [ "joinedAt", "member", "owner" ]
       },
+      "PlaytestRequest" : {
+        "type" : "object",
+        "description" : "Création ou modification d'une campagne (brouillon ou refusée)",
+        "properties" : {
+          "appName" : {
+            "type" : "string",
+            "example" : "Tontine Cash",
+            "maxLength" : 80,
+            "minLength" : 2
+          },
+          "packageName" : {
+            "type" : "string",
+            "example" : "sn.tontinecash.app",
+            "maxLength" : 150,
+            "minLength" : 0,
+            "pattern" : "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+$"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Markdown. Le HTML brut est ignoré.",
+            "maxLength" : 5000,
+            "minLength" : 30
+          },
+          "optInUrl" : {
+            "type" : "string",
+            "example" : "https://play.google.com/apps/testing/sn.tontinecash.app",
+            "maxLength" : 300,
+            "minLength" : 0,
+            "pattern" : "^https://(play\\.google\\.com/apps/testing/|groups\\.google\\.com/)[^\\s<>\"']*$"
+          },
+          "testersTarget" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "14 par défaut ; Google en exige 12",
+            "example" : 14,
+            "maximum" : 100,
+            "minimum" : 12
+          },
+          "desiredStart" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Date de début souhaitée, à titre indicatif",
+            "example" : "2026-11-17"
+          },
+          "instructions" : {
+            "type" : "string",
+            "description" : "Consignes aux testeurs, texte brut",
+            "example" : "Créez une tontine de test et invitez un ami. Signalez tout plantage dans le groupe.",
+            "maxLength" : 2000,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "appName", "description", "optInUrl", "packageName" ]
+      },
+      "MyPlaytestParticipation" : {
+        "type" : "object",
+        "description" : "Ma participation à une campagne",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "JOINED", "CONFIRMED", "VERIFIED", "COMPLETED", "DROPPED", "REMOVED" ]
+          },
+          "proofLevel" : {
+            "type" : "string",
+            "description" : "Null tant que l'installation n'est pas déclarée, et après un départ",
+            "enum" : [ "DECLARED", "VERIFIED", "COMPLETED" ]
+          },
+          "daysDone" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "requiredDays" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "joinedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "confirmBefore" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "Avant cette date, l'installation doit être déclarée, sinon la place se libère"
+          },
+          "confirmedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "verifiedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "endsAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "lastCheckInAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "checkedInToday" : {
+            "type" : "boolean",
+            "description" : "« Toujours inscrit » déjà fait aujourd'hui (UTC)"
+          },
+          "needsAttention" : {
+            "type" : "boolean",
+            "description" : "3 jours sans « toujours inscrit »"
+          },
+          "googleEmail" : {
+            "type" : "string"
+          },
+          "completedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "droppedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "dropReason" : {
+            "type" : "string",
+            "description" : "Motif d'un désistement ou d'un retrait"
+          }
+        },
+        "required" : [ "checkedInToday", "daysDone", "id", "joinedAt", "needsAttention", "requiredDays", "status" ]
+      },
+      "PlaytestDetail" : {
+        "type" : "object",
+        "description" : "Page d'une campagne",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "appName" : {
+            "type" : "string"
+          },
+          "packageName" : {
+            "type" : "string"
+          },
+          "platform" : {
+            "type" : "string",
+            "example" : "GOOGLE_PLAY"
+          },
+          "iconUrl" : {
+            "type" : "string"
+          },
+          "descriptionMarkdown" : {
+            "type" : "string"
+          },
+          "descriptionHtml" : {
+            "type" : "string",
+            "description" : "HTML nettoyé côté serveur, à afficher avec MemberContent"
+          },
+          "optInUrl" : {
+            "type" : "string",
+            "description" : "Lien d'inscription au test : seulement pour le porteur, l'équipe et les testeurs en cours. À ouvrir dans un nouvel onglet."
+          },
+          "instructions" : {
+            "type" : "string",
+            "description" : "Seulement pour le porteur, l'équipe et les testeurs"
+          },
+          "owner" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "DRAFT", "PENDING_REVIEW", "REJECTED", "ACTIVE", "SUSPENDED", "COMPLETED" ]
+          },
+          "reviewNote" : {
+            "type" : "string",
+            "description" : "Motif d'un refus ou d'une suspension : seulement pour le porteur et l'équipe"
+          },
+          "testersTarget" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "requiredDays" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "spotsLeft" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "progress" : {
+            "$ref" : "#/components/schemas/PlaytestProgress"
+          },
+          "estimatedEndAt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "description" : "Quand toutes les places sont prises par des installations déclarées : fin du dernier testeur. Null sinon."
+          },
+          "desiredStart" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "myParticipation" : {
+            "$ref" : "#/components/schemas/MyPlaytestParticipation",
+            "description" : "Null si je ne participe pas (ou si je ne suis pas connecté)"
+          },
+          "canEdit" : {
+            "type" : "boolean",
+            "description" : "Brouillon ou refusée, et je suis le porteur"
+          },
+          "canSubmit" : {
+            "type" : "boolean",
+            "description" : "Brouillon, et je suis le porteur"
+          },
+          "canClose" : {
+            "type" : "boolean",
+            "description" : "Active ou suspendue, et je suis le porteur"
+          },
+          "canJoin" : {
+            "type" : "boolean",
+            "description" : "Active, une place libre, je ne suis pas le porteur et je n'ai jamais rejoint. Faux aussi pour un visiteur non connecté : le front l'invite alors à se connecter."
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "updatedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "startedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "completedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "appName", "canClose", "canEdit", "canJoin", "canSubmit", "createdAt", "descriptionHtml", "descriptionMarkdown", "id", "owner", "packageName", "platform", "progress", "requiredDays", "spotsLeft", "status", "testersTarget", "updatedAt" ]
+      },
+      "PlaytestProgress" : {
+        "type" : "object",
+        "description" : "Avancement : percent = jours effectués par les testeurs en cours et terminés, rapportés à testersTarget × requiredDays. Ce ne sont que des déclarations : jamais une conformité Google Play.",
+        "properties" : {
+          "percent" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 42
+          },
+          "completed" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Participations terminées",
+            "example" : 3
+          },
+          "verified" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "En cours, vérifiées par le porteur",
+            "example" : 5
+          },
+          "declared" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "En cours, déclarées par le testeur seulement",
+            "example" : 4
+          },
+          "joined" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Ont rejoint, installation pas encore déclarée",
+            "example" : 1
+          }
+        },
+        "required" : [ "completed", "declared", "joined", "percent", "verified" ]
+      },
       "Budget" : {
         "type" : "object",
         "properties" : {
@@ -8504,7 +10404,7 @@
         "properties" : {
           "targetType" : {
             "type" : "string",
-            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER", "PROJECT" ]
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER", "PROJECT", "PLAYTEST" ]
           },
           "targetId" : {
             "type" : "integer",
@@ -8753,6 +10653,115 @@
         },
         "required" : [ "reason" ]
       },
+      "PlaytestParticipation" : {
+        "type" : "object",
+        "description" : "Testeur vu par le porteur ou l'équipe",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "tester" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "JOINED", "CONFIRMED", "VERIFIED", "COMPLETED", "DROPPED", "REMOVED" ]
+          },
+          "proofLevel" : {
+            "type" : "string",
+            "enum" : [ "DECLARED", "VERIFIED", "COMPLETED" ]
+          },
+          "daysDone" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "joinedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "confirmedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "verifiedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "endsAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "lastCheckInAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "needsAttention" : {
+            "type" : "boolean",
+            "description" : "« À confirmer » : 3 jours sans « toujours inscrit »"
+          },
+          "googleEmail" : {
+            "type" : "string",
+            "description" : "Adresse Google déclarée, effacée 30 jours après la fin"
+          },
+          "completedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "droppedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "dropReason" : {
+            "type" : "string"
+          },
+          "replacesId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Participation dont ce testeur a repris la place"
+          }
+        },
+        "required" : [ "daysDone", "id", "joinedAt", "needsAttention", "status", "tester" ]
+      },
+      "PlaytestRemoveRequest" : {
+        "type" : "object",
+        "description" : "Retrait d'un testeur, avec un motif montré au testeur",
+        "properties" : {
+          "reason" : {
+            "type" : "string",
+            "example" : "Absent de la liste des testeurs de la Play Console",
+            "maxLength" : 300,
+            "minLength" : 5
+          }
+        },
+        "required" : [ "reason" ]
+      },
+      "PlaytestWithdrawRequest" : {
+        "type" : "object",
+        "description" : "Désistement, motif facultatif",
+        "properties" : {
+          "reason" : {
+            "type" : "string",
+            "example" : "Mon téléphone est en panne",
+            "maxLength" : 300,
+            "minLength" : 0
+          }
+        }
+      },
+      "PlaytestConfirmRequest" : {
+        "type" : "object",
+        "description" : "Déclaration d'installation",
+        "properties" : {
+          "googleEmail" : {
+            "type" : "string",
+            "format" : "email",
+            "description" : "Adresse du compte Google utilisé sur le téléphone, si le porteur gère sa liste de testeurs par adresse. Visible du porteur et de l'équipe seulement, effacée 30 jours après la fin.",
+            "example" : "aminata.diallo@gmail.com",
+            "maxLength" : 254,
+            "minLength" : 0
+          }
+        }
+      },
       "MarkReadRequest" : {
         "type" : "object",
         "properties" : {
@@ -8881,7 +10890,7 @@
         "properties" : {
           "type" : {
             "type" : "string",
-            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER", "PROJECT" ]
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "USER", "PROJECT", "PLAYTEST" ]
           },
           "id" : {
             "type" : "integer",
@@ -9398,6 +11407,35 @@
         },
         "required" : [ "challengeId", "id", "member", "repositoryUrl", "status", "submittedAt" ]
       },
+      "PlaytestNoteRequest" : {
+        "type" : "object",
+        "description" : "Suspension ou réactivation ; motif obligatoire pour suspendre",
+        "properties" : {
+          "note" : {
+            "type" : "string",
+            "example" : "Plusieurs testeurs signalent une application qui demande des accès abusifs",
+            "maxLength" : 300,
+            "minLength" : 0
+          }
+        }
+      },
+      "PlaytestReviewRequest" : {
+        "type" : "object",
+        "description" : "Décision de l'équipe ; motif obligatoire pour REJECT",
+        "properties" : {
+          "decision" : {
+            "type" : "string",
+            "enum" : [ "APPROVE", "REJECT" ]
+          },
+          "note" : {
+            "type" : "string",
+            "example" : "Le lien d'inscription ne mène pas à un test fermé",
+            "maxLength" : 300,
+            "minLength" : 0
+          }
+        },
+        "required" : [ "decision" ]
+      },
       "JobReviewRequest" : {
         "type" : "object",
         "description" : "Décision de l'équipe sur une offre en attente (JOB-4)",
@@ -9706,7 +11744,7 @@
           },
           "reason" : {
             "type" : "string",
-            "enum" : [ "QUESTION_ASKED", "QUESTION_UPVOTED", "ANSWER_UPVOTED", "ANSWER_ACCEPTED", "ACCEPTED_AN_ANSWER", "CHALLENGE_VALIDATED", "PROJECT_COMPLETED", "SPAM_REMOVED" ]
+            "enum" : [ "QUESTION_ASKED", "QUESTION_UPVOTED", "ANSWER_UPVOTED", "ANSWER_ACCEPTED", "ACCEPTED_AN_ANSWER", "CHALLENGE_VALIDATED", "PROJECT_COMPLETED", "PLAYTEST_COMPLETED", "SPAM_REMOVED" ]
           },
           "questionId" : {
             "type" : "integer",
@@ -9779,6 +11817,101 @@
           }
         },
         "required" : [ "items", "page", "size", "total" ]
+      },
+      "MyPlaytestEntry" : {
+        "type" : "object",
+        "description" : "Une de mes participations, avec sa campagne",
+        "properties" : {
+          "campaign" : {
+            "$ref" : "#/components/schemas/PlaytestSummary"
+          },
+          "participation" : {
+            "$ref" : "#/components/schemas/MyPlaytestParticipation"
+          }
+        },
+        "required" : [ "campaign", "participation" ]
+      },
+      "PageResponseMyPlaytestEntry" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/MyPlaytestEntry"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "PlaytestSummary" : {
+        "type" : "object",
+        "description" : "Campagne dans une liste",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "appName" : {
+            "type" : "string"
+          },
+          "packageName" : {
+            "type" : "string"
+          },
+          "platform" : {
+            "type" : "string",
+            "example" : "GOOGLE_PLAY"
+          },
+          "iconUrl" : {
+            "type" : "string"
+          },
+          "owner" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "DRAFT", "PENDING_REVIEW", "REJECTED", "ACTIVE", "SUSPENDED", "COMPLETED" ]
+          },
+          "testersTarget" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "requiredDays" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "spotsLeft" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Places libres ; 0 : campagne complète"
+          },
+          "progress" : {
+            "$ref" : "#/components/schemas/PlaytestProgress"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "startedAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "appName", "createdAt", "id", "owner", "packageName", "platform", "progress", "requiredDays", "spotsLeft", "status", "testersTarget" ]
       },
       "PageResponseMyModeratedContent" : {
         "type" : "object",
@@ -10253,6 +12386,33 @@
         },
         "required" : [ "items", "page", "size", "total" ]
       },
+      "PageResponsePlaytestSummary" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PlaytestSummary"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
       "Notification" : {
         "type" : "object",
         "properties" : {
@@ -10262,7 +12422,7 @@
           },
           "type" : {
             "type" : "string",
-            "enum" : [ "ANSWER_POSTED", "ANSWER_ACCEPTED", "VOTE_RECEIVED", "JOB_MATCH", "MISSION_MATCH", "APPLICATION_RECEIVED", "APPLICATION_DECIDED", "JOB_REVIEWED", "CHALLENGE_STARTED", "PROJECT_REQUEST_DECIDED", "CONTENT_HIDDEN", "CONTENT_RESTORED", "ACCOUNT_WARNED", "SUBMISSION_REVIEWED", "COMMUNITY_PROPOSAL_DECISION", "PROJECT_REQUEST_RECEIVED", "PROJECT_MEMBER_REMOVED", "PROJECT_CLOSED" ]
+            "enum" : [ "ANSWER_POSTED", "ANSWER_ACCEPTED", "VOTE_RECEIVED", "JOB_MATCH", "MISSION_MATCH", "APPLICATION_RECEIVED", "APPLICATION_DECIDED", "JOB_REVIEWED", "CHALLENGE_STARTED", "PROJECT_REQUEST_DECIDED", "CONTENT_HIDDEN", "CONTENT_RESTORED", "ACCOUNT_WARNED", "SUBMISSION_REVIEWED", "COMMUNITY_PROPOSAL_DECISION", "PROJECT_REQUEST_RECEIVED", "PROJECT_MEMBER_REMOVED", "PROJECT_CLOSED", "PLAYTEST_NEW_CAMPAIGN", "PLAYTEST_JOINED", "PLAYTEST_INSTALL_REMINDER", "PLAYTEST_STAY_REMINDER", "PLAYTEST_ENDING_SOON", "PLAYTEST_PARTICIPATION_DONE", "PLAYTEST_TESTER_LEFT", "PLAYTEST_TESTER_REPLACED", "PLAYTEST_CAMPAIGN_FULL", "PLAYTEST_CAMPAIGN_REVIEWED", "PLAYTEST_REMOVED" ]
           },
           "read" : {
             "type" : "boolean"
@@ -10292,7 +12452,7 @@
         "properties" : {
           "type" : {
             "type" : "string",
-            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "APPLICATION", "CHALLENGE", "PROJECT", "USER", "COMMUNITY_PROPOSAL" ]
+            "enum" : [ "QUESTION", "ANSWER", "JOB", "MISSION", "APPLICATION", "CHALLENGE", "PROJECT", "USER", "COMMUNITY_PROPOSAL", "PLAYTEST" ]
           },
           "id" : {
             "type" : "integer",
@@ -10781,6 +12941,158 @@
           }
         },
         "required" : [ "items", "page", "size", "total" ]
+      },
+      "AdminPlaytestSummary" : {
+        "type" : "object",
+        "description" : "Campagne dans le back office, avec ses signaux d'alerte",
+        "properties" : {
+          "campaign" : {
+            "$ref" : "#/components/schemas/PlaytestSummary"
+          },
+          "hidden" : {
+            "type" : "boolean"
+          },
+          "inactive" : {
+            "type" : "boolean",
+            "description" : "Active, aucune participation depuis 7 jours"
+          },
+          "stalled" : {
+            "type" : "boolean",
+            "description" : "Plus de 30 % des testeurs en cours « à confirmer »"
+          },
+          "reviewNote" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "campaign", "hidden", "inactive", "stalled" ]
+      },
+      "PageResponseAdminPlaytestSummary" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AdminPlaytestSummary"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "PageResponsePlaytestEvent" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PlaytestEvent"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
+      "PlaytestEvent" : {
+        "type" : "object",
+        "description" : "Ligne de l'historique d'une campagne",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "action" : {
+            "type" : "string",
+            "enum" : [ "CREATED", "EDITED", "SUBMITTED", "APPROVED", "AUTO_APPROVED", "REJECTED", "SUSPENDED", "REACTIVATED", "CLOSED", "COMPLETED", "JOINED", "REPLACED", "CONFIRMED", "VERIFIED", "WITHDRAWN", "EXPIRED", "REMOVED", "PARTICIPATION_COMPLETED" ]
+          },
+          "actor" : {
+            "$ref" : "#/components/schemas/AuthorSummary",
+            "description" : "Null pour une action automatique de la plateforme"
+          },
+          "participationId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "note" : {
+            "type" : "string"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "action", "createdAt", "id" ]
+      },
+      "PlaytestStats" : {
+        "type" : "object",
+        "description" : "Indicateurs du back office, calculés à la demande",
+        "properties" : {
+          "campaigns" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "pendingReview" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "active" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "completed" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "targetReached" : {
+            "type" : "integer",
+            "format" : "int64",
+            "description" : "Campagnes dont toutes les places ont été tenues 14 jours"
+          },
+          "owners" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "testers" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "participationsRunning" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "participationsCompleted" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        },
+        "required" : [ "active", "campaigns", "completed", "owners", "participationsCompleted", "participationsRunning", "pendingReview", "targetReached", "testers" ]
       },
       "PageResponseJobDetail" : {
         "type" : "object",
