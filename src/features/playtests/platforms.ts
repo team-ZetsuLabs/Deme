@@ -12,6 +12,10 @@ export type PlatformConfig = {
   testersMin: number;
   testersMax: number;
   testersDefault: number;
+  /** Durée du test par testeur, en jours. 0 en web (pas de décompte). */
+  daysMin: number;
+  daysMax: number;
+  daysDefault: number;
   /** DAILY : décompte quotidien ; NONE : pas de décompte (web). */
   tracking: 'DAILY' | 'NONE';
 };
@@ -27,6 +31,9 @@ export const PLATFORM_CONFIG: Record<PlaytestPlatform, PlatformConfig> = {
     testersMin: 12,
     testersMax: 100,
     testersDefault: 14,
+    daysMin: 14,
+    daysMax: 60,
+    daysDefault: 14,
     tracking: 'DAILY',
   },
   APP_STORE: {
@@ -35,6 +42,9 @@ export const PLATFORM_CONFIG: Record<PlaytestPlatform, PlatformConfig> = {
     testersMin: 1,
     testersMax: 100,
     testersDefault: 10,
+    daysMin: 1,
+    daysMax: 60,
+    daysDefault: 7,
     tracking: 'DAILY',
   },
   WEB: {
@@ -43,6 +53,9 @@ export const PLATFORM_CONFIG: Record<PlaytestPlatform, PlatformConfig> = {
     testersMin: 1,
     testersMax: 100,
     testersDefault: 10,
+    daysMin: 0,
+    daysMax: 0,
+    daysDefault: 0,
     tracking: 'NONE',
   },
 };

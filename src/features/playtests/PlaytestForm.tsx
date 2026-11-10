@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { PlaytestDetail, PlaytestPlatform, PlaytestRequest } from '../../api/types';
@@ -20,6 +20,7 @@ type PlaytestValues = {
   description: string;
   optInUrl: string;
   testersTarget: string;
+  requiredDays: string;
   desiredStart: string;
   instructions: string;
 };
@@ -49,6 +50,14 @@ const VALIDATORS: Validators<PlaytestValues> = {
       ? null
       : 'playtests.new.errors.testersTarget';
   },
+  requiredDays: (v, vals) => {
+    const c = PLATFORM_CONFIG[asPlatform(vals.platform)];
+    if (c.tracking === 'NONE') return null;
+    const n = Number(v);
+    return Number.isInteger(n) && n >= c.daysMin && n <= c.daysMax
+      ? null
+      : 'playtests.new.errors.requiredDays';
+  },
   desiredStart: () => null,
   instructions: () => null,
 };
@@ -60,6 +69,7 @@ const IDS: Record<keyof PlaytestValues, string> = {
   description: 'pt-description',
   optInUrl: 'pt-opt-in',
   testersTarget: 'pt-testers',
+  requiredDays: 'pt-days',
   desiredStart: 'pt-start',
   instructions: 'pt-instructions',
 };
@@ -70,7 +80,7 @@ export type PlaytestFormProps = {
   onSaved: (playtest: PlaytestDetail) => void;
 };
 
-/** Créer ou modifier une campagne de test fermé (TST-1, TST-7). Toujours créée en brouillon. */
+/** Créer ou modifier une campagne de test fermé (TST-1, TST-7). */
 export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
   const { t } = useTranslation();
   const initialPlatform: PlaytestPlatform = initial?.platform ?? 'GOOGLE_PLAY';
@@ -84,6 +94,7 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
       testersTarget: String(
         initial?.testersTarget ?? PLATFORM_CONFIG[initialPlatform].testersDefault,
       ),
+      requiredDays: String(initial?.requiredDays ?? PLATFORM_CONFIG[initialPlatform].daysDefault),
       desiredStart: initial?.desiredStart ?? '',
       instructions: initial?.instructions ?? '',
     },
@@ -91,13 +102,13 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
   );
   const submitError = useSubmitError(form.setServerErrors);
   const [busy, setBusy] = useState(false);
+  // Quel bouton a été cliqué : publier (défaut) ou garder en brouillon. Lu dans onSubmit.
+  const publishRef = useRef(true);
   const { values, errors } = form;
   const platform = asPlatform(values.platform);
   const config = PLATFORM_CONFIG[platform];
 
-  // Un seul setValue : enchaîner plusieurs setValue lirait des valeurs périmées et
-  // écraserait le changement. L'identifiant masqué en web n'est de toute façon pas
-  // envoyé (packageName null à la soumission), et les bornes de testeurs s'adaptent.
+  // Un seul setValue : enchaîner plusieurs setValue lirait des valeurs périmées.
   const onPlatform = (next: PlaytestPlatform) => form.setValue('platform', next);
 
   const onSubmit = async (e: FormEvent) => {
@@ -110,7 +121,7 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
     }
     setBusy(true);
     try {
-      // packageName est ignoré par le serveur en web : on ne l'envoie que s'il s'applique.
+      // packageName et requiredDays sont ignorés en web : on ne les envoie que s'ils s'appliquent.
       const body: PlaytestRequest = {
         platform,
         appName: values.appName.trim(),
@@ -118,12 +129,16 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
         optInUrl: values.optInUrl.trim(),
         testersTarget: Number(values.testersTarget),
         ...(config.packageKind ? { packageName: values.packageName.trim() } : {}),
+        ...(config.tracking === 'DAILY' ? { requiredDays: Number(values.requiredDays) } : {}),
         ...(values.desiredStart ? { desiredStart: values.desiredStart } : {}),
         ...(values.instructions.trim() ? { instructions: values.instructions.trim() } : {}),
       };
-      onSaved(
-        initial ? await playtestsApi.update(initial.id, body) : await playtestsApi.create(body),
-      );
+      let saved = initial
+        ? await playtestsApi.update(initial.id, body)
+        : await playtestsApi.create(body);
+      // Publier directement : le back crée un brouillon, submit le met ACTIVE ou en validation.
+      if (!initial && publishRef.current) saved = await playtestsApi.submit(saved.id);
+      onSaved(saved);
     } catch (error) {
       submitError.report(error);
       setBusy(false);
@@ -235,14 +250,31 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
             {...bind('testersTarget', true)}
           />
         </Field>
-        <Field
-          id={IDS.desiredStart}
-          label={t('playtests.new.desiredStart')}
-          error={err('desiredStart')}
-        >
-          <input type="date" {...bind('desiredStart')} />
-        </Field>
+        {config.tracking === 'DAILY' && (
+          <Field
+            id={IDS.requiredDays}
+            label={t('playtests.new.requiredDays')}
+            hint={t('playtests.new.requiredDaysHint', { min: config.daysMin, max: config.daysMax })}
+            error={err('requiredDays')}
+          >
+            <input
+              type="number"
+              inputMode="numeric"
+              min={config.daysMin}
+              max={config.daysMax}
+              {...bind('requiredDays', true)}
+            />
+          </Field>
+        )}
       </div>
+
+      <Field
+        id={IDS.desiredStart}
+        label={t('playtests.new.desiredStart')}
+        error={err('desiredStart')}
+      >
+        <input type="date" {...bind('desiredStart')} />
+      </Field>
 
       <Field
         id={IDS.instructions}
@@ -257,16 +289,39 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
         {config.tracking === 'NONE' ? t('playtests.new.noticeWeb') : t('playtests.new.notice')}
       </p>
       <div className={styles.actions}>
-        {initial && (
-          <Link to={`/playtests/${initial.id}`} className={buttonClass({ variant: 'secondary' })}>
-            {t('settings.cancel')}
-          </Link>
+        {initial ? (
+          <>
+            <Link to={`/playtests/${initial.id}`} className={buttonClass({ variant: 'secondary' })}>
+              {t('settings.cancel')}
+            </Link>
+            <Button type="submit" variant="primary" busy={busy}>
+              {busy ? t('playtests.new.busy') : t('playtests.edit.submit')}
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              type="submit"
+              variant="secondary"
+              busy={busy}
+              onClick={() => {
+                publishRef.current = false;
+              }}
+            >
+              {t('playtests.new.saveDraft')}
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              busy={busy}
+              onClick={() => {
+                publishRef.current = true;
+              }}
+            >
+              {busy ? t('playtests.new.busy') : t('playtests.new.publish')}
+            </Button>
+          </>
         )}
-        <Button type="submit" variant="primary" busy={busy}>
-          {busy
-            ? t('playtests.new.busy')
-            : t(initial ? 'playtests.edit.submit' : 'playtests.new.submit')}
-        </Button>
       </div>
     </form>
   );

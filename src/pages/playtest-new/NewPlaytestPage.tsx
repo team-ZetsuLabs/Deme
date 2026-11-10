@@ -18,7 +18,13 @@ export default function NewPlaytestPage() {
       <p className={styles.lead}>{t('playtests.new.lead')}</p>
       <PlaytestForm
         onSaved={(playtest) => {
-          toast(t('playtests.new.saved'));
+          const key =
+            playtest.status === 'ACTIVE'
+              ? 'playtests.new.published'
+              : playtest.status === 'PENDING_REVIEW'
+                ? 'playtests.new.pendingReview'
+                : 'playtests.new.draftSaved';
+          toast(t(key));
           navigate(`/playtests/${playtest.id}`, { replace: true });
         }}
       />

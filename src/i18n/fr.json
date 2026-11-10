@@ -129,10 +129,18 @@
           "APP_STORE": "Entrez un lien TestFlight valide (testflight.apple.com/join/…).",
           "WEB": "Entrez une adresse https:// valide."
         },
-        "testersTarget": "Indiquez un nombre de testeurs entre 12 et 100."
+        "testersTarget": "Indiquez un nombre de testeurs entre 12 et 100.",
+        "requiredDays": "Indiquez une durée valide pour cette plateforme."
       },
       "platform": "Plateforme",
-      "noticeWeb": "Campagne web : pas de décompte de jours, mais chaque campagne web est relue par l’équipe avant publication."
+      "noticeWeb": "Campagne web : pas de décompte de jours, mais chaque campagne web est relue par l’équipe avant publication.",
+      "publish": "Publier la campagne",
+      "saveDraft": "Enregistrer comme brouillon",
+      "requiredDays": "Durée du test (jours)",
+      "requiredDaysHint": "De {{min}} à {{max}} jours par testeur.",
+      "published": "Campagne publiée",
+      "pendingReview": "Campagne envoyée à l’équipe pour validation",
+      "draftSaved": "Brouillon enregistré"
     },
     "edit": {
       "pageTitle": "Modifier la campagne",

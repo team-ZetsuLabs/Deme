@@ -110,24 +110,44 @@ describe('créer une campagne (TST-1, TST-7)', () => {
       '/playtests/new',
     );
 
-  it('refuse un identifiant Android invalide puis crée le brouillon', async () => {
+  it('refuse un identifiant invalide, puis publie (crée + envoie) la campagne', async () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(demoMe());
     const create = vi.spyOn(playtestsApi, 'create');
+    const submit = vi.spyOn(playtestsApi, 'submit');
     renderNew();
 
     set(/^Nom de l'application/, 'Tontine Cash');
     set(/^Identifiant de l'application/, 'pas valide');
     set(/^Description/, 'Application de tontine avec Orange Money et Wave.');
     set(/^Lien d'inscription/, 'https://play.google.com/apps/testing/sn.tontinecash.app');
-    fireEvent.click(screen.getByRole('button', { name: 'Créer le brouillon' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Publier la campagne' }));
     expect(await screen.findByText(/identifiant Android valide/)).toBeTruthy();
     expect(create).not.toHaveBeenCalled();
 
     set(/^Identifiant de l'application/, 'sn.tontinecash.app');
-    fireEvent.click(screen.getByRole('button', { name: 'Créer le brouillon' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Publier la campagne' }));
     await waitFor(() => expect(create).toHaveBeenCalled());
-    expect(create.mock.calls[0][0].platform).toBe('GOOGLE_PLAY');
+    const body = create.mock.calls[0][0];
+    expect(body.platform).toBe('GOOGLE_PLAY');
+    expect(body.requiredDays).toBe(14);
+    // Publier = créer puis soumettre, sans repasser par le brouillon.
+    await waitFor(() => expect(submit).toHaveBeenCalled());
     expect(await screen.findByRole('heading', { name: 'Campagne' })).toBeTruthy();
+  });
+
+  it('peut aussi enregistrer comme brouillon, sans publier', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe());
+    const create = vi.spyOn(playtestsApi, 'create');
+    const submit = vi.spyOn(playtestsApi, 'submit');
+    renderNew();
+
+    set(/^Nom de l'application/, 'Tontine Cash');
+    set(/^Identifiant de l'application/, 'sn.tontinecash.app');
+    set(/^Description/, 'Application de tontine avec Orange Money et Wave.');
+    set(/^Lien d'inscription/, 'https://play.google.com/apps/testing/sn.tontinecash.app');
+    fireEvent.click(screen.getByRole('button', { name: 'Enregistrer comme brouillon' }));
+    await waitFor(() => expect(create).toHaveBeenCalled());
+    expect(submit).not.toHaveBeenCalled();
   });
 
   it('en plateforme web, masque l’identifiant et crée sans package', async () => {
@@ -141,7 +161,7 @@ describe('créer une campagne (TST-1, TST-7)', () => {
     set(/^Nom de l'application/, 'SamaDaara');
     set(/^Description/, 'Plateforme web de suivi scolaire pour les parents.');
     set(/^Lien d'inscription/, 'https://samadaara.sn');
-    fireEvent.click(screen.getByRole('button', { name: 'Créer le brouillon' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Publier la campagne' }));
     await waitFor(() => expect(create).toHaveBeenCalled());
     const body = create.mock.calls[0][0];
     expect(body.platform).toBe('WEB');

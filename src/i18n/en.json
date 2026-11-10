@@ -129,10 +129,18 @@
           "APP_STORE": "Enter a valid TestFlight link (testflight.apple.com/join/…).",
           "WEB": "Enter a valid https:// address."
         },
-        "testersTarget": "Enter a number of testers between 12 and 100."
+        "testersTarget": "Enter a number of testers between 12 and 100.",
+        "requiredDays": "Enter a valid length for this platform."
       },
       "platform": "Platform",
-      "noticeWeb": "Web campaign: no day counter, but every web campaign is reviewed by the team before publishing."
+      "noticeWeb": "Web campaign: no day counter, but every web campaign is reviewed by the team before publishing.",
+      "publish": "Publish the campaign",
+      "saveDraft": "Save as draft",
+      "requiredDays": "Test length (days)",
+      "requiredDaysHint": "From {{min}} to {{max}} days per tester.",
+      "published": "Campaign published",
+      "pendingReview": "Campaign sent to the team for review",
+      "draftSaved": "Draft saved"
     },
     "edit": {
       "pageTitle": "Edit the campaign",
