@@ -40,13 +40,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
- * Tests fermés Google Play, côté membre : campagnes (TST-1), participation et suivi des 14 jours (TST-2, TST-3).
- * Zetsu organise l'entraide mais ne vérifie rien chez Google : les compteurs sont des déclarations.
+ * Tests fermés, côté membre : campagnes (TST-1), participation et suivi des jours (TST-2, TST-3), sur Google Play,
+ * l'App Store ou le web (TST-7). Zetsu organise l'entraide mais ne vérifie rien chez les stores : les compteurs sont
+ * des déclarations.
  */
 @Service
 public class PlaytestService {
@@ -63,11 +66,12 @@ public class PlaytestService {
     private final NotificationService notifications;
     private final AvatarStorage images;
     private final PlaytestClock clock;
+    private final PlaytestJobs jobs;
 
     public PlaytestService(TestCampaignRepository campaigns, TestParticipationRepository participations,
                            PlaytestEvents events, UserRepository users, TagRepository tags, MarkdownRenderer markdown,
                            ReputationService reputation, NotificationService notifications, AvatarStorage images,
-                           PlaytestClock clock) {
+                           PlaytestClock clock, PlaytestJobs jobs) {
         this.campaigns = campaigns;
         this.participations = participations;
         this.events = events;
@@ -78,6 +82,7 @@ public class PlaytestService {
         this.notifications = notifications;
         this.images = images;
         this.clock = clock;
+        this.jobs = jobs;
     }
 
     // ---------------------------------------------------------------- campagnes
@@ -142,7 +147,8 @@ public class PlaytestService {
         requirePackageFree(c);
         Instant now = clock.now();
         User owner = users.findById(me.id()).orElseThrow();
-        if (reputation.levelOf(owner.getReputation()).atLeast(PlaytestRules.TRUSTED_LEVEL)) {
+        boolean trusted = reputation.levelOf(owner.getReputation()).atLeast(PlaytestRules.TRUSTED_LEVEL);
+        if (trusted && !PlaytestRules.ALWAYS_REVIEWED.contains(c.getPlatform())) {
             c.setStatus(CampaignStatus.ACTIVE, now);
             events.log(c.getId(), null, me.id(), Action.AUTO_APPROVED, null, now);
             campaigns.flush();
@@ -154,7 +160,10 @@ public class PlaytestService {
         return detail(c, me);
     }
 
-    /** Clôture par le porteur : plus de nouvelles participations ; celles en cours vont au bout de leur décompte. */
+    /**
+     * Clôture par le porteur : plus de nouvelles participations ; celles en cours vont au bout de leur décompte.
+     * Sans décompte (web), les testeurs en cours terminent tout de suite.
+     */
     @Transactional
     public PlaytestDetail close(Long id, ZetsuPrincipal me) {
         TestCampaign c = loadOwned(id, me);
@@ -164,6 +173,7 @@ public class PlaytestService {
         Instant now = clock.now();
         c.setStatus(CampaignStatus.COMPLETED, now);
         events.log(c.getId(), null, me.id(), Action.CLOSED, null, now);
+        jobs.finishUntracked(c, now);
         return detail(c, me);
     }
 
@@ -267,6 +277,9 @@ public class PlaytestService {
     @Transactional
     public PlaytestDetail checkIn(Long id, ZetsuPrincipal me) {
         TestParticipation p = mine(id, me);
+        if (!p.tracked()) {
+            throw ApiException.conflict("CHECK_IN_NOT_TRACKED", "Cette campagne ne compte pas les jours");
+        }
         if (!p.getStatus().counting()) {
             throw ApiException.conflict("PARTICIPATION_NOT_RUNNING", "Aucun décompte en cours sur cette campagne");
         }
@@ -355,15 +368,18 @@ public class PlaytestService {
 
     // ---------------------------------------------------------------- outils partagés avec le back office
 
-    /** PLAYTEST_NEW_CAMPAIGN : membres qui ont une technologie mobile dans leur stack. */
+    /** PLAYTEST_NEW_CAMPAIGN : membres qui ont une technologie de la plateforme dans leur stack. */
     void announce(TestCampaign c) {
-        List<Long> tagIds = tags.findByNameIn(PlaytestRules.MOBILE_TAGS).stream().map(Tag::getId).toList();
+        List<Long> tagIds = tags.findByNameIn(PlaytestRules.ANNOUNCE_TAGS.get(c.getPlatform())).stream()
+                .map(Tag::getId).toList();
         notifications.notifyStackMatch(NotificationType.PLAYTEST_NEW_CAMPAIGN, c.getOwner().getId(),
                 c.getOwner().getId(), tagIds, target(c));
     }
 
+    /** Une seule campagne en cours par application et par plateforme. Rien à vérifier pour le web. */
     void requirePackageFree(TestCampaign c) {
-        if (campaigns.packageRunningElsewhere(c.getPackageName(), c.getId())) {
+        if (c.getPackageName() != null
+                && campaigns.packageRunningElsewhere(c.getPlatform(), c.getPackageName(), c.getId())) {
             throw ApiException.conflict("PACKAGE_ALREADY_RUNNING",
                     "Une campagne est déjà en cours pour cette application");
         }
@@ -430,12 +446,60 @@ public class PlaytestService {
         return AuthorSummary.from(u, reputation.levelOf(u.getReputation()));
     }
 
+    /** Règles propres à chaque plateforme (TST-7), renvoyées comme des erreurs de validation des champs. */
     private void apply(TestCampaign c, PlaytestRequest req, Instant now) {
+        Platform platform = req.platform();
+        PlaytestRules.Limits limits = PlaytestRules.LIMITS.get(platform);
+        Map<String, String> errors = new LinkedHashMap<>();
+        String packageName = req.packageName() == null || req.packageName().isBlank() ? null
+                : req.packageName().trim();
+        String optInUrl = req.optInUrl().trim();
+        switch (platform) {
+            case GOOGLE_PLAY -> {
+                if (packageName == null) {
+                    errors.put("packageName", "Obligatoire");
+                } else if (!packageName.matches(PlaytestDtos.PACKAGE_NAME)) {
+                    errors.put("packageName", "Identifiant d'application attendu (com.exemple.app)");
+                }
+                if (!optInUrl.matches(PlaytestDtos.OPT_IN_URL)) {
+                    errors.put("optInUrl",
+                            "Lien https://play.google.com/apps/testing/… ou https://groups.google.com/… attendu");
+                }
+            }
+            case APP_STORE -> {
+                if (packageName == null) {
+                    errors.put("packageName", "Obligatoire");
+                } else if (!packageName.matches(PlaytestDtos.BUNDLE_ID)) {
+                    errors.put("packageName", "Bundle ID attendu (com.exemple.app)");
+                }
+                if (!optInUrl.matches(PlaytestDtos.TESTFLIGHT_URL)) {
+                    errors.put("optInUrl", "Lien public https://testflight.apple.com/join/… attendu");
+                }
+            }
+            case WEB -> {
+                packageName = null;
+                if (!optInUrl.matches(PlaytestDtos.WEB_URL)) {
+                    errors.put("optInUrl", "Adresse https://… du site à tester attendue");
+                }
+            }
+        }
+        int target = req.testersTarget() == null ? limits.defaultTesters() : req.testersTarget();
+        if (target < limits.minTesters()) {
+            errors.put("testersTarget", limits.minTesters() + " testeurs au moins");
+        }
+        int days = platform.tracking() == Tracking.NONE ? 0
+                : req.requiredDays() == null ? limits.defaultDays() : req.requiredDays();
+        if (days < limits.minDays() || days > limits.maxDays()) {
+            errors.put("requiredDays", "Entre " + limits.minDays() + " et " + limits.maxDays() + " jours");
+        }
+        if (!errors.isEmpty()) {
+            throw ApiException.invalidFields(errors);
+        }
         String instructions = req.instructions() == null || req.instructions().isBlank() ? null
                 : req.instructions().trim();
-        c.edit(req.appName().trim(), req.packageName().trim(), req.description(),
-                markdown.toSafeHtml(req.description()), req.optInUrl().trim(),
-                req.testersTarget() == null ? 14 : req.testersTarget(), req.desiredStart(), instructions, now);
+        c.edit(platform, req.appName().trim(), packageName, req.description(),
+                markdown.toSafeHtml(req.description()), optInUrl, target, days, req.desiredStart(), instructions,
+                now);
     }
 
     // ---------------------------------------------------------------- vues
@@ -456,7 +520,8 @@ public class PlaytestService {
     }
 
     PlaytestSummary summary(TestCampaign c, List<TestParticipation> all, Instant now) {
-        return new PlaytestSummary(c.getId(), c.getAppName(), c.getPackageName(), c.getPlatform(), c.getIconUrl(),
+        return new PlaytestSummary(c.getId(), c.getAppName(), c.getPackageName(), c.getPlatform(), c.getTracking(),
+                c.getIconUrl(),
                 author(c.getOwner()), c.getStatus(), c.getTestersTarget(), c.getRequiredDays(), spotsLeft(c, all),
                 progress(c, all, now), c.getCreatedAt(), c.getStartedAt());
     }
@@ -474,7 +539,8 @@ public class PlaytestService {
         int spots = spotsLeft(c, all);
         boolean canJoin = me != null && !owner && mine.isEmpty() && c.getStatus() == CampaignStatus.ACTIVE
                 && !c.isHidden() && spots > 0;
-        return new PlaytestDetail(c.getId(), c.getAppName(), c.getPackageName(), c.getPlatform(), c.getIconUrl(),
+        return new PlaytestDetail(c.getId(), c.getAppName(), c.getPackageName(), c.getPlatform(), c.getTracking(),
+                c.getIconUrl(),
                 c.getDescriptionMarkdown(), c.getDescriptionHtml(), insider ? c.getOptInUrl() : null,
                 insider ? c.getInstructions() : null, author(c.getOwner()), c.getStatus(),
                 owner || staff ? c.getReviewNote() : null, c.getTestersTarget(), c.getRequiredDays(), spots,
@@ -519,20 +585,31 @@ public class PlaytestService {
                 days += p.daysDone(now);
             }
         }
-        long goal = (long) c.getTestersTarget() * c.getRequiredDays();
-        int percent = goal == 0 ? 0 : (int) Math.min(100, days * 100 / goal);
+        int percent;
+        if (c.getTracking() == Tracking.NONE) {
+            // Sans décompte : part des places tenues par une installation déclarée.
+            long installed = all.stream().filter(p -> p.getStatus().counting()
+                    || p.getStatus() == ParticipationStatus.COMPLETED).count();
+            percent = c.getTestersTarget() == 0 ? 0 : (int) Math.min(100, installed * 100 / c.getTestersTarget());
+        } else {
+            long goal = (long) c.getTestersTarget() * c.getRequiredDays();
+            percent = goal == 0 ? 0 : (int) Math.min(100, days * 100 / goal);
+        }
         return new Progress(percent, counts.getOrDefault(ParticipationStatus.COMPLETED, 0),
                 counts.getOrDefault(ParticipationStatus.VERIFIED, 0),
                 counts.getOrDefault(ParticipationStatus.CONFIRMED, 0),
                 counts.getOrDefault(ParticipationStatus.JOINED, 0));
     }
 
-    /** Toutes les places prises par des installations déclarées : fin du dernier décompte. Null sinon. */
+    /**
+     * Toutes les places prises par des installations déclarées : fin du dernier décompte. Null sinon, et toujours
+     * null sans décompte (web).
+     */
     private static Instant estimatedEnd(List<TestParticipation> all, int spots) {
         if (spots > 0 || all.stream().anyMatch(p -> p.getStatus() == ParticipationStatus.JOINED)) {
             return null;
         }
         return all.stream().filter(p -> p.getStatus().counting()).map(TestParticipation::getEndsAt)
-                .max(Instant::compareTo).orElse(null);
+                .filter(Objects::nonNull).max(Instant::compareTo).orElse(null);
     }
 }

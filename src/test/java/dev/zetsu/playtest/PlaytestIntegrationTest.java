@@ -54,6 +54,7 @@ class PlaytestIntegrationTest extends IntegrationTest {
 
     private Map<String, Object> campaign(String packageName, int target) {
         Map<String, Object> req = new HashMap<>();
+        req.put("platform", "GOOGLE_PLAY");
         req.put("appName", "Tontine Cash");
         req.put("packageName", packageName);
         req.put("description", DESCRIPTION);
@@ -365,6 +366,163 @@ class PlaytestIntegrationTest extends IntegrationTest {
         action(owner, "/api/v1/playtests/{id}/close", id).andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("COMPLETED"));
         join(stranger, id).andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("PLAYTEST_NOT_ACTIVE"));
+    }
+
+    // ---------------------------------------------------------------- TST-7 : App Store et web
+
+    private Map<String, Object> campaignOn(String platform, String packageName, String optInUrl, Integer target) {
+        Map<String, Object> req = campaign(packageName, 14);
+        req.put("platform", platform);
+        req.put("optInUrl", optInUrl);
+        if (packageName == null) {
+            req.remove("packageName");
+        }
+        if (target == null) {
+            req.remove("testersTarget");
+        } else {
+            req.put("testersTarget", target);
+        }
+        return req;
+    }
+
+    private ResultActions submitForm(Member owner, Map<String, Object> req) throws Exception {
+        return mvc.perform(post("/api/v1/playtests").with(csrf()).session(owner.session())
+                .contentType(MediaType.APPLICATION_JSON).content(body(req)));
+    }
+
+    @Test
+    void chaquePlateformeASesRegles() throws Exception {
+        Member owner = register("Nana", "GH");
+
+        Map<String, Object> noPlatform = campaign("gh.hubtel.pay", 14);
+        noPlatform.remove("platform");
+        submitForm(owner, noPlatform).andExpect(status().isBadRequest()).andExpect(jsonPath("$.fields.platform").exists());
+
+        // Google Play : 14 jours au moins.
+        Map<String, Object> shortPlay = campaign("gh.hubtel.pay", 14);
+        shortPlay.put("requiredDays", 7);
+        submitForm(owner, shortPlay).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fields.requiredDays").exists());
+
+        // App Store : Bundle ID et lien TestFlight, pas un lien Google Play.
+        submitForm(owner, campaignOn("APP_STORE", "gh.hubtel.pay", "https://play.google.com/apps/testing/gh.hubtel.pay",
+                3)).andExpect(status().isBadRequest()).andExpect(jsonPath("$.fields.optInUrl").exists());
+        submitForm(owner, campaignOn("APP_STORE", null, "https://testflight.apple.com/join/AbC123", 3))
+                .andExpect(status().isBadRequest()).andExpect(jsonPath("$.fields.packageName").exists());
+
+        // Web : https seulement, jamais javascript: ni http.
+        submitForm(owner, campaignOn("WEB", null, "javascript:alert(1)", 5)).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fields.optInUrl").exists());
+        submitForm(owner, campaignOn("WEB", null, "http://hubtel.example.com", 5)).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fields.optInUrl").exists());
+
+        // Valeurs par défaut de chaque plateforme ; l'identifiant et les jours sont ignorés pour le web.
+        submitForm(owner, campaignOn("APP_STORE", "gh.hubtel.pay", "https://testflight.apple.com/join/AbC123", null))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.platform").value("APP_STORE"))
+                .andExpect(jsonPath("$.tracking").value("DAILY"))
+                .andExpect(jsonPath("$.testersTarget").value(10))
+                .andExpect(jsonPath("$.requiredDays").value(7));
+        Map<String, Object> web = campaignOn("WEB", "gh.hubtel.pay", "https://beta.hubtel.example.com/app", null);
+        web.put("requiredDays", 30);
+        submitForm(owner, web).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.platform").value("WEB"))
+                .andExpect(jsonPath("$.tracking").value("NONE"))
+                .andExpect(jsonPath("$.packageName").value(nullValue()))
+                .andExpect(jsonPath("$.testersTarget").value(10))
+                .andExpect(jsonPath("$.requiredDays").value(0));
+    }
+
+    @Test
+    void uneApplicationIosSuitSesPropresJours() throws Exception {
+        Member owner = register("Ngozi", "NG");
+        withReputation(owner, 50);
+        // Même identifiant sur Google Play et sur l'App Store : deux campagnes en cours, une par plateforme.
+        active(owner, "ng.kuda.split", 12);
+        Map<String, Object> ios = campaignOn("APP_STORE", "ng.kuda.split", "https://testflight.apple.com/join/Kd7Xq2",
+                2);
+        ios.put("requiredDays", 5);
+        long id = read(submitForm(owner, ios).andExpect(status().isCreated()).andReturn()).get("id").asLong();
+        action(owner, "/api/v1/playtests/{id}/submit", id).andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("ACTIVE"));
+
+        Member tester = register("Tunde");
+        join(tester, id).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.optInUrl").value("https://testflight.apple.com/join/Kd7Xq2"));
+        advance(Duration.ZERO);
+        action(tester, "/api/v1/playtests/{id}/participations/me/confirm", id).andExpect(status().isOk())
+                .andExpect(jsonPath("$.myParticipation.requiredDays").value(5))
+                .andExpect(jsonPath("$.myParticipation.endsAt").exists());
+        advance(Duration.ofDays(5).plusHours(1));
+        jobs.run();
+        mvc.perform(get("/api/v1/playtests/{id}", id).session(tester.session()))
+                .andExpect(jsonPath("$.myParticipation.status").value("COMPLETED"))
+                .andExpect(jsonPath("$.myParticipation.daysDone").value(5));
+    }
+
+    @Test
+    void uneApplicationWebEstRelueEtSesTesteursTerminentALaCloture() throws Exception {
+        Member owner = register("Sipho", "ZA");
+        withReputation(owner, 500);
+        Member moderator = withRole(register("Thandi"), "MODERATOR");
+        long id = read(submitForm(owner, campaignOn("WEB", null, "https://beta.stokvel.example.co.za", 5))
+                .andExpect(status().isCreated()).andReturn()).get("id").asLong();
+
+        // Le lien mène hors des stores : relue même pour un porteur de confiance.
+        action(owner, "/api/v1/playtests/{id}/submit", id).andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("PENDING_REVIEW"));
+        send(moderator, "/api/v1/admin/playtests/{id}/review", Map.of("decision", "APPROVE"), id)
+                .andExpect(status().isOk()).andExpect(jsonPath("$.status").value("ACTIVE"));
+
+        Member early = register("Lerato");
+        Member late = register("Bongani");
+        Member idle = register("Zanele");
+        join(early, id).andExpect(status().isCreated());
+        advance(Duration.ZERO);
+        action(early, "/api/v1/playtests/{id}/participations/me/confirm", id).andExpect(status().isOk())
+                .andExpect(jsonPath("$.myParticipation.endsAt").value(nullValue()))
+                .andExpect(jsonPath("$.myParticipation.requiredDays").value(0));
+        action(early, "/api/v1/playtests/{id}/participations/me/check-in", id)
+                .andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("CHECK_IN_NOT_TRACKED"));
+
+        // Ni fin automatique ni rappel, même après des semaines. Une heure de marge : PostgreSQL arrondit les dates à
+        // la microseconde.
+        advance(Duration.ofDays(20).plusHours(1));
+        jobs.run();
+        assertThat(notificationsOf(early)).doesNotContain("PLAYTEST_STAY_REMINDER", "PLAYTEST_PARTICIPATION_DONE");
+        mvc.perform(get("/api/v1/playtests/{id}", id).session(early.session()))
+                .andExpect(jsonPath("$.myParticipation.status").value("CONFIRMED"))
+                .andExpect(jsonPath("$.myParticipation.daysDone").value(20))
+                .andExpect(jsonPath("$.myParticipation.needsAttention").value(false))
+                .andExpect(jsonPath("$.progress.percent").value(20));
+
+        join(late, id).andExpect(status().isCreated());
+        action(late, "/api/v1/playtests/{id}/participations/me/confirm", id).andExpect(status().isOk());
+        join(idle, id).andExpect(status().isCreated());
+        advance(Duration.ofHours(2));
+
+        // Clôture : installé depuis un jour, il termine et gagne ses points ; les autres partent avec un motif.
+        action(owner, "/api/v1/playtests/{id}/close", id).andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("COMPLETED"))
+                .andExpect(jsonPath("$.progress.completed").value(1));
+        mvc.perform(get("/api/v1/playtests/{id}", id).session(early.session()))
+                .andExpect(jsonPath("$.myParticipation.status").value("COMPLETED"))
+                .andExpect(jsonPath("$.myParticipation.daysDone").value(20));
+        mvc.perform(get("/api/v1/playtests/{id}", id).session(late.session()))
+                .andExpect(jsonPath("$.myParticipation.status").value("DROPPED"))
+                .andExpect(jsonPath("$.myParticipation.dropReason").value(PlaytestRules.CLOSED_TOO_SOON_REASON));
+        mvc.perform(get("/api/v1/playtests/{id}", id).session(idle.session()))
+                .andExpect(jsonPath("$.myParticipation.dropReason")
+                        .value(PlaytestRules.CLOSED_BEFORE_INSTALL_REASON));
+        Integer points = jdbc.queryForObject("select reputation from users where id = ?", Integer.class, early.id());
+        assertThat(points).isEqualTo(5);
+        Integer latePoints = jdbc.queryForObject("select reputation from users where id = ?", Integer.class,
+                late.id());
+        assertThat(latePoints).isZero();
+
+        // La tâche horaire ne repasse pas sur une campagne déjà soldée.
+        jobs.run();
+        assertThat(notificationsOf(early)).containsOnlyOnce("PLAYTEST_PARTICIPATION_DONE");
     }
 
     @Test

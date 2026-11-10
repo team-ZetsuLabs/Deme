@@ -43,12 +43,13 @@ import java.time.Duration;
 import java.util.List;
 
 /**
- * Tests fermés Google Play (TST-1 à TST-4) : un développeur réunit 12 testeurs pendant 14 jours avant de publier.
- * Zetsu ne peut rien vérifier chez Google : les compteurs sont des déclarations, jamais une conformité.
+ * Tests fermés (TST-1 à TST-4, TST-7) : un développeur réunit des testeurs avant de publier, sur Google Play, l'App
+ * Store ou le web.
+ * Zetsu ne peut rien vérifier chez les stores : les compteurs sont des déclarations, jamais une conformité.
  */
 @RestController
 @RequestMapping("/api/v1")
-@Tag(name = "playtests", description = "Tests fermés Google Play : trouver des testeurs, tester les applications des autres")
+@Tag(name = "playtests", description = "Tests fermés (Google Play, App Store, web) : trouver des testeurs, tester les applications des autres")
 public class PlaytestController {
 
     private final PlaytestService playtests;
@@ -98,7 +99,7 @@ public class PlaytestController {
 
     @PostMapping("/playtests")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Créer une campagne (TST-1)", description = "Toujours en brouillon : POST /playtests/{id}/submit pour la publier.")
+    @Operation(summary = "Créer une campagne (TST-1)", description = "Toujours en brouillon : POST /playtests/{id}/submit pour la publier. Règles de chaque plateforme : voir le schéma PlaytestRequest.")
     @ApiResponse(responseCode = "201", description = "Brouillon créé")
     @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
@@ -156,7 +157,8 @@ public class PlaytestController {
     @PostMapping("/playtests/{id}/submit")
     @Operation(summary = "Publier sa campagne", description = """
             Un porteur de niveau Membre (50 points) ou plus est publié tout de suite (ACTIVE) ; sinon la campagne \
-            attend l'équipe (PENDING_REVIEW). Une seule campagne en cours par application.""")
+            attend l'équipe (PENDING_REVIEW). Une campagne WEB attend toujours l'équipe. Une seule campagne en cours \
+            par application et par plateforme.""")
     @ApiResponse(responseCode = "200", description = "Campagne envoyée")
     @ApiResponse(responseCode = "403", description = "NOT_PLAYTEST_OWNER", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "404", description = "PLAYTEST_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
@@ -166,7 +168,7 @@ public class PlaytestController {
     }
 
     @PostMapping("/playtests/{id}/close")
-    @Operation(summary = "Clôturer sa campagne", description = "Plus de nouveaux testeurs ; ceux en cours vont au bout de leurs jours et gagnent leurs points.")
+    @Operation(summary = "Clôturer sa campagne", description = "Plus de nouveaux testeurs ; ceux en cours vont au bout de leurs jours et gagnent leurs points. Campagne web (tracking NONE) : les testeurs installés depuis 24 heures terminent tout de suite et gagnent leurs points, les autres partent.")
     @ApiResponse(responseCode = "200", description = "Campagne terminée")
     @ApiResponse(responseCode = "403", description = "NOT_PLAYTEST_OWNER", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "404", description = "PLAYTEST_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
@@ -204,7 +206,7 @@ public class PlaytestController {
     }
 
     @PostMapping("/playtests/{id}/participations/me/confirm")
-    @Operation(summary = "Déclarer l'installation", description = "Le décompte des jours commence maintenant. Adresse Google facultative.")
+    @Operation(summary = "Déclarer l'installation", description = "Le décompte des jours commence maintenant (rien à décompter pour une campagne web). Adresse Google facultative.")
     @ApiResponse(responseCode = "200", description = "Campagne avec myParticipation")
     @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR", content = @Content(schema = @Schema(implementation = ApiError.class)))
     @ApiResponse(responseCode = "404", description = "PARTICIPATION_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
@@ -218,7 +220,7 @@ public class PlaytestController {
     @Operation(summary = "« Toujours inscrit »", description = "Une fois par jour (UTC). Sert à repérer les décrochages, pas de preuve.")
     @ApiResponse(responseCode = "200", description = "Campagne avec myParticipation")
     @ApiResponse(responseCode = "404", description = "PARTICIPATION_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
-    @ApiResponse(responseCode = "409", description = "PARTICIPATION_NOT_RUNNING, ALREADY_CHECKED_IN", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "409", description = "PARTICIPATION_NOT_RUNNING, ALREADY_CHECKED_IN, CHECK_IN_NOT_TRACKED (campagne web)", content = @Content(schema = @Schema(implementation = ApiError.class)))
     public PlaytestDetail checkIn(@PathVariable Long id, @AuthenticationPrincipal ZetsuPrincipal me) {
         return playtests.checkIn(id, me);
     }

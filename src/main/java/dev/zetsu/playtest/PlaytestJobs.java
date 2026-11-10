@@ -59,6 +59,16 @@ public class PlaytestJobs {
             NotificationTarget target = PlaytestService.target(c);
             Long tester = p.getTester().getId();
             Long owner = c.getOwner().getId();
+            if (!p.tracked() && c.getStatus() == CampaignStatus.COMPLETED) {
+                // Campagne web clôturée (par le porteur ou par la suppression de son compte).
+                if (finishUntracked(p, c, now)) {
+                    touched.add(c.getId());
+                    completed++;
+                } else {
+                    expired++;
+                }
+                continue;
+            }
             if (p.getStatus() == ParticipationStatus.JOINED) {
                 if (!p.getJoinedAt().plus(PlaytestRules.INSTALL_DEADLINE).isAfter(now)) {
                     // Place libérée : elle sera reprise par le prochain testeur.
@@ -73,13 +83,13 @@ public class PlaytestJobs {
                 }
                 continue;
             }
+            if (!p.tracked()) {
+                // Sans décompte : ni fin automatique, ni rappels. La participation se termine à la clôture.
+                continue;
+            }
             // Décompte en cours (déclaré ou vérifié).
             if (!p.getEndsAt().isAfter(now)) {
-                p.complete(now);
-                reputation.grantForPlaytest(tester, p.getId());
-                events.log(c.getId(), p.getId(), null, Action.PARTICIPATION_COMPLETED, null, now);
-                notifications.notify(tester, NotificationType.PLAYTEST_PARTICIPATION_DONE, null, target, null);
-                notifications.notify(owner, NotificationType.PLAYTEST_PARTICIPATION_DONE, tester, target, null);
+                complete(p, c, now);
                 touched.add(c.getId());
                 completed++;
                 continue;
@@ -104,6 +114,54 @@ public class PlaytestJobs {
             log.info("Tests fermés : {} place(s) libérée(s), {} participation(s) terminée(s), {} adresse(s) effacée(s)",
                     expired, completed, erased);
         }
+    }
+
+    /**
+     * Clôture d'une campagne sans décompte (web) : ses testeurs en cours terminent tout de suite, sans attendre la
+     * tâche horaire. Appelée dans la transaction de la clôture.
+     */
+    void finishUntracked(TestCampaign c, Instant now) {
+        if (c.getTracking() != Tracking.NONE) {
+            return;
+        }
+        for (TestParticipation p : participations.findAllOf(c.getId())) {
+            if (p.getStatus().running()) {
+                finishUntracked(p, c, now);
+            }
+        }
+    }
+
+    /**
+     * Un testeur installé depuis au moins un jour à la clôture termine et gagne ses points ; les autres partent,
+     * avec un motif. Renvoie vrai si la participation est terminée.
+     */
+    private boolean finishUntracked(TestParticipation p, TestCampaign c, Instant now) {
+        Instant closedAt = c.getCompletedAt() != null ? c.getCompletedAt() : now;
+        String reason;
+        if (p.getStatus() == ParticipationStatus.JOINED) {
+            reason = PlaytestRules.CLOSED_BEFORE_INSTALL_REASON;
+        } else if (!p.getConfirmedAt().plus(PlaytestRules.UNTRACKED_MIN_STAY).isAfter(closedAt)) {
+            complete(p, c, now);
+            return true;
+        } else {
+            reason = PlaytestRules.CLOSED_TOO_SOON_REASON;
+        }
+        p.stop(ParticipationStatus.DROPPED, reason, now);
+        events.log(c.getId(), p.getId(), null, Action.EXPIRED, reason, now);
+        notifications.notify(p.getTester().getId(), NotificationType.PLAYTEST_REMOVED, null,
+                PlaytestService.target(c), null);
+        return false;
+    }
+
+    private void complete(TestParticipation p, TestCampaign c, Instant now) {
+        Long tester = p.getTester().getId();
+        NotificationTarget target = PlaytestService.target(c);
+        p.complete(now);
+        reputation.grantForPlaytest(tester, p.getId());
+        events.log(c.getId(), p.getId(), null, Action.PARTICIPATION_COMPLETED, null, now);
+        notifications.notify(tester, NotificationType.PLAYTEST_PARTICIPATION_DONE, null, target, null);
+        notifications.notify(c.getOwner().getId(), NotificationType.PLAYTEST_PARTICIPATION_DONE, tester, target,
+                null);
     }
 
     /** Objectif atteint : autant de participations terminées que de places. */

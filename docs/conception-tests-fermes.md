@@ -213,3 +213,35 @@ Prises le 10 novembre 2026 pour avancer, à rediscuter si besoin :
 2. Validation de toutes les campagnes par l'équipe, ou seulement celles des nouveaux membres ?
 3. Demande-t-on l'adresse Google aux testeurs, ou seulement le lien de groupe ?
 4. Récompense en réputation (+5) pour une participation terminée : oui ou non ?
+
+## 13. App Store et applications web (TST-7, phase 2)
+
+Statut : **back-end codé** le 10 novembre 2026 (migration V18, branche `backend/TST-7-plateformes`). Changement de contrat : à fusionner après le 15 novembre, une fois le site web prêt.
+
+### Plateformes
+
+`platform` est obligatoire à la création : `GOOGLE_PLAY`, `APP_STORE` ou `WEB`. Les campagnes existantes restent sur `GOOGLE_PLAY`. `tracking` (`DAILY` ou `NONE`) est déduit de la plateforme et renvoyé dans chaque campagne : le front s'appuie dessus pour ses libellés.
+
+| | GOOGLE_PLAY | APP_STORE | WEB |
+| --- | --- | --- | --- |
+| `packageName` | identifiant Android, obligatoire | Bundle ID, obligatoire | ignoré, toujours `null` |
+| `optInUrl` | `play.google.com/apps/testing/…` ou `groups.google.com/…` | `testflight.apple.com/join/…` | toute adresse `https://` avec un nom de domaine |
+| `testersTarget` | 12 à 100 (14 par défaut) | 1 à 100 (10) | 1 à 100 (10) |
+| `requiredDays` | 14 à 60 (14) | 1 à 60 (7) | toujours 0 |
+| `tracking` | DAILY | DAILY | NONE |
+| Relecture | nouveaux porteurs | nouveaux porteurs | **toujours** |
+
+Une règle non respectée revient en `400 VALIDATION_ERROR`, avec le champ en cause dans `fields`. Une seule campagne en cours par application **et par plateforme** : le même identifiant peut tourner sur Android et sur iOS.
+
+### Campagne sans décompte (web)
+
+- À la déclaration d'installation, `endsAt` reste vide. Pas de « toujours inscrit » (`409 CHECK_IN_NOT_TRACKED`), pas de rappel, pas de fin automatique.
+- `daysDone` compte les jours depuis l'installation, sans plafond. `progress.percent` est la part des places tenues par une installation déclarée.
+- À la clôture par le porteur, les testeurs installés depuis au moins 24 heures terminent et gagnent leurs 5 points. Les autres partent avec un motif (installés trop récemment, ou installation jamais déclarée). Si le compte du porteur est supprimé, la tâche horaire fait la même chose.
+- Le lien mène hors des stores : chaque campagne web est relue par l'équipe avant publication.
+
+### Ce qui ne change pas
+
+L'adresse déclarée par le testeur garde le nom `googleEmail` (pour TestFlight, c'est l'adresse Apple). On pourra ajouter un champ `testerEmail` plus tard sans rien casser.
+
+Un exemple complet de campagne web est dans `docs/exemples/GET_playtests_id-campagne-web.json` ; `mocks/GET_playtests.json` contient une campagne de chaque plateforme.

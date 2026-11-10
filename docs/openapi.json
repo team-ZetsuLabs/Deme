@@ -16,6 +16,9 @@
     "name" : "answers",
     "description" : "Réponses aux questions et réponse acceptée"
   }, {
+    "name" : "playtests",
+    "description" : "Tests fermés (Google Play, App Store, web) : trouver des testeurs, tester les applications des autres"
+  }, {
     "name" : "admin",
     "description" : "Back office de l'équipe (Modérateur, Administrateur)"
   }, {
@@ -48,9 +51,6 @@
   }, {
     "name" : "communities",
     "description" : "Communautés par pays ou par technologie"
-  }, {
-    "name" : "playtests",
-    "description" : "Tests fermés Google Play : trouver des testeurs, tester les applications des autres"
   }, {
     "name" : "challenges",
     "description" : "Défis, dépôts et classement"
@@ -3008,7 +3008,7 @@
       "post" : {
         "tags" : [ "playtests" ],
         "summary" : "Créer une campagne (TST-1)",
-        "description" : "Toujours en brouillon : POST /playtests/{id}/submit pour la publier.",
+        "description" : "Toujours en brouillon : POST /playtests/{id}/submit pour la publier. Règles de chaque plateforme : voir le schéma PlaytestRequest.",
         "operationId" : "playtestCreate",
         "requestBody" : {
           "content" : {
@@ -3068,7 +3068,7 @@
       "post" : {
         "tags" : [ "playtests" ],
         "summary" : "Publier sa campagne",
-        "description" : "Un porteur de niveau Membre (50 points) ou plus est publié tout de suite (ACTIVE) ; sinon la campagne attend l'équipe (PENDING_REVIEW). Une seule campagne en cours par application.",
+        "description" : "Un porteur de niveau Membre (50 points) ou plus est publié tout de suite (ACTIVE) ; sinon la campagne attend l'équipe (PENDING_REVIEW). Une campagne WEB attend toujours l'équipe. Une seule campagne en cours par application et par plateforme.",
         "operationId" : "playtestSubmit",
         "parameters" : [ {
           "name" : "id",
@@ -3494,7 +3494,7 @@
       "post" : {
         "tags" : [ "playtests" ],
         "summary" : "Déclarer l'installation",
-        "description" : "Le décompte des jours commence maintenant. Adresse Google facultative.",
+        "description" : "Le décompte des jours commence maintenant (rien à décompter pour une campagne web). Adresse Google facultative.",
         "operationId" : "playtestConfirm",
         "parameters" : [ {
           "name" : "id",
@@ -3595,7 +3595,7 @@
             }
           },
           "409" : {
-            "description" : "PARTICIPATION_NOT_RUNNING, ALREADY_CHECKED_IN",
+            "description" : "PARTICIPATION_NOT_RUNNING, ALREADY_CHECKED_IN, CHECK_IN_NOT_TRACKED (campagne web)",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -3611,7 +3611,7 @@
       "post" : {
         "tags" : [ "playtests" ],
         "summary" : "Clôturer sa campagne",
-        "description" : "Plus de nouveaux testeurs ; ceux en cours vont au bout de leurs jours et gagnent leurs points.",
+        "description" : "Plus de nouveaux testeurs ; ceux en cours vont au bout de leurs jours et gagnent leurs points. Campagne web (tracking NONE) : les testeurs installés depuis 24 heures terminent tout de suite et gagnent leurs points, les autres partent.",
         "operationId" : "playtestClose",
         "parameters" : [ {
           "name" : "id",
@@ -9452,8 +9452,13 @@
       },
       "PlaytestRequest" : {
         "type" : "object",
-        "description" : "Création ou modification d'une campagne (brouillon ou refusée)",
+        "description" : "Création ou modification d'une campagne (brouillon ou refusée). Les règles dépendent de platform. GOOGLE_PLAY : packageName Android obligatoire ; optInUrl https://play.google.com/apps/testing/… ou https://groups.google.com/… ; testersTarget de 12 à 100 (14 par défaut) ; requiredDays de 14 à 60 (14). APP_STORE : packageName = Bundle ID obligatoire ; optInUrl https://testflight.apple.com/join/… ; testersTarget de 1 à 100 (10) ; requiredDays de 1 à 60 (7). WEB : packageName ignoré (toujours null) ; optInUrl = adresse https du site à tester ; testersTarget de 1 à 100 (10) ; requiredDays ignoré (toujours 0, pas de décompte) ; toujours relue par l'équipe. Une règle non respectée revient en VALIDATION_ERROR avec le champ en cause dans fields.",
         "properties" : {
+          "platform" : {
+            "type" : "string",
+            "enum" : [ "GOOGLE_PLAY", "APP_STORE", "WEB" ],
+            "example" : "GOOGLE_PLAY"
+          },
           "appName" : {
             "type" : "string",
             "example" : "Tontine Cash",
@@ -9462,10 +9467,10 @@
           },
           "packageName" : {
             "type" : "string",
+            "description" : "Obligatoire pour GOOGLE_PLAY (com.exemple.app) et APP_STORE (Bundle ID), ignoré pour WEB",
             "example" : "sn.tontinecash.app",
             "maxLength" : 150,
-            "minLength" : 0,
-            "pattern" : "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+$"
+            "minLength" : 0
           },
           "description" : {
             "type" : "string",
@@ -9475,18 +9480,26 @@
           },
           "optInUrl" : {
             "type" : "string",
+            "description" : "Format selon platform (voir PlaytestRequest)",
             "example" : "https://play.google.com/apps/testing/sn.tontinecash.app",
             "maxLength" : 300,
-            "minLength" : 0,
-            "pattern" : "^https://(play\\.google\\.com/apps/testing/|groups\\.google\\.com/)[^\\s<>\"']*$"
+            "minLength" : 0
           },
           "testersTarget" : {
             "type" : "integer",
             "format" : "int32",
-            "description" : "14 par défaut ; Google en exige 12",
+            "description" : "Minimum et défaut selon platform ; Google en exige 12",
             "example" : 14,
             "maximum" : 100,
-            "minimum" : 12
+            "minimum" : 1
+          },
+          "requiredDays" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Jours de test par testeur. Bornes et défaut selon platform ; ignoré pour WEB",
+            "example" : 14,
+            "maximum" : 60,
+            "minimum" : 0
           },
           "desiredStart" : {
             "type" : "string",
@@ -9502,7 +9515,7 @@
             "minLength" : 0
           }
         },
-        "required" : [ "appName", "description", "optInUrl", "packageName" ]
+        "required" : [ "appName", "description", "optInUrl", "platform" ]
       },
       "MyPlaytestParticipation" : {
         "type" : "object",
@@ -9523,11 +9536,13 @@
           },
           "daysDone" : {
             "type" : "integer",
-            "format" : "int32"
+            "format" : "int32",
+            "description" : "Sans décompte (NONE) : jours depuis l'installation"
           },
           "requiredDays" : {
             "type" : "integer",
-            "format" : "int32"
+            "format" : "int32",
+            "description" : "0 quand la campagne n'a pas de décompte"
           },
           "joinedAt" : {
             "type" : "string",
@@ -9592,11 +9607,17 @@
             "type" : "string"
           },
           "packageName" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Identifiant Android ou Bundle ID ; null pour WEB"
           },
           "platform" : {
             "type" : "string",
-            "example" : "GOOGLE_PLAY"
+            "enum" : [ "GOOGLE_PLAY", "APP_STORE", "WEB" ]
+          },
+          "tracking" : {
+            "type" : "string",
+            "description" : "Déduit de platform : NONE pour WEB",
+            "enum" : [ "DAILY", "NONE" ]
           },
           "iconUrl" : {
             "type" : "string"
@@ -9633,7 +9654,8 @@
           },
           "requiredDays" : {
             "type" : "integer",
-            "format" : "int32"
+            "format" : "int32",
+            "description" : "0 quand tracking vaut NONE"
           },
           "spotsLeft" : {
             "type" : "integer",
@@ -9688,11 +9710,11 @@
             "format" : "date-time"
           }
         },
-        "required" : [ "appName", "canClose", "canEdit", "canJoin", "canSubmit", "createdAt", "descriptionHtml", "descriptionMarkdown", "id", "owner", "packageName", "platform", "progress", "requiredDays", "spotsLeft", "status", "testersTarget", "updatedAt" ]
+        "required" : [ "appName", "canClose", "canEdit", "canJoin", "canSubmit", "createdAt", "descriptionHtml", "descriptionMarkdown", "id", "owner", "platform", "progress", "requiredDays", "spotsLeft", "status", "testersTarget", "tracking", "updatedAt" ]
       },
       "PlaytestProgress" : {
         "type" : "object",
-        "description" : "Avancement : percent = jours effectués par les testeurs en cours et terminés, rapportés à testersTarget × requiredDays. Ce ne sont que des déclarations : jamais une conformité Google Play.",
+        "description" : "Avancement. DAILY : percent = jours effectués par les testeurs en cours et terminés, rapportés à testersTarget × requiredDays. NONE : testeurs qui ont déclaré l'installation (en cours et terminés), rapportés à testersTarget. Ce ne sont que des déclarations : jamais une conformité d'un store.",
         "properties" : {
           "percent" : {
             "type" : "integer",
@@ -11934,11 +11956,17 @@
             "type" : "string"
           },
           "packageName" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Identifiant Android ou Bundle ID ; null pour WEB"
           },
           "platform" : {
             "type" : "string",
-            "example" : "GOOGLE_PLAY"
+            "enum" : [ "GOOGLE_PLAY", "APP_STORE", "WEB" ]
+          },
+          "tracking" : {
+            "type" : "string",
+            "description" : "Déduit de platform : NONE pour WEB",
+            "enum" : [ "DAILY", "NONE" ]
           },
           "iconUrl" : {
             "type" : "string"
@@ -11956,7 +11984,8 @@
           },
           "requiredDays" : {
             "type" : "integer",
-            "format" : "int32"
+            "format" : "int32",
+            "description" : "0 quand tracking vaut NONE"
           },
           "spotsLeft" : {
             "type" : "integer",
@@ -11975,7 +12004,7 @@
             "format" : "date-time"
           }
         },
-        "required" : [ "appName", "createdAt", "id", "owner", "packageName", "platform", "progress", "requiredDays", "spotsLeft", "status", "testersTarget" ]
+        "required" : [ "appName", "createdAt", "id", "owner", "platform", "progress", "requiredDays", "spotsLeft", "status", "testersTarget", "tracking" ]
       },
       "PageResponseMyModeratedContent" : {
         "type" : "object",
@@ -13137,7 +13166,7 @@
           "targetReached" : {
             "type" : "integer",
             "format" : "int64",
-            "description" : "Campagnes dont toutes les places ont été tenues 14 jours"
+            "description" : "Campagnes dont toutes les places ont été tenues jusqu'au bout"
           },
           "owners" : {
             "type" : "integer",

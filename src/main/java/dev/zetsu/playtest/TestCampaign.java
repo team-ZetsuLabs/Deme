@@ -16,12 +16,10 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.time.LocalDate;
 
-/** Campagne de test fermé Google Play (TST-1). */
+/** Campagne de test fermé (TST-1), Google Play, App Store ou web (TST-7). */
 @Entity
 @Table(name = "test_campaigns")
 public class TestCampaign {
-
-    public static final String PLATFORM = "GOOGLE_PLAY";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,13 +29,15 @@ public class TestCampaign {
     @JoinColumn(name = "owner_id")
     private User owner;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private String platform = PLATFORM;
+    private Platform platform = Platform.GOOGLE_PLAY;
 
     @Column(name = "app_name", nullable = false, length = 80)
     private String appName;
 
-    @Column(name = "package_name", nullable = false, length = 150)
+    /** Identifiant Android ou Bundle ID ; null pour une application web. */
+    @Column(name = "package_name", length = 150)
     private String packageName;
 
     @Column(name = "description_markdown", nullable = false, columnDefinition = "text")
@@ -102,8 +102,11 @@ public class TestCampaign {
         this.updatedAt = now;
     }
 
-    void edit(String appName, String packageName, String markdown, String safeHtml, String optInUrl,
-              int testersTarget, LocalDate desiredStart, String instructions, Instant now) {
+    void edit(Platform platform, String appName, String packageName, String markdown, String safeHtml,
+              String optInUrl, int testersTarget, int requiredDays, LocalDate desiredStart, String instructions,
+              Instant now) {
+        this.platform = platform;
+        this.requiredDays = requiredDays;
         this.appName = appName;
         this.packageName = packageName;
         this.descriptionMarkdown = markdown;
@@ -149,8 +152,12 @@ public class TestCampaign {
         return owner;
     }
 
-    public String getPlatform() {
+    public Platform getPlatform() {
         return platform;
+    }
+
+    public Tracking getTracking() {
+        return platform.tracking();
     }
 
     public String getAppName() {
