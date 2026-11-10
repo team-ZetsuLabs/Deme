@@ -1877,7 +1877,13 @@
       "emptyMissions": "لا مهام بعد.",
       "projects": "مشاريع تبحث عن أعضاء",
       "allProjects": "كل المشاريع",
-      "emptyProjects": "لا مشاريع بعد."
+      "emptyProjects": "لا مشاريع بعد.",
+      "playtests": "اختبارات مغلقة للانضمام",
+      "allPlaytests": "كل الاختبارات",
+      "emptyPlaytests": "لا حملات اختبار حاليًا.",
+      "communities": "المجتمعات",
+      "allCommunities": "كل المجتمعات",
+      "emptyCommunities": "لا مجتمعات حاليًا."
     }
   }
 }

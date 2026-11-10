@@ -10,6 +10,10 @@ import { ProjectCard } from '../../features/projects/ProjectCard';
 import { projectsApi } from '../../features/projects/projectsApi';
 import { QuestionRow } from '../../features/questions/QuestionRow';
 import { questionsApi } from '../../features/questions/questionsApi';
+import { PlaytestCard } from '../../features/playtests/PlaytestCard';
+import { playtestsApi } from '../../features/playtests/playtestsApi';
+import { CommunityRow } from '../../features/communities/CommunityRow';
+import { communitiesApi } from '../../features/communities/communitiesApi';
 import { challengesApi } from '../../features/challenges/challengesApi';
 import { useSession } from '../../features/auth/useSession';
 import { useApiQuery } from '../../hooks/useApiQuery';
@@ -48,6 +52,11 @@ export default function FeedPage() {
     [],
   );
   const projects = useApiQuery(() => projectsApi.list({ type: 'all', tech: null, page: 0 }), []);
+  const playtests = useApiQuery(
+    () => playtestsApi.list({ status: 'ACTIVE', availability: 'all', page: 0 }),
+    [],
+  );
+  const communities = useApiQuery(() => communitiesApi.list({ kind: 'all', q: null, page: 0 }), []);
   const challenge = useApiQuery(() => challengesApi.current(), []);
   const current = challenge.data;
 
@@ -118,6 +127,41 @@ export default function FeedPage() {
         limit={3}
         empty={t('feed.sections.emptyMissions')}
         renderItem={(mission) => <MissionRow mission={mission} />}
+      />
+
+      <HomeSection
+        title={t('feed.sections.playtests')}
+        to="/playtests"
+        toLabel={t('feed.sections.allPlaytests')}
+        query={playtests}
+        limit={3}
+        empty={t('feed.sections.emptyPlaytests')}
+        renderItem={(playtest) => <PlaytestCard playtest={playtest} />}
+      />
+
+      <HomeSection
+        title={t('feed.sections.communities')}
+        to="/communities"
+        toLabel={t('feed.sections.allCommunities')}
+        query={communities}
+        limit={3}
+        empty={t('feed.sections.emptyCommunities')}
+        getKey={(community) => community.slug}
+        renderItem={(community) => (
+          <CommunityRow
+            community={community}
+            onMembership={(result) =>
+              communities.setData((current) => ({
+                ...current,
+                items: current.items.map((c) =>
+                  c.slug === community.slug
+                    ? { ...c, joined: result.joined, memberCount: result.memberCount }
+                    : c,
+                ),
+              }))
+            }
+          />
+        )}
       />
     </>
   );

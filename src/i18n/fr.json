@@ -1757,7 +1757,13 @@
       "emptyMissions": "Aucune mission pour le moment.",
       "projects": "Projets qui recrutent",
       "allProjects": "Tous les projets",
-      "emptyProjects": "Aucun projet pour le moment."
+      "emptyProjects": "Aucun projet pour le moment.",
+      "playtests": "Tests fermés à rejoindre",
+      "allPlaytests": "Tous les tests",
+      "emptyPlaytests": "Aucune campagne de test pour le moment.",
+      "communities": "Communautés",
+      "allCommunities": "Toutes les communautés",
+      "emptyCommunities": "Aucune communauté pour le moment."
     }
   }
 }

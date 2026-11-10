@@ -1757,7 +1757,13 @@
       "emptyMissions": "No missions yet.",
       "projects": "Projects hiring",
       "allProjects": "All projects",
-      "emptyProjects": "No projects yet."
+      "emptyProjects": "No projects yet.",
+      "playtests": "Closed tests to join",
+      "allPlaytests": "All tests",
+      "emptyPlaytests": "No test campaign for now.",
+      "communities": "Communities",
+      "allCommunities": "All communities",
+      "emptyCommunities": "No community for now."
     }
   }
 }

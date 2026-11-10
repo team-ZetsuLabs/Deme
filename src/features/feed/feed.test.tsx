@@ -40,6 +40,9 @@ describe('FeedPage (accueil portail)', () => {
     expect(await screen.findByRole('heading', { name: 'Questions récentes' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Offres récentes' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Missions ouvertes' })).toBeTruthy();
+    // Espaces récents aussi agrégés : tests fermés et communautés.
+    expect(await screen.findByRole('heading', { name: 'Tests fermés à rejoindre' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Communautés' })).toBeTruthy();
     // Un contenu réel apparaît dans une section (question du mock).
     expect((await screen.findAllByText(/Orange Money/)).length).toBeGreaterThan(0);
   });

@@ -17,6 +17,8 @@ export type HomeSectionProps<T> = {
   /** Texte quand la section est vide ou indisponible. */
   empty: string;
   renderItem: (item: T) => ReactNode;
+  /** Clé React de chaque élément ; par défaut son `id` (les communautés utilisent `slug`). */
+  getKey?: (item: T) => string | number;
 };
 
 /**
@@ -24,7 +26,7 @@ export type HomeSectionProps<T> = {
  * lien « voir tout ». Chaque section charge et échoue de façon indépendante : une section
  * en erreur affiche son message vide, sans casser le reste de la page.
  */
-export function HomeSection<T extends { id: number }>({
+export function HomeSection<T>({
   title,
   to,
   toLabel,
@@ -32,10 +34,12 @@ export function HomeSection<T extends { id: number }>({
   limit,
   empty,
   renderItem,
+  getKey,
 }: HomeSectionProps<T>) {
   const { t } = useTranslation();
   const items = query.data?.items.slice(0, limit) ?? [];
   const showEmpty = !query.loading && (query.error !== null || items.length === 0);
+  const keyOf = getKey ?? ((item: T) => (item as { id: number }).id);
 
   return (
     <section className={styles.section} aria-label={title}>
@@ -48,7 +52,7 @@ export function HomeSection<T extends { id: number }>({
       <div className={styles.panel} aria-busy={query.loading}>
         {query.loading && <ListRowsSkeleton count={limit} />}
         {showEmpty && <p className={styles.empty}>{empty}</p>}
-        {!query.loading && items.map((item) => <div key={item.id}>{renderItem(item)}</div>)}
+        {!query.loading && items.map((item) => <div key={keyOf(item)}>{renderItem(item)}</div>)}
       </div>
       {!query.loading && query.data && query.data.total > limit && (
         <Link to={to} className={styles.footLink}>
