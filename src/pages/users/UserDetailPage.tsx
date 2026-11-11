@@ -15,6 +15,7 @@ import { EmptyState, Panel, PanelBody, PanelHead } from '../../components/Panel'
 import QueryState from '../../components/QueryState'
 import { Status } from '../../components/Status'
 import { useToast } from '../../components/ToastProvider'
+import { siteUrl } from '../../config'
 import { fmt, formatDate } from '../../features/admin/format'
 import MemberTabs from '../../features/members/MemberTabs'
 import { useAuth } from '../../hooks/useAuth'
@@ -118,7 +119,7 @@ function UserDetail({ user, reload }: { user: AdminUser; reload: () => void }) {
           </div>
           <div className={styles.actions}>
             <ExternalButtonLink
-              href={`/profil/${encodeURIComponent(user.username)}`}
+              href={siteUrl(`profil/${encodeURIComponent(user.username)}`)}
               target="_blank"
               rel="noopener"
             >

@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from 'react'
 import { Link } from 'react-router-dom'
 import type { LinkProps } from 'react-router-dom'
@@ -20,18 +21,13 @@ export function buttonClass({ variant = 'secondary', size = 'md', block }: Look,
     .join(' ')
 }
 
-export default function Button({
-  variant,
-  size,
-  block,
-  busy,
-  type = 'button',
-  className,
-  children,
-  ...rest
-}: ButtonProps) {
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { variant, size, block, busy, type = 'button', className, children, ...rest },
+  ref,
+) {
   return (
     <button
+      ref={ref}
       type={type}
       className={buttonClass({ variant, size, block }, className)}
       aria-busy={busy || undefined}
@@ -41,7 +37,9 @@ export default function Button({
       {children}
     </button>
   )
-}
+})
+
+export default Button
 
 export function ButtonLink({ variant, size, block, className, ...rest }: ButtonLinkProps) {
   return <Link className={buttonClass({ variant, size, block }, className)} {...rest} />

@@ -43,6 +43,9 @@ export type PlaytestEvent = Schemas['PlaytestEvent']
 export type PlaytestStats = Schemas['PlaytestStats']
 export type HomeStats = Schemas['HomeStats']
 
+export type Notification = Schemas['Notification']
+export type NotificationType = Notification['type']
+
 export type Page<T> = { items: T[]; page: number; size: number; total: number }
 
 type Query<P extends keyof paths> = paths[P] extends { get: { parameters: { query?: infer Q } } }

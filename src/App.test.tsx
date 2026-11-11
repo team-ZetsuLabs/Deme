@@ -151,3 +151,14 @@ test('le tableau de bord affiche les chiffres de la communauté', async () => {
   expect(await screen.findByText('Taux de résolution')).toBeInTheDocument()
   expect(await screen.findByText('50 %')).toBeInTheDocument()
 })
+
+test('le bouton « Voir le site » ouvre le site public dans un nouvel onglet', async () => {
+  mockBackend(member('ADMIN'))
+  at('connexion')
+  render(<App />)
+  await signIn()
+  const link = await screen.findByRole('link', { name: /Voir le site/ })
+  expect(link).toHaveAttribute('href', 'https://hackathon-web-4glg.onrender.com/')
+  expect(link).toHaveAttribute('target', '_blank')
+  expect(link.getAttribute('rel')).toContain('noopener')
+})

@@ -8,6 +8,7 @@ import { EmptyState, PanelBody } from '../../components/Panel'
 import QueryState from '../../components/QueryState'
 import Segmented from '../../components/Segmented'
 import { Pill, Status, Tag, Tags } from '../../components/Status'
+import { siteUrl } from '../../config'
 import { fmt, formatAgo, formatDate } from '../admin/format'
 import ProjectTable from '../projects/ProjectTable'
 import styles from './MemberTabs.module.css'
@@ -186,7 +187,7 @@ function Questions({ username }: { username: string }) {
                   <td>
                     <a
                       className={cell.title}
-                      href={`/question/${q.id}`}
+                      href={siteUrl(`question/${q.id}`)}
                       target="_blank"
                       rel="noopener"
                     >
@@ -269,7 +270,7 @@ function Missions({ username }: { username: string }) {
                   <td>
                     <a
                       className={cell.title}
-                      href={`/mission/${m.id}`}
+                      href={siteUrl(`mission/${m.id}`)}
                       target="_blank"
                       rel="noopener"
                     >

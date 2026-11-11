@@ -18,6 +18,11 @@ Le site est sur http://localhost:3200/admin/. Le proxy de Vite renvoie `/api` ve
 La session est un cookie : tout passe par la même adresse, donc ni CORS ni jeton à gérer à la main
 (`src/api/api.ts` ajoute l'en-tête CSRF sur chaque écriture).
 
+## Site public
+
+Le bouton « Voir le site » et les liens vers les contenus des membres utilisent `VITE_SITE_URL` (par défaut https://hackathon-web-4glg.onrender.com/).
+La cloche du header lit les notifications du compte connecté (compteur interrogé toutes les 60 s, onglet visible seulement).
+
 ## API
 
 Les types viennent du contrat OpenAPI du back-end : `npm run gen:api` (adresse dans `VITE_API_SPEC`) régénère

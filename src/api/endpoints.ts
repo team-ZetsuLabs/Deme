@@ -15,6 +15,7 @@ import type {
   JobDetail,
   JobsQuery,
   Me,
+  Notification,
   AdminPlaytestSummary,
   AdminPlaytestsQuery,
   HomeStats,
@@ -135,6 +136,16 @@ export const playtestApi = {
         body: { reason },
       },
     ),
+}
+
+export const notificationApi = {
+  unreadCount: (options?: Signal) =>
+    api.get<{ count: number }>('/notifications/unread-count', options),
+  list: (options?: Signal) =>
+    api.get<Page<Notification>>('/notifications', { query: { size: 20 }, ...options }),
+  /** Sans identifiants : tout marquer comme lu. Renvoie le compteur à jour. */
+  markRead: (ids?: number[]) =>
+    api.post<{ count: number }>('/notifications/read', { body: ids ? { ids } : {} }),
 }
 
 export const referentApi = {

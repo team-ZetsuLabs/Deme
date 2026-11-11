@@ -7,9 +7,11 @@ import Button, { ExternalButtonLink } from '../components/Button'
 import Icon from '../components/Icon'
 import type { IconName } from '../components/Icon'
 import Logo from '../components/Logo'
+import NotificationBell from '../components/NotificationBell'
 import { LanguageSwitch, ThemeToggle } from '../components/Preferences'
 import StateMessage from '../components/StateMessage'
 import { useCounts } from './counts'
+import { SITE_URL } from '../config'
 import { useAuth } from '../hooks/useAuth'
 import { CrumbsContext } from './crumbs'
 import type { Crumb } from './crumbs'
@@ -202,10 +204,11 @@ export default function AdminLayout() {
                 <LanguageSwitch />
               </div>
               <ThemeToggle />
+              <NotificationBell />
               <ExternalButtonLink
                 size="sm"
                 className={styles.hideSm}
-                href="/"
+                href={SITE_URL}
                 target="_blank"
                 rel="noopener"
               >

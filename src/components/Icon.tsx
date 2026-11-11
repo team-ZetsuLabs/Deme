@@ -24,6 +24,7 @@ export type IconName =
   | 'eye'
   | 'folder'
   | 'device'
+  | 'bell'
   | 'eyeOff'
 
 export type IconProps = { name: IconName; size?: number }
@@ -206,6 +207,16 @@ const ICONS: Record<IconName, { viewBox: string; body: JSX.Element }> = {
     viewBox: '0 0 14 14',
     body: (
       <path d="M7 2.5v9M2.5 7h9" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" />
+    ),
+  },
+  bell: {
+    viewBox: '0 0 18 18',
+    body: (
+      <path
+        d="M4.5 12.5V8a4.5 4.5 0 0 1 9 0v4.5l1.2 1.5H3.3l1.2-1.5ZM7.5 15.5a1.5 1.5 0 0 0 3 0"
+        {...S}
+        {...R}
+      />
     ),
   },
   device: {
