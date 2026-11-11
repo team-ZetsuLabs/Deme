@@ -33,5 +33,17 @@
   "proposalsEnd": "for a community to review",
   "tagsTitle": "Questions per tag",
   "tagsLead": "The 6 most used tags",
-  "barTip": "{{count}} questions"
+  "barTip": "{{count}} questions",
+  "communityKpis": "Community figures",
+  "questionsTotal": "Questions",
+  "questionsHint": "Visible questions",
+  "answersTotal": "Answers",
+  "answersHint": "Visible answers",
+  "solvedRate": "Resolution rate",
+  "solvedHint": "Questions with an accepted answer",
+  "members": "Active members",
+  "membersHint": "{{countries}} countries, {{referents}} Referents",
+  "playtests_one": "{{count}} test campaign",
+  "playtests_other": "{{count}} test campaigns",
+  "playtestsEnd": "to review"
 }

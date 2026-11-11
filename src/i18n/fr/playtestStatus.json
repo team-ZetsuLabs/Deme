@@ -1,0 +1,8 @@
+{
+  "DRAFT": "Brouillon",
+  "PENDING_REVIEW": "À valider",
+  "REJECTED": "Refusée",
+  "ACTIVE": "Active",
+  "SUSPENDED": "Suspendue",
+  "COMPLETED": "Terminée"
+}

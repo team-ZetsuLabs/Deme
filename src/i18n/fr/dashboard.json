@@ -33,5 +33,17 @@
   "proposalsEnd": "de communauté à examiner",
   "tagsTitle": "Questions par tag",
   "tagsLead": "Les 6 tags les plus utilisés",
-  "barTip": "{{count}} questions"
+  "barTip": "{{count}} questions",
+  "communityKpis": "Chiffres de la communauté",
+  "questionsTotal": "Questions",
+  "questionsHint": "Questions visibles",
+  "answersTotal": "Réponses",
+  "answersHint": "Réponses visibles",
+  "solvedRate": "Taux de résolution",
+  "solvedHint": "Questions avec une réponse acceptée",
+  "members": "Membres actifs",
+  "membersHint": "{{countries}} pays, {{referents}} Référents",
+  "playtests_one": "{{count}} campagne de test",
+  "playtests_other": "{{count}} campagnes de test",
+  "playtestsEnd": "à valider"
 }

@@ -1,0 +1,8 @@
+{
+  "DRAFT": "Draft",
+  "PENDING_REVIEW": "To review",
+  "REJECTED": "Refused",
+  "ACTIVE": "Active",
+  "SUSPENDED": "Suspended",
+  "COMPLETED": "Completed"
+}

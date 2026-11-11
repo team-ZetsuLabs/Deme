@@ -680,3 +680,66 @@ export const RUDE_QUESTION = {
   tags: ['laravel'],
   ctx: { countryCode: 'NG' },
 }
+
+/** Campagnes de test fermé : qui les publie, ce que fait l'équipe, et qui s'inscrit. */
+export const PLAYTESTS = [
+  {
+    owner: 'kwame.asante',
+    platform: 'GOOGLE_PLAY',
+    appName: 'Tontine Cash',
+    packageName: 'gh.tontinecash.app',
+    description:
+      "Application de tontine numérique pour les groupes d'épargne de Kumasi : cotisations, tours de table et rappels par notification. Nous cherchons des testeurs sur Android d'entrée de gamme pour vérifier le fonctionnement hors ligne.",
+    optInUrl: 'https://play.google.com/apps/testing/gh.tontinecash.app',
+    testersTarget: 12,
+    requiredDays: 14,
+    instructions:
+      'Créez une tontine de test, invitez un ami et coupez le réseau pour vérifier que la saisie est conservée.',
+    testers: [
+      'aminata.diallo',
+      'fatou.ndiaye',
+      'ibrahim.sawadogo',
+      'awa.kane',
+      'seydou.ouedraogo',
+      'grace.njeri',
+      'moussa.traore',
+      'youssef.benali',
+    ],
+    declare: 5,
+  },
+  {
+    owner: 'seydou.ouedraogo',
+    platform: 'WEB',
+    appName: 'Annuaire des développeurs africains',
+    description:
+      "Version de test du site de l'annuaire open source : recherche par ville et technologie, profils et filtres. Nous voulons des retours sur la lisibilité en 3G et sur le parcours de recherche.",
+    optInUrl: 'https://annuaire-dev-afrique.example.com',
+    testersTarget: 10,
+  },
+  {
+    owner: 'fatou.ndiaye',
+    platform: 'WEB',
+    appName: 'Wave Sandbox Dashboard',
+    description:
+      'Tableau de bord web qui rejoue des paiements Wave de démonstration pour apprendre à gérer les statuts et les webhooks. Les testeurs reçoivent un compte de démonstration.',
+    optInUrl: 'https://wave-sandbox.example.com',
+    testersTarget: 8,
+    decision: 'APPROVE',
+    testers: ['kwame.asante', 'awa.kane', 'grace.njeri'],
+    declare: 2,
+  },
+  {
+    owner: 'aminata.diallo',
+    platform: 'APP_STORE',
+    appName: 'Teranga Livraison',
+    packageName: 'sn.teranga.livraison',
+    description:
+      'Application iOS de suivi de livraison à Dakar, pensée pour des connexions instables. Les testeurs reçoivent une invitation TestFlight et suivent un scénario de commande de bout en bout.',
+    optInUrl: 'https://testflight.apple.com/join/TERANGA1',
+    testersTarget: 10,
+    requiredDays: 7,
+    instructions: 'Passez une commande de test puis suivez le livreur sur la carte.',
+    testers: ['ibrahim.sawadogo', 'fatou.ndiaye'],
+    suspend: 'Le lien TestFlight renvoie une erreur : campagne suspendue le temps de le corriger.',
+  },
+]

@@ -42,6 +42,27 @@ function mockBackend(loggedInAs: ReturnType<typeof member>) {
       return json(loggedInAs)
     }
     if (path === '/auth/logout') return new Response(null, { status: 204 })
+    if (path === '/stats')
+      return json({
+        questions: 3,
+        answers: 5,
+        solvedRate: 0.5,
+        members: 4,
+        countries: 2,
+        levels: { MEMBER: 3, CONTRIBUTOR: 0, REFERENT: 1 },
+      })
+    if (path === '/admin/playtests/stats')
+      return json({
+        campaigns: 2,
+        pendingReview: 1,
+        active: 1,
+        completed: 0,
+        targetReached: 0,
+        owners: 1,
+        testers: 3,
+        participationsRunning: 2,
+        participationsCompleted: 0,
+      })
     return json(page)
   })
   vi.stubGlobal('fetch', fetchMock)
@@ -120,4 +141,13 @@ test('le mot de passe peut être affiché puis masqué', async () => {
   expect(field).toHaveAttribute('type', 'text')
   await userEvent.click(screen.getByRole('button', { name: 'Masquer le mot de passe' }))
   expect(field).toHaveAttribute('type', 'password')
+})
+
+test('le tableau de bord affiche les chiffres de la communauté', async () => {
+  mockBackend(member('ADMIN'))
+  at('connexion')
+  render(<App />)
+  await signIn()
+  expect(await screen.findByText('Taux de résolution')).toBeInTheDocument()
+  expect(await screen.findByText('50 %')).toBeInTheDocument()
 })

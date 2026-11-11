@@ -12,6 +12,7 @@ import {
   CORE,
   JOBS,
   MISSIONS,
+  PLAYTESTS,
   PROJECTS,
   QUESTIONS,
   RECRUITERS,
@@ -50,9 +51,11 @@ class ApiFailure extends Error {
 /** Client HTTP minimal avec cookie de session, jeton CSRF et nouvel essai sur 429 et pannes réseau. */
 class Client {
   jar = new Map()
+  credentials = null
 
   async request(method, path, body, tolerated = []) {
     const write = method !== 'GET'
+    let retriedLogin = false
     for (let attempt = 0; attempt < 8; attempt++) {
       // Le jeton CSRF d'abord : sa demande pose le cookie qui doit accompagner la requête.
       const token = write ? await this.csrf() : undefined
@@ -83,6 +86,20 @@ class Client {
       }
       const text = await response.text()
       const data = text ? JSON.parse(text) : null
+      if (path === '/auth/login' && response.ok) this.credentials = body
+      // Session perdue (le serveur gratuit redémarre) : on se reconnecte une fois puis on rejoue l'appel.
+      if (
+        response.status === 401 &&
+        this.credentials &&
+        !path.startsWith('/auth/') &&
+        !retriedLogin
+      ) {
+        retriedLogin = true
+        this.jar.clear()
+        await this.request('POST', '/auth/login', this.credentials)
+        attempt -= 1
+        continue
+      }
       if (response.ok || tolerated.includes(response.status) || tolerated.includes(data?.code)) {
         await sleep(PAUSE_MS)
         return { status: response.status, data }
@@ -442,6 +459,45 @@ async function main() {
   for (const name of UNUSED_TAGS) {
     const { status } = await admin.post('/admin/tags', { name }, [409])
     if (status !== 409) count('étiquettes')
+  }
+
+  // 11. Tests fermés : publiés par les membres, validés, suspendus ou en attente par l'équipe
+  log('\n10. Tests fermés')
+  const knownPlaytests = new Set()
+  for (const status of ['PENDING_REVIEW', 'ACTIVE', 'SUSPENDED', 'REJECTED', 'COMPLETED']) {
+    for (const item of await pages(admin, `/admin/playtests?status=${status}`)) {
+      knownPlaytests.add(item.campaign.appName)
+    }
+  }
+  for (const test of PLAYTESTS) {
+    if (knownPlaytests.has(test.appName)) continue
+    const { owner, decision, testers = [], declare = 0, suspend, ...body } = test
+    const { data: draft } = await who(owner).client.post('/playtests', body)
+    const { data: submitted } = await who(owner).client.post(`/playtests/${draft.id}/submit`)
+    count('tests fermés')
+    let status = submitted.status
+    if (status === 'PENDING_REVIEW' && decision === 'APPROVE') {
+      status = (await admin.post(`/admin/playtests/${draft.id}/review`, { decision: 'APPROVE' }))
+        .data.status
+    }
+    if (status === 'ACTIVE') {
+      for (const [index, handle] of testers.entries()) {
+        await who(handle).client.post(`/playtests/${draft.id}/participations`, {}, [403, 409])
+        if (index < declare) {
+          await who(handle).client.post(
+            `/playtests/${draft.id}/participations/me/confirm`,
+            {},
+            [400, 409],
+          )
+        }
+        count('participations')
+      }
+      if (suspend) {
+        await admin.post(`/admin/playtests/${draft.id}/suspend`, { note: suspend })
+        status = 'SUSPENDED'
+      }
+    }
+    log(`  + ${test.appName} (${status})`)
   }
 
   log('\nTerminé.')

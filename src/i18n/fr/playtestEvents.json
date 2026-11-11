@@ -1,0 +1,20 @@
+{
+  "CREATED": "Campagne créée",
+  "EDITED": "Campagne modifiée",
+  "SUBMITTED": "Envoyée pour publication",
+  "APPROVED": "Validée par l'équipe",
+  "AUTO_APPROVED": "Publiée automatiquement",
+  "REJECTED": "Refusée",
+  "SUSPENDED": "Suspendue",
+  "REACTIVATED": "Réactivée",
+  "CLOSED": "Clôturée",
+  "COMPLETED": "Campagne terminée",
+  "JOINED": "Un testeur a rejoint",
+  "REPLACED": "Testeur remplacé",
+  "CONFIRMED": "Installation déclarée",
+  "VERIFIED": "Testeur vérifié",
+  "WITHDRAWN": "Testeur désisté",
+  "EXPIRED": "Place libérée (48 h dépassées)",
+  "REMOVED": "Testeur retiré",
+  "PARTICIPATION_COMPLETED": "Testeur arrivé au bout"
+}

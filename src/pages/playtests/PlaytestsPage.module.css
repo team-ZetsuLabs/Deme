@@ -1,0 +1,85 @@
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: var(--s5);
+}
+
+.kpi {
+  padding: var(--s4) var(--s5);
+  border-left: 1px solid var(--line);
+}
+
+.kpi:first-child {
+  border-left: none;
+}
+
+.kLabel {
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+.kValue {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin-top: 2px;
+}
+
+.kHint {
+  font-size: 13px;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+
+.app {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  min-width: 0;
+}
+
+.progress {
+  height: 8px;
+  min-width: 90px;
+  max-width: 160px;
+  border-radius: 4px;
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  background: var(--series-1);
+}
+
+.flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+@media (max-width: 1180px) {
+  .kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .kpi:nth-child(3) {
+    border-left: none;
+  }
+
+  .kpi:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 640px) {
+  .kpi {
+    padding: var(--s3) var(--s4);
+  }
+
+  .kValue {
+    font-size: 22px;
+  }
+}

@@ -14,6 +14,8 @@ const UsersPage = lazy(() => import('./pages/users/UsersPage'))
 const UserDetailPage = lazy(() => import('./pages/users/UserDetailPage'))
 const ProjectsPage = lazy(() => import('./pages/projects/ProjectsPage'))
 const ProjectDetailPage = lazy(() => import('./pages/projects/ProjectDetailPage'))
+const PlaytestsPage = lazy(() => import('./pages/playtests/PlaytestsPage'))
+const PlaytestDetailPage = lazy(() => import('./pages/playtests/PlaytestDetailPage'))
 const JobsPage = lazy(() => import('./pages/jobs/JobsPage'))
 const ChallengesPage = lazy(() => import('./pages/challenges/ChallengesPage'))
 const CommunitiesPage = lazy(() => import('./pages/communities/CommunitiesPage'))
@@ -38,6 +40,8 @@ export default function App() {
               <Route path="utilisateurs/:username" element={<UserDetailPage />} />
               <Route path="projets" element={<ProjectsPage />} />
               <Route path="projets/:id" element={<ProjectDetailPage />} />
+              <Route path="tests" element={<PlaytestsPage />} />
+              <Route path="tests/:id" element={<PlaytestDetailPage />} />
               <Route path="offres" element={<JobsPage />} />
               <Route path="challenges" element={<ChallengesPage />} />
               <Route path="challenges/nouveau" element={<NewChallengePage />} />

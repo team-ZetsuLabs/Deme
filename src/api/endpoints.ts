@@ -15,6 +15,13 @@ import type {
   JobDetail,
   JobsQuery,
   Me,
+  AdminPlaytestSummary,
+  AdminPlaytestsQuery,
+  HomeStats,
+  PlaytestDetail,
+  PlaytestEvent,
+  PlaytestParticipation,
+  PlaytestStats,
   BadgeProgress,
   MissionSummary,
   MissionsQuery,
@@ -103,6 +110,33 @@ export const adminApi = {
     }),
 }
 
+export const playtestApi = {
+  stats: (options?: Signal) => api.get<PlaytestStats>('/admin/playtests/stats', options),
+  list: (query: AdminPlaytestsQuery, options?: Signal) =>
+    api.get<Page<AdminPlaytestSummary>>('/admin/playtests', { query, ...options }),
+  detail: (id: number, options?: Signal) => api.get<PlaytestDetail>(`/playtests/${id}`, options),
+  participations: (id: number, options?: Signal) =>
+    api.get<PlaytestParticipation[]>(`/admin/playtests/${id}/participations`, options),
+  events: (id: number, options?: Signal) =>
+    api.get<Page<PlaytestEvent>>(`/admin/playtests/${id}/events`, {
+      query: { size: 30 },
+      ...options,
+    }),
+  review: (id: number, decision: 'APPROVE' | 'REJECT', note?: string) =>
+    api.post<PlaytestDetail>(`/admin/playtests/${id}/review`, { body: { decision, note } }),
+  suspend: (id: number, note: string) =>
+    api.post<PlaytestDetail>(`/admin/playtests/${id}/suspend`, { body: { note } }),
+  reactivate: (id: number, note?: string) =>
+    api.post<PlaytestDetail>(`/admin/playtests/${id}/reactivate`, { body: { note } }),
+  removeTester: (id: number, participationId: number, reason: string) =>
+    api.post<PlaytestParticipation[]>(
+      `/admin/playtests/${id}/participations/${participationId}/remove`,
+      {
+        body: { reason },
+      },
+    ),
+}
+
 export const referentApi = {
   listCases: (query: ReferentCasesQuery, options?: Signal) =>
     api.get<Page<ModerationCase>>('/moderation/cases', { query, ...options }),
@@ -112,6 +146,7 @@ export const referentApi = {
 
 /** Lectures publiques du site, utiles à l'administration (projets, fiche d'un membre). */
 export const publicApi = {
+  stats: (options?: Signal) => api.get<HomeStats>('/stats', options),
   listProjects: (query: ProjectsQuery, options?: Signal) =>
     api.get<Page<ProjectSummary>>('/projects', { query, ...options }),
   project: (id: number, options?: Signal) => api.get<ProjectDetail>(`/projects/${id}`, options),

@@ -33,6 +33,16 @@ export type QuestionSummary = Schemas['QuestionSummary']
 export type MissionSummary = Schemas['MissionSummary']
 export type ProjectUpdate = Schemas['ProjectUpdate']
 
+export type PlaytestSummary = Schemas['PlaytestSummary']
+export type AdminPlaytestSummary = Schemas['AdminPlaytestSummary']
+export type PlaytestDetail = Schemas['PlaytestDetail']
+export type PlaytestStatus = PlaytestSummary['status']
+export type PlaytestPlatform = PlaytestSummary['platform']
+export type PlaytestParticipation = Schemas['PlaytestParticipation']
+export type PlaytestEvent = Schemas['PlaytestEvent']
+export type PlaytestStats = Schemas['PlaytestStats']
+export type HomeStats = Schemas['HomeStats']
+
 export type Page<T> = { items: T[]; page: number; size: number; total: number }
 
 type Query<P extends keyof paths> = paths[P] extends { get: { parameters: { query?: infer Q } } }
@@ -43,6 +53,7 @@ export type ProjectsQuery = Query<'/api/v1/projects'>
 export type ReputationQuery = Query<'/api/v1/users/{username}/reputation'>
 export type QuestionsQuery = Query<'/api/v1/questions'>
 export type MissionsQuery = Query<'/api/v1/missions'>
+export type AdminPlaytestsQuery = Query<'/api/v1/admin/playtests'>
 export type UsersQuery = Query<'/api/v1/admin/users'>
 export type TagsQuery = Query<'/api/v1/admin/tags'>
 export type CasesQuery = Query<'/api/v1/admin/cases'>

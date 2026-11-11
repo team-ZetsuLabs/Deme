@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { adminApi } from '../../api/endpoints'
+import { adminApi, playtestApi, publicApi } from '../../api/endpoints'
 import { useQuery } from '../../api/useQuery'
 import { ButtonLink } from '../../components/Button'
 import { cell, TableWrap } from '../../components/DataTable'
@@ -46,6 +46,9 @@ export default function DashboardPage() {
     return page.total
   }, [])
 
+  const stats = useQuery((signal) => publicApi.stats({ signal }), [])
+  const playtests = useQuery((signal) => playtestApi.stats({ signal }), [])
+
   const topTags = useMemo(
     () =>
       [...(tags.data?.items ?? [])].sort((a, b) => b.questionCount - a.questionCount).slice(0, 6),
@@ -87,6 +90,32 @@ export default function DashboardPage() {
           label={t('dashboard.submissions')}
           value={value(toGrade.data)}
           hint={t('dashboard.submissionsHint')}
+        />
+      </Panel>
+
+      <Panel className={styles.kpis} aria-label={t('dashboard.communityKpis')}>
+        <Kpi
+          label={t('dashboard.questionsTotal')}
+          value={value(stats.data?.questions)}
+          hint={t('dashboard.questionsHint')}
+        />
+        <Kpi
+          label={t('dashboard.answersTotal')}
+          value={value(stats.data?.answers)}
+          hint={t('dashboard.answersHint')}
+        />
+        <Kpi
+          label={t('dashboard.solvedRate')}
+          value={stats.data ? `${Math.round(stats.data.solvedRate * 100)} %` : '…'}
+          hint={t('dashboard.solvedHint')}
+        />
+        <Kpi
+          label={t('dashboard.members')}
+          value={value(stats.data?.members)}
+          hint={t('dashboard.membersHint', {
+            countries: stats.data?.countries ?? 0,
+            referents: stats.data?.levels.REFERENT ?? 0,
+          })}
         />
       </Panel>
 
@@ -176,6 +205,15 @@ export default function DashboardPage() {
                     {t('dashboard.appeals', { count: appeals.data?.total ?? 0 })}
                   </Link>{' '}
                   {t('dashboard.appealsEnd')}
+                </span>
+              </li>
+              <li>
+                <time>{t('nav.playtests')}</time>
+                <span>
+                  <Link to="/tests?status=PENDING_REVIEW">
+                    {t('dashboard.playtests', { count: playtests.data?.pendingReview ?? 0 })}
+                  </Link>{' '}
+                  {t('dashboard.playtestsEnd')}
                 </span>
               </li>
               <li>

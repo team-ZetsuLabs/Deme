@@ -20,7 +20,7 @@ type NavItem = {
   to: string
   key: string
   icon: IconName
-  count?: 'reports' | 'jobs' | 'proposals'
+  count?: 'reports' | 'jobs' | 'proposals' | 'playtests'
   referent?: boolean
 }
 
@@ -39,6 +39,7 @@ const NAV: { group: string; items: NavItem[] }[] = [
     items: [
       { to: '/utilisateurs', key: 'users', icon: 'users' },
       { to: '/projets', key: 'projects', icon: 'folder' },
+      { to: '/tests', key: 'playtests', icon: 'device', count: 'playtests' },
       { to: '/offres', key: 'jobs', icon: 'jobs', count: 'jobs' },
       { to: '/challenges', key: 'challenges', icon: 'trophy' },
       { to: '/communautes', key: 'communities', icon: 'globe', count: 'proposals' },

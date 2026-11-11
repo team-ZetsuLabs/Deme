@@ -1,0 +1,20 @@
+{
+  "CREATED": "Campaign created",
+  "EDITED": "Campaign edited",
+  "SUBMITTED": "Sent for publication",
+  "APPROVED": "Approved by the team",
+  "AUTO_APPROVED": "Published automatically",
+  "REJECTED": "Refused",
+  "SUSPENDED": "Suspended",
+  "REACTIVATED": "Reactivated",
+  "CLOSED": "Closed",
+  "COMPLETED": "Campaign completed",
+  "JOINED": "A tester joined",
+  "REPLACED": "Tester replaced",
+  "CONFIRMED": "Install declared",
+  "VERIFIED": "Tester verified",
+  "WITHDRAWN": "Tester withdrew",
+  "EXPIRED": "Spot freed (48 h exceeded)",
+  "REMOVED": "Tester removed",
+  "PARTICIPATION_COMPLETED": "Tester completed"
+}
