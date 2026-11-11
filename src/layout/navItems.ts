@@ -8,13 +8,15 @@ export type NavItem = {
   icon: IconName;
   /** Autres chemins qui rendent l'espace actif (Mes candidatures relève d'Emploi). */
   alsoActive?: string[];
+  /** Mis en avant dans la barre d'onglets mobile ; les autres passent sous « Plus ». */
+  primary?: boolean;
 };
 
 /** Espaces principaux, partagés par le menu latéral et la barre d'onglets mobile. */
 export const NAV_ITEMS: NavItem[] = [
-  { to: '/feed', labelKey: 'nav.feed', icon: 'home' },
-  { to: '/questions', labelKey: 'nav.questions', icon: 'help' },
-  { to: '/jobs', labelKey: 'nav.jobs', icon: 'jobs', alsoActive: ['/applications'] },
+  { to: '/feed', labelKey: 'nav.feed', icon: 'home', primary: true },
+  { to: '/questions', labelKey: 'nav.questions', icon: 'help', primary: true },
+  { to: '/jobs', labelKey: 'nav.jobs', icon: 'jobs', alsoActive: ['/applications'], primary: true },
   { to: '/missions', labelKey: 'nav.missions', icon: 'mission' },
   {
     to: '/playtests',
@@ -31,6 +33,10 @@ export const NAV_ITEMS: NavItem[] = [
     icon: 'users',
   },
 ];
+
+/** Barre d'onglets mobile : espaces mis en avant, et les autres regroupés sous « Plus ». */
+export const PRIMARY_NAV_ITEMS: NavItem[] = NAV_ITEMS.filter((item) => item.primary);
+export const MORE_NAV_ITEMS: NavItem[] = NAV_ITEMS.filter((item) => !item.primary);
 
 /** Onglet « Compte » de la barre mobile : connexion, ou profil une fois connecté. */
 export const ACCOUNT_ITEM: NavItem = { to: '/login', labelKey: 'nav.account', icon: 'user' };

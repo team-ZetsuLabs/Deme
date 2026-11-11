@@ -29,6 +29,54 @@
   color: var(--text-3);
   font-size: var(--fs-xs);
   font-weight: 500;
+  /* .tab sert aussi au bouton « Plus » : on neutralise l'apparence par défaut. */
+  background: none;
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Cellule « Plus » : le bouton remplit la colonne, le panneau s'ouvre au-dessus. */
+.more {
+  position: relative;
+  display: grid;
+}
+
+.sheet {
+  position: absolute;
+  inset-block-end: calc(100% + var(--s1));
+  inset-inline-end: var(--s2);
+  min-inline-size: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--s1);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+}
+
+.sheetItem {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  min-height: var(--touch);
+  padding: 0 var(--s3);
+  border-radius: var(--r-md);
+  color: var(--text-2);
+  font-size: var(--fs-base-sm);
+}
+
+.sheetItem:hover {
+  text-decoration: none;
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.sheetItem[aria-current='page'] {
+  color: var(--green-text);
+  background: var(--green-wash);
 }
 
 .tab span {

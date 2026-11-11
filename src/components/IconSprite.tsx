@@ -28,6 +28,11 @@ export function IconSprite() {
           d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58Z"
         />
       </symbol>
+      <symbol id="i-more" viewBox="0 0 18 18">
+        <circle cx="4" cy="9" r="1.4" fill="currentColor" />
+        <circle cx="9" cy="9" r="1.4" fill="currentColor" />
+        <circle cx="14" cy="9" r="1.4" fill="currentColor" />
+      </symbol>
       <symbol id="i-home" viewBox="0 0 18 18">
         <path {...round} d="M2.8 8.6 9 3.2l6.2 5.4" />
         <path {...round} d="M4.5 7.8V15h9V7.8" />

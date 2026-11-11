@@ -183,7 +183,8 @@
     "applications": "My applications",
     "communities": "Communities",
     "communitiesShort": "Groups",
-    "projects": "Projects"
+    "projects": "Projects",
+    "more": "More"
   },
   "topbar": {
     "search": "Search",

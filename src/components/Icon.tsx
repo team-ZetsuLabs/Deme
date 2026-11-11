@@ -25,7 +25,8 @@ export type IconName =
   | 'share'
   | 'install'
   | 'projects'
-  | 'home';
+  | 'home'
+  | 'more';
 
 export type IconProps = {
   name: IconName;
