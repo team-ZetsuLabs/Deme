@@ -1,63 +1,104 @@
+.layout {
+  display: block;
+}
+
+.stream {
+  min-inline-size: 0;
+}
+
 .head {
-  margin-bottom: var(--s4);
+  margin-block-end: var(--s4);
 }
 
 .title {
+  margin: 0;
   font-size: var(--fs-2xl);
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: var(--lh-tight);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
 }
 
 .lead {
-  max-width: 60ch;
-  margin-top: var(--s1);
+  margin: var(--s1) 0 0;
   color: var(--text-2);
 }
 
-.challenge {
+/* Rail de droite : caché sur mobile (le fil occupe tout l'écran, façon LinkedIn). */
+.rail {
+  display: none;
+}
+
+.profile {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--s3);
-  margin-bottom: var(--s5);
-  padding: var(--s4) var(--s5);
+  gap: var(--s2);
+  padding: var(--s5) var(--s4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  text-align: center;
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profileName {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.profileName:hover {
+  color: var(--green-text);
+}
+
+.profileMeta {
+  color: var(--text-3);
+  font-size: var(--fs-sm);
+}
+
+.railCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s2);
+  padding: var(--s4);
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
 }
 
-.challengeText {
-  min-width: 0;
-}
-
-.challengeKicker {
-  display: inline-flex;
+.railKicker {
+  display: flex;
   align-items: center;
   gap: var(--s1);
-  font-size: var(--fs-sm);
+  color: var(--green-text);
+  font-size: var(--fs-xs);
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  color: var(--text-3);
 }
 
-.challengeTitle {
-  margin-top: var(--s1);
+.railTitle {
+  margin: 0;
   font-size: var(--fs-base);
   font-weight: 600;
 }
 
-.challengeLink {
-  flex: none;
-  font-size: var(--fs-md);
-  font-weight: 500;
-  color: var(--green-text);
-}
+@media (min-width: 1024px) {
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: var(--s5);
+    align-items: start;
+  }
 
-@media (max-width: 767px) {
-  .title {
-    font-size: var(--fs-xl);
+  .rail {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s4);
+    position: sticky;
+    top: calc(var(--topbar-h) + var(--s4));
   }
 }

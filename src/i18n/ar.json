@@ -1886,6 +1886,18 @@
       "communities": "المجتمعات",
       "allCommunities": "كل المجتمعات",
       "emptyCommunities": "لا مجتمعات حاليًا."
+    },
+    "kind": {
+      "question": "سؤال",
+      "job": "وظيفة",
+      "mission": "مهمة",
+      "project": "مشروع",
+      "playtest": "اختبار مغلق"
+    },
+    "empty": "لا شيء لعرضه حاليًا. ابدأ: اطرح سؤالًا.",
+    "profile": {
+      "stats": "{{points}} نقطة · {{level}}",
+      "view": "عرض ملفي"
     }
   }
 }

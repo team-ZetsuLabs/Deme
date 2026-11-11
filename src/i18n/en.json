@@ -1766,6 +1766,18 @@
       "communities": "Communities",
       "allCommunities": "All communities",
       "emptyCommunities": "No community for now."
+    },
+    "kind": {
+      "question": "Question",
+      "job": "Job",
+      "mission": "Gig",
+      "project": "Project",
+      "playtest": "Closed test"
+    },
+    "empty": "Nothing to show yet. Get started: ask a question.",
+    "profile": {
+      "stats": "{{points}} points · {{level}}",
+      "view": "View my profile"
     }
   }
 }

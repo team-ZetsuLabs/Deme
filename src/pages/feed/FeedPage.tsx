@@ -1,19 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Avatar } from '../../components/Avatar';
 import { Icon } from '../../components/Icon';
-import { HomeSection } from '../../features/feed/HomeSection';
-import { JobRow } from '../../features/jobs/JobRow';
+import { buttonClass } from '../../components/buttonClass';
+import { StateMessage } from '../../components/StateMessage';
+import { ListRowsSkeleton } from '../../components/skeleton/ListRowsSkeleton';
+import { FeedItem } from '../../features/feed/FeedItem';
+import { mergeFeed } from '../../features/feed/feedEntries';
 import { jobsApi } from '../../features/jobs/jobsApi';
-import { MissionRow } from '../../features/missions/MissionRow';
 import { missionsApi } from '../../features/missions/missionsApi';
-import { ProjectCard } from '../../features/projects/ProjectCard';
 import { projectsApi } from '../../features/projects/projectsApi';
-import { QuestionRow } from '../../features/questions/QuestionRow';
 import { questionsApi } from '../../features/questions/questionsApi';
-import { PlaytestCard } from '../../features/playtests/PlaytestCard';
 import { playtestsApi } from '../../features/playtests/playtestsApi';
-import { CommunityRow } from '../../features/communities/CommunityRow';
-import { communitiesApi } from '../../features/communities/communitiesApi';
 import { challengesApi } from '../../features/challenges/challengesApi';
 import { useSession } from '../../features/auth/useSession';
 import { useApiQuery } from '../../hooks/useApiQuery';
@@ -21,8 +19,8 @@ import { usePageTitle } from '../../hooks/usePageTitle';
 import styles from './FeedPage.module.css';
 
 /**
- * Accueil du membre connecté : un portail qui rassemble un aperçu de chaque espace
- * (questions, offres, missions, défi), chacun chargé indépendamment depuis son endpoint.
+ * Accueil du membre connecté : un fil unique qui mélange tous les espaces (questions, offres,
+ * missions, projets, tests fermés), du plus récent au plus ancien, avec un rail profil + défi.
  */
 export default function FeedPage() {
   const { t } = useTranslation();
@@ -56,113 +54,86 @@ export default function FeedPage() {
     () => playtestsApi.list({ status: 'ACTIVE', availability: 'all', page: 0 }),
     [],
   );
-  const communities = useApiQuery(() => communitiesApi.list({ kind: 'all', q: null, page: 0 }), []);
   const challenge = useApiQuery(() => challengesApi.current(), []);
-  const current = challenge.data;
+
+  const sources = [questions, jobs, missions, projects, playtests];
+  const loading = sources.some((q) => q.loading);
+  const entries = mergeFeed({
+    questions: questions.data?.items,
+    jobs: jobs.data?.items,
+    missions: missions.data?.items,
+    projects: projects.data?.items,
+    playtests: playtests.data?.items,
+  });
 
   return (
-    <>
-      <div className={styles.head}>
-        <h1 className={styles.title}>
-          {user ? t('feed.greeting', { name: user.displayName }) : t('feed.title')}
-        </h1>
-        <p className={styles.lead}>{t('feed.lead')}</p>
-      </div>
+    <div className={styles.layout}>
+      <main className={styles.stream}>
+        <div className={styles.head}>
+          <h1 className={styles.title}>
+            {user ? t('feed.greeting', { name: user.displayName }) : t('feed.title')}
+          </h1>
+          <p className={styles.lead}>{t('feed.lead')}</p>
+        </div>
 
-      {!challenge.loading && current && (
-        <section className={styles.challenge} aria-label={t('feed.sections.challenge')}>
-          <div className={styles.challengeText}>
-            <span className={styles.challengeKicker}>
+        <div aria-busy={loading}>
+          {loading && <ListRowsSkeleton count={5} />}
+          {!loading && entries.length === 0 && (
+            <StateMessage
+              action={
+                <Link to="/questions/ask" className={buttonClass({ variant: 'primary' })}>
+                  {t('home.cta.email')}
+                </Link>
+              }
+            >
+              {t('feed.empty')}
+            </StateMessage>
+          )}
+          {!loading &&
+            entries.map((entry) => <FeedItem key={`${entry.kind}-${entry.key}`} entry={entry} />)}
+        </div>
+      </main>
+
+      <aside className={styles.rail}>
+        {user && (
+          <section className={styles.profile}>
+            <Avatar name={user.displayName} photoUrl={user.avatarUrl ?? null} size={56} />
+            <div className={styles.profileText}>
+              <Link to="/users/me" className={styles.profileName}>
+                {user.displayName}
+              </Link>
+              <span className={styles.profileMeta}>
+                {t('feed.profile.stats', {
+                  points: user.reputation,
+                  level: t(`levels.${user.level}`),
+                })}
+              </span>
+            </div>
+            <Link
+              to="/users/me"
+              className={buttonClass({ variant: 'secondary', size: 'sm', block: true })}
+            >
+              {t('feed.profile.view')}
+            </Link>
+          </section>
+        )}
+
+        {!challenge.loading && challenge.data && (
+          <section className={styles.railCard} aria-label={t('feed.sections.challenge')}>
+            <span className={styles.railKicker}>
               <Icon name="trophy" size={15} /> {t('feed.sections.challenge')}
             </span>
-            <h2 className={styles.challengeTitle}>{current.title}</h2>
-          </div>
-          <Link to="/challenges" className={styles.challengeLink}>
-            {t('feed.sections.challengeGo')}
-          </Link>
-        </section>
-      )}
-
-      <HomeSection
-        title={t('feed.sections.questions')}
-        to="/questions"
-        toLabel={t('feed.sections.allQuestions')}
-        query={questions}
-        limit={4}
-        empty={t('feed.sections.emptyQuestions')}
-        renderItem={(q) => (
-          <QuestionRow
-            question={q}
-            activeTag={null}
-            onTag={(tag) => navigate(`/questions?tag=${encodeURIComponent(tag)}`)}
-          />
+            <h2 className={styles.railTitle}>{challenge.data.title}</h2>
+            <button
+              type="button"
+              className={buttonClass({ variant: 'secondary', size: 'sm' })}
+              onClick={() => navigate('/challenges')}
+            >
+              {t('feed.sections.challengeGo')}
+            </button>
+          </section>
         )}
-      />
-
-      <HomeSection
-        title={t('feed.sections.projects')}
-        to="/projects"
-        toLabel={t('feed.sections.allProjects')}
-        query={projects}
-        limit={3}
-        empty={t('feed.sections.emptyProjects')}
-        renderItem={(project) => <ProjectCard project={project} />}
-      />
-
-      <HomeSection
-        title={t('feed.sections.jobs')}
-        to="/jobs"
-        toLabel={t('feed.sections.allJobs')}
-        query={jobs}
-        limit={3}
-        empty={t('feed.sections.emptyJobs')}
-        renderItem={(job) => <JobRow job={job} />}
-      />
-
-      <HomeSection
-        title={t('feed.sections.missions')}
-        to="/missions"
-        toLabel={t('feed.sections.allMissions')}
-        query={missions}
-        limit={3}
-        empty={t('feed.sections.emptyMissions')}
-        renderItem={(mission) => <MissionRow mission={mission} />}
-      />
-
-      <HomeSection
-        title={t('feed.sections.playtests')}
-        to="/playtests"
-        toLabel={t('feed.sections.allPlaytests')}
-        query={playtests}
-        limit={3}
-        empty={t('feed.sections.emptyPlaytests')}
-        renderItem={(playtest) => <PlaytestCard playtest={playtest} />}
-      />
-
-      <HomeSection
-        title={t('feed.sections.communities')}
-        to="/communities"
-        toLabel={t('feed.sections.allCommunities')}
-        query={communities}
-        limit={3}
-        empty={t('feed.sections.emptyCommunities')}
-        getKey={(community) => community.slug}
-        renderItem={(community) => (
-          <CommunityRow
-            community={community}
-            onMembership={(result) =>
-              communities.setData((current) => ({
-                ...current,
-                items: current.items.map((c) =>
-                  c.slug === community.slug
-                    ? { ...c, joined: result.joined, memberCount: result.memberCount }
-                    : c,
-                ),
-              }))
-            }
-          />
-        )}
-      />
-    </>
+      </aside>
+    </div>
   );
 }
