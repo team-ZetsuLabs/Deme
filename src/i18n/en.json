@@ -233,7 +233,8 @@
       "next": "Next page",
       "status": "Page {{page}} of {{pages}}"
     },
-    "close": "Close"
+    "close": "Close",
+    "viewPhoto": "View {{name}}’s photo"
   },
   "errors": {
     "NETWORK_ERROR": "Cannot reach the server. Check your connection.",

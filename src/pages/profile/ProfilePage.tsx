@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ApiError } from '../../api/api';
-import { Avatar } from '../../components/Avatar';
+import { AvatarViewer } from '../../components/AvatarViewer';
 import { Flag } from '../../components/Flag';
 import { buttonClass } from '../../components/buttonClass';
 import { ErrorState } from '../../components/ErrorState';
@@ -64,7 +64,7 @@ function ProfileView({ username }: { username: string }) {
   return (
     <section className={styles.panel}>
       <div className={styles.head}>
-        <Avatar name={p.displayName} photoUrl={p.avatarUrl ?? null} size={88} />
+        <AvatarViewer name={p.displayName} photoUrl={p.avatarUrl ?? null} size={88} />
         <div className={styles.identity}>
           <h1 className={styles.name}>{p.displayName}</h1>
           <p className={styles.handle}>@{p.username}</p>

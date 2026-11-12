@@ -129,7 +129,7 @@
   --topbar-h: 61px;
   --tabbar-h: 60px;
   --rail-w: 210px;
-  --content-max: 1536px;
+  --content-max: 1400px;
 
   /* Animations : courtes et discrètes, coupées si « réduire les animations » est actif */
   --t-press: 90ms;

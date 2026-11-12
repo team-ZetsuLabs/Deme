@@ -233,7 +233,8 @@
       "next": "Page suivante",
       "status": "Page {{page}} sur {{pages}}"
     },
-    "close": "Fermer"
+    "close": "Fermer",
+    "viewPhoto": "Voir la photo de {{name}}"
   },
   "errors": {
     "NETWORK_ERROR": "Impossible de joindre le serveur. Vérifiez votre connexion.",
