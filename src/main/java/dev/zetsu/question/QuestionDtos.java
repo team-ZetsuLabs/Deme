@@ -1,5 +1,6 @@
 package dev.zetsu.question;
 
+import dev.zetsu.comment.CommentDtos.CommentView;
 import dev.zetsu.common.CountryCode;
 import dev.zetsu.user.UserDtos.AuthorSummary;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -92,7 +93,9 @@ public final class QuestionDtos {
             @Schema(requiredMode = REQUIRED) Instant updatedAt,
             @Schema(requiredMode = REQUIRED,
                     description = "Vrai si le membre connecté peut supprimer la question : la sienne, sans réponse")
-            boolean canDelete) {
+            boolean canDelete,
+            @Schema(requiredMode = REQUIRED, description = "Commentaires de la question (QA-9), du plus ancien au plus récent")
+            List<CommentView> comments) {
     }
 
     @Schema(name = "SimilarQuestion", description = "Question proche du titre en cours de saisie (QA-8), version légère")

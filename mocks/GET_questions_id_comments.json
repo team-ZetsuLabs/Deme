@@ -1,0 +1,32 @@
+[
+  {
+    "id": 9001,
+    "author": {
+      "username": "fatou_sow",
+      "displayName": "Fatou Sow",
+      "avatarUrl": null,
+      "countryCode": "SN",
+      "reputation": 128,
+      "level": "MEMBER",
+      "deleted": false
+    },
+    "bodyHtml": "<p>Tu es en sandbox ou déjà en production ? Le comportement du webhook n'est pas le même.</p>\n",
+    "createdAt": "2026-10-19T14:20:00Z",
+    "canDelete": false
+  },
+  {
+    "id": 9004,
+    "author": {
+      "username": "moussa_traore",
+      "displayName": "Moussa Traoré",
+      "avatarUrl": null,
+      "countryCode": "ML",
+      "reputation": 57,
+      "level": "NEWCOMER",
+      "deleted": false
+    },
+    "bodyHtml": "<p>Même souci chez moi à Bamako, je suis la question.</p>\n",
+    "createdAt": "2026-10-19T16:02:00Z",
+    "canDelete": true
+  }
+]

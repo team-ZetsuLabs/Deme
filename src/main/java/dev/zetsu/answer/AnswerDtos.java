@@ -1,5 +1,6 @@
 package dev.zetsu.answer;
 
+import dev.zetsu.comment.CommentDtos.CommentView;
 import dev.zetsu.user.UserDtos.AuthorSummary;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
+import java.util.List;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
@@ -45,6 +47,8 @@ public final class AnswerDtos {
             Integer myVote,
             @Schema(requiredMode = REQUIRED) boolean canEdit,
             @Schema(requiredMode = REQUIRED) Instant createdAt,
-            @Schema(requiredMode = REQUIRED) Instant updatedAt) {
+            @Schema(requiredMode = REQUIRED) Instant updatedAt,
+            @Schema(requiredMode = REQUIRED, description = "Commentaires de la réponse (QA-9), du plus ancien au plus récent")
+            List<CommentView> comments) {
     }
 }

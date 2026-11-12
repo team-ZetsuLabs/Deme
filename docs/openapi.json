@@ -25,6 +25,9 @@
     "name" : "auth",
     "description" : "Inscription, connexion par email ou OAuth, session"
   }, {
+    "name" : "comments",
+    "description" : "Commentaires sous les questions et les réponses (QA-9)"
+  }, {
     "name" : "notifications",
     "description" : "Notifications dans l'application"
   }, {
@@ -2041,6 +2044,124 @@
           },
           "404" : {
             "description" : "QUESTION_NOT_FOUND, VOTE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/questions/{questionId}/comments" : {
+      "get" : {
+        "tags" : [ "comments" ],
+        "summary" : "Commentaires d'une question",
+        "description" : "Du plus ancien au plus récent. Déjà fournis dans QuestionDetail.comments.",
+        "operationId" : "commentListOnQuestion",
+        "parameters" : [ {
+          "name" : "questionId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Liste des commentaires, éventuellement vide",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Comment"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "QUESTION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "comments" ],
+        "summary" : "Commenter une question",
+        "operationId" : "commentCommentQuestion",
+        "parameters" : [ {
+          "name" : "questionId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CommentRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Commentaire publié",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "QUESTION_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -5151,6 +5272,124 @@
           },
           "404" : {
             "description" : "ANSWER_NOT_FOUND, VOTE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/answers/{answerId}/comments" : {
+      "get" : {
+        "tags" : [ "comments" ],
+        "summary" : "Commentaires d'une réponse",
+        "description" : "Du plus ancien au plus récent. Déjà fournis dans Answer.comments.",
+        "operationId" : "commentListOnAnswer",
+        "parameters" : [ {
+          "name" : "answerId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Liste des commentaires, éventuellement vide",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Comment"
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "ANSWER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "comments" ],
+        "summary" : "Commenter une réponse",
+        "operationId" : "commentCommentAnswer",
+        "parameters" : [ {
+          "name" : "answerId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CommentRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Commentaire publié",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "ANSWER_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -8824,6 +9063,58 @@
         }
       }
     },
+    "/api/v1/comments/{commentId}" : {
+      "delete" : {
+        "tags" : [ "comments" ],
+        "summary" : "Supprimer un commentaire",
+        "description" : "Son auteur, ou un modérateur ou administrateur.",
+        "operationId" : "commentDelete",
+        "parameters" : [ {
+          "name" : "commentId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Commentaire supprimé"
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_COMMENT_AUTHOR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "COMMENT_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/admin/tags/{name}" : {
       "delete" : {
         "tags" : [ "admin" ],
@@ -9126,6 +9417,31 @@
         },
         "required" : [ "deleted", "displayName", "level", "reputation", "username" ]
       },
+      "Comment" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "author" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "bodyHtml" : {
+            "type" : "string",
+            "description" : "HTML nettoyé côté serveur, à afficher avec MemberContent"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "canDelete" : {
+            "type" : "boolean",
+            "description" : "Vrai si le membre connecté peut supprimer le commentaire : le sien, ou l'équipe"
+          }
+        },
+        "required" : [ "author", "bodyHtml", "canDelete", "createdAt", "id" ]
+      },
       "QuestionContext" : {
         "type" : "object",
         "properties" : {
@@ -9217,9 +9533,16 @@
           "canDelete" : {
             "type" : "boolean",
             "description" : "Vrai si le membre connecté peut supprimer la question : la sienne, sans réponse"
+          },
+          "comments" : {
+            "type" : "array",
+            "description" : "Commentaires de la question (QA-9), du plus ancien au plus récent",
+            "items" : {
+              "$ref" : "#/components/schemas/Comment"
+            }
           }
         },
-        "required" : [ "answerCount", "author", "bodyHtml", "bodyMarkdown", "canDelete", "canEdit", "context", "createdAt", "id", "score", "tags", "title", "updatedAt" ]
+        "required" : [ "answerCount", "author", "bodyHtml", "bodyMarkdown", "canDelete", "canEdit", "comments", "context", "createdAt", "id", "score", "tags", "title", "updatedAt" ]
       },
       "QuestionRequest" : {
         "type" : "object",
@@ -10133,9 +10456,16 @@
           "updatedAt" : {
             "type" : "string",
             "format" : "date-time"
+          },
+          "comments" : {
+            "type" : "array",
+            "description" : "Commentaires de la réponse (QA-9), du plus ancien au plus récent",
+            "items" : {
+              "$ref" : "#/components/schemas/Comment"
+            }
           }
         },
-        "required" : [ "accepted", "author", "bodyHtml", "bodyMarkdown", "canEdit", "createdAt", "id", "questionId", "sameContext", "score", "updatedAt" ]
+        "required" : [ "accepted", "author", "bodyHtml", "bodyMarkdown", "canEdit", "comments", "createdAt", "id", "questionId", "sameContext", "score", "updatedAt" ]
       },
       "RoleChangeRequest" : {
         "type" : "object",
@@ -10553,6 +10883,20 @@
           }
         },
         "required" : [ "score" ]
+      },
+      "CommentRequest" : {
+        "type" : "object",
+        "description" : "Commentaire sous une question ou une réponse (QA-9)",
+        "properties" : {
+          "body" : {
+            "type" : "string",
+            "description" : "Markdown. Le HTML brut est ignoré.",
+            "example" : "Tu as essayé d'abord avec la sandbox Orange Money ?",
+            "maxLength" : 1000,
+            "minLength" : 2
+          }
+        },
+        "required" : [ "body" ]
       },
       "ProjectCreateRequest" : {
         "type" : "object",

@@ -1,6 +1,7 @@
 package dev.zetsu.question;
 
 import dev.zetsu.auth.ZetsuPrincipal;
+import dev.zetsu.comment.CommentService;
 import dev.zetsu.common.ApiException;
 import dev.zetsu.common.MarkdownRenderer;
 import dev.zetsu.common.PageResponse;
@@ -49,11 +50,12 @@ public class QuestionService {
     private final ReputationService reputation;
     private final ReputationEventRepository reputationEvents;
     private final NotificationRepository notifications;
+    private final CommentService comments;
 
     public QuestionService(QuestionRepository questions, QuestionSearch search, UserRepository users,
                            VoteRepository votes, TagService tagService, MarkdownRenderer markdown,
                            ReputationService reputation, ReputationEventRepository reputationEvents,
-                           NotificationRepository notifications) {
+                           NotificationRepository notifications, CommentService comments) {
         this.questions = questions;
         this.search = search;
         this.users = users;
@@ -63,6 +65,7 @@ public class QuestionService {
         this.reputation = reputation;
         this.reputationEvents = reputationEvents;
         this.notifications = notifications;
+        this.comments = comments;
     }
 
     @Transactional(readOnly = true)
@@ -200,6 +203,6 @@ public class QuestionService {
                 tagNames(q),
                 QuestionContext.from(q), author(q.getAuthor()), q.getScore(), q.getAnswerCount(),
                 q.getAcceptedAnswerId(), myVote, canEdit(q, me), q.getCreatedAt(), q.getUpdatedAt(),
-                canEdit(q, me) && q.getAnswerCount() == 0);
+                canEdit(q, me) && q.getAnswerCount() == 0, comments.forQuestion(q.getId(), me));
     }
 }
