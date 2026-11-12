@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { remainingUntil } from './remaining';
 import styles from './Countdown.module.css';
 
-/** Mise à jour toutes les 30 secondes : la minute près suffit, et c'est léger. */
-const TICK_MS = 30_000;
+/** Mise à jour chaque seconde : le compte à rebours affiche les secondes qui défilent. */
+const TICK_MS = 1_000;
 
 export type CountdownProps = { endsAt: string };
 
@@ -30,14 +30,19 @@ export function Countdown({ endsAt }: CountdownProps) {
       value: String(r.minutes).padStart(2, '0'),
       label: t('challenges.units.minutes', { count: r.minutes }),
     },
+    {
+      value: String(r.seconds).padStart(2, '0'),
+      label: t('challenges.units.seconds', { count: r.seconds }),
+    },
   ];
 
   return (
     <div>
       <p className={styles.caption}>{t('challenges.closesIn')}</p>
       {/* Lu une fois en phrase entière ; les chiffres ne sont pas annoncés à chaque mise à jour.
-          Chaque unité est accordée à part (« 1 jour », « 2 jours ») : une phrase avec trois
-          nombres ne peut pas s'accorder avec un seul `count`. */}
+          Les secondes restent visuelles seulement : les inclure ici ferait changer la phrase
+          chaque seconde. Chaque unité est accordée à part (« 1 jour », « 2 jours ») : une phrase
+          avec plusieurs nombres ne peut pas s'accorder avec un seul `count`. */}
       <p className="sr-only">
         {t('challenges.closesInFull', {
           days: t('challenges.unitsFull.days', { count: r.days }),

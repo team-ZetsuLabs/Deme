@@ -1430,7 +1430,9 @@
       "hours_one": "hora",
       "hours_other": "horas",
       "minutes_one": "minuto",
-      "minutes_other": "minutos"
+      "minutes_other": "minutos",
+      "seconds_one": "segundo",
+      "seconds_other": "segundos"
     },
     "submissions_one": "{{count}} trabalho de momento",
     "submissions_other": "{{count}} trabalhos de momento",

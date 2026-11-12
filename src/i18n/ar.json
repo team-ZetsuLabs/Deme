@@ -1518,7 +1518,13 @@
       "minutes_two": "دقيقتان",
       "minutes_few": "دقائق",
       "minutes_many": "دقيقة",
-      "minutes_other": "دقيقة"
+      "minutes_other": "دقيقة",
+      "seconds_zero": "ثوانٍ",
+      "seconds_one": "ثانية",
+      "seconds_two": "ثانيتان",
+      "seconds_few": "ثوانٍ",
+      "seconds_many": "ثانية",
+      "seconds_other": "ثانية"
     },
     "submissions_zero": "لا مشاركات حتى الآن",
     "submissions_one": "مشاركة واحدة حتى الآن",

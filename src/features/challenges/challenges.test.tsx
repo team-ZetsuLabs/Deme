@@ -48,6 +48,7 @@ describe('compte à rebours (CH-1)', () => {
       days: 2,
       hours: 3,
       minutes: 30,
+      seconds: 0,
       ended: false,
     });
     expect(remainingUntil('2026-10-20T00:00:00Z', now).ended).toBe(true);

@@ -1430,7 +1430,9 @@
       "hours_one": "hour",
       "hours_other": "hours",
       "minutes_one": "minute",
-      "minutes_other": "minutes"
+      "minutes_other": "minutes",
+      "seconds_one": "second",
+      "seconds_other": "seconds"
     },
     "submissions_one": "{{count}} submission so far",
     "submissions_other": "{{count}} submissions so far",
