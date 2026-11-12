@@ -22,7 +22,26 @@ export type FeedSources = {
   playtests?: PlaytestSummary[];
 };
 
-/** Fusionne les espaces en un seul flux, du plus récent au plus ancien (comme un fil social). */
+/**
+ * Mélange déterministe (même ordre à données égales, donc aucun saut au re-render) mais
+ * d'apparence aléatoire. La graine vient du nombre d'éléments : le fil ne dépend plus de la
+ * date, donc il n'affiche plus « un espace puis un autre » mais un vrai mélange.
+ */
+function shuffle(entries: FeedEntry[]): FeedEntry[] {
+  const a = entries.slice();
+  let seed = (a.length * 2654435761) & 0x7fffffff || 1;
+  const rand = () => {
+    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+    return seed / 0x7fffffff;
+  };
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/** Fusionne tous les espaces en un seul flux mélangé (comme un fil social, pas section par section). */
 export function mergeFeed(sources: FeedSources): FeedEntry[] {
   const entries: FeedEntry[] = [
     ...(sources.questions ?? []).map((item): FeedEntry => ({
@@ -56,5 +75,5 @@ export function mergeFeed(sources: FeedSources): FeedEntry[] {
       item,
     })),
   ];
-  return entries.sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
+  return shuffle(entries);
 }
