@@ -111,6 +111,10 @@
       "testersTarget": "Testeurs recherchés",
       "testersTargetHint": "De {{min}} à {{max}} testeurs.",
       "desiredStart": "Date de début souhaitée",
+      "desiredEnd": "Date de fin",
+      "desiredEndHint": "De {{min}} à {{max}} jours après le début.",
+      "durationDays_one": "Durée : {{count}} jour.",
+      "durationDays_other": "Durée : {{count}} jours.",
       "instructions": "Consignes aux testeurs (facultatif)",
       "instructionsHint": "Ce qu'il faut tester en priorité, où signaler les bugs.",
       "notice": "Votre campagne est créée en brouillon : vous la publierez ensuite.",
@@ -130,14 +134,13 @@
           "WEB": "Entrez une adresse https:// valide."
         },
         "testersTarget": "Indiquez un nombre de testeurs entre 12 et 100.",
-        "requiredDays": "Indiquez une durée valide pour cette plateforme."
+        "desiredStart": "Choisissez une date de début.",
+        "desiredEnd": "La date de fin doit suivre le début et respecter la durée autorisée."
       },
       "platform": "Plateforme",
       "noticeWeb": "Campagne web : pas de décompte de jours, mais chaque campagne web est relue par l’équipe avant publication.",
       "publish": "Publier la campagne",
       "saveDraft": "Enregistrer comme brouillon",
-      "requiredDays": "Durée du test (jours)",
-      "requiredDaysHint": "De {{min}} à {{max}} jours par testeur.",
       "published": "Campagne publiée",
       "pendingReview": "Campagne envoyée à l’équipe pour validation",
       "draftSaved": "Brouillon enregistré"

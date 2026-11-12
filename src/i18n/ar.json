@@ -115,6 +115,14 @@
       "testersTarget": "عدد المختبِرين المطلوب",
       "testersTargetHint": "من {{min}} إلى {{max}} مختبِرًا.",
       "desiredStart": "تاريخ البدء المفضّل",
+      "desiredEnd": "تاريخ الانتهاء",
+      "desiredEndHint": "من {{min}} إلى {{max}} يومًا بعد البدء.",
+      "durationDays_zero": "المدة: {{count}} يوم.",
+      "durationDays_one": "المدة: يوم واحد.",
+      "durationDays_two": "المدة: يومان.",
+      "durationDays_few": "المدة: {{count}} أيام.",
+      "durationDays_many": "المدة: {{count}} يومًا.",
+      "durationDays_other": "المدة: {{count}} يوم.",
       "instructions": "تعليمات للمختبِرين (اختياري)",
       "instructionsHint": "ما الذي يُختبَر أولًا، وأين تُبلَّغ الأعطال.",
       "notice": "تُنشأ حملتك كمسودة: تنشرها بعد ذلك.",
@@ -134,14 +142,13 @@
           "WEB": "أدخل عنوان https:// صالحًا."
         },
         "testersTarget": "أدخل عدد مختبِرين بين 12 و100.",
-        "requiredDays": "أدخل مدة صالحة لهذه المنصة."
+        "desiredStart": "اختر تاريخ بدء.",
+        "desiredEnd": "يجب أن يلي تاريخ الانتهاء تاريخ البدء وأن يحترم المدة المسموح بها."
       },
       "platform": "المنصة",
       "noticeWeb": "حملة ويب: لا عدّاد للأيام، لكن تُراجَع كل حملة ويب من الفريق قبل النشر.",
       "publish": "نشر الحملة",
       "saveDraft": "حفظ كمسودة",
-      "requiredDays": "مدة الاختبار (أيام)",
-      "requiredDaysHint": "من {{min}} إلى {{max}} يومًا لكل مختبِر.",
       "published": "نُشرت الحملة",
       "pendingReview": "أُرسلت الحملة إلى الفريق للمراجعة",
       "draftSaved": "حُفظت المسودة"

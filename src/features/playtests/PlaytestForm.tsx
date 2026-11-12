@@ -20,12 +20,22 @@ type PlaytestValues = {
   description: string;
   optInUrl: string;
   testersTarget: string;
-  requiredDays: string;
   desiredStart: string;
+  desiredEnd: string;
   instructions: string;
 };
 
 const asPlatform = (v: string): PlaytestPlatform => v as PlaytestPlatform;
+
+/** Dates au format AAAA-MM-JJ, calculs en UTC pour éviter les décalages de fuseau. */
+const todayIso = () => new Date().toISOString().slice(0, 10);
+const addDays = (iso: string, n: number) => {
+  const d = new Date(`${iso}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+};
+const daysBetween = (start: string, end: string) =>
+  Math.round((Date.parse(`${end}T00:00:00Z`) - Date.parse(`${start}T00:00:00Z`)) / 86_400_000);
 
 const VALIDATORS: Validators<PlaytestValues> = {
   platform: () => null,
@@ -50,15 +60,14 @@ const VALIDATORS: Validators<PlaytestValues> = {
       ? null
       : 'playtests.new.errors.testersTarget';
   },
-  requiredDays: (v, vals) => {
+  desiredStart: (v) => (v ? null : 'playtests.new.errors.desiredStart'),
+  // La durée est l'écart début → fin, bornée par la plateforme (ex. 14 j mini sur Google Play).
+  desiredEnd: (v, vals) => {
+    if (!v || !vals.desiredStart) return 'playtests.new.errors.desiredEnd';
     const c = PLATFORM_CONFIG[asPlatform(vals.platform)];
-    if (c.tracking === 'NONE') return null;
-    const n = Number(v);
-    return Number.isInteger(n) && n >= c.daysMin && n <= c.daysMax
-      ? null
-      : 'playtests.new.errors.requiredDays';
+    const d = daysBetween(vals.desiredStart, v);
+    return d >= c.daysMin && d <= c.daysMax ? null : 'playtests.new.errors.desiredEnd';
   },
-  desiredStart: () => null,
   instructions: () => null,
 };
 
@@ -69,8 +78,8 @@ const IDS: Record<keyof PlaytestValues, string> = {
   description: 'pt-description',
   optInUrl: 'pt-opt-in',
   testersTarget: 'pt-testers',
-  requiredDays: 'pt-days',
   desiredStart: 'pt-start',
+  desiredEnd: 'pt-end',
   instructions: 'pt-instructions',
 };
 
@@ -84,6 +93,10 @@ export type PlaytestFormProps = {
 export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
   const { t } = useTranslation();
   const initialPlatform: PlaytestPlatform = initial?.platform ?? 'GOOGLE_PLAY';
+  // Pré-remplissage : début = date enregistrée ou aujourd'hui ; fin = début + durée enregistrée
+  // (reconstituée depuis requiredDays) ou durée par défaut de la plateforme.
+  const initialStart = initial?.desiredStart ?? todayIso();
+  const initialDays = initial?.requiredDays ?? PLATFORM_CONFIG[initialPlatform].daysDefault;
   const form = useValidatedForm<PlaytestValues>(
     {
       platform: initialPlatform,
@@ -94,8 +107,8 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
       testersTarget: String(
         initial?.testersTarget ?? PLATFORM_CONFIG[initialPlatform].testersDefault,
       ),
-      requiredDays: String(initial?.requiredDays ?? PLATFORM_CONFIG[initialPlatform].daysDefault),
-      desiredStart: initial?.desiredStart ?? '',
+      desiredStart: initialStart,
+      desiredEnd: addDays(initialStart, initialDays),
       instructions: initial?.instructions ?? '',
     },
     VALIDATORS,
@@ -121,16 +134,17 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
     }
     setBusy(true);
     try {
-      // packageName et requiredDays sont ignorés en web : on ne les envoie que s'ils s'appliquent.
+      // La durée (requiredDays) est l'écart début → fin, envoyée pour toutes les plateformes.
+      // packageName reste ignoré en web (pas d'identifiant d'application).
       const body: PlaytestRequest = {
         platform,
         appName: values.appName.trim(),
         description: values.description.trim(),
         optInUrl: values.optInUrl.trim(),
         testersTarget: Number(values.testersTarget),
+        requiredDays: daysBetween(values.desiredStart, values.desiredEnd),
+        desiredStart: values.desiredStart,
         ...(config.packageKind ? { packageName: values.packageName.trim() } : {}),
-        ...(config.tracking === 'DAILY' ? { requiredDays: Number(values.requiredDays) } : {}),
-        ...(values.desiredStart ? { desiredStart: values.desiredStart } : {}),
         ...(values.instructions.trim() ? { instructions: values.instructions.trim() } : {}),
       };
       let saved = initial
@@ -144,6 +158,11 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
       setBusy(false);
     }
   };
+
+  const durationDays =
+    values.desiredStart && values.desiredEnd
+      ? daysBetween(values.desiredStart, values.desiredEnd)
+      : null;
 
   const err = (name: keyof PlaytestValues) => fieldErrorText(t, errors[name]);
   const bind = (name: keyof PlaytestValues, hint = false) => ({
@@ -232,49 +251,48 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
         />
       </Field>
 
+      <Field
+        id={IDS.testersTarget}
+        label={t('playtests.new.testersTarget')}
+        hint={t('playtests.new.testersTargetHint', {
+          min: config.testersMin,
+          max: config.testersMax,
+        })}
+        error={err('testersTarget')}
+      >
+        <input
+          type="number"
+          inputMode="numeric"
+          min={config.testersMin}
+          max={config.testersMax}
+          {...bind('testersTarget', true)}
+        />
+      </Field>
+
       <div className={styles.grid}>
         <Field
-          id={IDS.testersTarget}
-          label={t('playtests.new.testersTarget')}
-          hint={t('playtests.new.testersTargetHint', {
-            min: config.testersMin,
-            max: config.testersMax,
-          })}
-          error={err('testersTarget')}
+          id={IDS.desiredStart}
+          label={t('playtests.new.desiredStart')}
+          error={err('desiredStart')}
+        >
+          <input type="date" min={todayIso()} {...bind('desiredStart')} />
+        </Field>
+        <Field
+          id={IDS.desiredEnd}
+          label={t('playtests.new.desiredEnd')}
+          hint={t('playtests.new.desiredEndHint', { min: config.daysMin, max: config.daysMax })}
+          error={err('desiredEnd')}
         >
           <input
-            type="number"
-            inputMode="numeric"
-            min={config.testersMin}
-            max={config.testersMax}
-            {...bind('testersTarget', true)}
+            type="date"
+            min={values.desiredStart || todayIso()}
+            {...bind('desiredEnd', true)}
           />
         </Field>
-        {config.tracking === 'DAILY' && (
-          <Field
-            id={IDS.requiredDays}
-            label={t('playtests.new.requiredDays')}
-            hint={t('playtests.new.requiredDaysHint', { min: config.daysMin, max: config.daysMax })}
-            error={err('requiredDays')}
-          >
-            <input
-              type="number"
-              inputMode="numeric"
-              min={config.daysMin}
-              max={config.daysMax}
-              {...bind('requiredDays', true)}
-            />
-          </Field>
-        )}
       </div>
-
-      <Field
-        id={IDS.desiredStart}
-        label={t('playtests.new.desiredStart')}
-        error={err('desiredStart')}
-      >
-        <input type="date" {...bind('desiredStart')} />
-      </Field>
+      {durationDays !== null && durationDays > 0 && (
+        <p className={styles.notice}>{t('playtests.new.durationDays', { count: durationDays })}</p>
+      )}
 
       <Field
         id={IDS.instructions}

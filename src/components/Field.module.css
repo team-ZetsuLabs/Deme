@@ -51,6 +51,36 @@
     18px 19px;
 }
 
+/* Champs date/heure : zone cliquable et icône de calendrier lisible dans les deux thèmes. */
+.field input[type='date'],
+.field input[type='datetime-local'],
+.field input[type='time'] {
+  cursor: pointer;
+}
+
+.field input[type='date']::-webkit-calendar-picker-indicator,
+.field input[type='datetime-local']::-webkit-calendar-picker-indicator,
+.field input[type='time']::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.55;
+  border-radius: var(--r-sm);
+  padding: var(--s1);
+  transition: opacity var(--t-fast) ease-out;
+}
+
+.field input[type='date']:hover::-webkit-calendar-picker-indicator,
+.field input[type='datetime-local']:hover::-webkit-calendar-picker-indicator,
+.field input[type='time']:hover::-webkit-calendar-picker-indicator {
+  opacity: 1;
+}
+
+/* L'icône native est sombre : on l'inverse en thème sombre pour qu'elle reste visible. */
+:global([data-theme='dark']) .field input[type='date']::-webkit-calendar-picker-indicator,
+:global([data-theme='dark']) .field input[type='datetime-local']::-webkit-calendar-picker-indicator,
+:global([data-theme='dark']) .field input[type='time']::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
 .field input:focus,
 .field textarea:focus,
 .field select:focus {

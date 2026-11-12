@@ -111,6 +111,10 @@
       "testersTarget": "Testers wanted",
       "testersTargetHint": "From {{min}} to {{max}} testers.",
       "desiredStart": "Preferred start date",
+      "desiredEnd": "End date",
+      "desiredEndHint": "From {{min}} to {{max}} days after the start.",
+      "durationDays_one": "Duration: {{count}} day.",
+      "durationDays_other": "Duration: {{count}} days.",
       "instructions": "Instructions for testers (optional)",
       "instructionsHint": "What to test first, where to report bugs.",
       "notice": "Your campaign is created as a draft: you'll publish it next.",
@@ -130,14 +134,13 @@
           "WEB": "Enter a valid https:// address."
         },
         "testersTarget": "Enter a number of testers between 12 and 100.",
-        "requiredDays": "Enter a valid length for this platform."
+        "desiredStart": "Choose a start date.",
+        "desiredEnd": "The end date must follow the start and keep within the allowed length."
       },
       "platform": "Platform",
       "noticeWeb": "Web campaign: no day counter, but every web campaign is reviewed by the team before publishing.",
       "publish": "Publish the campaign",
       "saveDraft": "Save as draft",
-      "requiredDays": "Test length (days)",
-      "requiredDaysHint": "From {{min}} to {{max}} days per tester.",
       "published": "Campaign published",
       "pendingReview": "Campaign sent to the team for review",
       "draftSaved": "Draft saved"

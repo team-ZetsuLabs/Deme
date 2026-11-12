@@ -12,7 +12,7 @@ export type PlatformConfig = {
   testersMin: number;
   testersMax: number;
   testersDefault: number;
-  /** Durée du test par testeur, en jours. 0 en web (pas de décompte). */
+  /** Durée de la campagne, en jours (écart entre la date de début et la date de fin). */
   daysMin: number;
   daysMax: number;
   daysDefault: number;
@@ -53,9 +53,10 @@ export const PLATFORM_CONFIG: Record<PlaytestPlatform, PlatformConfig> = {
     testersMin: 1,
     testersMax: 100,
     testersDefault: 10,
-    daysMin: 0,
-    daysMax: 0,
-    daysDefault: 0,
+    // Le web a maintenant une durée de campagne (dates début/fin), même sans décompte quotidien.
+    daysMin: 1,
+    daysMax: 90,
+    daysDefault: 14,
     tracking: 'NONE',
   },
 };
