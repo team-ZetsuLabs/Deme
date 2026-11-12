@@ -325,7 +325,8 @@ public class ProjectService {
         }).toList();
         MyRequestRef mine = me == null ? null
                 : members.findFirstByProjectIdAndUserIdOrderByCreatedAtDescIdDesc(p.getId(), me.id())
-                .map(m -> new MyRequestRef(m.getId(), m.getRole() == null ? null : m.getRole().getId(), m.getStatus()))
+                .map(m -> new MyRequestRef(m.getId(), m.getRole() == null ? null : m.getRole().getId(), m.getStatus(),
+                        m.getRoleTitle(), m.getMessage(), m.getCreatedAt()))
                 .orElse(null);
         boolean active = p.getStatus() != ProjectStatus.CLOSED;
         boolean teamMember = isOwner(p, me) || (mine != null && mine.status() == MemberStatus.ACCEPTED);

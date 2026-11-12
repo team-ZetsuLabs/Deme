@@ -125,6 +125,14 @@ public class ProjectRequestService {
         members.delete(m);
     }
 
+    /** Comme {@link #withdraw}, sans connaître l'identifiant : la demande en attente du membre sur ce projet. */
+    @Transactional
+    public void withdrawMine(Long projectId, ZetsuPrincipal me) {
+        ProjectMember m = members.findFirstByProjectIdAndUserIdAndStatusIn(projectId, me.id(),
+                List.of(MemberStatus.PENDING)).orElseThrow(ProjectRequestService::requestNotFound);
+        members.delete(m);
+    }
+
     /** Section 5.2 : un membre peut quitter le projet ; son rôle se rouvre. */
     @Transactional
     public ProjectDetail leave(Long projectId, ZetsuPrincipal me) {
@@ -166,7 +174,8 @@ public class ProjectRequestService {
     }
 
     private MyRequest toMine(ProjectMember m) {
-        return new MyRequest(m.getId(), m.getProject().getId(), m.getProject().getTitle(), m.getRoleTitle(),
+        return new MyRequest(m.getId(), m.getProject().getId(), m.getProject().getTitle(),
+                m.getRole() == null ? null : m.getRole().getId(), m.getRoleTitle(),
                 m.getMessage(), m.getStatus(), m.getRemovalReason(), m.getCreatedAt(), m.getDecidedAt(), m.getLeftAt());
     }
 

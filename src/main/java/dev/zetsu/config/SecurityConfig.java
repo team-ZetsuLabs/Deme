@@ -76,7 +76,7 @@ public class SecurityConfig {
                         // Lectures privées sous des chemins par ailleurs publics : à déclarer avant les permitAll.
                         .requestMatchers(HttpMethod.GET, "/api/v1/users/me/**", "/api/v1/jobs/mine",
                                 "/api/v1/jobs/*/applications", "/api/v1/missions/*/applications",
-                                "/api/v1/projects/*/requests", "/api/v1/playtests/mine",
+                                "/api/v1/projects/*/requests", "/api/v1/projects/mine", "/api/v1/playtests/mine",
                                 "/api/v1/playtests/*/participations",
                                 "/api/v1/playtests/*/feedback").authenticated()
                         .requestMatchers(HttpMethod.GET,

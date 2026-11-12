@@ -239,6 +239,52 @@ class ProjectIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    void retirerSaDemandeSansConnaitreSonIdentifiant() throws Exception {
+        Member owner = register("Fatou");
+        Member kwame = register("Kwame", "GH");
+        JsonNode p = publish(owner, "Annuaire des développeurs freelance de Lomé");
+        long id = p.get("id").asLong();
+        long roleId = p.get("roles").get(1).get("id").asLong();
+        askId(kwame, id, roleId);
+        // La page du projet donne au candidat de quoi réafficher sa demande.
+        mvc.perform(get("/api/v1/projects/{id}", id).session(kwame.session()))
+                .andExpect(jsonPath("$.myRequest.status").value("PENDING"))
+                .andExpect(jsonPath("$.myRequest.roleId").value(roleId))
+                .andExpect(jsonPath("$.myRequest.roleTitle").value("Designer UX"))
+                .andExpect(jsonPath("$.myRequest.message").value("Je fais du Flutter depuis deux ans à Dakar."))
+                .andExpect(jsonPath("$.myRequest.createdAt").isNotEmpty());
+        mvc.perform(get("/api/v1/users/me/project-requests").session(kwame.session()))
+                .andExpect(jsonPath("$.items[0].roleId").value(roleId));
+
+        mvc.perform(delete("/api/v1/projects/{id}/requests/me", id).with(csrf()).session(kwame.session()))
+                .andExpect(status().isNoContent());
+        mvc.perform(delete("/api/v1/projects/{id}/requests/me", id).with(csrf()).session(kwame.session()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("REQUEST_NOT_FOUND"));
+        mvc.perform(get("/api/v1/projects/{id}/requests", id).session(owner.session()))
+                .andExpect(jsonPath("$.total").value(0));
+    }
+
+    @Test
+    void mesProjetsPorteEtRejoints() throws Exception {
+        Member owner = register("Ousmane");
+        Member nadia = register("Nadia", "MA");
+        JsonNode p = publish(owner, "Passerelle SMS pour coopératives agricoles");
+        long id = p.get("id").asLong();
+        long other = publish(register("Ibrahim", "NE"), "Outil de suivi des forages au Niger").get("id").asLong();
+        long requestId = askId(nadia, id, p.get("roles").get(0).get("id").asLong());
+        decide(owner, id, requestId, "ACCEPTED").andExpect(status().isOk());
+
+        mvc.perform(get("/api/v1/projects/mine")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/v1/projects/mine").session(owner.session()))
+                .andExpect(jsonPath("$.total").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(id));
+        mvc.perform(get("/api/v1/projects/mine").session(nadia.session()))
+                .andExpect(jsonPath("$.items[*].id", hasItem((int) id)))
+                .andExpect(jsonPath("$.items[*].id", not(hasItem((int) other))));
+    }
+
+    @Test
     void lesDemandesRecuesSontReserveesAuPorteur() throws Exception {
         Member owner = register("Aminata");
         long id = publish(owner, "Comparateur de forfaits internet au Sénégal").get("id").asLong();

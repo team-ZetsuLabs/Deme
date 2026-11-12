@@ -99,7 +99,10 @@ public final class ProjectDtos {
     public record MyRequestRef(
             @Schema(requiredMode = REQUIRED) Long id,
             @Schema(description = "Null si le rôle a été retiré depuis") Long roleId,
-            @Schema(requiredMode = REQUIRED) MemberStatus status) {
+            @Schema(requiredMode = REQUIRED) MemberStatus status,
+            @Schema(requiredMode = REQUIRED, description = "Intitulé du rôle au moment de la demande") String roleTitle,
+            @Schema(requiredMode = REQUIRED) String message,
+            @Schema(requiredMode = REQUIRED) Instant createdAt) {
     }
 
     @Schema(name = "ProjectSummary", description = "Projet tel qu'affiché dans une liste (PRJ-2)")
@@ -182,6 +185,7 @@ public final class ProjectDtos {
             @Schema(requiredMode = REQUIRED) Long id,
             @Schema(requiredMode = REQUIRED) Long projectId,
             @Schema(requiredMode = REQUIRED) String projectTitle,
+            @Schema(description = "Null si le rôle a été retiré depuis") Long roleId,
             @Schema(requiredMode = REQUIRED) String roleTitle,
             @Schema(requiredMode = REQUIRED) String message,
             @Schema(requiredMode = REQUIRED) MemberStatus status,
