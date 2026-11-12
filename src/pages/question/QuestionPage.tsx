@@ -168,6 +168,17 @@ function QuestionView({ id }: { id: number }) {
           <div className={detail.content}>
             <MemberContent html={q.bodyHtml} />
             {q.code && <CodeBlock code={q.code} />}
+            {q.images && q.images.length > 0 && (
+              <ul className={detail.images}>
+                {q.images.map((img) => (
+                  <li key={img.id}>
+                    <a href={img.url} target="_blank" rel="noopener noreferrer">
+                      <img src={img.url} alt="" className={detail.image} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
             <div className={detail.foot}>
               <div className={detail.actions}>
                 <ul className={styles.tags}>

@@ -594,7 +594,11 @@
       "network": "جودة الشبكة",
       "noNetwork": "غير محددة",
       "techVersion": "إصدار التقنية",
-      "techVersionPlaceholder": "مثال: Spring Boot 3.3، Flutter 3.24"
+      "techVersionPlaceholder": "مثال: Spring Boot 3.3، Flutter 3.24",
+      "photos": "صور",
+      "photosHint": "حتى صورتين (لقطة خطأ، شاشة). PNG أو JPG أو WebP، 2 ميغابايت كحد أقصى.",
+      "addPhoto": "إضافة صورة",
+      "removePhoto": "إزالة الصورة"
     },
     "submit": "نشر السؤال",
     "busy": "جارٍ النشر",

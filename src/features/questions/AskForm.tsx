@@ -1,7 +1,12 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { MobileMoneyOperator, NetworkQuality, QuestionDetail } from '../../api/types';
+import type {
+  MobileMoneyOperator,
+  NetworkQuality,
+  QuestionDetail,
+  QuestionImage,
+} from '../../api/types';
 import { CountrySelect } from '../../components/CountrySelect';
 import { Button } from '../../components/Button';
 import { Field } from '../../components/Field';
@@ -11,6 +16,7 @@ import { OTHER_COUNTRY } from '../../i18n/countries';
 import { fieldErrorText } from '../../hooks/fieldErrorText';
 import { useSubmitError } from '../../hooks/useSubmitError';
 import { AiAssist } from './AiAssist';
+import { QuestionImagePicker } from './QuestionImagePicker';
 import { SimilarQuestions } from './SimilarQuestions';
 import { NETWORKS, OPERATORS } from './context';
 import { questionsApi } from './questionsApi';
@@ -73,6 +79,7 @@ export function AskForm({
     question?.context?.networkQuality ?? '',
   );
   const [techVersion, setTechVersion] = useState(question?.context?.techVersion ?? '');
+  const [images, setImages] = useState<QuestionImage[]>(question?.images ?? []);
   const { values, errors } = form;
   const context = {
     countryCode: country || null,
@@ -97,6 +104,7 @@ export function AskForm({
         code: code.trim() || null,
         tags: parseTags(values.tags),
         context,
+        ...(images.length ? { imageIds: images.map((i) => i.id) } : {}),
       };
       onPosted(
         question ? await questionsApi.update(question.id, body) : await questionsApi.create(body),
@@ -180,6 +188,8 @@ export function AskForm({
           onChange={(e) => setCode(e.target.value)}
         />
       </Field>
+
+      <QuestionImagePicker images={images} onChange={setImages} />
 
       <AiAssist
         title={values.title}

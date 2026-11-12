@@ -562,7 +562,11 @@
       "network": "Network quality",
       "noNetwork": "Not specified",
       "techVersion": "Technology version",
-      "techVersionPlaceholder": "E.g. Spring Boot 3.3, Flutter 3.24"
+      "techVersionPlaceholder": "E.g. Spring Boot 3.3, Flutter 3.24",
+      "photos": "Photos",
+      "photosHint": "Up to 2 images (error screenshot, screen). PNG, JPG or WebP, 2 MB max.",
+      "addPhoto": "Add a photo",
+      "removePhoto": "Remove photo"
     },
     "submit": "Post the question",
     "busy": "Posting",

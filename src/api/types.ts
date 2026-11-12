@@ -80,7 +80,9 @@ export type QuestionContext = Schemas['QuestionContext'];
 export type MobileMoneyOperator = NonNullable<QuestionContext['mobileMoneyOperator']>;
 export type NetworkQuality = NonNullable<QuestionContext['networkQuality']>;
 export type QuestionSummary = Schemas['QuestionSummary'];
-export type QuestionRequest = Schemas['QuestionRequest'];
+/** Pas encore dans le contrat : photos jointes à une question (2 max), voir message back-end. */
+export type QuestionImage = { id: number; url: string };
+export type QuestionRequest = Schemas['QuestionRequest'] & { imageIds?: number[] };
 export type AnswerRequest = Schemas['AnswerRequest'];
 export type VoteResult = Schemas['VoteResult'];
 export type TagCount = Schemas['TagCount'];
@@ -90,7 +92,8 @@ export type ContentExtras = {
   comments?: Comment[];
 };
 
-export type QuestionDetail = Schemas['QuestionDetail'] & ContentExtras;
+export type QuestionDetail = Schemas['QuestionDetail'] &
+  ContentExtras & { images?: QuestionImage[] };
 export type Answer = Schemas['Answer'] & ContentExtras;
 
 // Emploi et missions

@@ -5,6 +5,7 @@ import type {
   Comment,
   Page,
   QuestionDetail,
+  QuestionImage,
   QuestionRequest,
   QuestionSummary,
   VoteResult,
@@ -62,6 +63,14 @@ export const questionsApi = {
     api.get<Page<Answer>>(`/questions/${questionId}/answers`, {
       query: { page: 0, size: ANSWERS_PAGE_SIZE },
     }),
+  /** Envoi d'une photo de question (max 2, QA, contrat provisoire — voir message back-end). */
+  uploadImage: async (file: File) => {
+    const form = new FormData();
+    form.append('image', file);
+    const image = await api.post<QuestionImage>('/questions/images', form);
+    // En mock, le serveur ne stocke rien : on affiche la photo choisie localement (URL d'objet).
+    return api.mode === 'mock' ? { ...image, url: URL.createObjectURL(file) } : image;
+  },
   create: (body: QuestionRequest) => api.post<QuestionDetail>('/questions', body),
   /** Modifier sa question (QA-3). Le serveur vérifie que le membre en est l'auteur. */
   update: (id: number, body: QuestionRequest) => api.put<QuestionDetail>(`/questions/${id}`, body),
