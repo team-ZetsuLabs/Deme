@@ -96,7 +96,7 @@ public class UserController {
 
     @PutMapping("/me/onboarding")
     @Operation(summary = "Terminer le parcours d'accueil",
-            description = "Stack (1 à 10 technologies, partagées avec les étiquettes), pays et langue (AUTH-5). "
+            description = "Stack (1 à 20 technologies, partagées avec les étiquettes), pays et langue (AUTH-5). "
                     + "Passe onboardingCompleted à vrai ; peut être rappelé pour corriger ses choix.")
     @ApiResponse(responseCode = "200", description = "Profil à jour")
     @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR, INVALID_TAG, TAG_REQUIRED", content = @Content(schema = @Schema(implementation = ApiError.class)))

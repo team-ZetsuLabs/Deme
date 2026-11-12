@@ -2,6 +2,8 @@ package dev.zetsu.answer;
 
 import dev.zetsu.answer.AnswerDtos.AnswerView;
 import dev.zetsu.auth.ZetsuPrincipal;
+import dev.zetsu.comment.CommentDtos.CommentView;
+import dev.zetsu.comment.CommentService;
 import dev.zetsu.common.ApiException;
 import dev.zetsu.common.MarkdownRenderer;
 import dev.zetsu.common.PageResponse;
@@ -41,10 +43,12 @@ public class AnswerService {
     private final MarkdownRenderer markdown;
     private final NotificationService notifications;
     private final BadgeService badges;
+    private final CommentService comments;
 
     public AnswerService(AnswerRepository answers, QuestionRepository questions, QuestionService questionService,
                          UserRepository users, VoteRepository votes, ReputationService reputation,
-                         MarkdownRenderer markdown, NotificationService notifications, BadgeService badges) {
+                         MarkdownRenderer markdown, NotificationService notifications, BadgeService badges,
+                         CommentService comments) {
         this.answers = answers;
         this.questions = questions;
         this.questionService = questionService;
@@ -54,6 +58,7 @@ public class AnswerService {
         this.markdown = markdown;
         this.notifications = notifications;
         this.badges = badges;
+        this.comments = comments;
     }
 
     @Transactional(readOnly = true)
@@ -62,7 +67,9 @@ public class AnswerService {
         Page<Answer> result = answers.findForQuestion(questionId, q.getAcceptedAnswerId(),
                 me == null ? null : me.id(), me != null && me.staff(), Paging.of(page, size));
         Map<Long, Integer> myVotes = myVotes(result.getContent(), me);
-        return PageResponse.of(result, a -> toView(a, q, myVotes.get(a.getId()), me));
+        Map<Long, List<CommentView>> byAnswer = comments.forAnswers(
+                result.getContent().stream().map(Answer::getId).toList(), me);
+        return PageResponse.of(result, a -> toView(a, q, myVotes.get(a.getId()), me, byAnswer.get(a.getId())));
     }
 
     @Transactional
@@ -72,12 +79,15 @@ public class AnswerService {
         a.setBody(req.body(), markdown.toSafeHtml(req.body()));
         a.setCode(blankToNull(req.code()));
         answers.saveAndFlush(a);
-        questions.addAnswerCount(q.getId(), 1);
+        if (questions.addAnswerCount(q.getId(), 1) == 0) {
+            // Supprimée entre la lecture et l'écriture : la transaction est annulée, la réponse avec.
+            throw ApiException.notFound("QUESTION_NOT_FOUND", "Question introuvable");
+        }
         notifications.notify(q.getAuthor().getId(), NotificationType.ANSWER_POSTED, me.id(),
                 NotificationService.answer(a.getId(), q.getTitle(), q.getId()), null);
         // Une réponse ne rapporte pas de points mais compte pour Premier pas, Entraide et Aide locale (REP-4).
         badges.refresh(me.id());
-        return toView(a, q, null, me);
+        return toView(a, q, null, me, List.of());
     }
 
     @Transactional
@@ -93,7 +103,7 @@ public class AnswerService {
         Question q = questionService.load(a.getQuestionId());
         Integer myVote = votes.findByVoterIdAndTargetTypeAndTargetId(me.id(), VoteTarget.ANSWER, a.getId())
                 .map(Vote::getValue).orElse(null);
-        return toView(a, q, myVote, me);
+        return toView(a, q, myVote, me, comments.forAnswers(List.of(a.getId()), me).get(a.getId()));
     }
 
     /** L'auteur de la question choisit la réponse qui l'a aidé. {@code answerId} null retire l'acceptation. */
@@ -177,12 +187,13 @@ public class AnswerService {
         return s == null || s.isBlank() ? null : s;
     }
 
-    private AnswerView toView(Answer a, Question q, Integer myVote, ZetsuPrincipal me) {
+    private AnswerView toView(Answer a, Question q, Integer myVote, ZetsuPrincipal me,
+                              List<CommentView> answerComments) {
         String authorCountry = a.getAuthor().getCountryCode();
         boolean sameContext = authorCountry != null && authorCountry.equals(q.getCountryCode());
         return new AnswerView(a.getId(), a.getQuestionId(), a.getBodyMarkdown(), a.getBodyHtml(), a.getCode(),
                 AuthorSummary.from(a.getAuthor(), reputation.levelOf(a.getAuthor().getReputation())), a.getScore(),
                 a.getId().equals(q.getAcceptedAnswerId()), sameContext, myVote, canEdit(a, me), a.getCreatedAt(),
-                a.getUpdatedAt());
+                a.getUpdatedAt(), answerComments);
     }
 }

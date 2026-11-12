@@ -1,0 +1,16 @@
+{
+  "id": 301,
+  "author": {
+    "username": "efua_mensah",
+    "displayName": "Efua Mensah",
+    "avatarUrl": null,
+    "countryCode": "GH",
+    "reputation": 64,
+    "level": "NEWCOMER",
+    "deleted": false
+  },
+  "kind": "BUG",
+  "rating": 3,
+  "bodyHtml": "<p>L'application se ferme quand je valide un versement MTN MoMo sur un Tecno Spark (Android 10).</p>\n",
+  "createdAt": "2026-11-12T09:14:00Z"
+}

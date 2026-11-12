@@ -37,6 +37,10 @@ public class Question {
     @Column(nullable = false, insertable = false, updatable = false)
     private boolean hidden;
 
+    /** Supprimée par son auteur (QA-3) : écrit seulement par {@link QuestionRepository#softDelete}. */
+    @Column(name = "deleted_at", insertable = false, updatable = false)
+    private Instant deletedAt;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "author_id")
     private User author;
@@ -206,6 +210,10 @@ public class Question {
 
     public Instant getUpdatedAt() {
         return updatedAt;
+    }
+
+    public boolean isDeleted() {
+        return deletedAt != null;
     }
 
     public boolean isHidden() {

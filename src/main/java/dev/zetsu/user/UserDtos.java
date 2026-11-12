@@ -18,7 +18,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
 public final class UserDtos {
 
-    public static final int MAX_TECHNOLOGIES = 10;
+    public static final int MAX_TECHNOLOGIES = 20;
 
     private UserDtos() {
     }

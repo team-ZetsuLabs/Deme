@@ -28,5 +28,44 @@
   "myVote": 1,
   "canEdit": false,
   "createdAt": "2026-10-19T14:05:00Z",
-  "updatedAt": "2026-10-19T14:12:00Z"
+  "updatedAt": "2026-10-19T14:12:00Z",
+  "canDelete": false,
+  "comments": [
+    {
+      "id": 9001,
+      "author": {
+        "username": "fatou_sow",
+        "displayName": "Fatou Sow",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 128,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "bodyHtml": "<p>Tu es en sandbox ou déjà en production ? Le comportement du webhook n'est pas le même.</p>\n",
+      "createdAt": "2026-10-19T14:20:00Z",
+      "canDelete": false
+    },
+    {
+      "id": 9004,
+      "author": {
+        "username": "moussa_traore",
+        "displayName": "Moussa Traoré",
+        "avatarUrl": null,
+        "countryCode": "ML",
+        "reputation": 57,
+        "level": "NEWCOMER",
+        "deleted": false
+      },
+      "bodyHtml": "<p>Même souci chez moi à Bamako, je suis la question.</p>\n",
+      "createdAt": "2026-10-19T16:02:00Z",
+      "canDelete": true
+    }
+  ],
+  "images": [
+    {
+      "id": "3f2b6c1e-8d4a-4c55-9a51-0b7e2f1d9c3a",
+      "url": "https://res.cloudinary.com/zetsu/image/upload/c_limit,w_1280/f_auto,q_auto/v1731400000/zetsu/questions/3f2b6c1e-8d4a-4c55-9a51-0b7e2f1d9c3a.png"
+    }
+  ]
 }

@@ -39,4 +39,12 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     @Modifying
     @Query(value = "delete from notifications where recipient_id = :recipientId", nativeQuery = true)
     void deleteAllOf(@Param("recipientId") Long recipientId);
+
+    /** Notifications qui mènent à une question supprimée (QA-3) : elles n'aboutiraient plus qu'à une 404. */
+    @Modifying
+    @Query(value = """
+            delete from notifications
+            where question_id = :questionId or (target_type = 'QUESTION' and target_id = :questionId)
+            """, nativeQuery = true)
+    void deleteAllAboutQuestion(@Param("questionId") Long questionId);
 }

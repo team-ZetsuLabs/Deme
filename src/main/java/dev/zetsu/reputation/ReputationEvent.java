@@ -48,6 +48,10 @@ public class ReputationEvent {
     @Column(name = "project_id")
     private Long projectId;
 
+    /** Participation à un test fermé terminée (TST-3), pour PLAYTEST_COMPLETED. */
+    @Column(name = "test_participation_id")
+    private Long testParticipationId;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 
@@ -73,6 +77,12 @@ public class ReputationEvent {
     public static ReputationEvent forProject(Long userId, int delta, ReputationReason reason, Long projectId) {
         ReputationEvent e = new ReputationEvent(userId, delta, reason, null, null, null);
         e.projectId = projectId;
+        return e;
+    }
+
+    public static ReputationEvent forPlaytest(Long userId, int delta, ReputationReason reason, Long participationId) {
+        ReputationEvent e = new ReputationEvent(userId, delta, reason, null, null, null);
+        e.testParticipationId = participationId;
         return e;
     }
 

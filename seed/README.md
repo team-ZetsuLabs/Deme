@@ -15,6 +15,15 @@
 - **5 projets** (PRJ-1 à PRJ-6) : 3 qui recrutent, 1 dont l'équipe est complète, 1 clôturé dont le membre a gagné ses 10 points ;
 - **le jury dans deux rôles** : porteur de « Annuaire des développeurs du Sénégal », avec deux demandes en attente sur le même rôle (en accepter une refuse l'autre), et membre de « Tontine Cash », dont il peut alimenter le fil ou qu'il peut quitter.
 
+`tests-fermes.sql` ajoute les tests fermés Google Play (TST), sur les mêmes membres plus 6 testeurs :
+
+- **4 campagnes** : « Kobo Split » (Nigeria, active, 2 places libres), « Wari Stock » (portée par le jury), « Jollof Rider » (porteuse nouvelle, en attente de validation dans le back office) et « Gbaka Abidjan » (terminée, 12 testeurs sur 14 jours) ;
+- **le jury testeur** de « Kobo Split » : vérifié par le porteur, 6 jours sur 14, « toujours inscrit » à faire aujourd'hui ;
+- **le jury porteur** de « Wari Stock » : un testeur à vérifier (Yao Kouassi), un « à confirmer » depuis 4 jours (Kwame Asante), une testeuse qui vient de rejoindre sans avoir déclaré l'installation (Fatou Ndiaye) ;
+- un testeur parti (installation non déclarée) et sa remplaçante, et l'historique de chaque campagne pour le back office.
+
+Ce script-là se remet à zéro à chaque passage : il efface ses 4 campagnes et les recrée avec des dates relatives à maintenant. La tâche horaire du back-end fait avancer les compteurs (rappels, place libérée au bout de 48 heures, fin des 14 jours) : on le relance juste avant la démo.
+
 `photos.sql` donne une photo de profil aux 9 membres de démo, jury compris : des avatars dessinés (`seed/avatars/`, WebP de 2 Ko environ), jamais des photos de vraies personnes. Il ne remplace jamais une photo déjà mise par un membre ou venue de GitHub ou Google.
 
 Les deux premiers scripts sont rejouables : ils ne créent rien deux fois, `photos.sql` non plus. Ils s'appliquent après les migrations Flyway, donc une fois que le back-end a démarré au moins une fois sur la base, et dans cet ordre : `communautes.sql` puis `projets-badges.sql`. Le second a besoin des migrations V13 (badges) et V14 (projets).
@@ -33,6 +42,8 @@ docker compose -f compose.dev.yaml exec -T db psql -U zetsu -d zetsu \
 docker compose -f compose.dev.yaml exec -T db psql -U zetsu -d zetsu \
   -v demo_username=aminata_dev -v demo_email="$DEMO_EMAIL" -v demo_password="$DEMO_PASSWORD" \
   < seed/projets-badges.sql
+
+docker compose -f compose.dev.yaml exec -T db psql -U zetsu -d zetsu   -v demo_username=aminata_dev < seed/tests-fermes.sql
 ```
 
 Pour les photos, on copie d'abord les images dans le dossier des téléversements (`UPLOADS_DIR`, par défaut `data/uploads`), puis on lance le script. Sans la copie, les profils pointent vers des images introuvables.
@@ -67,4 +78,5 @@ Le script active l'extension `pgcrypto` pour hacher le mot de passe en bcrypt. I
 - Les réputations des membres sont posées directement : leur historique de points ne contient que les gains du mois qui servent aux communautés.
 - Pour la démo de la proposition : se connecter avec le compte du jury, proposer une communauté depuis /communities/new, puis l'accepter ou la refuser depuis le back office.
 - Les badges sont recalculés depuis les contenus à chaque action : un badge gagné ne se perd pas, il reste affiché si l'on démarre ensuite sans le profil `demo`, même si la progression est sous le seuil normal.
+- Pour la démo des tests fermés : avec le compte du jury, ouvrir « Kobo Split », appuyer sur « Toujours inscrit », puis ouvrir « Wari Stock » et vérifier Yao Kouassi. Depuis le back office, valider ou refuser « Jollof Rider » ; les indicateurs sont sur /admin/playtests/stats.
 - Pour la démo des projets : se connecter avec le compte du jury, ouvrir « Annuaire des développeurs du Sénégal », accepter une des deux demandes sur « Développeur front React » (l'autre est refusée et notifiée, le projet passe « En cours »), puis clôturer le projet : les deux membres gagnent 10 points.

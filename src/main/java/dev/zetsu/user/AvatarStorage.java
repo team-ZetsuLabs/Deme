@@ -40,6 +40,13 @@ public class AvatarStorage {
     /** Recadrage carré et format automatique (WebP, AVIF…) : quelques Ko par photo, pour la 3G. */
     static final String TRANSFORMATION = "c_fill,w_256,h_256/f_auto,q_auto";
     private static final String LOCAL_PREFIX = "/api/v1/users/";
+    private static final String ICON_PREFIX = "/api/v1/playtests/";
+    private static final String ICONS = "playtests";
+    static final String ICON_TRANSFORMATION = "c_fill,w_128,h_128/f_auto,q_auto";
+    private static final String QUESTION_IMAGES = "questions";
+    private static final String QUESTION_IMAGE_PREFIX = "/api/v1/questions/images/";
+    /** Largeur limitée, sans agrandir ni recadrer, au format le plus léger pour la 3G. */
+    static final String QUESTION_IMAGE_TRANSFORMATION = "c_limit,w_1280/f_auto,q_auto";
     private static final String CLOUD = "cloudinary:";
     private static final Pattern CLOUD_ID = Pattern.compile("/v\\d+/(.+)/([0-9a-f-]{36})\\.[a-z0-9]+$");
 
@@ -67,6 +74,55 @@ public class AvatarStorage {
         }
         writeLocal(file, name);
         return new Stored(name, LOCAL_PREFIX + username + "/avatar/" + name);
+    }
+
+    /** Icône d'une campagne de test fermé (TST-1) : mêmes contrôles qu'une photo, recadrée en 128 px. */
+    public Stored storeIcon(MultipartFile file, Long campaignId) {
+        String name = check(file);
+        if (cloudinary.enabled()) {
+            String publicId = cloudinary.folder(ICONS) + "/" + name.substring(0, name.indexOf('.'));
+            CloudinaryClient.Upload up = cloudinary.upload(bytes(file), publicId, "image", CloudinaryClient.PUBLIC);
+            String extension = up.format() == null ? name.substring(name.indexOf('.') + 1) : up.format();
+            return new Stored(CLOUD + up.publicId(), cloudPrefix() + ICON_TRANSFORMATION + "/v" + up.version() + "/"
+                    + up.publicId() + "." + extension);
+        }
+        writeLocal(file, name);
+        return new Stored(name, ICON_PREFIX + campaignId + "/icon/" + name);
+    }
+
+    /**
+     * Image jointe à une question (QA-11) : mêmes contrôles qu'une photo, sans recadrage, réduite à 1280 px de large
+     * au plus. Sur le disque, servie par {@code GET /api/v1/questions/images/<fichier>}.
+     */
+    public Stored storeQuestionImage(MultipartFile file) {
+        String name = check(file);
+        if (cloudinary.enabled()) {
+            String publicId = cloudinary.folder(QUESTION_IMAGES) + "/" + name.substring(0, name.indexOf('.'));
+            CloudinaryClient.Upload up = cloudinary.upload(bytes(file), publicId, "image", CloudinaryClient.PUBLIC);
+            String extension = up.format() == null ? name.substring(name.indexOf('.') + 1) : up.format();
+            return new Stored(CLOUD + up.publicId(), cloudPrefix() + QUESTION_IMAGE_TRANSFORMATION + "/v"
+                    + up.version() + "/" + up.publicId() + "." + extension);
+        }
+        writeLocal(file, name);
+        return new Stored(name, QUESTION_IMAGE_PREFIX + name);
+    }
+
+    /** Référence d'une icône enregistrée par Zetsu, null pour toute autre adresse. */
+    public String iconRefOf(String iconUrl) {
+        if (iconUrl == null) {
+            return null;
+        }
+        if (iconUrl.startsWith(ICON_PREFIX)) {
+            String name = iconUrl.substring(iconUrl.lastIndexOf('/') + 1);
+            return isStoredName(name) ? name : null;
+        }
+        if (cloudinary.enabled() && iconUrl.startsWith(cloudPrefix())) {
+            Matcher m = CLOUD_ID.matcher(iconUrl);
+            if (m.find() && m.group(1).equals(cloudinary.folder(ICONS))) {
+                return CLOUD + m.group(1) + "/" + m.group(2);
+            }
+        }
+        return null;
     }
 
     /**

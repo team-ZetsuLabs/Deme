@@ -28,6 +28,12 @@ public class ApiException extends RuntimeException {
                 Map.of(field, message));
     }
 
+    /** Plusieurs champs vérifiés à la main (règles qui dépendent d'un autre champ). */
+    public static ApiException invalidFields(Map<String, String> fields) {
+        return new ApiException(HttpStatus.BAD_REQUEST, "VALIDATION_ERROR", "Certains champs sont invalides",
+                Map.copyOf(fields));
+    }
+
     public Map<String, String> fields() {
         return fields;
     }

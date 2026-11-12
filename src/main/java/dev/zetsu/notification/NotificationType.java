@@ -37,5 +37,29 @@ public enum NotificationType {
     /** Le porteur m'a retiré de l'équipe d'un projet ; le motif est sur ma demande. */
     PROJECT_MEMBER_REMOVED,
     /** Un projet dont je fais partie est clôturé : +10 de réputation (PRJ-6). */
-    PROJECT_CLOSED
+    PROJECT_CLOSED,
+    /** Nouvelle campagne de test fermé, pour un membre qui fait du mobile (TST-4). */
+    PLAYTEST_NEW_CAMPAIGN,
+    /** Porteur : un testeur a rejoint (outcome JOINED) ou déclaré l'installation (outcome CONFIRMED). */
+    PLAYTEST_JOINED,
+    /** Testeur : installation pas encore déclarée 24 heures après avoir rejoint. */
+    PLAYTEST_INSTALL_REMINDER,
+    /** Testeur : pas de « toujours inscrit » depuis 3 jours. */
+    PLAYTEST_STAY_REMINDER,
+    /** Testeur et porteur : la participation se termine dans 2 jours. */
+    PLAYTEST_ENDING_SOON,
+    /** Testeur et porteur : 14 jours effectués, +5 de réputation pour le testeur. */
+    PLAYTEST_PARTICIPATION_DONE,
+    /** Porteur : un testeur est parti (outcome DROPPED, ou EXPIRED sans installation déclarée sous 48 heures). */
+    PLAYTEST_TESTER_LEFT,
+    /** Porteur : une place libérée a été reprise par un nouveau testeur. */
+    PLAYTEST_TESTER_REPLACED,
+    /** Porteur : plus aucune place libre. */
+    PLAYTEST_CAMPAIGN_FULL,
+    /** Porteur : décision de l'équipe (outcome APPROVED, REJECTED, SUSPENDED, REACTIVATED). */
+    PLAYTEST_CAMPAIGN_REVIEWED,
+    /** Testeur : retiré de la campagne par le porteur ou l'équipe ; le motif est sur la participation. */
+    PLAYTEST_REMOVED,
+    /** Porteur : un testeur a envoyé un retour ; outcome vaut BUG, SUGGESTION ou OTHER. */
+    PLAYTEST_FEEDBACK
 }

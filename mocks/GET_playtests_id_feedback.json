@@ -1,0 +1,39 @@
+{
+  "items": [
+    {
+      "id": 305,
+      "author": {
+        "username": "ibrahim_kone",
+        "displayName": "Ibrahim Koné",
+        "avatarUrl": null,
+        "countryCode": "CI",
+        "reputation": 212,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "kind": "SUGGESTION",
+      "rating": 4,
+      "bodyHtml": "<p>Ajoutez un mode hors ligne pour noter les cotisations quand le réseau coupe, puis synchroniser.</p>\n",
+      "createdAt": "2026-11-12T11:40:00Z"
+    },
+    {
+      "id": 301,
+      "author": {
+        "username": "efua_mensah",
+        "displayName": "Efua Mensah",
+        "avatarUrl": null,
+        "countryCode": "GH",
+        "reputation": 64,
+        "level": "NEWCOMER",
+        "deleted": false
+      },
+      "kind": "BUG",
+      "rating": 3,
+      "bodyHtml": "<p>L'application se ferme quand je valide un versement MTN MoMo sur un Tecno Spark (Android 10).</p>\n",
+      "createdAt": "2026-11-12T09:14:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 2
+}

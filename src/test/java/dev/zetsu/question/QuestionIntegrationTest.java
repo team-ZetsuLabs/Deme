@@ -7,10 +7,13 @@ import org.springframework.http.MediaType;
 import java.util.List;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -175,5 +178,64 @@ class QuestionIntegrationTest extends IntegrationTest {
         mvc.perform(get("/api/v1/questions").param("country", "TG").param("network", "UNSTABLE")
                         .param("sort", "VOTES"))
                 .andExpect(jsonPath("$.total").value(1));
+    }
+
+    @Test
+    void lAuteurSupprimeSaQuestionSansReponse() throws Exception {
+        Member fatou = register("Fatou");
+        Member moussa = withReputation(register("Moussa"), 50);
+        long id = askQuestion(fatou, "Webhook Wave reçu deux fois en production", BODY, "SN");
+        mvc.perform(post("/api/v1/questions/{id}/votes", id).with(csrf()).session(moussa.session())
+                        .contentType(MediaType.APPLICATION_JSON).content(body(Map.of("value", 1))))
+                .andExpect(status().isOk());
+        int before = jdbc.queryForObject("select reputation from users where id = ?", Integer.class, fatou.id());
+        mvc.perform(get("/api/v1/questions/{id}", id).session(fatou.session()))
+                .andExpect(jsonPath("$.canDelete").value(true));
+        mvc.perform(get("/api/v1/questions/{id}", id).session(moussa.session()))
+                .andExpect(jsonPath("$.canDelete").value(false));
+
+        mvc.perform(delete("/api/v1/questions/{id}", id).with(csrf()))
+                .andExpect(status().isUnauthorized());
+        mvc.perform(delete("/api/v1/questions/{id}", id).with(csrf()).session(moussa.session()))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("NOT_QUESTION_AUTHOR"));
+        mvc.perform(delete("/api/v1/questions/{id}", id).with(csrf()).session(fatou.session()))
+                .andExpect(status().isNoContent());
+
+        // Elle n'existe plus pour personne, ni en lecture, ni pour y répondre ou la modifier.
+        mvc.perform(get("/api/v1/questions/{id}", id).session(fatou.session()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("QUESTION_NOT_FOUND"));
+        mvc.perform(get("/api/v1/questions").param("size", "50"))
+                .andExpect(jsonPath("$.items[?(@.id == " + id + ")]", hasSize(0)));
+        mvc.perform(post("/api/v1/questions/{id}/answers", id).with(csrf()).session(moussa.session())
+                        .contentType(MediaType.APPLICATION_JSON).content(body(Map.of("body", BODY))))
+                .andExpect(status().isNotFound());
+        mvc.perform(delete("/api/v1/questions/{id}", id).with(csrf()).session(fatou.session()))
+                .andExpect(status().isNotFound());
+
+        // Les points de la question posée (+5) et du vote reçu (+2) sont retirés, le vote avec.
+        int after = jdbc.queryForObject("select reputation from users where id = ?", Integer.class, fatou.id());
+        assertThat(before - after).isEqualTo(7);
+        assertThat(jdbc.queryForObject("select count(*) from votes where target_type = 'QUESTION' and target_id = ?",
+                Integer.class, id)).isZero();
+        assertThat(jdbc.queryForObject("select count(*) from notifications where target_type = 'QUESTION' "
+                + "and target_id = ?", Integer.class, id)).isZero();
+    }
+
+    @Test
+    void uneQuestionAvecReponseNeSeSupprimePlus() throws Exception {
+        Member fatou = register("Fatou");
+        long id = askQuestion(fatou, "Limiter les appels USSD sur un réseau instable", BODY, "BF");
+        mvc.perform(post("/api/v1/questions/{id}/answers", id).with(csrf()).session(register("Issa", "BF").session())
+                        .contentType(MediaType.APPLICATION_JSON).content(body(Map.of("body", BODY))))
+                .andExpect(status().isCreated());
+
+        mvc.perform(get("/api/v1/questions/{id}", id).session(fatou.session()))
+                .andExpect(jsonPath("$.canDelete").value(false));
+        mvc.perform(delete("/api/v1/questions/{id}", id).with(csrf()).session(fatou.session()))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("QUESTION_HAS_ANSWERS"));
+        mvc.perform(get("/api/v1/questions/{id}", id)).andExpect(status().isOk());
     }
 }

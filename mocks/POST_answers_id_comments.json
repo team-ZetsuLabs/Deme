@@ -1,0 +1,15 @@
+{
+  "id": 9005,
+  "author": {
+    "username": "moussa_traore",
+    "displayName": "Moussa Traoré",
+    "avatarUrl": null,
+    "countryCode": "ML",
+    "reputation": 57,
+    "level": "NEWCOMER",
+    "deleted": false
+  },
+  "bodyHtml": "<p>Et pour les doublons, l'index unique sur <code>txnid</code> suffit ?</p>\n",
+  "createdAt": "2026-10-20T08:11:00Z",
+  "canDelete": true
+}

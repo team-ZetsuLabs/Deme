@@ -49,6 +49,7 @@ Après un changement de contrat, on régénère `docs/openapi.json` et on le pou
 | `user` | `GET /users/{username}`, `GET /users/{username}/reputation`, `PUT /users/me`, `PUT /users/me/onboarding` (accueil : stack, pays, langue), `DELETE /users/me` (suppression confirmée par le pseudo, contenus anonymisés) |
 | `question` | `GET /questions` (recherche plein texte sur titre, détails et étiquettes ; filtres pays, opérateur, réseau, étiquette, auteur, sans solution ; tri), `POST /questions`, `GET /questions/{id}`, `PUT /questions/{id}` |
 | `answer` | `GET /questions/{id}/answers`, `POST /questions/{id}/answers`, `PUT /answers/{id}`, `PUT` et `DELETE /questions/{id}/accepted-answer` |
+| `comment` | `GET` et `POST /questions/{id}/comments`, `GET` et `POST /answers/{id}/comments`, `DELETE /comments/{id}` (QA-9) ; aussi fournis dans `QuestionDetail.comments` et `Answer.comments` |
 | `vote` | `POST` et `DELETE /questions/{id}/votes`, `POST` et `DELETE /answers/{id}/votes` |
 | `tag` | `GET /tags` |
 | `reputation` | barème dans `ReputationReason`, historique par membre |
@@ -112,10 +113,24 @@ Espace Projets (PRJ-1 à PRJ-6) : un projet a de 1 à 6 rôles, un membre par r�
 | `admin` (communautés) | `GET` et `POST /admin/communities`, `PUT /admin/communities/{slug}`, `PUT /admin/communities/{slug}/referents`, `POST /admin/communities/{slug}/close` et `/reopen`, `GET /admin/community-proposals`, `POST /admin/community-proposals/{id}/decision` |
 | `ai` | `POST /ai/question-assist` (IA-1) |
 | `question` | `GET /questions/similar?title=&exclude=&limit=` (QA-8, publique, de 1 à 10 résultats) |
+| `question` | `POST /questions/images` (QA-11, multipart `image`, PNG/JPG/WebP de 2 Mo au plus) puis `imageIds` (2 au plus) dans `POST` et `PUT /questions` ; `QuestionDetail.images` |
 | `reputation` | `GET /users/{username}/badges` (les six badges et la progression) ; champ `badges` du profil public (badges gagnés) |
 | `project` | `GET` et `POST /projects`, `GET` et `PUT /projects/{id}`, `POST /projects/{id}/roles`, `DELETE /projects/{id}/roles/{roleId}`, `POST /projects/{id}/close`, `POST` et `GET /projects/{id}/requests`, `PATCH` et `DELETE /projects/{id}/requests/{requestId}`, `POST /projects/{id}/leave`, `POST /projects/{id}/members/{username}/remove`, `GET` et `POST /projects/{id}/updates`, `GET /users/me/project-requests` |
 
 Nouveaux types de notification : `COMMUNITY_PROPOSAL_DECISION`, `PROJECT_REQUEST_RECEIVED`, `PROJECT_REQUEST_DECIDED`, `PROJECT_MEMBER_REMOVED`, `PROJECT_CLOSED`, et la cible `PROJECT`. Un projet se signale avec `targetType: PROJECT`.
+
+## Tests fermés Google Play (TST, idée de l'équipe hors cahier)
+
+Conception complète : `docs/conception-tests-fermes.md`. Un développeur doit réunir 12 testeurs pendant 14 jours avant de publier sur Google Play ; Zetsu organise l'entraide. Google ne donne aucune API pour lire la liste des testeurs : rien n'est vérifié automatiquement, et chaque compteur affiche son niveau de preuve (`DECLARED` par le testeur, `VERIFIED` par le porteur dans la Play Console, `COMPLETED` après les 14 jours).
+
+Une campagne naît en `DRAFT`, puis passe `ACTIVE` tout de suite si le porteur a 50 points ou plus, sinon `PENDING_REVIEW` jusqu'à la décision de l'équipe (`REJECTED` avec un motif, corrigeable). L'équipe peut la suspendre (`SUSPENDED`) ; elle devient `COMPLETED` quand toutes les places ont tenu 14 jours, ou à la clôture par le porteur. Une seule campagne en cours par application. Rejoindre prend une place sous verrou de la campagne ; l'installation se déclare sous 48 heures, sinon la place se libère et sera reprise par le suivant. Le lien d'inscription au test n'est donné qu'après avoir rejoint. Une tâche horaire envoie les rappels (installation, « toujours inscrit », fin proche), termine les participations arrivées au bout (+5 de réputation, `PLAYTEST_COMPLETED`) et efface les adresses Google 30 jours après la fin.
+
+| Domaine | Points d'entrée |
+| --- | --- |
+| `playtest` | `GET` et `POST /playtests`, `GET /playtests/mine`, `GET` et `PUT /playtests/{id}`, `PUT /playtests/{id}/icon`, `POST /playtests/{id}/submit`, `POST /playtests/{id}/close`, `GET` et `POST /playtests/{id}/participations`, `POST /playtests/{id}/participations/me/confirm`, `/check-in` et `/withdraw`, `POST /playtests/{id}/participations/{participationId}/verify` et `/remove`, `GET /users/me/playtest-participations` |
+| `admin` (tests fermés) | `GET /admin/playtests?status&problem=INACTIVE\|STALLED\|REPORTED`, `GET /admin/playtests/stats`, `POST /admin/playtests/{id}/review`, `/suspend` et `/reactivate`, `GET /admin/playtests/{id}/participations`, `POST /admin/playtests/{id}/participations/{participationId}/remove`, `GET /admin/playtests/{id}/events` |
+
+Nouveaux types de notification : `PLAYTEST_NEW_CAMPAIGN`, `PLAYTEST_JOINED`, `PLAYTEST_INSTALL_REMINDER`, `PLAYTEST_STAY_REMINDER`, `PLAYTEST_ENDING_SOON`, `PLAYTEST_PARTICIPATION_DONE`, `PLAYTEST_TESTER_LEFT`, `PLAYTEST_TESTER_REPLACED`, `PLAYTEST_CAMPAIGN_FULL`, `PLAYTEST_CAMPAIGN_REVIEWED`, `PLAYTEST_REMOVED`, et la cible `PLAYTEST`. Une campagne se signale avec `targetType: PLAYTEST`.
 
 ## Données de démo
 
@@ -139,4 +154,4 @@ Un exemple de réponse par point d'entrée se trouve dans `mocks/` (`GET_questio
 - Un compte GitHub ou Google n'est jamais rattaché automatiquement à un compte email existant, même avec la même adresse : l'email d'inscription n'est pas vérifié, ce serait une porte ouverte au vol de compte.
 - La limitation de débit est en mémoire (une seule instance). Les sessions aussi : un redémarrage déconnecte tout le monde.
 - Les compteurs des badges et la recherche des questions similaires sont faits en SQL (`BadgeService`, `QuestionSearch`) : pas de compteur à tenir à jour, pas de service de recherche externe.
-- Les migrations Flyway ne se modifient jamais une fois fusionnées ; la dernière est `V14__projets.sql`.
+- Les migrations Flyway ne se modifient jamais une fois fusionnées ; la dernière est `V17__tests_fermes.sql` (V16, suppression des questions, arrive avec la PR #24 et doit être fusionnée avant).

@@ -1,5 +1,6 @@
 package dev.zetsu.question;
 
+import dev.zetsu.comment.CommentDtos.CommentView;
 import dev.zetsu.common.CountryCode;
 import dev.zetsu.user.UserDtos.AuthorSummary;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -50,7 +51,26 @@ public final class QuestionDtos {
             @Schema(requiredMode = REQUIRED, example = "[\"mobile-money\", \"spring-boot\"]")
             List<String> tags,
 
-            @Valid QuestionContext context) {
+            @Valid QuestionContext context,
+
+            @Size(max = 2, message = "2 images maximum")
+            @Schema(description = "Images envoyées avant par POST /questions/images, dans l'ordre d'affichage (2 au "
+                    + "plus). Absent : les images ne changent pas ; [] : toutes retirées.",
+                    example = "[\"3f2b6c1e-8d4a-4c55-9a51-0b7e2f1d9c3a\"]")
+            List<String> imageIds) {
+    }
+
+    @Schema(name = "QuestionImage", description = "Image jointe à une question (QA-11)")
+    public record QuestionImageView(
+            @Schema(requiredMode = REQUIRED, example = "3f2b6c1e-8d4a-4c55-9a51-0b7e2f1d9c3a") String id,
+            @Schema(requiredMode = REQUIRED, description = "Adresse de l'image, à afficher telle quelle dans <img>")
+            String url) {
+    }
+
+    @Schema(name = "QuestionImageForm", description = "Formulaire multipart d'une image de question (QA-11)")
+    public record QuestionImageForm(
+            @Schema(requiredMode = REQUIRED, type = "string", format = "binary",
+                    description = "PNG, JPG ou WebP, 2 Mo maximum") String image) {
     }
 
     @Schema(name = "QuestionSummary", description = "Question telle qu'affichée dans une liste")
@@ -89,7 +109,14 @@ public final class QuestionDtos {
             @Schema(requiredMode = REQUIRED, description = "Vrai si le membre connecté peut modifier la question")
             boolean canEdit,
             @Schema(requiredMode = REQUIRED) Instant createdAt,
-            @Schema(requiredMode = REQUIRED) Instant updatedAt) {
+            @Schema(requiredMode = REQUIRED) Instant updatedAt,
+            @Schema(requiredMode = REQUIRED,
+                    description = "Vrai si le membre connecté peut supprimer la question : la sienne, sans réponse")
+            boolean canDelete,
+            @Schema(requiredMode = REQUIRED, description = "Commentaires de la question (QA-9), du plus ancien au plus récent")
+            List<CommentView> comments,
+            @Schema(requiredMode = REQUIRED, description = "Images jointes (QA-11), 2 au plus, dans l'ordre choisi")
+            List<QuestionImageView> images) {
     }
 
     @Schema(name = "SimilarQuestion", description = "Question proche du titre en cours de saisie (QA-8), version légère")

@@ -69,10 +69,10 @@ class OnboardingIntegrationTest extends IntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_TAG"));
 
-        List<String> eleven = List.of("a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "a9", "a10", "a11");
-        mvc.perform(onboarding(kofi, eleven, "GH", "fr"))
+        List<String> twentyOne = java.util.stream.IntStream.rangeClosed(1, 21).mapToObj(i -> "a" + i).toList();
+        mvc.perform(onboarding(kofi, twentyOne, "GH", "fr"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.fields.technologies").value("10 technologies maximum"));
+                .andExpect(jsonPath("$.fields.technologies").value("20 technologies maximum"));
     }
 
     @Test

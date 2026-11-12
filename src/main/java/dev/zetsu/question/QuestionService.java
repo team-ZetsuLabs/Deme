@@ -1,15 +1,18 @@
 package dev.zetsu.question;
 
 import dev.zetsu.auth.ZetsuPrincipal;
+import dev.zetsu.comment.CommentService;
 import dev.zetsu.common.ApiException;
 import dev.zetsu.common.MarkdownRenderer;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.common.Paging;
+import dev.zetsu.notification.NotificationRepository;
 import dev.zetsu.question.QuestionDtos.QuestionContext;
 import dev.zetsu.question.QuestionDtos.QuestionDetail;
 import dev.zetsu.question.QuestionDtos.QuestionRequest;
 import dev.zetsu.question.QuestionDtos.QuestionSummary;
 import dev.zetsu.question.QuestionDtos.SimilarQuestion;
+import dev.zetsu.reputation.ReputationEventRepository;
 import dev.zetsu.reputation.ReputationReason;
 import dev.zetsu.reputation.ReputationService;
 import dev.zetsu.tag.Tag;
@@ -45,10 +48,16 @@ public class QuestionService {
     private final TagService tagService;
     private final MarkdownRenderer markdown;
     private final ReputationService reputation;
+    private final ReputationEventRepository reputationEvents;
+    private final NotificationRepository notifications;
+    private final CommentService comments;
+    private final QuestionImageService images;
 
     public QuestionService(QuestionRepository questions, QuestionSearch search, UserRepository users,
                            VoteRepository votes, TagService tagService, MarkdownRenderer markdown,
-                           ReputationService reputation) {
+                           ReputationService reputation, ReputationEventRepository reputationEvents,
+                           NotificationRepository notifications, CommentService comments,
+                           QuestionImageService images) {
         this.questions = questions;
         this.search = search;
         this.users = users;
@@ -56,6 +65,10 @@ public class QuestionService {
         this.tagService = tagService;
         this.markdown = markdown;
         this.reputation = reputation;
+        this.reputationEvents = reputationEvents;
+        this.notifications = notifications;
+        this.comments = comments;
+        this.images = images;
     }
 
     @Transactional(readOnly = true)
@@ -95,6 +108,7 @@ public class QuestionService {
         Question q = new Question(author);
         apply(q, req);
         questions.saveAndFlush(q);
+        images.attach(q.getId(), req.imageIds(), me.id());
         reputation.grant(me.id(), ReputationReason.QUESTION_ASKED, q.getId(), null, null);
         return toDetail(load(q.getId()), me);
     }
@@ -108,11 +122,35 @@ public class QuestionService {
         apply(q, req);
         q.touch();
         questions.saveAndFlush(q);
+        images.attach(q.getId(), req.imageIds(), me.id());
         return toDetail(q, me);
     }
 
+    /**
+     * QA-3 : l'auteur (ou un administrateur) supprime une question tant que personne n'y a répondu, pour ne pas
+     * effacer le travail des autres. Les points gagnés grâce à elle (question posée, votes reçus) sont retirés.
+     */
+    @Transactional
+    public void delete(Long id, ZetsuPrincipal me) {
+        Question q = load(id);
+        if (!canEdit(q, me)) {
+            throw ApiException.forbidden("NOT_QUESTION_AUTHOR", "Seul l'auteur peut supprimer cette question");
+        }
+        if (questions.softDelete(id) == 0) {
+            throw ApiException.conflict("QUESTION_HAS_ANSWERS",
+                    "Cette question a déjà reçu une réponse : elle ne peut plus être supprimée");
+        }
+        for (Object[] cause : reputationEvents.openCausesOnQuestion(id)) {
+            reputation.revoke(((Number) cause[0]).longValue(), ReputationReason.valueOf((String) cause[1]), id, null,
+                    cause[2] == null ? null : ((Number) cause[2]).longValue());
+        }
+        votes.deleteAllOn(VoteTarget.QUESTION, id);
+        notifications.deleteAllAboutQuestion(id);
+    }
+
+    /** Une question supprimée (QA-3) n'existe plus pour personne. */
     public Question load(Long id) {
-        return questions.findDetailed(id)
+        return questions.findDetailed(id).filter(q -> !q.isDeleted())
                 .orElseThrow(() -> ApiException.notFound("QUESTION_NOT_FOUND", "Question introuvable"));
     }
 
@@ -169,6 +207,8 @@ public class QuestionService {
         return new QuestionDetail(q.getId(), q.getTitle(), q.getBodyMarkdown(), q.getBodyHtml(), q.getCode(),
                 tagNames(q),
                 QuestionContext.from(q), author(q.getAuthor()), q.getScore(), q.getAnswerCount(),
-                q.getAcceptedAnswerId(), myVote, canEdit(q, me), q.getCreatedAt(), q.getUpdatedAt());
+                q.getAcceptedAnswerId(), myVote, canEdit(q, me), q.getCreatedAt(), q.getUpdatedAt(),
+                canEdit(q, me) && q.getAnswerCount() == 0, comments.forQuestion(q.getId(), me),
+                images.of(q.getId()));
     }
 }
