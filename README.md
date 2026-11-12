@@ -49,6 +49,7 @@ Après un changement de contrat, on régénère `docs/openapi.json` et on le pou
 | `user` | `GET /users/{username}`, `GET /users/{username}/reputation`, `PUT /users/me`, `PUT /users/me/onboarding` (accueil : stack, pays, langue), `DELETE /users/me` (suppression confirmée par le pseudo, contenus anonymisés) |
 | `question` | `GET /questions` (recherche plein texte sur titre, détails et étiquettes ; filtres pays, opérateur, réseau, étiquette, auteur, sans solution ; tri), `POST /questions`, `GET /questions/{id}`, `PUT /questions/{id}` |
 | `answer` | `GET /questions/{id}/answers`, `POST /questions/{id}/answers`, `PUT /answers/{id}`, `PUT` et `DELETE /questions/{id}/accepted-answer` |
+| `comment` | `GET` et `POST /questions/{id}/comments`, `GET` et `POST /answers/{id}/comments`, `DELETE /comments/{id}` (QA-9) ; aussi fournis dans `QuestionDetail.comments` et `Answer.comments` |
 | `vote` | `POST` et `DELETE /questions/{id}/votes`, `POST` et `DELETE /answers/{id}/votes` |
 | `tag` | `GET /tags` |
 | `reputation` | barème dans `ReputationReason`, historique par membre |
