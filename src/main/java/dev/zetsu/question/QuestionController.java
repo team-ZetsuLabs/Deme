@@ -7,6 +7,8 @@ import dev.zetsu.common.CountryCode;
 import dev.zetsu.common.PageResponse;
 import dev.zetsu.common.RateLimiter;
 import dev.zetsu.question.QuestionDtos.QuestionDetail;
+import dev.zetsu.question.QuestionDtos.QuestionImageForm;
+import dev.zetsu.question.QuestionDtos.QuestionImageView;
 import dev.zetsu.question.QuestionDtos.QuestionRequest;
 import dev.zetsu.question.QuestionDtos.QuestionSummary;
 import dev.zetsu.question.QuestionDtos.SimilarQuestion;
@@ -18,7 +20,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.core.io.Resource;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +34,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Duration;
 import java.util.List;
 
 @RestController
@@ -39,10 +48,13 @@ import java.util.List;
 public class QuestionController {
 
     private final QuestionService questionService;
+    private final QuestionImageService imageService;
     private final RateLimiter rateLimiter;
 
-    public QuestionController(QuestionService questionService, RateLimiter rateLimiter) {
+    public QuestionController(QuestionService questionService, QuestionImageService imageService,
+                              RateLimiter rateLimiter) {
         this.questionService = questionService;
+        this.imageService = imageService;
         this.rateLimiter = rateLimiter;
     }
 
@@ -110,6 +122,36 @@ public class QuestionController {
     public QuestionDetail create(@Valid @RequestBody QuestionRequest req, @AuthenticationPrincipal ZetsuPrincipal me) {
         rateLimiter.check(RateLimiter.Rule.PUBLISH, "user:" + me.id());
         return questionService.create(req, me);
+    }
+
+    @PostMapping(value = "/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Envoyer une image pour une question (QA-11)", description = """
+            Formulaire multipart, champ image : PNG, JPG ou WebP de 2 Mo maximum, vérifié par son contenu. Renvoie             { id, url } : citer id dans imageIds de POST ou PUT /questions (2 images au plus). Une image jamais             rattachée à une question est effacée au bout d'un jour.""")
+    @ApiResponse(responseCode = "201", description = "Image enregistrée")
+    @ApiResponse(responseCode = "400", description = "PHOTO_REQUIRED, PHOTO_TYPE, PHOTO_TOO_LARGE, FILE_TOO_LARGE (plus de 5 Mo)", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "429", description = "RATE_LIMITED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "503", description = "STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(
+            mediaType = MediaType.MULTIPART_FORM_DATA_VALUE, schema = @Schema(implementation = QuestionImageForm.class)))
+    public QuestionImageView uploadImage(@Parameter(hidden = true) @RequestPart(required = false) MultipartFile image,
+                                         @AuthenticationPrincipal ZetsuPrincipal me) {
+        rateLimiter.check(RateLimiter.Rule.PUBLISH, "user:" + me.id());
+        return imageService.upload(image, me.id());
+    }
+
+    @GetMapping("/images/{file}")
+    @Operation(summary = "Image gardée sur le serveur", description = "Ne pas construire cette adresse : utiliser url. En cache un an.")
+    @ApiResponse(responseCode = "200", description = "L'image", content = {
+            @Content(mediaType = "image/png"), @Content(mediaType = "image/jpeg"), @Content(mediaType = "image/webp")})
+    @ApiResponse(responseCode = "404", description = "IMAGE_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    public ResponseEntity<Resource> imageFile(@PathVariable String file) {
+        QuestionImageService.Image image = imageService.load(file);
+        return ResponseEntity.ok()
+                .contentType(image.type())
+                .cacheControl(CacheControl.maxAge(Duration.ofDays(365)).cachePublic().immutable())
+                .body(image.file());
     }
 
     @PutMapping("/{id}")

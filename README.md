@@ -113,6 +113,7 @@ Espace Projets (PRJ-1 à PRJ-6) : un projet a de 1 à 6 rôles, un membre par r�
 | `admin` (communautés) | `GET` et `POST /admin/communities`, `PUT /admin/communities/{slug}`, `PUT /admin/communities/{slug}/referents`, `POST /admin/communities/{slug}/close` et `/reopen`, `GET /admin/community-proposals`, `POST /admin/community-proposals/{id}/decision` |
 | `ai` | `POST /ai/question-assist` (IA-1) |
 | `question` | `GET /questions/similar?title=&exclude=&limit=` (QA-8, publique, de 1 à 10 résultats) |
+| `question` | `POST /questions/images` (QA-11, multipart `image`, PNG/JPG/WebP de 2 Mo au plus) puis `imageIds` (2 au plus) dans `POST` et `PUT /questions` ; `QuestionDetail.images` |
 | `reputation` | `GET /users/{username}/badges` (les six badges et la progression) ; champ `badges` du profil public (badges gagnés) |
 | `project` | `GET` et `POST /projects`, `GET` et `PUT /projects/{id}`, `POST /projects/{id}/roles`, `DELETE /projects/{id}/roles/{roleId}`, `POST /projects/{id}/close`, `POST` et `GET /projects/{id}/requests`, `PATCH` et `DELETE /projects/{id}/requests/{requestId}`, `POST /projects/{id}/leave`, `POST /projects/{id}/members/{username}/remove`, `GET` et `POST /projects/{id}/updates`, `GET /users/me/project-requests` |
 

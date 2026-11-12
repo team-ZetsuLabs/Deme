@@ -2306,6 +2306,76 @@
         }
       }
     },
+    "/api/v1/questions/images" : {
+      "post" : {
+        "tags" : [ "questions" ],
+        "summary" : "Envoyer une image pour une question (QA-11)",
+        "description" : "Formulaire multipart, champ image : PNG, JPG ou WebP de 2 Mo maximum, vérifié par son contenu. Renvoie             { id, url } : citer id dans imageIds de POST ou PUT /questions (2 images au plus). Une image jamais             rattachée à une question est effacée au bout d'un jour.",
+        "operationId" : "questionUploadImage",
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/QuestionImageForm"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Image enregistrée",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionImage"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "PHOTO_REQUIRED, PHOTO_TYPE, PHOTO_TOO_LARGE, FILE_TOO_LARGE (plus de 5 Mo)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/projects" : {
       "get" : {
         "tags" : [ "projects" ],
@@ -7737,6 +7807,42 @@
         }
       }
     },
+    "/api/v1/questions/images/{file}" : {
+      "get" : {
+        "tags" : [ "questions" ],
+        "summary" : "Image gardée sur le serveur",
+        "description" : "Ne pas construire cette adresse : utiliser url. En cache un an.",
+        "operationId" : "questionImageFile",
+        "parameters" : [ {
+          "name" : "file",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "L'image",
+            "content" : {
+              "image/png" : { },
+              "image/jpeg" : { },
+              "image/webp" : { }
+            }
+          },
+          "404" : {
+            "description" : "IMAGE_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/playtests/{id}/icon/{file}" : {
       "get" : {
         "tags" : [ "playtests" ],
@@ -9540,9 +9646,31 @@
             "items" : {
               "$ref" : "#/components/schemas/Comment"
             }
+          },
+          "images" : {
+            "type" : "array",
+            "description" : "Images jointes (QA-11), 2 au plus, dans l'ordre choisi",
+            "items" : {
+              "$ref" : "#/components/schemas/QuestionImage"
+            }
           }
         },
-        "required" : [ "answerCount", "author", "bodyHtml", "bodyMarkdown", "canDelete", "canEdit", "comments", "context", "createdAt", "id", "score", "tags", "title", "updatedAt" ]
+        "required" : [ "answerCount", "author", "bodyHtml", "bodyMarkdown", "canDelete", "canEdit", "comments", "context", "createdAt", "id", "images", "score", "tags", "title", "updatedAt" ]
+      },
+      "QuestionImage" : {
+        "type" : "object",
+        "description" : "Image jointe à une question (QA-11)",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "example" : "3f2b6c1e-8d4a-4c55-9a51-0b7e2f1d9c3a"
+          },
+          "url" : {
+            "type" : "string",
+            "description" : "Adresse de l'image, à afficher telle quelle dans <img>"
+          }
+        },
+        "required" : [ "id", "url" ]
       },
       "QuestionRequest" : {
         "type" : "object",
@@ -9577,6 +9705,16 @@
           },
           "context" : {
             "$ref" : "#/components/schemas/QuestionContext"
+          },
+          "imageIds" : {
+            "type" : "array",
+            "description" : "Images envoyées avant par POST /questions/images, dans l'ordre d'affichage (2 au plus). Absent : les images ne changent pas ; [] : toutes retirées.",
+            "example" : [ "3f2b6c1e-8d4a-4c55-9a51-0b7e2f1d9c3a" ],
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 2,
+            "minItems" : 0
           }
         },
         "required" : [ "body", "tags", "title" ]
@@ -10897,6 +11035,18 @@
           }
         },
         "required" : [ "body" ]
+      },
+      "QuestionImageForm" : {
+        "type" : "object",
+        "description" : "Formulaire multipart d'une image de question (QA-11)",
+        "properties" : {
+          "image" : {
+            "type" : "string",
+            "format" : "binary",
+            "description" : "PNG, JPG ou WebP, 2 Mo maximum"
+          }
+        },
+        "required" : [ "image" ]
       },
       "ProjectCreateRequest" : {
         "type" : "object",
