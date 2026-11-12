@@ -51,11 +51,13 @@ public class QuestionService {
     private final ReputationEventRepository reputationEvents;
     private final NotificationRepository notifications;
     private final CommentService comments;
+    private final QuestionImageService images;
 
     public QuestionService(QuestionRepository questions, QuestionSearch search, UserRepository users,
                            VoteRepository votes, TagService tagService, MarkdownRenderer markdown,
                            ReputationService reputation, ReputationEventRepository reputationEvents,
-                           NotificationRepository notifications, CommentService comments) {
+                           NotificationRepository notifications, CommentService comments,
+                           QuestionImageService images) {
         this.questions = questions;
         this.search = search;
         this.users = users;
@@ -66,6 +68,7 @@ public class QuestionService {
         this.reputationEvents = reputationEvents;
         this.notifications = notifications;
         this.comments = comments;
+        this.images = images;
     }
 
     @Transactional(readOnly = true)
@@ -105,6 +108,7 @@ public class QuestionService {
         Question q = new Question(author);
         apply(q, req);
         questions.saveAndFlush(q);
+        images.attach(q.getId(), req.imageIds(), me.id());
         reputation.grant(me.id(), ReputationReason.QUESTION_ASKED, q.getId(), null, null);
         return toDetail(load(q.getId()), me);
     }
@@ -118,6 +122,7 @@ public class QuestionService {
         apply(q, req);
         q.touch();
         questions.saveAndFlush(q);
+        images.attach(q.getId(), req.imageIds(), me.id());
         return toDetail(q, me);
     }
 
@@ -203,6 +208,7 @@ public class QuestionService {
                 tagNames(q),
                 QuestionContext.from(q), author(q.getAuthor()), q.getScore(), q.getAnswerCount(),
                 q.getAcceptedAnswerId(), myVote, canEdit(q, me), q.getCreatedAt(), q.getUpdatedAt(),
-                canEdit(q, me) && q.getAnswerCount() == 0, comments.forQuestion(q.getId(), me));
+                canEdit(q, me) && q.getAnswerCount() == 0, comments.forQuestion(q.getId(), me),
+                images.of(q.getId()));
     }
 }
