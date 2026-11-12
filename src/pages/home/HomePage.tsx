@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { buttonClass } from '../../components/buttonClass';
 import { StatsSkeleton } from '../../components/skeleton/StatsSkeleton';
 import { useSession } from '../../features/auth/useSession';
+import { hasAuthHint } from '../../features/auth/authHint';
 import { OAuthButtons } from '../../features/auth/OAuthButtons';
 import { HomeHeader } from '../../features/home/HomeHeader';
 import { LevelLadder } from '../../features/home/LevelLadder';
@@ -12,6 +13,7 @@ import { StatsStrip } from '../../features/home/StatsStrip';
 import { useApiQuery } from '../../hooks/useApiQuery';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import { Footer } from '../../layout/Footer';
+import { PageLoader } from '../../layout/PageLoader';
 import styles from './HomePage.module.css';
 
 const POINTS = ['QUESTION', 'VOTE', 'ACCEPTED'] as const;
@@ -33,6 +35,9 @@ export default function HomePage() {
   usePageTitle(t('home.pageTitle'));
 
   if (status === 'authenticated') return <Navigate to="/feed" replace />;
+  // Reconnexion : si la dernière session connue était « connectée », on attend /auth/me
+  // plutôt que de faire clignoter la page publique avant la redirection vers /feed.
+  if (status === 'loading' && hasAuthHint()) return <PageLoader />;
 
   return (
     <div className={`${styles.page} page-enter`}>

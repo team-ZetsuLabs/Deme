@@ -3,6 +3,7 @@ import type { LoginRequest, Me, MeUpdate, RegisterRequest } from '../../api/type
 import { api } from '../../api/api';
 import { changeLanguage } from '../../i18n';
 import { authApi } from './authApi';
+import { setAuthHint } from './authHint';
 import { SessionContext, type SessionStatus } from './sessionContext';
 
 type SessionProviderProps = { children: ReactNode };
@@ -18,12 +19,14 @@ export function SessionProvider({ children }: SessionProviderProps) {
     authApi
       .me()
       .then((me) => {
+        setAuthHint(true);
         if (!active) return;
         setUser(me);
         setStatus('authenticated');
       })
       .catch(() => {
         // 401 attendu quand personne n'est connecté (ou exemple absent en mode mock)
+        setAuthHint(false);
         if (active) setStatus('anonymous');
       });
     return () => {
@@ -32,6 +35,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
   }, []);
 
   const signIn = useCallback((me: Me) => {
+    setAuthHint(true);
     setUser(me);
     setStatus('authenticated');
     void changeLanguage(me.language);
@@ -58,6 +62,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
     [signIn, user],
   );
   const signOutLocally = useCallback(() => {
+    setAuthHint(false);
     setUser(null);
     setStatus('anonymous');
     setOnboardingSkipped(false);

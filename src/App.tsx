@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, type ReactNode } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { IconSprite } from './components/IconSprite';
 import { ToastProvider } from './components/ToastProvider';
@@ -11,6 +11,20 @@ import { PageLoader } from './layout/PageLoader';
 import { RouteErrorBoundary } from './layout/RouteErrorBoundary';
 import { MaintenanceGate } from './layout/MaintenanceGate';
 import { ThemeProvider } from './theme/ThemeProvider';
+import { ChallengeSkeleton } from './components/skeleton/ChallengeSkeleton';
+import { CommunityRowsSkeleton } from './components/skeleton/CommunityRowsSkeleton';
+import { CommunitySkeleton } from './components/skeleton/CommunitySkeleton';
+import { JobDetailSkeleton } from './components/skeleton/JobDetailSkeleton';
+import { JobRowsSkeleton } from './components/skeleton/JobRowsSkeleton';
+import { ListRowsSkeleton } from './components/skeleton/ListRowsSkeleton';
+import { MissionDetailSkeleton } from './components/skeleton/MissionDetailSkeleton';
+import { MissionRowsSkeleton } from './components/skeleton/MissionRowsSkeleton';
+import { NotificationRowsSkeleton } from './components/skeleton/NotificationRowsSkeleton';
+import { ProfileSkeleton } from './components/skeleton/ProfileSkeleton';
+import { ProjectCardsSkeleton } from './components/skeleton/ProjectCardsSkeleton';
+import { ProjectDetailSkeleton } from './components/skeleton/ProjectDetailSkeleton';
+import { QuestionDetailSkeleton } from './components/skeleton/QuestionDetailSkeleton';
+import { QuestionRowsSkeleton } from './components/skeleton/QuestionRowsSkeleton';
 
 // Chaque page est chargée à la demande pour rester léger en 3G.
 const HomePage = lazy(() => import('./pages/home/HomePage'));
@@ -56,6 +70,15 @@ const MyProjectsPage = lazy(() => import('./pages/my-projects/MyProjectsPage'));
 const LegalPage = lazy(() => import('./pages/legal/LegalPage'));
 const NotFoundPage = lazy(() => import('./pages/notfound/NotFoundPage'));
 
+/**
+ * Suspense par page : pendant le téléchargement du chunk lazy, on affiche déjà le squelette
+ * propre à la page (le même qu'elle montre pendant le chargement des données). Le shimmer
+ * générique ne vient donc plus avant le shimmer particulier — c'est un seul squelette continu.
+ */
+function Lazy({ fallback, children }: { fallback: ReactNode; children: ReactNode }) {
+  return <Suspense fallback={fallback}>{children}</Suspense>;
+}
+
 export function App() {
   return (
     <ThemeProvider>
@@ -94,12 +117,21 @@ export function App() {
                         <Route
                           path="feed"
                           element={
-                            <RequireAuth>
-                              <FeedPage />
-                            </RequireAuth>
+                            <Lazy fallback={<ListRowsSkeleton count={5} />}>
+                              <RequireAuth>
+                                <FeedPage />
+                              </RequireAuth>
+                            </Lazy>
                           }
                         />
-                        <Route path="questions" element={<QuestionsPage />} />
+                        <Route
+                          path="questions"
+                          element={
+                            <Lazy fallback={<QuestionRowsSkeleton />}>
+                              <QuestionsPage />
+                            </Lazy>
+                          }
+                        />
                         <Route
                           path="questions/ask"
                           element={
@@ -108,16 +140,32 @@ export function App() {
                             </RequireAuth>
                           }
                         />
-                        <Route path="questions/:id" element={<QuestionPage />} />
+                        <Route
+                          path="questions/:id"
+                          element={
+                            <Lazy fallback={<QuestionDetailSkeleton />}>
+                              <QuestionPage />
+                            </Lazy>
+                          }
+                        />
                         <Route
                           path="questions/:id/edit"
                           element={
-                            <RequireAuth>
-                              <EditQuestionPage />
-                            </RequireAuth>
+                            <Lazy fallback={<QuestionDetailSkeleton />}>
+                              <RequireAuth>
+                                <EditQuestionPage />
+                              </RequireAuth>
+                            </Lazy>
                           }
                         />
-                        <Route path="users/:username" element={<ProfilePage />} />
+                        <Route
+                          path="users/:username"
+                          element={
+                            <Lazy fallback={<ProfileSkeleton />}>
+                              <ProfilePage />
+                            </Lazy>
+                          }
+                        />
                         <Route
                           path="profile/edit"
                           element={
@@ -137,20 +185,31 @@ export function App() {
                         <Route
                           path="moderation"
                           element={
-                            <RequireAuth>
-                              <MyModerationPage />
-                            </RequireAuth>
+                            <Lazy fallback={<ListRowsSkeleton count={2} />}>
+                              <RequireAuth>
+                                <MyModerationPage />
+                              </RequireAuth>
+                            </Lazy>
                           }
                         />
                         <Route
                           path="notifications"
                           element={
-                            <RequireAuth>
-                              <NotificationsPage />
-                            </RequireAuth>
+                            <Lazy fallback={<NotificationRowsSkeleton />}>
+                              <RequireAuth>
+                                <NotificationsPage />
+                              </RequireAuth>
+                            </Lazy>
                           }
                         />
-                        <Route path="jobs" element={<JobsPage />} />
+                        <Route
+                          path="jobs"
+                          element={
+                            <Lazy fallback={<JobRowsSkeleton />}>
+                              <JobsPage />
+                            </Lazy>
+                          }
+                        />
                         <Route
                           path="jobs/new"
                           element={
@@ -162,29 +221,49 @@ export function App() {
                         <Route
                           path="jobs/mine"
                           element={
-                            <RequireAuth>
-                              <MyJobsPage />
-                            </RequireAuth>
+                            <Lazy fallback={<JobRowsSkeleton />}>
+                              <RequireAuth>
+                                <MyJobsPage />
+                              </RequireAuth>
+                            </Lazy>
                           }
                         />
-                        <Route path="jobs/:id" element={<JobPage />} />
+                        <Route
+                          path="jobs/:id"
+                          element={
+                            <Lazy fallback={<JobDetailSkeleton />}>
+                              <JobPage />
+                            </Lazy>
+                          }
+                        />
                         <Route
                           path="jobs/:id/edit"
                           element={
-                            <RequireAuth>
-                              <EditJobPage />
-                            </RequireAuth>
+                            <Lazy fallback={<JobDetailSkeleton />}>
+                              <RequireAuth>
+                                <EditJobPage />
+                              </RequireAuth>
+                            </Lazy>
                           }
                         />
                         <Route
                           path="applications"
                           element={
-                            <RequireAuth>
-                              <ApplicationsPage />
-                            </RequireAuth>
+                            <Lazy fallback={<ListRowsSkeleton />}>
+                              <RequireAuth>
+                                <ApplicationsPage />
+                              </RequireAuth>
+                            </Lazy>
                           }
                         />
-                        <Route path="missions" element={<MissionsPage />} />
+                        <Route
+                          path="missions"
+                          element={
+                            <Lazy fallback={<MissionRowsSkeleton />}>
+                              <MissionsPage />
+                            </Lazy>
+                          }
+                        />
                         <Route
                           path="missions/new"
                           element={
@@ -193,16 +272,32 @@ export function App() {
                             </RequireAuth>
                           }
                         />
-                        <Route path="missions/:id" element={<MissionPage />} />
+                        <Route
+                          path="missions/:id"
+                          element={
+                            <Lazy fallback={<MissionDetailSkeleton />}>
+                              <MissionPage />
+                            </Lazy>
+                          }
+                        />
                         <Route
                           path="missions/:id/edit"
                           element={
-                            <RequireAuth>
-                              <EditMissionPage />
-                            </RequireAuth>
+                            <Lazy fallback={<MissionDetailSkeleton />}>
+                              <RequireAuth>
+                                <EditMissionPage />
+                              </RequireAuth>
+                            </Lazy>
                           }
                         />
-                        <Route path="playtests" element={<PlaytestsPage />} />
+                        <Route
+                          path="playtests"
+                          element={
+                            <Lazy fallback={<MissionRowsSkeleton />}>
+                              <PlaytestsPage />
+                            </Lazy>
+                          }
+                        />
                         <Route
                           path="playtests/new"
                           element={
@@ -214,22 +309,47 @@ export function App() {
                         <Route
                           path="playtests/mine"
                           element={
-                            <RequireAuth>
-                              <MyPlaytestsPage />
-                            </RequireAuth>
+                            <Lazy fallback={<MissionRowsSkeleton />}>
+                              <RequireAuth>
+                                <MyPlaytestsPage />
+                              </RequireAuth>
+                            </Lazy>
                           }
                         />
-                        <Route path="playtests/:id" element={<PlaytestPage />} />
+                        <Route
+                          path="playtests/:id"
+                          element={
+                            <Lazy fallback={<JobDetailSkeleton />}>
+                              <PlaytestPage />
+                            </Lazy>
+                          }
+                        />
                         <Route
                           path="playtests/:id/edit"
                           element={
-                            <RequireAuth>
-                              <EditPlaytestPage />
-                            </RequireAuth>
+                            <Lazy fallback={<JobDetailSkeleton />}>
+                              <RequireAuth>
+                                <EditPlaytestPage />
+                              </RequireAuth>
+                            </Lazy>
                           }
                         />
-                        <Route path="challenges" element={<ChallengesPage />} />
-                        <Route path="projects" element={<ProjectsPage />} />
+                        <Route
+                          path="challenges"
+                          element={
+                            <Lazy fallback={<ChallengeSkeleton />}>
+                              <ChallengesPage />
+                            </Lazy>
+                          }
+                        />
+                        <Route
+                          path="projects"
+                          element={
+                            <Lazy fallback={<ProjectCardsSkeleton />}>
+                              <ProjectsPage />
+                            </Lazy>
+                          }
+                        />
                         <Route
                           path="projects/new"
                           element={
@@ -241,21 +361,39 @@ export function App() {
                         <Route
                           path="projects/mine"
                           element={
-                            <RequireAuth>
-                              <MyProjectsPage />
-                            </RequireAuth>
+                            <Lazy fallback={<ProjectCardsSkeleton />}>
+                              <RequireAuth>
+                                <MyProjectsPage />
+                              </RequireAuth>
+                            </Lazy>
                           }
                         />
-                        <Route path="projects/:id" element={<ProjectPage />} />
+                        <Route
+                          path="projects/:id"
+                          element={
+                            <Lazy fallback={<ProjectDetailSkeleton />}>
+                              <ProjectPage />
+                            </Lazy>
+                          }
+                        />
                         <Route
                           path="projects/:id/edit"
                           element={
-                            <RequireAuth>
-                              <EditProjectPage />
-                            </RequireAuth>
+                            <Lazy fallback={<ProjectDetailSkeleton />}>
+                              <RequireAuth>
+                                <EditProjectPage />
+                              </RequireAuth>
+                            </Lazy>
                           }
                         />
-                        <Route path="communities" element={<CommunitiesPage />} />
+                        <Route
+                          path="communities"
+                          element={
+                            <Lazy fallback={<CommunityRowsSkeleton />}>
+                              <CommunitiesPage />
+                            </Lazy>
+                          }
+                        />
                         <Route
                           path="communities/new"
                           element={
@@ -264,7 +402,14 @@ export function App() {
                             </RequireAuth>
                           }
                         />
-                        <Route path="communities/:slug" element={<CommunityPage />} />
+                        <Route
+                          path="communities/:slug"
+                          element={
+                            <Lazy fallback={<CommunitySkeleton />}>
+                              <CommunityPage />
+                            </Lazy>
+                          }
+                        />
                         <Route path="rules" element={<LegalPage doc="rules" />} />
                         <Route path="terms" element={<LegalPage doc="terms" />} />
                         <Route path="privacy" element={<LegalPage doc="privacy" />} />
