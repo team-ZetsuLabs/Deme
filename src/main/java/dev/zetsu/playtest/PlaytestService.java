@@ -402,7 +402,7 @@ public class PlaytestService {
      * Visible de tous : active ou terminée, et pas masquée. Toujours visible du porteur, de l'équipe et de ceux qui
      * y participent (une campagne suspendue continue leur décompte). 404 pour les autres.
      */
-    private boolean visibleTo(TestCampaign c, ZetsuPrincipal me) {
+    boolean visibleTo(TestCampaign c, ZetsuPrincipal me) {
         boolean listed = c.getStatus() == CampaignStatus.ACTIVE || c.getStatus() == CampaignStatus.COMPLETED;
         if (listed && !c.isHidden()) {
             return true;
@@ -554,7 +554,7 @@ public class PlaytestService {
                 owner && c.getStatus() == CampaignStatus.DRAFT,
                 owner && (c.getStatus() == CampaignStatus.ACTIVE || c.getStatus() == CampaignStatus.SUSPENDED),
                 canJoin, c.getCreatedAt(), c.getUpdatedAt(), c.getStartedAt(), c.getCompletedAt(),
-                c.getDesiredEnd());
+                c.getDesiredEnd(), owner || staff, tester);
     }
 
     List<ParticipationView> participationViews(TestCampaign c) {

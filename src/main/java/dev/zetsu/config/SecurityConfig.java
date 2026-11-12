@@ -77,7 +77,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/users/me/**", "/api/v1/jobs/mine",
                                 "/api/v1/jobs/*/applications", "/api/v1/missions/*/applications",
                                 "/api/v1/projects/*/requests", "/api/v1/playtests/mine",
-                                "/api/v1/playtests/*/participations").authenticated()
+                                "/api/v1/playtests/*/participations",
+                                "/api/v1/playtests/*/feedback").authenticated()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/questions/**", "/api/v1/answers/**", "/api/v1/users/**",
                                 "/api/v1/tags/**", "/api/v1/jobs/**", "/api/v1/missions/**",

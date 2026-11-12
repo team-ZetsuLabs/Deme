@@ -59,5 +59,7 @@ public enum NotificationType {
     /** Porteur : décision de l'équipe (outcome APPROVED, REJECTED, SUSPENDED, REACTIVATED). */
     PLAYTEST_CAMPAIGN_REVIEWED,
     /** Testeur : retiré de la campagne par le porteur ou l'équipe ; le motif est sur la participation. */
-    PLAYTEST_REMOVED
+    PLAYTEST_REMOVED,
+    /** Porteur : un testeur a envoyé un retour ; outcome vaut BUG, SUGGESTION ou OTHER. */
+    PLAYTEST_FEEDBACK
 }

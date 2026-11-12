@@ -1,6 +1,28 @@
 {
   "items": [
     {
+      "id": 77,
+      "type": "PLAYTEST_FEEDBACK",
+      "read": false,
+      "actor": {
+        "username": "efua_mensah",
+        "displayName": "Efua Mensah",
+        "avatarUrl": null,
+        "countryCode": "GH",
+        "reputation": 64,
+        "level": "NEWCOMER",
+        "deleted": false
+      },
+      "target": {
+        "type": "PLAYTEST",
+        "id": 12,
+        "title": "Tontine Cash",
+        "questionId": null
+      },
+      "outcome": "BUG",
+      "createdAt": "2026-11-12T09:14:00Z"
+    },
+    {
       "id": 42,
       "type": "ANSWER_POSTED",
       "read": false,
@@ -75,5 +97,5 @@
   ],
   "page": 0,
   "size": 20,
-  "total": 4
+  "total": 5
 }

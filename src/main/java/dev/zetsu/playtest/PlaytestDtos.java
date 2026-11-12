@@ -216,7 +216,11 @@ public final class PlaytestDtos {
             @Schema(requiredMode = REQUIRED) Instant updatedAt,
             Instant startedAt,
             Instant completedAt,
-            @Schema(description = "Date de fin souhaitée, à titre indicatif") LocalDate desiredEnd) {
+            @Schema(description = "Date de fin souhaitée, à titre indicatif") LocalDate desiredEnd,
+            @Schema(requiredMode = REQUIRED, description = "Je suis le porteur ou de l'équipe : je lis les retours "
+                    + "des testeurs (GET /playtests/{id}/feedback)") boolean canViewFeedback,
+            @Schema(requiredMode = REQUIRED, description = "Je teste ou j'ai testé l'application : je peux envoyer un "
+                    + "retour au porteur (POST /playtests/{id}/feedback)") boolean canGiveFeedback) {
     }
 
     @Schema(name = "PlaytestParticipation", description = "Testeur vu par le porteur ou l'équipe")
@@ -295,5 +299,27 @@ public final class PlaytestDtos {
         STALLED,
         /** Masquée par la modération. */
         REPORTED
+    }
+
+    @Schema(name = "PlaytestFeedbackRequest", description = "Retour d'un testeur au porteur")
+    public record FeedbackRequest(
+            @NotBlank(message = "Obligatoire") @Size(min = 10, max = 5000, message = "Entre 10 et 5000 caractères")
+            @Schema(requiredMode = REQUIRED, description = "Markdown. Le HTML brut est ignoré.",
+                    example = "L'application se ferme quand je valide un paiement Wave sur Android 10.")
+            String body,
+            @Min(value = 1, message = "Entre 1 et 5") @Max(value = 5, message = "Entre 1 et 5")
+            @Schema(description = "Note facultative de 1 à 5", example = "4") Integer rating,
+            @Schema(description = "OTHER par défaut", example = "BUG") FeedbackKind kind) {
+    }
+
+    @Schema(name = "PlaytestFeedback", description = "Retour d'un testeur, lu par le porteur et l'équipe")
+    public record FeedbackView(
+            @Schema(requiredMode = REQUIRED) Long id,
+            @Schema(requiredMode = REQUIRED) AuthorSummary author,
+            @Schema(requiredMode = REQUIRED) FeedbackKind kind,
+            @Schema(description = "De 1 à 5, null si le testeur n'a pas noté") Integer rating,
+            @Schema(requiredMode = REQUIRED, description = "HTML nettoyé côté serveur, à afficher avec MemberContent")
+            String bodyHtml,
+            @Schema(requiredMode = REQUIRED) Instant createdAt) {
     }
 }
