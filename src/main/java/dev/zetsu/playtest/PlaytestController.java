@@ -53,10 +53,12 @@ import java.util.List;
 public class PlaytestController {
 
     private final PlaytestService playtests;
+    private final PlaytestFeedbackService feedback;
     private final RateLimiter rateLimiter;
 
-    public PlaytestController(PlaytestService playtests, RateLimiter rateLimiter) {
+    public PlaytestController(PlaytestService playtests, PlaytestFeedbackService feedback, RateLimiter rateLimiter) {
         this.playtests = playtests;
+        this.feedback = feedback;
         this.rateLimiter = rateLimiter;
     }
 
@@ -258,6 +260,36 @@ public class PlaytestController {
                                           @Valid @RequestBody RemoveRequest req,
                                           @AuthenticationPrincipal ZetsuPrincipal me) {
         return playtests.removeByOwner(id, participationId, req.reason(), me);
+    }
+
+    @PostMapping("/playtests/{id}/feedback")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Envoyer un retour au porteur", description = """
+            Pour un testeur en cours ou qui a terminé : bug, suggestion ou autre, avec une note facultative de 1 à 5.             Le porteur reçoit une notification PLAYTEST_FEEDBACK (outcome = kind).""")
+    @ApiResponse(responseCode = "201", description = "Retour envoyé")
+    @ApiResponse(responseCode = "400", description = "VALIDATION_ERROR", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "403", description = "NOT_PLAYTEST_TESTER", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "404", description = "PLAYTEST_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "429", description = "RATE_LIMITED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    public PlaytestDtos.FeedbackView giveFeedback(@PathVariable Long id,
+                                                  @Valid @RequestBody PlaytestDtos.FeedbackRequest req,
+                                                  @AuthenticationPrincipal ZetsuPrincipal me) {
+        rateLimiter.check(RateLimiter.Rule.PUBLISH, "user:" + me.id());
+        return feedback.give(id, req, me);
+    }
+
+    @GetMapping("/playtests/{id}/feedback")
+    @Operation(summary = "Retours des testeurs", description = "Porteur et équipe seulement (canViewFeedback). Les plus récents d'abord.")
+    @ApiResponse(responseCode = "200", description = "Page de retours")
+    @ApiResponse(responseCode = "401", description = "UNAUTHENTICATED", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "403", description = "NOT_PLAYTEST_OWNER", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "404", description = "PLAYTEST_NOT_FOUND", content = @Content(schema = @Schema(implementation = ApiError.class)))
+    public PageResponse<PlaytestDtos.FeedbackView> listFeedback(@PathVariable Long id,
+                                                                @RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "20") int size,
+                                                                @AuthenticationPrincipal ZetsuPrincipal me) {
+        return feedback.list(id, page, size, me);
     }
 
     @GetMapping("/users/me/playtest-participations")

@@ -41,5 +41,7 @@
   "updatedAt": "2026-11-02T10:02:00Z",
   "startedAt": "2026-11-02T10:02:00Z",
   "completedAt": null,
-  "desiredEnd": "2026-11-17"
+  "desiredEnd": "2026-11-17",
+  "canViewFeedback": true,
+  "canGiveFeedback": false
 }

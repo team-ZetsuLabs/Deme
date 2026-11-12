@@ -3798,6 +3798,170 @@
         }
       }
     },
+    "/api/v1/playtests/{id}/feedback" : {
+      "get" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Retours des testeurs",
+        "description" : "Porteur et équipe seulement (canViewFeedback). Les plus récents d'abord.",
+        "operationId" : "playtestListFeedback",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 0
+          }
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int32",
+            "default" : 20
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Page de retours",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageResponsePlaytestFeedback"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PLAYTEST_OWNER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "playtests" ],
+        "summary" : "Envoyer un retour au porteur",
+        "description" : "Pour un testeur en cours ou qui a terminé : bug, suggestion ou autre, avec une note facultative de 1 à 5.             Le porteur reçoit une notification PLAYTEST_FEEDBACK (outcome = kind).",
+        "operationId" : "playtestGiveFeedback",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PlaytestFeedbackRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Retour envoyé",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PlaytestFeedback"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "VALIDATION_ERROR",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "UNAUTHENTICATED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "NOT_PLAYTEST_TESTER",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "PLAYTEST_NOT_FOUND",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "RATE_LIMITED",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/playtests/{id}/close" : {
       "post" : {
         "tags" : [ "playtests" ],
@@ -10180,9 +10344,17 @@
             "type" : "string",
             "format" : "date",
             "description" : "Date de fin souhaitée, à titre indicatif"
+          },
+          "canViewFeedback" : {
+            "type" : "boolean",
+            "description" : "Je suis le porteur ou de l'équipe : je lis les retours des testeurs (GET /playtests/{id}/feedback)"
+          },
+          "canGiveFeedback" : {
+            "type" : "boolean",
+            "description" : "Je teste ou j'ai testé l'application : je peux envoyer un retour au porteur (POST /playtests/{id}/feedback)"
           }
         },
-        "required" : [ "appName", "canClose", "canEdit", "canJoin", "canSubmit", "createdAt", "descriptionHtml", "descriptionMarkdown", "id", "owner", "platform", "progress", "requiredDays", "spotsLeft", "status", "testersTarget", "tracking", "updatedAt" ]
+        "required" : [ "appName", "canClose", "canEdit", "canGiveFeedback", "canJoin", "canSubmit", "canViewFeedback", "createdAt", "descriptionHtml", "descriptionMarkdown", "id", "owner", "platform", "progress", "requiredDays", "spotsLeft", "status", "testersTarget", "tracking", "updatedAt" ]
       },
       "PlaytestProgress" : {
         "type" : "object",
@@ -11352,6 +11524,65 @@
             "minLength" : 0
           }
         }
+      },
+      "PlaytestFeedbackRequest" : {
+        "type" : "object",
+        "description" : "Retour d'un testeur au porteur",
+        "properties" : {
+          "body" : {
+            "type" : "string",
+            "description" : "Markdown. Le HTML brut est ignoré.",
+            "example" : "L'application se ferme quand je valide un paiement Wave sur Android 10.",
+            "maxLength" : 5000,
+            "minLength" : 10
+          },
+          "rating" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "Note facultative de 1 à 5",
+            "example" : 4,
+            "maximum" : 5,
+            "minimum" : 1
+          },
+          "kind" : {
+            "type" : "string",
+            "description" : "OTHER par défaut",
+            "enum" : [ "BUG", "SUGGESTION", "OTHER" ],
+            "example" : "BUG"
+          }
+        },
+        "required" : [ "body" ]
+      },
+      "PlaytestFeedback" : {
+        "type" : "object",
+        "description" : "Retour d'un testeur, lu par le porteur et l'équipe",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "author" : {
+            "$ref" : "#/components/schemas/AuthorSummary"
+          },
+          "kind" : {
+            "type" : "string",
+            "enum" : [ "BUG", "SUGGESTION", "OTHER" ]
+          },
+          "rating" : {
+            "type" : "integer",
+            "format" : "int32",
+            "description" : "De 1 à 5, null si le testeur n'a pas noté"
+          },
+          "bodyHtml" : {
+            "type" : "string",
+            "description" : "HTML nettoyé côté serveur, à afficher avec MemberContent"
+          },
+          "createdAt" : {
+            "type" : "string",
+            "format" : "date-time"
+          }
+        },
+        "required" : [ "author", "bodyHtml", "createdAt", "id", "kind" ]
       },
       "MarkReadRequest" : {
         "type" : "object",
@@ -13011,6 +13242,33 @@
         },
         "required" : [ "items", "page", "size", "total" ]
       },
+      "PageResponsePlaytestFeedback" : {
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/PlaytestFeedback"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 0
+          },
+          "size" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : 20
+          },
+          "total" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 134
+          }
+        },
+        "required" : [ "items", "page", "size", "total" ]
+      },
       "Notification" : {
         "type" : "object",
         "properties" : {
@@ -13020,7 +13278,7 @@
           },
           "type" : {
             "type" : "string",
-            "enum" : [ "ANSWER_POSTED", "ANSWER_ACCEPTED", "VOTE_RECEIVED", "JOB_MATCH", "MISSION_MATCH", "APPLICATION_RECEIVED", "APPLICATION_DECIDED", "JOB_REVIEWED", "CHALLENGE_STARTED", "PROJECT_REQUEST_DECIDED", "CONTENT_HIDDEN", "CONTENT_RESTORED", "ACCOUNT_WARNED", "SUBMISSION_REVIEWED", "COMMUNITY_PROPOSAL_DECISION", "PROJECT_REQUEST_RECEIVED", "PROJECT_MEMBER_REMOVED", "PROJECT_CLOSED", "PLAYTEST_NEW_CAMPAIGN", "PLAYTEST_JOINED", "PLAYTEST_INSTALL_REMINDER", "PLAYTEST_STAY_REMINDER", "PLAYTEST_ENDING_SOON", "PLAYTEST_PARTICIPATION_DONE", "PLAYTEST_TESTER_LEFT", "PLAYTEST_TESTER_REPLACED", "PLAYTEST_CAMPAIGN_FULL", "PLAYTEST_CAMPAIGN_REVIEWED", "PLAYTEST_REMOVED" ]
+            "enum" : [ "ANSWER_POSTED", "ANSWER_ACCEPTED", "VOTE_RECEIVED", "JOB_MATCH", "MISSION_MATCH", "APPLICATION_RECEIVED", "APPLICATION_DECIDED", "JOB_REVIEWED", "CHALLENGE_STARTED", "PROJECT_REQUEST_DECIDED", "CONTENT_HIDDEN", "CONTENT_RESTORED", "ACCOUNT_WARNED", "SUBMISSION_REVIEWED", "COMMUNITY_PROPOSAL_DECISION", "PROJECT_REQUEST_RECEIVED", "PROJECT_MEMBER_REMOVED", "PROJECT_CLOSED", "PLAYTEST_NEW_CAMPAIGN", "PLAYTEST_JOINED", "PLAYTEST_INSTALL_REMINDER", "PLAYTEST_STAY_REMINDER", "PLAYTEST_ENDING_SOON", "PLAYTEST_PARTICIPATION_DONE", "PLAYTEST_TESTER_LEFT", "PLAYTEST_TESTER_REPLACED", "PLAYTEST_CAMPAIGN_FULL", "PLAYTEST_CAMPAIGN_REVIEWED", "PLAYTEST_REMOVED", "PLAYTEST_FEEDBACK" ]
           },
           "read" : {
             "type" : "boolean"

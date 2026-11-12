@@ -100,6 +100,50 @@ class PlaytestIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    void unTesteurEnvoieUnRetourQueSeulLePorteurLit() throws Exception {
+        Member owner = register("Kwabena", "GH");
+        Member tester = register("Efua", "GH");
+        Member stranger = register("Yaw", "GH");
+        long id = active(owner, "gh.susu.save", 12);
+        Map<String, Object> bug = Map.of("body", "<script>alert(1)</script> L'appli se ferme quand je valide un "
+                + "versement MTN MoMo sur Android 10.", "rating", 3, "kind", "BUG");
+
+        send(stranger, "/api/v1/playtests/{id}/feedback", bug, id).andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("NOT_PLAYTEST_TESTER"));
+        send(owner, "/api/v1/playtests/{id}/feedback", bug, id).andExpect(status().isForbidden());
+
+        join(tester, id).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.canGiveFeedback").value(true))
+                .andExpect(jsonPath("$.canViewFeedback").value(false));
+        send(tester, "/api/v1/playtests/{id}/feedback", Map.of("body", "Trop court", "rating", 6), id)
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fields.rating").exists());
+        send(tester, "/api/v1/playtests/{id}/feedback", bug, id).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.kind").value("BUG"))
+                .andExpect(jsonPath("$.rating").value(3))
+                .andExpect(jsonPath("$.bodyHtml").value(not(org.hamcrest.Matchers.containsString("<script"))));
+        send(tester, "/api/v1/playtests/{id}/feedback", Map.of("body", "Ajoutez un mode sombre, merci !"), id)
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.kind").value("OTHER"))
+                .andExpect(jsonPath("$.rating").value(nullValue()));
+        assertThat(notificationsOf(owner)).contains("PLAYTEST_FEEDBACK");
+
+        mvc.perform(get("/api/v1/playtests/{id}/feedback", id).session(tester.session()))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("NOT_PLAYTEST_OWNER"));
+        mvc.perform(get("/api/v1/playtests/{id}/feedback", id)).andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/v1/playtests/{id}", id).session(owner.session()))
+                .andExpect(jsonPath("$.canViewFeedback").value(true))
+                .andExpect(jsonPath("$.canGiveFeedback").value(false));
+        mvc.perform(get("/api/v1/playtests/{id}/feedback", id).session(owner.session()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.total").value(2))
+                .andExpect(jsonPath("$.items[0].kind").value("OTHER"))
+                .andExpect(jsonPath("$.items[1].kind").value("BUG"))
+                .andExpect(jsonPath("$.items[1].author.username").value(tester.username()));
+    }
+
+    @Test
     void unNouveauPorteurPasseParLEquipeEtCorrigeApresUnRefus() throws Exception {
         Member owner = register("Aminata");
         Member stranger = register("Moussa");
