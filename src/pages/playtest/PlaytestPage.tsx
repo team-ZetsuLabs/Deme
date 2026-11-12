@@ -11,6 +11,7 @@ import { useToast } from '../../components/useToast';
 import { errorMessage } from '../../api/errorMessage';
 import { useSession } from '../../features/auth/useSession';
 import { ParticipationPanel } from '../../features/playtests/ParticipationPanel';
+import { PlaytestFeedback } from '../../features/playtests/PlaytestFeedback';
 import { PlaytestProgress } from '../../features/playtests/PlaytestProgress';
 import { playtestsApi } from '../../features/playtests/playtestsApi';
 import { CloseListingButton } from '../../features/jobs/CloseListingButton';
@@ -148,6 +149,9 @@ function PlaytestView({ id }: { id: number }) {
           </section>
         ) : (
           <ParticipationPanel playtest={p} onChange={(updated) => query.setData(() => updated)} />
+        )}
+        {(p.status === 'ACTIVE' || p.status === 'COMPLETED') && (
+          <PlaytestFeedback playtest={p} isOwner={isOwner} />
         )}
         <p className={own.notice}>{t('playtests.disclaimer')}</p>
       </aside>

@@ -162,6 +162,27 @@
       "GOOGLE_PLAY": "Closed test via the Play Console.",
       "APP_STORE": "Test via TestFlight.",
       "WEB": "A site to test, no store."
+    },
+    "feedback": {
+      "title": "Tester feedback",
+      "empty": "No feedback yet.",
+      "kindLabel": "Feedback type",
+      "field": "Your feedback",
+      "placeholder": "Describe the bug or your suggestion…",
+      "rating": "{{n}}/5",
+      "tooShort": "Your feedback must be at least {{min}} characters.",
+      "sent": "Feedback sent to the creator",
+      "kind": {
+        "BUG": "Bug",
+        "SUGGESTION": "Suggestion",
+        "OTHER": "Other"
+      },
+      "send": {
+        "title": "Send feedback to the creator",
+        "hint": "Report a bug or suggest an improvement: only the owner sees it.",
+        "submit": "Send feedback",
+        "busy": "Sending"
+      }
     }
   },
   "app": {

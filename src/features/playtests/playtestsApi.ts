@@ -4,6 +4,8 @@ import type {
   Page,
   PlaytestConfirmRequest,
   PlaytestDetail,
+  PlaytestFeedback,
+  PlaytestFeedbackRequest,
   PlaytestParticipation,
   PlaytestRemoveRequest,
   PlaytestRequest,
@@ -77,4 +79,10 @@ export const playtestsApi = {
       `/playtests/${id}/participations/${participationId}/remove`,
       body,
     ),
+
+  /** Retour d'un testeur au porteur (TST, contrat provisoire — voir message back-end). */
+  sendFeedback: (id: number, body: PlaytestFeedbackRequest) =>
+    api.post<PlaytestFeedback>(`/playtests/${id}/feedback`, body),
+  /** Retours reçus par le porteur (TST, contrat provisoire). */
+  feedback: (id: number) => api.get<PlaytestFeedback[]>(`/playtests/${id}/feedback`),
 };

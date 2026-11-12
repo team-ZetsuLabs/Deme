@@ -162,6 +162,27 @@
       "GOOGLE_PLAY": "Test fermé via la Play Console.",
       "APP_STORE": "Test via TestFlight.",
       "WEB": "Un site à tester, sans store."
+    },
+    "feedback": {
+      "title": "Retours des testeurs",
+      "empty": "Aucun retour pour l’instant.",
+      "kindLabel": "Type de retour",
+      "field": "Votre retour",
+      "placeholder": "Décrivez le bug ou votre suggestion…",
+      "rating": "{{n}}/5",
+      "tooShort": "Votre retour doit faire au moins {{min}} caractères.",
+      "sent": "Retour envoyé au créateur",
+      "kind": {
+        "BUG": "Bug",
+        "SUGGESTION": "Suggestion",
+        "OTHER": "Autre"
+      },
+      "send": {
+        "title": "Envoyer un retour au créateur",
+        "hint": "Signalez un bug ou proposez une amélioration : seul le porteur le voit.",
+        "submit": "Envoyer le retour",
+        "busy": "Envoi en cours"
+      }
     }
   },
   "app": {

@@ -74,6 +74,13 @@ describe('participation (TST-2)', () => {
     expect(screen.queryByRole('button', { name: 'Rejoindre le test' })).toBeNull();
   });
 
+  it('le porteur voit les retours des testeurs (TST)', async () => {
+    vi.spyOn(authApi, 'me').mockResolvedValue(demoMe({ username: 'aminata_dev' }));
+    renderDetail();
+    expect(await screen.findByText('Retours des testeurs')).toBeTruthy();
+    expect(await screen.findByText(/écran de connexion plante/)).toBeTruthy();
+  });
+
   it('une campagne web (sans décompte) ne montre pas « toujours inscrit »', async () => {
     vi.spyOn(authApi, 'me').mockResolvedValue(demoMe({ username: 'koffi_m' }));
     const web = {

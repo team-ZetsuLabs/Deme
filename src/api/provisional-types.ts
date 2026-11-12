@@ -16,6 +16,30 @@ export type Comment = {
   createdAt: string;
 };
 
+/**
+ * RETOURS DE TEST FERMÉ (TST) : contrat PAS encore publié. Un testeur envoie un retour ou un
+ * bug au porteur de la campagne ; le porteur lit la liste. Types provisoires, à confirmer avec
+ * Salif avant de passer en `live` (voir le message back-end). Dès publication, ils partent
+ * vers les alias de types.ts.
+ */
+export type PlaytestFeedbackKind = 'BUG' | 'SUGGESTION' | 'OTHER';
+
+export type PlaytestFeedback = {
+  id: number;
+  author: AuthorSummary;
+  body: string;
+  /** Note facultative de 1 à 5, null si non donnée. */
+  rating: number | null;
+  kind: PlaytestFeedbackKind;
+  createdAt: string;
+};
+
+export type PlaytestFeedbackRequest = {
+  body: string;
+  kind: PlaytestFeedbackKind;
+  rating?: number | null;
+};
+
 /** Information qui manque à une question, repérée par l'assistant (IA-1). */
 export type MissingInfo =
   'ERROR_MESSAGE' | 'TECH_VERSION' | 'CODE' | 'STEPS_TRIED' | 'EXPECTED_RESULT';
