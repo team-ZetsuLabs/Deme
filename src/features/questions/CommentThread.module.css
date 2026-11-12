@@ -21,7 +21,6 @@
 
 .body {
   color: var(--text-2);
-  white-space: pre-line;
 }
 
 .meta {
@@ -33,6 +32,22 @@
 .meta a {
   color: var(--text-2);
   font-weight: 500;
+}
+
+.delete {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  margin-inline-start: var(--s1);
+  border: none;
+  background: none;
+  color: var(--text-3);
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.delete:hover {
+  color: var(--red);
 }
 
 .more,

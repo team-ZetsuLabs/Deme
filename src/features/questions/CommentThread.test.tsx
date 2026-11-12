@@ -32,11 +32,12 @@ const COMMENTS: Comment[] = [
   'Même souci avec MTN MoMo au Cameroun, la solution marche aussi.',
   'Attention, le jeton expire au bout d’une heure exactement.',
   'Il faut aussi le header Content-Type, sinon on obtient une 415.',
-].map((body, i) => ({
+].map((text, i) => ({
   id: 40 + i,
-  body,
+  bodyHtml: `<p>${text}</p>`,
   author: author({ username: `membre_${i}`, displayName: `Membre ${i}` }),
   createdAt: `2026-10-21T1${i}:00:00Z`,
+  canDelete: false,
 }));
 
 const withComments = (): Page<Answer> => {
@@ -80,9 +81,10 @@ describe('Commentaires (QA-9)', () => {
     signIn();
     const comment = vi.spyOn(questionsApi, 'comment').mockResolvedValue({
       id: 990,
-      body: 'Quelle version du SDK Orange Money utilises-tu ?',
+      bodyHtml: '<p>Quelle version du SDK Orange Money utilises-tu ?</p>',
       author: author(),
       createdAt: '2026-10-22T12:00:00Z',
+      canDelete: true,
     });
     renderQuestion();
     await screen.findByRole('heading', { level: 1 });
@@ -114,20 +116,23 @@ describe('Commentaires (QA-9)', () => {
 
   it('affiche un commentaire piégé comme du texte', async () => {
     signIn();
+    // Le serveur renvoie du HTML nettoyé ; MemberContent est une seconde barrière.
     vi.spyOn(questionsApi, 'comment').mockResolvedValue({
       id: 991,
-      body: '<img src=x onerror=alert(1)> regarde ça',
+      bodyHtml: '<p><img src=x onerror=alert(1)> regarde ça</p>',
       author: author(),
       createdAt: '2026-10-22T12:00:00Z',
+      canDelete: true,
     });
     renderQuestion();
     await screen.findByRole('heading', { level: 1 });
     fireEvent.click(screen.getAllByRole('button', { name: 'Ajouter un commentaire' })[0]);
     fireEvent.change(screen.getByLabelText('Votre commentaire'), {
-      target: { value: '<img src=x onerror=alert(1)> regarde ça' },
+      target: { value: 'regarde cette image <img src=x onerror=alert(1)>' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Commenter' }));
-    expect(await screen.findByText('<img src=x onerror=alert(1)> regarde ça')).toBeTruthy();
+    expect(await screen.findByText(/regarde ça/)).toBeTruthy();
+    // L'image piégée est retirée (img hors liste blanche).
     expect(document.querySelector('img[src="x"]')).toBeNull();
   });
 });

@@ -9,7 +9,6 @@
  * - Points d'entrée pas encore publiés (IA, commentaires, statistiques…) : provisional-types.ts.
  */
 import type { components } from './api-types';
-import type { Comment } from './provisional-types';
 
 export * from './provisional-types';
 
@@ -80,21 +79,16 @@ export type QuestionContext = Schemas['QuestionContext'];
 export type MobileMoneyOperator = NonNullable<QuestionContext['mobileMoneyOperator']>;
 export type NetworkQuality = NonNullable<QuestionContext['networkQuality']>;
 export type QuestionSummary = Schemas['QuestionSummary'];
-/** Pas encore dans le contrat : photos jointes à une question (2 max), voir message back-end. */
-export type QuestionImage = { id: number; url: string };
-export type QuestionRequest = Schemas['QuestionRequest'] & { imageIds?: number[] };
+export type QuestionImage = Schemas['QuestionImage'];
+export type QuestionRequest = Schemas['QuestionRequest'];
 export type AnswerRequest = Schemas['AnswerRequest'];
+export type Comment = Schemas['Comment'];
+export type CommentRequest = Schemas['CommentRequest'];
 export type VoteResult = Schemas['VoteResult'];
 export type TagCount = Schemas['TagCount'];
 
-/** Pas encore dans le contrat : commentaires (QA-9). */
-export type ContentExtras = {
-  comments?: Comment[];
-};
-
-export type QuestionDetail = Schemas['QuestionDetail'] &
-  ContentExtras & { images?: QuestionImage[] };
-export type Answer = Schemas['Answer'] & ContentExtras;
+export type QuestionDetail = Schemas['QuestionDetail'];
+export type Answer = Schemas['Answer'];
 
 // Emploi et missions
 export type JobType = Schemas['JobSummary']['type'];
@@ -161,6 +155,9 @@ export type MyPlaytestEntry = Schemas['MyPlaytestEntry'];
 export type PlaytestConfirmRequest = Schemas['PlaytestConfirmRequest'];
 export type PlaytestWithdrawRequest = Schemas['PlaytestWithdrawRequest'];
 export type PlaytestRemoveRequest = Schemas['PlaytestRemoveRequest'];
+export type PlaytestFeedback = Schemas['PlaytestFeedback'];
+export type PlaytestFeedbackRequest = Schemas['PlaytestFeedbackRequest'];
+export type PlaytestFeedbackKind = NonNullable<PlaytestFeedback['kind']>;
 
 // Communautés
 export type CommunityKind = Schemas['CommunitySummary']['kind'];

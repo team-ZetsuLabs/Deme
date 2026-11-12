@@ -130,6 +130,9 @@ export function AnswerItem({
           targetId={a.id}
           comments={a.comments ?? []}
           onAdded={(comment) => onEdited({ ...a, comments: [...(a.comments ?? []), comment] })}
+          onDeleted={(id) =>
+            onEdited({ ...a, comments: (a.comments ?? []).filter((x) => x.id !== id) })
+          }
         />
       </div>
     </article>

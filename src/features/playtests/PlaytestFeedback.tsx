@@ -7,6 +7,7 @@ import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
 import { ErrorState } from '../../components/ErrorState';
 import { Field } from '../../components/Field';
+import { MemberContent } from '../../components/MemberContent';
 import { RelativeTime } from '../../components/RelativeTime';
 import { StateMessage } from '../../components/StateMessage';
 import { useToast } from '../../components/useToast';
@@ -20,19 +21,19 @@ const KINDS: PlaytestFeedbackKind[] = ['BUG', 'SUGGESTION', 'OTHER'];
 
 export type PlaytestFeedbackProps = {
   playtest: PlaytestDetail;
-  isOwner: boolean;
 };
 
 /**
- * Retours sur un test fermé (TST) : le porteur lit la liste, un testeur inscrit envoie un
- * retour ou signale un bug. Contrat provisoire (voir message back-end) : marche en mock.
+ * Retours sur un test fermé (TST) : le porteur (ou l'équipe) lit la liste, un testeur en cours
+ * ou qui a terminé envoie un retour ou signale un bug.
  */
-export function PlaytestFeedback({ playtest, isOwner }: PlaytestFeedbackProps) {
-  return isOwner ? (
-    <OwnerFeedback id={playtest.id} />
-  ) : playtest.myParticipation ? (
-    <TesterFeedback id={playtest.id} />
-  ) : null;
+export function PlaytestFeedback({ playtest }: PlaytestFeedbackProps) {
+  return (
+    <>
+      {playtest.canViewFeedback && <OwnerFeedback id={playtest.id} />}
+      {playtest.canGiveFeedback && <TesterFeedback id={playtest.id} />}
+    </>
+  );
 }
 
 /** Liste des retours reçus (porteur). */
@@ -47,12 +48,12 @@ function OwnerFeedback({ id }: { id: number }) {
       {!query.loading && query.error !== null && (
         <ErrorState error={query.error} onRetry={query.reload} />
       )}
-      {!query.loading && query.data && query.data.length === 0 && (
+      {!query.loading && query.data && query.data.items.length === 0 && (
         <StateMessage>{t('playtests.feedback.empty')}</StateMessage>
       )}
-      {!query.loading && query.data && query.data.length > 0 && (
+      {!query.loading && query.data && query.data.items.length > 0 && (
         <ul className={styles.list}>
-          {query.data.map((f) => (
+          {query.data.items.map((f) => (
             <li key={f.id} className={styles.item}>
               <div className={styles.head}>
                 <Avatar
@@ -73,7 +74,7 @@ function OwnerFeedback({ id }: { id: number }) {
                   <RelativeTime iso={f.createdAt} />
                 </span>
               </div>
-              <p className={styles.body}>{f.body}</p>
+              <MemberContent html={f.bodyHtml} className={styles.body} />
             </li>
           ))}
         </ul>

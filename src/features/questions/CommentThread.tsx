@@ -4,7 +4,10 @@ import { useTranslation } from 'react-i18next';
 import type { Comment } from '../../api/types';
 import { errorMessage } from '../../api/errorMessage';
 import { Button } from '../../components/Button';
+import { Icon } from '../../components/Icon';
+import { MemberContent } from '../../components/MemberContent';
 import { RelativeTime } from '../../components/RelativeTime';
+import { useToast } from '../../components/useToast';
 import { useSession } from '../auth/useSession';
 import { questionsApi, type VoteTarget } from './questionsApi';
 import { COMMENT_MAX, COMMENT_MIN } from './validation';
@@ -18,12 +21,20 @@ export type CommentThreadProps = {
   targetId: number;
   comments: Comment[];
   onAdded: (comment: Comment) => void;
+  onDeleted: (commentId: number) => void;
 };
 
-/** Commentaires courts, en texte brut, sous une question ou une réponse (QA-9). */
-export function CommentThread({ target, targetId, comments, onAdded }: CommentThreadProps) {
+/** Commentaires courts sous une question ou une réponse (QA-9). */
+export function CommentThread({
+  target,
+  targetId,
+  comments,
+  onAdded,
+  onDeleted,
+}: CommentThreadProps) {
   const { t } = useTranslation();
   const { user } = useSession();
+  const toast = useToast();
   const navigate = useNavigate();
   const location = useLocation();
   const [expanded, setExpanded] = useState(false);
@@ -49,6 +60,15 @@ export function CommentThread({ target, targetId, comments, onAdded }: CommentTh
     setOpen(false);
     setBody('');
     setError(null);
+  };
+
+  const onDelete = async (id: number) => {
+    try {
+      await questionsApi.deleteComment(id);
+      onDeleted(id);
+    } catch (err) {
+      toast(errorMessage(t, err));
+    }
   };
 
   const onSubmit = async (e: FormEvent) => {
@@ -78,11 +98,21 @@ export function CommentThread({ target, targetId, comments, onAdded }: CommentTh
         <ul className={styles.list} aria-label={t('comments.label')}>
           {visible.map((c) => (
             <li key={c.id} className={styles.comment}>
-              <span className={styles.body}>{c.body}</span>{' '}
+              <MemberContent html={c.bodyHtml} className={styles.body} />
               <span className={styles.meta}>
                 <Link to={`/users/${c.author.username}`}>{c.author.displayName}</Link>
                 <span aria-hidden="true"> · </span>
                 <RelativeTime iso={c.createdAt} />
+                {c.canDelete && (
+                  <button
+                    type="button"
+                    className={styles.delete}
+                    aria-label={t('comments.delete')}
+                    onClick={() => onDelete(c.id)}
+                  >
+                    <Icon name="x" size={13} />
+                  </button>
+                )}
               </span>
             </li>
           ))}

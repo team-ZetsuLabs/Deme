@@ -22,8 +22,8 @@ export const SUGGESTED_SKILLS = [
   'ui-design',
 ];
 
-/** Limite du contrat (PUT /users/me/onboarding). */
-export const SKILLS_MAX = 10;
+/** Limite du contrat (PUT /users/me/onboarding et /users/me). */
+export const SKILLS_MAX = 20;
 
 const SKILL_PATTERN = /^[a-z0-9][a-z0-9.+#-]{0,34}$/;
 

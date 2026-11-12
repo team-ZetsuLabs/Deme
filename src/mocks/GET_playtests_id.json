@@ -40,5 +40,8 @@
   "updatedAt": "2026-11-09T06:00:00Z",
   "startedAt": "2026-11-03T12:00:00Z",
   "completedAt": null,
-  "tracking": "DAILY"
+  "tracking": "DAILY",
+  "canViewFeedback": true,
+  "canGiveFeedback": false,
+  "desiredEnd": "2026-12-01"
 }

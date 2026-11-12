@@ -205,6 +205,12 @@ function QuestionView({ id }: { id: number }) {
               onAdded={(comment) =>
                 setQuestion((c) => ({ ...c, comments: [...(c.comments ?? []), comment] }))
               }
+              onDeleted={(id) =>
+                setQuestion((c) => ({
+                  ...c,
+                  comments: (c.comments ?? []).filter((x) => x.id !== id),
+                }))
+              }
             />
           </div>
         </div>

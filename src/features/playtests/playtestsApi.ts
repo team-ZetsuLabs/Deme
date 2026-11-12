@@ -80,9 +80,12 @@ export const playtestsApi = {
       body,
     ),
 
-  /** Retour d'un testeur au porteur (TST, contrat provisoire — voir message back-end). */
+  /** Retour d'un testeur au porteur (TST). */
   sendFeedback: (id: number, body: PlaytestFeedbackRequest) =>
     api.post<PlaytestFeedback>(`/playtests/${id}/feedback`, body),
-  /** Retours reçus par le porteur (TST, contrat provisoire). */
-  feedback: (id: number) => api.get<PlaytestFeedback[]>(`/playtests/${id}/feedback`),
+  /** Retours reçus par le porteur et l'équipe (TST). */
+  feedback: (id: number) =>
+    api.get<Page<PlaytestFeedback>>(`/playtests/${id}/feedback`, {
+      query: { page: 0, size: PLAYTESTS_PAGE_SIZE },
+    }),
 };

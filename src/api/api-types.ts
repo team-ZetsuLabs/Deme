@@ -35,7 +35,7 @@ export interface paths {
         get?: never;
         /**
          * Terminer le parcours d'accueil
-         * @description Stack (1 à 10 technologies, partagées avec les étiquettes), pays et langue (AUTH-5). Passe onboardingCompleted à vrai ; peut être rappelé pour corriger ses choix.
+         * @description Stack (1 à 20 technologies, partagées avec les étiquettes), pays et langue (AUTH-5). Passe onboardingCompleted à vrai ; peut être rappelé pour corriger ses choix.
          */
         put: operations["userOnboarding"];
         post?: never;
@@ -405,6 +405,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/questions/{questionId}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Commentaires d'une question
+         * @description Du plus ancien au plus récent. Déjà fournis dans QuestionDetail.comments.
+         */
+        get: operations["commentListOnQuestion"];
+        put?: never;
+        /** Commenter une question */
+        post: operations["commentCommentQuestion"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/questions/{questionId}/answers": {
         parameters: {
             query?: never;
@@ -420,6 +441,26 @@ export interface paths {
         put?: never;
         /** Répondre à une question */
         post: operations["answerCreate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/questions/images": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Envoyer une image pour une question (QA-11)
+         * @description Formulaire multipart, champ image : PNG, JPG ou WebP de 2 Mo maximum, vérifié par son contenu. Renvoie             { id, url } : citer id dans imageIds de POST ou PUT /questions (2 images au plus). Une image jamais             rattachée à une question est effacée au bout d'un jour.
+         */
+        post: operations["questionUploadImage"];
         delete?: never;
         options?: never;
         head?: never;
@@ -740,6 +781,30 @@ export interface paths {
          * @description Une fois par jour (UTC). Sert à repérer les décrochages, pas de preuve.
          */
         post: operations["playtestCheckIn"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/playtests/{id}/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retours des testeurs
+         * @description Porteur et équipe seulement (canViewFeedback). Les plus récents d'abord.
+         */
+        get: operations["playtestListFeedback"];
+        put?: never;
+        /**
+         * Envoyer un retour au porteur
+         * @description Pour un testeur en cours ou qui a terminé : bug, suggestion ou autre, avec une note facultative de 1 à 5.             Le porteur reçoit une notification PLAYTEST_FEEDBACK (outcome = kind).
+         */
+        post: operations["playtestGiveFeedback"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1082,6 +1147,27 @@ export interface paths {
         post: operations["voteVoteAnswer"];
         /** Retirer son vote sur une réponse */
         delete: operations["voteUnvoteAnswer"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/answers/{answerId}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Commentaires d'une réponse
+         * @description Du plus ancien au plus récent. Déjà fournis dans Answer.comments.
+         */
+        get: operations["commentListOnAnswer"];
+        put?: never;
+        /** Commenter une réponse */
+        post: operations["commentCommentAnswer"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -1742,6 +1828,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/questions/images/{file}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Image gardée sur le serveur
+         * @description Ne pas construire cette adresse : utiliser url. En cache un an.
+         */
+        get: operations["questionImageFile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mes projets
+         * @description Projets dont le membre connecté est porteur ou membre accepté, clôturés compris, les plus actifs             d'abord. Même résultat que GET /projects?member=<mon pseudo>.
+         */
+        get: operations["projectMine"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/playtests/{id}/icon/{file}": {
         parameters: {
             query?: never;
@@ -2230,6 +2356,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{id}/requests/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Retirer sa demande en attente sur ce projet
+         * @description Comme DELETE /projects/{id}/requests/{requestId}, sans avoir à connaître l'identifiant.
+         */
+        delete: operations["projectWithdrawMine"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/comments/{commentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Supprimer un commentaire
+         * @description Son auteur, ou un modérateur ou administrateur.
+         */
+        delete: operations["commentDelete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/tags/{name}": {
         parameters: {
             query?: never;
@@ -2372,6 +2538,17 @@ export interface components {
             /** @description Compte supprimé (AUTH-6) : afficher « Utilisateur supprimé » traduit, sans lien vers le profil */
             deleted: boolean;
         };
+        Comment: {
+            /** Format: int64 */
+            id: number;
+            author: components["schemas"]["AuthorSummary"];
+            /** @description HTML nettoyé côté serveur, à afficher avec MemberContent */
+            bodyHtml: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** @description Vrai si le membre connecté peut supprimer le commentaire : le sien, ou l'équipe */
+            canDelete: boolean;
+        };
         QuestionContext: {
             /**
              * @description Code pays ISO 3166-1 alpha-2
@@ -2420,6 +2597,17 @@ export interface components {
             updatedAt: string;
             /** @description Vrai si le membre connecté peut supprimer la question : la sienne, sans réponse */
             canDelete: boolean;
+            /** @description Commentaires de la question (QA-9), du plus ancien au plus récent */
+            comments: components["schemas"]["Comment"][];
+            /** @description Images jointes (QA-11), 2 au plus, dans l'ordre choisi */
+            images: components["schemas"]["QuestionImage"][];
+        };
+        /** @description Image jointe à une question (QA-11) */
+        QuestionImage: {
+            /** @example 3f2b6c1e-8d4a-4c55-9a51-0b7e2f1d9c3a */
+            id: string;
+            /** @description Adresse de l'image, à afficher telle quelle dans <img> */
+            url: string;
         };
         /** @description Création ou modification complète d'une question (QA-1) */
         QuestionRequest: {
@@ -2437,6 +2625,13 @@ export interface components {
              */
             tags: string[];
             context?: components["schemas"]["QuestionContext"];
+            /**
+             * @description Images envoyées avant par POST /questions/images, dans l'ordre d'affichage (2 au plus). Absent : les images ne changent pas ; [] : toutes retirées.
+             * @example [
+             *       "3f2b6c1e-8d4a-4c55-9a51-0b7e2f1d9c3a"
+             *     ]
+             */
+            imageIds?: string[];
         };
         /** @description Modification d'un projet ; les rôles se gèrent à part */
         ProjectEditRequest: {
@@ -2459,6 +2654,11 @@ export interface components {
             roleId?: number;
             /** @enum {string} */
             status: "PENDING" | "ACCEPTED" | "REFUSED" | "LEFT";
+            /** @description Intitulé du rôle au moment de la demande */
+            roleTitle: string;
+            message: string;
+            /** Format: date-time */
+            createdAt: string;
         };
         /** @description Page d'un projet (PRJ-5) */
         ProjectDetail: {
@@ -2554,6 +2754,12 @@ export interface components {
              * @example 2026-11-17
              */
             desiredStart?: string;
+            /**
+             * Format: date
+             * @description Date de fin souhaitée, à titre indicatif, toutes plateformes. Pour WEB, c'est la seule façon d'indiquer la durée (requiredDays y est ignoré). Le même jour que desiredStart ou après.
+             * @example 2026-11-24
+             */
+            desiredEnd?: string;
             /**
              * @description Consignes aux testeurs, texte brut
              * @example Créez une tontine de test et invitez un ami. Signalez tout plantage dans le groupe.
@@ -2670,6 +2876,15 @@ export interface components {
             startedAt?: string;
             /** Format: date-time */
             completedAt?: string;
+            /**
+             * Format: date
+             * @description Date de fin souhaitée, à titre indicatif
+             */
+            desiredEnd?: string;
+            /** @description Je suis le porteur ou de l'équipe : je lis les retours des testeurs (GET /playtests/{id}/feedback) */
+            canViewFeedback: boolean;
+            /** @description Je teste ou j'ai testé l'application : je peux envoyer un retour au porteur (POST /playtests/{id}/feedback) */
+            canGiveFeedback: boolean;
         };
         /** @description Avancement. DAILY : percent = jours effectués par les testeurs en cours et terminés, rapportés à testersTarget × requiredDays. NONE : testeurs qui ont déclaré l'installation (en cours et terminés), rapportés à testersTarget. Ce ne sont que des déclarations : jamais une conformité d'un store. */
         PlaytestProgress: {
@@ -2894,6 +3109,8 @@ export interface components {
             createdAt: string;
             /** Format: date-time */
             updatedAt: string;
+            /** @description Commentaires de la réponse (QA-9), du plus ancien au plus récent */
+            comments: components["schemas"]["Comment"][];
         };
         /** @description Changement de rôle, par un Administrateur seulement */
         RoleChangeRequest: {
@@ -3121,6 +3338,22 @@ export interface components {
              */
             myVote?: number;
         };
+        /** @description Commentaire sous une question ou une réponse (QA-9) */
+        CommentRequest: {
+            /**
+             * @description Markdown. Le HTML brut est ignoré.
+             * @example Tu as essayé d'abord avec la sandbox Orange Money ?
+             */
+            body: string;
+        };
+        /** @description Formulaire multipart d'une image de question (QA-11) */
+        QuestionImageForm: {
+            /**
+             * Format: binary
+             * @description PNG, JPG ou WebP, 2 Mo maximum
+             */
+            image: string;
+        };
         /** @description Publication d'un projet avec ses rôles (PRJ-1) */
         ProjectCreateRequest: {
             /** @example Application de cotisation de tontine en mobile money */
@@ -3189,6 +3422,11 @@ export interface components {
             /** Format: int64 */
             projectId: number;
             projectTitle: string;
+            /**
+             * Format: int64
+             * @description Null si le rôle a été retiré depuis
+             */
+            roleId?: number;
             roleTitle: string;
             message: string;
             /** @enum {string} */
@@ -3260,6 +3498,43 @@ export interface components {
              * @example aminata.diallo@gmail.com
              */
             googleEmail?: string;
+        };
+        /** @description Retour d'un testeur au porteur */
+        PlaytestFeedbackRequest: {
+            /**
+             * @description Markdown. Le HTML brut est ignoré.
+             * @example L'application se ferme quand je valide un paiement Wave sur Android 10.
+             */
+            body: string;
+            /**
+             * Format: int32
+             * @description Note facultative de 1 à 5
+             * @example 4
+             */
+            rating?: number;
+            /**
+             * @description OTHER par défaut
+             * @example BUG
+             * @enum {string}
+             */
+            kind?: "BUG" | "SUGGESTION" | "OTHER";
+        };
+        /** @description Retour d'un testeur, lu par le porteur et l'équipe */
+        PlaytestFeedback: {
+            /** Format: int64 */
+            id: number;
+            author: components["schemas"]["AuthorSummary"];
+            /** @enum {string} */
+            kind: "BUG" | "SUGGESTION" | "OTHER";
+            /**
+             * Format: int32
+             * @description De 1 à 5, null si le testeur n'a pas noté
+             */
+            rating?: number;
+            /** @description HTML nettoyé côté serveur, à afficher avec MemberContent */
+            bodyHtml: string;
+            /** Format: date-time */
+            createdAt: string;
         };
         MarkReadRequest: {
             /**
@@ -4175,11 +4450,29 @@ export interface components {
              */
             total: number;
         };
+        PageResponsePlaytestFeedback: {
+            items: components["schemas"]["PlaytestFeedback"][];
+            /**
+             * Format: int32
+             * @example 0
+             */
+            page: number;
+            /**
+             * Format: int32
+             * @example 20
+             */
+            size: number;
+            /**
+             * Format: int64
+             * @example 134
+             */
+            total: number;
+        };
         Notification: {
             /** Format: int64 */
             id: number;
             /** @enum {string} */
-            type: "ANSWER_POSTED" | "ANSWER_ACCEPTED" | "VOTE_RECEIVED" | "JOB_MATCH" | "MISSION_MATCH" | "APPLICATION_RECEIVED" | "APPLICATION_DECIDED" | "JOB_REVIEWED" | "CHALLENGE_STARTED" | "PROJECT_REQUEST_DECIDED" | "CONTENT_HIDDEN" | "CONTENT_RESTORED" | "ACCOUNT_WARNED" | "SUBMISSION_REVIEWED" | "COMMUNITY_PROPOSAL_DECISION" | "PROJECT_REQUEST_RECEIVED" | "PROJECT_MEMBER_REMOVED" | "PROJECT_CLOSED" | "PLAYTEST_NEW_CAMPAIGN" | "PLAYTEST_JOINED" | "PLAYTEST_INSTALL_REMINDER" | "PLAYTEST_STAY_REMINDER" | "PLAYTEST_ENDING_SOON" | "PLAYTEST_PARTICIPATION_DONE" | "PLAYTEST_TESTER_LEFT" | "PLAYTEST_TESTER_REPLACED" | "PLAYTEST_CAMPAIGN_FULL" | "PLAYTEST_CAMPAIGN_REVIEWED" | "PLAYTEST_REMOVED";
+            type: "ANSWER_POSTED" | "ANSWER_ACCEPTED" | "VOTE_RECEIVED" | "JOB_MATCH" | "MISSION_MATCH" | "APPLICATION_RECEIVED" | "APPLICATION_DECIDED" | "JOB_REVIEWED" | "CHALLENGE_STARTED" | "PROJECT_REQUEST_DECIDED" | "CONTENT_HIDDEN" | "CONTENT_RESTORED" | "ACCOUNT_WARNED" | "SUBMISSION_REVIEWED" | "COMMUNITY_PROPOSAL_DECISION" | "PROJECT_REQUEST_RECEIVED" | "PROJECT_MEMBER_REMOVED" | "PROJECT_CLOSED" | "PLAYTEST_NEW_CAMPAIGN" | "PLAYTEST_JOINED" | "PLAYTEST_INSTALL_REMINDER" | "PLAYTEST_STAY_REMINDER" | "PLAYTEST_ENDING_SOON" | "PLAYTEST_PARTICIPATION_DONE" | "PLAYTEST_TESTER_LEFT" | "PLAYTEST_TESTER_REPLACED" | "PLAYTEST_CAMPAIGN_FULL" | "PLAYTEST_CAMPAIGN_REVIEWED" | "PLAYTEST_REMOVED" | "PLAYTEST_FEEDBACK";
             read: boolean;
             /** @description Membre à l'origine de l'événement ; null pour un événement de la plateforme */
             actor?: components["schemas"]["AuthorSummary"];
@@ -6254,6 +6547,99 @@ export interface operations {
             };
         };
     };
+    commentListOnQuestion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                questionId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Liste des commentaires, éventuellement vide */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Comment"][];
+                };
+            };
+            /** @description QUESTION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    commentCommentQuestion: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                questionId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommentRequest"];
+            };
+        };
+        responses: {
+            /** @description Commentaire publié */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Comment"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description QUESTION_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     answerList: {
         parameters: {
             query?: {
@@ -6341,6 +6727,66 @@ export interface operations {
             };
             /** @description RATE_LIMITED */
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    questionUploadImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["QuestionImageForm"];
+            };
+        };
+        responses: {
+            /** @description Image enregistrée */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QuestionImage"];
+                };
+            };
+            /** @description PHOTO_REQUIRED, PHOTO_TYPE, PHOTO_TOO_LARGE, FILE_TOO_LARGE (plus de 5 Mo) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description STORAGE_UNAVAILABLE : Cloudinary injoignable, réessayer */
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -7396,6 +7842,129 @@ export interface operations {
             };
             /** @description PARTICIPATION_NOT_RUNNING, ALREADY_CHECKED_IN, CHECK_IN_NOT_TRACKED (campagne web) */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestListFeedback: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de retours */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponsePlaytestFeedback"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PLAYTEST_OWNER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    playtestGiveFeedback: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlaytestFeedbackRequest"];
+            };
+        };
+        responses: {
+            /** @description Retour envoyé */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlaytestFeedback"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_PLAYTEST_TESTER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description PLAYTEST_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -8596,6 +9165,99 @@ export interface operations {
             };
             /** @description ANSWER_NOT_FOUND, VOTE_NOT_FOUND */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    commentListOnAnswer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                answerId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Liste des commentaires, éventuellement vide */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Comment"][];
+                };
+            };
+            /** @description ANSWER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    commentCommentAnswer: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                answerId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommentRequest"];
+            };
+        };
+        responses: {
+            /** @description Commentaire publié */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Comment"];
+                };
+            };
+            /** @description VALIDATION_ERROR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description ANSWER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description RATE_LIMITED */
+            429: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -10378,6 +11040,80 @@ export interface operations {
             };
         };
     };
+    questionImageFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                file: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description L'image */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/png": unknown;
+                    "image/jpeg": unknown;
+                    "image/webp": unknown;
+                };
+            };
+            /** @description IMAGE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectMine: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Page de projets */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PageResponseProjectSummary"];
+                };
+            };
+            /** @description INVALID_PAGE, INVALID_PAGE_SIZE */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
     playtestIconFile: {
         parameters: {
             query?: never;
@@ -11287,6 +12023,91 @@ export interface operations {
             };
             /** @description PROJECT_CLOSED, ROLE_FILLED */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    projectWithdrawMine: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Demande retirée */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description REQUEST_NOT_FOUND : aucune demande en attente */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+        };
+    };
+    commentDelete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                commentId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Commentaire supprimé */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description UNAUTHENTICATED */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description NOT_COMMENT_AUTHOR */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ApiError"];
+                };
+            };
+            /** @description COMMENT_NOT_FOUND */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

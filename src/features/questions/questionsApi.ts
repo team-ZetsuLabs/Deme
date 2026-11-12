@@ -81,11 +81,13 @@ export const questionsApi = {
   /** L'auteur de la question accepte une réponse (QA-5) ; renvoie la question à jour. */
   accept: (questionId: number, answerId: number) =>
     api.put<QuestionDetail>(`/questions/${questionId}/accepted-answer`, { answerId }),
-  /** POST /questions/{id}/comments ou /answers/{id}/comments (QA-9, pas encore dans le contrat). */
+  /** Commenter une question ou une réponse (QA-9). */
   comment: (target: VoteTarget, id: number, body: string) =>
     api.post<Comment>(`/${target === 'question' ? 'questions' : 'answers'}/${id}/comments`, {
       body,
     }),
+  /** Supprimer un commentaire (son auteur ou l'équipe). */
+  deleteComment: (commentId: number) => api.delete<void>(`/comments/${commentId}`),
   /** Vote positif (QA-4). Le contrat accepte aussi -1 ; le cahier ne demande que « voter pour ». */
   vote: (target: VoteTarget, id: number) =>
     api.post<VoteResult>(votePath(target, id), { value: 1 }),

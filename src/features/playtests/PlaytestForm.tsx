@@ -97,6 +97,7 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
   // (reconstituée depuis requiredDays) ou durée par défaut de la plateforme.
   const initialStart = initial?.desiredStart ?? todayIso();
   const initialDays = initial?.requiredDays ?? PLATFORM_CONFIG[initialPlatform].daysDefault;
+  const initialEnd = initial?.desiredEnd ?? addDays(initialStart, initialDays);
   const form = useValidatedForm<PlaytestValues>(
     {
       platform: initialPlatform,
@@ -108,7 +109,7 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
         initial?.testersTarget ?? PLATFORM_CONFIG[initialPlatform].testersDefault,
       ),
       desiredStart: initialStart,
-      desiredEnd: addDays(initialStart, initialDays),
+      desiredEnd: initialEnd,
       instructions: initial?.instructions ?? '',
     },
     VALIDATORS,
@@ -134,17 +135,20 @@ export function PlaytestForm({ initial, onSaved }: PlaytestFormProps) {
     }
     setBusy(true);
     try {
-      // La durée (requiredDays) est l'écart début → fin, envoyée pour toutes les plateformes.
-      // packageName reste ignoré en web (pas d'identifiant d'application).
+      // Dates début/fin pour toutes les plateformes ; requiredDays (= écart, borné) seulement
+      // pour le suivi quotidien (le web déduit sa durée de desiredEnd). packageName ignoré en web.
       const body: PlaytestRequest = {
         platform,
         appName: values.appName.trim(),
         description: values.description.trim(),
         optInUrl: values.optInUrl.trim(),
         testersTarget: Number(values.testersTarget),
-        requiredDays: daysBetween(values.desiredStart, values.desiredEnd),
         desiredStart: values.desiredStart,
+        desiredEnd: values.desiredEnd,
         ...(config.packageKind ? { packageName: values.packageName.trim() } : {}),
+        ...(config.tracking === 'DAILY'
+          ? { requiredDays: daysBetween(values.desiredStart, values.desiredEnd) }
+          : {}),
         ...(values.instructions.trim() ? { instructions: values.instructions.trim() } : {}),
       };
       let saved = initial

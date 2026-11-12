@@ -150,9 +150,7 @@ function PlaytestView({ id }: { id: number }) {
         ) : (
           <ParticipationPanel playtest={p} onChange={(updated) => query.setData(() => updated)} />
         )}
-        {(p.status === 'ACTIVE' || p.status === 'COMPLETED') && (
-          <PlaytestFeedback playtest={p} isOwner={isOwner} />
-        )}
+        {(p.status === 'ACTIVE' || p.status === 'COMPLETED') && <PlaytestFeedback playtest={p} />}
         <p className={own.notice}>{t('playtests.disclaimer')}</p>
       </aside>
     </div>

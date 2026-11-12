@@ -1,32 +1,39 @@
-[
-  {
-    "id": 501,
-    "body": "L'écran de connexion plante quand on choisit Wave au lieu d'Orange Money. Testé sur un Tecno Spark 10, Android 13.",
-    "rating": 4,
-    "kind": "BUG",
-    "author": {
-      "username": "koffi_m",
-      "displayName": "Koffi Mensah",
-      "avatarUrl": null,
-      "countryCode": "CI",
-      "reputation": 128,
-      "level": "MEMBER"
+{
+  "items": [
+    {
+      "id": 501,
+      "author": {
+        "username": "koffi_m",
+        "displayName": "Koffi Mensah",
+        "avatarUrl": null,
+        "countryCode": "CI",
+        "reputation": 128,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "kind": "BUG",
+      "rating": 4,
+      "bodyHtml": "<p>L'écran de connexion plante quand on choisit Wave au lieu d'Orange Money. Testé sur un Tecno Spark 10, Android 13.</p>",
+      "createdAt": "2026-11-09T09:30:00Z"
     },
-    "createdAt": "2026-11-09T09:30:00Z"
-  },
-  {
-    "id": 502,
-    "body": "Très fluide même en 3G. Il manque juste un bouton pour renvoyer le code USSD si on l'a raté.",
-    "rating": 5,
-    "kind": "SUGGESTION",
-    "author": {
-      "username": "fatou_ba",
-      "displayName": "Fatou Ba",
-      "avatarUrl": null,
-      "countryCode": "SN",
-      "reputation": 256,
-      "level": "CONTRIBUTOR"
-    },
-    "createdAt": "2026-11-08T17:10:00Z"
-  }
-]
+    {
+      "id": 502,
+      "author": {
+        "username": "fatou_ba",
+        "displayName": "Fatou Ba",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 256,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "kind": "SUGGESTION",
+      "rating": 5,
+      "bodyHtml": "<p>Très fluide même en 3G. Il manque juste un bouton pour renvoyer le code USSD si on l'a raté.</p>",
+      "createdAt": "2026-11-08T17:10:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 2
+}
