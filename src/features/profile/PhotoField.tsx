@@ -8,6 +8,7 @@ import { useToast } from '../../components/useToast';
 import { authApi } from '../auth/authApi';
 import { useSession } from '../auth/useSession';
 import { photoError, PHOTO_TYPES } from './photo';
+import { PhotoCropDialog } from './PhotoCropDialog';
 import styles from './PhotoField.module.css';
 
 export type PhotoFieldProps = { user: Me };
@@ -20,17 +21,24 @@ export function PhotoField({ user }: PhotoFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // Image choisie en attente de cadrage : ouvre le dialogue de recadrage avant l'envoi.
+  const [toCrop, setToCrop] = useState<File | null>(null);
 
-  const onFile = async (e: ChangeEvent<HTMLInputElement>) => {
+  const onFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file) return;
     const problem = photoError(file);
     setError(problem ? t(problem) : null);
     if (problem) return;
+    setToCrop(file);
+  };
+
+  const onCropped = async (cropped: File) => {
     setBusy(true);
     try {
-      setUser(await authApi.uploadPhoto(file));
+      setUser(await authApi.uploadPhoto(cropped));
+      setToCrop(null);
       toast(t('settings.photo.updated'));
     } catch (err) {
       setError(errorMessage(t, err));
@@ -82,6 +90,14 @@ export function PhotoField({ user }: PhotoFieldProps) {
           </p>
         )}
       </div>
+      {toCrop && (
+        <PhotoCropDialog
+          file={toCrop}
+          busy={busy}
+          onCancel={() => setToCrop(null)}
+          onConfirm={onCropped}
+        />
+      )}
     </div>
   );
 }

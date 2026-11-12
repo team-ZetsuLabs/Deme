@@ -776,7 +776,13 @@
       "tooBig": "A imagem deve ter no máximo 2 MB.",
       "updated": "Foto atualizada",
       "removed": "Foto removida, são apresentadas as suas iniciais",
-      "title": "Foto de perfil"
+      "title": "Foto de perfil",
+      "crop": {
+        "title": "Enquadrar a foto",
+        "hint": "Arraste para mover, o cursor para dar zoom.",
+        "zoom": "Zoom",
+        "confirm": "Guardar foto"
+      }
     },
     "accounts": {
       "title": "Contas associadas",

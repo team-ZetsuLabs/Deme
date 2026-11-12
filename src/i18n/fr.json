@@ -776,7 +776,13 @@
       "tooBig": "L'image doit faire 2 Mo au plus.",
       "updated": "Photo mise à jour",
       "removed": "Photo retirée, vos initiales sont affichées",
-      "title": "Photo de profil"
+      "title": "Photo de profil",
+      "crop": {
+        "title": "Cadrer la photo",
+        "hint": "Glissez pour déplacer, le curseur pour zoomer.",
+        "zoom": "Zoom",
+        "confirm": "Enregistrer la photo"
+      }
     },
     "accounts": {
       "title": "Comptes connectés",

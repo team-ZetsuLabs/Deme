@@ -776,7 +776,13 @@
       "tooBig": "The image must be 2 MB at most.",
       "updated": "Photo updated",
       "removed": "Photo removed, your initials are shown",
-      "title": "Profile photo"
+      "title": "Profile photo",
+      "crop": {
+        "title": "Frame the photo",
+        "hint": "Drag to move, the slider to zoom.",
+        "zoom": "Zoom",
+        "confirm": "Save photo"
+      }
     },
     "accounts": {
       "title": "Connected accounts",
