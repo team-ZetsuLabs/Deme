@@ -9968,6 +9968,12 @@
             "description" : "Date de début souhaitée, à titre indicatif",
             "example" : "2026-11-17"
           },
+          "desiredEnd" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Date de fin souhaitée, à titre indicatif, toutes plateformes. Pour WEB, c'est la seule façon d'indiquer la durée (requiredDays y est ignoré). Le même jour que desiredStart ou après.",
+            "example" : "2026-11-24"
+          },
           "instructions" : {
             "type" : "string",
             "description" : "Consignes aux testeurs, texte brut",
@@ -10169,6 +10175,11 @@
           "completedAt" : {
             "type" : "string",
             "format" : "date-time"
+          },
+          "desiredEnd" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Date de fin souhaitée, à titre indicatif"
           }
         },
         "required" : [ "appName", "canClose", "canEdit", "canJoin", "canSubmit", "createdAt", "descriptionHtml", "descriptionMarkdown", "id", "owner", "platform", "progress", "requiredDays", "spotsLeft", "status", "testersTarget", "tracking", "updatedAt" ]

@@ -61,6 +61,9 @@ public class TestCampaign {
     @Column(name = "desired_start")
     private LocalDate desiredStart;
 
+    @Column(name = "desired_end")
+    private LocalDate desiredEnd;
+
     @Column(length = 2000)
     private String instructions;
 
@@ -103,8 +106,8 @@ public class TestCampaign {
     }
 
     void edit(Platform platform, String appName, String packageName, String markdown, String safeHtml,
-              String optInUrl, int testersTarget, int requiredDays, LocalDate desiredStart, String instructions,
-              Instant now) {
+              String optInUrl, int testersTarget, int requiredDays, LocalDate desiredStart, LocalDate desiredEnd,
+              String instructions, Instant now) {
         this.platform = platform;
         this.requiredDays = requiredDays;
         this.appName = appName;
@@ -114,6 +117,7 @@ public class TestCampaign {
         this.optInUrl = optInUrl;
         this.testersTarget = testersTarget;
         this.desiredStart = desiredStart;
+        this.desiredEnd = desiredEnd;
         this.instructions = instructions;
         // Une campagne refusée qu'on corrige redevient un brouillon, à renvoyer.
         if (status == CampaignStatus.REJECTED) {
@@ -194,6 +198,10 @@ public class TestCampaign {
 
     public LocalDate getDesiredStart() {
         return desiredStart;
+    }
+
+    public LocalDate getDesiredEnd() {
+        return desiredEnd;
     }
 
     public String getInstructions() {

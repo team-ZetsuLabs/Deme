@@ -71,6 +71,11 @@ public final class PlaytestDtos {
             @Schema(description = "Date de début souhaitée, à titre indicatif", example = "2026-11-17")
             LocalDate desiredStart,
 
+            @Schema(description = "Date de fin souhaitée, à titre indicatif, toutes plateformes. Pour WEB, c'est la "
+                    + "seule façon d'indiquer la durée (requiredDays y est ignoré). Le même jour que desiredStart "
+                    + "ou après.", example = "2026-11-24")
+            LocalDate desiredEnd,
+
             @Size(max = 2000, message = "2000 caractères maximum")
             @Schema(description = "Consignes aux testeurs, texte brut",
                     example = "Créez une tontine de test et invitez un ami. Signalez tout plantage dans le groupe.")
@@ -210,7 +215,8 @@ public final class PlaytestDtos {
             @Schema(requiredMode = REQUIRED) Instant createdAt,
             @Schema(requiredMode = REQUIRED) Instant updatedAt,
             Instant startedAt,
-            Instant completedAt) {
+            Instant completedAt,
+            @Schema(description = "Date de fin souhaitée, à titre indicatif") LocalDate desiredEnd) {
     }
 
     @Schema(name = "PlaytestParticipation", description = "Testeur vu par le porteur ou l'équipe")
