@@ -434,6 +434,22 @@ class PlaytestIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    void dateDeFinSouhaitee() throws Exception {
+        Member owner = register("Thandi", "ZA");
+        Map<String, Object> web = campaignOn("WEB", null, "https://beta.stokvel.example.co.za", 5);
+        web.put("desiredStart", "2026-11-17");
+        web.put("desiredEnd", "2026-11-16");
+        submitForm(owner, web).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fields.desiredEnd").value("La date de fin doit suivre la date de début"));
+
+        web.put("desiredEnd", "2026-11-24");
+        submitForm(owner, web).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.desiredStart").value("2026-11-17"))
+                .andExpect(jsonPath("$.desiredEnd").value("2026-11-24"))
+                .andExpect(jsonPath("$.requiredDays").value(0));
+    }
+
+    @Test
     void uneApplicationIosSuitSesPropresJours() throws Exception {
         Member owner = register("Ngozi", "NG");
         withReputation(owner, 50);

@@ -492,14 +492,18 @@ public class PlaytestService {
         if (days < limits.minDays() || days > limits.maxDays()) {
             errors.put("requiredDays", "Entre " + limits.minDays() + " et " + limits.maxDays() + " jours");
         }
+        if (req.desiredStart() != null && req.desiredEnd() != null
+                && req.desiredEnd().isBefore(req.desiredStart())) {
+            errors.put("desiredEnd", "La date de fin doit suivre la date de début");
+        }
         if (!errors.isEmpty()) {
             throw ApiException.invalidFields(errors);
         }
         String instructions = req.instructions() == null || req.instructions().isBlank() ? null
                 : req.instructions().trim();
         c.edit(platform, req.appName().trim(), packageName, req.description(),
-                markdown.toSafeHtml(req.description()), optInUrl, target, days, req.desiredStart(), instructions,
-                now);
+                markdown.toSafeHtml(req.description()), optInUrl, target, days, req.desiredStart(), req.desiredEnd(),
+                instructions, now);
     }
 
     // ---------------------------------------------------------------- vues
@@ -549,7 +553,8 @@ public class PlaytestService {
                 owner && (c.getStatus() == CampaignStatus.DRAFT || c.getStatus() == CampaignStatus.REJECTED),
                 owner && c.getStatus() == CampaignStatus.DRAFT,
                 owner && (c.getStatus() == CampaignStatus.ACTIVE || c.getStatus() == CampaignStatus.SUSPENDED),
-                canJoin, c.getCreatedAt(), c.getUpdatedAt(), c.getStartedAt(), c.getCompletedAt());
+                canJoin, c.getCreatedAt(), c.getUpdatedAt(), c.getStartedAt(), c.getCompletedAt(),
+                c.getDesiredEnd());
     }
 
     List<ParticipationView> participationViews(TestCampaign c) {
