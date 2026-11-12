@@ -156,7 +156,7 @@
       "put" : {
         "tags" : [ "users" ],
         "summary" : "Terminer le parcours d'accueil",
-        "description" : "Stack (1 à 10 technologies, partagées avec les étiquettes), pays et langue (AUTH-5). Passe onboardingCompleted à vrai ; peut être rappelé pour corriger ses choix.",
+        "description" : "Stack (1 à 20 technologies, partagées avec les étiquettes), pays et langue (AUTH-5). Passe onboardingCompleted à vrai ; peut être rappelé pour corriger ses choix.",
         "operationId" : "userOnboarding",
         "requestBody" : {
           "content" : {
@@ -8944,7 +8944,7 @@
             "items" : {
               "type" : "string"
             },
-            "maxItems" : 10,
+            "maxItems" : 20,
             "minItems" : 0
           }
         },
@@ -9058,7 +9058,7 @@
             "items" : {
               "type" : "string"
             },
-            "maxItems" : 10,
+            "maxItems" : 20,
             "minItems" : 0
           },
           "countryCode" : {
