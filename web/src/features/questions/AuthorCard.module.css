@@ -1,0 +1,25 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s2) var(--s3);
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  font-size: var(--fs-sm);
+}
+
+.label {
+  display: block;
+  color: var(--text-3);
+}
+
+.name {
+  font-size: var(--fs-md);
+  font-weight: 500;
+  color: var(--text);
+}
+
+.rep {
+  font-family: var(--f-mono);
+  color: var(--gold-text);
+}

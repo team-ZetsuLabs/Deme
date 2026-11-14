@@ -1,0 +1,38 @@
+{
+  "items": [
+    {
+      "id": 207,
+      "target": {
+        "type": "JOB",
+        "id": 31,
+        "title": "Développeur back-end Java, paiements mobiles",
+        "companyName": "Sahel Pay"
+      },
+      "candidate": {
+        "username": "aminata_dev",
+        "displayName": "Aminata Diallo",
+        "avatarUrl": null,
+        "bio": "Développeuse back-end à Dakar. Java, Spring et paiements mobiles.",
+        "countryCode": "SN",
+        "city": "Dakar",
+        "role": "MEMBER",
+        "reputation": 342,
+        "level": "MEMBER",
+        "visibleToRecruiters": true,
+        "technologies": ["java", "spring-boot", "postgresql"],
+        "questionCount": 6,
+        "answerCount": 41,
+        "createdAt": "2026-09-14T08:21:00Z"
+      },
+      "message": "Je construis des intégrations Orange Money depuis deux ans chez un agrégateur à Thiès, dont la réconciliation des webhooks en double.",
+      "hasCv": true,
+      "proposedBudget": null,
+      "status": "VIEWED",
+      "createdAt": "2026-10-23T10:15:00Z",
+      "updatedAt": "2026-10-23T11:02:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 1
+}

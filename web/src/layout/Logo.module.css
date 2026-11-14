@@ -1,0 +1,16 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text);
+}
+
+.logo:hover {
+  text-decoration: none;
+}
+
+/* Logo Dɛmɛ monochrome : hauteur fixe, largeur selon le ratio du dessin. */
+.mark {
+  display: block;
+  height: 24px;
+  width: auto;
+}

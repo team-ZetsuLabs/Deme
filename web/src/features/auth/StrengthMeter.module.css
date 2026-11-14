@@ -1,0 +1,26 @@
+.meter {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s1);
+  margin-top: var(--s2);
+}
+
+.meter i {
+  height: 3px;
+  border-radius: 2px;
+  background: var(--surface-3);
+  transition: background-color var(--t-base) ease-out;
+}
+
+.meter[data-level='1'] i:nth-child(-n + 1) {
+  background: var(--red);
+}
+
+.meter[data-level='2'] i:nth-child(-n + 2) {
+  background: var(--gold);
+}
+
+.meter[data-level='3'] i:nth-child(-n + 3),
+.meter[data-level='4'] i {
+  background: var(--green);
+}

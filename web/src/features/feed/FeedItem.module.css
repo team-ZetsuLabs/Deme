@@ -1,0 +1,25 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  margin-block-end: var(--s4);
+  overflow: hidden;
+}
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: var(--s1);
+  margin: 0;
+  padding: var(--s2) var(--s4);
+  border-block-end: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--text-3);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+/* Le contenu de l'espace d'origine garde sa propre mise en page. */
+.body {
+  padding: var(--s1) var(--s3);
+}

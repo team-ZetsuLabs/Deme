@@ -1,0 +1,27 @@
+.text {
+  margin-bottom: var(--s4);
+  font-size: var(--fs-md);
+  color: var(--text-2);
+}
+
+.alert {
+  margin-bottom: var(--s4);
+  padding: var(--s3);
+  border: 1px solid var(--red);
+  border-radius: var(--r-md);
+  background: var(--red-wash);
+  font-size: var(--fs-md);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--s2);
+  margin-top: var(--s4);
+}
+
+@media (max-width: 767px) {
+  .actions {
+    flex-direction: column-reverse;
+  }
+}

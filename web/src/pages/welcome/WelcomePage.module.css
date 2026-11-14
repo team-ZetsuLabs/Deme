@@ -1,0 +1,129 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.top {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--s5) var(--s5) 0;
+}
+
+.main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--s6) var(--s5) var(--s7);
+}
+
+.main:focus {
+  outline: none;
+}
+
+.title {
+  font-size: var(--fs-3xl);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+}
+
+.lead {
+  max-width: 60ch;
+  margin: var(--s2) 0 var(--s6);
+  color: var(--text-2);
+}
+
+.section {
+  margin-bottom: var(--s4);
+  padding: var(--s5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  float: inline-start;
+  width: 100%;
+  margin-bottom: var(--s2);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.legend + * {
+  clear: both;
+}
+
+.step {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--surface-3);
+  font-family: var(--f-mono);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+.hint {
+  margin-bottom: var(--s4);
+  font-size: var(--fs-md);
+  color: var(--text-3);
+}
+
+.languages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+}
+
+.language {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: var(--touch);
+  padding: 0 var(--s4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  font-weight: 500;
+}
+
+.language:has(input:checked) {
+  border-color: var(--green-text);
+  box-shadow: 0 0 0 1px var(--green-text);
+}
+
+.language input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--green-text);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--s2);
+  margin-top: var(--s5);
+}
+
+@media (max-width: 767px) {
+  .top {
+    padding: var(--s4) var(--s4) 0;
+  }
+  .main {
+    padding: var(--s5) var(--s4) var(--s6);
+  }
+  .title {
+    font-size: var(--fs-2xl);
+  }
+  .section {
+    padding: var(--s4);
+  }
+  .actions {
+    flex-direction: column-reverse;
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "items": [
+    {
+      "id": 4,
+      "title": "Nouveau projet",
+      "type": "STUDY",
+      "technologies": ["python"],
+      "status": "OPEN",
+      "owner": {
+        "username": "benhasser",
+        "displayName": "Benhasser Maiga",
+        "avatarUrl": null,
+        "countryCode": "ML",
+        "reputation": 120,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "openRoles": ["Développeur Python"],
+      "teamSize": 1,
+      "createdAt": "2026-11-02T10:00:00.000000Z",
+      "lastActivityAt": "2026-11-02T10:00:00.000000Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 1
+}

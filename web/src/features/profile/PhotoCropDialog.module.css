@@ -1,0 +1,60 @@
+.viewport {
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.viewport:active {
+  cursor: grabbing;
+}
+
+.image {
+  position: absolute;
+  max-width: none;
+  -webkit-user-drag: none;
+}
+
+/* Cercle de cadrage : l'extérieur est assombri, l'intérieur montre la zone retenue. */
+.mask {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 9999px var(--backdrop);
+  pointer-events: none;
+}
+
+.zoomRow {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin-top: var(--s4);
+}
+
+.zoomLabel {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.zoomRow input[type='range'] {
+  flex: 1;
+  accent-color: var(--green);
+}
+
+.hint {
+  margin-top: var(--s2);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--s2);
+  margin-top: var(--s4);
+}

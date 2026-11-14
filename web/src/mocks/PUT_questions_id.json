@@ -1,0 +1,28 @@
+{
+  "id": 101,
+  "title": "Comment vérifier une notification de paiement Orange Money côté serveur ?",
+  "bodyMarkdown": "Je reçois bien la notification de paiement Orange Money sur mon webhook, mais je ne sais pas comment être sûre qu'elle vient vraiment d'Orange.\n\n```java\n@PostMapping(\"/webhooks/orange\")\npublic void notify(@RequestBody Map<String, Object> body) {\n    // comment vérifier ?\n}\n```\n\nFaut-il rappeler l'API de statut à chaque fois ?",
+  "bodyHtml": "<p>Je reçois bien la notification de paiement Orange Money sur mon webhook, mais je ne sais pas comment être sûre qu'elle vient vraiment d'Orange.</p>\n<pre><code class=\"language-java\">@PostMapping(&quot;/webhooks/orange&quot;)\npublic void notify(@RequestBody Map&lt;String, Object&gt; body) {\n    // comment vérifier ?\n}\n</code></pre>\n<p>Faut-il rappeler l'API de statut à chaque fois ?</p>\n",
+  "tags": ["orange-money", "spring-boot", "webhook"],
+  "context": {
+    "countryCode": "SN",
+    "mobileMoneyOperator": "ORANGE_MONEY",
+    "networkQuality": "GOOD"
+  },
+  "author": {
+    "username": "aminata_dev",
+    "displayName": "Aminata Diallo",
+    "avatarUrl": null,
+    "countryCode": "SN",
+    "reputation": 342,
+    "level": "MEMBER",
+    "deleted": false
+  },
+  "score": 7,
+  "answerCount": 2,
+  "acceptedAnswerId": 512,
+  "myVote": null,
+  "canEdit": true,
+  "createdAt": "2026-10-19T14:05:00Z",
+  "updatedAt": "2026-10-21T10:18:00Z"
+}

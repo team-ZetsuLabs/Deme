@@ -1,0 +1,11 @@
+.actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--s2);
+}
+
+@media (max-width: 767px) {
+  .actions {
+    flex-direction: column-reverse;
+  }
+}

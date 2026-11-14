@@ -1,0 +1,17 @@
+{
+  "id": 7,
+  "roleId": 1,
+  "roleTitle": "Développeur front-end React",
+  "message": "Bonjour, je veux bien aider sur le front React.",
+  "status": "ACCEPTED",
+  "createdAt": "2026-11-02T11:00:00.000000Z",
+  "applicant": {
+    "username": "amadou_diallo",
+    "displayName": "Amadou Diallo",
+    "avatarUrl": null,
+    "countryCode": "ML",
+    "reputation": 34,
+    "level": "MEMBER",
+    "deleted": false
+  }
+}

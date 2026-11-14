@@ -1,0 +1,18 @@
+{
+  "id": 12,
+  "username": "aminata_dev",
+  "displayName": "Aminata Diallo",
+  "email": "aminata.diallo@exemple.sn",
+  "avatarUrl": "/api/v1/users/aminata_dev/avatar/3f9c2a7e-5b1d-4c8e-9a40-1d2e6f7b8c90.webp",
+  "bio": "Développeuse back-end à Dakar. Java, Spring et paiements mobiles.",
+  "countryCode": "SN",
+  "city": "Dakar",
+  "language": "fr",
+  "visibleToRecruiters": false,
+  "role": "MEMBER",
+  "reputation": 342,
+  "level": "MEMBER",
+  "technologies": ["java", "spring-boot", "postgresql"],
+  "onboardingCompleted": true,
+  "createdAt": "2026-09-14T08:21:00Z"
+}

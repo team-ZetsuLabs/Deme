@@ -1,0 +1,42 @@
+.banner {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2) var(--s4);
+  padding: var(--s2) calc(var(--s4) + var(--touch));
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-md);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.close {
+  position: absolute;
+  inset-inline-end: var(--s2);
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: var(--touch);
+  height: var(--touch);
+  border: none;
+  background: transparent;
+  color: var(--text-2);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition:
+    color var(--t-fast) ease-out,
+    background-color var(--t-fast) ease-out;
+}
+
+.close:hover {
+  color: var(--text);
+  background: var(--surface-3);
+}
+
+.close:active {
+  transform: translateY(-50%) scale(var(--press-scale));
+}

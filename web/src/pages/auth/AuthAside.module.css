@@ -1,0 +1,130 @@
+.side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--s7);
+  border-inline-start: 1px solid var(--line);
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.inner {
+  width: 100%;
+  max-width: 560px;
+  min-width: 0;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+
+.sub {
+  margin-top: var(--s2);
+  color: var(--text-2);
+}
+
+.thread {
+  margin-top: var(--s6);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: 10px var(--s4);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--f-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+}
+
+.post {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: var(--s3);
+  padding: var(--s4);
+}
+
+.post + .post {
+  border-top: 1px solid var(--line);
+}
+
+.post h3 {
+  font-size: var(--fs-base-sm);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.post p {
+  margin-top: var(--s1);
+  font-size: var(--fs-md);
+  color: var(--text-2);
+}
+
+.post .by {
+  margin-top: var(--s2);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.accepted {
+  background: var(--green-wash);
+}
+
+.acceptedTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--green-text);
+}
+
+.code {
+  margin-top: var(--s3);
+  padding: var(--s3) var(--s4);
+  overflow-x: auto;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  font-family: var(--f-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.rep {
+  margin-inline-start: var(--s2);
+  font-family: var(--f-mono);
+  font-size: var(--fs-sm);
+  color: var(--gold-text);
+}
+
+@media (max-width: 959px) {
+  .side {
+    display: none;
+  }
+}

@@ -1,0 +1,104 @@
+.layout {
+  display: block;
+}
+
+.stream {
+  min-inline-size: 0;
+}
+
+.head {
+  margin-block-end: var(--s4);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+}
+
+.lead {
+  margin: var(--s1) 0 0;
+  color: var(--text-2);
+}
+
+/* Rail de droite : caché sur mobile (le fil occupe tout l'écran, façon LinkedIn). */
+.rail {
+  display: none;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s5) var(--s4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  text-align: center;
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profileName {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.profileName:hover {
+  color: var(--green-text);
+}
+
+.profileMeta {
+  color: var(--text-3);
+  font-size: var(--fs-sm);
+}
+
+.railCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s2);
+  padding: var(--s4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+
+.railKicker {
+  display: flex;
+  align-items: center;
+  gap: var(--s1);
+  color: var(--green-text);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.railTitle {
+  margin: 0;
+  font-size: var(--fs-base);
+  font-weight: 600;
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: var(--s5);
+    align-items: start;
+  }
+
+  .rail {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s4);
+    position: sticky;
+    top: calc(var(--topbar-h) + var(--s4));
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "items": [
+    {
+      "id": 77,
+      "challengeId": 4,
+      "member": {
+        "username": "awa_kone",
+        "displayName": "Awa Koné",
+        "avatarUrl": null,
+        "countryCode": "CI",
+        "reputation": 640,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "repositoryUrl": "https://github.com/awa-kone/zetsu-defi-ussd",
+      "comment": "Testé avec le simulateur Africa's Talking",
+      "status": "PENDING",
+      "score": null,
+      "feedback": null,
+      "submittedAt": "2026-11-03T18:22:00Z",
+      "reviewedAt": null
+    },
+    {
+      "id": 79,
+      "challengeId": 4,
+      "member": {
+        "username": "moussa_traore",
+        "displayName": "Moussa Traoré",
+        "avatarUrl": null,
+        "countryCode": "ML",
+        "reputation": 85,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "repositoryUrl": "https://github.com/moussa-tr/ussd-facture",
+      "comment": null,
+      "status": "PENDING",
+      "score": null,
+      "feedback": null,
+      "submittedAt": "2026-11-04T06:48:00Z",
+      "reviewedAt": null
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 2
+}

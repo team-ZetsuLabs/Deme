@@ -1,0 +1,15 @@
+{
+  "id": 207,
+  "target": {
+    "type": "JOB",
+    "id": 31,
+    "title": "Développeur back-end Java, paiements mobiles",
+    "companyName": "Sahel Pay"
+  },
+  "status": "SENT",
+  "message": "Je construis des intégrations Orange Money depuis deux ans chez un agrégateur à Thiès, dont la réconciliation des webhooks en double.",
+  "hasCv": true,
+  "proposedBudget": null,
+  "createdAt": "2026-10-23T10:15:00Z",
+  "updatedAt": "2026-10-23T10:15:00Z"
+}

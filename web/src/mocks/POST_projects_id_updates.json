@@ -1,0 +1,15 @@
+{
+  "id": 3,
+  "bodyMarkdown": "Mise à jour de test.",
+  "bodyHtml": "<p>Mise à jour de test.</p>\n",
+  "author": {
+    "username": "benhasser",
+    "displayName": "Benhasser Maiga",
+    "avatarUrl": null,
+    "countryCode": "ML",
+    "reputation": 120,
+    "level": "MEMBER",
+    "deleted": false
+  },
+  "createdAt": "2026-11-02T12:00:00.000000Z"
+}

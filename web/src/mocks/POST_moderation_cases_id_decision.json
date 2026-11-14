@@ -1,0 +1,37 @@
+{
+  "id": 19,
+  "target": {
+    "type": "QUESTION",
+    "id": 214,
+    "title": "Quel est le meilleur ordinateur portable pour un étudiant à Bamako ?",
+    "excerpt": "Je cherche un ordinateur pas cher pour commencer l'informatique, vous conseillez quelle marque ?",
+    "questionId": null,
+    "author": {
+      "username": "moussa_traore",
+      "displayName": "Moussa Traoré",
+      "avatarUrl": null,
+      "countryCode": "ML",
+      "reputation": 85,
+      "level": "MEMBER",
+      "deleted": false
+    }
+  },
+  "status": "HIDDEN",
+  "reportCount": 2,
+  "reasons": [
+    {
+      "reason": "OFF_TOPIC",
+      "count": 2
+    }
+  ],
+  "comments": ["Question d'achat, pas de développement"],
+  "decision": {
+    "action": "HIDE",
+    "note": "Question d'achat de matériel, hors du champ de Dɛmɛ",
+    "byTeam": false,
+    "decidedAt": "2026-10-29T12:10:00Z"
+  },
+  "appeal": null,
+  "firstReportedAt": "2026-10-29T08:05:00Z",
+  "updatedAt": "2026-10-29T12:10:00Z"
+}

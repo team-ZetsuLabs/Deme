@@ -1,0 +1,15 @@
+{
+  "id": 901,
+  "bodyHtml": "<p>Commentaire publié en mode mock : l'API renvoie toujours ce contenu fixe.</p>",
+  "author": {
+    "username": "aminata_dev",
+    "displayName": "Aminata Diallo",
+    "avatarUrl": null,
+    "countryCode": "SN",
+    "reputation": 342,
+    "level": "MEMBER",
+    "deleted": false
+  },
+  "createdAt": "2026-10-22T12:00:00Z",
+  "canDelete": true
+}

@@ -1,0 +1,84 @@
+.list {
+  list-style: none;
+}
+
+.item {
+  padding: var(--s4) 0;
+  border-top: 1px solid var(--line);
+}
+
+.item:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.who {
+  flex: 1;
+  min-width: 0;
+}
+
+.who a {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.who small {
+  display: block;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: var(--s3);
+  list-style: none;
+}
+
+.tags li {
+  padding: 2px var(--s2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  font-family: var(--f-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+
+.message {
+  margin-top: var(--s3);
+  color: var(--text-2);
+  white-space: pre-line;
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s2);
+  margin-top: var(--s3);
+}
+
+.terms {
+  font-family: var(--f-mono);
+  font-size: var(--fs-sm);
+  color: var(--text);
+}
+
+.cv {
+  font-size: var(--fs-md);
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  gap: var(--s2);
+}

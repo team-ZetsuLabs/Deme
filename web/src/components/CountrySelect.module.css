@@ -1,0 +1,139 @@
+.wrap {
+  position: relative;
+  width: 100%;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  width: 100%;
+  min-height: var(--touch);
+  padding: 0 36px 0 var(--s3);
+  background-color: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  font-size: var(--fs-base);
+  color: var(--text);
+  text-align: start;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--text-2) 50%),
+    linear-gradient(135deg, var(--text-2) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 50%,
+    calc(100% - 13px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  transition:
+    border-color var(--t-fast) ease-out,
+    box-shadow var(--t-fast) ease-out;
+}
+
+.button:focus-visible,
+.button[aria-expanded='true'] {
+  outline: none;
+  border-color: var(--green-text);
+  box-shadow: 0 0 0 3px var(--green-wash);
+}
+
+.button[aria-invalid='true'] {
+  border-color: var(--red);
+}
+
+.value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty {
+  color: var(--placeholder);
+}
+
+.flagSlot {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 20px;
+}
+
+.flagSlot:empty {
+  display: none;
+}
+
+.list {
+  position: absolute;
+  z-index: var(--z-menu);
+  top: calc(100% + var(--s1));
+  inset-inline-start: 0;
+  /* Assez large pour « République centrafricaine » sur une ligne, sans sortir de l'écran. */
+  min-width: 100%;
+  width: max-content;
+  max-width: min(320px, calc(100vw - 2 * var(--s4)));
+  max-height: 280px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--s1);
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow);
+}
+
+.upward {
+  top: auto;
+  bottom: calc(100% + var(--s1));
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: 40px;
+  padding: 0 var(--s2);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-md);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.option .flagSlot:empty {
+  display: inline-flex;
+}
+
+.active {
+  background: var(--surface-2);
+}
+
+.option[aria-selected='true'] {
+  font-weight: 600;
+  color: var(--green-text);
+}
+
+/* Barre de filtres : même hauteur et même bordure que les autres listes. */
+.filter {
+  width: auto;
+  min-width: 220px;
+}
+
+.filter .button {
+  min-height: calc(var(--control-h-sm) + 8px);
+  border-color: var(--line);
+  font-size: var(--fs-md);
+}
+
+@media (max-width: 767px) {
+  /* Sur téléphone, la liste reste sous son champ : elle ne doit jamais dépasser de l'écran. */
+  .list {
+    width: 100%;
+    max-width: none;
+  }
+  .filter {
+    width: 100%;
+    min-width: 0;
+  }
+  .filter .button {
+    min-height: var(--touch);
+  }
+}

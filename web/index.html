@@ -1,0 +1,54 @@
+﻿<!doctype html>
+<html lang="fr" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Ne jamais envoyer l'URL complète (titres de questions…) aux sites externes visités. -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="description" content="Dɛmɛ, l'entraide entre développeurs africains." />
+    <meta name="theme-color" content="#f6f7f6" />
+    <!-- Aperçu générique quand un lien Dɛmɛ est partagé (WhatsApp, LinkedIn, Slack…).
+         L'aperçu précis par page (titre exact d'une question) demande un rendu côté serveur :
+         les robots des réseaux ne lisent pas le JavaScript. À prévoir côté infra. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Dɛmɛ" />
+    <meta property="og:title" content="Dɛmɛ, l'entraide entre développeurs africains" />
+    <meta
+      property="og:description"
+      content="Posez vos questions avec votre contexte africain, répondez, trouvez des missions entre pairs et faites reconnaître votre travail."
+    />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Dɛmɛ, l'entraide entre développeurs africains" />
+    <meta
+      name="twitter:description"
+      content="Posez vos questions avec votre contexte africain, répondez, trouvez des missions entre pairs."
+    />
+    <meta name="twitter:image" content="/og-image.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <!-- Thème et langue appliqués avant l'affichage, sans script inline (CSP). -->
+    <script src="/theme-init.js"></script>
+    <title>Dɛmɛ</title>
+  </head>
+  <body>
+    <!--
+      Coquille affichée dès l'arrivée du CSS, avant le JavaScript (premier affichage en 3G).
+      React la remplace au premier rendu. HTML et CSS seulement : pas de script inline (CSP).
+    -->
+    <div id="root">
+      <div class="app-shell" aria-hidden="true">
+        <div class="app-shell-bar"><span class="app-shell-brand">Dɛmɛ</span></div>
+        <div class="app-shell-body">
+          <span class="app-shell-line app-shell-title"></span>
+          <span class="app-shell-line"></span>
+          <span class="app-shell-line"></span>
+          <span class="app-shell-line app-shell-short"></span>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,67 @@
+{
+  "items": [
+    {
+      "id": 3,
+      "title": "Simulateur d'API de paiement mobile pour apprendre",
+      "type": "STUDY",
+      "technologies": ["node.js", "mobile-money"],
+      "status": "OPEN",
+      "owner": {
+        "username": "awa_kane",
+        "displayName": "Awa Kane",
+        "avatarUrl": null,
+        "countryCode": "BF",
+        "reputation": 98,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "openRoles": ["Développeur Node.js"],
+      "teamSize": 1,
+      "createdAt": "2026-10-27T20:15:14.134445Z",
+      "lastActivityAt": "2026-10-27T20:15:14.134445Z"
+    },
+    {
+      "id": 2,
+      "title": "Surveillance simple des serveurs pour petites équipes",
+      "type": "STARTUP",
+      "technologies": ["devops", "docker", "python"],
+      "status": "OPEN",
+      "owner": {
+        "username": "seydou_ouedraogo",
+        "displayName": "Seydou Ouédraogo",
+        "avatarUrl": null,
+        "countryCode": "BF",
+        "reputation": 78,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "openRoles": ["Ingénieur DevOps", "Développeur Python"],
+      "teamSize": 1,
+      "createdAt": "2026-10-27T20:15:12.009943Z",
+      "lastActivityAt": "2026-10-27T20:15:12.009943Z"
+    },
+    {
+      "id": 1,
+      "title": "Annuaire open source des développeurs africains",
+      "type": "OPEN_SOURCE",
+      "technologies": ["react", "typescript", "node.js"],
+      "status": "OPEN",
+      "owner": {
+        "username": "fatou_ndiaye",
+        "displayName": "Fatou Ndiaye",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 78,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "openRoles": ["Développeur front-end React", "Développeur back-end Node.js"],
+      "teamSize": 1,
+      "createdAt": "2026-10-27T20:15:09.739849Z",
+      "lastActivityAt": "2026-10-27T20:15:09.739849Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 3
+}

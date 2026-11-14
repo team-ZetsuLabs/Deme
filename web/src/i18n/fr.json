@@ -1,0 +1,1820 @@
+{
+  "playtests": {
+    "pageTitle": "Tests fermés",
+    "title": "Tests fermés Google Play",
+    "lead": "Trouvez des testeurs pour votre application, et testez celles des autres membres.",
+    "publish": "Proposer une campagne",
+    "mine": "Mes campagnes",
+    "mineLead": "Vos campagnes de test, brouillons compris.",
+    "mineEmpty": "Vous n'avez pas encore de campagne.",
+    "empty": "Aucune campagne pour le moment.",
+    "full": "Complète",
+    "spotsLeft_one": "{{count}} place sur {{target}}",
+    "spotsLeft_other": "{{count}} places sur {{target}}",
+    "instructions": "Consignes aux testeurs",
+    "disclaimer": "Les compteurs reposent sur les déclarations des testeurs : ils n'attestent pas de la conformité Google Play.",
+    "filters": {
+      "status": "État",
+      "active": "En cours",
+      "completed": "Terminées",
+      "availability": "Places",
+      "open": "Avec place",
+      "full": "Complètes"
+    },
+    "status": {
+      "DRAFT": "Brouillon",
+      "PENDING_REVIEW": "En validation",
+      "REJECTED": "Refusée",
+      "ACTIVE": "Active",
+      "SUSPENDED": "Suspendue",
+      "COMPLETED": "Terminée"
+    },
+    "statusNotice": {
+      "DRAFT": "Ce brouillon n'est visible que par vous. Publiez-le pour recruter des testeurs.",
+      "PENDING_REVIEW": "Cette campagne attend la validation de l'équipe.",
+      "REJECTED": "Cette campagne a été refusée.",
+      "SUSPENDED": "Cette campagne est suspendue."
+    },
+    "progress": {
+      "label": "Avancement"
+    },
+    "facts": {
+      "testers": "Testeurs visés",
+      "days": "Jours requis",
+      "spots": "Places libres"
+    },
+    "owner": {
+      "yours": "Votre campagne.",
+      "edit": "Modifier",
+      "submit": "Publier la campagne",
+      "submitted": "Campagne publiée",
+      "closed": "Campagne clôturée",
+      "close": {
+        "button": "Clôturer la campagne",
+        "title": "Clôturer cette campagne ?",
+        "text": "Elle n'accepte plus de nouveaux testeurs. Ceux en cours vont au bout de leurs jours.",
+        "confirm": "Clôturer"
+      }
+    },
+    "join": {
+      "title": "Devenir testeur",
+      "loginText": "Connectez-vous pour rejoindre cette campagne.",
+      "login": "Se connecter",
+      "text": "Installez l'application et gardez-la {{days}} jours : vous aidez un autre développeur à publier la sienne.",
+      "cta": "Rejoindre le test"
+    },
+    "participation": {
+      "joinedTitle": "À vous de jouer",
+      "step1": "Ouvrez le lien d'inscription au test.",
+      "step2": "Rejoignez le programme et installez l'application.",
+      "step3": "Revenez ici déclarer votre installation.",
+      "openOptIn": "Ouvrir le test Google Play",
+      "googleEmail": "Adresse Google (facultatif)",
+      "googleEmailHint": "Utile si le porteur gère ses testeurs par adresse. Visible de lui seul.",
+      "confirm": "J'ai installé l'application",
+      "withdraw": "Me désister",
+      "withdrawConfirm": "Votre place sera libérée et vous ne pourrez pas rejoindre à nouveau cette campagne.",
+      "withdrawYes": "Me désister",
+      "runningTitle": "Votre test est en cours",
+      "daysOf": "jours sur {{total}}",
+      "verified": "Le porteur a confirmé votre présence dans la Play Console.",
+      "declared": "Installation déclarée. Revenez chaque jour confirmer que vous êtes toujours inscrit.",
+      "needsAttention": "Vous n'avez pas confirmé depuis 3 jours : pensez à rester inscrit.",
+      "checkIn": "Je suis toujours inscrit",
+      "checkedIn": "Confirmé pour aujourd'hui",
+      "completedTitle": "Test terminé, merci !",
+      "completedText": "Vous avez tenu vos {{days}} jours. Votre réputation a augmenté.",
+      "dropped": "Vous vous êtes désisté de cette campagne.",
+      "removed": "Le porteur vous a retiré de cette campagne.",
+      "reason": "Motif",
+      "daysInstalled": "jours depuis l’installation",
+      "web": "Gardez l’application installée et envoyez vos retours au porteur. Pas de décompte imposé."
+    },
+    "new": {
+      "pageTitle": "Nouvelle campagne",
+      "lead": "Décrivez votre application et le test fermé à rejoindre.",
+      "appName": "Nom de l'application",
+      "appNamePlaceholder": "Tontine Cash",
+      "packageName": "Identifiant de l'application",
+      "packageNameHint": {
+        "android": "L’identifiant Android, par exemple sn.monappli.app.",
+        "bundle": "Le Bundle ID iOS, par exemple com.monappli.ios."
+      },
+      "description": "Description",
+      "descriptionHint": "À quoi sert l'application, ce que les testeurs doivent regarder.",
+      "optInUrl": "Lien d'inscription au test",
+      "optInUrlHint": {
+        "GOOGLE_PLAY": "Le lien Google Play (play.google.com/apps/testing/…) ou le groupe Google.",
+        "APP_STORE": "Le lien TestFlight (testflight.apple.com/join/…).",
+        "WEB": "L’adresse https:// du site à tester."
+      },
+      "testersTarget": "Testeurs recherchés",
+      "testersTargetHint": "De {{min}} à {{max}} testeurs.",
+      "desiredStart": "Date de début souhaitée",
+      "desiredEnd": "Date de fin",
+      "desiredEndHint": "De {{min}} à {{max}} jours après le début.",
+      "durationDays_one": "Durée : {{count}} jour.",
+      "durationDays_other": "Durée : {{count}} jours.",
+      "instructions": "Consignes aux testeurs (facultatif)",
+      "instructionsHint": "Ce qu'il faut tester en priorité, où signaler les bugs.",
+      "notice": "Votre campagne est créée en brouillon : vous la publierez ensuite.",
+      "submit": "Créer le brouillon",
+      "busy": "Création en cours",
+      "saved": "Brouillon créé",
+      "errors": {
+        "appName": "Le nom doit faire de 2 à 80 caractères.",
+        "packageName": {
+          "android": "Entrez un identifiant Android valide, par exemple sn.monappli.app.",
+          "bundle": "Entrez un Bundle ID iOS valide, par exemple com.monappli.ios."
+        },
+        "description": "La description doit faire au moins 30 caractères.",
+        "optInUrl": {
+          "GOOGLE_PLAY": "Entrez un lien de test Google Play valide.",
+          "APP_STORE": "Entrez un lien TestFlight valide (testflight.apple.com/join/…).",
+          "WEB": "Entrez une adresse https:// valide."
+        },
+        "testersTarget": "Indiquez un nombre de testeurs entre 12 et 100.",
+        "desiredStart": "Choisissez une date de début.",
+        "desiredEnd": "La date de fin doit suivre le début et respecter la durée autorisée."
+      },
+      "platform": "Plateforme",
+      "noticeWeb": "Campagne web : pas de décompte de jours, mais chaque campagne web est relue par l’équipe avant publication.",
+      "publish": "Publier la campagne",
+      "saveDraft": "Enregistrer comme brouillon",
+      "published": "Campagne publiée",
+      "pendingReview": "Campagne envoyée à l’équipe pour validation",
+      "draftSaved": "Brouillon enregistré"
+    },
+    "edit": {
+      "pageTitle": "Modifier la campagne",
+      "lead": "Modifiable tant que la campagne est en brouillon ou refusée.",
+      "submit": "Enregistrer les modifications",
+      "saved": "Campagne mise à jour",
+      "notAllowed": "Cette campagne ne peut plus être modifiée.",
+      "back": "Revenir à la campagne"
+    },
+    "platform": {
+      "GOOGLE_PLAY": "Google Play (Android)",
+      "APP_STORE": "App Store (iOS)",
+      "WEB": "Application web"
+    },
+    "platformHint": {
+      "GOOGLE_PLAY": "Test fermé via la Play Console.",
+      "APP_STORE": "Test via TestFlight.",
+      "WEB": "Un site à tester, sans store."
+    },
+    "feedback": {
+      "title": "Retours des testeurs",
+      "empty": "Aucun retour pour l’instant.",
+      "kindLabel": "Type de retour",
+      "field": "Votre retour",
+      "placeholder": "Décrivez le bug ou votre suggestion…",
+      "rating": "{{n}}/5",
+      "tooShort": "Votre retour doit faire au moins {{min}} caractères.",
+      "sent": "Retour envoyé au créateur",
+      "kind": {
+        "BUG": "Bug",
+        "SUGGESTION": "Suggestion",
+        "OTHER": "Autre"
+      },
+      "send": {
+        "title": "Envoyer un retour au créateur",
+        "hint": "Signalez un bug ou proposez une amélioration : seul le porteur le voit.",
+        "submit": "Envoyer le retour",
+        "busy": "Envoi en cours"
+      }
+    }
+  },
+  "app": {
+    "name": "Dɛmɛ",
+    "home": "Dɛmɛ, accueil",
+    "skipToContent": "Aller au contenu"
+  },
+  "nav": {
+    "feed": "Accueil",
+    "label": "Navigation principale",
+    "spaces": "Espaces",
+    "questions": "Aide",
+    "jobs": "Emploi",
+    "missions": "Missions",
+    "playtests": "Tests fermés",
+    "playtestsShort": "Tests",
+    "challenges": "Défis",
+    "account": "Compte",
+    "profile": "Mon profil",
+    "settings": "Paramètres",
+    "notifications": "Notifications",
+    "applications": "Mes candidatures",
+    "communities": "Communautés",
+    "communitiesShort": "Groupes",
+    "projects": "Projets",
+    "more": "Plus"
+  },
+  "topbar": {
+    "search": "Rechercher",
+    "searchPlaceholder": "Rechercher une erreur, un tag, une techno",
+    "login": "Se connecter",
+    "register": "Créer un compte",
+    "account": "Mon compte",
+    "points": "Réputation : {{points}} points",
+    "logout": "Se déconnecter"
+  },
+  "theme": {
+    "toLight": "Passer en mode clair",
+    "toDark": "Passer en mode sombre"
+  },
+  "install": {
+    "button": "Installer l'application"
+  },
+  "share": {
+    "button": "Partager",
+    "copied": "Lien copié",
+    "failed": "Impossible de copier le lien."
+  },
+  "language": {
+    "label": "Langue de l'interface",
+    "fr": "Français",
+    "en": "English",
+    "pt": "Português",
+    "ar": "العربية"
+  },
+  "network": {
+    "offline": "Vous êtes hors ligne. Les questions déjà consultées restent lisibles.",
+    "loadingOffline": "Vous êtes hors ligne. Le chargement reprendra dès le retour de la connexion.",
+    "loadingSlow": "Connexion lente : le chargement prend un peu plus de temps.",
+    "pageOffline": "Cette page n'a pas pu être chargée car vous êtes hors ligne. Elle se rechargera dès le retour de la connexion.",
+    "pageFailed": "Cette page n'a pas pu être chargée. Vérifiez votre connexion et réessayez."
+  },
+  "common": {
+    "loading": "Chargement en cours",
+    "retry": "Réessayer",
+    "pagination": {
+      "label": "Pagination",
+      "prev": "Page précédente",
+      "next": "Page suivante",
+      "status": "Page {{page}} sur {{pages}}"
+    },
+    "close": "Fermer",
+    "viewPhoto": "Voir la photo de {{name}}"
+  },
+  "errors": {
+    "NETWORK_ERROR": "Impossible de joindre le serveur. Vérifiez votre connexion.",
+    "MOCK_NOT_FOUND": "Les données d'exemple de cet écran ne sont pas encore disponibles.",
+    "UNKNOWN_ERROR": "Une erreur est survenue. Réessayez dans un instant.",
+    "VALIDATION_ERROR": "Certains champs sont à corriger.",
+    "INVALID_CREDENTIALS": "Email ou mot de passe incorrect.",
+    "TOO_MANY_ATTEMPTS": "Trop de tentatives. Réessayez dans 15 minutes.",
+    "ACCOUNT_SUSPENDED": "Ce compte est suspendu. Contactez l'équipe Dɛmɛ si vous pensez que c'est une erreur.",
+    "ALREADY_REPORTED": "Vous avez déjà signalé ce contenu.",
+    "ALREADY_SUBMITTED": "Vous avez déjà soumis un dépôt pour ce défi.",
+    "ALREADY_APPEALED": "Vous avez déjà contesté cette décision.",
+    "MAINTENANCE": "Dɛmɛ est en maintenance. Réessayez dans quelques minutes.",
+    "EMAIL_TAKEN": "Cette adresse ne peut pas être utilisée. Si vous avez déjà un compte, connectez-vous.",
+    "LOGIN_LOCKED": "Trop d'essais ratés. La connexion est bloquée pendant 15 minutes.",
+    "RATE_LIMITED": "Trop d'actions en peu de temps. Patientez un instant avant de réessayer.",
+    "UNAUTHENTICATED": "Connectez-vous pour continuer.",
+    "FORBIDDEN": "Vous n'avez pas le droit de faire cette action.",
+    "CSRF_INVALID": "Votre session a expiré. Rechargez la page et réessayez.",
+    "LEVEL_TOO_LOW": "Votre niveau ne permet pas encore cette action.",
+    "ALREADY_VOTED": "Vous avez déjà voté pour ce contenu.",
+    "CANNOT_VOTE_OWN_CONTENT": "Vous ne pouvez pas voter pour votre propre contenu.",
+    "VOTE_NOT_FOUND": "Vous n'aviez pas voté pour ce contenu.",
+    "QUESTION_NOT_FOUND": "Cette question n'existe pas ou a été supprimée.",
+    "ANSWER_NOT_FOUND": "Cette réponse n'existe pas ou a été supprimée.",
+    "ANSWER_NOT_IN_QUESTION": "Cette réponse n'appartient pas à la question.",
+    "USER_NOT_FOUND": "Ce membre n'existe pas.",
+    "NOT_QUESTION_AUTHOR": "Seul l'auteur de la question peut faire cette action.",
+    "NOT_ANSWER_AUTHOR": "Seul l'auteur de la réponse peut la modifier.",
+    "TOO_MANY_TAGS": "Indiquez 4 tags au maximum.",
+    "TAG_REQUIRED": "Indiquez au moins un tag.",
+    "INVALID_TAG": "Un tag ne contient que des lettres minuscules, des chiffres, des tirets ou des points.",
+    "INVALID_COUNTRY": "Ce pays n'est pas reconnu.",
+    "INTERNAL_ERROR": "Une erreur est survenue de notre côté. Réessayez dans un instant.",
+    "COMMUNITY_EXISTS": "Une communauté de ce nom ou de ce tag existe déjà, ou est déjà proposée.",
+    "ACTION_NOT_ALLOWED": "Cette action n'est pas permise.",
+    "ALREADY_APPLIED": "Vous avez déjà postulé.",
+    "ALREADY_LINKED": "Ce compte est déjà lié.",
+    "ALREADY_LINKED_ELSEWHERE": "Ce compte appartient déjà à un autre membre de Dɛmɛ.",
+    "APPLICATION_NOT_FOUND": "Candidature introuvable.",
+    "CANNOT_APPLY_OWN": "Vous ne pouvez pas postuler à votre propre annonce.",
+    "CANNOT_MODERATE_OWN": "Vous ne pouvez pas modérer votre propre contenu.",
+    "CANNOT_REPORT_OWN": "Vous ne pouvez pas signaler votre propre contenu.",
+    "CASE_ALREADY_DECIDED": "Ce dossier a déjà été traité.",
+    "CASE_NOT_FOUND": "Dossier de modération introuvable.",
+    "CASE_NOT_HIDDEN": "Ce contenu n'est pas masqué.",
+    "CHALLENGE_NOT_FOUND": "Défi introuvable.",
+    "CHALLENGE_NOT_OPEN": "Ce défi n'accepte pas de dépôt en ce moment.",
+    "COMMUNITY_NOT_FOUND": "Communauté introuvable.",
+    "CONFIRMATION_MISMATCH": "Le pseudo recopié ne correspond pas.",
+    "CV_NOT_FOUND": "Aucun CV joint à cette candidature.",
+    "CV_NOT_PDF": "Le CV doit être un fichier PDF.",
+    "CV_TOO_LARGE": "Le CV dépasse 2 Mo.",
+    "FILE_TOO_LARGE": "Le fichier dépasse 5 Mo.",
+    "INVALID_VOTE": "Vote invalide.",
+    "JOB_CLOSED": "Cette offre est clôturée.",
+    "JOB_NOT_FOUND": "Offre introuvable.",
+    "LAST_LOGIN_METHOD": "C'est votre seul moyen de connexion : il ne peut pas être retiré.",
+    "MISSION_NOT_FOUND": "Mission introuvable.",
+    "MISSION_NOT_OPEN": "Cette mission n'accepte plus de propositions.",
+    "NOTE_REQUIRED": "Ajoutez une note pour expliquer la décision.",
+    "NOT_JOB_OWNER": "Seul le recruteur de cette offre peut faire cela.",
+    "NOT_LINKED": "Ce compte n'est pas lié.",
+    "NOT_MISSION_AUTHOR": "Seul l'auteur de la mission peut faire cela.",
+    "NOT_TARGET_OWNER": "Seul l'auteur du contenu peut faire cela.",
+    "NO_CURRENT_CHALLENGE": "Pas de défi en cours.",
+    "PHOTO_REQUIRED": "Choisissez une photo.",
+    "PHOTO_TOO_LARGE": "La photo dépasse 2 Mo.",
+    "PHOTO_TYPE": "La photo doit être au format PNG, JPG ou WebP.",
+    "PROVIDER_NOT_FOUND": "Ce fournisseur de connexion n'est pas proposé.",
+    "RECRUITER_ONLY": "Réservé aux comptes recruteurs.",
+    "TARGET_NOT_FOUND": "Ce contenu n'existe plus."
+  },
+  "auth": {
+    "browse": "Parcourir sans compte",
+    "tabs": {
+      "label": "Connexion ou inscription",
+      "login": "Connexion",
+      "register": "Inscription"
+    },
+    "login": {
+      "pageTitle": "Connexion",
+      "title": "Bon retour parmi nous",
+      "lead": "Connectez-vous pour poser vos questions, voter et suivre votre réputation.",
+      "submit": "Se connecter",
+      "busy": "Connexion en cours",
+      "switch": "Pas encore de compte ?",
+      "switchLink": "Créer un compte"
+    },
+    "register": {
+      "pageTitle": "Créer un compte",
+      "title": "Rejoignez la communauté",
+      "lead": "Un compte gratuit pour poser vos questions, répondre, relever les défis et être visible des recruteurs.",
+      "submit": "Créer mon compte",
+      "busy": "Création du compte",
+      "switch": "Déjà inscrit ?",
+      "switchLink": "Se connecter",
+      "legal": "En créant un compte, vous acceptez les <terms>conditions d'utilisation</terms> et la <privacy>politique de confidentialité</privacy>."
+    },
+    "oauth": {
+      "github": "Continuer avec GitHub",
+      "google": "Continuer avec Google",
+      "githubRegister": "S'inscrire avec GitHub",
+      "googleRegister": "S'inscrire avec Google"
+    },
+    "or": "ou avec votre adresse email",
+    "fields": {
+      "name": "Nom complet",
+      "nameHint": "Affiché sur votre profil et à côté de vos réponses.",
+      "email": "Adresse email",
+      "country": "Pays",
+      "countryPlaceholder": "Choisir un pays",
+      "countryHint": "Il sert à vous proposer des offres et des réponses proches de vous.",
+      "countryOther": "Autre pays",
+      "password": "Mot de passe",
+      "passwordHint": "8 caractères minimum, avec au moins un chiffre.",
+      "website": "Ne pas remplir ce champ",
+      "show": "Afficher",
+      "hide": "Masquer"
+    },
+    "errors": {
+      "nameLength": "Entrez votre nom, entre 3 et 40 caractères.",
+      "emailInvalid": "Entrez une adresse email valide, par exemple nom@domaine.com.",
+      "countryRequired": "Choisissez votre pays.",
+      "passwordRule": "Le mot de passe doit faire au moins 8 caractères, avec au moins un chiffre.",
+      "passwordRequired": "Entrez votre mot de passe.",
+      "passwordMismatch": "Les deux mots de passe ne sont pas identiques."
+    },
+    "aside": {
+      "label": "Aperçu de la plateforme",
+      "title": "Les bugs que vous rencontrez, d'autres les ont déjà résolus.",
+      "sub": "Posez votre question, recevez une réponse validée par la communauté, gagnez de la réputation en aidant à votre tour.",
+      "status": "question résolue en 38 min",
+      "questionTitle": "L'API Orange Money renvoie 401 alors que le token est généré",
+      "questionBody": "Mon token d'accès est bien récupéré, mais l'appel de paiement échoue.",
+      "accepted": "Réponse acceptée",
+      "answerBody": "Le header doit être préfixé par Bearer, et le token expire après une heure :",
+      "reputation": "+15 réputation"
+    }
+  },
+  "password": {
+    "backToLogin": "Retour à la connexion",
+    "forgot": {
+      "link": "Mot de passe oublié ?",
+      "pageTitle": "Mot de passe oublié",
+      "title": "Mot de passe oublié",
+      "lead": "Entrez l'adresse de votre compte. Nous vous enverrons un lien pour choisir un nouveau mot de passe, valable une heure.",
+      "submit": "Envoyer le lien",
+      "busy": "Envoi en cours",
+      "sentTitle": "Vérifiez votre boîte mail",
+      "sentText": "Si un compte Dɛmɛ existe pour {{email}}, un lien vient d'y être envoyé. Pensez à regarder dans les courriers indésirables."
+    },
+    "reset": {
+      "pageTitle": "Nouveau mot de passe",
+      "title": "Choisissez un nouveau mot de passe",
+      "lead": "Il remplacera l’ancien sur tous vos appareils.",
+      "new": "Nouveau mot de passe",
+      "confirm": "Confirmez le mot de passe",
+      "submit": "Enregistrer le mot de passe",
+      "busy": "Enregistrement",
+      "done": "Mot de passe modifié. Connectez-vous avec le nouveau.",
+      "deadTitle": "Ce lien n'est plus valable",
+      "deadText": "Le lien a expiré ou a déjà servi. Demandez-en un nouveau, il sera valable une heure.",
+      "newLink": "Demander un nouveau lien"
+    }
+  },
+  "verifyEmail": {
+    "pageTitle": "Confirmation de l'adresse",
+    "checking": "Confirmation de votre adresse",
+    "doneTitle": "Adresse confirmée",
+    "doneText": "Merci, votre adresse email est confirmée.",
+    "continue": "Aller aux questions",
+    "failedTitle": "L'adresse n'a pas pu être confirmée",
+    "deadText": "Le lien a expiré ou a déjà servi. Demandez un nouvel email de vérification.",
+    "login": "Se connecter pour recevoir un nouveau lien",
+    "resend": "Renvoyer l'email",
+    "resentShort": "Email envoyé",
+    "resent": "Email de vérification envoyé.",
+    "banner": "Confirmez votre adresse {{email}} avec le lien que nous vous avons envoyé."
+  },
+  "context": {
+    "label": "Contexte",
+    "operator": {
+      "ORANGE_MONEY": "Orange Money",
+      "WAVE": "Wave",
+      "MOOV_MONEY": "Moov Money",
+      "MTN_MOMO": "MTN Mobile Money",
+      "MPESA": "M-Pesa",
+      "OTHER": "Autre opérateur"
+    },
+    "network": {
+      "GOOD": "Réseau bon",
+      "UNSTABLE": "Réseau instable",
+      "VERY_POOR": "Réseau très faible"
+    }
+  },
+  "questions": {
+    "pageTitle": "Aide",
+    "title": "Questions récentes",
+    "titleTag": "Questions sur {{tag}}",
+    "lead": "Décrivez l'erreur. Des développeurs de Dakar à Nairobi l'ont peut-être déjà rencontrée.",
+    "ask": {
+      "heading": "Quel bug vous bloque aujourd'hui ?",
+      "placeholder": "Ex. : l'API Orange Money renvoie 401 alors que mon token est valide",
+      "submit": "Poser la question"
+    },
+    "filters": {
+      "status": "Filtrer les questions",
+      "all": "Toutes",
+      "open": "Sans solution",
+      "solved": "Résolues",
+      "sort": "Trier les questions",
+      "recent": "Récentes",
+      "votes": "Les plus votées",
+      "country": "Pays",
+      "anyCountry": "Tous les pays",
+      "operator": "Opérateur",
+      "anyOperator": "Tous les opérateurs",
+      "tag": "Tag {{tag}}",
+      "search": "Recherche « {{q}} »",
+      "reset": "Retirer les filtres",
+      "results_one": "{{count}} résultat",
+      "results_other": "{{count}} résultats",
+      "relevance": "Pertinence"
+    },
+    "row": {
+      "votes_one": "vote",
+      "votes_other": "votes",
+      "answers_one": "réponse",
+      "answers_other": "réponses",
+      "solved": "résolue"
+    },
+    "empty": "Aucune question ne correspond. Posez-la, quelqu'un a peut-être la réponse."
+  },
+  "question": {
+    "crumbs": "Fil d'Ariane",
+    "crumbQuestion": "Question",
+    "askQuestion": "Poser une question",
+    "asked": "Posée",
+    "askedBy": "Posée par",
+    "answered": "Répondu",
+    "views_one": "{{count}} vue",
+    "views_other": "{{count}} vues",
+    "answers_one": "{{count}} réponse",
+    "answers_other": "{{count}} réponses",
+    "sort": "Trier les réponses",
+    "sortVotes": "Les plus votées",
+    "sortRecent": "Les plus récentes",
+    "accepted": "Réponse acceptée",
+    "accept": "Accepter cette réponse",
+    "sameCountry": "Même pays que la question",
+    "noAnswers": "Pas encore de réponse. Si vous connaissez la solution, vous pouvez être le premier à aider.",
+    "points": "{{points}} points",
+    "vote": "Voter, {{count}} votes",
+    "unvote": "Retirer mon vote, {{count}} votes",
+    "voteOwn": "Vous ne pouvez pas voter pour votre propre contenu.",
+    "voteLevel": "Il faut 50 points de réputation (niveau Membre) pour voter.",
+    "yourAnswer": "Votre réponse",
+    "answerHint": "Markdown accepté. Une réponse acceptée rapporte 15 points.",
+    "answerCode": "Code",
+    "optional": "(facultatif)",
+    "publish": "Publier ma réponse",
+    "publishing": "Publication en cours",
+    "answerTooShort": "Écrivez au moins 30 caractères pour que la réponse soit utile.",
+    "loginToAnswerText": "Connectez-vous pour répondre et gagner de la réputation.",
+    "loginToAnswer": "Se connecter pour répondre",
+    "posted": "Réponse publiée",
+    "edit": "Modifier",
+    "saveEdit": "Enregistrer la modification",
+    "edited": "Réponse modifiée",
+    "cancel": "Annuler"
+  },
+  "comments": {
+    "label": "Commentaires",
+    "add": "Ajouter un commentaire",
+    "field": "Votre commentaire",
+    "placeholder": "Demander une précision, signaler un détail…",
+    "submit": "Commenter",
+    "busy": "Envoi",
+    "tooShort": "Écrivez au moins {{min}} caractères.",
+    "more_one": "Voir {{count}} autre commentaire",
+    "more_other": "Voir les {{count}} autres commentaires"
+  },
+  "ask": {
+    "pageTitle": "Poser une question",
+    "title": "Poser une question",
+    "lead": "Une question claire reçoit une réponse plus vite. Décrivez le problème, ce que vous avez essayé et votre contexte.",
+    "optional": "(facultatif)",
+    "fields": {
+      "title": "Titre",
+      "titleHint": "Le problème en une phrase, avec le message d'erreur si possible.",
+      "body": "Détails",
+      "bodyHint": "Ce que vous essayez de faire et ce que vous avez déjà tenté. Markdown accepté.",
+      "bodyPlaceholder": "J'appelle l'API de paiement après avoir récupéré le token, et j'obtiens…",
+      "code": "Code concerné",
+      "tags": "Tags",
+      "tagsHint": "De 1 à 4, séparés par des virgules. Exemple : spring-boot, mobile-money",
+      "contextLegend": "Contexte africain",
+      "contextHint": "Facultatif, mais il aide les membres qui ont le même contexte à vous répondre.",
+      "country": "Pays",
+      "noCountry": "Non précisé",
+      "operator": "Opérateur mobile money",
+      "noOperator": "Aucun ou non concerné",
+      "network": "Qualité du réseau",
+      "noNetwork": "Non précisée",
+      "techVersion": "Version de la techno",
+      "techVersionPlaceholder": "Ex. : Spring Boot 3.3, Flutter 3.24",
+      "photos": "Photos",
+      "photosHint": "Jusqu’à 2 images (capture d’erreur, écran). PNG, JPG ou WebP, 2 Mo max.",
+      "addPhoto": "Ajouter une photo",
+      "removePhoto": "Retirer la photo"
+    },
+    "submit": "Publier la question",
+    "busy": "Publication en cours",
+    "cancel": "Annuler",
+    "errors": {
+      "titleLength": "Le titre doit faire entre 15 et 150 caractères.",
+      "bodyLength": "Ajoutez au moins 30 caractères : ce que vous avez essayé et le message d'erreur.",
+      "tagsCount": "Indiquez entre 1 et 4 tags.",
+      "tagFormat": "Un tag ne contient que des lettres minuscules, des chiffres, des tirets ou des points."
+    },
+    "posted": "Question publiée",
+    "edit": {
+      "pageTitle": "Modifier la question",
+      "lead": "Précisez le titre, le détail, les étiquettes ou le contexte.",
+      "submit": "Enregistrer les modifications",
+      "busy": "Enregistrement en cours",
+      "saved": "Question mise à jour",
+      "notAllowed": "Seul l'auteur de la question peut la modifier.",
+      "back": "Revenir à la question"
+    },
+    "ai": {
+      "title": "Assistant de rédaction",
+      "lead": "Il propose un titre plus clair, des tags et le contexte détecté, et signale ce qui manque. Rien ne change sans votre accord.",
+      "needText": "Écrivez d'abord le titre et quelques détails ({{min}} caractères au moins) pour lancer l'assistant.",
+      "button": "Améliorer avec l'IA",
+      "again": "Analyser à nouveau",
+      "busy": "Analyse en cours",
+      "label": "Suggestions générées par l'IA, à vérifier",
+      "nothing": "Votre question est déjà claire, rien à suggérer.",
+      "titleSuggestion": "Titre plus clair",
+      "tagsSuggestion": "Tags",
+      "newTag": "nouveau",
+      "contextSuggestion": "Contexte détecté",
+      "missingTitle": "Il manque peut-être",
+      "missing": {
+        "ERROR_MESSAGE": "Le message d'erreur exact, copié tel quel.",
+        "TECH_VERSION": "La version de la technologie ou de la bibliothèque.",
+        "CODE": "Le morceau de code qui pose problème.",
+        "STEPS_TRIED": "Ce que vous avez déjà essayé.",
+        "EXPECTED_RESULT": "Le résultat attendu et celui obtenu."
+      },
+      "apply": "Appliquer",
+      "ignore": "Ignorer",
+      "appliedTitle": "Titre remplacé par la suggestion.",
+      "appliedTags": "Tags remplacés par la suggestion.",
+      "appliedContext": "Contexte ajouté à la question.",
+      "unavailable": "L'assistant ne répond pas pour le moment. Vous pouvez publier votre question normalement.",
+      "rateLimited": "Vous avez utilisé l'assistant 10 fois cette heure. Vous pouvez publier votre question normalement."
+    },
+    "similar": {
+      "title": "Questions similaires",
+      "lead": "Votre réponse existe peut-être déjà. Vérifiez avant de publier.",
+      "loading": "Recherche des questions similaires",
+      "empty": "Aucune question similaire : la vôtre est peut-être nouvelle.",
+      "error": "Les questions similaires ne sont pas disponibles pour le moment.",
+      "newTab": "(s'ouvre dans un nouvel onglet)"
+    }
+  },
+  "notFound": {
+    "title": "Cette page n'existe pas",
+    "text": "Le lien est peut-être incomplet, ou la page a été supprimée.",
+    "back": "Retour aux questions"
+  },
+  "errorPage": {
+    "code": "Erreur",
+    "codeOffline": "Hors ligne",
+    "title": "Cette page n'a pas pu s'afficher",
+    "titleOffline": "Pas de connexion"
+  },
+  "maintenance": {
+    "code": "Maintenance",
+    "title": "Dɛmɛ est en maintenance",
+    "text": "Nous améliorons la plateforme et revenons dans quelques minutes. Vos questions et vos réponses sont conservées."
+  },
+  "welcome": {
+    "pageTitle": "Bienvenue",
+    "title": "Bienvenue sur Dɛmɛ, {{name}}",
+    "lead": "Trois informations pour vous proposer des questions, des offres et des missions qui vous ressemblent. Vous pourrez les changer plus tard dans vos paramètres.",
+    "stack": {
+      "legend": "Votre stack",
+      "hint": "Choisissez les technologies que vous utilisez. Elles servent à vous suggérer des offres, des missions et des projets.",
+      "addLabel": "Ajouter une autre technologie",
+      "addPlaceholder": "Ex. : svelte",
+      "add": "Ajouter",
+      "selected_one": "{{count}} technologie choisie",
+      "selected_other": "{{count}} technologies choisies",
+      "max": "10 technologies au maximum.",
+      "invalid": "Utilisez des lettres minuscules, des chiffres, des tirets ou des points."
+    },
+    "country": {
+      "legend": "Votre pays",
+      "hint": "Il sert à mettre en avant les réponses et les offres proches de vous.",
+      "required": "Choisissez votre pays pour continuer."
+    },
+    "language": {
+      "legend": "Langue de l'interface",
+      "hint": "Le contenu des membres reste dans la langue de son auteur."
+    },
+    "submit": "C'est parti",
+    "busy": "Enregistrement",
+    "later": "Plus tard"
+  },
+  "report": {
+    "button": "Signaler",
+    "title": "Signaler ce contenu",
+    "lead": "Les signalements sont traités par les Référents de la communauté. Après 5 signalements de membres différents, le contenu est masqué en attendant leur décision.",
+    "reasonLegend": "Motif",
+    "reasons": {
+      "SPAM": "Spam ou publicité",
+      "OFFENSIVE": "Propos offensants",
+      "OFF_TOPIC": "Hors sujet",
+      "IMPERSONATION": "Usurpation d'identité",
+      "FRAUDULENT_JOB": "Offre frauduleuse"
+    },
+    "comment": "Précisions",
+    "commentHint": "300 caractères maximum.",
+    "submit": "Envoyer le signalement",
+    "busy": "Envoi en cours",
+    "sent": "Signalement envoyé. Merci de votre vigilance.",
+    "level": "Il faut 50 points de réputation (niveau Membre) pour signaler.",
+    "reasonRequired": "Choisissez un motif."
+  },
+  "hidden": {
+    "title": "Contenu masqué",
+    "byReports": "Ce contenu a été masqué après 5 signalements de membres différents, en attendant la décision d'un Référent.",
+    "byReferent": "Un Référent a masqué ce contenu.",
+    "onlyYou": "Vous êtes seul à le voir.",
+    "appeal": "Contester la décision",
+    "rules": "Relire les règles",
+    "pending": "Contestation envoyée : l'équipe Dɛmɛ l'examine.",
+    "rejected": "L'équipe a examiné votre contestation et maintenu la décision.",
+    "dialogTitle": "Contester la décision",
+    "dialogLead": "Votre contestation est examinée par l'équipe Dɛmɛ, pas par le Référent qui a pris la décision. Expliquez pourquoi ce contenu respecte les règles.",
+    "message": "Votre explication",
+    "messageHint": "Entre {{min}} et {{max}} caractères.",
+    "messageLength": "Expliquez en {{min}} caractères au moins.",
+    "submit": "Envoyer la contestation",
+    "busy": "Envoi en cours",
+    "sent": "Contestation envoyée. Vous serez notifié de la décision.",
+    "byTeam": "L'équipe Dɛmɛ a masqué ce contenu.",
+    "note": "Motif : {{note}}."
+  },
+  "profile": {
+    "pageTitle": "Profil",
+    "edit": "Modifier le profil",
+    "recruiterVisible": "Visible par les recruteurs",
+    "joined": "Membre depuis {{date}}",
+    "sections": "Sections du profil",
+    "tabs": {
+      "activity": "Activité",
+      "skills": "Compétences",
+      "badges": "Badges"
+    },
+    "stats": {
+      "reputation": "réputation",
+      "answers": "réponses",
+      "accepted": "acceptées",
+      "questions": "questions"
+    },
+    "nextLevel": "Encore {{points}} points avant le niveau {{level}}",
+    "progressLabel": "Progression vers le niveau suivant",
+    "empty": "Aucune activité pour le moment.",
+    "emptyMine": "Vous n'avez encore rien publié. Votre première question vous rapporte 5 points.",
+    "skillsHint": "Technologies déclarées. Un clic affiche les questions sur ce sujet.",
+    "noSkills": "Aucune technologie déclarée pour le moment.",
+    "badgeLocked": "Pas encore obtenu.",
+    "reputation": {
+      "QUESTION_ASKED": "Question posée",
+      "QUESTION_UPVOTED": "Vote sur une question",
+      "ANSWER_UPVOTED": "Vote sur une réponse",
+      "ANSWER_ACCEPTED": "Réponse acceptée",
+      "ACCEPTED_AN_ANSWER": "A accepté une réponse",
+      "CHALLENGE_VALIDATED": "Défi validé",
+      "PROJECT_COMPLETED": "Projet clôturé",
+      "SPAM_REMOVED": "Contenu retiré pour spam",
+      "seeQuestion": "Voir la question",
+      "seeAnswer": "Voir la réponse",
+      "noLink": "Contribution à la communauté"
+    }
+  },
+  "levels": {
+    "NEWCOMER": "Nouveau",
+    "MEMBER": "Membre",
+    "CONTRIBUTOR": "Contributeur",
+    "REFERENT": "Référent"
+  },
+  "badges": {
+    "FIRST_STEP": {
+      "name": "Premier pas",
+      "desc": "Poser sa première question."
+    },
+    "HELPER": {
+      "name": "Entraide",
+      "desc": "Recevoir 10 votes sur ses réponses."
+    },
+    "SOLVER": {
+      "name": "Résolveur",
+      "desc": "Avoir 5 réponses acceptées."
+    },
+    "CHALLENGER": {
+      "name": "Challenger",
+      "desc": "Soumettre un défi."
+    },
+    "POLYGLOT": {
+      "name": "Polyglotte",
+      "desc": "Répondre dans 5 tags différents."
+    },
+    "LOCAL_HELP": {
+      "name": "Aide locale",
+      "desc": "Répondre à des questions de son propre pays."
+    }
+  },
+  "settings": {
+    "pageTitle": "Paramètres",
+    "save": "Enregistrer les modifications",
+    "saving": "Enregistrement",
+    "saved": "Modifications enregistrées",
+    "cancel": "Annuler",
+    "profile": {
+      "city": "Ville",
+      "bio": "Présentation",
+      "bioHint": "Ce que vous faites et ce qui vous intéresse.",
+      "bioTooLong": "La présentation doit faire 200 caractères au plus.",
+      "skills": "Technologies",
+      "recruiterVisible": "Visible par les recruteurs",
+      "recruiterHint": "Les entreprises peuvent consulter votre profil et vos réponses. Désactivé par défaut."
+    },
+    "photo": {
+      "change": "Changer la photo",
+      "remove": "Retirer",
+      "hint": "PNG, JPG ou WebP, 2 Mo au plus. Sans photo, vos initiales sont affichées.",
+      "badType": "Choisissez une image PNG, JPG ou WebP.",
+      "tooBig": "L'image doit faire 2 Mo au plus.",
+      "updated": "Photo mise à jour",
+      "removed": "Photo retirée, vos initiales sont affichées",
+      "title": "Photo de profil",
+      "crop": {
+        "title": "Cadrer la photo",
+        "hint": "Glissez pour déplacer, le curseur pour zoomer.",
+        "zoom": "Zoom",
+        "confirm": "Enregistrer la photo"
+      }
+    },
+    "accounts": {
+      "title": "Comptes connectés",
+      "intro": "Connectez-vous plus vite avec GitHub ou Google.",
+      "linked": "Connecté",
+      "notLinked": "Non connecté",
+      "link": "Connecter",
+      "unlink": "Déconnecter",
+      "linkLabel": "Connecter {{name}}",
+      "unlinkLabel": "Déconnecter {{name}}",
+      "unlinked": "Compte déconnecté",
+      "lastMethod": "C'est votre seul moyen de connexion : il ne peut pas être retiré.",
+      "mockOnly": "En mode mock, la connexion OAuth n'est pas disponible.",
+      "unavailable": "Pas encore proposé",
+      "linkedNow": "Compte connecté"
+    },
+    "appearance": {
+      "title": "Apparence et langue",
+      "intro": "Le mode clair est utilisé par défaut. Vos choix sont mémorisés.",
+      "theme": "Thème",
+      "themes": {
+        "light": "Clair",
+        "dark": "Sombre",
+        "system": "Comme le système"
+      }
+    },
+    "delete": {
+      "title": "Supprimer le compte",
+      "intro": "Votre réputation et vos candidatures seront effacées définitivement.",
+      "button": "Supprimer mon compte",
+      "explain": "Vos questions et réponses resteront visibles, signées « Utilisateur supprimé ». Votre réputation et vos candidatures seront effacées. Cette action est définitive.",
+      "confirmLabel": "Recopiez votre pseudo {{word}} pour confirmer",
+      "mismatch": "Recopiez exactement votre pseudo {{word}}.",
+      "confirm": "Supprimer définitivement",
+      "done": "Votre compte a été supprimé."
+    },
+    "lead": "Votre compte et vos préférences. Ce que les autres voient se modifie depuis votre profil.",
+    "toc": "Sections des paramètres",
+    "account": {
+      "title": "Compte",
+      "intro": "Votre adresse de connexion et votre mot de passe.",
+      "email": "Adresse email",
+      "unverified": "Adresse pas encore vérifiée",
+      "password": "Mot de passe",
+      "passwordHint": "Pour le changer, nous vous envoyons un lien par email.",
+      "noPassword": "Vous vous connectez avec GitHub ou Google. Un mot de passe vous permet aussi d'entrer avec votre email.",
+      "changePassword": "Changer le mot de passe",
+      "setPassword": "Créer un mot de passe",
+      "passwordSent": "Lien envoyé à {{email}}",
+      "passwordSentShort": "Lien envoyé"
+    },
+    "moderation": {
+      "title": "Modération",
+      "intro": "Vos contenus signalés par des membres, les décisions prises et vos contestations.",
+      "link": "Voir mes contenus signalés"
+    }
+  },
+  "notifications": {
+    "pageTitle": "Notifications",
+    "readAll": "Tout marquer comme lu",
+    "allRead": "Toutes les notifications sont lues",
+    "empty": "Aucune notification pour le moment. Vous serez prévenu quand quelqu'un répondra à vos questions.",
+    "unread": "Non lue",
+    "unreadShort": "non lues",
+    "bellLabel_one": "Notifications, {{count}} non lue",
+    "bellLabel_other": "Notifications, {{count}} non lues",
+    "groups": {
+      "today": "Aujourd'hui",
+      "week": "Cette semaine",
+      "earlier": "Plus ancien"
+    },
+    "types": {
+      "ANSWER_POSTED": "{{actor}} a répondu à votre question",
+      "ANSWER_ACCEPTED": "{{actor}} a accepté votre réponse",
+      "VOTE_RECEIVED": "{{actor}} a voté pour votre contenu",
+      "JOB_MATCH": "Une offre correspond à votre profil",
+      "MISSION_MATCH": "Une mission correspond à votre profil",
+      "APPLICATION_RECEIVED": "{{actor}} a postulé",
+      "APPLICATION_DECIDED": "Votre candidature est {{decision}}",
+      "JOB_REVIEWED": "Votre offre est {{decision}}",
+      "CHALLENGE_STARTED": "Nouveau défi de la semaine",
+      "SUBMISSION_REVIEWED": "Votre dépôt est {{decision}}",
+      "PROJECT_REQUEST_DECIDED": "Votre demande pour rejoindre le projet est {{decision}}",
+      "COMMUNITY_PROPOSAL_DECISION": "La proposition de communauté est {{decision}}",
+      "CONTENT_HIDDEN": "Un de vos contenus a été masqué",
+      "CONTENT_RESTORED": "Un de vos contenus est de nouveau visible",
+      "ACCOUNT_WARNED": "Vous avez reçu un avertissement de l'équipe"
+    },
+    "decisions": {
+      "VIEWED": "vue",
+      "SHORTLISTED": "retenue",
+      "ACCEPTED": "acceptée",
+      "REJECTED": "refusée",
+      "PUBLISHED": "publiée",
+      "VALIDATED": "validé",
+      "APPROVED": "acceptée"
+    },
+    "someone": "Un membre",
+    "filter": "Afficher",
+    "all": "Toutes",
+    "unreadOnly": "Non lues",
+    "emptyUnread": "Vous avez tout lu."
+  },
+  "home": {
+    "pageTitle": "Dɛmɛ, l'entraide entre développeurs africains",
+    "title": "L'entraide entre développeurs africains",
+    "lead": "Posez vos questions avec votre contexte : pays, opérateur mobile money, qualité du réseau. Répondez, trouvez des missions entre pairs et faites reconnaître votre travail par une réputation vérifiable.",
+    "cta": {
+      "email": "Créer un compte avec un email",
+      "browse": "Parcourir les questions"
+    },
+    "solved": {
+      "title": "résolu récemment",
+      "empty": "Les premières questions résolues apparaîtront ici.",
+      "answers_one": "{{count}} réponse, résolue",
+      "answers_other": "{{count}} réponses, résolue",
+      "more": "Voir toutes les questions"
+    },
+    "stats": {
+      "questions": "questions posées",
+      "solved": "questions résolues",
+      "members": "membres",
+      "countries": "pays représentés"
+    },
+    "exchanges": {
+      "title": "Un seul profil pour quatre échanges",
+      "knowledge": {
+        "name": "Le savoir",
+        "text": "Des questions et des réponses sur les problèmes que rencontrent vraiment les développeurs du continent."
+      },
+      "missions": {
+        "name": "Les missions",
+        "text": "Des missions courtes entre pairs, un dépannage ou une revue de code, avec un budget indicatif."
+      },
+      "collaboration": {
+        "name": "La collaboration",
+        "text": "Des projets en équipe : publiez les rôles que vous cherchez, rejoignez ceux des autres."
+      },
+      "visibility": {
+        "name": "La visibilité",
+        "text": "Votre réputation et vos réponses forment un CV vivant, visible des recruteurs si vous le souhaitez."
+      }
+    },
+    "differences": {
+      "title": "Pensé pour le terrain",
+      "context": {
+        "title": "Le contexte africain sur chaque question",
+        "text": "Pays, opérateur (Orange Money, Wave, MTN, M-Pesa…) et qualité du réseau sont indiqués sur les questions et servent de filtres. Les réponses de membres du même pays sont mises en avant."
+      },
+      "light": {
+        "title": "Léger, même en 3G",
+        "text": "Des pages légères, la lecture hors ligne des questions déjà consultées et une application installable sur un téléphone Android."
+      },
+      "community": {
+        "title": "Modéré par la communauté",
+        "text": "La réputation ouvre des droits. Les membres de confiance, les Référents, traitent les signalements. L'équipe tranche en dernier recours."
+      }
+    },
+    "levels": {
+      "title": "La réputation se gagne en aidant",
+      "lead": "Chaque action est enregistrée et rapporte des points. Les niveaux ouvrent des droits de modération.",
+      "from": "dès {{points}} points",
+      "points": {
+        "QUESTION": {
+          "value": "+5",
+          "label": "pour une question posée"
+        },
+        "VOTE": {
+          "value": "+2",
+          "label": "pour un vote reçu"
+        },
+        "ACCEPTED": {
+          "value": "+15",
+          "label": "pour une réponse acceptée"
+        }
+      },
+      "rights": {
+        "NEWCOMER": "Poser, répondre, candidater.",
+        "MEMBER": "Voter et signaler.",
+        "CONTRIBUTOR": "Proposer des tags, voir les signalements.",
+        "REFERENT": "Masquer un contenu signalé, traiter la file, proposer les défis."
+      }
+    },
+    "final": {
+      "title": "Une question vous bloque ? D'autres ont peut-être déjà la réponse."
+    }
+  },
+  "footer": {
+    "label": "Liens du site",
+    "about": "Dɛmɛ, par Dɛmɛ Labs pour la CADev 2026.",
+    "rules": "Règles de la communauté",
+    "terms": "Conditions d'utilisation",
+    "privacy": "Confidentialité"
+  },
+  "legal": {
+    "docsLabel": "Documents",
+    "tocLabel": "Sommaire",
+    "updated": "Dernière mise à jour : 21 octobre 2026",
+    "contact": "Une question sur ce document ? Écrivez-nous :",
+    "rules": {
+      "title": "Règles de la communauté",
+      "intro": "Dɛmɛ est fait par les développeurs, pour les développeurs. Ces règles gardent la plateforme utile et respectueuse. Les Référents et l'équipe s'appuient sur elles pour modérer.",
+      "sections": [
+        {
+          "title": "L'esprit de Dɛmɛ",
+          "paragraphs": [
+            "On vient ici pour apprendre et pour aider. Chaque question mérite une réponse sérieuse, quel que soit le niveau de la personne qui la pose.",
+            "Critiquez le code, jamais la personne. Une réponse sèche décourage plus qu’elle n’aide."
+          ]
+        },
+        {
+          "title": "Poser une bonne question",
+          "paragraphs": [
+            "Un titre qui résume le problème, le message d'erreur exact, ce que vous avez déjà essayé et un extrait de code réduit à l'essentiel.",
+            "Indiquez votre contexte quand il compte : pays, opérateur mobile money, qualité du réseau, version de la techno. Il aide les membres qui vivent la même situation à vous répondre.",
+            "Ne publiez jamais de clé d'API, de mot de passe, de jeton ni de données de vos clients, même dans un extrait de code."
+          ]
+        },
+        {
+          "title": "Répondre",
+          "paragraphs": [
+            "Expliquez pourquoi la solution fonctionne, pas seulement quoi copier. Citez la documentation quand vous la connaissez.",
+            "Si vous vous aidez d'un outil d'intelligence artificielle, vérifiez et testez la réponse avant de la publier. Vous en restez responsable."
+          ]
+        },
+        {
+          "title": "Ce qui est interdit",
+          "paragraphs": [
+            "Les insultes, le harcèlement, les propos discriminatoires, l'usurpation d'identité et la publication de données personnelles d'autrui.",
+            "Le spam, la publicité déguisée et les offres frauduleuses : frais d’inscription, promesses de gains rapides, demande de paiement pour postuler.",
+            "Les contenus illégaux, et les liens vers des logiciels piratés ou malveillants."
+          ]
+        },
+        {
+          "title": "Votes et réputation",
+          "paragraphs": [
+            "Votez pour la qualité d’un contenu, pas pour son auteur. Les échanges de votes entre comptes ne rapportent pas de points et peuvent entraîner une suspension.",
+            "Les points gagnés chaque jour sont plafonnés. Un contenu supprimé pour spam retire 50 points à son auteur."
+          ]
+        },
+        {
+          "title": "Signalements et modération",
+          "paragraphs": [
+            "À partir du niveau Membre, vous pouvez signaler un contenu qui enfreint ces règles. Après 5 signalements de membres différents, il est masqué en attendant une décision. Son auteur le voit toujours.",
+            "Les Référents traitent les signalements : ils ignorent ou masquent le contenu. Chaque décision est enregistrée, et l'auteur peut la contester auprès de l'équipe Dɛmɛ, qui tranche en dernier recours.",
+            "En cas d'abus répétés, l'équipe peut avertir puis suspendre un compte."
+          ]
+        },
+        {
+          "title": "Emploi et missions",
+          "paragraphs": [
+            "Les offres d'entreprise sont validées par l'équipe avant publication. Ne payez jamais pour postuler à une offre ou obtenir une mission.",
+            "Les échanges d'argent pour une mission se font en dehors de Dɛmɛ, entre les membres. Signalez toute demande suspecte."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "intro": "Ces conditions s'appliquent à toute personne qui utilise Dɛmɛ. En créant un compte, vous les acceptez, ainsi que les règles de la communauté.",
+      "sections": [
+        {
+          "title": "Le service",
+          "paragraphs": [
+            "Dɛmɛ est une plateforme d'échange entre développeurs : questions et réponses, offres d'emploi, missions entre pairs, projets, défis et réputation. Elle est développée par l'équipe Dɛmɛ Labs dans le cadre de la CADev 2026."
+          ]
+        },
+        {
+          "title": "Votre compte",
+          "paragraphs": [
+            "Les informations de votre compte doivent être exactes. Un compte correspond à une seule personne.",
+            "Vous êtes responsable de ce qui est fait depuis votre compte. Gardez votre mot de passe pour vous et prévenez l'équipe si vous pensez qu'il a été utilisé par quelqu'un d'autre."
+          ]
+        },
+        {
+          "title": "Vos contenus",
+          "paragraphs": [
+            "Vous restez auteur de vos questions, réponses et projets. Vous autorisez Dɛmɛ à les afficher, à les adapter pour la lecture sur mobile et à les conserver de façon anonyme si vous supprimez votre compte.",
+            "Vous ne publiez que des contenus que vous avez le droit de partager, sans données personnelles de tiers ni secrets."
+          ]
+        },
+        {
+          "title": "Emploi et missions",
+          "paragraphs": [
+            "Dɛmɛ met en relation des membres et des entreprises. Dɛmɛ n'est partie à aucun contrat de travail ou de mission, et ne gère aucun paiement.",
+            "Les offres sont vérifiées avant publication, mais restez vigilant et signalez toute offre douteuse."
+          ]
+        },
+        {
+          "title": "Modération et suspension",
+          "paragraphs": [
+            "Un contenu contraire aux règles de la communauté peut être masqué ou supprimé. Un compte peut être suspendu en cas d'abus. Vous pouvez contester une décision auprès de l'équipe."
+          ]
+        },
+        {
+          "title": "Disponibilité",
+          "paragraphs": [
+            "Le service est fourni tel quel. Nous faisons notre possible pour qu'il reste disponible et que vos données soient sauvegardées chaque jour, sans pouvoir garantir une disponibilité permanente."
+          ]
+        },
+        {
+          "title": "Fin de votre compte",
+          "paragraphs": [
+            "Vous pouvez supprimer votre compte à tout moment depuis vos paramètres. Vos questions et réponses restent visibles, signées « Utilisateur supprimé ». Votre réputation et vos candidatures sont effacées."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Confidentialité",
+      "intro": "Voici les données que Dɛmɛ collecte, ce que nous en faisons et comment vous gardez la main dessus.",
+      "sections": [
+        {
+          "title": "Les données collectées",
+          "paragraphs": [
+            "Votre compte : nom, adresse email, pays, et si vous les ajoutez, ville, photo, présentation et technologies.",
+            "Si vous vous connectez avec GitHub ou Google : votre identifiant chez ce service, votre adresse email et votre nom public. Nous ne recevons jamais votre mot de passe.",
+            "Ce que vous publiez : questions, réponses, votes, signalements, candidatures (message et CV si vous en joignez un), projets et dépôts de défis.",
+            "Des données techniques : un cookie de session pour vous garder connecté, et des journaux de sécurité (tentatives de connexion, limitation des abus)."
+          ]
+        },
+        {
+          "title": "Pourquoi nous les utilisons",
+          "paragraphs": [
+            "Pour faire fonctionner le service, vous proposer des questions, offres et missions proches de votre profil, calculer votre réputation, modérer et protéger la plateforme contre les abus."
+          ]
+        },
+        {
+          "title": "Ce que nous ne faisons pas",
+          "paragraphs": [
+            "Nous ne vendons pas vos données et n'affichons pas de publicité. Il n'y a pas de traceur publicitaire sur Dɛmɛ.",
+            "Votre thème et votre langue sont mémorisés dans votre navigateur, pas sur nos serveurs."
+          ]
+        },
+        {
+          "title": "Visibilité pour les recruteurs",
+          "paragraphs": [
+            "L'option « Visible par les recruteurs » est désactivée par défaut. Tant que vous ne l'activez pas, les entreprises ne voient pas votre profil dans leurs recherches. Vous pouvez la retirer à tout moment."
+          ]
+        },
+        {
+          "title": "L'assistant de rédaction",
+          "paragraphs": [
+            "Si vous utilisez l'assistant pour améliorer une question, le titre, les détails et le code de la question sont envoyés à un fournisseur d'intelligence artificielle. Votre nom, votre email et votre identifiant ne sont jamais transmis."
+          ]
+        },
+        {
+          "title": "Durée de conservation",
+          "paragraphs": [
+            "Vos données sont conservées tant que votre compte existe. À la suppression du compte, vos contenus publics sont anonymisés, et votre réputation et vos candidatures sont effacées. Les journaux de sécurité sont conservés pour une durée limitée."
+          ]
+        },
+        {
+          "title": "Vos droits",
+          "paragraphs": [
+            "Vous pouvez consulter et corriger vos informations dans vos paramètres, et supprimer votre compte à tout moment. Pour toute autre demande d'accès, de correction ou d'opposition, écrivez à l'équipe.",
+            "Dɛmɛ applique la loi burkinabè sur la protection des données personnelles. Vous pouvez aussi saisir la Commission de l’informatique et des libertés (CIL)."
+          ]
+        }
+      ]
+    }
+  },
+  "jobs": {
+    "pageTitle": "Emploi",
+    "title": "Offres pour développeurs",
+    "lead": "Des offres d'entreprises vérifiées par l'équipe avant publication.",
+    "publish": "Publier une offre",
+    "view": "Voir l'offre",
+    "viewLabel": "Voir l'offre : {{title}}",
+    "empty": "Aucune offre ne correspond à ces filtres pour le moment.",
+    "published": "Publiée",
+    "technologies": "Technologies",
+    "pendingNotice": "Cette offre est en attente de validation par l'équipe Dɛmɛ. Elle n'est visible que par vous.",
+    "contract": {
+      "PERMANENT": "CDI",
+      "REMOTE": "À distance",
+      "CONTRACT": "Mission freelance",
+      "INTERNSHIP": "Stage"
+    },
+    "status": {
+      "SENT": "Envoyée",
+      "VIEWED": "Vue",
+      "SHORTLISTED": "Retenue",
+      "REJECTED": "Refusée"
+    },
+    "filters": {
+      "type": "Type de poste",
+      "types": {
+        "all": "Toutes",
+        "PERMANENT": "CDI",
+        "REMOTE": "À distance",
+        "CONTRACT": "Missions",
+        "INTERNSHIP": "Stages"
+      },
+      "country": "Pays",
+      "tech": "Technologie",
+      "techPlaceholder": "Ex. : flutter",
+      "apply": "Filtrer"
+    },
+    "applyBox": {
+      "title": "Postuler avec votre profil Dɛmɛ",
+      "text": "Votre réputation, vos réponses et vos défis sont transmis avec votre message.",
+      "button": "Postuler"
+    },
+    "applied": {
+      "title": "Candidature envoyée",
+      "text": "Le recruteur a reçu votre profil. Vous serez prévenu de sa réponse.",
+      "follow": "Suivre mes candidatures"
+    },
+    "match": {
+      "title": "Correspondance avec votre profil",
+      "summary_one": "{{count}} technologie sur {{total}} dans votre profil.",
+      "summary_other": "{{count}} technologies sur {{total}} dans votre profil.",
+      "have": "présente dans votre profil",
+      "missing": "absente de votre profil",
+      "login": "Connectez-vous pour comparer l'offre à vos compétences.",
+      "noSkills": "Ajoutez vos technologies pour voir la correspondance :"
+    },
+    "apply": {
+      "title": "Postuler chez {{company}}",
+      "profile": "Profil transmis au recruteur",
+      "message": "Message au recruteur",
+      "messageHint": "Pourquoi ce poste vous intéresse, et un projet dont vous êtes fier.",
+      "messageTooShort": "Écrivez au moins {{min}} caractères pour présenter votre candidature.",
+      "cv": "CV",
+      "cvHint": "PDF, 2 Mo au plus.",
+      "cvType": "Le CV doit être un fichier PDF.",
+      "cvSize": "Le CV doit faire 2 Mo au plus.",
+      "submit": "Envoyer ma candidature",
+      "busy": "Envoi en cours",
+      "sent": "Candidature envoyée à {{company}}"
+    },
+    "new": {
+      "pageTitle": "Publier une offre",
+      "lead": "Décrivez le poste. L'équipe Dɛmɛ vérifie chaque offre avant de la publier, en général sous 24 heures.",
+      "title": "Intitulé du poste",
+      "company": "Entreprise",
+      "website": "Site de l'entreprise",
+      "websiteHint": "Adresse en https://, elle aide à vérifier votre entreprise.",
+      "contract": "Type de contrat",
+      "technologiesHint": "Séparées par des virgules. Exemple : spring-boot, react, postgresql",
+      "salary": "Rémunération",
+      "salaryHint": "Indiquer une fourchette donne plus de candidatures. Exemple : 450 000 à 600 000 FCFA par mois",
+      "description": "Description du poste",
+      "descriptionHint": "L'entreprise, les missions et le profil recherché. Markdown accepté.",
+      "notice": "Une offre ne doit jamais demander de frais d'inscription ou promettre des gains rapides. Les offres de ce type sont refusées.",
+      "submit": "Envoyer l'offre pour validation",
+      "busy": "Envoi en cours",
+      "created": "Offre envoyée. Elle sera publiée après validation par l'équipe.",
+      "errors": {
+        "title": "L'intitulé doit faire entre 10 et 120 caractères.",
+        "company": "Indiquez le nom de l'entreprise.",
+        "website": "Entrez une adresse qui commence par https://",
+        "technologies": "Indiquez au moins une technologie.",
+        "description": "Décrivez le poste en 100 caractères au moins."
+      },
+      "recruiterOnly": "Publier une offre est réservé aux comptes recruteurs. Écrivez à l'équipe Dɛmɛ pour faire vérifier votre entreprise.",
+      "backToJobs": "Voir les offres"
+    },
+    "subnav": {
+      "label": "Emploi",
+      "offers": "Offres",
+      "mine": "Mes offres"
+    },
+    "jobStatus": {
+      "PENDING": "En attente",
+      "PUBLISHED": "Publiée",
+      "REJECTED": "Refusée",
+      "CLOSED": "Clôturée"
+    },
+    "rejectedNotice": "L'équipe Dɛmɛ n'a pas validé cette offre.",
+    "rejectedNoticeReason": "L'équipe Dɛmɛ n'a pas validé cette offre : {{reason}}",
+    "closedNotice": "Cette offre est clôturée : elle n'accepte plus de candidatures.",
+    "owner": {
+      "title": "Votre offre",
+      "applications_one": "{{count}} candidature reçue.",
+      "applications_other": "{{count}} candidatures reçues.",
+      "all": "Toutes mes offres"
+    },
+    "received": {
+      "title_one": "{{count}} candidature reçue",
+      "title_other": "{{count}} candidatures reçues",
+      "empty": "Aucune candidature pour le moment.",
+      "cv": "Voir le CV",
+      "noCv": "Pas de CV joint",
+      "mockCv": "En mode mock, les CV ne sont pas disponibles.",
+      "shortlist": "Retenir",
+      "reject": "Refuser",
+      "shortlistLabel": "Retenir la candidature ({{name}})",
+      "rejectLabel": "Refuser la candidature ({{name}})",
+      "shortlisted": "Candidature retenue. Le candidat est prévenu.",
+      "rejected": "Candidature refusée. Le candidat est prévenu.",
+      "titleNoCount": "Candidatures reçues"
+    },
+    "close": {
+      "button": "Clôturer l'offre",
+      "title": "Clôturer cette offre ?",
+      "text": "Elle disparaît de la liste des offres et n'accepte plus de candidatures. Les candidatures reçues restent consultables.",
+      "confirm": "Clôturer",
+      "done": "Offre clôturée"
+    },
+    "edit": {
+      "pageTitle": "Modifier l'offre",
+      "lead": "Corrigez ce qui doit l'être. L'équipe Dɛmɛ revalidera l'offre avant de la republier.",
+      "notice": "Après modification, l'offre repasse « En attente » jusqu'à la nouvelle validation.",
+      "submit": "Enregistrer et renvoyer en validation",
+      "saved": "Offre modifiée, en attente de validation",
+      "button": "Modifier l'offre",
+      "back": "Retour à l'offre",
+      "closed": "Cette offre est clôturée : elle ne peut plus être modifiée.",
+      "notAllowed": "Seul le recruteur qui a publié cette offre peut la modifier."
+    }
+  },
+  "applications": {
+    "pageTitle": "Mes candidatures",
+    "lead": "Vos candidatures aux offres et vos propositions de mission, avec leur avancement.",
+    "empty": "Vous n'avez pas encore postulé. Les offres qui correspondent à votre stack vous attendent.",
+    "browse": "Voir les offres",
+    "sent": "envoyée",
+    "kind": {
+      "JOB": "Offre",
+      "MISSION": "Mission"
+    },
+    "filters": {
+      "type": "Type",
+      "types": {
+        "all": "Tout",
+        "JOB": "Offres",
+        "MISSION": "Missions"
+      },
+      "status": "Statut",
+      "anyStatus": "Tous les statuts"
+    },
+    "emptyFiltered": "Aucune candidature ne correspond à ces filtres."
+  },
+  "missions": {
+    "pageTitle": "Missions",
+    "title": "Missions entre pairs",
+    "lead": "Des coups de main courts entre développeurs : un dépannage, une intégration, une revue de code.",
+    "publish": "Publier une mission",
+    "empty": "Aucune mission ouverte ne correspond pour le moment. Publiez la vôtre.",
+    "budget": "Budget : {{amount}}",
+    "budgetLabel": "Budget indicatif",
+    "delay_one": "{{count}} jour",
+    "delay_other": "{{count}} jours",
+    "offerCount_one": "{{count}} proposition",
+    "offerCount_other": "{{count}} propositions",
+    "yours": "Vous avez publié cette mission. Les propositions reçues sont listées sur la page.",
+    "paymentNotice": "Dɛmɛ ne gère aucun paiement. Mettez-vous d'accord directement, et ne payez jamais pour obtenir une mission.",
+    "kind": {
+      "TROUBLESHOOTING": "Dépannage",
+      "INTEGRATION": "Intégration",
+      "CODE_REVIEW": "Revue de code",
+      "OTHER": "Autre"
+    },
+    "kindHint": {
+      "TROUBLESHOOTING": "Un bug ou une panne à régler vite.",
+      "INTEGRATION": "Brancher une API, un paiement, un service.",
+      "CODE_REVIEW": "Un regard extérieur avant une mise en production.",
+      "OTHER": "Tout autre coup de main court."
+    },
+    "statusNotice": {
+      "IN_PROGRESS": "Cette mission est en cours : elle ne reçoit plus de propositions.",
+      "CLOSED": "Cette mission est terminée."
+    },
+    "filters": {
+      "kind": "Type de mission"
+    },
+    "offer": {
+      "button": "Se proposer",
+      "title": "Se proposer pour cette mission",
+      "lead": "Présentez-vous en quelques phrases. L'auteur voit aussi votre profil et votre réputation.",
+      "message": "Votre message",
+      "messageHint": "Comment vous comptez vous y prendre, et une expérience proche.",
+      "messageTooShort": "Écrivez au moins {{min}} caractères pour présenter votre proposition.",
+      "price": "Votre prix ({{currency}})",
+      "submit": "Envoyer ma proposition",
+      "sent": "Proposition envoyée. L'auteur de la mission sera prévenu.",
+      "sentText": "Vous vous êtes proposé pour cette mission."
+    },
+    "offers": {
+      "title_one": "{{count}} proposition reçue",
+      "title_other": "{{count}} propositions reçues",
+      "empty": "Aucune proposition pour le moment. Les membres seront prévenus si la mission correspond à leur stack.",
+      "noTerms": "Prix et délai non précisés",
+      "shortlist": "Retenir",
+      "reject": "Refuser",
+      "shortlisted": "Proposition retenue. Le membre est prévenu.",
+      "rejected": "Proposition refusée. Le membre est prévenu.",
+      "shortlistLabel": "Retenir la proposition ({{name}})",
+      "rejectLabel": "Refuser la proposition ({{name}})"
+    },
+    "new": {
+      "pageTitle": "Publier une mission",
+      "lead": "Décrivez le coup de main dont vous avez besoin. Les membres qui ont la bonne stack pourront se proposer.",
+      "kind": "Type de mission",
+      "title": "Titre",
+      "titlePlaceholder": "Ex. : intégrer Wave dans une boutique WooCommerce",
+      "description": "Description",
+      "descriptionHint": "Le contexte, ce qui est attendu et comment vous saurez que c'est terminé. Markdown accepté.",
+      "budget": "Budget indicatif",
+      "budgetHint": "Montant indicatif : aucun paiement ne passe par Dɛmɛ.",
+      "currency": "Monnaie",
+      "delay": "Délai souhaité (jours)",
+      "delayHint": "Entre 1 et {{max}} jours.",
+      "notice": "Une mission est un service ponctuel. Pour monter une équipe dans la durée, utilisez plutôt un projet.",
+      "submit": "Publier la mission",
+      "busy": "Publication en cours",
+      "created": "Mission publiée",
+      "errors": {
+        "title": "Le titre doit faire entre 10 et 120 caractères.",
+        "description": "Décrivez la mission en 50 caractères au moins.",
+        "delay": "Indiquez un délai entre 1 et 90 jours.",
+        "budget": "Indiquez un budget indicatif, en montant positif."
+      }
+    },
+    "close": {
+      "button": "Clôturer la mission",
+      "title": "Clôturer cette mission ?",
+      "text": "Elle n'accepte plus de propositions. À faire quand la mission est terminée ou abandonnée.",
+      "confirm": "Clôturer",
+      "done": "Mission clôturée"
+    },
+    "edit": {
+      "pageTitle": "Modifier la mission",
+      "lead": "Les membres qui se sont déjà proposés gardent leur proposition.",
+      "submit": "Enregistrer les modifications",
+      "saved": "Mission modifiée",
+      "button": "Modifier la mission",
+      "back": "Retour à la mission",
+      "notOpen": "Cette mission n'est plus ouverte : elle ne peut plus être modifiée.",
+      "notAllowed": "Seul l'auteur de cette mission peut la modifier."
+    }
+  },
+  "challenges": {
+    "pageTitle": "Défis",
+    "current": "Défi en cours",
+    "reward": "+{{points}} points pour un dépôt validé",
+    "none": "Pas de défi en cours pour le moment. Le prochain sera annoncé dans vos notifications.",
+    "closesIn": "Clôture dans",
+    "closesInFull": "Clôture dans {{days}}, {{hours}} et {{minutes}}.",
+    "unitsFull": {
+      "days_one": "{{count}} jour",
+      "days_other": "{{count}} jours",
+      "hours_one": "{{count}} heure",
+      "hours_other": "{{count}} heures",
+      "minutes_one": "{{count}} minute",
+      "minutes_other": "{{count}} minutes"
+    },
+    "ended": "Ce défi est clôturé. Les dépôts sont en cours de notation.",
+    "units": {
+      "days_one": "jour",
+      "days_other": "jours",
+      "hours_one": "heure",
+      "hours_other": "heures",
+      "minutes_one": "minute",
+      "minutes_other": "minutes",
+      "seconds_one": "seconde",
+      "seconds_other": "secondes"
+    },
+    "submissions_one": "{{count}} dépôt pour le moment",
+    "submissions_other": "{{count}} dépôts pour le moment",
+    "submission": {
+      "PENDING": "Dépôt reçu, en attente de notation",
+      "VALIDATED": "Dépôt validé : {{score}}/100",
+      "REJECTED": "Dépôt refusé"
+    },
+    "submit": {
+      "button": "Soumettre mon dépôt",
+      "title": "Soumettre mon dépôt",
+      "label": "Lien du dépôt GitHub",
+      "hint": "Le dépôt doit être public, avec un README qui explique comment lancer le projet.",
+      "badUrl": "Entrez un lien de la forme https://github.com/compte/depot.",
+      "notice": "Un seul dépôt par défi. L'équipe le note sur 100 après la clôture.",
+      "submit": "Soumettre",
+      "sent": "Dépôt reçu. Il sera noté par l'équipe après la clôture."
+    },
+    "board": {
+      "title": "Classement",
+      "caption": "Classement du défi en cours",
+      "rank": "Rang",
+      "member": "Développeur",
+      "score": "Note",
+      "scoreValue": "{{score}}/100",
+      "pending": "À noter",
+      "you": "(vous)",
+      "empty": "Pas encore de dépôt. Soyez le premier à relever le défi.",
+      "view": "Type de classement",
+      "members": "Membres",
+      "countries": "Pays",
+      "country": "Pays",
+      "points": "Points",
+      "countryCaption": "Classement par pays du défi en cours",
+      "yourCountry": "(votre pays)",
+      "participants_one": "{{count}} participant",
+      "participants_other": "{{count}} participants"
+    },
+    "upcoming": "Défi à venir"
+  },
+  "communities": {
+    "pageTitle": "Communautés",
+    "title": "Communautés",
+    "lead": "Retrouvez les développeurs de votre pays et de votre techno : leurs questions, leurs Référents, leurs règles.",
+    "mine": "Mes communautés",
+    "mineEmpty": "Vous n'avez rejoint aucune communauté. Commencez par votre pays ou votre techno principale.",
+    "mineError": "Vos communautés ne sont pas disponibles pour le moment.",
+    "filters": {
+      "kind": "Type de communauté",
+      "kinds": {
+        "all": "Toutes",
+        "COUNTRY": "Pays",
+        "TECH": "Technos"
+      },
+      "search": "Chercher une communauté",
+      "searchPlaceholder": "Sénégal, Flutter, mobile money…",
+      "apply": "Chercher"
+    },
+    "kinds": {
+      "COUNTRY": "Communauté de pays",
+      "TECH": "Communauté de techno"
+    },
+    "members_one": "{{formatted}} membre",
+    "members_other": "{{formatted}} membres",
+    "questions_one": "{{formatted}} question",
+    "questions_other": "{{formatted}} questions",
+    "join": "Rejoindre",
+    "member": "Membre",
+    "joinLabel": "Rejoindre la communauté {{name}}",
+    "leaveLabel": "Quitter la communauté {{name}}",
+    "joinedToast": "Bienvenue dans la communauté {{name}}.",
+    "left": "Vous avez quitté la communauté {{name}}.",
+    "empty": "Aucune communauté ne correspond. L'équipe en ouvre de nouvelles régulièrement.",
+    "ask": "Poser une question ici",
+    "sections": "Sections de la communauté",
+    "tabs": {
+      "questions": "Questions",
+      "members": "Membres",
+      "rules": "Règles"
+    },
+    "noQuestions": "Pas encore de question dans cette communauté. Posez la première.",
+    "referents": "Référents",
+    "topMembers": "Les plus utiles ce mois-ci",
+    "nobody": "Personne pour le moment.",
+    "noRules": "Pas de règle particulière : les règles générales suffisent.",
+    "generalRules": "Les règles générales de Dɛmɛ s'appliquent aussi.",
+    "rulesLink": "Relire les règles",
+    "propose": {
+      "button": "Proposer une communauté",
+      "note": "Les Référents (1 500 points) peuvent proposer une communauté, validée ensuite par l'équipe.",
+      "pageTitle": "Proposer une communauté",
+      "lead": "Votre proposition est examinée par l'équipe Dɛmɛ, comme une offre d'emploi. Vérifiez d'abord qu'une communauté proche n'existe pas déjà.",
+      "referentsOnly": "Seuls les Référents (1 500 points de réputation) peuvent proposer une communauté. En attendant, rejoignez celles qui existent et aidez leurs membres.",
+      "back": "Voir les communautés",
+      "kind": "Type de communauté",
+      "name": "Nom",
+      "namePlaceholderTech": "Ex. : Laravel",
+      "namePlaceholderCountry": "Ex. : Mali",
+      "tag": "Tag des questions",
+      "tagHint": "Les questions qui portent ce tag apparaîtront dans la communauté.",
+      "description": "Description",
+      "descriptionHint": "Pour qui, et pour parler de quoi. 30 à 200 caractères.",
+      "rules": "Règles propres",
+      "rulesHint": "Une règle par ligne, 5 au maximum. Les règles générales de Dɛmɛ s’appliquent déjà.",
+      "submit": "Envoyer la proposition",
+      "busy": "Envoi en cours",
+      "sent": "Proposition envoyée. L'équipe vous répondra par une notification.",
+      "mine": "Vos propositions",
+      "none": "Vous n'avez encore rien proposé.",
+      "reason": "Motif : {{reason}}",
+      "status": {
+        "PENDING": "En attente",
+        "APPROVED": "Acceptée",
+        "REJECTED": "Refusée"
+      },
+      "errors": {
+        "name": "Le nom doit faire entre 3 et 40 caractères.",
+        "country": "Choisissez le pays.",
+        "tag": "Un tag en minuscules, avec chiffres, tirets ou points (35 caractères au plus).",
+        "description": "La description doit faire entre 30 et 200 caractères.",
+        "rulesCount": "5 règles au maximum.",
+        "ruleLength": "Chaque règle fait 200 caractères au plus."
+      }
+    }
+  },
+  "profileEdit": {
+    "pageTitle": "Modifier mon profil",
+    "lead": "Ce que les autres membres voient sur votre profil. Les réglages du compte et de l'appli sont dans les Paramètres.",
+    "back": "Retour au profil",
+    "saved": "Profil mis à jour"
+  },
+  "myJobs": {
+    "pageTitle": "Mes offres",
+    "lead": "Vos offres, qu'elles soient en attente de validation, publiées ou clôturées. Ouvrez-en une pour voir les candidatures.",
+    "empty": "Vous n'avez pas encore publié d'offre."
+  },
+  "myModeration": {
+    "pageTitle": "Mes contenus signalés",
+    "lead": "Les contenus que des membres ont signalés, et ce qui a été décidé. Vous pouvez contester un masquage une fois, devant l'équipe Dɛmɛ.",
+    "empty": "Aucun de vos contenus n'a été signalé.",
+    "updated": "Mis à jour",
+    "kind": {
+      "QUESTION": "Question",
+      "ANSWER": "Réponse",
+      "JOB": "Offre",
+      "MISSION": "Mission",
+      "USER": "Profil"
+    },
+    "status": {
+      "OPEN": "Signalé, en attente",
+      "DISMISSED": "Signalement écarté",
+      "HIDDEN": "Masqué",
+      "APPEALED": "Contestation en cours",
+      "RESTORED": "Rétabli"
+    }
+  },
+  "projects": {
+    "pageTitle": "Projets",
+    "title": "Projets",
+    "lead": "Des projets portés par des membres : rejoignez une équipe ou proposez le vôtre.",
+    "propose": "Proposer un projet",
+    "mine": "Mes projets",
+    "empty": "Aucun projet pour le moment.",
+    "technologies": "Technologies",
+    "updatedAgo": "mis à jour",
+    "completedNotice": "Ce projet est clôturé : il n’accueille plus de nouveaux membres.",
+    "completeDone": "Projet clôturé.",
+    "githubLink": "Voir sur GitHub",
+    "contactLink": "Contacter",
+    "rolesTitle": "Rôles recherchés",
+    "updatesTitle": "Mises à jour",
+    "ownerRole": "Porteur",
+    "contributor": "Membre",
+    "deletedMember": "Utilisateur supprimé",
+    "team_one": "{{count}} membre",
+    "team_other": "{{count}} membres",
+    "openRoles_one": "{{count}} rôle ouvert",
+    "openRoles_other": "{{count}} rôles ouverts",
+    "teamTitle_one": "Équipe — {{count}} membre",
+    "teamTitle_other": "Équipe — {{count}} membres",
+    "types": {
+      "STUDY": "Projet d’étude",
+      "STARTUP": "Startup",
+      "OPEN_SOURCE": "Open source"
+    },
+    "projectStatus": {
+      "OPEN": "Ouvert",
+      "COMPLETED": "Clôturé"
+    },
+    "roleStatus": {
+      "OPEN": "À pourvoir",
+      "FILLED": "Pourvu"
+    },
+    "requestStatus": {
+      "PENDING": "En attente",
+      "ACCEPTED": "Acceptée",
+      "REJECTED": "Refusée"
+    },
+    "filters": {
+      "type": "Type de projet",
+      "tech": "Technologie",
+      "techPlaceholder": "ex. react",
+      "apply": "Filtrer",
+      "types": {
+        "all": "Tous",
+        "STUDY": "Étude",
+        "STARTUP": "Startup",
+        "OPEN_SOURCE": "Open source"
+      }
+    },
+    "owner": {
+      "box": "Votre projet",
+      "edit": "Modifier le projet",
+      "complete": "Clôturer le projet",
+      "all": "Tous mes projets"
+    },
+    "join": {
+      "title": "Rejoindre « {{title}} »",
+      "role": "Rôle visé",
+      "roleHint": "Facultatif : laissez vide pour une proposition générale.",
+      "roleAny": "Pas de rôle précis",
+      "message": "Message de présentation",
+      "messageHint": "Expliquez en quelques mots pourquoi vous voulez rejoindre ce projet.",
+      "messageTooShort": "Au moins {{min}} caractères.",
+      "busy": "Envoi…",
+      "submit": "Envoyer la demande",
+      "sent": "Demande envoyée au porteur du projet.",
+      "sentTitle": "Demande envoyée",
+      "status": {
+        "PENDING": "Votre demande est en attente de réponse.",
+        "ACCEPTED": "Votre demande a été acceptée. Bienvenue dans l’équipe !",
+        "REJECTED": "Votre demande n’a pas été retenue."
+      },
+      "cancel": "Annuler ma demande",
+      "cancelled": "Demande annulée.",
+      "memberTitle": "Vous êtes dans l’équipe",
+      "memberText": "Vous participez déjà à ce projet.",
+      "box": "Rejoindre ce projet",
+      "boxText": "Proposez votre aide au porteur du projet.",
+      "button": "Rejoindre",
+      "boxRoles_one": "{{count}} rôle à pourvoir.",
+      "boxRoles_other": "{{count}} rôles à pourvoir."
+    },
+    "requests": {
+      "title": "Demandes reçues",
+      "empty": "Aucune demande pour le moment.",
+      "general": "Proposition générale",
+      "accept": "Accepter",
+      "reject": "Refuser",
+      "acceptLabel": "Accepter la demande de {{name}}",
+      "rejectLabel": "Refuser la demande de {{name}}",
+      "accepted": "Demande acceptée. Le membre rejoint l’équipe.",
+      "rejected": "Demande refusée."
+    },
+    "updates": {
+      "label": "Poster une mise à jour",
+      "placeholder": "Où en est le projet ?",
+      "post": "Publier",
+      "posted": "Mise à jour publiée.",
+      "empty": "Aucune mise à jour pour l’instant.",
+      "tooShort": "Message trop court."
+    },
+    "form": {
+      "title": "Titre du projet",
+      "type": "Type de projet",
+      "technologiesHint": "Séparées par des virgules : react, node.js, docker.",
+      "description": "Description",
+      "descriptionHint": "Présentez le projet, son objectif et ce que vous cherchez. Markdown accepté.",
+      "github": "Lien GitHub",
+      "contact": "Lien de contact",
+      "contactHint": "Adresse pour vous joindre (https uniquement).",
+      "roles": "Rôles recherchés",
+      "rolesHint": "Ajoutez les rôles que vous cherchez à pourvoir.",
+      "roleTitle": "Intitulé du rôle",
+      "roleTitlePlaceholder": "ex. Développeur front-end",
+      "roleTech": "Technologies du rôle",
+      "roleTechPlaceholder": "ex. react, typescript",
+      "removeRole": "Retirer ce rôle",
+      "addRole": "Ajouter un rôle",
+      "busy": "Enregistrement…",
+      "save": "Enregistrer",
+      "create": "Créer le projet",
+      "errors": {
+        "title": "Entre 10 et 120 caractères.",
+        "description": "Au moins 60 caractères.",
+        "url": "Doit commencer par https://",
+        "technologies": "Indiquez au moins une technologie."
+      }
+    },
+    "new": {
+      "pageTitle": "Proposer un projet",
+      "lead": "Décrivez votre projet et les rôles que vous cherchez à pourvoir.",
+      "created": "Projet créé."
+    },
+    "edit": {
+      "pageTitle": "Modifier le projet",
+      "lead": "Mettez à jour les informations de votre projet.",
+      "saved": "Projet mis à jour.",
+      "back": "Retour au projet",
+      "completed": "Ce projet est clôturé et ne peut plus être modifié.",
+      "notAllowed": "Vous ne pouvez pas modifier ce projet."
+    },
+    "myProjects": {
+      "pageTitle": "Mes projets",
+      "lead": "Les projets que vous portez.",
+      "empty": "Vous ne portez aucun projet pour l’instant."
+    }
+  },
+  "feed": {
+    "pageTitle": "Accueil",
+    "title": "Accueil",
+    "greeting": "Bonjour {{name}}",
+    "lead": "Un aperçu de tout ce qui bouge sur Dɛmɛ.",
+    "seeMore": "Voir les {{count}}",
+    "sections": {
+      "challenge": "Défi en cours",
+      "challengeGo": "Voir le défi",
+      "questions": "Questions récentes",
+      "allQuestions": "Toutes les questions",
+      "emptyQuestions": "Aucune question pour le moment.",
+      "jobs": "Offres récentes",
+      "allJobs": "Toutes les offres",
+      "emptyJobs": "Aucune offre pour le moment.",
+      "missions": "Missions ouvertes",
+      "allMissions": "Toutes les missions",
+      "emptyMissions": "Aucune mission pour le moment.",
+      "projects": "Projets qui recrutent",
+      "allProjects": "Tous les projets",
+      "emptyProjects": "Aucun projet pour le moment.",
+      "playtests": "Tests fermés à rejoindre",
+      "allPlaytests": "Tous les tests",
+      "emptyPlaytests": "Aucune campagne de test pour le moment.",
+      "communities": "Communautés",
+      "allCommunities": "Toutes les communautés",
+      "emptyCommunities": "Aucune communauté pour le moment."
+    },
+    "kind": {
+      "question": "Question",
+      "job": "Offre d’emploi",
+      "mission": "Mission",
+      "project": "Projet",
+      "playtest": "Test fermé"
+    },
+    "empty": "Rien à afficher pour le moment. Lancez-vous : posez une question.",
+    "profile": {
+      "stats": "{{points}} points · {{level}}",
+      "view": "Voir mon profil"
+    }
+  }
+}

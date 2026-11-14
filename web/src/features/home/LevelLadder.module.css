@@ -1,0 +1,65 @@
+.ladder {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: end;
+  gap: var(--s2);
+  list-style: none;
+}
+
+/* Chaque marche est plus haute que la précédente : on monte en aidant. */
+.step {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--s1);
+  padding: var(--s4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+
+.step:nth-child(1) {
+  min-height: 150px;
+}
+
+.step:nth-child(2) {
+  min-height: 180px;
+}
+
+.step:nth-child(3) {
+  min-height: 210px;
+}
+
+.step:nth-child(4) {
+  min-height: 240px;
+}
+
+.top {
+  border-color: var(--gold);
+}
+
+.points {
+  font-family: var(--f-mono);
+  font-size: var(--fs-sm);
+  color: var(--gold-text);
+}
+
+.name {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.rights {
+  font-size: var(--fs-md);
+  color: var(--text-2);
+}
+
+@media (max-width: 767px) {
+  .ladder {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .step:nth-child(n) {
+    min-height: 0;
+  }
+}

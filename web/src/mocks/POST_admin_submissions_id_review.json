@@ -1,0 +1,20 @@
+{
+  "id": 77,
+  "challengeId": 4,
+  "member": {
+    "username": "awa_kone",
+    "displayName": "Awa Koné",
+    "avatarUrl": null,
+    "countryCode": "CI",
+    "reputation": 640,
+    "level": "CONTRIBUTOR",
+    "deleted": false
+  },
+  "repositoryUrl": "https://github.com/awa-kone/zetsu-defi-ussd",
+  "comment": "Testé avec le simulateur Africa's Talking",
+  "status": "VALIDATED",
+  "score": 84,
+  "feedback": "Parcours clair et gestion du délai de session USSD, il manque des tests sur les montants.",
+  "submittedAt": "2026-11-03T18:22:00Z",
+  "reviewedAt": "2026-11-05T10:20:00Z"
+}

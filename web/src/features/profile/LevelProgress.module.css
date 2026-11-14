@@ -1,0 +1,34 @@
+.box {
+  margin-top: var(--s4);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s1) var(--s3);
+}
+
+.level {
+  font-weight: 600;
+}
+
+.next {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.track {
+  height: 4px;
+  margin-top: var(--s2);
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--surface-3);
+}
+
+.track i {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+}

@@ -1,0 +1,127 @@
+{
+  "items": [
+    {
+      "id": 7,
+      "appName": "Tontine Cash",
+      "packageName": "sn.tontinecash.app",
+      "platform": "GOOGLE_PLAY",
+      "iconUrl": null,
+      "owner": {
+        "username": "aminata_dev",
+        "displayName": "Aminata Diallo",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 342,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "status": "ACTIVE",
+      "testersTarget": 14,
+      "requiredDays": 14,
+      "spotsLeft": 5,
+      "progress": {
+        "percent": 38,
+        "completed": 2,
+        "verified": 4,
+        "declared": 3,
+        "joined": 0
+      },
+      "createdAt": "2026-11-03T09:00:00Z",
+      "startedAt": "2026-11-03T12:00:00Z",
+      "tracking": "DAILY"
+    },
+    {
+      "id": 8,
+      "appName": "ChampReçu",
+      "packageName": "ci.champrecu.caisse",
+      "platform": "GOOGLE_PLAY",
+      "iconUrl": null,
+      "owner": {
+        "username": "koffi_dev",
+        "displayName": "Koffi N'Guessan",
+        "avatarUrl": null,
+        "countryCode": "CI",
+        "reputation": 128,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "status": "ACTIVE",
+      "testersTarget": 12,
+      "requiredDays": 14,
+      "spotsLeft": 0,
+      "progress": {
+        "percent": 61,
+        "completed": 5,
+        "verified": 6,
+        "declared": 1,
+        "joined": 0
+      },
+      "createdAt": "2026-11-01T08:30:00Z",
+      "startedAt": "2026-11-01T10:00:00Z",
+      "tracking": "DAILY"
+    },
+    {
+      "id": 5,
+      "appName": "Wari Météo",
+      "packageName": "bf.warimeteo.app",
+      "platform": "GOOGLE_PLAY",
+      "iconUrl": null,
+      "owner": {
+        "username": "salif_b",
+        "displayName": "Salif Bationo",
+        "avatarUrl": null,
+        "countryCode": "BF",
+        "reputation": 540,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "status": "ACTIVE",
+      "testersTarget": 14,
+      "requiredDays": 14,
+      "spotsLeft": 9,
+      "progress": {
+        "percent": 12,
+        "completed": 0,
+        "verified": 1,
+        "declared": 4,
+        "joined": 0
+      },
+      "createdAt": "2026-11-07T14:00:00Z",
+      "startedAt": "2026-11-07T15:00:00Z",
+      "tracking": "DAILY"
+    },
+    {
+      "id": 9,
+      "appName": "SamaDaara",
+      "packageName": null,
+      "platform": "WEB",
+      "iconUrl": null,
+      "owner": {
+        "username": "fatou_ndiaye",
+        "displayName": "Fatou Ndiaye",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 210,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "status": "ACTIVE",
+      "testersTarget": 10,
+      "requiredDays": 0,
+      "spotsLeft": 6,
+      "progress": {
+        "percent": 0,
+        "completed": 0,
+        "verified": 0,
+        "declared": 4,
+        "joined": 0
+      },
+      "createdAt": "2026-11-08T09:00:00Z",
+      "startedAt": "2026-11-08T09:30:00Z",
+      "tracking": "NONE"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 4
+}

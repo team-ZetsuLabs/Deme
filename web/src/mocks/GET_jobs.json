@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "id": 31,
+      "title": "Développeur back-end Java, paiements mobiles",
+      "companyName": "Sahel Pay",
+      "type": "PERMANENT",
+      "countryCode": "SN",
+      "city": "Dakar",
+      "technologies": ["java", "spring-boot", "postgresql"],
+      "compensation": "900 000 à 1 300 000 XOF par mois",
+      "status": "PUBLISHED",
+      "matchPercent": 100,
+      "createdAt": "2026-10-20T09:12:00Z"
+    },
+    {
+      "id": 28,
+      "title": "Développeuse mobile Flutter, application de microcrédit",
+      "companyName": "Lagune Finance",
+      "type": "REMOTE",
+      "countryCode": null,
+      "city": null,
+      "technologies": ["flutter", "dart", "firebase"],
+      "compensation": "Selon profil",
+      "status": "PUBLISHED",
+      "createdAt": "2026-10-18T07:30:00Z",
+      "matchPercent": 0
+    },
+    {
+      "id": 25,
+      "title": "Stage développeur web, plateforme agricole",
+      "companyName": "Nyota Agritech",
+      "type": "INTERNSHIP",
+      "countryCode": "KE",
+      "city": "Nairobi",
+      "technologies": ["react", "typescript", "django"],
+      "compensation": "25 000 KES par mois",
+      "status": "PUBLISHED",
+      "createdAt": "2026-10-16T12:05:00Z",
+      "matchPercent": 0
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 3
+}

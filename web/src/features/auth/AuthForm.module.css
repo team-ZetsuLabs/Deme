@@ -1,0 +1,85 @@
+.alert {
+  margin-bottom: var(--s4);
+  padding: var(--s3);
+  border: 1px solid var(--red);
+  border-radius: var(--r-md);
+  background: var(--red-wash);
+  color: var(--text);
+  font-size: var(--fs-md);
+}
+
+.alert:focus {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+.actions {
+  margin-top: var(--s4);
+}
+
+.legal {
+  margin-top: var(--s3);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.legal a {
+  color: var(--text-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Champ piège : invisible pour un humain, rempli par les robots. */
+.trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.oauth {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s2);
+}
+
+/* Deux champs côte à côte : le formulaire d'inscription tient sur un écran d'ordinateur. */
+.row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--s3);
+  align-items: start;
+}
+
+@media (max-width: 479px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.oauthBtn {
+  min-height: var(--touch);
+}
+
+.forgot {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.or {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin: var(--s4) 0;
+  color: var(--text-3);
+  font-size: var(--fs-sm);
+}
+
+.or::before,
+.or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}

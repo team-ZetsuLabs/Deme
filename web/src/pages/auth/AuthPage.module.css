@@ -1,0 +1,139 @@
+.auth {
+  height: 100vh;
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  overflow: hidden;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: var(--s4) var(--s7);
+  overflow-y: auto;
+  background: var(--surface);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.topRight {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.form {
+  width: 100%;
+  max-width: 440px;
+  margin: auto;
+  padding: var(--s5) 0;
+}
+
+.form:focus {
+  outline: none;
+}
+
+.title {
+  font-size: var(--fs-3xl);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+}
+
+.lead {
+  margin-top: var(--s2);
+  color: var(--text-2);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: var(--s4) 0;
+  padding: 3px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+
+.tabs a {
+  display: grid;
+  place-items: center;
+  min-height: 36px;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-md);
+  font-weight: 500;
+  color: var(--text-2);
+  transition:
+    transform var(--t-press) var(--ease-out),
+    background-color var(--t-fast) ease-out,
+    color var(--t-fast) ease-out;
+}
+
+.tabs a:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.tabs a[aria-current='page'] {
+  background: var(--surface-3);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+
+.spaced {
+  margin-top: var(--s5);
+}
+
+.switch {
+  margin-top: var(--s5);
+  font-size: var(--fs-md);
+  color: var(--text-2);
+}
+
+.switch a {
+  font-weight: 500;
+}
+
+/* Écran court : l'introduction cède sa place au formulaire. */
+@media (max-height: 820px) {
+  .lead {
+    display: none;
+  }
+}
+
+@media (max-width: 959px) {
+  .auth {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .main {
+    padding: var(--s4) var(--s5);
+  }
+}
+
+@media (max-width: 767px) {
+  .main {
+    padding: var(--s3) var(--s4);
+  }
+  .browse {
+    display: none;
+  }
+  .form {
+    padding: var(--s6) 0;
+  }
+  .title {
+    font-size: var(--fs-2xl);
+  }
+  .tabs a {
+    min-height: var(--touch);
+  }
+}
+
+.tabs a:active {
+  transform: scale(var(--press-scale));
+}

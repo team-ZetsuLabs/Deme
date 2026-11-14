@@ -1,0 +1,148 @@
+/* ==================================================================
+   Design system Dɛmɛ (repris de docs/maquettes/zetsu-maquette.html)
+   Clair par défaut. Un accent vert, l'or réservé à la réputation.
+   Contraste texte >= 4.5:1 dans les deux thèmes.
+   Aucune couleur, taille ou espacement en dur ailleurs : tout vient d'ici.
+   Point de rupture mobile : 768px (les variables CSS ne marchent pas
+   dans les media queries, on écrit donc la valeur directement).
+   ================================================================== */
+
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f6f7f6;
+  --surface: #ffffff;
+  --surface-2: #f1f3f2;
+  --surface-3: #e7ebe9;
+  --line: #e2e6e4;
+  --line-strong: #cfd6d3;
+  --text: #0d1110;
+  --text-2: #444d4a;
+  --text-3: #5f6966;
+  --placeholder: #7f8985;
+  --green: #00e599;
+  --green-hover: #00cf8a;
+  --green-ink: #00170f;
+  --green-text: #00704b;
+  --green-wash: rgba(0, 180, 118, 0.1);
+  --gold: #f5b83d;
+  --gold-ink: #2b1d00;
+  --gold-text: #8a5a00;
+  --red: #c4372b;
+  --red-wash: rgba(196, 55, 43, 0.07);
+  --code-k: #1f5fc4;
+  --code-s: #00704b;
+  --code-c: #6b7572;
+  --grid: rgba(13, 17, 16, 0.06);
+  --backdrop: rgba(13, 17, 16, 0.45);
+  --shadow: 0 8px 28px rgba(13, 17, 16, 0.1);
+  --skeleton: #e9edeb;
+  --skeleton-shine: rgba(255, 255, 255, 0.65);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0b0c0c;
+  --surface: #121414;
+  --surface-2: #181b1b;
+  --surface-3: #202424;
+  --line: #262b2b;
+  --line-strong: #353b3b;
+  --text: #eef1f0;
+  --text-2: #b0b8b5;
+  --text-3: #8f9895;
+  --placeholder: #737c79;
+  --green: #00e599;
+  --green-hover: #3ff0b4;
+  --green-ink: #00170f;
+  --green-text: #00e599;
+  --green-wash: rgba(0, 229, 153, 0.1);
+  --gold: #f5b83d;
+  --gold-ink: #2b1d00;
+  --gold-text: #f5b83d;
+  --red: #ff7a6b;
+  --red-wash: rgba(255, 122, 107, 0.08);
+  --code-k: #7cc4ff;
+  --code-s: #00e599;
+  --code-c: #7d8683;
+  --grid: rgba(255, 255, 255, 0.045);
+  --backdrop: rgba(0, 0, 0, 0.7);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  --skeleton: #1d2121;
+  --skeleton-shine: rgba(255, 255, 255, 0.06);
+}
+
+:root {
+  /* Avatars à initiales : couleur stable choisie par le nom, texte blanc. */
+  --av-text: #ffffff;
+  --av-1: #1f5fc4;
+  --av-2: #0b7a55;
+  --av-3: #9a5b0a;
+  --av-4: #b23a2e;
+  --av-5: #6b46c1;
+  --av-6: #0e7490;
+  --av-7: #9d174d;
+  --av-8: #4d6b12;
+
+  /* Aperçus du choix de thème (paramètres) */
+  --swatch-light: #ffffff;
+  --swatch-light-2: #f1f3f2;
+  --swatch-dark: #121414;
+  --swatch-dark-2: #0b0c0c;
+
+  /* Espacements */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+
+  /* Rayons : angles nets, à peine adoucis. */
+  --r-sm: 2px;
+  --r-md: 4px;
+  --r-lg: 6px;
+  --r-full: 999px;
+
+  /* Typographie */
+  --f-sans: 'Hanken Grotesk', system-ui, sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 14px;
+  --fs-base-sm: 15px;
+  --fs-base: 16px;
+  --fs-lg: 17px;
+  --fs-xl: 22px;
+  --fs-2xl: 26px;
+  --fs-3xl: 30px;
+  --fs-4xl: 44px;
+  --lh-tight: 1.2;
+  --lh-base: 1.55;
+  --tracking-tight: -0.03em;
+
+  /* Tailles d'éléments */
+  --control-h: 40px;
+  --control-h-sm: 32px;
+  --touch: 44px;
+  --topbar-h: 61px;
+  --tabbar-h: 60px;
+  --rail-w: 210px;
+  --content-max: 1400px;
+
+  /* Animations : courtes et discrètes, coupées si « réduire les animations » est actif */
+  --t-press: 90ms;
+  --t-fast: 150ms;
+  --t-base: 200ms;
+  --t-page: 220ms;
+  --t-shimmer: 1s;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --press-scale: 0.97;
+
+  /* Superposition */
+  --z-topbar: 20;
+  --z-menu: 30;
+  --z-tabbar: 40;
+  --z-toast: 60;
+}

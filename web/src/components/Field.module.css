@@ -1,0 +1,119 @@
+.field {
+  margin-bottom: var(--s4);
+}
+
+.labelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s3);
+}
+
+.label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: var(--fs-md);
+  font-weight: 500;
+  color: var(--text);
+}
+
+.field input:not([type='checkbox']):not([type='radio']):not([type='file']),
+.field textarea,
+.field select {
+  width: 100%;
+  min-height: var(--touch);
+  padding: 10px var(--s3);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  transition:
+    border-color var(--t-fast) ease-out,
+    box-shadow var(--t-fast) ease-out;
+}
+
+.field select {
+  appearance: none;
+  padding-inline-end: 36px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--text-2) 50%),
+    linear-gradient(135deg, var(--text-2) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 19px,
+    calc(100% - 13px) 19px;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+
+/* En droite-à-gauche, la flèche passe à gauche (background-position ne se reflète pas seul). */
+:global([dir='rtl']) .field select {
+  background-position:
+    13px 19px,
+    18px 19px;
+}
+
+/* Champs date/heure : zone cliquable et icône de calendrier lisible dans les deux thèmes. */
+.field input[type='date'],
+.field input[type='datetime-local'],
+.field input[type='time'] {
+  cursor: pointer;
+}
+
+.field input[type='date']::-webkit-calendar-picker-indicator,
+.field input[type='datetime-local']::-webkit-calendar-picker-indicator,
+.field input[type='time']::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.55;
+  border-radius: var(--r-sm);
+  padding: var(--s1);
+  transition: opacity var(--t-fast) ease-out;
+}
+
+.field input[type='date']:hover::-webkit-calendar-picker-indicator,
+.field input[type='datetime-local']:hover::-webkit-calendar-picker-indicator,
+.field input[type='time']:hover::-webkit-calendar-picker-indicator {
+  opacity: 1;
+}
+
+/* L'icône native est sombre : on l'inverse en thème sombre pour qu'elle reste visible. */
+:global([data-theme='dark']) .field input[type='date']::-webkit-calendar-picker-indicator,
+:global([data-theme='dark']) .field input[type='datetime-local']::-webkit-calendar-picker-indicator,
+:global([data-theme='dark']) .field input[type='time']::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--green-text);
+  box-shadow: 0 0 0 3px var(--green-wash);
+}
+
+.field [aria-invalid='true'] {
+  border-color: var(--red);
+}
+
+.hint {
+  margin-top: 6px;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.error {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin-top: 6px;
+  font-size: var(--fs-sm);
+  color: var(--red);
+}
+
+.error::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  margin-top: 7px;
+  border-radius: 50%;
+  background: var(--red);
+  flex-shrink: 0;
+}

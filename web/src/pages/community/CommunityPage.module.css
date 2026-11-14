@@ -1,0 +1,158 @@
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-bottom: var(--s3);
+  font-size: var(--fs-md);
+  color: var(--text-3);
+}
+
+.crumbs a {
+  color: var(--text-2);
+}
+
+.panel {
+  padding: var(--s5);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+
+.head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--s5);
+  margin-bottom: var(--s5);
+}
+
+.identity {
+  min-width: 0;
+}
+
+.name {
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: var(--lh-tight);
+}
+
+.kind {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+  margin-top: var(--s1);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.tag {
+  padding: 0 var(--s1);
+  border-radius: var(--r-sm);
+  background: var(--surface-3);
+  font-family: var(--f-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+}
+
+.desc {
+  max-width: 62ch;
+  margin-top: var(--s3);
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+
+.stats {
+  margin-top: var(--s2);
+  font-size: var(--fs-md);
+  color: var(--text-3);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--s2);
+}
+
+.questions {
+  margin: 0 calc(var(--s5) * -1);
+  border-top: 1px solid var(--line);
+}
+
+.members {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s5);
+}
+
+.peopleTitle {
+  margin-bottom: var(--s3);
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.people {
+  display: grid;
+  gap: var(--s3);
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  font-size: var(--fs-md);
+}
+
+.person a {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.person small {
+  display: block;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.rules {
+  display: grid;
+  gap: var(--s4);
+}
+
+.ruleList {
+  display: grid;
+  gap: var(--s2);
+  padding-inline-start: var(--s5);
+  color: var(--text-2);
+}
+
+.muted {
+  font-size: var(--fs-md);
+  color: var(--text-3);
+}
+
+@media (max-width: 767px) {
+  .panel {
+    padding: var(--s4);
+  }
+  .head {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--s3);
+  }
+  .actions {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .name {
+    font-size: var(--fs-xl);
+  }
+  .questions {
+    margin: 0 calc(var(--s4) * -1);
+  }
+  .members {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "items": [
+    {
+      "slug": "mobile-money",
+      "name": "Mobile money",
+      "kind": "TECH",
+      "countryCode": null,
+      "tag": "mobile-money",
+      "description": "Intégrer Wave, Orange Money, MTN MoMo et M-Pesa : webhooks, réconciliation, cas d'erreur.",
+      "rules": [
+        "Précisez l'opérateur et le pays : les API diffèrent.",
+        "Jamais de clé ou de jeton dans une question."
+      ],
+      "status": "OPEN",
+      "memberCount": 1102,
+      "questionCount": 367,
+      "referents": [
+        {
+          "username": "aminata_dev",
+          "displayName": "Aminata Diallo",
+          "avatarUrl": null,
+          "countryCode": "SN",
+          "reputation": 1642,
+          "level": "REFERENT",
+          "deleted": false
+        }
+      ],
+      "createdAt": "2026-09-20T09:00:00Z",
+      "updatedAt": "2026-10-21T16:30:00Z"
+    },
+    {
+      "slug": "senegal",
+      "name": "Sénégal",
+      "kind": "COUNTRY",
+      "countryCode": "SN",
+      "tag": null,
+      "description": "Développeurs de Dakar, Thiès, Saint-Louis et d'ailleurs : Wave, Orange Money, freelance et premiers emplois.",
+      "rules": [
+        "On écrit en français ou en wolof translittéré, et on reste courtois.",
+        "Pas d'offre d'emploi ici : elles vont dans l'espace Emploi, où l'équipe les vérifie.",
+        "Une question qui concerne un opérateur précise lequel (Wave, Orange Money, Free Money)."
+      ],
+      "status": "OPEN",
+      "memberCount": 1284,
+      "questionCount": 412,
+      "referents": [
+        {
+          "username": "aminata_dev",
+          "displayName": "Aminata Diallo",
+          "avatarUrl": null,
+          "countryCode": "SN",
+          "reputation": 1642,
+          "level": "REFERENT",
+          "deleted": false
+        },
+        {
+          "username": "moussa_s",
+          "displayName": "Moussa Sow",
+          "avatarUrl": null,
+          "countryCode": "SN",
+          "reputation": 1580,
+          "level": "REFERENT",
+          "deleted": false
+        }
+      ],
+      "createdAt": "2026-09-20T09:00:00Z",
+      "updatedAt": "2026-10-21T16:30:00Z"
+    },
+    {
+      "slug": "kenya",
+      "name": "Kenya",
+      "kind": "COUNTRY",
+      "countryCode": "KE",
+      "tag": null,
+      "description": "De Nairobi à Mombasa : M-Pesa, Daraja API, startups et missions à distance.",
+      "rules": [
+        "English or Swahili, always courteous.",
+        "Pour M-Pesa, précisez sandbox ou production."
+      ],
+      "status": "OPEN",
+      "memberCount": 973,
+      "questionCount": 288,
+      "referents": [
+        {
+          "username": "wanjiru_k",
+          "displayName": "Wanjiru Kamau",
+          "avatarUrl": null,
+          "countryCode": "KE",
+          "reputation": 1710,
+          "level": "REFERENT",
+          "deleted": false
+        }
+      ],
+      "createdAt": "2026-09-20T09:00:00Z",
+      "updatedAt": "2026-10-21T16:30:00Z"
+    },
+    {
+      "slug": "flutter",
+      "name": "Flutter",
+      "kind": "TECH",
+      "countryCode": null,
+      "tag": "flutter",
+      "description": "Applications Flutter légères qui tiennent en 3G et sur Android Go, du prototype à la publication.",
+      "rules": ["Indiquez la version de Flutter et l'appareil de test."],
+      "status": "CLOSED",
+      "memberCount": 846,
+      "questionCount": 233,
+      "referents": [],
+      "createdAt": "2026-09-20T09:00:00Z",
+      "updatedAt": "2026-10-21T16:30:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 4
+}

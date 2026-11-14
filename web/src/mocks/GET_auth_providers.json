@@ -1,0 +1,12 @@
+{
+  "providers": [
+    {
+      "id": "github",
+      "authorizationUrl": "/api/v1/auth/oauth2/authorization/github"
+    },
+    {
+      "id": "google",
+      "authorizationUrl": "/api/v1/auth/oauth2/authorization/google"
+    }
+  ]
+}

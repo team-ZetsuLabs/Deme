@@ -1,0 +1,105 @@
+.tabs {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .tabs {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-tabbar);
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    min-height: var(--tabbar-h);
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+  }
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: var(--touch);
+  color: var(--text-3);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  /* .tab sert aussi au bouton « Plus » : on neutralise l'apparence par défaut. */
+  background: none;
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Cellule « Plus » : le bouton remplit la colonne, le panneau s'ouvre au-dessus. */
+.more {
+  position: relative;
+  display: grid;
+}
+
+.sheet {
+  position: absolute;
+  inset-block-end: calc(100% + var(--s1));
+  inset-inline-end: var(--s2);
+  min-inline-size: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--s1);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+}
+
+.sheetItem {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  min-height: var(--touch);
+  padding: 0 var(--s3);
+  border-radius: var(--r-md);
+  color: var(--text-2);
+  font-size: var(--fs-base-sm);
+}
+
+.sheetItem:hover {
+  text-decoration: none;
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.sheetItem[aria-current='page'] {
+  color: var(--green-text);
+  background: var(--green-wash);
+}
+
+.tab span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  text-decoration: none;
+  color: var(--text);
+}
+
+.tab[aria-current='page'] {
+  color: var(--green-text);
+  box-shadow: inset 0 2px 0 var(--green);
+}
+
+.tab svg {
+  transition: transform var(--t-press) var(--ease-out);
+}
+
+.tab:active svg {
+  transform: scale(0.9);
+}

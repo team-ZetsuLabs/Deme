@@ -1,0 +1,38 @@
+[
+  {
+    "rank": 1,
+    "country": "SN",
+    "participants": 4,
+    "points": 302
+  },
+  {
+    "rank": 2,
+    "country": "GH",
+    "participants": 3,
+    "points": 241
+  },
+  {
+    "rank": 3,
+    "country": "BF",
+    "participants": 3,
+    "points": 238
+  },
+  {
+    "rank": 4,
+    "country": "KE",
+    "participants": 2,
+    "points": 155
+  },
+  {
+    "rank": 5,
+    "country": "CI",
+    "participants": 2,
+    "points": 140
+  },
+  {
+    "rank": 6,
+    "country": "NG",
+    "participants": 1,
+    "points": 0
+  }
+]

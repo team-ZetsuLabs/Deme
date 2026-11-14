@@ -1,0 +1,80 @@
+{
+  "id": 1,
+  "title": "Annuaire open source des développeurs africains",
+  "descriptionMarkdown": "Un annuaire **open source** qui recense les développeuses et développeurs du continent, avec leur stack et leur pays, pour faciliter les mises en relation et le recrutement local.\n\nOn cherche des personnes motivées pour construire une première version simple et utile.",
+  "descriptionHtml": "<p>Un annuaire <strong>open source</strong> qui recense les développeuses et développeurs du continent, avec leur stack et leur pays, pour faciliter les mises en relation et le recrutement local.</p>\n<p>On cherche des personnes motivées pour construire une première version simple et utile.</p>\n",
+  "type": "OPEN_SOURCE",
+  "technologies": ["react", "typescript", "node.js"],
+  "githubUrl": "https://github.com/zetsu-demo/annuaire-devs",
+  "contactUrl": null,
+  "status": "OPEN",
+  "owner": {
+    "username": "fatou_ndiaye",
+    "displayName": "Fatou Ndiaye",
+    "avatarUrl": null,
+    "countryCode": "SN",
+    "reputation": 78,
+    "level": "MEMBER",
+    "deleted": false
+  },
+  "roles": [
+    {
+      "id": 1,
+      "title": "Développeur front-end React",
+      "technologies": ["react", "typescript"],
+      "status": "OPEN",
+      "member": null
+    },
+    {
+      "id": 2,
+      "title": "Développeur back-end Node.js",
+      "technologies": ["node.js"],
+      "status": "FILLED",
+      "member": {
+        "username": "ibrahim_sawadogo",
+        "displayName": "Ibrahim Sawadogo",
+        "avatarUrl": null,
+        "countryCode": "BF",
+        "reputation": 61,
+        "level": "MEMBER",
+        "deleted": false
+      }
+    }
+  ],
+  "team": [
+    {
+      "member": {
+        "username": "fatou_ndiaye",
+        "displayName": "Fatou Ndiaye",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 78,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "roleTitle": null,
+      "owner": true,
+      "joinedAt": "2026-10-27T20:15:09.739849Z"
+    },
+    {
+      "member": {
+        "username": "ibrahim_sawadogo",
+        "displayName": "Ibrahim Sawadogo",
+        "avatarUrl": null,
+        "countryCode": "BF",
+        "reputation": 61,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "roleTitle": "Développeur back-end Node.js",
+      "owner": false,
+      "joinedAt": "2026-10-28T09:30:00.000000Z"
+    }
+  ],
+  "myRequest": null,
+  "canEdit": false,
+  "canPostUpdate": false,
+  "createdAt": "2026-10-27T20:15:09.739849Z",
+  "updatedAt": "2026-10-27T20:15:09.739849Z",
+  "lastActivityAt": "2026-10-28T09:30:00.000000Z"
+}

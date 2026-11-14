@@ -1,0 +1,52 @@
+.layout {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--s5);
+  display: grid;
+  grid-template-columns: var(--rail-w) minmax(0, 1fr);
+  gap: var(--s5);
+  align-items: start;
+}
+
+/* Menu latéral fixe : il reste visible pendant que la page défile. */
+.rail {
+  position: sticky;
+  top: calc(var(--topbar-h) + var(--s5));
+  max-height: calc(100dvh - var(--topbar-h) - var(--s5) * 2);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.main {
+  min-width: 0;
+}
+
+.main:focus {
+  outline: none;
+}
+
+.skip {
+  position: absolute;
+  inset-inline-start: var(--s4);
+  top: -100px;
+  z-index: var(--z-toast);
+  padding: var(--s2) var(--s4);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+}
+
+.skip:focus {
+  top: var(--s2);
+}
+
+@media (max-width: 767px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    padding: var(--s4);
+    padding-bottom: calc(var(--tabbar-h) + var(--s5));
+  }
+  .rail {
+    display: none;
+  }
+}

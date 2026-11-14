@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zetsu, entraide entre développeurs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+  /* Thème appliqué avant l'affichage pour éviter un flash. Clair par défaut. */
+  (function () {
+    var pref = "light";
+    try { pref = localStorage.getItem("zetsu-theme") || "light"; } catch (e) {}
+    var dark = pref === "dark" || (pref === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+    document.documentElement.dataset.pref = pref;
+  })();
+</script>
+<style>
+/* ==================================================================
+   Design system Zetsu
+   Style outil de développeur, inspiré de Neon. Clair par défaut.
+   Un accent vert, l'or réservé à la réputation.
+   Contraste texte >= 4.5:1 dans les deux thèmes.
+   ================================================================== */
+:root, [data-theme="light"] {
+  color-scheme: light;
+  --bg: #f6f7f6;
+  --surface: #ffffff;
+  --surface-2: #f1f3f2;
+  --surface-3: #e7ebe9;
+  --line: #e2e6e4;
+  --line-strong: #cfd6d3;
+  --text: #0d1110;
+  --text-2: #444d4a;
+  --text-3: #5f6966;
+  --placeholder: #7f8985;
+  --green: #00e599;
+  --green-hover: #00cf8a;
+  --green-ink: #00170f;
+  --green-text: #00704b;
+  --green-wash: rgba(0, 180, 118, .1);
+  --gold: #f5b83d;
+  --gold-text: #8a5a00;
+  --red: #c4372b;
+  --red-wash: rgba(196, 55, 43, .07);
+  --code-k: #1f5fc4;
+  --code-s: #00704b;
+  --code-c: #6b7572;
+  --grid: rgba(13, 17, 16, .06);
+  --backdrop: rgba(13, 17, 16, .45);
+  --shadow: 0 8px 28px rgba(13, 17, 16, .1);
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b0c0c;
+  --surface: #121414;
+  --surface-2: #181b1b;
+  --surface-3: #202424;
+  --line: #262b2b;
+  --line-strong: #353b3b;
+  --text: #eef1f0;
+  --text-2: #b0b8b5;
+  --text-3: #8f9895;
+  --placeholder: #737c79;
+  --green: #00e599;
+  --green-hover: #3ff0b4;
+  --green-ink: #00170f;
+  --green-text: #00e599;
+  --green-wash: rgba(0, 229, 153, .1);
+  --gold: #f5b83d;
+  --gold-text: #f5b83d;
+  --red: #ff7a6b;
+  --red-wash: rgba(255, 122, 107, .08);
+  --code-k: #7cc4ff;
+  --code-s: #00e599;
+  --code-c: #7d8683;
+  --grid: rgba(255, 255, 255, .045);
+  --backdrop: rgba(0, 0, 0, .7);
+  --shadow: 0 8px 28px rgba(0, 0, 0, .5);
+}
+:root {
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px;
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px;
+  --t-fast: 150ms; --t-base: 200ms;
+  --f-sans: "Hanken Grotesk", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; background: var(--bg); }
+body { font-family: var(--f-sans); font-size: 16px; line-height: 1.55; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button, a, select, label[for] { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+a { color: var(--green-text); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--green-text); outline-offset: 2px; }
+::selection { background: var(--green); color: var(--green-ink); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+[hidden] { display: none !important; }
+.mono { font-family: var(--f-mono); }
+.muted { color: var(--text-3); }
+
+code { font-family: var(--f-mono); font-size: .86em; padding: 1px 6px; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-sm); }
+pre.code {
+  margin-top: var(--s3); padding: var(--s3) var(--s4); background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: var(--r-md); font-family: var(--f-mono); font-size: 13px; line-height: 1.7; overflow-x: auto; color: var(--text);
+}
+pre.code .k { color: var(--code-k); } pre.code .s { color: var(--code-s); } pre.code .c { color: var(--code-c); }
+
+/* ---------- Avatars ---------- */
+.av {
+  flex-shrink: 0; display: inline-grid; place-items: center; border-radius: 50%;
+  color: #fff; font-weight: 600; font-family: var(--f-sans); letter-spacing: .01em; object-fit: cover;
+  box-shadow: 0 0 0 1px var(--line);
+}
+.av.sq { border-radius: var(--r-md); }
+.plink { display: inline-flex; align-items: center; gap: var(--s2); color: var(--text-2); font-weight: 500; }
+.plink:hover { color: var(--text); text-decoration: none; }
+.plink:hover span { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- Logo ---------- */
+.logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 18px; letter-spacing: -0.02em; color: var(--text); }
+.logo:hover { text-decoration: none; }
+.logo-mark { width: 22px; height: 22px; border-radius: 5px; border: 1px solid var(--line-strong);
+  background: repeating-linear-gradient(90deg, var(--green) 0 5px, var(--surface) 5px 7px, var(--gold) 7px 9px, var(--surface) 9px 11px); }
+
+/* ---------- Boutons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: 40px; padding: 0 var(--s4); border-radius: var(--r-md); border: 1px solid transparent;
+  font-weight: 500; font-size: 15px; white-space: nowrap; text-decoration: none;
+  transition: background-color var(--t-fast) ease-out, border-color var(--t-fast) ease-out, color var(--t-fast) ease-out;
+}
+.btn:hover { text-decoration: none; }
+.btn-primary { background: var(--green); color: var(--green-ink); font-weight: 600; }
+.btn-primary:hover { background: var(--green-hover); }
+.btn-secondary { background: var(--surface); border-color: var(--line-strong); color: var(--text); }
+.btn-secondary:hover { background: var(--surface-2); border-color: var(--text-3); }
+.btn-ghost { background: none; color: var(--text-2); }
+.btn-ghost:hover { color: var(--text); background: var(--surface-2); }
+.btn-danger { background: var(--surface); border-color: var(--red); color: var(--red); }
+.btn-danger:hover { background: var(--red-wash); }
+.btn-dark { background: var(--text); color: var(--bg); font-weight: 600; }
+.btn-dark:hover { opacity: 1; background: var(--text-2); }
+.btn-icon { width: 40px; padding: 0; position: relative; }
+.btn-sm { min-height: 32px; padding: 0 var(--s3); font-size: 14px; }
+.btn-block { width: 100%; }
+.btn[aria-busy="true"] { pointer-events: none; }
+.spinner { width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.badge-count { position: absolute; top: 4px; right: 4px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 9px;
+  background: var(--green); color: var(--green-ink); font-size: 11px; font-weight: 700; display: grid; place-items: center; font-family: var(--f-mono); }
+
+/* ---------- Champs ---------- */
+.field { margin-bottom: var(--s4); }
+.field-row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s3); }
+.field label, .label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; color: var(--text); }
+.hint { font-size: 13px; color: var(--text-3); margin-top: 6px; }
+.input-wrap { position: relative; }
+.input, .field input:not([type=checkbox]):not([type=radio]):not([type=file]), .field textarea, .field select {
+  width: 100%; min-height: 44px; padding: 10px var(--s3); background: var(--surface);
+  border: 1px solid var(--line-strong); border-radius: var(--r-md);
+  transition: border-color var(--t-fast) ease-out, box-shadow var(--t-fast) ease-out;
+}
+.field textarea { min-height: 140px; resize: vertical; font-family: var(--f-mono); font-size: 14px; line-height: 1.6; }
+.field textarea.prose { font-family: var(--f-sans); font-size: 15px; min-height: 96px; }
+.field select { appearance: none; padding-right: 36px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-2) 50%), linear-gradient(135deg, var(--text-2) 50%, transparent 50%);
+  background-position: calc(100% - 18px) 19px, calc(100% - 13px) 19px; background-size: 5px 5px; background-repeat: no-repeat; }
+input::placeholder, textarea::placeholder { color: var(--placeholder); }
+.input:focus, .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--green-text); box-shadow: 0 0 0 3px var(--green-wash); }
+.field [aria-invalid="true"] { border-color: var(--red); }
+.reveal { position: absolute; right: 4px; top: 4px; height: 36px; padding: 0 var(--s3); background: none; border: none; border-radius: var(--r-sm); color: var(--text-2); font-size: 13px; font-weight: 500; }
+.reveal:hover { background: var(--surface-2); color: var(--text); }
+.has-reveal input { padding-right: 96px !important; }
+.error { display: none; gap: 6px; align-items: flex-start; font-size: 13.5px; color: var(--red); margin-top: 6px; }
+.error.show { display: flex; }
+.error::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--red); margin-top: 7px; flex-shrink: 0; }
+.count { font-size: 13px; color: var(--text-3); font-family: var(--f-mono); white-space: nowrap; }
+.check { display: flex; gap: var(--s3); align-items: flex-start; padding: var(--s3) 0; border-top: 1px solid var(--line); }
+.check:first-of-type { border-top: none; }
+.check input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--green-text); flex-shrink: 0; }
+.check b { display: block; font-weight: 500; font-size: 15px; }
+.check span { font-size: 14px; color: var(--text-3); }
+.strength { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: var(--s2); }
+.strength i { height: 3px; border-radius: 2px; background: var(--surface-3); transition: background-color var(--t-base) ease-out; }
+.strength[data-level="1"] i:nth-child(-n+1) { background: var(--red); }
+.strength[data-level="2"] i:nth-child(-n+2) { background: var(--gold); }
+.strength[data-level="3"] i:nth-child(-n+3), .strength[data-level="4"] i { background: var(--green); }
+
+/* ---------- Segmented, tags ---------- */
+.seg { display: inline-flex; padding: 3px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); }
+.seg button { min-height: 32px; padding: 0 var(--s3); border: none; background: none; border-radius: var(--r-sm); font-size: 14px; font-weight: 500; color: var(--text-2); white-space: nowrap;
+  transition: background-color var(--t-fast) ease-out, color var(--t-fast) ease-out; }
+.seg button:hover { color: var(--text); }
+.seg button[aria-pressed="true"], .seg button[aria-selected="true"] { background: var(--surface-3); color: var(--text); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.tag { display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px; font-family: var(--f-mono); font-size: 12.5px; color: var(--text-2);
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r-sm); text-decoration: none;
+  transition: border-color var(--t-fast) ease-out, color var(--t-fast) ease-out, background-color var(--t-fast) ease-out; }
+button.tag:hover, a.tag:hover { border-color: var(--line-strong); color: var(--text); text-decoration: none; }
+button.tag[aria-pressed="true"] { border-color: var(--green-text); color: var(--green-text); background: var(--green-wash); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 10px; font-size: 13px; color: var(--text); border: 1px solid var(--line-strong); border-radius: var(--r-sm); }
+.chip.ok { border-color: var(--green-text); color: var(--green-text); }
+
+/* ==================================================================
+   AUTHENTIFICATION
+   ================================================================== */
+.auth { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); }
+.auth-main { display: flex; flex-direction: column; padding: var(--s5) var(--s7); background: var(--surface); }
+.auth-top { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); }
+.auth-top .right { display: flex; gap: var(--s2); }
+.auth-form { width: 100%; max-width: 400px; margin: auto; padding: var(--s7) 0; }
+.auth-form h1 { font-size: 30px; font-weight: 600; letter-spacing: -0.035em; line-height: 1.15; }
+.lead { color: var(--text-2); margin-top: var(--s2); }
+.tabs { display: grid; grid-template-columns: 1fr 1fr; width: 100%; margin: var(--s5) 0; }
+.tabs button { min-height: 36px; }
+.oauth-stack { display: grid; gap: var(--s2); }
+.btn-oauth { min-height: 46px; font-size: 15px; }
+.or { display: flex; align-items: center; gap: var(--s3); margin: var(--s5) 0; color: var(--text-3); font-size: 13px; }
+.or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.form-actions { margin-top: var(--s5); }
+.legal { margin-top: var(--s4); font-size: 13px; color: var(--text-3); }
+.legal a { color: var(--text-2); text-decoration: underline; text-underline-offset: 3px; }
+.switch { margin-top: var(--s5); font-size: 14px; color: var(--text-2); }
+.linklike { background: none; border: none; color: var(--green-text); font-weight: 500; padding: 0; }
+.linklike:hover { text-decoration: underline; text-underline-offset: 3px; }
+.form-alert { display: none; padding: var(--s3); border: 1px solid var(--red); background: var(--red-wash); color: var(--text); border-radius: var(--r-md); font-size: 14px; margin-bottom: var(--s4); }
+.form-alert.show { display: block; }
+.auth-side { border-left: 1px solid var(--line); background-color: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px; display: flex; flex-direction: column; justify-content: center; padding: var(--s7); }
+.auth-side > * { max-width: 560px; width: 100%; min-width: 0; margin-left: auto; margin-right: auto; }
+.side-title { font-size: 26px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.2; text-wrap: balance; }
+.side-sub { color: var(--text-2); margin-top: var(--s2); }
+.thread { margin-top: var(--s6); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow); }
+.thread-bar { display: flex; align-items: center; gap: var(--s2); padding: 10px var(--s4); border-bottom: 1px solid var(--line); font-family: var(--f-mono); font-size: 13px; color: var(--text-3); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+.post { padding: var(--s4); display: grid; grid-template-columns: 32px minmax(0,1fr); gap: var(--s3); }
+.post + .post { border-top: 1px solid var(--line); }
+.post h3 { font-size: 15.5px; font-weight: 600; line-height: 1.35; }
+.post p { font-size: 14px; color: var(--text-2); margin-top: 4px; }
+.post .by { font-size: 13px; color: var(--text-3); margin-top: var(--s2); }
+.post.accepted { background: var(--green-wash); }
+.accepted-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--green-text); }
+.rep-pop { font-family: var(--f-mono); font-size: 12.5px; color: var(--gold-text); margin-left: var(--s2); }
+.side-facts { margin-top: var(--s5); display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); font-size: 14px; color: var(--text-2); }
+.side-facts b { color: var(--text); font-weight: 600; font-family: var(--f-mono); }
+
+/* ==================================================================
+   APPLICATION : structure
+   ================================================================== */
+.topbar { position: sticky; top: 0; z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line); }
+.topbar-inner { max-width: 1280px; margin: 0 auto; padding: 10px var(--s5); display: flex; align-items: center; gap: var(--s4); }
+.search { flex: 1; max-width: 480px; display: flex; align-items: center; gap: var(--s2); height: 40px; padding: 0 var(--s3);
+  border: 1px solid var(--line-strong); border-radius: var(--r-md); background: var(--bg); transition: border-color var(--t-fast) ease-out; }
+.search:focus-within { border-color: var(--green-text); box-shadow: 0 0 0 3px var(--green-wash); }
+.search input { flex: 1; min-width: 0; border: none; background: none; outline: none; font-size: 14.5px; }
+.kbd { font-family: var(--f-mono); font-size: 12px; color: var(--text-3); border: 1px solid var(--line-strong); border-radius: 4px; padding: 1px 6px; }
+.topbar .right { margin-left: auto; display: flex; gap: var(--s2); align-items: center; }
+.menu-wrap { position: relative; }
+.me-chip { display: flex; align-items: center; gap: var(--s2); min-height: 40px; padding: 0 var(--s3) 0 5px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface); font-size: 14px; font-weight: 500; }
+.me-chip:hover { border-color: var(--text-3); }
+.me-chip .pts { font-family: var(--f-mono); color: var(--gold-text); font-size: 13px; }
+.menu { position: absolute; right: 0; top: calc(100% + 6px); min-width: 230px; padding: 6px; background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--r-md); box-shadow: var(--shadow); z-index: 30; }
+.menu-head { padding: var(--s2) var(--s3) var(--s3); border-bottom: 1px solid var(--line); margin-bottom: 6px; }
+.menu-head b { display: block; font-weight: 600; font-size: 14px; }
+.menu-head span { font-size: 13px; color: var(--text-3); }
+.menu a, .menu button { display: flex; align-items: center; gap: var(--s3); width: 100%; min-height: 38px; padding: 0 var(--s3); border: none; background: none; border-radius: var(--r-sm); color: var(--text); font-size: 14px; text-align: left; }
+.menu a:hover, .menu button:hover { background: var(--surface-2); text-decoration: none; }
+.menu svg { color: var(--text-3); }
+.menu hr { border: none; border-top: 1px solid var(--line); margin: 6px 0; }
+
+.layout { max-width: 1280px; margin: 0 auto; padding: var(--s5); display: grid; grid-template-columns: 210px minmax(0,1fr) 300px; gap: var(--s5); align-items: start; }
+.layout.wide { grid-template-columns: 210px minmax(0,1fr); }
+.layout > * { min-width: 0; }
+.rail { position: sticky; top: 84px; }
+.rail-label { font-size: 13px; color: var(--text-3); margin: var(--s5) 0 var(--s2) var(--s3); }
+.rail-label:first-child { margin-top: 0; }
+.space { width: 100%; display: flex; align-items: center; gap: var(--s3); min-height: 40px; padding: 0 var(--s3); border-radius: var(--r-md);
+  color: var(--text-2); font-weight: 500; font-size: 15px; transition: background-color var(--t-fast) ease-out, color var(--t-fast) ease-out; }
+.space svg { flex-shrink: 0; color: var(--text-3); }
+.space:hover { background: var(--surface); color: var(--text); text-decoration: none; }
+.space[aria-current="page"] { background: var(--surface); color: var(--text); box-shadow: inset 2px 0 0 var(--green), 0 0 0 1px var(--line); }
+.space[aria-current="page"] svg { color: var(--green-text); }
+.space small { margin-left: auto; font-family: var(--f-mono); font-size: 12.5px; color: var(--text-3); }
+.space .badge-dot { margin-left: auto; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--green); color: var(--green-ink); font-size: 11.5px; font-weight: 700; display: grid; place-items: center; font-family: var(--f-mono); }
+#railAccount .rail-label { margin-top: var(--s5); }
+.taglist { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 var(--s3); }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); }
+.pad { padding: var(--s5); }
+.toolbar { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); margin-bottom: var(--s3); flex-wrap: wrap; }
+.toolbar h2 { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2); font-size: 14px; color: var(--text-3); margin-bottom: var(--s4); }
+.crumbs a { color: var(--text-2); }
+.crumbs span[aria-hidden] { color: var(--line-strong); }
+.page-title { font-size: 26px; font-weight: 600; letter-spacing: -0.035em; line-height: 1.2; }
+.section-title { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: var(--s3); }
+.empty { padding: var(--s7) var(--s5); text-align: center; color: var(--text-2); }
+.empty .btn { margin-top: var(--s4); }
+.side > * + * { margin-top: var(--s5); }
+.side .panel { padding: var(--s5); }
+.side h3 { font-size: 15px; font-weight: 600; margin-bottom: var(--s3); }
+.side p { font-size: 14px; color: var(--text-2); }
+.list li { list-style: none; padding: var(--s2) 0; border-top: 1px solid var(--line); }
+.list li:first-child { border-top: none; padding-top: 0; }
+.list a.title { color: var(--text); font-size: 14px; font-weight: 500; }
+.list a.title:hover { color: var(--green-text); }
+.list small { display: block; font-size: 13px; color: var(--text-3); }
+
+/* ---------- Fil de questions ---------- */
+.ask { padding: var(--s5); margin-bottom: var(--s5); }
+.ask h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.035em; line-height: 1.2; }
+.ask p { color: var(--text-2); margin-top: 6px; max-width: 60ch; }
+.ask form { display: flex; gap: var(--s2); margin-top: var(--s4); }
+.ask .input { flex: 1; min-width: 0; }
+.active-filter { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); padding: var(--s2) var(--s2) var(--s2) var(--s4); margin-bottom: var(--s3); border: 1px dashed var(--line-strong); border-radius: var(--r-md); font-size: 14px; color: var(--text-2); }
+.row { display: grid; grid-template-columns: 56px 64px minmax(0,1fr); gap: var(--s4); padding: var(--s4) var(--s5); border-top: 1px solid var(--line); }
+.row:first-child { border-top: none; }
+.stat { text-align: center; font-family: var(--f-mono); }
+.stat strong { display: block; font-size: 18px; font-weight: 500; line-height: 1.3; }
+.stat span { font-size: 12px; color: var(--text-3); font-family: var(--f-sans); }
+.vote { width: 100%; min-height: 30px; margin-bottom: 4px; display: grid; place-items: center; border: 1px solid var(--line-strong); border-radius: var(--r-sm); background: var(--surface); color: var(--text-2);
+  transition: border-color var(--t-fast) ease-out, color var(--t-fast) ease-out, background-color var(--t-fast) ease-out; }
+.vote:hover { border-color: var(--green-text); color: var(--green-text); }
+.vote[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: var(--green-ink); }
+.answers { border: 1px solid var(--line-strong); border-radius: var(--r-sm); padding: 6px 0; }
+.answers.solved { border-color: var(--green-text); background: var(--green-wash); }
+.answers.solved strong, .answers.solved span { color: var(--green-text); }
+.answers.none { border-style: dashed; }
+.q h3 { font-size: 16.5px; font-weight: 600; line-height: 1.4; letter-spacing: -0.01em; }
+.q h3 a { color: var(--text); }
+.q h3 a:hover { color: var(--green-text); }
+.q p { color: var(--text-2); font-size: 14.5px; margin: 4px 0 var(--s3); max-width: 72ch; }
+.q-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s2); }
+.who { display: flex; align-items: center; gap: var(--s2); font-size: 13px; color: var(--text-3); }
+
+/* ---------- Question détaillée ---------- */
+.qd-head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--s3) var(--s4); }
+.qd-head h1 { min-width: 0; flex: 1 1 320px; }
+.qd-head .btn { flex-shrink: 0; }
+@media (max-width: 760px) { .qd-head { flex-wrap: wrap; } }
+.qd-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s4); margin-top: var(--s3); font-size: 14px; color: var(--text-3); padding-bottom: var(--s4); border-bottom: 1px solid var(--line); }
+.post-block { display: grid; grid-template-columns: 48px minmax(0,1fr); gap: var(--s4); padding: var(--s5) 0; }
+.post-block + .post-block { border-top: 1px solid var(--line); }
+.votecol { display: flex; flex-direction: column; align-items: center; gap: 4px; font-family: var(--f-mono); }
+.votecol strong { font-size: 18px; font-weight: 500; }
+.votecol .vote { width: 40px; min-height: 36px; }
+.accepted-mark { width: 40px; height: 36px; display: grid; place-items: center; border-radius: var(--r-sm); background: var(--green); color: var(--green-ink); margin-top: 4px; }
+.post-body { font-size: 15.5px; color: var(--text); }
+.post-body p + p { margin-top: var(--s3); }
+.post-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--s3); margin-top: var(--s4); }
+.author-card { display: flex; align-items: center; gap: var(--s3); padding: var(--s2) var(--s3); background: var(--surface-2); border-radius: var(--r-md); font-size: 13px; }
+.author-card a { color: var(--text); font-weight: 500; font-size: 14px; }
+.author-card small { display: block; color: var(--text-3); }
+.author-card .rp { font-family: var(--f-mono); color: var(--gold-text); }
+.answer.accepted { background: linear-gradient(var(--green-wash), var(--green-wash)); margin: 0 calc(var(--s5) * -1); padding-left: var(--s5); padding-right: var(--s5); border-radius: 0; }
+.accepted-label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--green-text); margin-bottom: var(--s2); }
+
+/* ---------- Emploi ---------- */
+.job { display: grid; grid-template-columns: 44px minmax(0,1fr) auto; gap: var(--s4); align-items: center; padding: var(--s4) var(--s5); border-top: 1px solid var(--line); }
+.job:first-child { border-top: none; }
+.job h3 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+.job h3 a { color: var(--text); }
+.job h3 a:hover { color: var(--green-text); }
+.job .where { font-size: 14px; color: var(--text-2); }
+.job .tags { margin-top: var(--s2); }
+.jd-head { display: flex; gap: var(--s4); align-items: flex-start; }
+.jd-facts { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s3); }
+.prose h3 { font-size: 16px; font-weight: 600; margin: var(--s5) 0 var(--s2); letter-spacing: -0.01em; }
+.prose p { color: var(--text-2); }
+.prose ul { padding-left: var(--s5); color: var(--text-2); }
+.prose li { margin-bottom: 6px; }
+.match { margin-top: var(--s3); }
+.match li { list-style: none; display: flex; align-items: center; gap: var(--s2); font-size: 14px; padding: 3px 0; color: var(--text-2); }
+.match li.ok { color: var(--text); }
+.match li svg { flex-shrink: 0; }
+.match li.ok svg { color: var(--green-text); }
+.match li.no svg { color: var(--text-3); }
+
+/* ---------- Challenges ---------- */
+.challenge { padding: var(--s5); margin-bottom: var(--s5); display: grid; grid-template-columns: minmax(0,1fr) auto; gap: var(--s6); align-items: end; }
+.challenge h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.25; }
+.challenge p { color: var(--text-2); margin-top: var(--s2); max-width: 58ch; }
+.spec { margin-top: var(--s4); display: grid; gap: 6px; }
+.spec li { list-style: none; display: grid; grid-template-columns: 56px 1fr; gap: var(--s3); font-size: 14px; color: var(--text-2); }
+.spec .mono { color: var(--green-text); font-size: 13px; font-weight: 500; }
+.clock { display: flex; gap: var(--s2); }
+.clock div { min-width: 64px; padding: var(--s2) var(--s3); text-align: center; background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-md); }
+.clock strong { display: block; font-family: var(--f-mono); font-size: 28px; font-weight: 500; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.clock span { font-size: 12px; color: var(--text-3); }
+.clock-wrap > p { font-size: 13px; color: var(--text-3); margin-bottom: var(--s2); }
+.clock-wrap .btn { width: 100%; margin-top: var(--s4); }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-size: 13px; font-weight: 500; color: var(--text-3); padding: var(--s3) var(--s5); border-bottom: 1px solid var(--line); }
+td { padding: var(--s3) var(--s5); border-bottom: 1px solid var(--line); font-size: 15px; }
+tr:last-child td { border-bottom: none; }
+td.num, th.num { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.rank { width: 56px; font-family: var(--f-mono); color: var(--text-3); }
+tr.first .rank { color: var(--gold-text); font-weight: 600; }
+tr.me td { background: var(--green-wash); }
+.person { display: flex; align-items: center; gap: var(--s3); }
+.person a { color: var(--text); font-weight: 500; }
+.person small { display: block; color: var(--text-3); font-size: 13px; }
+
+/* ---------- Profil ---------- */
+.prof-head { display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: var(--s5); align-items: start; }
+.prof-head h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.035em; line-height: 1.2; }
+.prof-handle { font-family: var(--f-mono); font-size: 14px; color: var(--text-3); margin-top: 2px; }
+.prof-bio { color: var(--text-2); margin-top: var(--s3); max-width: 62ch; }
+.prof-meta { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); margin-top: var(--s3); font-size: 14px; color: var(--text-3); }
+.prof-meta span, .prof-meta a { display: inline-flex; align-items: center; gap: 6px; }
+.prof-meta a { color: var(--text-2); }
+.stats-strip { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); margin-top: var(--s5); border: 1px solid var(--line); border-radius: var(--r-md); }
+.stats-strip > div { padding: var(--s3) var(--s4); border-left: 1px solid var(--line); }
+.stats-strip > div:first-child { border-left: none; }
+.stats-strip strong { display: block; font-family: var(--f-mono); font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.stats-strip strong.gold { color: var(--gold-text); }
+.stats-strip span { font-size: 13px; color: var(--text-3); }
+.tabbar { display: flex; gap: var(--s1); border-bottom: 1px solid var(--line); margin: var(--s5) 0 0; overflow-x: auto; }
+.tabbar button { min-height: 44px; padding: 0 var(--s3); border: none; background: none; color: var(--text-2); font-weight: 500; font-size: 15px; white-space: nowrap; box-shadow: inset 0 -2px 0 transparent;
+  transition: color var(--t-fast) ease-out, box-shadow var(--t-fast) ease-out; }
+.tabbar button:hover { color: var(--text); }
+.tabbar button[aria-selected="true"] { color: var(--text); box-shadow: inset 0 -2px 0 var(--green); }
+.activity li { list-style: none; display: grid; grid-template-columns: 92px minmax(0,1fr) auto; gap: var(--s3); align-items: baseline; padding: var(--s3) 0; border-top: 1px solid var(--line); font-size: 15px; }
+.activity li:first-child { border-top: none; }
+.activity .kind { font-size: 13px; color: var(--text-3); }
+.activity a { color: var(--text); font-weight: 500; }
+.activity a:hover { color: var(--green-text); }
+.activity .delta { font-family: var(--f-mono); font-size: 13px; color: var(--gold-text); }
+.badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--s3); }
+.badge-item { display: flex; gap: var(--s3); align-items: flex-start; padding: var(--s3); border: 1px solid var(--line); border-radius: var(--r-md); }
+.badge-item.locked { opacity: .65; border-style: dashed; }
+.medal { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; font-family: var(--f-mono); font-size: 12px; font-weight: 600; }
+.medal.gold { background: var(--gold); color: #2b1d00; }
+.medal.green { background: var(--green); color: var(--green-ink); }
+.medal.grey { background: var(--surface-3); color: var(--text-2); }
+.badge-item b { display: block; font-size: 14px; font-weight: 600; }
+.badge-item span { font-size: 13px; color: var(--text-3); }
+.recruit-flag { display: flex; align-items: center; gap: var(--s2); font-size: 13px; color: var(--green-text); font-weight: 500; }
+
+/* ---------- Paramètres ---------- */
+.settings-section { padding: var(--s5); }
+.settings-section + .settings-section { border-top: 1px solid var(--line); }
+.settings-section h2 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+.settings-section > p { font-size: 14px; color: var(--text-3); margin: 4px 0 var(--s4); }
+.photo-row { display: flex; align-items: center; gap: var(--s4); flex-wrap: wrap; margin-bottom: var(--s5); }
+.photo-row .actions { display: flex; gap: var(--s2); flex-wrap: wrap; }
+.connected { display: flex; align-items: center; gap: var(--s3); padding: var(--s3) 0; border-top: 1px solid var(--line); }
+.connected:first-of-type { border-top: none; }
+.connected .info { flex: 1; min-width: 0; }
+.connected b { display: block; font-weight: 500; font-size: 15px; }
+.connected span { font-size: 13px; color: var(--text-3); }
+.theme-choice { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: var(--s2); }
+.theme-choice label { display: flex; flex-direction: column; gap: var(--s2); padding: var(--s3); border: 1px solid var(--line-strong); border-radius: var(--r-md); font-size: 14px; font-weight: 500; }
+.theme-choice label:has(input:checked) { border-color: var(--green-text); box-shadow: 0 0 0 1px var(--green-text); }
+.theme-choice input { accent-color: var(--green-text); }
+.swatch { height: 44px; border-radius: var(--r-sm); border: 1px solid var(--line); display: grid; grid-template-columns: 1fr 2fr; overflow: hidden; }
+.swatch.light { background: #ffffff; } .swatch.light i { background: #f1f3f2; }
+.swatch.dark { background: #121414; } .swatch.dark i { background: #0b0c0c; }
+.swatch.system { background: linear-gradient(90deg, #ffffff 50%, #121414 50%); }
+.save-bar { display: flex; justify-content: flex-end; gap: var(--s2); padding: var(--s4) var(--s5); border-top: 1px solid var(--line); background: var(--surface-2); border-radius: 0 0 var(--r-lg) var(--r-lg); }
+.danger-zone { border-color: var(--red); }
+.danger-zone h2 { color: var(--red); }
+
+/* ---------- Notifications ---------- */
+.notif { display: grid; grid-template-columns: 36px minmax(0,1fr) auto; gap: var(--s3); align-items: start; padding: var(--s4) var(--s5); border-top: 1px solid var(--line); }
+.notif:first-child { border-top: none; }
+.notif.unread { background: var(--green-wash); }
+.notif p { font-size: 15px; color: var(--text); }
+.notif p a { color: var(--text); font-weight: 600; }
+.notif small { display: block; font-size: 13px; color: var(--text-3); margin-top: 2px; }
+.notif .ndot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-text); margin-top: 8px; }
+.sys-icon { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-3); color: var(--text-2); }
+.group-label { font-size: 13px; color: var(--text-3); padding: var(--s3) var(--s5); background: var(--surface-2); border-top: 1px solid var(--line); }
+.group-label:first-child { border-top: none; border-radius: var(--r-lg) var(--r-lg) 0 0; }
+
+/* ---------- 404 ---------- */
+.notfound { text-align: center; padding: var(--s7) var(--s5); }
+.notfound .code404 { font-family: var(--f-mono); font-size: 56px; font-weight: 500; color: var(--text-3); line-height: 1; }
+.notfound h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.03em; margin-top: var(--s4); }
+.notfound p { color: var(--text-2); margin-top: var(--s2); }
+.notfound .btns { display: flex; justify-content: center; gap: var(--s2); margin-top: var(--s5); flex-wrap: wrap; }
+
+/* ---------- Fenêtres et notification ---------- */
+dialog { width: min(580px, calc(100vw - 32px)); margin: auto; padding: 0; background: var(--surface); color: var(--text); border: 1px solid var(--line-strong); border-radius: var(--r-lg); box-shadow: var(--shadow); }
+dialog::backdrop { background: var(--backdrop); }
+dialog[open] { animation: rise var(--t-base) ease-out; }
+@keyframes rise { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+.dlg-head { display: flex; justify-content: space-between; align-items: center; padding: var(--s4) var(--s5); border-bottom: 1px solid var(--line); }
+.dlg-head h2 { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
+.dlg-body { padding: var(--s5); }
+.dlg-foot { display: flex; justify-content: flex-end; gap: var(--s2); margin-top: var(--s5); }
+.applicant { display: flex; align-items: center; gap: var(--s3); padding: var(--s3); border: 1px solid var(--line); border-radius: var(--r-md); margin-bottom: var(--s4); }
+.applicant b { display: block; font-weight: 600; }
+.applicant span { font-size: 13px; color: var(--text-3); }
+.toast { position: fixed; left: 50%; bottom: var(--s5); z-index: 60; transform: translate(-50%, 180%); display: flex; align-items: center; gap: var(--s2); padding: 10px var(--s4);
+  background: var(--text); color: var(--bg); border-radius: var(--r-md); font-size: 14px; font-weight: 500; box-shadow: var(--shadow); transition: transform var(--t-base) ease-out; max-width: calc(100vw - 32px); }
+.toast.show { transform: translate(-50%, 0); }
+.toast::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: 190px minmax(0,1fr); }
+  .layout > .side { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--s5); }
+  .side > * + * { margin-top: 0; }
+}
+@media (max-width: 960px) {
+  .auth { grid-template-columns: minmax(0, 1fr); }
+  .auth-side { border-left: none; border-top: 1px solid var(--line); padding: var(--s6) var(--s5); }
+  .auth-main { padding: var(--s4) var(--s5); }
+}
+@media (max-width: 760px) {
+  .topbar-inner { flex-wrap: wrap; padding: 10px var(--s4); }
+  .search { order: 3; max-width: none; flex-basis: 100%; }
+  .kbd, .me-chip .name { display: none; }
+  .layout, .layout.wide { grid-template-columns: 1fr; padding: var(--s4); gap: var(--s4); }
+  .rail { position: static; }
+  .rail-label, .taglist { display: none; }
+  .spaces { display: flex; gap: 4px; overflow-x: auto; }
+  .space { width: auto; flex-shrink: 0; white-space: nowrap; }
+  .space[aria-current="page"] { box-shadow: inset 0 -2px 0 var(--green), 0 0 0 1px var(--line); }
+  .ask, .pad, .settings-section { padding: var(--s4); }
+  .ask h1, .page-title, .prof-head h1 { font-size: 22px; }
+  .ask form { flex-direction: column; }
+  .seg { width: 100%; overflow-x: auto; }
+  .seg button { flex: 1; padding: 0 var(--s2); }
+  .row { grid-template-columns: 48px minmax(0,1fr); padding: var(--s4); }
+  .row .answers-col { display: none; }
+  .job { grid-template-columns: 44px minmax(0,1fr); padding: var(--s4); }
+  .job > .btn { grid-column: 2; justify-self: start; }
+  .challenge { grid-template-columns: 1fr; padding: var(--s4); gap: var(--s5); }
+  th, td { padding: var(--s3) var(--s4); }
+  .col-done { display: none; }
+  .rank { width: 40px; }
+  .post-block { grid-template-columns: 40px minmax(0,1fr); gap: var(--s3); }
+  .answer.accepted { margin: 0 calc(var(--s4) * -1); padding-left: var(--s4); padding-right: var(--s4); }
+  .prof-head { grid-template-columns: auto minmax(0,1fr); }
+  .prof-head > .btn, .prof-head > .recruit-flag { grid-column: 1 / -1; justify-self: start; }
+  .stats-strip { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .stats-strip > div:nth-child(3) { border-left: none; }
+  .stats-strip > div:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .activity li { grid-template-columns: minmax(0,1fr) auto; }
+  .activity .kind { grid-column: 1 / -1; }
+  .theme-choice { grid-template-columns: 1fr; }
+  .notif { padding: var(--s4); }
+  .btn, .space, .seg button, .vote, .tabbar button { min-height: 44px; }
+  button.tag { min-height: 36px; }
+  .auth-form { padding: var(--s6) 0; }
+  .auth-form h1 { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Icônes maison -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-github" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.83 1.23.83.72 1.22 1.88.87 2.34.67.07-.52.28-.87.5-1.07-1.78-.2-3.65-.89-3.65-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></symbol>
+  <symbol id="i-google" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62Z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18Z"/><path fill="#FBBC05" d="M3.97 10.72A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.29-1.72V4.95H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.05l3.01-2.33Z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58Z"/></symbol>
+  <symbol id="i-help" viewBox="0 0 18 18"><path d="M3 4.5A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5v6a1.5 1.5 0 0 1-1.5 1.5H8l-3.5 3v-3A1.5 1.5 0 0 1 3 10.5v-6Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+  <symbol id="i-jobs" viewBox="0 0 18 18"><rect x="2.5" y="5.5" width="13" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 5.5v-1A1.5 1.5 0 0 1 8 3h2a1.5 1.5 0 0 1 1.5 1.5v1M2.5 9.5h13" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 18 18"><path d="M5.5 3h7v4a3.5 3.5 0 0 1-7 0V3ZM9 10.5V13m-3 2h6M5.5 4.5H3a2.5 2.5 0 0 0 2.5 3M12.5 4.5H15a2.5 2.5 0 0 1-2.5 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-user" viewBox="0 0 18 18"><circle cx="9" cy="6" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 15.5c.8-2.8 3.2-4.5 6-4.5s5.2 1.7 6 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 18 18"><path d="M4.5 12.5V8a4.5 4.5 0 0 1 9 0v4.5l1.5 1.5H3l1.5-1.5ZM7.5 15.5a1.5 1.5 0 0 0 3 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 18 18"><circle cx="9" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 1.8v2M9 14.2v2M1.8 9h2M14.2 9h2M3.9 3.9l1.4 1.4M12.7 12.7l1.4 1.4M3.9 14.1l1.4-1.4M12.7 5.3l1.4-1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-out" viewBox="0 0 18 18"><path d="M7 3H4.5A1.5 1.5 0 0 0 3 4.5v9A1.5 1.5 0 0 0 4.5 15H7M11.5 12.5 15 9l-3.5-3.5M15 9H7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m11 11 3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-up" viewBox="0 0 12 12"><path d="M2 8l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 14 14"><path d="m2.5 7.5 3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 14 14"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 16 16"><path d="M8 14.5s-4.5-4.2-4.5-7.5a4.5 4.5 0 0 1 9 0c0 3.3-4.5 7.5-4.5 7.5Z" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="7" r="1.6" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 16 16"><rect x="2.5" y="3.5" width="11" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.5 6.5h11M5.5 2v3M10.5 2v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 18 18"><circle cx="9" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 1.5v1.8M9 14.7v1.8M1.5 9h1.8M14.7 9h1.8M3.7 3.7l1.3 1.3M13 13l1.3 1.3M3.7 14.3 5 13M13 5l1.3-1.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 18 18"><path d="M15 10.8A6.5 6.5 0 1 1 7.2 3a5.2 5.2 0 0 0 7.8 7.8Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+  <symbol id="i-star" viewBox="0 0 16 16"><path d="m8 2 1.8 3.8 4.2.5-3.1 2.9.8 4.1L8 11.3l-3.7 2 .8-4.1L2 6.3l4.2-.5L8 2Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+</svg>
+
+<!-- =================================================================
+     CONNEXION / INSCRIPTION
+     ================================================================= -->
+<div class="auth" id="authPage" hidden>
+  <div class="auth-main">
+    <div class="auth-top">
+      <a href="#aide" class="logo" aria-label="Zetsu, accueil"><span class="logo-mark" aria-hidden="true"></span>zetsu</a>
+      <div class="right">
+        <button class="btn btn-ghost btn-icon" data-action="toggle-theme" aria-label="Changer de thème"><svg width="18" height="18" aria-hidden="true"><use href="#i-moon" class="theme-ico"/></svg></button>
+        <a href="#aide" class="btn btn-ghost">Parcourir sans compte</a>
+      </div>
+    </div>
+
+    <div class="auth-form">
+      <h1 id="authTitle">Bon retour parmi nous</h1>
+      <p class="lead" id="authLead">Connectez-vous pour poser vos questions, voter et suivre votre réputation.</p>
+
+      <div class="seg tabs" role="tablist" aria-label="Connexion ou inscription">
+        <button role="tab" id="tabLogin" aria-selected="true" aria-controls="authPanel" data-mode="login">Connexion</button>
+        <button role="tab" id="tabRegister" aria-selected="false" aria-controls="authPanel" data-mode="register">Inscription</button>
+      </div>
+
+      <div id="authPanel" role="tabpanel" aria-labelledby="tabLogin">
+        <div class="oauth-stack">
+          <button class="btn btn-oauth btn-dark" data-oauth="GitHub"><svg width="18" height="18" aria-hidden="true"><use href="#i-github"/></svg><span data-oauth-label>Continuer avec GitHub</span></button>
+          <button class="btn btn-oauth btn-secondary" data-oauth="Google"><svg width="18" height="18" aria-hidden="true"><use href="#i-google"/></svg><span data-oauth-label>Continuer avec Google</span></button>
+        </div>
+        <div class="or">ou avec votre adresse email</div>
+
+        <form id="authForm" novalidate>
+          <div class="form-alert" id="authAlert" role="alert" tabindex="-1"></div>
+          <div class="field" data-only="register" hidden>
+            <label for="fName">Nom complet</label>
+            <input id="fName" autocomplete="name" maxlength="40" aria-describedby="fNameHint fNameErr">
+            <p class="hint" id="fNameHint">Affiché sur votre profil et à côté de vos réponses.</p>
+            <p class="error" id="fNameErr">Entrez votre nom, 3 caractères minimum.</p>
+          </div>
+          <div class="field">
+            <label for="fEmail">Adresse email</label>
+            <input id="fEmail" type="email" inputmode="email" autocomplete="email" aria-describedby="fEmailErr">
+            <p class="error" id="fEmailErr">Entrez une adresse email valide, par exemple nom@domaine.com.</p>
+          </div>
+          <div class="field" data-only="register" hidden>
+            <label for="fCountry">Pays</label>
+            <select id="fCountry" autocomplete="country-name" aria-describedby="fCountryErr">
+              <option value="">Choisir un pays</option>
+              <option>Burkina Faso</option><option>Bénin</option><option>Cameroun</option><option>Côte d'Ivoire</option><option>Ghana</option>
+              <option>Kenya</option><option>Mali</option><option>Maroc</option><option>Niger</option><option>Nigeria</option>
+              <option>Sénégal</option><option>Togo</option><option>Autre</option>
+            </select>
+            <p class="error" id="fCountryErr">Choisissez votre pays pour voir les offres proches de vous.</p>
+          </div>
+          <div class="field">
+            <div class="field-row">
+              <label for="fPass">Mot de passe</label>
+              <button type="button" class="linklike" data-only="login" data-action="forgot" style="font-size:13px">Mot de passe oublié ?</button>
+            </div>
+            <div class="input-wrap has-reveal">
+              <input id="fPass" type="password" autocomplete="current-password" aria-describedby="fPassHint fPassErr">
+              <button type="button" class="reveal" id="reveal" aria-pressed="false" aria-controls="fPass">Afficher</button>
+            </div>
+            <div data-only="register" hidden>
+              <div class="strength" id="strength" data-level="0" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+              <p class="hint" id="fPassHint">8 caractères minimum, avec au moins un chiffre.</p>
+            </div>
+            <p class="error" id="fPassErr">Le mot de passe doit faire au moins 8 caractères.</p>
+          </div>
+          <div class="form-actions"><button type="submit" class="btn btn-primary btn-block" id="authSubmit">Se connecter</button></div>
+          <p class="legal" data-only="register" hidden>En créant un compte, vous acceptez les <a href="#conditions">conditions d'utilisation</a> et la <a href="#confidentialite">politique de confidentialité</a>.</p>
+          <p class="legal" data-only="login">Compte de démonstration : <span class="mono">demo@zetsu.dev</span> / <span class="mono">demo1234</span></p>
+        </form>
+        <p class="switch" id="switchLine"></p>
+      </div>
+    </div>
+  </div>
+
+  <aside class="auth-side" aria-label="Aperçu de la plateforme">
+    <h2 class="side-title">Les bugs que vous rencontrez, d'autres les ont déjà résolus.</h2>
+    <p class="side-sub">Posez votre question, recevez une réponse validée par la communauté, gagnez de la réputation en aidant à votre tour.</p>
+    <div class="thread" id="sideThread"></div>
+    <div class="side-facts"><span><b>1 284</b> questions</span><span><b>46</b> offres d'emploi</span><span><b>18</b> pays</span></div>
+  </aside>
+</div>
+
+<!-- =================================================================
+     APPLICATION
+     ================================================================= -->
+<div id="appPage" hidden>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="#aide" class="logo" aria-label="Zetsu, accueil"><span class="logo-mark" aria-hidden="true"></span>zetsu</a>
+      <label class="search">
+        <svg width="16" height="16" aria-hidden="true" style="color:var(--text-3)"><use href="#i-search"/></svg>
+        <span class="sr-only">Rechercher</span>
+        <input id="search" type="search" placeholder="Rechercher une erreur, un tag, une techno">
+        <span class="kbd" aria-hidden="true">/</span>
+      </label>
+      <div class="right" id="topRight"></div>
+    </div>
+  </header>
+
+  <div class="layout" id="layout">
+    <nav class="rail" aria-label="Navigation principale">
+      <p class="rail-label">Espaces</p>
+      <div class="spaces">
+        <a class="space" href="#aide" data-nav="aide"><svg width="18" height="18" aria-hidden="true"><use href="#i-help"/></svg>Aide<small>1 284</small></a>
+        <a class="space" href="#emploi" data-nav="emploi"><svg width="18" height="18" aria-hidden="true"><use href="#i-jobs"/></svg>Emploi<small>46</small></a>
+        <a class="space" href="#challenges" data-nav="challenges"><svg width="18" height="18" aria-hidden="true"><use href="#i-trophy"/></svg>Challenges<small>1</small></a>
+      </div>
+      <div id="railAccount"></div>
+      <p class="rail-label">Tags fréquents</p>
+      <div class="taglist" id="railTags"></div>
+    </nav>
+
+    <main id="main" tabindex="-1"></main>
+
+    <aside class="side" id="side"></aside>
+  </div>
+</div>
+
+<!-- Fenêtre : poser une question -->
+<dialog id="dlgAsk" aria-labelledby="askTitle">
+  <div class="dlg-head"><h2 id="askTitle">Poser une question</h2><button class="btn btn-ghost btn-icon" data-close aria-label="Fermer"><svg width="14" height="14" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <form class="dlg-body" id="askForm" novalidate>
+    <div class="field">
+      <label for="aTitle">Titre</label>
+      <input id="aTitle" maxlength="150" aria-describedby="aTitleHint aTitleErr">
+      <div class="field-row"><p class="hint" id="aTitleHint">Le problème en une phrase, avec le message d'erreur si possible.</p><span class="count" id="aTitleCount">0/150</span></div>
+      <p class="error" id="aTitleErr">Le titre doit faire au moins 15 caractères pour être compréhensible.</p>
+    </div>
+    <div class="field">
+      <label for="aBody">Détails</label>
+      <textarea id="aBody" class="prose" aria-describedby="aBodyHint aBodyErr" placeholder="Ce que vous essayez de faire et ce que vous avez déjà tenté."></textarea>
+      <p class="hint" id="aBodyHint">Entourez le code court de `backticks`.</p>
+      <p class="error" id="aBodyErr">Ajoutez au moins 30 caractères : ce que vous avez essayé et le message d'erreur.</p>
+    </div>
+    <div class="field">
+      <label for="aCode">Code concerné <span class="muted">(facultatif)</span></label>
+      <textarea id="aCode" placeholder="@PostMapping(&quot;/pay&quot;)&#10;public ResponseEntity&lt;?&gt; pay(...)"></textarea>
+    </div>
+    <div class="field">
+      <label for="aTags">Tags</label>
+      <input id="aTags" placeholder="spring-boot, mobile-money" aria-describedby="aTagsHint aTagsErr">
+      <p class="hint" id="aTagsHint">Jusqu'à 4, séparés par des virgules.</p>
+      <p class="error" id="aTagsErr">Indiquez 4 tags au maximum.</p>
+    </div>
+    <div class="dlg-foot">
+      <button class="btn btn-secondary" type="button" data-close>Annuler</button>
+      <button class="btn btn-primary" type="submit" id="askSubmit">Publier la question</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Fenêtre : soumettre un dépôt -->
+<dialog id="dlgRepo" aria-labelledby="repoTitle">
+  <div class="dlg-head"><h2 id="repoTitle">Soumettre mon dépôt</h2><button class="btn btn-ghost btn-icon" data-close aria-label="Fermer"><svg width="14" height="14" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <form class="dlg-body" id="repoForm" novalidate>
+    <div class="field">
+      <label for="repoUrl">Lien du dépôt GitHub</label>
+      <input id="repoUrl" type="url" inputmode="url" placeholder="https://github.com/votre-compte/api-paiement" aria-describedby="repoHint repoErr">
+      <p class="hint" id="repoHint">Le dépôt doit être public, avec un README qui explique comment lancer le projet.</p>
+      <p class="error" id="repoErr">Entrez un lien de la forme https://github.com/compte/depot.</p>
+    </div>
+    <div class="dlg-foot">
+      <button class="btn btn-secondary" type="button" data-close>Annuler</button>
+      <button class="btn btn-primary" type="submit" id="repoSubmit">Soumettre mon dépôt</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Fenêtre : postuler -->
+<dialog id="dlgApply" aria-labelledby="applyTitle">
+  <div class="dlg-head"><h2 id="applyTitle">Postuler</h2><button class="btn btn-ghost btn-icon" data-close aria-label="Fermer"><svg width="14" height="14" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <form class="dlg-body" id="applyForm" novalidate>
+    <p class="label">Profil transmis au recruteur</p>
+    <div class="applicant" id="applicant"></div>
+    <div class="field">
+      <label for="applyMsg">Message au recruteur</label>
+      <textarea id="applyMsg" class="prose" maxlength="600" aria-describedby="applyHint applyErr" placeholder="Pourquoi ce poste vous intéresse, et un projet dont vous êtes fier."></textarea>
+      <div class="field-row"><p class="hint" id="applyHint">Quelques phrases suffisent.</p><span class="count" id="applyCount">0/600</span></div>
+      <p class="error" id="applyErr">Écrivez au moins 40 caractères pour présenter votre candidature.</p>
+    </div>
+    <div class="field">
+      <label for="applyCv">CV <span class="muted">(facultatif, PDF)</span></label>
+      <input id="applyCv" type="file" accept="application/pdf">
+    </div>
+    <div class="dlg-foot">
+      <button class="btn btn-secondary" type="button" data-close>Annuler</button>
+      <button class="btn btn-primary" type="submit" id="applySubmit">Envoyer ma candidature</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Fenêtre : supprimer le compte -->
+<dialog id="dlgDelete" aria-labelledby="delTitle">
+  <div class="dlg-head"><h2 id="delTitle">Supprimer votre compte</h2><button class="btn btn-ghost btn-icon" data-close aria-label="Fermer"><svg width="14" height="14" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+  <form class="dlg-body" id="deleteForm" novalidate>
+    <p style="color:var(--text-2)">Vos questions et réponses resteront visibles, signées « Utilisateur supprimé ». Votre réputation et vos candidatures seront effacées. Cette action est définitive.</p>
+    <div class="field" style="margin-top:16px">
+      <label for="delConfirm">Tapez <span class="mono">SUPPRIMER</span> pour confirmer</label>
+      <input id="delConfirm" autocomplete="off" aria-describedby="delErr">
+      <p class="error" id="delErr">Tapez SUPPRIMER en majuscules pour confirmer.</p>
+    </div>
+    <div class="dlg-foot">
+      <button class="btn btn-secondary" type="button" data-close>Annuler</button>
+      <button class="btn btn-danger" type="submit">Supprimer définitivement</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   DONNÉES DE DÉMONSTRATION
+   ===================================================================== */
+const ME = "benhasser-ouedraogo";
+const people = {
+  "awa-kane":            { name: "Awa Kane", city: "Dakar", country: "Sénégal", rep: 875, github: "awakane", joined: "mars 2026", stack: ["node.js", "react", "mobile-money"], bio: "Développeuse back-end chez une fintech dakaroise. J'intègre des API de paiement depuis cinq ans." },
+  "ibrahim-sawadogo":    { name: "Ibrahim Sawadogo", city: "Ouagadougou", country: "Burkina Faso", rep: 790, github: "isawadogo", joined: "janvier 2026", stack: ["spring-boot", "postgresql", "docker"], bio: "Ingénieur Java. J'aime comprendre pourquoi un bug arrive, pas seulement le corriger." },
+  "kwame-asante":        { name: "Kwame Asante", city: "Accra", country: "Ghana", rep: 980, github: "kwamea", joined: "décembre 2025", stack: ["flutter", "dart", "firebase"], bio: "Mobile first. Je construis des apps pensées pour les réseaux instables." },
+  "fatou-diallo":        { name: "Fatou Diallo", city: "Abidjan", country: "Côte d'Ivoire", rep: 455, github: "fatoud", joined: "avril 2026", stack: ["docker", "laravel", "postgresql"], bio: "DevOps en reconversion, ex-administratrice réseau." },
+  "moussa-traore":       { name: "Moussa Traoré", city: "Bamako", country: "Mali", rep: 310, github: "mtraore", joined: "mai 2026", stack: ["laravel", "vue", "mobile-money"], bio: "Freelance PHP. Je construis des boutiques en ligne pour les commerçants de Bamako." },
+  "grace-njeri":         { name: "Grace Njeri", city: "Nairobi", country: "Kenya", rep: 640, github: "gnjeri", joined: "février 2026", stack: ["java", "spring-boot", "kafka"], bio: "Backend engineer. Happy to answer in English or French." },
+  "youssef-benali":      { name: "Youssef Benali", city: "Casablanca", country: "Maroc", rep: 515, github: "ybenali", joined: "mars 2026", stack: ["java", "hibernate", "react"], bio: "Architecte logiciel, passionné de performances SQL." },
+  "aicha-ouattara":      { name: "Aïcha Ouattara", city: "Bobo-Dioulasso", country: "Burkina Faso", rep: 120, github: "aichao", joined: "juillet 2026", stack: ["javascript", "php"], bio: "Étudiante en informatique, je réponds pour apprendre." },
+  [ME]:                  { name: "Benhasser Ouedraogo", city: "Ouagadougou", country: "Burkina Faso", rep: 42, github: "benhasser", joined: "octobre 2026", stack: ["spring-boot", "flutter", "docker"], bio: "Développeur mobile et web. Étudiant en master sécurité informatique." }
+};
+
+const questions = [
+  { id: 1, author: "awa-kane", time: "il y a 2 h", views: 312, votes: 14, tags: ["mobile-money", "node.js", "api"],
+    title: "L'API Orange Money renvoie 401 alors que le token est généré",
+    body: "Le token d'accès est bien récupéré, mais l'appel au endpoint de paiement échoue avec `401 Unauthorized`. Faut-il préfixer le header `Authorization` par `Bearer` ?",
+    code: `<span class="k">const</span> res = <span class="k">await</span> fetch(PAY_URL, {\n  method: <span class="s">"POST"</span>,\n  headers: { <span class="s">"Authorization"</span>: token },\n  body: JSON.stringify(payload)\n});`,
+    answers: [
+      { id: 11, author: "ibrahim-sawadogo", time: "il y a 1 h", votes: 9, accepted: true,
+        body: "Oui, le header doit être préfixé par `Bearer`. Attention aussi : le token expire au bout d'une heure, il faut le renouveler avant chaque lot d'appels.",
+        code: `headers: {\n  <span class="s">"Authorization"</span>: <span class="s">\`Bearer \${token}\`</span>,\n  <span class="s">"Content-Type"</span>: <span class="s">"application/json"</span>\n}  <span class="c">// renouveler le token avant expiration</span>` },
+      { id: 12, author: "moussa-traore", time: "il y a 50 min", votes: 3, body: "Vérifiez aussi que vous utilisez bien l'URL de production et non celle du bac à sable, les tokens ne sont pas interchangeables." },
+      { id: 13, author: "aicha-ouattara", time: "il y a 20 min", votes: 1, body: "J'avais le même souci, c'était un espace en trop avant le token dans ma variable d'environnement." }
+    ] },
+  { id: 2, author: "ibrahim-sawadogo", time: "il y a 4 h", views: 188, votes: 9, tags: ["spring-boot", "jpa"],
+    title: "LazyInitializationException sur une relation @OneToMany avec Spring Boot",
+    body: "Quand le contrôleur renvoie l'entité, j'obtiens `could not initialize proxy - no Session`. Est-ce qu'un DTO règle vraiment le problème ?",
+    code: `<span class="k">@GetMapping</span>(<span class="s">"/clients/{id}"</span>)\n<span class="k">public</span> Client get(<span class="k">@PathVariable</span> Long id) {\n  <span class="k">return</span> repo.findById(id).orElseThrow();\n}`,
+    answers: [
+      { id: 21, author: "grace-njeri", time: "il y a 3 h", votes: 6, body: "Oui. Renvoyer l'entité expose la relation paresseuse hors transaction. Mappez vers un DTO dans le service, à l'intérieur d'une méthode `@Transactional(readOnly = true)`." },
+      { id: 23, author: "kwame-asante", time: "il y a 1 h", votes: 2, body: "Petit conseil en plus : activez `spring.jpa.open-in-view=false` pour voir ce genre d'erreur dès le développement, au lieu de la découvrir en production." },
+      { id: 22, author: "youssef-benali", time: "il y a 2 h", votes: 4, body: "Si vous avez vraiment besoin des commandes, chargez-les explicitement avec un `JOIN FETCH` plutôt que de passer la relation en `EAGER`.",
+        code: `<span class="k">@Query</span>(<span class="s">"select c from Client c left join fetch c.commandes where c.id = :id"</span>)\nOptional&lt;Client&gt; findWithCommandes(Long id);` }
+    ] },
+  { id: 3, author: "kwame-asante", time: "hier", views: 540, votes: 21, tags: ["flutter", "hors-ligne", "sqlite"],
+    title: "Garder une app Flutter utilisable quand la connexion coupe",
+    body: "Mes utilisateurs perdent souvent le réseau. Je cherche une façon simple de mettre les données en cache avec `sqflite` et de synchroniser au retour de la connexion.",
+    answers: [
+      { id: 31, author: "fatou-diallo", time: "hier", votes: 12, accepted: true, body: "Écrivez toujours d'abord en local, puis gardez une file d'attente des actions à envoyer. Le paquet `connectivity_plus` vous prévient au retour du réseau, et vous videz la file à ce moment-là." },
+      { id: 32, author: "aicha-ouattara", time: "hier", votes: 2, body: "Pensez à horodater chaque action pour régler les conflits si deux appareils modifient la même donnée." }
+    ] },
+  { id: 4, author: "fatou-diallo", time: "hier", views: 97, votes: 6, tags: ["docker", "postgresql"],
+    title: "PostgreSQL dans Docker perd ses données au redémarrage",
+    body: "Toutes mes tables disparaissent après `docker compose down`. Je pense qu'il manque un volume, mais je ne vois pas où le déclarer.", answers: [] },
+  { id: 5, author: "moussa-traore", time: "il y a 2 j", views: 260, votes: 17, tags: ["laravel", "mobile-money"],
+    title: "Gérer Wave et Moov Money dans la même application Laravel",
+    body: "Comment structurer le code pour ajouter un nouvel opérateur sans dupliquer toute la logique de paiement ?",
+    answers: [
+      { id: 51, author: "awa-kane", time: "il y a 2 j", votes: 8, body: "Une interface commune par opérateur, et le conteneur de Laravel choisit l'implémentation selon le moyen de paiement.",
+        code: `<span class="k">interface</span> PaymentGateway {\n  <span class="k">public function</span> charge(Payment $p): Result;\n}\n<span class="c">// WaveGateway, MoovGateway, OrangeGateway implémentent PaymentGateway</span>` },
+      { id: 52, author: "kwame-asante", time: "il y a 1 j", votes: 3, body: "Gardez aussi une table de transactions commune avec une colonne `operateur`, ça simplifie énormément le rapprochement comptable." }
+    ] },
+  { id: 6, author: ME, time: "il y a 3 j", views: 74, votes: 3, tags: ["spring-boot", "docker", "postgresql"],
+    title: "BeanCreationException au démarrage quand PostgreSQL tourne dans Docker",
+    body: "L'application Spring Boot démarre avant que la base soit prête et plante avec `BeanCreationException` sur le datasource. Au deuxième lancement, tout fonctionne.",
+    answers: [
+      { id: 61, author: "fatou-diallo", time: "il y a 2 j", votes: 4, body: "Ajoutez un `healthcheck` sur le service PostgreSQL et `depends_on` avec la condition `service_healthy` sur l'application. Docker attendra que la base accepte les connexions.",
+        code: `depends_on:\n  db:\n    condition: <span class="s">service_healthy</span>` },
+      { id: 62, author: "grace-njeri", time: "il y a 2 j", votes: 1, body: "Autre option côté Spring : activer les tentatives de reconnexion du pool HikariCP, mais le healthcheck reste plus propre." }
+    ] }
+];
+
+const jobs = [
+  { id: 1, title: "Développeur full-stack Spring Boot et React", company: "Sahel Paiements", city: "Ouagadougou", type: ["CDI"], tags: ["spring-boot", "react", "postgresql", "docker"], time: "il y a 1 j", level: "2 à 4 ans d'expérience", pay: "Selon profil",
+    about: "Sahel Paiements développe une solution d'encaissement pour les commerçants du Burkina Faso et du Niger, connectée aux principaux opérateurs de mobile money.",
+    missions: ["Développer les API de paiement et de rapprochement bancaire", "Construire le tableau de bord marchand en React", "Participer aux revues de code et à l'astreinte mensuelle"],
+    profile: ["Bonne maîtrise de Spring Boot et de JPA", "Expérience avec React ou un framework équivalent", "Notions de Docker et de CI"] },
+  { id: 2, title: "Développeur mobile Flutter", company: "AgriLien", city: "À distance, Afrique de l'Ouest", type: ["Remote", "CDI"], tags: ["flutter", "firebase", "hors-ligne"], time: "il y a 2 j", level: "1 à 3 ans d'expérience", pay: "Selon profil",
+    about: "AgriLien met en relation producteurs et acheteurs agricoles, avec une application pensée pour les zones rurales à faible couverture réseau.",
+    missions: ["Faire évoluer l'application Flutter", "Améliorer le fonctionnement hors connexion", "Travailler avec l'équipe terrain sur les retours utilisateurs"],
+    profile: ["Une application Flutter publiée", "Expérience de la synchronisation de données", "Autonomie en travail à distance"] },
+  { id: 3, title: "Ingénieur DevOps", company: "Teranga Cloud", city: "Dakar", type: ["CDI"], tags: ["docker", "kubernetes", "terraform"], time: "il y a 3 j", level: "3 ans d'expérience minimum", pay: "Selon profil",
+    about: "Teranga Cloud héberge des applications d'entreprises sénégalaises sur une infrastructure locale.",
+    missions: ["Maintenir les clusters Kubernetes", "Automatiser les déploiements", "Améliorer la supervision"], profile: ["Kubernetes en production", "Terraform ou Ansible", "Linux avancé"] },
+  { id: 4, title: "Intégration d'une API de paiement mobile", company: "Boutik Express", city: "À distance", type: ["Remote", "Mission"], tags: ["laravel", "api", "mobile-money"], time: "il y a 4 j", level: "Mission de 6 semaines", pay: "Forfait à définir",
+    about: "Boutik Express est une boutique en ligne de produits locaux.", missions: ["Intégrer Wave et Orange Money au paiement", "Gérer les notifications de confirmation"], profile: ["Laravel", "Une intégration de paiement déjà réalisée"] },
+  { id: 5, title: "Stage développeur web, 6 mois", company: "Faso Numérique", city: "Bobo-Dioulasso", type: ["Stage"], tags: ["javascript", "php"], time: "il y a 5 j", level: "Bac+3 en cours", pay: "Gratifié",
+    about: "Faso Numérique accompagne les administrations locales dans leur transformation numérique.", missions: ["Développer des formulaires en ligne", "Tester et documenter"], profile: ["Bases solides en JavaScript", "Envie d'apprendre"] }
+];
+
+const board = [
+  { who: "kwame-asante", done: 4, pts: 980 }, { who: "awa-kane", done: 4, pts: 875 }, { who: "ibrahim-sawadogo", done: 3, pts: 790 },
+  { who: "grace-njeri", done: 3, pts: 640 }, { who: "youssef-benali", done: 2, pts: 515 }
+];
+
+const notifications = [
+  { id: 1, group: "Aujourd'hui", who: "fatou-diallo", text: "a répondu à votre question", target: "#question/6", label: "BeanCreationException au démarrage…", time: "il y a 2 h", unread: true },
+  { id: 2, group: "Aujourd'hui", who: "grace-njeri", text: "a aussi répondu à votre question", target: "#question/6", label: "BeanCreationException au démarrage…", time: "il y a 3 h", unread: true },
+  { id: 3, group: "Aujourd'hui", sys: "trophy", text: "Nouveau défi de la semaine", target: "#challenges", label: "Simuler une API de paiement mobile", time: "il y a 5 h", unread: true },
+  { id: 4, group: "Cette semaine", sys: "jobs", text: "Une offre correspond à votre profil", target: "#offre/1", label: "Développeur full-stack Spring Boot et React", time: "il y a 1 j", unread: false },
+  { id: 5, group: "Cette semaine", who: "ibrahim-sawadogo", text: "a voté pour votre question", target: "#question/6", label: "BeanCreationException au démarrage…", time: "il y a 2 j", unread: false }
+];
+
+const badgesCatalog = [
+  { id: "first", name: "Premier pas", desc: "Poser sa première question", kind: "green", short: "1" },
+  { id: "helper", name: "Entraide", desc: "Recevoir 10 votes sur ses réponses", kind: "gold", short: "10" },
+  { id: "solver", name: "Résolveur", desc: "Avoir 5 réponses acceptées", kind: "gold", short: "5" },
+  { id: "challenger", name: "Challenger", desc: "Soumettre un défi", kind: "green", short: "D" },
+  { id: "polyglot", name: "Polyglotte", desc: "Répondre dans 5 tags différents", kind: "gold", short: "5T" }
+];
+const earned = { "kwame-asante": ["first", "helper", "solver", "challenger", "polyglot"], "awa-kane": ["first", "helper", "solver", "challenger"], "ibrahim-sawadogo": ["first", "helper", "challenger"],
+  "fatou-diallo": ["first", "helper", "solver"], "grace-njeri": ["first", "helper"], "youssef-benali": ["first", "helper"], "moussa-traore": ["first"], "aicha-ouattara": ["first"], [ME]: ["first"] };
+
+const railTags = ["mobile-money", "spring-boot", "flutter", "laravel", "docker", "react", "postgresql"];
+
+/* =====================================================================
+   ÉTAT
+   ===================================================================== */
+let me = null;                 // slug de l'utilisateur connecté
+let authMode = "login";
+let returnTo = null;           // page à rouvrir après connexion
+let afterLogin = null;         // action à reprendre après connexion
+let feedFilter = "all", tagFilter = null, jobFilter = "all", query = "", answerSort = "votes", profileTab = "activite";
+const voted = new Set();       // "q1", "a11"
+const applied = new Set();     // id d'offres
+let currentJob = null;
+let challengeSubmitted = false;
+
+/* =====================================================================
+   UTILITAIRES
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const rich = s => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>");
+const icon = (id, size = 16) => `<svg width="${size}" height="${size}" aria-hidden="true"><use href="#${id}"/></svg>`;
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const plural = (n, one, many) => `${n} ${n > 1 ? many : one}`;
+const fmt = n => n.toLocaleString("fr-FR");
+
+/* Avatar : la photo si la personne en a une, sinon ses initiales sur une couleur stable */
+const AV_COLORS = ["#1f5fc4", "#0b7a55", "#9a5b0a", "#b23a2e", "#6b46c1", "#0e7490", "#9d174d", "#4d6b12"];
+const hash = s => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+const initials = n => n.split(/[\s-]+/).filter(Boolean).map(p => p[0]).join("").slice(0, 2).toUpperCase();
+function avatar(p, size = 26, square = false) {
+  const name = p.name || p;
+  const style = `width:${size}px;height:${size}px;font-size:${Math.max(10, Math.round(size * .38))}px`;
+  if (p.photo) return `<img class="av${square ? " sq" : ""}" src="${p.photo}" alt="" style="${style}">`;
+  return `<span class="av${square ? " sq" : ""}" style="${style};background:${AV_COLORS[hash(name) % AV_COLORS.length]}" aria-hidden="true">${esc(initials(name))}</span>`;
+}
+const person = slug => people[slug] || { name: "Utilisateur supprimé", city: "", rep: 0 };
+const plink = (slug, size = 24) => `<a class="plink" href="#profil/${slug}">${avatar(person(slug), size)}<span>${esc(person(slug).name)}</span></a>`;
+
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t.timer); t.timer = setTimeout(() => t.classList.remove("show"), 2800);
+}
+function setError(input, errId, bad) {
+  input.setAttribute("aria-invalid", bad ? "true" : "false");
+  $("#" + errId).classList.toggle("show", !!bad);
+  return !!bad;
+}
+/* Pas de validation au blur quand le focus part vers un bouton d'action :
+   le message décalerait le bouton sous le curseur et le clic serait perdu. */
+const leavingToAction = e => !!(e.relatedTarget && e.relatedTarget.closest(".dlg-foot, .form-actions, .tabs, .switch, .save-bar, .answer-actions"));
+function wire(checks) {
+  Object.entries(checks).forEach(([id, fn]) => {
+    const el = document.getElementById(id);
+    if (!el || el.dataset.wired) return;
+    el.dataset.wired = "1";
+    el.addEventListener("blur", e => { if (!leavingToAction(e) && el.value) fn(); });
+    el.addEventListener("input", () => { if (el.getAttribute("aria-invalid") === "true") fn(); });
+    if (el.tagName === "SELECT") el.addEventListener("change", fn);
+  });
+}
+const firstInvalid = checks => Object.keys(checks).filter(id => checks[id]())[0] || null;
+async function busy(btn, label, ms = 700) {
+  const old = btn.innerHTML;
+  btn.setAttribute("aria-busy", "true");
+  btn.innerHTML = `<span class="spinner" aria-hidden="true"></span>${label}`;
+  await wait(ms);
+  btn.removeAttribute("aria-busy"); btn.innerHTML = old;
+}
+
+/* =====================================================================
+   THÈME : clair par défaut, choix mémorisé
+   ===================================================================== */
+const mqDark = matchMedia("(prefers-color-scheme: dark)");
+function applyTheme(pref) {
+  try { localStorage.setItem("zetsu-theme", pref); } catch (e) {}
+  const dark = pref === "dark" || (pref === "system" && mqDark.matches);
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  document.documentElement.dataset.pref = pref;
+  $$(".theme-ico").forEach(u => u.setAttribute("href", dark ? "#i-sun" : "#i-moon"));
+  $$("[data-action=toggle-theme]").forEach(b => b.setAttribute("aria-label", dark ? "Passer en mode clair" : "Passer en mode sombre"));
+}
+mqDark.addEventListener("change", () => { if (document.documentElement.dataset.pref === "system") applyTheme("system"); });
+
+/* =====================================================================
+   ROUTAGE
+   #connexion  #inscription  #aide  #question/ID  #emploi  #offre/ID
+   #challenges  #profil/SLUG  #parametres  #notifications
+   ===================================================================== */
+const PRIVATE = ["parametres", "notifications"];
+function route() {
+  const [page = "connexion", arg] = (location.hash.slice(1) || "connexion").split("/");
+  const isAuth = page === "connexion" || page === "inscription";
+  closeMenu();
+
+  if (isAuth && me) return location.replace("#" + (returnTo || "aide"));
+  if (PRIVATE.includes(page) && !me) { returnTo = page; toast("Connectez-vous pour accéder à cette page"); return location.replace("#connexion"); }
+
+  $("#authPage").hidden = !isAuth;
+  $("#appPage").hidden = isAuth;
+  if (isAuth) { setMode(page === "inscription" ? "register" : "login", false); document.title = (page === "inscription" ? "Créer un compte" : "Connexion") + " · Zetsu"; window.scrollTo(0, 0); return; }
+
+  const nav = { aide: "aide", question: "aide", emploi: "emploi", offre: "emploi", challenges: "challenges", profil: "profil", parametres: "parametres", notifications: "notifications" }[page];
+  $$("[data-nav]").forEach(a => a.dataset.nav === nav && !(page === "profil" && arg && arg !== "me" && arg !== me)
+    ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
+
+  const views = { aide: viewFeed, question: viewQuestion, emploi: viewJobs, offre: viewJob, challenges: viewChallenges,
+    profil: viewProfile, parametres: viewSettings, notifications: viewNotifications };
+  const fn = views[page];
+  const out = fn ? fn(arg) : null;
+  const res = out || viewNotFound();
+  $("#main").innerHTML = res.main;
+  $("#side").innerHTML = res.side || "";
+  $("#side").hidden = !res.side;
+  $("#layout").classList.toggle("wide", !res.side);
+  document.title = res.title + " · Zetsu";
+  if (res.after) res.after();
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+const go = h => { if (location.hash.slice(1) === h) route(); else location.hash = h; };
+
+function requireAuth(reason, then) {
+  if (me) return true;
+  returnTo = location.hash.slice(1) || "aide";
+  afterLogin = then || null;
+  toast(reason);
+  go("connexion");
+  return false;
+}
+
+/* =====================================================================
+   CHROME : barre du haut, navigation, panneau latéral
+   ===================================================================== */
+const unread = () => notifications.filter(n => n.unread).length;
+function renderChrome() {
+  const themeBtn = `<button class="btn btn-ghost btn-icon" data-action="toggle-theme" aria-label="Changer de thème"><svg width="18" height="18" aria-hidden="true"><use href="#i-moon" class="theme-ico"/></svg></button>`;
+  if (!me) {
+    $("#topRight").innerHTML = `${themeBtn}<a class="btn btn-ghost" href="#connexion">Se connecter</a><a class="btn btn-primary" href="#inscription">Créer un compte</a>`;
+    $("#railAccount").innerHTML = "";
+  } else {
+    const u = person(me), n = unread();
+    $("#topRight").innerHTML = `${themeBtn}
+      <a class="btn btn-ghost btn-icon" href="#notifications" aria-label="Notifications, ${n} non lues">${icon("i-bell", 18)}${n ? `<span class="badge-count">${n}</span>` : ""}</a>
+      <div class="menu-wrap">
+        <button class="me-chip" id="meBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="meMenu">${avatar(u, 30)}<span class="name">${esc(u.name.split(" ")[0])}</span><span class="pts" aria-label="${u.rep} points">${u.rep}</span></button>
+        <div class="menu" id="meMenu" role="menu" hidden>
+          <div class="menu-head"><b>${esc(u.name)}</b><span>${fmt(u.rep)} points de réputation</span></div>
+          <a role="menuitem" href="#profil/${me}">${icon("i-user")}Mon profil</a>
+          <a role="menuitem" href="#notifications">${icon("i-bell")}Notifications</a>
+          <a role="menuitem" href="#parametres">${icon("i-gear")}Paramètres</a>
+          <hr>
+          <button role="menuitem" data-action="logout">${icon("i-out")}Se déconnecter</button>
+        </div>
+      </div>`;
+    $("#railAccount").innerHTML = `<p class="rail-label">Mon compte</p><div class="spaces">
+      <a class="space" href="#profil/${me}" data-nav="profil">${icon("i-user", 18)}Mon profil</a>
+      <a class="space" href="#notifications" data-nav="notifications">${icon("i-bell", 18)}Notifications${n ? `<span class="badge-dot">${n}</span>` : ""}</a>
+      <a class="space" href="#parametres" data-nav="parametres">${icon("i-gear", 18)}Paramètres</a></div>`;
+  }
+  applyTheme(document.documentElement.dataset.pref || "light");
+}
+function closeMenu() { const m = $("#meMenu"); if (m && !m.hidden) { m.hidden = true; $("#meBtn").setAttribute("aria-expanded", "false"); } }
+
+function sideAccount() {
+  if (!me) return `<div class="panel"><h3>Votre profil de développeur</h3>
+    <p>Chaque réponse acceptée et chaque défi réussi s'ajoutent à votre réputation. Les recruteurs la consultent avec votre accord.</p>
+    <div class="oauth-stack" style="margin-top:16px">
+      <button class="btn btn-oauth btn-dark" data-oauth="GitHub">${icon("i-github", 18)}Continuer avec GitHub</button>
+      <button class="btn btn-oauth btn-secondary" data-oauth="Google">${icon("i-google", 18)}Continuer avec Google</button>
+    </div></div>`;
+  const u = person(me), next = 500;
+  return `<div class="panel">
+    <div class="person">${avatar(u, 44)}<div><a href="#profil/${me}">${esc(u.name)}</a><small>${esc(u.city)}, ${esc(u.country)}</small></div></div>
+    <div class="field-row" style="margin-top:16px;align-items:baseline"><span style="font-family:var(--f-mono);font-size:28px;color:var(--gold-text)">${u.rep}</span><span class="muted" style="font-size:14px">points de réputation</span></div>
+    <div style="height:4px;background:var(--surface-3);border-radius:2px;margin:8px 0 6px;overflow:hidden"><i style="display:block;height:100%;width:${Math.min(u.rep / next * 100, 100)}%;background:var(--gold)"></i></div>
+    <small class="muted" style="font-size:13px">${next - u.rep} points avant le niveau Contributeur</small>
+  </div>`;
+}
+const sideJobs = () => `<div class="panel"><h3>Offres récentes</h3><ul class="list">${jobs.slice(0, 3).map(j =>
+  `<li><a class="title" href="#offre/${j.id}">${esc(j.title)}</a><small>${esc(j.company)}, ${esc(j.city)}</small></li>`).join("")}</ul></div>`;
+
+/* =====================================================================
+   VUE : FIL DE QUESTIONS
+   ===================================================================== */
+function viewFeed() {
+  return {
+    title: "Aide",
+    main: `
+      <div class="panel ask">
+        <h1 id="askHeading">Quel bug vous bloque aujourd'hui ?</h1>
+        <p>Décrivez l'erreur. Des développeurs de Dakar à Nairobi l'ont peut-être déjà rencontrée.</p>
+        <form id="quickAsk">
+          <input class="input" id="quickTitle" aria-labelledby="askHeading" placeholder="Ex. : l'API Orange Money renvoie 401 alors que mon token est valide">
+          <button class="btn btn-primary" type="submit">Poser la question</button>
+        </form>
+      </div>
+      <div class="toolbar">
+        <h2 id="feedTitle" tabindex="-1">Questions récentes</h2>
+        <div class="seg" role="group" aria-label="Filtrer les questions">
+          ${[["all", "Toutes"], ["open", "Sans solution"], ["solved", "Résolues"]].map(([k, l]) => `<button data-f="${k}" aria-pressed="${feedFilter === k}">${l}</button>`).join("")}
+        </div>
+      </div>
+      <div class="active-filter" id="activeFilter" hidden><span id="activeFilterText"></span><button class="btn btn-ghost btn-sm" data-action="reset-filter">Retirer le filtre</button></div>
+      <div class="panel" id="feed" aria-live="polite"></div>`,
+    side: sideAccount() + sideJobs(),
+    after: renderFeed
+  };
+}
+function renderFeed() {
+  if (!$("#feed")) return;
+  const list = questions.filter(q => {
+    const solved = q.answers.some(a => a.accepted);
+    return !(feedFilter === "open" && solved) && !(feedFilter === "solved" && !solved) && !(tagFilter && !q.tags.includes(tagFilter))
+      && !(query && !(q.title + " " + q.body + " " + q.tags.join(" ")).toLowerCase().includes(query));
+  });
+  $("#feedTitle").textContent = tagFilter ? `Questions sur ${tagFilter}` : "Questions récentes";
+  $("#activeFilter").hidden = !(tagFilter || query);
+  $("#activeFilterText").textContent = [tagFilter && `Tag ${tagFilter}`, query && `Recherche « ${query} »`].filter(Boolean).join(", ") + `, ${plural(list.length, "résultat", "résultats")}`;
+  $$("#railTags .tag").forEach(b => b.setAttribute("aria-pressed", b.dataset.tag === tagFilter));
+  if (!list.length) {
+    $("#feed").innerHTML = `<div class="empty"><p>Aucune question ne correspond. Posez-la, quelqu'un a peut-être la réponse.</p><button class="btn btn-primary" data-action="open-ask">Poser la question</button></div>`;
+    return;
+  }
+  $("#feed").innerHTML = list.map(q => {
+    const solved = q.answers.some(a => a.accepted), n = q.answers.length;
+    return `<article class="row">
+      <div class="stat">
+        <button class="vote" data-vote="q${q.id}" aria-pressed="${voted.has("q" + q.id)}" aria-label="Voter pour cette question, ${q.votes} votes">${icon("i-up", 12)}</button>
+        <strong>${q.votes}</strong><span>votes</span>
+      </div>
+      <div class="stat answers-col"><div class="answers ${solved ? "solved" : n ? "" : "none"}"><strong>${n}</strong><span>${solved ? "résolue" : n > 1 ? "réponses" : "réponse"}</span></div></div>
+      <div class="q">
+        <h3><a href="#question/${q.id}">${esc(q.title)}</a></h3>
+        <p>${rich(q.body)}</p>
+        <div class="q-foot">
+          <div class="tags">${q.tags.map(t => `<button class="tag" data-tag="${esc(t)}" aria-pressed="${tagFilter === t}">${esc(t)}</button>`).join("")}</div>
+          <div class="who">${plink(q.author, 24)}<span>${esc(person(q.author).city)}, ${q.time}</span></div>
+        </div>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+/* =====================================================================
+   VUE : QUESTION DÉTAILLÉE
+   ===================================================================== */
+function viewQuestion(id) {
+  const q = questions.find(x => x.id === +id);
+  if (!q) return null;
+  const isMine = me === q.author;
+  const sorted = [...q.answers].sort((a, b) => (!!b.accepted - !!a.accepted) || (answerSort === "votes" ? b.votes - a.votes : b.id - a.id));
+  const similar = questions.filter(x => x.id !== q.id && x.tags.some(t => q.tags.includes(t))).slice(0, 3);
+  const author = person(q.author);
+
+  const voteCol = (key, votes, accepted) => `<div class="votecol">
+      <button class="vote" data-vote="${key}" aria-pressed="${voted.has(key)}" aria-label="Voter, ${votes} votes">${icon("i-up", 12)}</button>
+      <strong>${votes}</strong>
+      ${accepted ? `<span class="accepted-mark" title="Réponse acceptée">${icon("i-check", 16)}<span class="sr-only">Réponse acceptée</span></span>` : ""}
+    </div>`;
+  const authorCard = (slug, verb, time) => `<div class="author-card">${avatar(person(slug), 32)}<div><small>${verb} ${time}</small><a href="#profil/${slug}">${esc(person(slug).name)}</a> <span class="rp">${fmt(person(slug).rep)}</span></div></div>`;
+
+  return {
+    title: q.title,
+    main: `
+      <nav class="crumbs" aria-label="Fil d'Ariane"><a href="#aide">Aide</a><span aria-hidden="true">/</span><a href="#aide" data-tag="${esc(q.tags[0])}">${esc(q.tags[0])}</a><span aria-hidden="true">/</span><span>Question</span></nav>
+      <div class="panel pad">
+        <div class="qd-head"><h1 class="page-title">${esc(q.title)}</h1><button class="btn btn-primary" data-action="open-ask">Poser une question</button></div>
+        <div class="qd-meta">
+          <span>${icon("i-cal", 14)} Posée ${q.time}</span>
+          <span>${plural(q.views, "vue", "vues")}</span>
+          <span>${plural(q.answers.length, "réponse", "réponses")}</span>
+        </div>
+        <div class="post-block">
+          ${voteCol("q" + q.id, q.votes)}
+          <div>
+            <div class="post-body"><p>${rich(q.body)}</p>${q.code ? `<pre class="code">${q.code}</pre>` : ""}</div>
+            <div class="post-foot">
+              <div class="tags">${q.tags.map(t => `<button class="tag" data-tag="${esc(t)}">${esc(t)}</button>`).join("")}</div>
+              ${authorCard(q.author, "Posée par", "")}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar" style="margin-top:24px">
+        <h2>${plural(q.answers.length, "réponse", "réponses")}</h2>
+        ${q.answers.length > 1 ? `<div class="seg" role="group" aria-label="Trier les réponses">
+          <button data-sort="votes" aria-pressed="${answerSort === "votes"}">Les plus votées</button>
+          <button data-sort="recent" aria-pressed="${answerSort === "recent"}">Les plus récentes</button></div>` : ""}
+      </div>
+      <div class="panel pad" id="answers">
+        ${sorted.length ? sorted.map(a => `
+          <div class="post-block answer ${a.accepted ? "accepted" : ""}" id="answer-${a.id}">
+            ${voteCol("a" + a.id, a.votes, a.accepted)}
+            <div>
+              ${a.accepted ? `<span class="accepted-label">${icon("i-check", 14)}Réponse acceptée par ${isMine ? "vous" : esc(author.name.split(" ")[0])}</span>` : ""}
+              <div class="post-body"><p>${rich(a.body)}</p>${a.code ? `<pre class="code">${a.code}</pre>` : ""}</div>
+              <div class="post-foot">
+                <div>${isMine && !a.accepted ? `<button class="btn btn-secondary btn-sm" data-accept="${q.id}:${a.id}">${icon("i-check", 14)}Accepter cette réponse</button>` : ""}</div>
+                ${authorCard(a.author, "Répondu", a.time)}
+              </div>
+            </div>
+          </div>`).join("")
+        : `<div class="empty" style="padding:24px 0"><p>Pas encore de réponse. Si vous connaissez la solution, vous pouvez être le premier à aider.</p></div>`}
+      </div>
+
+      <div class="panel pad" style="margin-top:24px">
+        <h2 class="section-title">Votre réponse</h2>
+        ${me ? `<form id="answerForm" novalidate data-q="${q.id}">
+          <div class="field">
+            <label for="ansBody" class="sr-only">Votre réponse</label>
+            <textarea id="ansBody" class="prose" style="min-height:140px" aria-describedby="ansHint ansErr" placeholder="Expliquez la solution et pourquoi elle fonctionne."></textarea>
+            <p class="hint" id="ansHint">Entourez le code court de \`backticks\`. Une réponse acceptée rapporte 15 points.</p>
+            <p class="error" id="ansErr">Écrivez au moins 30 caractères pour que la réponse soit utile.</p>
+          </div>
+          <div class="field">
+            <label for="ansCode">Code <span class="muted">(facultatif)</span></label>
+            <textarea id="ansCode" style="min-height:100px"></textarea>
+          </div>
+          <div class="answer-actions"><button class="btn btn-primary" type="submit" id="ansSubmit">Publier ma réponse</button></div>
+        </form>`
+        : `<p class="muted" style="margin-bottom:16px">Connectez-vous pour répondre et gagner de la réputation.</p>
+           <button class="btn btn-primary" data-action="login-to-answer">Se connecter pour répondre</button>`}
+      </div>`,
+    side: `
+      <div class="panel"><h3>Posée par</h3>
+        <div class="person">${avatar(author, 44)}<div><a href="#profil/${q.author}">${esc(author.name)}</a><small>${esc(author.city)}, ${fmt(author.rep)} points</small></div></div>
+        <p style="margin-top:12px">${esc(author.bio)}</p>
+      </div>
+      ${similar.length ? `<div class="panel"><h3>Questions similaires</h3><ul class="list">${similar.map(s =>
+        `<li><a class="title" href="#question/${s.id}">${esc(s.title)}</a><small>${plural(s.answers.length, "réponse", "réponses")}, ${s.votes} votes</small></li>`).join("")}</ul></div>` : ""}`,
+    after: () => {
+      if (!$("#answerForm")) return;
+      const checks = { ansBody: () => setError($("#ansBody"), "ansErr", $("#ansBody").value.trim().length < 30) };
+      wire(checks);
+      $("#answerForm").onsubmit = async e => {
+        e.preventDefault();
+        if (firstInvalid(checks)) return $("#ansBody").focus();
+        await busy($("#ansSubmit"), "Publication en cours", 600);
+        const code = $("#ansCode").value.trim();
+        const a = { id: Date.now(), author: me, time: "à l'instant", votes: 0, body: $("#ansBody").value.trim(), code: code ? esc(code) : "" };
+        q.answers.push(a);
+        answerSort = "recent";
+        route();
+        toast("Réponse publiée");
+        const el = document.getElementById("answer-" + a.id);
+        if (el) el.scrollIntoView({ block: "center" });
+      };
+    }
+  };
+}
+
+/* =====================================================================
+   VUE : EMPLOI ET OFFRE DÉTAILLÉE
+   ===================================================================== */
+function viewJobs() {
+  return {
+    title: "Emploi",
+    main: `
+      <div class="toolbar">
+        <h1 class="page-title" style="font-size:22px">Offres pour développeurs</h1>
+        <div class="seg" role="group" aria-label="Filtrer les offres">
+          ${[["all", "Toutes"], ["Remote", "À distance"], ["CDI", "CDI"], ["Mission", "Missions"], ["Stage", "Stages"]].map(([k, l]) => `<button data-j="${k}" aria-pressed="${jobFilter === k}">${l}</button>`).join("")}
+        </div>
+      </div>
+      <div class="panel" id="jobs"></div>`,
+    side: sideAccount() + `<div class="panel"><h3>Vous recrutez ?</h3><p>Publiez une offre et consultez les profils et la réputation des candidats.</p><button class="btn btn-secondary btn-block" style="margin-top:16px" data-action="soon">Publier une offre</button></div>`,
+    after: renderJobs
+  };
+}
+function renderJobs() {
+  if (!$("#jobs")) return;
+  const list = jobs.filter(j => jobFilter === "all" || j.type.includes(jobFilter));
+  $("#jobs").innerHTML = list.map(j => `
+    <article class="job">
+      ${avatar({ name: j.company }, 44, true)}
+      <div>
+        <h3><a href="#offre/${j.id}">${esc(j.title)}</a></h3>
+        <div class="where">${esc(j.company)}, ${esc(j.city)}. Publiée ${j.time}.</div>
+        <div class="tags">${j.type.map(t => `<span class="chip">${t === "Remote" ? "À distance" : t}</span>`).join("")}${j.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>
+      </div>
+      ${applied.has(j.id) ? `<span class="chip ok">${icon("i-check", 14)}Candidature envoyée</span>` : `<a class="btn btn-secondary" href="#offre/${j.id}">Voir l'offre</a>`}
+    </article>`).join("");
+}
+function viewJob(id) {
+  const j = jobs.find(x => x.id === +id);
+  if (!j) return null;
+  currentJob = j;
+  const myStack = me ? person(me).stack : [];
+  return {
+    title: j.title,
+    main: `
+      <nav class="crumbs" aria-label="Fil d'Ariane"><a href="#emploi">Emploi</a><span aria-hidden="true">/</span><span>${esc(j.company)}</span></nav>
+      <div class="panel pad">
+        <div class="jd-head">
+          ${avatar({ name: j.company }, 56, true)}
+          <div style="flex:1;min-width:0">
+            <h1 class="page-title">${esc(j.title)}</h1>
+            <p class="muted" style="margin-top:4px">${esc(j.company)}, ${esc(j.city)}. Publiée ${j.time}.</p>
+            <div class="jd-facts">
+              ${j.type.map(t => `<span class="chip">${t === "Remote" ? "À distance" : t}</span>`).join("")}
+              <span class="chip">${esc(j.level)}</span><span class="chip">${esc(j.pay)}</span>
+            </div>
+          </div>
+        </div>
+        <div class="prose">
+          <h3>L'entreprise</h3><p>${esc(j.about)}</p>
+          <h3>Vos missions</h3><ul>${j.missions.map(m => `<li>${esc(m)}</li>`).join("")}</ul>
+          <h3>Profil recherché</h3><ul>${j.profile.map(m => `<li>${esc(m)}</li>`).join("")}</ul>
+          <h3>Technologies</h3><div class="tags">${j.tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>
+        </div>
+      </div>`,
+    side: `
+      <div class="panel">
+        <h3>${applied.has(j.id) ? "Candidature envoyée" : "Postuler avec votre profil Zetsu"}</h3>
+        <p>${applied.has(j.id) ? "Le recruteur a reçu votre profil. Vous serez notifié de sa réponse." : "Votre réputation, vos réponses et vos défis sont transmis avec votre message."}</p>
+        ${applied.has(j.id) ? `<span class="chip ok" style="margin-top:16px">${icon("i-check", 14)}Envoyée</span>`
+          : `<button class="btn btn-primary btn-block" style="margin-top:16px" data-action="apply">Postuler</button>`}
+      </div>
+      <div class="panel">
+        <h3>Correspondance avec votre profil</h3>
+        ${me ? `<ul class="match">${j.tags.map(t => {
+          const ok = myStack.includes(t);
+          return `<li class="${ok ? "ok" : "no"}">${icon(ok ? "i-check" : "i-x", 14)}${t}<span class="sr-only">${ok ? ", présent dans votre profil" : ", absent de votre profil"}</span></li>`;
+        }).join("")}</ul><p style="margin-top:8px">${j.tags.filter(t => myStack.includes(t)).length} sur ${j.tags.length} technologies de votre profil.</p>`
+        : `<p>Connectez-vous pour comparer l'offre à vos compétences.</p>`}
+      </div>`
+  };
+}
+
+/* =====================================================================
+   VUE : CHALLENGES
+   ===================================================================== */
+function viewChallenges() {
+  return {
+    title: "Challenges",
+    main: `
+      <div class="panel challenge">
+        <div>
+          <h1 class="page-title" style="font-size:22px">Simuler une API de paiement mobile</h1>
+          <p>Construisez une API REST qui reproduit le parcours d'un paiement par mobile money, dans le langage de votre choix.</p>
+          <ul class="spec">
+            <li><span class="mono">POST</span>Initier un paiement avec un numéro et un montant</li>
+            <li><span class="mono">POST</span>Confirmer par code à usage unique</li>
+            <li><span class="mono">GET</span>Consulter l'historique des transactions</li>
+          </ul>
+        </div>
+        <div class="clock-wrap">
+          <p>Clôture dans</p>
+          <div class="clock"><div><strong id="cd-d">0</strong><span>jours</span></div><div><strong id="cd-h">00</strong><span>heures</span></div><div><strong id="cd-m">00</strong><span>minutes</span></div></div>
+          ${challengeSubmitted ? `<span class="chip ok" style="margin-top:16px;width:100%;justify-content:center">${icon("i-check", 14)}Dépôt soumis</span>` : `<button class="btn btn-primary" data-action="submit-repo">Soumettre mon dépôt</button>`}
+        </div>
+      </div>
+      <div class="toolbar"><h2>Classement du mois</h2></div>
+      <div class="panel" style="overflow-x:auto"><table>
+        <thead><tr><th>Rang</th><th>Développeur</th><th class="num col-done">Défis</th><th class="num">Points</th></tr></thead>
+        <tbody>${[...board, ...(me && !board.some(b => b.who === me) ? [{ who: me, done: challengeSubmitted ? 1 : 0, pts: person(me).rep, mine: true }] : [])].map((b, i) => `
+          <tr class="${i ? "" : "first"} ${b.who === me ? "me" : ""}">
+            <td class="rank">${b.mine ? "–" : "#" + (i + 1)}</td>
+            <td><span class="person">${avatar(person(b.who), 32)}<span><a href="#profil/${b.who}">${esc(person(b.who).name)}</a>${b.who === me ? " (vous)" : ""}<small>${esc(person(b.who).city)}</small></span></span></td>
+            <td class="num col-done">${b.done}</td><td class="num">${b.pts}</td>
+          </tr>`).join("")}</tbody>
+      </table></div>`,
+    side: sideAccount() + `<div class="panel"><h3>Défis précédents</h3><ul class="list">
+      <li><span class="title" style="font-weight:500;font-size:14px">Raccourcisseur d'URL</span><small>Gagné par ${esc(person("kwame-asante").name)}</small></li>
+      <li><span class="title" style="font-weight:500;font-size:14px">Bot Telegram de météo</span><small>Gagné par ${esc(person("awa-kane").name)}</small></li></ul></div>`,
+    after: tick
+  };
+}
+
+/* =====================================================================
+   VUE : PROFIL
+   ===================================================================== */
+function viewProfile(slug) {
+  if (!slug || slug === "me") { if (!me) { requireAuth("Connectez-vous pour voir votre profil"); return { title: "Profil", main: "" }; } slug = me; }
+  const p = people[slug];
+  if (!p) return null;
+  const isMe = slug === me;
+  const asked = questions.filter(q => q.author === slug);
+  const answered = questions.flatMap(q => q.answers.filter(a => a.author === slug).map(a => ({ q, a })));
+  const accepted = answered.filter(x => x.a.accepted).length;
+  const mine = earned[slug] || [];
+  const activity = [
+    ...answered.map(({ q, a }) => ({ kind: a.accepted ? "Réponse acceptée" : "Réponse", title: q.title, href: `#question/${q.id}`, delta: a.accepted ? "+15" : a.votes ? `+${a.votes * 2}` : "", time: a.time })),
+    ...asked.map(q => ({ kind: "Question", title: q.title, href: `#question/${q.id}`, delta: q.votes ? `+${q.votes}` : "", time: q.time }))
+  ];
+  const tabs = [["activite", "Activité"], ["badges", "Badges"], ["competences", "Compétences"]];
+
+  let panel = "";
+  if (profileTab === "activite") panel = activity.length
+    ? `<ul class="activity">${activity.map(x => `<li><span class="kind">${x.kind}</span><a href="${x.href}">${esc(x.title)}</a><span class="delta">${x.delta}</span></li>`).join("")}</ul>`
+    : `<div class="empty" style="padding:24px 0"><p>${isMe ? "Vous n'avez encore rien publié. Votre première question vous rapporte 5 points." : "Aucune activité pour le moment."}</p>${isMe ? `<a class="btn btn-primary" href="#aide">Poser une question</a>` : ""}</div>`;
+  if (profileTab === "badges") panel = `<div class="badges">${badgesCatalog.map(b => {
+    const has = mine.includes(b.id);
+    return `<div class="badge-item ${has ? "" : "locked"}"><span class="medal ${has ? b.kind : "grey"}" aria-hidden="true">${b.short}</span><div><b>${b.name}</b><span>${b.desc}${has ? "" : ". Pas encore obtenu."}</span></div></div>`;
+  }).join("")}</div>`;
+  if (profileTab === "competences") panel = `<p class="muted" style="font-size:14px;margin-bottom:12px">Technologies déclarées, confirmées par les réponses publiées dans ces tags.</p>
+    <div class="tags">${p.stack.map(t => `<span class="tag">${t}</span>`).join("")}</div>`;
+
+  return {
+    title: p.name,
+    main: `
+      <div class="panel pad">
+        <div class="prof-head">
+          ${avatar(p, 88)}
+          <div>
+            <h1>${esc(p.name)}</h1>
+            <div class="prof-handle">@${esc(p.github)}</div>
+            <p class="prof-bio">${esc(p.bio)}</p>
+            <div class="prof-meta">
+              <span>${icon("i-pin", 14)}${esc(p.city)}, ${esc(p.country)}</span>
+              <span>${icon("i-cal", 14)}Membre depuis ${esc(p.joined)}</span>
+              <a href="#profil/${slug}" data-action="soon">${icon("i-github", 14)}github.com/${esc(p.github)}</a>
+            </div>
+          </div>
+          ${isMe ? `<a class="btn btn-secondary" href="#parametres">Modifier le profil</a>` : `<span class="recruit-flag">${icon("i-check", 14)}Visible par les recruteurs</span>`}
+        </div>
+        <div class="stats-strip">
+          <div><strong class="gold">${fmt(p.rep)}</strong><span>réputation</span></div>
+          <div><strong>${answered.length}</strong><span>réponses</span></div>
+          <div><strong>${accepted}</strong><span>acceptées</span></div>
+          <div><strong>${asked.length}</strong><span>questions</span></div>
+        </div>
+        <div class="tabbar" role="tablist" aria-label="Sections du profil">
+          ${tabs.map(([k, l]) => `<button role="tab" data-ptab="${k}" aria-selected="${profileTab === k}" aria-controls="ptabPanel">${l}</button>`).join("")}
+        </div>
+        <div id="ptabPanel" role="tabpanel" style="padding-top:16px">${panel}</div>
+      </div>`,
+    side: isMe ? sideJobs() : `<div class="panel"><h3>Spécialités</h3><div class="tags">${p.stack.map(t => `<span class="tag">${t}</span>`).join("")}</div></div>` + sideJobs()
+  };
+}
+
+/* =====================================================================
+   VUE : PARAMÈTRES
+   ===================================================================== */
+const settingsChecks = {
+  sName: () => setError($("#sName"), "sNameErr", $("#sName").value.trim().length < 3),
+  sBio: () => setError($("#sBio"), "sBioErr", $("#sBio").value.length > 200)
+};
+function viewSettings() {
+  const u = person(me), pref = document.documentElement.dataset.pref || "light";
+  return {
+    title: "Paramètres",
+    main: `
+      <h1 class="page-title" style="margin-bottom:16px">Paramètres</h1>
+      <form class="panel" id="settingsForm" novalidate>
+        <section class="settings-section" aria-labelledby="secProfile">
+          <h2 id="secProfile">Profil public</h2>
+          <p>Ces informations apparaissent sur votre profil et à côté de vos réponses.</p>
+          <div class="photo-row">
+            <span id="photoPreview">${avatar(u, 72)}</span>
+            <div>
+              <div class="actions">
+                <label class="btn btn-secondary btn-sm" for="sPhoto">Changer la photo</label>
+                <input id="sPhoto" type="file" accept="image/png,image/jpeg,image/webp" class="sr-only">
+                <button type="button" class="btn btn-ghost btn-sm" data-action="remove-photo" ${u.photo ? "" : "hidden"} id="removePhoto">Retirer</button>
+              </div>
+              <p class="hint">PNG, JPG ou WebP, 2 Mo maximum. Sans photo, vos initiales sont affichées.</p>
+              <p class="error" id="sPhotoErr">Choisissez une image PNG, JPG ou WebP de moins de 2 Mo.</p>
+            </div>
+          </div>
+          <div class="field"><label for="sName">Nom complet</label><input id="sName" value="${esc(u.name)}" maxlength="40" aria-describedby="sNameErr"><p class="error" id="sNameErr">Entrez votre nom, 3 caractères minimum.</p></div>
+          <div class="field"><label for="sCity">Ville</label><input id="sCity" value="${esc(u.city)}" autocomplete="address-level2"></div>
+          <div class="field"><label for="sBio">Présentation</label><textarea id="sBio" class="prose" maxlength="220" aria-describedby="sBioCount sBioErr">${esc(u.bio)}</textarea>
+            <div class="field-row"><p class="hint">Ce que vous faites et ce qui vous intéresse.</p><span class="count" id="sBioCount">${u.bio.length}/200</span></div>
+            <p class="error" id="sBioErr">La présentation doit faire 200 caractères maximum.</p></div>
+          <div class="field" style="margin-bottom:0"><label for="sStack">Technologies</label><input id="sStack" value="${esc(u.stack.join(", "))}" aria-describedby="sStackHint"><p class="hint" id="sStackHint">Séparées par des virgules. Elles servent à vous proposer des offres.</p></div>
+        </section>
+
+        <section class="settings-section" aria-labelledby="secAccounts">
+          <h2 id="secAccounts">Comptes connectés</h2>
+          <p>Connectez-vous plus vite et affichez vos dépôts publics sur votre profil.</p>
+          <div class="connected">${icon("i-github", 22)}<div class="info"><b>GitHub</b><span>Connecté en tant que @${esc(u.github)}</span></div><button type="button" class="btn btn-secondary btn-sm" data-action="soon">Déconnecter</button></div>
+          <div class="connected">${icon("i-google", 22)}<div class="info"><b>Google</b><span id="googleState">Non connecté</span></div><button type="button" class="btn btn-secondary btn-sm" data-action="link-google" id="googleBtn">Connecter</button></div>
+        </section>
+
+        <section class="settings-section" aria-labelledby="secTheme">
+          <h2 id="secTheme">Apparence</h2>
+          <p>Le mode clair est utilisé par défaut.</p>
+          <div class="theme-choice" role="radiogroup" aria-labelledby="secTheme">
+            ${[["light", "Clair"], ["dark", "Sombre"], ["system", "Comme le système"]].map(([k, l]) => `<label><span class="swatch ${k}"><i></i></span><span><input type="radio" name="theme" value="${k}" ${pref === k ? "checked" : ""}> ${l}</span></label>`).join("")}
+          </div>
+        </section>
+
+        <section class="settings-section" aria-labelledby="secNotif">
+          <h2 id="secNotif">Notifications par email</h2>
+          <p>Les notifications dans l'application restent toujours actives.</p>
+          <label class="check"><input type="checkbox" checked><div><b>Réponses à mes questions</b><span>Dès qu'une réponse est publiée.</span></div></label>
+          <label class="check"><input type="checkbox" checked><div><b>Offres qui correspondent à mon profil</b><span>Un résumé par semaine au maximum.</span></div></label>
+          <label class="check"><input type="checkbox"><div><b>Nouveau défi de la semaine</b><span>Chaque lundi matin.</span></div></label>
+          <label class="check"><input type="checkbox" checked><div><b>Visible par les recruteurs</b><span>Les entreprises peuvent consulter votre profil et vous contacter.</span></div></label>
+        </section>
+
+        <div class="save-bar"><button type="button" class="btn btn-ghost" data-action="reset-settings">Annuler</button><button type="submit" class="btn btn-primary" id="saveSettings">Enregistrer les modifications</button></div>
+      </form>
+
+      <section class="panel settings-section danger-zone" style="margin-top:24px" aria-labelledby="secDanger">
+        <h2 id="secDanger">Supprimer le compte</h2>
+        <p>Votre réputation et vos candidatures seront effacées définitivement.</p>
+        <button type="button" class="btn btn-danger" data-action="delete-account">Supprimer mon compte</button>
+      </section>`,
+    after: () => {
+      wire(settingsChecks);
+      $("#sBio").addEventListener("input", () => $("#sBioCount").textContent = `${$("#sBio").value.length}/200`);
+      $$("input[name=theme]").forEach(r => r.addEventListener("change", () => { applyTheme(r.value); toast("Apparence mise à jour"); }));
+      let pendingPhoto;
+      $("#sPhoto").addEventListener("change", e => {
+        const f = e.target.files[0];
+        if (!f) return;
+        const ok = /^image\/(png|jpeg|webp)$/.test(f.type) && f.size <= 2 * 1024 * 1024;
+        $("#sPhotoErr").classList.toggle("show", !ok);
+        if (!ok) return;
+        const reader = new FileReader();
+        reader.onload = () => { pendingPhoto = reader.result; $("#photoPreview").innerHTML = avatar({ name: u.name, photo: pendingPhoto }, 72); $("#removePhoto").hidden = false; };
+        reader.readAsDataURL(f);
+      });
+      $("#settingsForm").onsubmit = async e => {
+        e.preventDefault();
+        const bad = firstInvalid(settingsChecks);
+        if (bad) return $("#" + bad).focus();
+        await busy($("#saveSettings"), "Enregistrement", 600);
+        u.name = $("#sName").value.trim(); u.city = $("#sCity").value.trim(); u.bio = $("#sBio").value.trim();
+        u.stack = $("#sStack").value.split(",").map(t => t.trim().toLowerCase()).filter(Boolean);
+        if (pendingPhoto !== undefined) u.photo = pendingPhoto;
+        renderChrome(); route();
+        toast("Modifications enregistrées");
+      };
+      $("#settingsForm").dataset.removePhoto = "";
+    }
+  };
+}
+
+/* =====================================================================
+   VUE : NOTIFICATIONS
+   ===================================================================== */
+function viewNotifications() {
+  const groups = [...new Set(notifications.map(n => n.group))];
+  return {
+    title: "Notifications",
+    main: `
+      <div class="toolbar"><h1 class="page-title" style="font-size:22px">Notifications</h1>
+        ${unread() ? `<button class="btn btn-secondary btn-sm" data-action="read-all">Tout marquer comme lu</button>` : ""}</div>
+      <div class="panel">${groups.map(g => `<div class="group-label">${g}</div>` + notifications.filter(n => n.group === g).map(n => `
+        <div class="notif ${n.unread ? "unread" : ""}">
+          ${n.who ? `<a href="#profil/${n.who}" aria-label="${esc(person(n.who).name)}">${avatar(person(n.who), 36)}</a>` : `<span class="sys-icon">${icon(n.sys === "jobs" ? "i-jobs" : "i-trophy", 18)}</span>`}
+          <div>
+            <p>${n.who ? `<a href="#profil/${n.who}">${esc(person(n.who).name)}</a> ` : ""}${esc(n.text)} : <a href="${n.target}" data-notif="${n.id}">${esc(n.label)}</a></p>
+            <small>${n.time}</small>
+          </div>
+          ${n.unread ? `<span class="ndot" aria-label="Non lue"></span>` : `<span></span>`}
+        </div>`).join("")).join("")}</div>`
+  };
+}
+
+/* =====================================================================
+   VUE : PAGE INTROUVABLE
+   ===================================================================== */
+function viewNotFound() {
+  return {
+    title: "Page introuvable",
+    main: `<div class="panel notfound">
+      <div class="code404">404</div>
+      <h1>Cette page n'existe pas</h1>
+      <p>Le lien est peut-être incomplet, ou la question a été supprimée.</p>
+      <div class="btns"><a class="btn btn-primary" href="#aide">Retour aux questions</a><button class="btn btn-secondary" data-action="focus-search">Rechercher</button></div>
+    </div>`
+  };
+}
+
+/* =====================================================================
+   AUTHENTIFICATION
+   ===================================================================== */
+function renderSideThread() {
+  const q = questions[0], a = q.answers[0];
+  $("#sideThread").innerHTML = `
+    <div class="thread-bar"><span class="dot" aria-hidden="true"></span>question résolue en 38 min</div>
+    <div class="post">${avatar(person(q.author), 32)}<div><h3>${esc(q.title)}</h3><p>Mon token d'accès est bien récupéré, mais l'appel de paiement échoue.</p><div class="by">${esc(person(q.author).name)}, ${esc(person(q.author).city)}</div></div></div>
+    <div class="post accepted">${avatar(person(a.author), 32)}<div><span class="accepted-tag">${icon("i-check", 14)}Réponse acceptée</span>
+      <p>Le header doit être préfixé par <code>Bearer</code>, et le token expire après une heure :</p><pre class="code">${a.code}</pre>
+      <div class="by">${esc(person(a.author).name)}, ${esc(person(a.author).city)}<span class="rep-pop">+15 réputation</span></div></div></div>`;
+}
+
+function setMode(mode, focus = true) {
+  authMode = mode;
+  const reg = mode === "register";
+  $("#tabLogin").setAttribute("aria-selected", !reg);
+  $("#tabRegister").setAttribute("aria-selected", reg);
+  $("#authPanel").setAttribute("aria-labelledby", reg ? "tabRegister" : "tabLogin");
+  $$("[data-only]").forEach(el => el.hidden = el.dataset.only !== mode);
+  $("#authTitle").textContent = reg ? "Rejoignez la communauté" : "Bon retour parmi nous";
+  $("#authLead").textContent = reg ? "Un compte gratuit pour poser vos questions, répondre, relever les défis et être visible des recruteurs."
+    : "Connectez-vous pour poser vos questions, voter et suivre votre réputation.";
+  $("#authSubmit").textContent = reg ? "Créer mon compte" : "Se connecter";
+  $$("[data-oauth-label]").forEach((s, i) => s.textContent = `${reg ? "S'inscrire" : "Continuer"} avec ${i ? "Google" : "GitHub"}`);
+  $("#fPass").autocomplete = reg ? "new-password" : "current-password";
+  $("#switchLine").innerHTML = reg ? `Déjà inscrit ? <button type="button" class="linklike" data-mode="login">Se connecter</button>`
+    : `Pas encore de compte ? <button type="button" class="linklike" data-mode="register">Créer un compte</button>`;
+  $("#authAlert").classList.remove("show");
+  $$("#authForm [aria-invalid]").forEach(el => el.removeAttribute("aria-invalid"));
+  $$("#authForm .error").forEach(el => el.classList.remove("show"));
+  const target = reg ? "inscription" : "connexion";
+  if (location.hash.slice(1) !== target && !$("#authPage").hidden) history.replaceState(null, "", "#" + target);
+  if (focus) (reg ? $("#fName") : $("#fEmail")).focus();
+}
+
+const authChecks = {
+  fName: () => authMode === "register" && setError($("#fName"), "fNameErr", $("#fName").value.trim().length < 3),
+  fEmail: () => setError($("#fEmail"), "fEmailErr", !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($("#fEmail").value.trim())),
+  fCountry: () => authMode === "register" && setError($("#fCountry"), "fCountryErr", !$("#fCountry").value),
+  fPass: () => setError($("#fPass"), "fPassErr", authMode === "register" ? !($("#fPass").value.length >= 8 && /\d/.test($("#fPass").value)) : $("#fPass").value.length < 8)
+};
+wire(authChecks);
+$("#fPass").addEventListener("input", () => {
+  const v = $("#fPass").value;
+  const lvl = [v.length >= 8, /\d/.test(v), /[A-Z]/.test(v) && /[a-z]/.test(v), /[^\w]/.test(v) || v.length >= 14].filter(Boolean).length;
+  $("#strength").dataset.level = v ? Math.max(lvl, 1) : 0;
+  $("#fPassErr").textContent = authMode === "register" ? "8 caractères minimum, avec au moins un chiffre." : "Le mot de passe doit faire au moins 8 caractères.";
+});
+$("#reveal").onclick = () => {
+  const show = $("#fPass").type === "password";
+  $("#fPass").type = show ? "text" : "password";
+  $("#reveal").textContent = show ? "Masquer" : "Afficher";
+  $("#reveal").setAttribute("aria-pressed", show);
+};
+
+function signIn({ name, country, city, provider, isNew }) {
+  if (isNew) {
+    const slug = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    if (!people[slug]) people[slug] = { name, city: city || "", country: country || "", rep: 1, github: slug.replace(/-/g, ""), joined: "octobre 2026", stack: [], bio: "Nouveau membre de Zetsu." };
+    me = slug;
+    earned[slug] = [];
+  } else {
+    me = ME;
+  }
+  renderChrome();
+  const dest = returnTo || "aide"; returnTo = null;
+  go(dest);
+  toast(isNew ? `Compte créé. Bienvenue, ${name.split(" ")[0]}` : `Connecté avec ${provider}`);
+  if (afterLogin) { const fn = afterLogin; afterLogin = null; setTimeout(fn, 250); }
+}
+
+$("#authForm").onsubmit = async e => {
+  e.preventDefault();
+  $("#authAlert").classList.remove("show");
+  const bad = firstInvalid(authChecks);
+  if (bad) return $("#" + bad).focus();
+  await busy($("#authSubmit"), authMode === "register" ? "Création du compte" : "Connexion en cours");
+  if (authMode === "login" && !($("#fEmail").value.trim() === "demo@zetsu.dev" && $("#fPass").value === "demo1234")) {
+    const al = $("#authAlert");
+    al.textContent = "Email ou mot de passe incorrect. Vérifiez vos identifiants, ou utilisez le compte de démonstration indiqué sous le bouton.";
+    al.classList.add("show"); return al.focus();
+  }
+  if (authMode === "register") signIn({ name: $("#fName").value.trim(), country: $("#fCountry").value, provider: "email", isNew: true });
+  else signIn({ provider: "email" });
+  e.target.reset(); $("#strength").dataset.level = 0;
+};
+
+/* =====================================================================
+   FORMULAIRES PARTAGÉS
+   ===================================================================== */
+const parseTags = () => $("#aTags").value.split(",").map(t => t.trim().toLowerCase()).filter(Boolean);
+const askChecks = {
+  aTitle: () => setError($("#aTitle"), "aTitleErr", $("#aTitle").value.trim().length < 15),
+  aBody: () => setError($("#aBody"), "aBodyErr", $("#aBody").value.trim().length < 30),
+  aTags: () => setError($("#aTags"), "aTagsErr", parseTags().length > 4)
+};
+wire(askChecks);
+const updateCount = () => $("#aTitleCount").textContent = `${$("#aTitle").value.length}/150`;
+$("#aTitle").addEventListener("input", updateCount);
+function openAsk(prefill = "") { $("#aTitle").value = prefill; updateCount(); $("#dlgAsk").showModal(); (prefill ? $("#aBody") : $("#aTitle")).focus(); }
+$("#askForm").onsubmit = async e => {
+  e.preventDefault();
+  const bad = firstInvalid(askChecks);
+  if (bad) return $("#" + bad).focus();
+  await busy($("#askSubmit"), "Publication en cours", 600);
+  const id = Math.max(...questions.map(q => q.id)) + 1, code = $("#aCode").value.trim();
+  questions.unshift({ id, author: me, time: "à l'instant", views: 1, votes: 0, tags: parseTags().slice(0, 4).length ? parseTags().slice(0, 4) : ["général"],
+    title: $("#aTitle").value.trim(), body: $("#aBody").value.trim(), code: code ? esc(code) : "", answers: [] });
+  person(me).rep += 5;
+  e.target.reset(); updateCount();
+  $("#dlgAsk").close();
+  renderChrome(); go("question/" + id);
+  toast("Question publiée, +5 points");
+};
+
+const repoCheck = () => setError($("#repoUrl"), "repoErr", !/^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/?$/.test($("#repoUrl").value.trim()));
+wire({ repoUrl: repoCheck });
+$("#repoForm").onsubmit = async e => {
+  e.preventDefault();
+  if (repoCheck()) return $("#repoUrl").focus();
+  await busy($("#repoSubmit"), "Envoi en cours", 600);
+  person(me).rep += 20; challengeSubmitted = true;
+  e.target.reset(); $("#dlgRepo").close();
+  if (!(earned[me] || []).includes("challenger")) (earned[me] = earned[me] || []).push("challenger");
+  renderChrome(); route(); toast("Dépôt soumis, +20 points et badge Challenger");
+};
+
+const applyCheck = () => setError($("#applyMsg"), "applyErr", $("#applyMsg").value.trim().length < 40);
+wire({ applyMsg: applyCheck });
+$("#applyMsg").addEventListener("input", () => $("#applyCount").textContent = `${$("#applyMsg").value.length}/600`);
+function openApply() {
+  const u = person(me);
+  $("#applyTitle").textContent = `Postuler chez ${currentJob.company}`;
+  $("#applicant").innerHTML = `${avatar(u, 44)}<div><b>${esc(u.name)}</b><span>${fmt(u.rep)} points, ${esc(u.city)}. ${u.stack.length ? esc(u.stack.join(", ")) : "Aucune technologie déclarée"}</span></div>`;
+  $("#dlgApply").showModal(); $("#applyMsg").focus();
+}
+$("#applyForm").onsubmit = async e => {
+  e.preventDefault();
+  if (applyCheck()) return $("#applyMsg").focus();
+  await busy($("#applySubmit"), "Envoi en cours", 700);
+  applied.add(currentJob.id);
+  e.target.reset(); $("#applyCount").textContent = "0/600"; $("#dlgApply").close();
+  route(); toast(`Candidature envoyée à ${currentJob.company}`);
+};
+
+$("#deleteForm").onsubmit = e => {
+  e.preventDefault();
+  if (setError($("#delConfirm"), "delErr", $("#delConfirm").value !== "SUPPRIMER")) return $("#delConfirm").focus();
+  $("#dlgDelete").close(); e.target.reset();
+  me = null; renderChrome(); go("connexion"); toast("Compte supprimé. Dans la vraie application, cette action serait définitive.");
+};
+
+/* =====================================================================
+   ÉVÉNEMENTS
+   ===================================================================== */
+document.addEventListener("click", async e => {
+  const t = e.target.closest("button, a");
+  if (!t) { closeMenu(); return; }
+  const d = t.dataset;
+
+  if (t.id === "meBtn") { const m = $("#meMenu"); m.hidden = !m.hidden; t.setAttribute("aria-expanded", !m.hidden); if (!m.hidden) m.querySelector("a").focus(); return; }
+  if (!t.closest("#meMenu")) closeMenu();
+
+  if (d.mode) return setMode(d.mode);
+  if (d.oauth) {
+    await busy(t, `Redirection vers ${d.oauth}`, 900);
+    return signIn({ provider: d.oauth });
+  }
+  if (t.hasAttribute("data-close")) return t.closest("dialog").close();
+  if (d.tag) { e.preventDefault(); tagFilter = tagFilter === d.tag ? null : d.tag; if (location.hash !== "#aide") go("aide"); else renderFeed(); return; }
+  if (d.vote) {
+    if (!requireAuth("Connectez-vous pour voter")) return;
+    const key = d.vote, isQ = key[0] === "q", id = +key.slice(1);
+    const target = isQ ? questions.find(q => q.id === id) : questions.flatMap(q => q.answers).find(a => a.id === id);
+    if (voted.has(key)) { voted.delete(key); target.votes--; } else { voted.add(key); target.votes++; }
+    t.setAttribute("aria-pressed", voted.has(key));
+    t.nextElementSibling.textContent = target.votes;
+    return;
+  }
+  if (d.accept) {
+    const [qid, aid] = d.accept.split(":").map(Number);
+    const q = questions.find(x => x.id === qid);
+    q.answers.forEach(a => a.accepted = a.id === aid);
+    const a = q.answers.find(x => x.id === aid);
+    person(a.author).rep += 15; person(me).rep += 2;
+    renderChrome(); route();
+    return toast(`Réponse de ${person(a.author).name.split(" ")[0]} acceptée, +2 points pour vous`);
+  }
+  if (d.sort) { answerSort = d.sort; return route(); }
+  if (d.ptab) { profileTab = d.ptab; route(); return $(`[data-ptab=${d.ptab}]`).focus(); }
+  if (d.f) { feedFilter = d.f; $$("[data-f]").forEach(b => b.setAttribute("aria-pressed", b === t)); return renderFeed(); }
+  if (d.j) { jobFilter = d.j; $$("[data-j]").forEach(b => b.setAttribute("aria-pressed", b === t)); return renderJobs(); }
+  if (d.notif) { const n = notifications.find(x => x.id === +d.notif); if (n) n.unread = false; renderChrome(); return; }
+
+  switch (d.action) {
+    case "toggle-theme": return applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+    case "logout": me = null; voted.clear(); renderChrome(); route(); return toast("Vous êtes déconnecté");
+    case "forgot": return toast("Un lien de réinitialisation sera envoyé par email dans la vraie application");
+    case "reset-filter": tagFilter = null; query = ""; $("#search").value = ""; renderFeed(); return $("#feedTitle").focus();
+    case "open-ask": if (requireAuth("Connectez-vous pour poser une question", () => openAsk())) openAsk(); return;
+    case "login-to-answer": return requireAuth("Connectez-vous pour répondre");
+    case "apply": if (requireAuth("Connectez-vous pour postuler", openApply)) openApply(); return;
+    case "submit-repo": if (requireAuth("Connectez-vous pour soumettre un dépôt", () => $("#dlgRepo").showModal())) $("#dlgRepo").showModal(); return;
+    case "read-all": notifications.forEach(n => n.unread = false); renderChrome(); route(); return toast("Toutes les notifications sont lues");
+    case "remove-photo": person(me).photo = null; $("#photoPreview").innerHTML = avatar(person(me), 72); t.hidden = true; renderChrome(); return toast("Photo retirée, vos initiales sont affichées");
+    case "link-google": await busy(t, "Redirection", 800); $("#googleState").textContent = "Connecté avec votre compte Google"; t.textContent = "Déconnecter"; t.dataset.action = "soon"; return toast("Compte Google connecté");
+    case "reset-settings": route(); return toast("Modifications annulées");
+    case "delete-account": return $("#dlgDelete").showModal();
+    case "focus-search": return $("#search").focus();
+    case "soon": e.preventDefault(); return toast("Disponible dans une prochaine version");
+  }
+});
+
+document.addEventListener("submit", e => {
+  if (e.target.id !== "quickAsk") return;
+  e.preventDefault();
+  const title = $("#quickTitle").value.trim();
+  if (requireAuth("Connectez-vous pour poser une question", () => openAsk(title))) openAsk(title);
+});
+
+$$(".tabs [role=tab]").forEach(tab => tab.addEventListener("keydown", e => {
+  if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+  const other = tab.id === "tabLogin" ? $("#tabRegister") : $("#tabLogin");
+  setMode(other.dataset.mode, false); other.focus();
+}));
+
+$("#search").addEventListener("input", e => {
+  query = e.target.value.trim().toLowerCase();
+  if (location.hash !== "#aide") go("aide"); else renderFeed();
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeMenu();
+  if (e.key === "/" && !$("#appPage").hidden && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) && !document.querySelector("dialog[open]")) {
+    e.preventDefault(); $("#search").focus();
+  }
+});
+
+/* Compte à rebours : dimanche prochain, 23 h 59 */
+function tick() {
+  if (!$("#cd-d")) return;
+  const now = new Date(), end = new Date(now);
+  end.setDate(now.getDate() + ((7 - now.getDay()) % 7 || 7)); end.setHours(23, 59, 0, 0);
+  const min = Math.max(0, Math.floor((end - now) / 60000));
+  $("#cd-d").textContent = Math.floor(min / 1440);
+  $("#cd-h").textContent = String(Math.floor(min % 1440 / 60)).padStart(2, "0");
+  $("#cd-m").textContent = String(min % 60).padStart(2, "0");
+}
+setInterval(tick, 30000);
+
+/* =====================================================================
+   INITIALISATION
+   ===================================================================== */
+$("#railTags").innerHTML = railTags.map(t => `<button class="tag" data-tag="${t}" aria-pressed="false">${t}</button>`).join("");
+renderSideThread();
+renderChrome();
+route();
+</script>
+</body>
+</html>

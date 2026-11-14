@@ -1,0 +1,8 @@
+.flag {
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+  border-radius: var(--r-sm);
+  /* Liseré pour que les bandes blanches restent visibles sur fond clair. */
+  box-shadow: 0 0 0 1px var(--line);
+}
