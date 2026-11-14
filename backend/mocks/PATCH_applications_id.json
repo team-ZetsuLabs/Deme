@@ -1,0 +1,41 @@
+{
+  "id": 211,
+  "target": {
+    "type": "MISSION",
+    "id": 14,
+    "title": "Brancher Wave sur ma boutique WooCommerce",
+    "companyName": null
+  },
+  "candidate": {
+    "id": 25,
+    "username": "aminata_dev",
+    "displayName": "Aminata Diallo",
+    "avatarUrl": null,
+    "bio": "Développeuse back-end à Dakar. Java, Spring et paiements mobiles.",
+    "countryCode": "SN",
+    "city": "Dakar",
+    "role": "MEMBER",
+    "reputation": 342,
+    "level": "MEMBER",
+    "nextLevelAt": 500,
+    "visibleToRecruiters": true,
+    "technologies": [
+      "java",
+      "spring-boot",
+      "postgresql"
+    ],
+    "questionCount": 6,
+    "answerCount": 41,
+    "acceptedCount": 10,
+    "createdAt": "2026-09-14T08:21:00Z"
+  },
+  "message": "J'ai intégré Wave et Orange Money pour deux boutiques à Abidjan, je peux livrer en 3 jours avec la gestion du paiement confirmé après fermeture de la page.",
+  "hasCv": false,
+  "proposedBudget": {
+    "amount": 70000,
+    "currency": "XOF"
+  },
+  "status": "SHORTLISTED",
+  "createdAt": "2026-10-23T09:00:00Z",
+  "updatedAt": "2026-10-23T12:00:00Z"
+}

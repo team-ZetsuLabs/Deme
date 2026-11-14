@@ -1,0 +1,17 @@
+[
+  {
+    "id": 9002,
+    "author": {
+      "username": "aminata_dev",
+      "displayName": "Aminata Diallo",
+      "avatarUrl": null,
+      "countryCode": "SN",
+      "reputation": 342,
+      "level": "MEMBER",
+      "deleted": false
+    },
+    "bodyHtml": "<p>Merci, la relecture du statut avec <code>pay_token</code> règle le problème.</p>\n",
+    "createdAt": "2026-10-19T15:45:00Z",
+    "canDelete": false
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "items": [
+    {
+      "id": 87,
+      "roleId": 32,
+      "roleTitle": "Designer UX",
+      "candidate": {
+        "username": "mariam_kone",
+        "displayName": "Mariam Koné",
+        "avatarUrl": null,
+        "countryCode": "CI",
+        "reputation": 128,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "message": "Je conçois des parcours de paiement mobile depuis trois ans à Abidjan, voici mon portfolio Behance.",
+      "status": "PENDING",
+      "createdAt": "2026-10-27T10:02:00Z",
+      "decidedAt": null
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 1
+}

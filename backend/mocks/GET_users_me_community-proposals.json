@@ -1,0 +1,35 @@
+[
+  {
+    "id": 12,
+    "name": "React Native",
+    "kind": "TECH",
+    "countryCode": null,
+    "tag": "react-native",
+    "status": "PENDING",
+    "rejectionReason": null,
+    "slug": null,
+    "createdAt": "2026-10-24T10:15:00Z"
+  },
+  {
+    "id": 9,
+    "name": "Bénin",
+    "kind": "COUNTRY",
+    "countryCode": "BJ",
+    "tag": null,
+    "status": "REJECTED",
+    "rejectionReason": "Pas encore assez de questions du Bénin : reproposez-la quand il y en aura une cinquantaine.",
+    "slug": null,
+    "createdAt": "2026-10-18T08:40:00Z"
+  },
+  {
+    "id": 4,
+    "name": "Mobile money",
+    "kind": "TECH",
+    "countryCode": null,
+    "tag": "mobile-money",
+    "status": "APPROVED",
+    "rejectionReason": null,
+    "slug": "mobile-money",
+    "createdAt": "2026-10-02T14:05:00Z"
+  }
+]

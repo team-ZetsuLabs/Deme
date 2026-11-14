@@ -1,0 +1,49 @@
+{
+  "items": [
+    {
+      "rank": 1,
+      "member": {
+        "username": "kwame_codes",
+        "displayName": "Kwame Asante",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/1024",
+        "countryCode": "GH",
+        "reputation": 1587,
+        "level": "REFERENT",
+        "deleted": false
+      },
+      "score": 92,
+      "submittedAt": "2026-11-02T21:40:00Z"
+    },
+    {
+      "rank": 2,
+      "member": {
+        "username": "wanjiru_k",
+        "displayName": "Wanjiru Kamau",
+        "avatarUrl": null,
+        "countryCode": "KE",
+        "reputation": 910,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "score": 88,
+      "submittedAt": "2026-11-03T07:05:00Z"
+    },
+    {
+      "rank": 2,
+      "member": {
+        "username": "chidi_okafor",
+        "displayName": "Chidi Okafor",
+        "avatarUrl": null,
+        "countryCode": "NG",
+        "reputation": 1240,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "score": 88,
+      "submittedAt": "2026-11-03T12:30:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 3
+}

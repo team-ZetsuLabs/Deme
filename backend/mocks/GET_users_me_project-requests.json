@@ -1,0 +1,33 @@
+{
+  "items": [
+    {
+      "id": 87,
+      "projectId": 12,
+      "projectTitle": "Tontine Cash, cotisations en mobile money",
+      "roleId": 32,
+      "roleTitle": "Designer UX",
+      "message": "Je conçois des parcours de paiement mobile depuis trois ans à Abidjan, voici mon portfolio Behance.",
+      "status": "PENDING",
+      "removalReason": null,
+      "createdAt": "2026-10-27T10:02:00Z",
+      "decidedAt": null,
+      "leftAt": null
+    },
+    {
+      "id": 54,
+      "projectId": 9,
+      "projectTitle": "Bibliothèque USSD open source pour Node.js",
+      "roleId": null,
+      "roleTitle": "Rédacteur de documentation",
+      "message": "Je peux écrire la documentation en français et en anglais.",
+      "status": "LEFT",
+      "removalReason": "Plus de nouvelles depuis trois semaines",
+      "createdAt": "2026-09-20T08:30:00Z",
+      "decidedAt": "2026-09-21T12:00:00Z",
+      "leftAt": "2026-10-15T17:45:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 2
+}

@@ -1,0 +1,41 @@
+{
+  "items": [
+    {
+      "id": 31,
+      "title": "Développeur back-end Java, paiements mobiles",
+      "companyName": "Sahel Pay",
+      "type": "PERMANENT",
+      "countryCode": "SN",
+      "city": "Dakar",
+      "technologies": [
+        "java",
+        "spring-boot",
+        "postgresql"
+      ],
+      "compensation": "900 000 à 1 300 000 XOF par mois",
+      "status": "PENDING",
+      "matchPercent": null,
+      "createdAt": "2026-10-23T08:00:00Z"
+    },
+    {
+      "id": 31,
+      "title": "Développeur back-end Java, paiements mobiles",
+      "companyName": "Sahel Pay",
+      "type": "PERMANENT",
+      "countryCode": "SN",
+      "city": "Dakar",
+      "technologies": [
+        "java",
+        "spring-boot",
+        "postgresql"
+      ],
+      "compensation": "900 000 à 1 300 000 XOF par mois",
+      "status": "PUBLISHED",
+      "matchPercent": null,
+      "createdAt": "2026-10-20T09:12:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 2
+}

@@ -1,0 +1,100 @@
+spring:
+  application:
+    name: zetsu
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/zetsu}
+    username: ${DATABASE_USER:zetsu}
+    password: ${DATABASE_PASSWORD:zetsu}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.jdbc.time_zone: UTC
+  flyway:
+    enabled: true
+  jackson:
+    time-zone: UTC
+    serialization:
+      write-dates-as-timestamps: false
+  mvc:
+    problemdetails:
+      enabled: false
+  servlet:
+    multipart:
+      # Le CV est limité à 2 Mo dans CvStorage (message clair CV_TOO_LARGE) ; au-delà de 5 Mo, refus immédiat.
+      max-file-size: 5MB
+      max-request-size: 6MB
+
+server:
+  port: ${PORT:8080}
+  # Derrière Caddy : X-Forwarded-For / X-Forwarded-Proto pour l'IP réelle (limitation de débit) et le HTTPS.
+  forward-headers-strategy: native
+  compression:
+    enabled: true
+    mime-types: application/json
+    min-response-size: 1024
+  servlet:
+    session:
+      timeout: 30d
+      cookie:
+        http-only: true
+        secure: ${COOKIE_SECURE:true}
+        same-site: lax
+        max-age: 30d
+  error:
+    whitelabel:
+      enabled: false
+    include-stacktrace: never
+    include-message: never
+
+zetsu:
+  front-url: ${FRONT_URL:/}
+  cookie-secure: ${COOKIE_SECURE:true}
+  # Téléversements (photos, CV) sur le disque, hors de tout dossier servi au public, quand Cloudinary n'est pas configuré.
+  uploads-dir: ${UPLOADS_DIR:data/uploads}
+  # Photos de profil (publiques, CDN) et CV (privés) chez Cloudinary. Sans ces trois valeurs, tout reste sur le disque.
+  cloudinary:
+    cloud-name: ${CLOUDINARY_CLOUD_NAME:}
+    api-key: ${CLOUDINARY_API_KEY:}
+    api-secret: ${CLOUDINARY_API_SECRET:}
+    folder: ${CLOUDINARY_FOLDER:zetsu}
+  # Section 8 du cahier des charges. Seuils abaissés par le profil « demo ».
+  reputation:
+    member-threshold: 50
+    contributor-threshold: 500
+    referent-threshold: 1500
+    daily-cap: 200
+    rewarded-questions-per-day: 3
+    rewarded-votes-per-pair-per-day: 3
+  # REP-4 : seuils des badges (Premier pas : 1 question ou réponse, fixe). Abaissés par le profil « demo ».
+  badges:
+    helper-answers: 10
+    solver-accepted: 5
+    challenger-validated: 1
+    polyglot-tags: 3
+    local-help-answers: 5
+  # Section 7 : masquage automatique après 5 signalements de comptes distincts (MOD-2).
+  moderation:
+    auto-hide-threshold: 5
+  # Section 6 : assistant de rédaction (IA-1). Sans clé, l'assistant répond 503 AI_UNAVAILABLE et tout le reste marche.
+  ai:
+    provider: ${AI_PROVIDER:gemini}
+    api-key: ${AI_API_KEY:}
+    model: ${AI_MODEL:gemini-2.5-flash-lite}
+    timeout: 7s
+    cache-ttl: 24h
+
+springdoc:
+  api-docs:
+    path: /api/v1/openapi.json
+  swagger-ui:
+    path: /api/v1/docs
+    csrf:
+      enabled: true
+  default-produces-media-type: application/json
+  paths-to-match: /api/**
+
+logging:
+  level:
+    org.springframework.security: INFO

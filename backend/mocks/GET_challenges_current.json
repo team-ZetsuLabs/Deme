@@ -1,0 +1,25 @@
+{
+  "id": 4,
+  "title": "Un menu USSD de paiement de facture",
+  "statementMarkdown": "Beaucoup de clients paient encore leur facture d'eau ou d'électricité par USSD, sans smartphone. Construisez un menu USSD qui permet de consulter et payer une facture en moins de 5 écrans.",
+  "statementHtml": "<p>Beaucoup de clients paient encore leur facture d'eau ou d'électricité par USSD, sans smartphone. Construisez un menu USSD qui permet de consulter et payer une facture en moins de 5 écrans.</p>\n",
+  "specificationsMarkdown": "- Saisie du numéro de compteur, affichage du montant dû\n- Paiement simulé par mobile money, avec confirmation par code\n- Session USSD coupée : reprise sans repayer\n- README avec la commande de lancement et des tests",
+  "specificationsHtml": "<ul>\n<li>Saisie du numéro de compteur, affichage du montant dû</li>\n<li>Paiement simulé par mobile money, avec confirmation par code</li>\n<li>Session USSD coupée : reprise sans repayer</li>\n<li>README avec la commande de lancement et des tests</li>\n</ul>\n",
+  "technologies": [
+    "ussd",
+    "node.js"
+  ],
+  "status": "OPEN",
+  "startsAt": "2026-11-02T08:00:00Z",
+  "endsAt": "2026-11-09T22:00:00Z",
+  "serverTime": "2026-11-04T09:15:00Z",
+  "submissionCount": 37,
+  "mySubmission": {
+    "id": 77,
+    "repositoryUrl": "https://github.com/awa-kone/zetsu-defi-ussd",
+    "status": "PENDING",
+    "score": null,
+    "feedback": null,
+    "submittedAt": "2026-11-03T18:22:00Z"
+  }
+}

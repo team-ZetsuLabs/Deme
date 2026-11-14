@@ -1,0 +1,14 @@
+# Développement sur sa machine, sans HTTPS : SPRING_PROFILES_ACTIVE=local
+server:
+  servlet:
+    session:
+      cookie:
+        secure: false
+
+zetsu:
+  front-url: http://localhost:5173/
+  cookie-secure: false
+
+logging:
+  level:
+    dev.zetsu: DEBUG

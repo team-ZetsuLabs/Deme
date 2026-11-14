@@ -1,0 +1,8 @@
+{
+  "code": "VALIDATION_ERROR",
+  "message": "Certains champs sont invalides",
+  "fields": {
+    "title": "Entre 15 et 150 caractères",
+    "tags": "Entre 1 et 5 étiquettes"
+  }
+}

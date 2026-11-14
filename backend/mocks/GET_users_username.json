@@ -1,0 +1,30 @@
+{
+  "id": 24,
+  "username": "kwame_codes",
+  "displayName": "Kwame Asante",
+  "avatarUrl": "https://avatars.githubusercontent.com/u/1024",
+  "bio": "Ingénieur back-end à Accra. Paiements, MTN MoMo et un peu de Kotlin.",
+  "countryCode": "GH",
+  "city": "Accra",
+  "role": "MEMBER",
+  "reputation": 1587,
+  "level": "REFERENT",
+  "nextLevelAt": null,
+  "visibleToRecruiters": false,
+  "technologies": [
+    "kotlin",
+    "spring-boot",
+    "mtn-momo"
+  ],
+  "questionCount": 14,
+  "answerCount": 96,
+  "acceptedCount": 24,
+  "createdAt": "2026-08-02T11:00:00Z",
+  "badges": [
+    "FIRST_STEP",
+    "HELPER",
+    "LOCAL_HELP",
+    "SOLVER",
+    "POLYGLOT"
+  ]
+}

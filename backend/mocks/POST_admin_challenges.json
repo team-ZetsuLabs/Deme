@@ -1,0 +1,18 @@
+{
+  "id": 5,
+  "title": "Une file d'envoi hors ligne pour un formulaire",
+  "statementMarkdown": "Sur un réseau 3G qui coupe, un formulaire envoyé ne doit jamais se perdre. Gardez les envois en attente et renvoyez-les dès que le réseau revient.",
+  "statementHtml": "<p>Sur un réseau 3G qui coupe, un formulaire envoyé ne doit jamais se perdre. Gardez les envois en attente et renvoyez-les dès que le réseau revient.</p>\n",
+  "specificationsMarkdown": "- Stockage dans IndexedDB\n- Renvoi automatique au retour du réseau\n- Aucun doublon côté serveur",
+  "specificationsHtml": "<ul>\n<li>Stockage dans IndexedDB</li>\n<li>Renvoi automatique au retour du réseau</li>\n<li>Aucun doublon côté serveur</li>\n</ul>\n",
+  "technologies": [
+    "javascript",
+    "pwa"
+  ],
+  "status": "UPCOMING",
+  "startsAt": "2026-11-10T08:00:00Z",
+  "endsAt": "2026-11-17T22:00:00Z",
+  "serverTime": "2026-11-04T09:15:00Z",
+  "submissionCount": 0,
+  "mySubmission": null
+}

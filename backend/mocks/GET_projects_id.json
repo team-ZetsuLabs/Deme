@@ -1,0 +1,96 @@
+{
+  "id": 12,
+  "title": "Tontine Cash, cotisations en mobile money",
+  "descriptionMarkdown": "Une application pour gérer les cotisations d'une tontine entre collègues : rappels par SMS, paiement par **Orange Money** ou **Wave**, historique partagé.",
+  "descriptionHtml": "<p>Une application pour gérer les cotisations d'une tontine entre collègues : rappels par SMS, paiement par <strong>Orange Money</strong> ou <strong>Wave</strong>, historique partagé.</p>",
+  "type": "STARTUP",
+  "technologies": [
+    "flutter",
+    "firebase",
+    "orange-money"
+  ],
+  "githubUrl": "https://github.com/tontine-cash/app",
+  "contactUrl": "https://discord.gg/tontinecash",
+  "status": "OPEN",
+  "owner": {
+    "username": "awa_ndiaye",
+    "displayName": "Awa Ndiaye",
+    "avatarUrl": null,
+    "countryCode": "SN",
+    "reputation": 742,
+    "level": "CONTRIBUTOR",
+    "deleted": false
+  },
+  "roles": [
+    {
+      "id": 31,
+      "title": "Développeur mobile Flutter",
+      "technologies": [
+        "flutter",
+        "dart"
+      ],
+      "status": "FILLED",
+      "member": {
+        "username": "kofi_mensah",
+        "displayName": "Kofi Mensah",
+        "avatarUrl": null,
+        "countryCode": "GH",
+        "reputation": 315,
+        "level": "MEMBER",
+        "deleted": false
+      }
+    },
+    {
+      "id": 32,
+      "title": "Designer UX",
+      "technologies": [
+        "figma"
+      ],
+      "status": "OPEN",
+      "member": null
+    }
+  ],
+  "team": [
+    {
+      "member": {
+        "username": "awa_ndiaye",
+        "displayName": "Awa Ndiaye",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 742,
+        "level": "CONTRIBUTOR",
+        "deleted": false
+      },
+      "roleTitle": null,
+      "owner": true,
+      "joinedAt": "2026-10-02T09:15:00Z"
+    },
+    {
+      "member": {
+        "username": "kofi_mensah",
+        "displayName": "Kofi Mensah",
+        "avatarUrl": null,
+        "countryCode": "GH",
+        "reputation": 315,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "roleTitle": "Développeur mobile Flutter",
+      "owner": false,
+      "joinedAt": "2026-10-05T16:20:00Z"
+    }
+  ],
+  "myRequest": {
+    "id": 87,
+    "roleId": 32,
+    "status": "PENDING",
+    "roleTitle": "Designer UX",
+    "message": "Je conçois des parcours de paiement mobile depuis trois ans à Abidjan, voici mon portfolio Behance.",
+    "createdAt": "2026-10-27T10:02:00Z"
+  },
+  "canEdit": false,
+  "canPostUpdate": false,
+  "createdAt": "2026-10-02T09:15:00Z",
+  "updatedAt": "2026-10-26T18:40:00Z",
+  "lastActivityAt": "2026-10-26T18:40:00Z"
+}

@@ -1,0 +1,101 @@
+{
+  "items": [
+    {
+      "id": 77,
+      "type": "PLAYTEST_FEEDBACK",
+      "read": false,
+      "actor": {
+        "username": "efua_mensah",
+        "displayName": "Efua Mensah",
+        "avatarUrl": null,
+        "countryCode": "GH",
+        "reputation": 64,
+        "level": "NEWCOMER",
+        "deleted": false
+      },
+      "target": {
+        "type": "PLAYTEST",
+        "id": 12,
+        "title": "Tontine Cash",
+        "questionId": null
+      },
+      "outcome": "BUG",
+      "createdAt": "2026-11-12T09:14:00Z"
+    },
+    {
+      "id": 42,
+      "type": "ANSWER_POSTED",
+      "read": false,
+      "actor": {
+        "username": "kwame_codes",
+        "displayName": "Kwame Asante",
+        "avatarUrl": "https://avatars.githubusercontent.com/u/1024",
+        "countryCode": "GH",
+        "reputation": 1587,
+        "level": "REFERENT",
+        "deleted": false
+      },
+      "target": {
+        "type": "ANSWER",
+        "id": 512,
+        "title": "Comment vérifier une notification de paiement Orange Money côté serveur ?",
+        "questionId": 101
+      },
+      "outcome": null,
+      "createdAt": "2026-10-23T10:40:00Z"
+    },
+    {
+      "id": 41,
+      "type": "APPLICATION_DECIDED",
+      "read": false,
+      "actor": {
+        "username": "fatou_sow",
+        "displayName": "Fatou Sow",
+        "avatarUrl": null,
+        "countryCode": "SN",
+        "reputation": 120,
+        "level": "MEMBER",
+        "deleted": false
+      },
+      "target": {
+        "type": "APPLICATION",
+        "id": 207,
+        "title": "Développeur back-end Java, paiements mobiles",
+        "questionId": null
+      },
+      "outcome": "SHORTLISTED",
+      "createdAt": "2026-10-23T10:05:00Z"
+    },
+    {
+      "id": 40,
+      "type": "MISSION_MATCH",
+      "read": false,
+      "actor": null,
+      "target": {
+        "type": "MISSION",
+        "id": 14,
+        "title": "Brancher Wave sur ma boutique WooCommerce",
+        "questionId": null
+      },
+      "outcome": null,
+      "createdAt": "2026-10-22T18:21:00Z"
+    },
+    {
+      "id": 37,
+      "type": "VOTE_RECEIVED",
+      "read": true,
+      "actor": null,
+      "target": {
+        "type": "QUESTION",
+        "id": 101,
+        "title": "Comment vérifier une notification de paiement Orange Money côté serveur ?",
+        "questionId": null
+      },
+      "outcome": null,
+      "createdAt": "2026-10-21T14:12:00Z"
+    }
+  ],
+  "page": 0,
+  "size": 20,
+  "total": 5
+}

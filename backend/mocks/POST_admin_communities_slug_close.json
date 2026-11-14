@@ -1,0 +1,17 @@
+{
+  "slug": "flutter",
+  "name": "Flutter",
+  "kind": "TECH",
+  "countryCode": null,
+  "tag": "flutter",
+  "description": "Applications Flutter légères qui tiennent en 3G et sur Android Go, du prototype à la publication.",
+  "rules": [
+    "Indiquez la version de Flutter et l'appareil de test."
+  ],
+  "status": "CLOSED",
+  "memberCount": 846,
+  "questionCount": 233,
+  "referents": [],
+  "createdAt": "2026-09-20T09:00:00Z",
+  "updatedAt": "2026-10-21T16:30:00Z"
+}
