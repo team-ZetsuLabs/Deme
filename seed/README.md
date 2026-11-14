@@ -30,3 +30,5 @@ Les comptes sont `<identifiant>@exemple.com` (par exemple `aminata.diallo@exempl
 Le script attend et réessaie quand le serveur répond 429 ou met du temps à se réveiller.
 
 Les votes et les scénarios de modération ne sont créés que lors de la première exécution : un vote ou un signalement est unique par membre.
+
+À chaque exécution, le script regarnit aussi la file de modération : tant qu'il y a moins de 4 dossiers à traiter ou moins de 3 offres en attente, il publie de nouveaux contenus à signaler (spam, propos hostiles, offre frauduleuse), pour que la démo ait toujours de quoi être traitée.

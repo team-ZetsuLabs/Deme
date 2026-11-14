@@ -11,9 +11,13 @@ import {
   COMMUNITIES,
   CORE,
   JOBS,
+  MIN_OPEN_CASES,
+  MIN_PENDING_JOBS,
   MISSIONS,
   PLAYTESTS,
   PROJECTS,
+  QUEUE_CASES,
+  QUEUE_JOBS,
   QUESTIONS,
   RECRUITERS,
   RUDE,
@@ -498,6 +502,98 @@ async function main() {
       }
     }
     log(`  + ${test.appName} (${status})`)
+  }
+
+  // 12. File de modération et offres en attente regarnies pour la démo
+  log('\n11. File de modération')
+  const openCases = (await admin.get('/admin/cases?status=OPEN&size=1')).data.total
+  if (openCases >= MIN_OPEN_CASES) log(`  ${openCases} dossiers à traiter, rien à ajouter`)
+  else {
+    const titles = new Set((await pages(admin, '/questions?status=ALL')).map((q) => q.title))
+    const missionTitles = new Set((await pages(admin, '/missions?status=OPEN')).map((m) => m.title))
+    const projectTitles = new Set((await pages(admin, '/projects')).map((p) => p.title))
+    const pool = CORE.map((p) => who(p.handle)).filter((m) => m.me.level !== 'NEWCOMER')
+    const answerTargets = (await pages(admin, '/questions?status=ALL')).filter(
+      (q) => q.answerCount > 0,
+    )
+    let added = 0
+    for (const item of QUEUE_CASES) {
+      if (openCases + added >= MIN_OPEN_CASES) break
+      const author = who(item.author)
+      let target
+      if (item.kind === 'QUESTION') {
+        if (titles.has(item.title)) continue
+        const { data } = await author.client.post('/questions', {
+          title: item.title,
+          body: item.body,
+          tags: item.tags,
+          context: item.ctx,
+        })
+        target = { type: 'QUESTION', id: data.id }
+      } else if (item.kind === 'ANSWER') {
+        const question = answerTargets[1] ?? answerTargets[0]
+        if (!question) continue
+        const { data } = await author.client.post(`/questions/${question.id}/answers`, {
+          body: item.answer,
+        })
+        target = { type: 'ANSWER', id: data.id }
+      } else if (item.kind === 'MISSION') {
+        if (missionTitles.has(item.title)) continue
+        const { data } = await author.client.post('/missions', {
+          title: item.title,
+          description: item.description,
+          kind: item.missionKind,
+          budget: item.budget,
+          durationDays: item.durationDays,
+          technologies: item.technologies,
+          countryCode: item.countryCode,
+        })
+        target = { type: 'MISSION', id: data.id }
+      } else {
+        if (projectTitles.has(item.title)) continue
+        const { data } = await author.client.post('/projects', {
+          title: item.title,
+          description: item.description,
+          type: item.type,
+          technologies: item.technologies,
+          roles: item.roles,
+        })
+        target = { type: 'PROJECT', id: data.id }
+      }
+      for (const reporter of pool.slice(0, item.reports)) {
+        await reporter.client.post(
+          '/reports',
+          {
+            targetType: target.type,
+            targetId: target.id,
+            reason: item.reason,
+            comment: item.comment,
+          },
+          [409],
+        )
+        count('signalements')
+      }
+      added++
+      log(`  + ${item.kind} signalée : ${item.title ?? item.answer.slice(0, 50)}`)
+    }
+  }
+  const pendingJobs = (await admin.get('/admin/jobs?status=PENDING&size=1')).data.total
+  if (pendingJobs < MIN_PENDING_JOBS) {
+    const known = new Map()
+    for (const status of ['PENDING', 'PUBLISHED', 'REJECTED']) {
+      for (const job of await pages(admin, `/admin/jobs?status=${status}`))
+        known.set(job.title, job)
+    }
+    let added = 0
+    for (const job of QUEUE_JOBS) {
+      if (pendingJobs + added >= MIN_PENDING_JOBS) break
+      if (known.has(job.title)) continue
+      const { recruiter: recruiterIndex, ...body } = job
+      await who(RECRUITERS[recruiterIndex].handle).client.post('/jobs', body)
+      count('offres')
+      added++
+      log(`  + offre en attente : ${job.title}`)
+    }
   }
 
   log('\nTerminé.')

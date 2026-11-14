@@ -743,3 +743,100 @@ export const PLAYTESTS = [
     suspend: 'Le lien TestFlight renvoie une erreur : campagne suspendue le temps de le corriger.',
   },
 ]
+
+/**
+ * De quoi regarnir la file de modération pour la démo : tant qu'il y a moins de dossiers à traiter
+ * que MIN_OPEN_CASES, le script publie ces contenus et les fait signaler (moins de 5 fois, donc
+ * sans masquage automatique), puis ajoute ces offres en attente de validation.
+ */
+export const MIN_OPEN_CASES = 4
+export const MIN_PENDING_JOBS = 3
+
+export const QUEUE_CASES = [
+  {
+    kind: 'QUESTION',
+    author: 'promo.deals',
+    title: 'Comptes Mobile Money vérifiés à vendre, contactez-moi sur WhatsApp',
+    body: "Je vends des comptes Orange Money et Wave déjà vérifiés, livraison immédiate, paiement d'avance par transfert. Écrivez-moi en privé pour avoir les prix et rejoindre le groupe.",
+    tags: ['mobile-money'],
+    ctx: { countryCode: 'CI' },
+    reason: 'SPAM',
+    reports: 3,
+    comment: 'Vente de comptes, sans rapport avec le développement.',
+  },
+  {
+    kind: 'ANSWER',
+    author: 'chinedu.okafor',
+    answer:
+      'Tu ne comprends rien à Spring, arrête de poser des questions et va relire la documentation avant de nous faire perdre notre temps.',
+    reason: 'OFFENSIVE',
+    reports: 2,
+    comment: 'Ton agressif envers le membre qui a posé la question.',
+  },
+  {
+    kind: 'MISSION',
+    author: 'promo.deals',
+    title: 'Copier-coller des annonces sur 200 sites, 2 000 F CFA par jour',
+    description:
+      'Mission urgente et facile : copier-coller nos annonces sur 200 sites chaque jour. Aucune compétence demandée, paiement à la fin du mois si le travail est jugé satisfaisant par notre équipe.',
+    missionKind: 'OTHER',
+    budget: { amount: 2000, currency: 'XOF' },
+    durationDays: 30,
+    technologies: ['web'],
+    countryCode: 'CI',
+    reason: 'SPAM',
+    reports: 3,
+    comment: 'Travail non rémunéré de fait, sans lien avec le développement.',
+  },
+  {
+    kind: 'PROJECT',
+    author: 'promo.deals',
+    title: 'Programme de parrainage Mobile Money, gagnez à chaque inscrit',
+    description:
+      "Rejoignez notre programme de parrainage : chaque personne inscrite grâce à votre lien vous rapporte de l'argent. Aucune compétence demandée, il suffit de partager notre lien dans vos groupes.",
+    type: 'STARTUP',
+    technologies: ['mobile-money'],
+    roles: [{ title: 'Ambassadeur du programme', technologies: ['mobile-money'] }],
+    reason: 'SPAM',
+    reports: 2,
+    comment: 'Parrainage rémunéré déguisé en projet.',
+  },
+]
+
+export const QUEUE_JOBS = [
+  {
+    recruiter: 0,
+    title: "Développeur Laravel pour une plateforme de transfert d'argent",
+    companyName: 'Sahel Paiements',
+    companyWebsite: 'https://sahelpaiements.example.com',
+    type: 'PERMANENT',
+    countryCode: 'SN',
+    city: 'Dakar',
+    technologies: ['laravel', 'php', 'mobile-money'],
+    description:
+      "Nous renforçons l'équipe qui construit notre plateforme de transfert d'argent entre le Sénégal, le Mali et la Côte d'Ivoire. Vous développez des API Laravel, intégrez les opérateurs de paiement mobile et participez à la revue de code. Une première expérience des paiements est un plus.",
+    compensation: '800 000 à 1 100 000 F CFA par mois',
+  },
+  {
+    recruiter: 1,
+    title: 'Ingénieur QA pour applications mobiles',
+    companyName: 'AgriLien',
+    companyWebsite: 'https://agrilien.example.com',
+    type: 'REMOTE',
+    countryCode: 'CI',
+    city: 'Abidjan',
+    technologies: ['flutter', 'tests'],
+    description:
+      "AgriLien cherche un ingénieur QA pour tester son application Flutter sur des téléphones Android d'entrée de gamme et en réseau instable. Vous rédigez des scénarios de test, signalez les anomalies et suivez leur correction avec l'équipe de développement.",
+    compensation: '600 000 F CFA par mois',
+  },
+  {
+    recruiter: 0,
+    title: 'Gagnez 2 000 000 F CFA en 3 jours sans diplôme',
+    companyName: 'Fast Cash Africa',
+    type: 'REMOTE',
+    technologies: ['web'],
+    description:
+      "Offre exceptionnelle pour travailler depuis chez vous et gagner beaucoup d'argent rapidement. Aucun diplôme n'est demandé. Des frais de dossier de 15 000 F CFA sont à régler par Mobile Money avant de recevoir votre premier contrat de travail.",
+  },
+]
