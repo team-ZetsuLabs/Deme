@@ -1,0 +1,69 @@
+{
+  "lead": "Traitez la file des contenus signalés. Chaque décision est enregistrée et l'auteur peut la contester. Un contenu très signalé est masqué automatiquement.",
+  "statusFilter": "Statut des dossiers",
+  "tab": {
+    "OPEN": "À traiter",
+    "APPEALED": "Contestations"
+  },
+  "allTypes": "Tous les types",
+  "filterByType": "Filtrer par type de contenu",
+  "queue": "File de signalements",
+  "count_one": "{{count}} signalement",
+  "count_other": "{{count}} signalements",
+  "reasonBy": "{{reason}}, par {{name}}",
+  "emptyTitle": "Aucun dossier à traiter",
+  "emptyHint": "La file est vide. Bon travail.",
+  "detailTitle": {
+    "QUESTION": "Question signalée pour « {{reason}} »",
+    "ANSWER": "Réponse signalée pour « {{reason}} »",
+    "JOB": "Offre signalée pour « {{reason}} »",
+    "MISSION": "Mission signalée pour « {{reason}} »",
+    "USER": "Profil signalé pour « {{reason}} »",
+    "PROJECT": "Projet signalé pour « {{reason}} »"
+  },
+  "author": "Auteur",
+  "deletedUser": "Utilisateur supprimé",
+  "authorLevel": "Niveau",
+  "points_one": "{{count}} point de réputation",
+  "points_other": "{{count}} points de réputation",
+  "country": "Pays",
+  "firstReported": "Premier signalement",
+  "decision": "Décision",
+  "byTeam": "(équipe)",
+  "byReferent": "(Référent)",
+  "appeal": "Contestation de l'auteur",
+  "reasonsTitle": "Motifs",
+  "comments": "Commentaires des membres",
+  "action": {
+    "DISMISS": "Ignorer le signalement",
+    "HIDE": "Masquer le contenu",
+    "WARN": "Avertir l'auteur",
+    "SUSPEND": "Suspendre l'auteur",
+    "RESTORE": "Rétablir le contenu",
+    "KEEP": "Maintenir le masquage"
+  },
+  "toast": {
+    "DISMISS": "Signalement ignoré",
+    "HIDE": "Contenu masqué",
+    "WARN": "Avertissement envoyé",
+    "SUSPEND": "Compte suspendu et contenu masqué",
+    "RESTORE": "Contenu rétabli"
+  },
+  "note": {
+    "label": "Motif montré à l'auteur",
+    "hint": "L'auteur reçoit ce message et peut contester la décision.",
+    "template": "Bonjour {{name}}, votre {{type}} a été signalé pour « {{reason}} ». Merci de relire les règles de la communauté.",
+    "HIDE": {
+      "title": "Masquer le contenu",
+      "lead": "Le contenu de {{name}} reste visible pour son auteur, qui peut contester devant l'équipe."
+    },
+    "WARN": {
+      "title": "Avertir l'auteur",
+      "lead": "{{name}} recevra cet avertissement dans ses notifications. Le contenu est aussi masqué."
+    },
+    "SUSPEND": {
+      "title": "Suspendre l'auteur",
+      "lead": "Le compte de {{name}} sera suspendu et le contenu masqué. Vous pourrez le réactiver depuis Utilisateurs."
+    }
+  }
+}

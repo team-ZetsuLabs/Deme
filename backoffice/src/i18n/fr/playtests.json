@@ -1,0 +1,101 @@
+{
+  "lead": "Campagnes de test fermé publiées par les membres : validez les nouvelles, suivez les testeurs et suspendez une campagne en cas de problème.",
+  "kpis": "Indicateurs des tests fermés",
+  "statusFilter": "Statut de la campagne",
+  "allStatuses": "Toutes (hors brouillons)",
+  "problemFilter": "Problème détecté",
+  "allProblems": "Tous les problèmes",
+  "problem": {
+    "INACTIVE": "Inactive depuis 7 jours",
+    "STALLED": "Testeurs à confirmer",
+    "REPORTED": "Masquée par la modération"
+  },
+  "emptyTitle": "Aucune campagne",
+  "emptyHint": "Modifiez les filtres.",
+  "noPackage": "Site web",
+  "testersCount": "{{count}} sur {{target}} testeurs",
+  "stats": {
+    "pending": "À valider",
+    "pendingHint": "Campagnes en attente",
+    "active": "Actives",
+    "activeHint": "sur {{total}} campagnes",
+    "testers": "Testeurs",
+    "testersHint": "{{owners}} porteurs",
+    "running": "Participations en cours",
+    "runningHint": "{{done}} terminées"
+  },
+  "col": {
+    "app": "Application",
+    "owner": "Porteur",
+    "platform": "Plateforme",
+    "progress": "Avancement",
+    "status": "Statut",
+    "created": "Créée"
+  },
+  "tracking": {
+    "DAILY": "décompte quotidien",
+    "NONE": "sans décompte"
+  },
+  "action": {
+    "approve": "Valider",
+    "reject": "Refuser",
+    "suspend": "Suspendre",
+    "reactivate": "Réactiver",
+    "removeTester": "Retirer"
+  },
+  "toast": {
+    "approved": "Campagne validée",
+    "rejected": "Campagne refusée",
+    "suspended": "Campagne suspendue",
+    "reactivated": "Campagne réactivée",
+    "removed": "Testeur retiré"
+  },
+  "note": {
+    "label": "Motif ou message",
+    "required": "Obligatoire : il est montré au porteur.",
+    "optional": "Facultatif.",
+    "removeHint": "Montré au testeur ; le porteur est prévenu et la place se libère.",
+    "reject": {
+      "title": "Refuser la campagne",
+      "lead": "Le motif est montré au porteur de « {{name}} », qui peut la corriger et la renvoyer."
+    },
+    "suspend": {
+      "title": "Suspendre la campagne",
+      "lead": "« {{name}} n'accepte plus de nouveaux testeurs ; le décompte de ceux en cours continue."
+    },
+    "approve": {
+      "title": "Valider la campagne",
+      "lead": "« {{name}} sera annoncée aux membres qui font du mobile."
+    },
+    "reactivate": {
+      "title": "Réactiver la campagne",
+      "lead": "« {{name}} accepte de nouveau des testeurs."
+    },
+    "remove": {
+      "title": "Retirer le testeur",
+      "lead": "{{name}} perd sa place dans cette campagne."
+    }
+  },
+  "detail": {
+    "back": "Retour aux tests",
+    "createdOn": "créée le {{date}}",
+    "progress": "avancement",
+    "spots": "places prises",
+    "days": "jours de test",
+    "completed": "terminés",
+    "description": "Description",
+    "optIn": "Lien d'inscription :",
+    "instructions": "Consignes aux testeurs",
+    "reviewNote": "Dernier motif :",
+    "testers": "Testeurs",
+    "noTesters": "Aucun testeur pour l'instant.",
+    "tester": "Testeur",
+    "daysDone": "Jours",
+    "google": "Compte Google",
+    "needsAttention": "À confirmer : 3 jours sans « toujours inscrit »",
+    "owner": "Porteur",
+    "history": "Historique",
+    "noHistory": "Aucun événement.",
+    "automatic": "Plateforme"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "navLabel": "Navigation de l'administration",
+  "groups": {
+    "pilotage": "Pilotage",
+    "moderation": "Modération",
+    "community": "Communauté",
+    "system": "Système"
+  },
+  "pending_one": "{{count}} en attente",
+  "pending_other": "{{count}} en attente",
+  "logout": "Se déconnecter",
+  "openMenu": "Ouvrir le menu",
+  "breadcrumbs": "Fil d'Ariane",
+  "searchUser": "Rechercher un utilisateur",
+  "viewSite": "Voir le site"
+}

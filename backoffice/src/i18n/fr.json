@@ -1,0 +1,235 @@
+{
+  "common": {
+    "loading": "Chargement…",
+    "error": "Une erreur est survenue.",
+    "empty": "Rien à afficher.",
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "undo": "Annuler l'action"
+  },
+  "nav": {
+    "reports": "Signalements",
+    "jobs": "Offres en attente",
+    "users": "Utilisateurs",
+    "tags": "Tags",
+    "challenges": "Défis",
+    "referent": "Vue Référent"
+  },
+  "shell": {
+    "skip": "Aller au contenu",
+    "brandSub": "Back office",
+    "menu": "Menu",
+    "closeMenu": "Fermer le menu",
+    "navLabel": "Navigation principale",
+    "logout": "Se déconnecter"
+  },
+  "login": {
+    "title": "Connexion à l'équipe",
+    "intro": "Réservé aux Modérateurs et aux Administrateurs.",
+    "email": "Adresse email",
+    "password": "Mot de passe",
+    "submit": "Se connecter",
+    "note": "Écran de démonstration : la connexion réelle sera branchée avec l'API.",
+    "emailError": "Saisissez une adresse email valide.",
+    "passwordError": "Saisissez votre mot de passe."
+  },
+  "reports": {
+    "title": "Signalements et contestations",
+    "intro": "Traitez la file des contenus signalés. Chaque décision est enregistrée et peut être contestée.",
+    "filter": "Filtrer les signalements",
+    "tab": {
+      "pending": "À traiter",
+      "treated": "Traités",
+      "contests": "Contestations"
+    },
+    "empty": "Aucun signalement dans cette liste.",
+    "target": {
+      "question": "Question",
+      "answer": "Réponse",
+      "offer": "Offre",
+      "mission": "Mission",
+      "project": "Projet",
+      "profile": "Profil"
+    },
+    "reason": {
+      "spam": "Spam",
+      "offensive": "Offensant",
+      "offTopic": "Hors sujet",
+      "impersonation": "Usurpation",
+      "fraudulentOffer": "Offre frauduleuse"
+    },
+    "reportCount_one": "{{count}} signalement",
+    "reportCount_other": "{{count}} signalements",
+    "status": {
+      "pending": "À traiter",
+      "ignored": "Ignoré",
+      "hidden": "Masqué",
+      "warned": "Auteur averti",
+      "suspended": "Compte suspendu"
+    },
+    "action": {
+      "ignore": "Ignorer",
+      "hide": "Masquer",
+      "warn": "Avertir",
+      "suspend": "Suspendre"
+    },
+    "undoMessage": "Décision enregistrée. Vous avez 6 secondes pour l'annuler.",
+    "suspendDialog": {
+      "title": "Suspendre ce compte ?",
+      "body": "Le compte de {{author}} sera suspendu. Vous pouvez annuler pendant 6 secondes, ou le réactiver ensuite depuis l'écran Utilisateurs."
+    },
+    "contest": {
+      "empty": "Aucune contestation en cours.",
+      "status": {
+        "pending": "En attente",
+        "upheld": "Décision maintenue",
+        "restored": "Contenu rétabli"
+      },
+      "restore": "Rétablir le contenu",
+      "keep": "Maintenir la décision",
+      "authorMessage": "Message de l'auteur :"
+    }
+  },
+  "jobs": {
+    "title": "Offres d'emploi en attente",
+    "intro": "Une offre n'est publiée qu'après validation par l'équipe. Vérifiez le domaine de l'entreprise et la rémunération.",
+    "filter": "Filtrer les offres",
+    "empty": "Aucune offre dans cette liste.",
+    "status": {
+      "pending": "En attente",
+      "approved": "Approuvées",
+      "refused": "Refusées"
+    },
+    "type": {
+      "permanent": "CDI",
+      "remote": "À distance",
+      "mission": "Mission",
+      "internship": "Stage"
+    },
+    "domainVerified": "Domaine vérifié",
+    "domainUnverified": "Domaine non vérifié",
+    "salaryShown": "Rémunération indiquée",
+    "salaryMissing": "Rémunération absente",
+    "approve": "Approuver",
+    "refuse": "Refuser",
+    "refuseTitle": "Refuser cette offre",
+    "reasonLabel": "Motif du refus",
+    "reasonHint": "Le motif est transmis à l'entreprise.",
+    "reasonError": "Le motif doit faire au moins {{count}} caractères."
+  },
+  "users": {
+    "title": "Utilisateurs",
+    "intro": "Recherchez un membre, suspendez ou réactivez son compte, changez son rôle.",
+    "search": "Rechercher par nom ou email",
+    "empty": "Aucun utilisateur ne correspond à cette recherche.",
+    "level": {
+      "NEWCOMER": "Nouveau",
+      "MEMBER": "Membre",
+      "CONTRIBUTOR": "Contributeur",
+      "REFERENT": "Référent"
+    },
+    "reputation_one": "{{count}} point",
+    "reputation_other": "{{count}} points",
+    "active": "Actif",
+    "suspended": "Suspendu",
+    "suspend": "Suspendre",
+    "reactivate": "Réactiver",
+    "role": {
+      "label": "Rôle",
+      "member": "Membre",
+      "recruiter": "Recruteur",
+      "moderator": "Modérateur",
+      "administrator": "Administrateur"
+    },
+    "suspendDialog": {
+      "title": "Suspendre ce compte ?",
+      "body": "{{name}} ne pourra plus se connecter ni publier tant que le compte n'est pas réactivé."
+    }
+  },
+  "tags": {
+    "title": "Tags",
+    "intro": "Créez des tags, fusionnez les doublons, supprimez les tags inutilisés.",
+    "empty": "Aucun tag.",
+    "create": {
+      "label": "Nouveau tag",
+      "hint": "Minuscules, chiffres et tirets, de 2 à 30 caractères.",
+      "submit": "Créer le tag",
+      "invalid": "Format invalide. Exemple : spring-boot.",
+      "exists": "Ce tag existe déjà."
+    },
+    "usage_one": "{{count}} question",
+    "usage_other": "{{count}} questions",
+    "merge": "Fusionner",
+    "delete": "Supprimer",
+    "deleteDisabled": "Seul un tag inutilisé peut être supprimé.",
+    "mergeDialog": {
+      "title": "Fusionner le tag {{name}}",
+      "target": "Tag à conserver",
+      "hint": "Les questions du tag fusionné passent au tag conservé.",
+      "choose": "Choisir un tag"
+    }
+  },
+  "challenges": {
+    "title": "Défis et soumissions",
+    "intro": "Créez un défi et notez les dépôts des membres sur 100.",
+    "create": "Créer un défi",
+    "current": "Défi en cours",
+    "endsOn": "Se termine le {{date}}",
+    "points_one": "{{count}} point",
+    "points_other": "{{count}} points",
+    "submissions": "Soumissions",
+    "noSubmissions": "Aucune soumission pour ce défi.",
+    "toGrade": "À noter",
+    "graded": "Note : {{score}} sur 100",
+    "score": "Note sur 100",
+    "saveScore": "Enregistrer la note",
+    "saved": "Note enregistrée.",
+    "scoreError": "Entier de 0 à 100.",
+    "invalidLink": "Lien invalide, il n'est pas affiché.",
+    "form": {
+      "title": "Titre du défi",
+      "brief": "Énoncé et spécifications",
+      "points": "Points attribués",
+      "endsOn": "Date de fin",
+      "submit": "Publier le défi",
+      "titleError": "Le titre doit faire au moins 5 caractères.",
+      "briefError": "L'énoncé doit faire au moins 20 caractères.",
+      "pointsError": "Saisissez un nombre entier positif.",
+      "endsOnError": "Choisissez une date de fin."
+    }
+  },
+  "referent": {
+    "title": "Vue Référent",
+    "intro": "La modération par les membres de confiance. Vous pouvez ignorer ou masquer un contenu ; l'auteur peut contester devant l'équipe."
+  },
+  "prefs": {
+    "theme": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "language": "Langue"
+  },
+  "errors": {
+    "notFound": {
+      "title": "Page introuvable",
+      "message": "L'adresse demandée n'existe pas dans le back office."
+    },
+    "crash": {
+      "title": "Une erreur est survenue",
+      "message": "Cet écran n'a pas pu s'afficher. Rechargez la page ; si le problème continue, prévenez l'équipe."
+    },
+    "reload": "Recharger la page",
+    "backHome": "Retour aux signalements",
+    "codes": {
+      "NETWORK_ERROR": "Connexion impossible. Vérifiez votre réseau et réessayez.",
+      "LOGIN_LOCKED": "Trop d'essais ratés. Réessayez dans 15 minutes.",
+      "ACCOUNT_SUSPENDED": "Ce compte est suspendu.",
+      "LEVEL_TOO_LOW": "Votre niveau de réputation ne permet pas cette action.",
+      "HTTP_401": "Votre session a expiré. Reconnectez-vous.",
+      "HTTP_403": "Vous n'avez pas le droit de faire cela.",
+      "HTTP_404": "Élément introuvable.",
+      "HTTP_429": "Trop de demandes. Patientez un instant.",
+      "MOCK_NOT_FOUND": "Exemple de réponse manquant dans src/mocks."
+    }
+  }
+}

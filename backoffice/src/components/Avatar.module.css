@@ -1,0 +1,13 @@
+.av {
+  flex-shrink: 0;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--on-color);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.sq {
+  border-radius: var(--r-sm);
+}

@@ -1,0 +1,69 @@
+{
+  "lead": "Work through the queue of reported content. Every decision is recorded and the author can appeal it. Heavily reported content is hidden automatically.",
+  "statusFilter": "Case status",
+  "tab": {
+    "OPEN": "To review",
+    "APPEALED": "Appeals"
+  },
+  "allTypes": "All types",
+  "filterByType": "Filter by content type",
+  "queue": "Report queue",
+  "count_one": "{{count}} report",
+  "count_other": "{{count}} reports",
+  "reasonBy": "{{reason}}, by {{name}}",
+  "emptyTitle": "No case to review",
+  "emptyHint": "The queue is empty. Good work.",
+  "detailTitle": {
+    "QUESTION": "Question reported for “{{reason}}”",
+    "ANSWER": "Answer reported for “{{reason}}”",
+    "JOB": "Offer reported for “{{reason}}”",
+    "MISSION": "Mission reported for “{{reason}}”",
+    "USER": "Profile reported for “{{reason}}”",
+    "PROJECT": "Project reported for “{{reason}}”"
+  },
+  "author": "Author",
+  "deletedUser": "Deleted user",
+  "authorLevel": "Level",
+  "points_one": "{{count}} reputation point",
+  "points_other": "{{count}} reputation points",
+  "country": "Country",
+  "firstReported": "First reported",
+  "decision": "Decision",
+  "byTeam": "(team)",
+  "byReferent": "(Referent)",
+  "appeal": "Author's appeal",
+  "reasonsTitle": "Reasons",
+  "comments": "Member comments",
+  "action": {
+    "DISMISS": "Ignore the report",
+    "HIDE": "Hide the content",
+    "WARN": "Warn the author",
+    "SUSPEND": "Suspend the author",
+    "RESTORE": "Restore the content",
+    "KEEP": "Keep it hidden"
+  },
+  "toast": {
+    "DISMISS": "Report ignored",
+    "HIDE": "Content hidden",
+    "WARN": "Warning sent",
+    "SUSPEND": "Account suspended and content hidden",
+    "RESTORE": "Content restored"
+  },
+  "note": {
+    "label": "Reason shown to the author",
+    "hint": "The author receives this message and can appeal the decision.",
+    "template": "Hello {{name}}, your {{type}} was reported for “{{reason}}”. Please read the community rules again.",
+    "HIDE": {
+      "title": "Hide the content",
+      "lead": "The content of {{name}} stays visible to its author, who can appeal to the team."
+    },
+    "WARN": {
+      "title": "Warn the author",
+      "lead": "{{name}} will receive this warning in their notifications. The content is also hidden."
+    },
+    "SUSPEND": {
+      "title": "Suspend the author",
+      "lead": "The account of {{name}} will be suspended and the content hidden. You can reactivate it from Users."
+    }
+  }
+}

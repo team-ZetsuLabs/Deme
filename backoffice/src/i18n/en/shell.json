@@ -1,0 +1,16 @@
+{
+  "navLabel": "Administration navigation",
+  "groups": {
+    "pilotage": "Overview",
+    "moderation": "Moderation",
+    "community": "Community",
+    "system": "System"
+  },
+  "pending_one": "{{count}} pending",
+  "pending_other": "{{count}} pending",
+  "logout": "Log out",
+  "openMenu": "Open menu",
+  "breadcrumbs": "Breadcrumb",
+  "searchUser": "Search for a user",
+  "viewSite": "View site"
+}

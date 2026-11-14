@@ -1,0 +1,26 @@
+{
+  "lead": "Accès réservé à l'équipe de modération et aux administrateurs.",
+  "email": "Adresse email",
+  "password": "Mot de passe",
+  "submit": "Se connecter",
+  "checking": "Vérification",
+  "emailError": "Entrez une adresse email valide.",
+  "passwordError": "Entrez votre mot de passe.",
+  "welcome": "Connexion réussie",
+  "attempts": "Après 5 essais ratés, le compte est bloqué 15 minutes.",
+  "brandTitle": "Modérez la communauté",
+  "brandAccent": "en toute confiance.",
+  "brandLead": "Traitez les signalements, validez les offres et notez les défis depuis un seul espace, pensé pour l'équipe de Dɛmɛ.",
+  "points": [
+    "Signalements et contestations au même endroit",
+    "Décisions annulables pendant 6 secondes",
+    "Droits vérifiés par le serveur à chaque action"
+  ],
+  "note": "Seuls les comptes de l'équipe peuvent accéder à cet espace.",
+  "noteSource": "Dɛmɛ, espace administration",
+  "greeting": "Bon retour !",
+  "showPassword": "Afficher le mot de passe",
+  "hidePassword": "Masquer le mot de passe",
+  "footer": "© 2026 Dɛmɛ. Tous droits réservés.",
+  "emailPlaceholder": "prenom@exemple.com"
+}

@@ -1,0 +1,4562 @@
+<!doctype html>
+<html lang="fr" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zetsu Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      ;(function () {
+        var pref = 'light'
+        try {
+          pref = localStorage.getItem('zetsu-admin-theme') || 'light'
+        } catch (e) {}
+        document.documentElement.dataset.theme = pref === 'dark' ? 'dark' : 'light'
+      })()
+    </script>
+    <style>
+      /* ==================================================================
+   Back office Zetsu : même design system que l'application.
+   Plus dense (outil de travail quotidien), clair par défaut.
+   Séries de graphiques validées (daltonisme + contraste) :
+   clair #2a78d6 / #eb6834, sombre #3987e5 / #d95926.
+   ================================================================== */
+      :root,
+      [data-theme='light'] {
+        color-scheme: light;
+        --bg: #f6f7f6;
+        --surface: #ffffff;
+        --surface-2: #f1f3f2;
+        --surface-3: #e7ebe9;
+        --line: #e2e6e4;
+        --line-strong: #cfd6d3;
+        --text: #0d1110;
+        --text-2: #444d4a;
+        --text-3: #5f6966;
+        --placeholder: #7f8985;
+        --green: #00e599;
+        --green-hover: #00cf8a;
+        --green-ink: #00170f;
+        --green-text: #00704b;
+        --green-wash: rgba(0, 180, 118, 0.1);
+        --gold-text: #8a5a00;
+        --good: #0ca30c;
+        --good-text: #006300;
+        --warn: #fab219;
+        --serious: #ec835a;
+        --crit: #d03b3b;
+        --crit-text: #b3261e;
+        --crit-wash: rgba(208, 59, 59, 0.07);
+        --series-1: #2a78d6;
+        --series-2: #eb6834;
+        --grid-line: #e7ebe9;
+        --axis: #cfd6d3;
+        --backdrop: rgba(13, 17, 16, 0.45);
+        --shadow: 0 8px 28px rgba(13, 17, 16, 0.1);
+        --side: #fbfcfb;
+      }
+      [data-theme='dark'] {
+        color-scheme: dark;
+        --bg: #0b0c0c;
+        --surface: #121414;
+        --surface-2: #181b1b;
+        --surface-3: #202424;
+        --line: #262b2b;
+        --line-strong: #353b3b;
+        --text: #eef1f0;
+        --text-2: #b0b8b5;
+        --text-3: #8f9895;
+        --placeholder: #737c79;
+        --green-text: #00e599;
+        --green-wash: rgba(0, 229, 153, 0.1);
+        --gold-text: #f5b83d;
+        --good-text: #3ccf3c;
+        --crit-text: #ff8a80;
+        --crit-wash: rgba(255, 122, 107, 0.08);
+        --series-1: #3987e5;
+        --series-2: #d95926;
+        --grid-line: #232828;
+        --axis: #353b3b;
+        --backdrop: rgba(0, 0, 0, 0.7);
+        --shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+        --side: #0f1111;
+      }
+      :root {
+        --s1: 4px;
+        --s2: 8px;
+        --s3: 12px;
+        --s4: 16px;
+        --s5: 24px;
+        --s6: 32px;
+        --s7: 48px;
+        --r-sm: 6px;
+        --r-md: 10px;
+        --r-lg: 12px;
+        --t-fast: 150ms;
+        --t-base: 200ms;
+        --f-sans: 'Geist', system-ui, sans-serif;
+        --f-mono: 'Geist Mono', ui-monospace, monospace;
+        --sidebar: 248px;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        background: var(--bg);
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        font-family: var(--f-sans);
+        font-size: 15px;
+        line-height: 1.5;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+      button,
+      input,
+      textarea,
+      select {
+        font: inherit;
+        color: inherit;
+      }
+      button,
+      a,
+      select,
+      label[for],
+      summary {
+        cursor: pointer;
+      }
+      button:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+      }
+      a {
+        color: var(--green-text);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      :focus-visible {
+        outline: 2px solid var(--green-text);
+        outline-offset: 2px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .mono {
+        font-family: var(--f-mono);
+      }
+      .num {
+        font-variant-numeric: tabular-nums;
+      }
+      .muted {
+        color: var(--text-3);
+      }
+      code {
+        font-family: var(--f-mono);
+        font-size: 0.86em;
+        padding: 1px 6px;
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        border-radius: var(--r-sm);
+      }
+
+      /* Avatars */
+      .av {
+        flex-shrink: 0;
+        display: inline-grid;
+        place-items: center;
+        border-radius: 50%;
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 0 0 1px var(--line);
+      }
+      .av.sq {
+        border-radius: var(--r-sm);
+      }
+      .who {
+        display: flex;
+        align-items: center;
+        gap: var(--s3);
+        min-width: 0;
+      }
+      .who b {
+        display: block;
+        font-weight: 500;
+        color: var(--text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .who small {
+        display: block;
+        font-size: 13px;
+        color: var(--text-3);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .who a {
+        color: inherit;
+      }
+
+      /* Logo */
+      .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        font-size: 17px;
+        letter-spacing: -0.02em;
+        color: var(--text);
+      }
+      .logo:hover {
+        text-decoration: none;
+      }
+      .logo-mark {
+        width: 22px;
+        height: 22px;
+        border-radius: 5px;
+        border: 1px solid var(--line-strong);
+        background: repeating-linear-gradient(
+          90deg,
+          var(--green) 0 5px,
+          var(--surface) 5px 7px,
+          #f5b83d 7px 9px,
+          var(--surface) 9px 11px
+        );
+      }
+      .env {
+        font-family: var(--f-mono);
+        font-size: 11.5px;
+        font-weight: 500;
+        padding: 1px 7px;
+        border-radius: 4px;
+        border: 1px solid var(--line-strong);
+        color: var(--text-2);
+      }
+
+      /* Boutons */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--s2);
+        min-height: 36px;
+        padding: 0 var(--s3);
+        border-radius: var(--r-md);
+        border: 1px solid transparent;
+        font-weight: 500;
+        font-size: 14px;
+        white-space: nowrap;
+        text-decoration: none;
+        transition:
+          background-color var(--t-fast) ease-out,
+          border-color var(--t-fast) ease-out,
+          color var(--t-fast) ease-out;
+      }
+      .btn:hover {
+        text-decoration: none;
+      }
+      .btn-primary {
+        background: var(--green);
+        color: var(--green-ink);
+        font-weight: 600;
+      }
+      .btn-primary:hover {
+        background: var(--green-hover);
+      }
+      .btn-secondary {
+        background: var(--surface);
+        border-color: var(--line-strong);
+        color: var(--text);
+      }
+      .btn-secondary:hover {
+        background: var(--surface-2);
+        border-color: var(--text-3);
+      }
+      .btn-ghost {
+        background: none;
+        color: var(--text-2);
+      }
+      .btn-ghost:hover {
+        background: var(--surface-2);
+        color: var(--text);
+      }
+      .btn-danger {
+        background: var(--crit);
+        color: #fff;
+        font-weight: 600;
+      }
+      .btn-danger:hover {
+        background: #b3261e;
+      }
+      .btn-danger-line {
+        background: var(--surface);
+        border-color: var(--crit);
+        color: var(--crit-text);
+      }
+      .btn-danger-line:hover {
+        background: var(--crit-wash);
+      }
+      .btn-icon {
+        width: 36px;
+        padding: 0;
+        position: relative;
+      }
+      .btn-sm {
+        min-height: 30px;
+        padding: 0 10px;
+        font-size: 13px;
+      }
+      .btn-block {
+        width: 100%;
+      }
+      .btn[aria-busy='true'] {
+        pointer-events: none;
+      }
+      .spinner {
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        border: 2px solid currentColor;
+        border-right-color: transparent;
+        animation: spin 0.7s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Champs */
+      .field {
+        margin-bottom: var(--s4);
+      }
+      .field-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: var(--s3);
+      }
+      .field label,
+      .label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 6px;
+      }
+      .hint {
+        font-size: 13px;
+        color: var(--text-3);
+        margin-top: 6px;
+      }
+      .input,
+      .field input:not([type='checkbox']):not([type='radio']),
+      .field textarea,
+      .field select,
+      .select {
+        width: 100%;
+        min-height: 40px;
+        padding: 8px var(--s3);
+        background: var(--surface);
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r-md);
+        transition:
+          border-color var(--t-fast) ease-out,
+          box-shadow var(--t-fast) ease-out;
+      }
+      .field textarea {
+        min-height: 110px;
+        resize: vertical;
+      }
+      .field select,
+      .select {
+        appearance: none;
+        padding-right: 34px;
+        background-image:
+          linear-gradient(45deg, transparent 50%, var(--text-2) 50%),
+          linear-gradient(135deg, var(--text-2) 50%, transparent 50%);
+        background-position:
+          calc(100% - 17px) 17px,
+          calc(100% - 12px) 17px;
+        background-size: 5px 5px;
+        background-repeat: no-repeat;
+      }
+      .select {
+        width: auto;
+        min-height: 36px;
+        font-size: 14px;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: var(--placeholder);
+      }
+      .input:focus,
+      .field input:focus,
+      .field textarea:focus,
+      .field select:focus,
+      .select:focus {
+        outline: none;
+        border-color: var(--green-text);
+        box-shadow: 0 0 0 3px var(--green-wash);
+      }
+      .field [aria-invalid='true'] {
+        border-color: var(--crit);
+      }
+      .error {
+        display: none;
+        gap: 6px;
+        align-items: flex-start;
+        font-size: 13px;
+        color: var(--crit-text);
+        margin-top: 6px;
+      }
+      .error.show {
+        display: flex;
+      }
+      .error::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--crit);
+        margin-top: 6px;
+        flex-shrink: 0;
+      }
+      .cb {
+        width: 17px;
+        height: 17px;
+        accent-color: var(--green-text);
+        vertical-align: middle;
+      }
+      .switch-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--s4);
+        padding: var(--s3) 0;
+        border-top: 1px solid var(--line);
+      }
+      .switch-row:first-of-type {
+        border-top: none;
+      }
+      .switch-row b {
+        display: block;
+        font-weight: 500;
+      }
+      .switch-row span {
+        font-size: 13px;
+        color: var(--text-3);
+      }
+      .toggle {
+        position: relative;
+        width: 40px;
+        height: 24px;
+        flex-shrink: 0;
+      }
+      .toggle input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        margin: 0;
+        cursor: pointer;
+      }
+      .toggle i {
+        position: absolute;
+        inset: 0;
+        border-radius: 12px;
+        background: var(--surface-3);
+        border: 1px solid var(--line-strong);
+        transition: background-color var(--t-fast) ease-out;
+        pointer-events: none;
+      }
+      .toggle i::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--surface);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+        transition: transform var(--t-fast) ease-out;
+      }
+      .toggle input:checked + i {
+        background: var(--green-text);
+        border-color: var(--green-text);
+      }
+      .toggle input:checked + i::after {
+        transform: translateX(16px);
+      }
+      .toggle input:focus-visible + i {
+        outline: 2px solid var(--green-text);
+        outline-offset: 2px;
+      }
+
+      /* Statuts : toujours pastille + libellé */
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text);
+        white-space: nowrap;
+      }
+      .status::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--text-3);
+        flex-shrink: 0;
+      }
+      .status.good::before {
+        background: var(--good);
+      }
+      .status.warn::before {
+        background: var(--warn);
+      }
+      .status.serious::before {
+        background: var(--serious);
+      }
+      .status.crit::before {
+        background: var(--crit);
+      }
+      .status.crit {
+        color: var(--crit-text);
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 22px;
+        padding: 0 8px;
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 4px;
+        border: 1px solid var(--line-strong);
+        color: var(--text-2);
+        white-space: nowrap;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        padding: 0 8px;
+        font-family: var(--f-mono);
+        font-size: 12px;
+        color: var(--text-2);
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+      .count-badge {
+        margin-left: auto;
+        min-width: 20px;
+        height: 20px;
+        padding: 0 6px;
+        border-radius: 10px;
+        background: var(--green);
+        color: var(--green-ink);
+        font-size: 11.5px;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+        font-family: var(--f-mono);
+      }
+      .count-badge.alert {
+        background: var(--crit);
+        color: #fff;
+      }
+
+      /* Segmented */
+      .seg {
+        max-width: 100%;
+        overflow-x: auto;
+        scrollbar-width: none;
+        display: inline-flex;
+        padding: 3px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r-md);
+      }
+      .seg button {
+        min-height: 28px;
+        padding: 0 10px;
+        border: none;
+        background: none;
+        border-radius: var(--r-sm);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-2);
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .seg button:hover {
+        color: var(--text);
+      }
+      .seg button[aria-pressed='true'],
+      .seg button[aria-selected='true'] {
+        background: var(--surface-3);
+        color: var(--text);
+        box-shadow: inset 0 0 0 1px var(--line-strong);
+      }
+      .seg .n {
+        font-family: var(--f-mono);
+        font-size: 12px;
+        color: var(--text-3);
+      }
+
+      /* ==================================================================
+   CONNEXION ADMIN
+   ================================================================== */
+      .login {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: var(--s5);
+      }
+      .login-card {
+        width: 100%;
+        max-width: 400px;
+      }
+      .login-card .logo {
+        margin-bottom: var(--s6);
+      }
+      .login-card h1 {
+        font-size: 24px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+      }
+      .login-card .lead {
+        color: var(--text-2);
+        margin: 6px 0 var(--s5);
+      }
+      .login-box {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        padding: var(--s5);
+      }
+      .login-foot {
+        margin-top: var(--s4);
+        font-size: 13px;
+        color: var(--text-3);
+      }
+      .otp {
+        font-family: var(--f-mono);
+        font-size: 22px;
+        letter-spacing: 0.5em;
+        text-align: center;
+        padding-left: 0.5em !important;
+      }
+      .form-alert {
+        display: none;
+        padding: var(--s3);
+        border: 1px solid var(--crit);
+        background: var(--crit-wash);
+        border-radius: var(--r-md);
+        font-size: 14px;
+        margin-bottom: var(--s4);
+      }
+      .form-alert.show {
+        display: block;
+      }
+
+      /* ==================================================================
+   STRUCTURE
+   ================================================================== */
+      .shell {
+        display: grid;
+        grid-template-columns: var(--sidebar) minmax(0, 1fr);
+        min-height: 100vh;
+      }
+      .shell > div {
+        min-width: 0;
+      }
+      .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+        background: var(--side);
+        border-right: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        padding: var(--s4) var(--s3);
+      }
+      .sidebar-head {
+        display: flex;
+        align-items: center;
+        gap: var(--s2);
+        padding: 4px var(--s2) var(--s5);
+      }
+      .nav-group {
+        margin-bottom: var(--s4);
+      }
+      .nav-label {
+        font-size: 12.5px;
+        color: var(--text-3);
+        padding: 0 var(--s2);
+        margin-bottom: 4px;
+      }
+      .nav a {
+        display: flex;
+        align-items: center;
+        gap: var(--s3);
+        min-height: 36px;
+        padding: 0 var(--s2);
+        border-radius: var(--r-sm);
+        color: var(--text-2);
+        font-weight: 500;
+        font-size: 14.5px;
+        transition:
+          background-color var(--t-fast) ease-out,
+          color var(--t-fast) ease-out;
+      }
+      .nav a svg {
+        color: var(--text-3);
+        flex-shrink: 0;
+      }
+      .nav a:hover {
+        background: var(--surface-2);
+        color: var(--text);
+        text-decoration: none;
+      }
+      .nav a[aria-current='page'] {
+        background: var(--surface);
+        color: var(--text);
+        box-shadow:
+          inset 2px 0 0 var(--green),
+          0 0 0 1px var(--line);
+      }
+      .nav a[aria-current='page'] svg {
+        color: var(--green-text);
+      }
+      .sidebar-foot {
+        margin-top: auto;
+        padding-top: var(--s4);
+        border-top: 1px solid var(--line);
+      }
+      .me {
+        display: flex;
+        align-items: center;
+        gap: var(--s3);
+        padding: var(--s2);
+        border-radius: var(--r-md);
+      }
+      .me b {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .me small {
+        display: block;
+        font-size: 12.5px;
+        color: var(--text-3);
+      }
+      .me .btn {
+        margin-left: auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 15;
+        display: flex;
+        align-items: center;
+        gap: var(--s3);
+        padding: 10px var(--s5);
+        background: var(--surface);
+        border-bottom: 1px solid var(--line);
+      }
+      .crumbs {
+        display: flex;
+        align-items: center;
+        gap: var(--s2);
+        font-size: 14px;
+        color: var(--text-3);
+        min-width: 0;
+      }
+      .crumbs a {
+        color: var(--text-2);
+      }
+      .crumbs b {
+        color: var(--text);
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .topbar .right {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: var(--s2);
+      }
+      .gsearch {
+        display: flex;
+        align-items: center;
+        gap: var(--s2);
+        height: 36px;
+        width: 300px;
+        padding: 0 var(--s3);
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r-md);
+        background: var(--bg);
+      }
+      .gsearch:focus-within {
+        border-color: var(--green-text);
+        box-shadow: 0 0 0 3px var(--green-wash);
+      }
+      .gsearch input {
+        flex: 1;
+        min-width: 0;
+        border: none;
+        background: none;
+        outline: none;
+        font-size: 14px;
+      }
+      .kbd {
+        font-family: var(--f-mono);
+        font-size: 11.5px;
+        color: var(--text-3);
+        border: 1px solid var(--line-strong);
+        border-radius: 4px;
+        padding: 0 5px;
+      }
+      .burger {
+        display: none;
+      }
+
+      .content {
+        padding: var(--s5);
+        max-width: 1320px;
+        width: 100%;
+        min-width: 0;
+      }
+      .page-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: var(--s4);
+        margin-bottom: var(--s5);
+        flex-wrap: wrap;
+      }
+      .page-head h1 {
+        font-size: 24px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        line-height: 1.2;
+      }
+      .page-head p {
+        color: var(--text-2);
+        margin-top: 4px;
+        font-size: 14.5px;
+      }
+      .page-head .actions {
+        display: flex;
+        gap: var(--s2);
+        flex-wrap: wrap;
+      }
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+      }
+      .panel-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--s3);
+        padding: var(--s4) var(--s5);
+        border-bottom: 1px solid var(--line);
+        flex-wrap: wrap;
+      }
+      .panel-head h2 {
+        font-size: 15.5px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      .panel-head p {
+        font-size: 13px;
+        color: var(--text-3);
+      }
+      .panel-body {
+        padding: var(--s5);
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+        gap: var(--s5);
+      }
+      .stack > * + * {
+        margin-top: var(--s5);
+      }
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--s2);
+        margin-bottom: var(--s4);
+      }
+      .filters .input {
+        width: 260px;
+        min-height: 36px;
+        font-size: 14px;
+      }
+      .filters .spacer {
+        flex: 1;
+      }
+
+      /* KPI */
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        margin-bottom: var(--s5);
+      }
+      .kpi {
+        padding: var(--s4) var(--s5);
+        border-left: 1px solid var(--line);
+      }
+      .kpi:first-child {
+        border-left: none;
+      }
+      .kpi .k-label {
+        font-size: 13.5px;
+        color: var(--text-2);
+      }
+      .kpi .k-value {
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        margin-top: 2px;
+      }
+      .kpi .k-delta {
+        font-size: 13px;
+        color: var(--text-3);
+        margin-top: 2px;
+      }
+      .kpi .k-delta b {
+        font-weight: 600;
+      }
+      .kpi .k-delta b.up {
+        color: var(--good-text);
+      }
+      .kpi .k-delta b.down {
+        color: var(--crit-text);
+      }
+
+      /* Graphiques */
+      .chart-legend {
+        display: flex;
+        gap: var(--s4);
+        flex-wrap: wrap;
+        font-size: 13px;
+        color: var(--text-2);
+      }
+      .chart-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .chart-legend i {
+        width: 14px;
+        height: 2px;
+        border-radius: 1px;
+        display: inline-block;
+      }
+      .chart-wrap {
+        position: relative;
+      }
+      .chart-wrap svg {
+        display: block;
+        width: 100%;
+        overflow: visible;
+      }
+      .chart-wrap svg:focus-visible {
+        outline: 2px solid var(--green-text);
+        outline-offset: 4px;
+        border-radius: 4px;
+      }
+      .chart-wrap text {
+        font-family: var(--f-sans);
+        font-size: 12px;
+        fill: var(--text-3);
+      }
+      .chart-wrap .dlabel {
+        font-size: 12.5px;
+        fill: var(--text-2);
+        font-weight: 500;
+      }
+      .tooltip {
+        position: absolute;
+        pointer-events: none;
+        z-index: 5;
+        min-width: 150px;
+        padding: var(--s2) var(--s3);
+        background: var(--surface);
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r-md);
+        box-shadow: var(--shadow);
+        font-size: 13px;
+      }
+      .tooltip .t-head {
+        color: var(--text-3);
+        margin-bottom: 4px;
+      }
+      .tooltip .t-row {
+        display: flex;
+        align-items: center;
+        gap: var(--s2);
+      }
+      .tooltip .t-row i {
+        width: 12px;
+        height: 2px;
+        border-radius: 1px;
+      }
+      .tooltip .t-row b {
+        font-weight: 600;
+        color: var(--text);
+        font-variant-numeric: tabular-nums;
+      }
+      .tooltip .t-row span {
+        color: var(--text-2);
+      }
+      .bars {
+        display: grid;
+        gap: 10px;
+      }
+      .bar-row {
+        display: grid;
+        grid-template-columns: 110px minmax(0, 1fr) 44px;
+        align-items: center;
+        gap: var(--s3);
+        font-size: 13.5px;
+        border-radius: var(--r-sm);
+        padding: 2px 0;
+      }
+      .bar-row .b-label {
+        font-family: var(--f-mono);
+        font-size: 12.5px;
+        color: var(--text-2);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .bar-track {
+        height: 14px;
+        position: relative;
+      }
+      .bar-fill {
+        height: 100%;
+        background: var(--series-1);
+        border-radius: 0 4px 4px 0;
+        transition: width var(--t-base) ease-out;
+      }
+      .bar-row:hover .bar-fill,
+      .bar-row:focus-visible .bar-fill {
+        filter: brightness(1.12);
+      }
+      .bar-row .b-val {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        color: var(--text);
+        font-weight: 500;
+      }
+      .data-table-toggle {
+        font-size: 13px;
+      }
+
+      /* Tableaux */
+      .table-wrap {
+        overflow-x: auto;
+        position: relative;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th {
+        text-align: left;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--text-3);
+        padding: 10px var(--s3);
+        border-bottom: 1px solid var(--line);
+        background: var(--surface-2);
+        white-space: nowrap;
+        position: sticky;
+        top: 0;
+      }
+      th:first-child {
+        padding-left: var(--s5);
+      }
+      th:last-child {
+        padding-right: var(--s5);
+      }
+      td {
+        padding: 10px var(--s3);
+        border-bottom: 1px solid var(--line);
+        vertical-align: middle;
+      }
+      td:first-child {
+        padding-left: var(--s5);
+      }
+      td:last-child {
+        padding-right: var(--s5);
+      }
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+      tbody tr:hover td {
+        background: var(--surface-2);
+      }
+      tbody tr.selected td {
+        background: var(--green-wash);
+      }
+      td.r,
+      th.r {
+        text-align: right;
+      }
+      td.num,
+      th.num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      td.num {
+        font-family: var(--f-mono);
+        font-size: 13px;
+      }
+      th button.sort {
+        all: unset;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      th button.sort:focus-visible {
+        outline: 2px solid var(--green-text);
+        outline-offset: 2px;
+      }
+      th button.sort svg {
+        opacity: 0.35;
+      }
+      th[aria-sort] button.sort svg {
+        opacity: 1;
+        color: var(--text);
+      }
+      th[aria-sort='descending'] button.sort svg {
+        transform: rotate(180deg);
+      }
+      .cell-title {
+        font-weight: 500;
+        color: var(--text);
+        display: block;
+        max-width: 420px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .cell-title:hover {
+        color: var(--green-text);
+      }
+      .row-actions {
+        display: flex;
+        gap: 4px;
+        justify-content: flex-end;
+      }
+      .pager {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--s3);
+        padding: var(--s3) var(--s5);
+        border-top: 1px solid var(--line);
+        font-size: 13.5px;
+        color: var(--text-3);
+        flex-wrap: wrap;
+      }
+      .pager .btns {
+        display: flex;
+        gap: 4px;
+      }
+      .bulk {
+        display: flex;
+        align-items: center;
+        gap: var(--s3);
+        padding: 10px var(--s5);
+        background: var(--green-wash);
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+        flex-wrap: wrap;
+      }
+      .bulk b {
+        font-weight: 600;
+      }
+      .empty {
+        padding: var(--s7) var(--s5);
+        text-align: center;
+        color: var(--text-2);
+      }
+      .empty b {
+        display: block;
+        color: var(--text);
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+
+      /* Modération : liste + détail */
+      .split {
+        display: grid;
+        grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+        min-height: 560px;
+      }
+      .queue {
+        border-right: 1px solid var(--line);
+        overflow-y: auto;
+        max-height: 72vh;
+      }
+      .q-item {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: var(--s3) var(--s4);
+        border: none;
+        border-bottom: 1px solid var(--line);
+        background: none;
+      }
+      .q-item:hover {
+        background: var(--surface-2);
+      }
+      .q-item[aria-current='true'] {
+        background: var(--green-wash);
+        box-shadow: inset 3px 0 0 var(--green);
+      }
+      .q-item .q-top {
+        display: flex;
+        align-items: center;
+        gap: var(--s2);
+        margin-bottom: 4px;
+      }
+      .q-item .q-top .muted {
+        margin-left: auto;
+        font-size: 12.5px;
+      }
+      .q-item p {
+        font-size: 14px;
+        color: var(--text);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .q-item small {
+        display: block;
+        font-size: 12.5px;
+        color: var(--text-3);
+        margin-top: 4px;
+      }
+      .reports-n {
+        font-family: var(--f-mono);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--crit-text);
+      }
+      .detail {
+        padding: var(--s5);
+      }
+      .detail h2 {
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+      .quote {
+        margin: var(--s4) 0;
+        padding: var(--s4);
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--serious);
+        border-radius: var(--r-md);
+        background: var(--surface-2);
+      }
+      .quote p {
+        white-space: pre-wrap;
+      }
+      .quote .ctx {
+        font-size: 13px;
+        color: var(--text-3);
+        margin-bottom: var(--s2);
+      }
+      .dl {
+        display: grid;
+        grid-template-columns: 150px minmax(0, 1fr);
+        gap: 8px var(--s4);
+        font-size: 14px;
+      }
+      .dl dt {
+        color: var(--text-3);
+      }
+      .dl dd {
+        color: var(--text);
+      }
+      .report-list li {
+        list-style: none;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: var(--s3);
+        align-items: center;
+        padding: 10px 0;
+        border-top: 1px solid var(--line);
+        font-size: 14px;
+      }
+      .report-list li:first-child {
+        border-top: none;
+      }
+      .action-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--s2);
+        padding-top: var(--s4);
+        margin-top: var(--s4);
+        border-top: 1px solid var(--line);
+      }
+      .section-title {
+        font-size: 14.5px;
+        font-weight: 600;
+        margin: var(--s5) 0 var(--s2);
+      }
+
+      /* Fiches */
+      .profile-head {
+        display: flex;
+        gap: var(--s4);
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .profile-head h1 {
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+      }
+      .profile-head .actions {
+        margin-left: auto;
+        display: flex;
+        gap: var(--s2);
+        flex-wrap: wrap;
+      }
+      .stat-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        border-top: 1px solid var(--line);
+      }
+      .stat-strip > div {
+        padding: var(--s3) var(--s5);
+        border-left: 1px solid var(--line);
+      }
+      .stat-strip > div:first-child {
+        border-left: none;
+      }
+      .stat-strip strong {
+        display: block;
+        font-family: var(--f-mono);
+        font-size: 20px;
+        font-weight: 500;
+      }
+      .stat-strip span {
+        font-size: 13px;
+        color: var(--text-3);
+      }
+      .tabbar {
+        display: flex;
+        gap: 4px;
+        border-bottom: 1px solid var(--line);
+        padding: 0 var(--s5);
+        overflow-x: auto;
+      }
+      .tabbar button {
+        min-height: 42px;
+        padding: 0 var(--s3);
+        border: none;
+        background: none;
+        color: var(--text-2);
+        font-weight: 500;
+        white-space: nowrap;
+        box-shadow: inset 0 -2px 0 transparent;
+      }
+      .tabbar button:hover {
+        color: var(--text);
+      }
+      .tabbar button[aria-selected='true'] {
+        color: var(--text);
+        box-shadow: inset 0 -2px 0 var(--green);
+      }
+      .timeline li {
+        list-style: none;
+        display: grid;
+        grid-template-columns: 110px minmax(0, 1fr);
+        gap: var(--s4);
+        padding: 10px 0;
+        border-top: 1px solid var(--line);
+        font-size: 14px;
+      }
+      .timeline li:first-child {
+        border-top: none;
+      }
+      .timeline time {
+        color: var(--text-3);
+        font-size: 13px;
+      }
+
+      /* Offres en attente */
+      .job-card {
+        padding: var(--s5);
+        border-top: 1px solid var(--line);
+        display: grid;
+        grid-template-columns: 48px minmax(0, 1fr) auto;
+        gap: var(--s4);
+        align-items: start;
+      }
+      .job-card:first-child {
+        border-top: none;
+      }
+      .job-card h3 {
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      .job-card .meta {
+        font-size: 13.5px;
+        color: var(--text-3);
+        margin-top: 2px;
+      }
+      .checks {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--s2) var(--s4);
+        margin-top: var(--s3);
+        font-size: 13px;
+      }
+      .checks span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--text-2);
+      }
+      .checks .ok svg {
+        color: var(--good-text);
+      }
+      .checks .ko svg {
+        color: var(--crit-text);
+      }
+      .job-card details {
+        margin-top: var(--s3);
+      }
+      .job-card summary {
+        font-size: 13.5px;
+        color: var(--text-2);
+        font-weight: 500;
+      }
+      .job-card details p,
+      .job-card details ul {
+        font-size: 14px;
+        color: var(--text-2);
+        margin-top: var(--s2);
+      }
+      .job-card details ul {
+        padding-left: var(--s5);
+      }
+      .job-card .acts {
+        display: flex;
+        flex-direction: column;
+        gap: var(--s2);
+      }
+
+      /* Création de défi */
+      .endpoint {
+        display: grid;
+        grid-template-columns: 110px minmax(0, 1fr) 36px;
+        gap: var(--s2);
+        margin-bottom: var(--s2);
+      }
+      .preview-box {
+        padding: var(--s4);
+        border: 1px dashed var(--line-strong);
+        border-radius: var(--r-md);
+      }
+      .preview-box h3 {
+        font-size: 17px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+      .preview-box p {
+        color: var(--text-2);
+        font-size: 14px;
+        margin-top: 4px;
+        white-space: pre-wrap;
+      }
+      .preview-box ul {
+        margin-top: var(--s3);
+        display: grid;
+        gap: 4px;
+      }
+      .preview-box li {
+        list-style: none;
+        font-size: 13.5px;
+        color: var(--text-2);
+        display: grid;
+        grid-template-columns: 52px 1fr;
+      }
+      .preview-box li .mono {
+        color: var(--green-text);
+        font-size: 12.5px;
+        font-weight: 500;
+      }
+
+      .save-bar {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--s2);
+        padding: var(--s3) var(--s5);
+        border-top: 1px solid var(--line);
+        background: var(--surface-2);
+        border-radius: 0 0 var(--r-lg) var(--r-lg);
+      }
+
+      /* Fenêtres, menus, notifications */
+      dialog {
+        width: min(520px, calc(100vw - 32px));
+        margin: auto;
+        padding: 0;
+        background: var(--surface);
+        color: var(--text);
+        border: 1px solid var(--line-strong);
+        border-radius: var(--r-lg);
+        box-shadow: var(--shadow);
+      }
+      dialog::backdrop {
+        background: var(--backdrop);
+      }
+      dialog[open] {
+        animation: rise var(--t-base) ease-out;
+      }
+      @keyframes rise {
+        from {
+          transform: translateY(8px);
+          opacity: 0;
+        }
+        to {
+          transform: none;
+          opacity: 1;
+        }
+      }
+      .dlg-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--s4) var(--s5);
+        border-bottom: 1px solid var(--line);
+      }
+      .dlg-head h2 {
+        font-size: 16.5px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+      .dlg-body {
+        padding: var(--s5);
+      }
+      .dlg-body > p {
+        color: var(--text-2);
+        font-size: 14.5px;
+        margin-bottom: var(--s4);
+      }
+      .dlg-foot {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--s2);
+        margin-top: var(--s5);
+      }
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: var(--s5);
+        z-index: 60;
+        transform: translate(-50%, 180%);
+        display: flex;
+        align-items: center;
+        gap: var(--s3);
+        padding: 10px var(--s4);
+        background: var(--text);
+        color: var(--bg);
+        border-radius: var(--r-md);
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: var(--shadow);
+        transition: transform var(--t-base) ease-out;
+        max-width: calc(100vw - 32px);
+      }
+      .toast.show {
+        transform: translate(-50%, 0);
+      }
+      .toast::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green);
+        flex-shrink: 0;
+      }
+      .toast button {
+        background: none;
+        border: none;
+        color: var(--bg);
+        font-weight: 600;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .scrim {
+        display: none;
+      }
+
+      /* Responsive */
+      @media (max-width: 1180px) {
+        .grid-2 {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .kpis {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .kpi:nth-child(3) {
+          border-left: none;
+        }
+        .kpi:nth-child(n + 3) {
+          border-top: 1px solid var(--line);
+        }
+        .gsearch {
+          width: 220px;
+        }
+      }
+      @media (max-width: 900px) {
+        .shell {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .sidebar {
+          position: fixed;
+          z-index: 40;
+          left: 0;
+          top: 0;
+          width: 280px;
+          transform: translateX(-100%);
+          transition: transform var(--t-base) ease-out;
+          box-shadow: var(--shadow);
+        }
+        .sidebar.open {
+          transform: none;
+        }
+        .scrim.show {
+          display: block;
+          position: fixed;
+          inset: 0;
+          z-index: 35;
+          background: var(--backdrop);
+        }
+        .burger {
+          display: inline-flex;
+        }
+        .gsearch {
+          display: none;
+        }
+        .split {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .queue {
+          border-right: none;
+          border-bottom: 1px solid var(--line);
+          max-height: 320px;
+        }
+        .job-card {
+          grid-template-columns: 44px minmax(0, 1fr);
+        }
+        .job-card .acts {
+          grid-column: 1 / -1;
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+      }
+      @media (max-width: 640px) {
+        .content {
+          padding: var(--s4);
+        }
+        .topbar {
+          padding: 10px var(--s4);
+        }
+        .kpis,
+        .stat-strip {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .stat-strip > div:nth-child(3) {
+          border-left: none;
+        }
+        .stat-strip > div:nth-child(n + 3) {
+          border-top: 1px solid var(--line);
+        }
+        .kpi {
+          padding: var(--s3) var(--s4);
+        }
+        .kpi .k-value {
+          font-size: 22px;
+        }
+        .panel-head,
+        .panel-body,
+        .detail {
+          padding-left: var(--s4);
+          padding-right: var(--s4);
+        }
+        th:first-child,
+        td:first-child {
+          padding-left: var(--s4);
+        }
+        th:last-child,
+        td:last-child {
+          padding-right: var(--s4);
+        }
+        .filters .input {
+          width: 100%;
+        }
+        .dl {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 2px;
+        }
+        .dl dd {
+          margin-bottom: var(--s2);
+        }
+        .timeline li {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 2px;
+        }
+        .endpoint {
+          grid-template-columns: 90px minmax(0, 1fr) 36px;
+        }
+        .btn {
+          min-height: 40px;
+        }
+        .hide-sm {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <symbol id="i-home" viewBox="0 0 18 18">
+        <path
+          d="M3 8 9 3l6 5v6.5a1 1 0 0 1-1 1h-3v-4H7v4H4a1 1 0 0 1-1-1V8Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        />
+      </symbol>
+      <symbol id="i-flag" viewBox="0 0 18 18">
+        <path
+          d="M4 15.5V3m0 0h8.5l-1.5 3 1.5 3H4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </symbol>
+      <symbol id="i-doc" viewBox="0 0 18 18">
+        <path
+          d="M5 2.5h5.5L14 6v9a.5.5 0 0 1-.5.5h-8.5A.5.5 0 0 1 4.5 15V3A.5.5 0 0 1 5 2.5ZM10 2.5V6.5h4M7 10h5M7 12.5h3.5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+          stroke-linecap="round"
+        />
+      </symbol>
+      <symbol id="i-tag" viewBox="0 0 18 18">
+        <path
+          d="M2.5 9V3.5a1 1 0 0 1 1-1H9l6.5 6.5-6.5 6.5L2.5 9Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        />
+        <circle cx="6" cy="6" r="1.2" fill="currentColor" />
+      </symbol>
+      <symbol id="i-users" viewBox="0 0 18 18">
+        <circle cx="7" cy="6" r="2.6" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <path
+          d="M2 15c.6-2.5 2.6-4 5-4s4.4 1.5 5 4M12 3.6a2.6 2.6 0 0 1 0 4.8M13.5 11c1.3.5 2.2 1.7 2.5 3.5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </symbol>
+      <symbol id="i-jobs" viewBox="0 0 18 18">
+        <rect
+          x="2.5"
+          y="5.5"
+          width="13"
+          height="9"
+          rx="1.5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        />
+        <path
+          d="M6.5 5.5v-1A1.5 1.5 0 0 1 8 3h2a1.5 1.5 0 0 1 1.5 1.5v1M2.5 9.5h13"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        />
+      </symbol>
+      <symbol id="i-trophy" viewBox="0 0 18 18">
+        <path
+          d="M5.5 3h7v4a3.5 3.5 0 0 1-7 0V3ZM9 10.5V13m-3 2h6M5.5 4.5H3a2.5 2.5 0 0 0 2.5 3M12.5 4.5H15a2.5 2.5 0 0 1-2.5 3"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </symbol>
+      <symbol id="i-list" viewBox="0 0 18 18">
+        <path
+          d="M6.5 4.5h9M6.5 9h9M6.5 13.5h9M2.5 4.5h1M2.5 9h1M2.5 13.5h1"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </symbol>
+      <symbol id="i-gear" viewBox="0 0 18 18">
+        <circle cx="9" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <path
+          d="M9 1.8v2M9 14.2v2M1.8 9h2M14.2 9h2M3.9 3.9l1.4 1.4M12.7 12.7l1.4 1.4M3.9 14.1l1.4-1.4M12.7 5.3l1.4-1.4"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </symbol>
+      <symbol id="i-out" viewBox="0 0 18 18">
+        <path
+          d="M7 3H4.5A1.5 1.5 0 0 0 3 4.5v9A1.5 1.5 0 0 0 4.5 15H7M11.5 12.5 15 9l-3.5-3.5M15 9H7"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </symbol>
+      <symbol id="i-search" viewBox="0 0 16 16">
+        <circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <path d="m11 11 3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 14 14">
+        <path
+          d="m2.5 7.5 3 3 6-7"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </symbol>
+      <symbol id="i-x" viewBox="0 0 14 14">
+        <path
+          d="M3 3l8 8M11 3l-8 8"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+      </symbol>
+      <symbol id="i-up" viewBox="0 0 12 12">
+        <path
+          d="M3 7.5 6 4.5l3 3"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </symbol>
+      <symbol id="i-menu" viewBox="0 0 18 18">
+        <path
+          d="M3 5h12M3 9h12M3 13h12"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </symbol>
+      <symbol id="i-sun" viewBox="0 0 18 18">
+        <circle cx="9" cy="9" r="3.2" fill="none" stroke="currentColor" stroke-width="1.5" />
+        <path
+          d="M9 1.5v1.8M9 14.7v1.8M1.5 9h1.8M14.7 9h1.8M3.7 3.7l1.3 1.3M13 13l1.3 1.3M3.7 14.3 5 13M13 5l1.3-1.3"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </symbol>
+      <symbol id="i-moon" viewBox="0 0 18 18">
+        <path
+          d="M15 10.8A6.5 6.5 0 1 1 7.2 3a5.2 5.2 0 0 0 7.8 7.8Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        />
+      </symbol>
+      <symbol id="i-ext" viewBox="0 0 14 14">
+        <path
+          d="M8 2.5h3.5V6M11.5 2.5 6.5 7.5M10 8.5v2.5a.5.5 0 0 1-.5.5h-6.5a.5.5 0 0 1-.5-.5v-6.5a.5.5 0 0 1 .5-.5H5.5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </symbol>
+      <symbol id="i-dl" viewBox="0 0 16 16">
+        <path
+          d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </symbol>
+      <symbol id="i-plus" viewBox="0 0 14 14">
+        <path
+          d="M7 2.5v9M2.5 7h9"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+      </symbol>
+      <symbol id="i-shield" viewBox="0 0 18 18">
+        <path
+          d="M9 2.5 3.5 4.5v4c0 3.5 2.4 6 5.5 7 3.1-1 5.5-3.5 5.5-7v-4L9 2.5Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linejoin="round"
+        />
+      </symbol>
+    </svg>
+
+    <!-- ====================== CONNEXION ADMIN ====================== -->
+    <div class="login" id="loginPage" hidden>
+      <div class="login-card">
+        <span class="logo"
+          ><span class="logo-mark" aria-hidden="true"></span>zetsu
+          <span class="env">admin</span></span
+        >
+        <h1 id="loginTitle">Connexion à l'administration</h1>
+        <p class="lead" id="loginLead">
+          Accès réservé à l'équipe de modération et aux administrateurs.
+        </p>
+        <div class="login-box">
+          <form id="stepCreds" novalidate>
+            <div class="form-alert" id="loginAlert" role="alert" tabindex="-1"></div>
+            <div class="field">
+              <label for="lEmail">Adresse email</label
+              ><input
+                id="lEmail"
+                type="email"
+                autocomplete="username"
+                aria-describedby="lEmailErr"
+              />
+              <p class="error" id="lEmailErr">Entrez une adresse email valide.</p>
+            </div>
+            <div class="field">
+              <label for="lPass">Mot de passe</label
+              ><input
+                id="lPass"
+                type="password"
+                autocomplete="current-password"
+                aria-describedby="lPassErr"
+              />
+              <p class="error" id="lPassErr">Entrez votre mot de passe.</p>
+            </div>
+            <button
+              class="btn btn-primary btn-block"
+              type="submit"
+              id="credSubmit"
+              style="min-height: 42px"
+            >
+              Continuer
+            </button>
+          </form>
+          <form id="stepOtp" novalidate hidden>
+            <div class="form-alert" id="otpAlert" role="alert" tabindex="-1"></div>
+            <div class="field">
+              <label for="lOtp">Code de vérification</label>
+              <input
+                id="lOtp"
+                class="otp"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                maxlength="6"
+                aria-describedby="lOtpHint lOtpErr"
+              />
+              <p class="hint" id="lOtpHint">
+                Le code à 6 chiffres de votre application d'authentification.
+              </p>
+              <p class="error" id="lOtpErr">Le code contient 6 chiffres.</p>
+            </div>
+            <button
+              class="btn btn-primary btn-block"
+              type="submit"
+              id="otpSubmit"
+              style="min-height: 42px"
+            >
+              Vérifier et se connecter
+            </button>
+            <button
+              class="btn btn-ghost btn-block"
+              type="button"
+              data-action="back-creds"
+              style="margin-top: 8px"
+            >
+              Revenir à l'étape précédente
+            </button>
+          </form>
+        </div>
+        <p class="login-foot">
+          Démo : <span class="mono">admin@zetsu.dev</span> / <span class="mono">admin1234</span>,
+          code <span class="mono">123456</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- ====================== APPLICATION ====================== -->
+    <div class="shell" id="appPage" hidden>
+      <aside class="sidebar" id="sidebar" aria-label="Navigation de l'administration">
+        <div class="sidebar-head">
+          <a class="logo" href="#tableau-de-bord"
+            ><span class="logo-mark" aria-hidden="true"></span>zetsu</a
+          ><span class="env">admin</span>
+        </div>
+        <nav class="nav" id="nav"></nav>
+        <div class="sidebar-foot"><div class="me" id="meBox"></div></div>
+      </aside>
+      <div class="scrim" id="scrim"></div>
+      <div>
+        <header class="topbar">
+          <button
+            class="btn btn-ghost btn-icon burger"
+            data-action="open-nav"
+            aria-label="Ouvrir le menu"
+            aria-controls="sidebar"
+            aria-expanded="false"
+          >
+            <svg width="18" height="18" aria-hidden="true"><use href="#i-menu" /></svg>
+          </button>
+          <nav class="crumbs" id="crumbs" aria-label="Fil d'Ariane"></nav>
+          <div class="right">
+            <label class="gsearch"
+              ><svg width="15" height="15" aria-hidden="true" style="color: var(--text-3)">
+                <use href="#i-search" /></svg
+              ><span class="sr-only">Rechercher un utilisateur</span
+              ><input id="gsearch" type="search" placeholder="Rechercher un utilisateur" /><span
+                class="kbd"
+                aria-hidden="true"
+                >/</span
+              ></label
+            >
+            <button
+              class="btn btn-ghost btn-icon"
+              data-action="toggle-theme"
+              aria-label="Changer de thème"
+            >
+              <svg width="18" height="18" aria-hidden="true">
+                <use href="#i-moon" class="theme-ico" />
+              </svg>
+            </button>
+            <a
+              class="btn btn-secondary btn-sm hide-sm"
+              href="zetsu-maquette.html"
+              target="_blank"
+              rel="noopener"
+              >Voir le site<svg width="13" height="13" aria-hidden="true"><use href="#i-ext" /></svg
+            ></a>
+          </div>
+        </header>
+        <main class="content" id="main" tabindex="-1"></main>
+      </div>
+    </div>
+
+    <!-- ====================== FENÊTRES ====================== -->
+    <dialog id="dlgWarn" aria-labelledby="warnTitle">
+      <div class="dlg-head">
+        <h2 id="warnTitle">Avertir l'auteur</h2>
+        <button class="btn btn-ghost btn-icon" data-close aria-label="Fermer">
+          <svg width="14" height="14" aria-hidden="true"><use href="#i-x" /></svg>
+        </button>
+      </div>
+      <form class="dlg-body" id="warnForm" novalidate>
+        <p id="warnLead"></p>
+        <div class="field">
+          <label for="warnMsg">Message envoyé à l'auteur</label
+          ><textarea id="warnMsg" aria-describedby="warnErr"></textarea>
+          <p class="error" id="warnErr">Expliquez la règle enfreinte en au moins 20 caractères.</p>
+        </div>
+        <label class="switch-row" style="border: none; padding: 0"
+          ><span><b>Masquer aussi le contenu</b><span>Il reste visible pour son auteur.</span></span
+          ><span class="toggle"><input type="checkbox" id="warnHide" checked /><i></i></span
+        ></label>
+        <div class="dlg-foot">
+          <button class="btn btn-secondary" type="button" data-close>Annuler</button
+          ><button class="btn btn-primary" type="submit">Envoyer l'avertissement</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="dlgSuspend" aria-labelledby="suspTitle">
+      <div class="dlg-head">
+        <h2 id="suspTitle">Suspendre le compte</h2>
+        <button class="btn btn-ghost btn-icon" data-close aria-label="Fermer">
+          <svg width="14" height="14" aria-hidden="true"><use href="#i-x" /></svg>
+        </button>
+      </div>
+      <form class="dlg-body" id="suspForm" novalidate>
+        <p id="suspLead"></p>
+        <div class="field">
+          <label for="suspDur">Durée</label
+          ><select id="suspDur">
+            <option value="1 jour">1 jour</option>
+            <option value="7 jours" selected>7 jours</option>
+            <option value="30 jours">30 jours</option>
+            <option value="définitive">Définitive</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="suspReason">Motif</label
+          ><textarea id="suspReason" aria-describedby="suspHint suspErr"></textarea>
+          <p class="hint" id="suspHint">
+            Le motif est envoyé à l'utilisateur et conservé dans le journal d'audit.
+          </p>
+          <p class="error" id="suspErr">Indiquez un motif d'au moins 20 caractères.</p>
+        </div>
+        <div class="dlg-foot">
+          <button class="btn btn-secondary" type="button" data-close>Annuler</button
+          ><button class="btn btn-danger" type="submit" id="suspSubmit">Suspendre</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="dlgRefuse" aria-labelledby="refTitle">
+      <div class="dlg-head">
+        <h2 id="refTitle">Refuser l'offre</h2>
+        <button class="btn btn-ghost btn-icon" data-close aria-label="Fermer">
+          <svg width="14" height="14" aria-hidden="true"><use href="#i-x" /></svg>
+        </button>
+      </div>
+      <form class="dlg-body" id="refForm" novalidate>
+        <p id="refLead"></p>
+        <div class="field">
+          <label for="refReason">Motif communiqué à l'entreprise</label>
+          <select id="refPreset">
+            <option value="">Choisir un motif fréquent</option>
+            <option>Description du poste trop vague</option>
+            <option>Entreprise non vérifiable</option>
+            <option>Offre non liée au développement</option>
+            <option>Rémunération manifestement abusive</option>
+          </select>
+          <textarea
+            id="refReason"
+            style="margin-top: 8px"
+            aria-describedby="refErr"
+            placeholder="Précisez ce que l'entreprise doit corriger pour republier."
+          ></textarea>
+          <p class="error" id="refErr">Indiquez un motif d'au moins 15 caractères.</p>
+        </div>
+        <div class="dlg-foot">
+          <button class="btn btn-secondary" type="button" data-close>Annuler</button
+          ><button class="btn btn-danger" type="submit">Refuser l'offre</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="dlgMerge" aria-labelledby="mergeTitle">
+      <div class="dlg-head">
+        <h2 id="mergeTitle">Fusionner le tag</h2>
+        <button class="btn btn-ghost btn-icon" data-close aria-label="Fermer">
+          <svg width="14" height="14" aria-hidden="true"><use href="#i-x" /></svg>
+        </button>
+      </div>
+      <form class="dlg-body" id="mergeForm" novalidate>
+        <p id="mergeLead"></p>
+        <div class="field">
+          <label for="mergeTarget">Fusionner dans</label
+          ><select id="mergeTarget"></select>
+        </div>
+        <div class="dlg-foot">
+          <button class="btn btn-secondary" type="button" data-close>Annuler</button
+          ><button class="btn btn-primary" type="submit">Fusionner</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="dlgConfirm" aria-labelledby="confTitle">
+      <div class="dlg-head">
+        <h2 id="confTitle">Confirmer</h2>
+        <button class="btn btn-ghost btn-icon" data-close aria-label="Fermer">
+          <svg width="14" height="14" aria-hidden="true"><use href="#i-x" /></svg>
+        </button>
+      </div>
+      <div class="dlg-body">
+        <p id="confText"></p>
+        <div class="dlg-foot">
+          <button class="btn btn-secondary" type="button" data-close>Annuler</button
+          ><button class="btn btn-primary" type="button" id="confOk">Confirmer</button>
+        </div>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      <span id="toastMsg"></span><button id="toastUndo" hidden>Annuler</button>
+    </div>
+
+    <script>
+      /* =====================================================================
+   DONNÉES DE DÉMONSTRATION
+   ===================================================================== */
+      const ADMIN = {
+        id: 'admin',
+        name: 'Benhasser Ouedraogo',
+        role: 'Administrateur',
+        email: 'admin@zetsu.dev',
+      }
+      const staff = [
+        {
+          id: 'admin',
+          name: 'Benhasser Ouedraogo',
+          email: 'admin@zetsu.dev',
+          role: 'Administrateur',
+          last: 'en ligne',
+        },
+        {
+          id: 'salif',
+          name: 'Salif Kaboré',
+          email: 'salif@zetsu.dev',
+          role: 'Administrateur',
+          last: 'il y a 2 h',
+        },
+        {
+          id: 'mariam',
+          name: 'Mariam Sanou',
+          email: 'mariam@zetsu.dev',
+          role: 'Modérateur',
+          last: 'il y a 20 min',
+        },
+        {
+          id: 'eric',
+          name: 'Éric Zida',
+          email: 'eric@zetsu.dev',
+          role: 'Modérateur',
+          last: 'hier',
+        },
+      ]
+
+      const COUNTRIES = [
+        'Burkina Faso',
+        'Sénégal',
+        "Côte d'Ivoire",
+        'Ghana',
+        'Mali',
+        'Kenya',
+        'Maroc',
+        'Bénin',
+        'Nigeria',
+        'Togo',
+      ]
+      const NAMES = [
+        'Awa Kane',
+        'Ibrahim Sawadogo',
+        'Kwame Asante',
+        'Fatou Diallo',
+        'Moussa Traoré',
+        'Grace Njeri',
+        'Youssef Benali',
+        'Aïcha Ouattara',
+        'Koffi Mensah',
+        'Nadia Benjelloun',
+        'Seydou Ouédraogo',
+        'Amina Bello',
+        'Jean-Marc Kouassi',
+        'Rokia Coulibaly',
+        'Chinedu Okafor',
+        'Fanta Camara',
+        'Ousmane Sy',
+        'Esi Boateng',
+        'Tidiane Ba',
+        'Lamine Diop',
+        'Adjoa Owusu',
+        'Bakary Konaté',
+        'Zeinab Hamidou',
+        'spam_promo_2026',
+      ]
+      const users = NAMES.map((name, i) => {
+        const slug = name
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[̀-ͯ]/g, '')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '')
+        const spam = name.startsWith('spam')
+        return {
+          id: slug,
+          name,
+          email: spam ? 'promo.deals@mail.xyz' : slug.replace(/-/g, '.') + '@exemple.com',
+          country: spam ? 'Inconnu' : COUNTRIES[i % COUNTRIES.length],
+          role: i === 3 ? 'Modérateur' : 'Membre',
+          rep: spam
+            ? 1
+            : ([
+                875, 790, 980, 455, 310, 640, 515, 120, 260, 95, 410, 33, 188, 72, 530, 14, 222, 61,
+                300, 150, 45, 9, 18,
+              ][i] ?? 10),
+          joinedDays: spam ? 2 : 10 + ((i * 37) % 290),
+          status: spam ? 'Signalé' : i === 21 ? 'Suspendu' : 'Actif',
+          questions: spam ? 0 : (i * 7) % 23,
+          answers: spam ? 0 : (i * 11) % 41,
+          provider: ['GitHub', 'Google', 'Email'][i % 3],
+          warnings: i === 4 ? 1 : i === 21 ? 2 : 0,
+          flags: spam ? 4 : 0,
+        }
+      })
+      const userBy = (id) => users.find((u) => u.id === id)
+
+      let reports = [
+        {
+          id: 101,
+          type: 'Réponse',
+          reason: 'Spam',
+          count: 4,
+          time: 'il y a 12 min',
+          author: 'spam-promo-2026',
+          reporters: ['kwame-asante', 'awa-kane', 'fatou-diallo', 'grace-njeri'],
+          context: "Réponse à « L'API Orange Money renvoie 401 alors que le token est généré »",
+          content:
+            "Arrêtez de chercher ! Formation complète Mobile Money à -90 %, lien en bio, offre valable aujourd'hui seulement !!!",
+        },
+        {
+          id: 102,
+          type: 'Question',
+          reason: 'Contenu offensant',
+          count: 2,
+          time: 'il y a 40 min',
+          author: 'moussa-traore',
+          reporters: ['youssef-benali', 'aicha-ouattara'],
+          context: 'Question publiée dans laravel',
+          content:
+            "Pourquoi les devs de ce forum sont aussi nuls ? Personne n'est capable de m'expliquer une simple intégration Wave.",
+        },
+        {
+          id: 103,
+          type: 'Profil',
+          reason: "Usurpation d'identité",
+          count: 1,
+          time: 'il y a 2 h',
+          author: 'koffi-mensah',
+          reporters: ['ibrahim-sawadogo'],
+          context: 'Présentation du profil',
+          content:
+            "Lead developer chez Orange Money Afrique. Je recrute, envoyez-moi vos CV et une copie de votre pièce d'identité en message privé.",
+        },
+        {
+          id: 104,
+          type: 'Réponse',
+          reason: 'Hors sujet',
+          count: 1,
+          time: 'il y a 3 h',
+          author: 'esi-boateng',
+          reporters: ['fatou-diallo'],
+          context: 'Réponse à « PostgreSQL dans Docker perd ses données au redémarrage »',
+          content:
+            "Moi j'utilise MongoDB et je n'ai jamais eu ce problème, vous devriez changer de base.",
+        },
+        {
+          id: 105,
+          type: 'Offre',
+          reason: 'Offre frauduleuse',
+          count: 3,
+          time: 'hier',
+          author: 'spam-promo-2026',
+          reporters: ['awa-kane', 'grace-njeri', 'lamine-diop'],
+          context: 'Offre « Développeur junior, 3 000 € par semaine, sans expérience »',
+          content:
+            "Travail à domicile, aucune expérience requise. Frais d'inscription de 25 000 F CFA à régler par Mobile Money avant l'entretien.",
+        },
+        {
+          id: 106,
+          type: 'Réponse',
+          reason: 'Spam',
+          count: 2,
+          time: 'hier',
+          author: 'chinedu-okafor',
+          reporters: ['kwame-asante', 'tidiane-ba'],
+          context: 'Réponse à « Garder une app Flutter utilisable quand la connexion coupe »',
+          content:
+            'Utilisez mon package flutter_offline_pro, lien sur mon GitHub, 5 étoiles garanties.',
+        },
+      ]
+
+      const contents = [
+        {
+          id: 1,
+          title: "L'API Orange Money renvoie 401 alors que le token est généré",
+          author: 'awa-kane',
+          tags: ['mobile-money', 'node.js'],
+          answers: 3,
+          flags: 0,
+          status: 'Publiée',
+          date: '09/10',
+        },
+        {
+          id: 2,
+          title: 'LazyInitializationException sur une relation @OneToMany avec Spring Boot',
+          author: 'ibrahim-sawadogo',
+          tags: ['spring-boot', 'jpa'],
+          answers: 3,
+          flags: 0,
+          status: 'Publiée',
+          date: '09/10',
+        },
+        {
+          id: 3,
+          title: 'Garder une app Flutter utilisable quand la connexion coupe',
+          author: 'kwame-asante',
+          tags: ['flutter', 'sqlite'],
+          answers: 2,
+          flags: 1,
+          status: 'Publiée',
+          date: '08/10',
+        },
+        {
+          id: 4,
+          title: 'PostgreSQL dans Docker perd ses données au redémarrage',
+          author: 'fatou-diallo',
+          tags: ['docker', 'postgresql'],
+          answers: 1,
+          flags: 1,
+          status: 'Publiée',
+          date: '08/10',
+        },
+        {
+          id: 5,
+          title: 'Gérer Wave et Moov Money dans la même application Laravel',
+          author: 'moussa-traore',
+          tags: ['laravel', 'mobile-money'],
+          answers: 2,
+          flags: 0,
+          status: 'Publiée',
+          date: '07/10',
+        },
+        {
+          id: 7,
+          title: 'Pourquoi les devs de ce forum sont aussi nuls ?',
+          author: 'moussa-traore',
+          tags: ['laravel'],
+          answers: 0,
+          flags: 2,
+          status: 'Publiée',
+          date: '09/10',
+        },
+        {
+          id: 8,
+          title: 'Formation Mobile Money à -90 %',
+          author: 'spam-promo-2026',
+          tags: ['mobile-money'],
+          answers: 0,
+          flags: 5,
+          status: 'Masquée',
+          date: '08/10',
+        },
+        {
+          id: 9,
+          title: 'Comment déployer une app Spring Boot sur un VPS ?',
+          author: 'seydou-ouedraogo',
+          tags: ['spring-boot', 'devops'],
+          answers: 6,
+          flags: 0,
+          status: 'Fermée',
+          date: '02/10',
+        },
+        {
+          id: 10,
+          title: 'React Native ou Flutter pour une app de livraison à Abidjan ?',
+          author: 'jean-marc-kouassi',
+          tags: ['flutter', 'react-native'],
+          answers: 9,
+          flags: 0,
+          status: 'Publiée',
+          date: '01/10',
+        },
+      ]
+
+      let tags = [
+        {
+          name: 'mobile-money',
+          count: 186,
+          synonyms: ['momo', 'orange-money'],
+          created: 'janv. 2026',
+        },
+        { name: 'spring-boot', count: 241, synonyms: ['springboot'], created: 'janv. 2026' },
+        { name: 'flutter', count: 203, synonyms: [], created: 'janv. 2026' },
+        { name: 'laravel', count: 158, synonyms: [], created: 'janv. 2026' },
+        { name: 'docker', count: 132, synonyms: [], created: 'févr. 2026' },
+        { name: 'react', count: 175, synonyms: ['reactjs'], created: 'janv. 2026' },
+        { name: 'postgresql', count: 97, synonyms: ['postgres'], created: 'févr. 2026' },
+        { name: 'springboot-3', count: 6, synonyms: [], created: 'sept. 2026' },
+        { name: 'hors-ligne', count: 41, synonyms: ['offline'], created: 'mars 2026' },
+        { name: 'wave', count: 0, synonyms: [], created: 'oct. 2026' },
+      ]
+
+      let pendingJobs = [
+        {
+          id: 201,
+          title: 'Développeur back-end Node.js',
+          company: 'PayDunya',
+          city: 'Dakar',
+          type: 'CDI',
+          by: 'rh@paydunya.example',
+          time: 'il y a 1 h',
+          checks: [
+            ["Domaine de l'entreprise vérifié", true],
+            ['Rémunération indiquée', true],
+            ['Description complète', true],
+          ],
+          about: 'Conception et maintenance des API de paiement.',
+          missions: [
+            "Développer de nouvelles intégrations d'opérateurs",
+            'Améliorer la supervision',
+          ],
+        },
+        {
+          id: 202,
+          title: 'Développeur junior, 3 000 € par semaine, sans expérience',
+          company: 'Global Remote Jobs',
+          city: 'À distance',
+          type: 'Mission',
+          by: 'promo.deals@mail.xyz',
+          time: 'il y a 3 h',
+          checks: [
+            ["Domaine de l'entreprise vérifié", false],
+            ['Rémunération indiquée', true],
+            ['Description complète', false],
+          ],
+          about: 'Travail à domicile, aucune expérience requise.',
+          missions: ["Frais d'inscription à régler avant l'entretien"],
+        },
+        {
+          id: 203,
+          title: 'Stage développeur mobile Flutter',
+          company: "Kiro'o Games",
+          city: 'Yaoundé',
+          type: 'Stage',
+          by: 'jobs@kiroo.example',
+          time: 'hier',
+          checks: [
+            ["Domaine de l'entreprise vérifié", true],
+            ['Rémunération indiquée', false],
+            ['Description complète', true],
+          ],
+          about: 'Studio de jeux vidéo camerounais.',
+          missions: ['Prototyper des mini-jeux en Flutter', 'Participer aux tests utilisateurs'],
+        },
+      ]
+      const publishedJobs = [
+        {
+          title: 'Développeur full-stack Spring Boot et React',
+          company: 'Sahel Paiements',
+          date: '08/10',
+          applicants: 14,
+        },
+        { title: 'Développeur mobile Flutter', company: 'AgriLien', date: '07/10', applicants: 22 },
+        { title: 'Ingénieur DevOps', company: 'Teranga Cloud', date: '06/10', applicants: 7 },
+        {
+          title: "Intégration d'une API de paiement mobile",
+          company: 'Boutik Express',
+          date: '05/10',
+          applicants: 9,
+        },
+        {
+          title: 'Stage développeur web, 6 mois',
+          company: 'Faso Numérique',
+          date: '04/10',
+          applicants: 31,
+        },
+      ]
+      const refusedJobs = [
+        {
+          title: 'Commercial terrain, vente de crédit',
+          company: 'Télé Plus',
+          date: '03/10',
+          reason: 'Offre non liée au développement',
+        },
+      ]
+
+      let challenges = [
+        {
+          id: 1,
+          title: 'Simuler une API de paiement mobile',
+          status: 'En cours',
+          start: '06/10/2026',
+          end: '12/10/2026',
+          submissions: 38,
+          points: 20,
+        },
+        {
+          id: 2,
+          title: 'Tableau de bord météo hors connexion',
+          status: 'À venir',
+          start: '13/10/2026',
+          end: '19/10/2026',
+          submissions: 0,
+          points: 20,
+        },
+        {
+          id: 3,
+          title: "Raccourcisseur d'URL",
+          status: 'Terminé',
+          start: '29/09/2026',
+          end: '05/10/2026',
+          submissions: 52,
+          points: 20,
+        },
+        {
+          id: 4,
+          title: 'Bot Telegram de météo',
+          status: 'Terminé',
+          start: '22/09/2026',
+          end: '28/09/2026',
+          submissions: 41,
+          points: 20,
+        },
+      ]
+      const submissions = [
+        { user: 'kwame-asante', repo: 'kwamea/momo-sim', time: 'il y a 1 h', status: 'À évaluer' },
+        {
+          user: 'awa-kane',
+          repo: 'awakane/fake-mobile-money',
+          time: 'il y a 3 h',
+          status: 'Validé',
+          score: 92,
+        },
+        {
+          user: 'ibrahim-sawadogo',
+          repo: 'isawadogo/pay-simulator',
+          time: 'hier',
+          status: 'À évaluer',
+        },
+        {
+          user: 'grace-njeri',
+          repo: 'gnjeri/mpesa-like-api',
+          time: 'hier',
+          status: 'Validé',
+          score: 88,
+        },
+        {
+          user: 'fanta-camara',
+          repo: 'fcamara/api-paiement',
+          time: 'il y a 2 j',
+          status: 'Refusé',
+          note: 'Dépôt vide',
+        },
+      ]
+
+      let audit = [
+        {
+          time: '09/10 14:12',
+          who: 'mariam',
+          action: 'Contenu masqué',
+          target: 'Question « Formation Mobile Money à -90 % »',
+          detail: '5 signalements, motif Spam',
+        },
+        {
+          time: '09/10 11:40',
+          who: 'salif',
+          action: 'Offre approuvée',
+          target: 'Développeur full-stack Spring Boot et React',
+          detail: 'Sahel Paiements',
+        },
+        {
+          time: '08/10 18:03',
+          who: 'eric',
+          action: 'Avertissement envoyé',
+          target: 'Moussa Traoré',
+          detail: 'Ton agressif dans une réponse',
+        },
+        {
+          time: '08/10 09:15',
+          who: 'admin',
+          action: 'Défi créé',
+          target: 'Tableau de bord météo hors connexion',
+          detail: 'Du 13/10 au 19/10',
+        },
+        {
+          time: '07/10 16:47',
+          who: 'salif',
+          action: 'Compte suspendu',
+          target: 'Bakary Konaté',
+          detail: '30 jours, spam répété',
+        },
+        {
+          time: '07/10 10:02',
+          who: 'mariam',
+          action: 'Tags fusionnés',
+          target: 'momo → mobile-money',
+          detail: '12 questions déplacées',
+        },
+      ]
+
+      /* Séries quotidiennes, déterministes, sur 90 jours */
+      const TODAY = new Date(2026, 9, 9)
+      function series(seed, base, amp) {
+        let x = seed
+        return Array.from({ length: 90 }, (_, i) => {
+          x = (x * 9301 + 49297) % 233280
+          const trend = base + i * (base / 140)
+          const weekly = [0.75, 1.05, 1.12, 1.1, 1.05, 0.95, 0.7][(i + 3) % 7]
+          return Math.round(trend * weekly + (x / 233280 - 0.5) * amp)
+        })
+      }
+      const dailyQuestions = series(7, 34, 14)
+      const dailyAnswers = series(42, 71, 24)
+      const dailySignups = series(99, 22, 10)
+      const tagShare = {
+        'spring-boot': 0.19,
+        flutter: 0.16,
+        'mobile-money': 0.15,
+        react: 0.14,
+        laravel: 0.12,
+        docker: 0.1,
+      }
+
+      /* =====================================================================
+   ÉTAT
+   ===================================================================== */
+      let logged = false
+      let range = 30
+      let countryFilter = 'Tous'
+      let reportFilter = 'Tous',
+        selectedReport = null
+      let userQuery = '',
+        userRole = 'Tous',
+        userStatus = 'Tous',
+        userSort = { key: 'joinedDays', dir: 'asc' },
+        userPage = 1
+      const selectedUsers = new Set()
+      let contentStatus = 'Toutes',
+        jobTab = 'attente',
+        userTab = 'activite'
+      let showChartTable = false
+      let undoFn = null
+      const PAGE = 8
+
+      /* =====================================================================
+   UTILITAIRES
+   ===================================================================== */
+      const $ = (s) => document.querySelector(s)
+      const $$ = (s) => document.querySelectorAll(s)
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"']/g,
+          (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
+        )
+      const icon = (id, size = 16) =>
+        `<svg width="${size}" height="${size}" aria-hidden="true"><use href="#${id}"/></svg>`
+      const wait = (ms) => new Promise((r) => setTimeout(r, ms))
+      const fmt = (n) => n.toLocaleString('fr-FR')
+      const plural = (n, a, b) => `${fmt(n)} ${n > 1 ? b : a}`
+      const AV_COLORS = [
+        '#1f5fc4',
+        '#0b7a55',
+        '#9a5b0a',
+        '#b23a2e',
+        '#6b46c1',
+        '#0e7490',
+        '#9d174d',
+        '#4d6b12',
+      ]
+      const hash = (s) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7)
+      const initials = (n) =>
+        n
+          .split(/[\s_-]+/)
+          .filter(Boolean)
+          .map((p) => p[0])
+          .join('')
+          .slice(0, 2)
+          .toUpperCase()
+      const avatar = (name, size = 28, sq = false) =>
+        `<span class="av${sq ? ' sq' : ''}" style="width:${size}px;height:${size}px;font-size:${Math.max(10, Math.round(size * 0.38))}px;background:${AV_COLORS[hash(name) % AV_COLORS.length]}" aria-hidden="true">${esc(initials(name))}</span>`
+      const staffBy = (id) => staff.find((s) => s.id === id) || ADMIN
+      const statusClass = (s) =>
+        ({
+          Actif: 'good',
+          Publiée: 'good',
+          Validé: 'good',
+          'En cours': 'good',
+          Signalé: 'warn',
+          'À évaluer': 'warn',
+          'À venir': 'warn',
+          'En attente': 'warn',
+          Masquée: 'serious',
+          Fermée: '',
+          Terminé: '',
+          Suspendu: 'crit',
+          Refusé: 'crit',
+          Refusée: 'crit',
+        })[s] ?? ''
+      const status = (s) => `<span class="status ${statusClass(s)}">${esc(s)}</span>`
+      const dateFromDays = (d) => {
+        const x = new Date(TODAY)
+        x.setDate(x.getDate() - d)
+        return x.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' })
+      }
+      const sum = (a) => a.reduce((s, v) => s + v, 0)
+
+      function toast(msg, undo) {
+        $('#toastMsg').textContent = msg
+        undoFn = undo || null
+        $('#toastUndo').hidden = !undo
+        const t = $('#toast')
+        t.classList.add('show')
+        clearTimeout(t.timer)
+        t.timer = setTimeout(() => t.classList.remove('show'), undo ? 6000 : 2800)
+      }
+      $('#toastUndo').onclick = () => {
+        if (undoFn) {
+          undoFn()
+          undoFn = null
+        }
+        $('#toast').classList.remove('show')
+      }
+
+      function log(action, target, detail = '') {
+        const d = new Date()
+        audit.unshift({
+          time: `${String(TODAY.getDate()).padStart(2, '0')}/10 ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`,
+          who: 'admin',
+          action,
+          target,
+          detail,
+        })
+      }
+      function setError(input, errId, bad) {
+        input.setAttribute('aria-invalid', bad ? 'true' : 'false')
+        $('#' + errId).classList.toggle('show', !!bad)
+        return !!bad
+      }
+      async function busy(btn, label, ms = 600) {
+        const old = btn.innerHTML
+        btn.setAttribute('aria-busy', 'true')
+        btn.innerHTML = `<span class="spinner" aria-hidden="true"></span>${label}`
+        await wait(ms)
+        btn.removeAttribute('aria-busy')
+        btn.innerHTML = old
+      }
+      function confirmBox(title, text, okLabel, danger) {
+        return new Promise((resolve) => {
+          $('#confTitle').textContent = title
+          $('#confText').textContent = text
+          const ok = $('#confOk')
+          ok.textContent = okLabel
+          ok.className = danger ? 'btn btn-danger' : 'btn btn-primary'
+          const d = $('#dlgConfirm')
+          const done = (v) => {
+            d.close()
+            resolve(v)
+          }
+          ok.onclick = () => done(true)
+          d.onclose = () => resolve(false)
+          d.showModal()
+        })
+      }
+
+      /* =====================================================================
+   THÈME
+   ===================================================================== */
+      function applyTheme(t) {
+        document.documentElement.dataset.theme = t
+        try {
+          localStorage.setItem('zetsu-admin-theme', t)
+        } catch (e) {}
+        $$('.theme-ico').forEach((u) => u.setAttribute('href', t === 'dark' ? '#i-sun' : '#i-moon'))
+        $$('[data-action=toggle-theme]').forEach((b) =>
+          b.setAttribute(
+            'aria-label',
+            t === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre',
+          ),
+        )
+        if (logged && location.hash.startsWith('#tableau-de-bord')) drawCharts()
+      }
+
+      /* =====================================================================
+   NAVIGATION
+   ===================================================================== */
+      const NAV = [
+        ['Pilotage', [['tableau-de-bord', 'Tableau de bord', 'i-home']]],
+        [
+          'Modération',
+          [
+            ['signalements', 'Signalements', 'i-flag', () => reports.length, true],
+            ['contenus', 'Contenus', 'i-doc'],
+            ['tags', 'Tags', 'i-tag'],
+          ],
+        ],
+        [
+          'Communauté',
+          [
+            ['utilisateurs', 'Utilisateurs', 'i-users'],
+            ['offres', "Offres d'emploi", 'i-jobs', () => pendingJobs.length],
+            ['challenges', 'Challenges', 'i-trophy'],
+          ],
+        ],
+        [
+          'Système',
+          [
+            ['journal', "Journal d'audit", 'i-list'],
+            ['parametres', 'Paramètres', 'i-gear'],
+          ],
+        ],
+      ]
+      function renderNav(current) {
+        $('#nav').innerHTML = NAV.map(
+          ([group, items]) =>
+            `<div class="nav-group"><p class="nav-label">${group}</p>${items
+              .map(([id, label, ic, counter, alert]) => {
+                const n = counter ? counter() : 0
+                return `<a href="#${id}" ${current === id ? 'aria-current="page"' : ''}>${icon(ic, 18)}${label}${n ? `<span class="count-badge ${alert ? 'alert' : ''}" aria-label="${n} en attente">${n}</span>` : ''}</a>`
+              })
+              .join('')}</div>`,
+        ).join('')
+        $('#meBox').innerHTML =
+          `${avatar(ADMIN.name, 32)}<div><b>${esc(ADMIN.name)}</b><small>${ADMIN.role}</small></div>
+    <button class="btn btn-ghost btn-icon" data-action="logout" aria-label="Se déconnecter">${icon('i-out', 17)}</button>`
+      }
+      function closeNav() {
+        $('#sidebar').classList.remove('open')
+        $('#scrim').classList.remove('show')
+        $('[data-action=open-nav]').setAttribute('aria-expanded', 'false')
+      }
+
+      function route() {
+        const [page = 'tableau-de-bord', arg] = (location.hash.slice(1) || '').split('/')
+        closeNav()
+        if (!logged) {
+          $('#loginPage').hidden = false
+          $('#appPage').hidden = true
+          document.title = 'Connexion · Zetsu Admin'
+          return
+        }
+        if (page === 'connexion' || !page) return location.replace('#tableau-de-bord')
+        $('#loginPage').hidden = true
+        $('#appPage').hidden = false
+
+        const views = {
+          'tableau-de-bord': vDashboard,
+          signalements: vReports,
+          contenus: vContents,
+          tags: vTags,
+          utilisateurs: vUsers,
+          utilisateur: vUser,
+          offres: vJobs,
+          challenges: arg === 'nouveau' ? vNewChallenge : vChallenges,
+          journal: vAudit,
+          parametres: vSettings,
+        }
+        const navId = page === 'utilisateur' ? 'utilisateurs' : page
+        const res = (views[page] && views[page](arg)) || vNotFound()
+        renderNav(navId)
+        $('#crumbs').innerHTML = res.crumbs
+          .map((c, i) =>
+            i < res.crumbs.length - 1
+              ? `<a href="${c[1]}">${esc(c[0])}</a><span aria-hidden="true">/</span>`
+              : `<b>${esc(c[0])}</b>`,
+          )
+          .join('')
+        $('#main').innerHTML = res.html
+        document.title = res.crumbs[res.crumbs.length - 1][0] + ' · Zetsu Admin'
+        applyTheme(document.documentElement.dataset.theme)
+        if (res.after) res.after()
+      }
+      window.addEventListener('hashchange', () => {
+        route()
+        window.scrollTo(0, 0)
+      })
+      const go = (h) => {
+        if (location.hash.slice(1) === h) route()
+        else location.hash = h
+      }
+
+      /* =====================================================================
+   TABLEAU DE BORD
+   ===================================================================== */
+      function windowSlice(arr, days, offset = 0) {
+        return arr.slice(arr.length - days - offset, arr.length - offset)
+      }
+      function countryFactor() {
+        return countryFilter === 'Tous'
+          ? 1
+          : {
+              'Burkina Faso': 0.24,
+              Sénégal: 0.18,
+              "Côte d'Ivoire": 0.16,
+              Ghana: 0.12,
+              Kenya: 0.1,
+              Maroc: 0.08,
+            }[countryFilter] || 0.05
+      }
+      function kpiDelta(cur, prev, goodWhenUp = true) {
+        if (!prev) return ''
+        const p = Math.round(((cur - prev) / prev) * 100)
+        const good = goodWhenUp ? p >= 0 : p <= 0
+        return `<b class="${good ? 'up' : 'down'}">${p >= 0 ? '+' : ''}${p} %</b> par rapport aux ${range} jours précédents`
+      }
+      function vDashboard() {
+        const f = countryFactor()
+        const q = Math.round(sum(windowSlice(dailyQuestions, range)) * f),
+          qp = Math.round(
+            sum(windowSlice(dailyQuestions, Math.min(range, 45), Math.min(range, 45))) *
+              f *
+              (range / Math.min(range, 45)),
+          )
+        const s = Math.round(sum(windowSlice(dailySignups, range)) * f),
+          sp = Math.round(
+            sum(windowSlice(dailySignups, Math.min(range, 45), Math.min(range, 45))) *
+              f *
+              (range / Math.min(range, 45)),
+          )
+        const resolved = { 7: 68, 30: 64, 90: 61 }[range],
+          resolvedPrev = { 7: 63, 30: 61, 90: 58 }[range]
+        const median = { 7: 38, 30: 44, 90: 51 }[range],
+          medianPrev = { 7: 45, 30: 49, 90: 56 }[range]
+        return {
+          crumbs: [['Tableau de bord', '#tableau-de-bord']],
+          html: `
+      <div class="page-head"><div><h1>Tableau de bord</h1><p>Activité de la communauté au ${TODAY.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}.</p></div></div>
+      <div class="filters" role="group" aria-label="Filtres du tableau de bord">
+        <div class="seg" role="group" aria-label="Période">${[7, 30, 90].map((d) => `<button data-range="${d}" aria-pressed="${range === d}">${d} derniers jours</button>`).join('')}</div>
+        <label class="sr-only" for="countrySel">Pays</label>
+        <select class="select" id="countrySel">${['Tous', 'Burkina Faso', 'Sénégal', "Côte d'Ivoire", 'Ghana', 'Kenya', 'Maroc'].map((c) => `<option ${c === countryFilter ? 'selected' : ''} value="${c}">${c === 'Tous' ? 'Tous les pays' : c}</option>`).join('')}</select>
+      </div>
+      <section class="panel kpis" aria-label="Indicateurs clés">
+        <div class="kpi"><div class="k-label">Nouveaux inscrits</div><div class="k-value">${fmt(s)}</div><div class="k-delta">${kpiDelta(s, sp)}</div></div>
+        <div class="kpi"><div class="k-label">Questions publiées</div><div class="k-value">${fmt(q)}</div><div class="k-delta">${kpiDelta(q, qp)}</div></div>
+        <div class="kpi"><div class="k-label">Questions résolues</div><div class="k-value">${resolved} %</div><div class="k-delta">${kpiDelta(resolved, resolvedPrev)}</div></div>
+        <div class="kpi"><div class="k-label">Délai médian de 1re réponse</div><div class="k-value">${median} min</div><div class="k-delta">${kpiDelta(median, medianPrev, false)}</div></div>
+      </section>
+      <div class="grid-2">
+        <section class="panel" aria-labelledby="actTitle">
+          <div class="panel-head">
+            <div><h2 id="actTitle">Questions et réponses publiées par jour</h2><p>${range} derniers jours${countryFilter !== 'Tous' ? `, ${esc(countryFilter)}` : ''}</p></div>
+            <button class="btn btn-ghost btn-sm data-table-toggle" data-action="chart-table" aria-pressed="${showChartTable}">${showChartTable ? 'Afficher le graphique' : 'Afficher les données'}</button>
+          </div>
+          <div class="panel-body">
+            <div class="chart-legend" style="margin-bottom:12px"><span><i style="background:var(--series-1)"></i>Réponses</span><span><i style="background:var(--series-2)"></i>Questions</span></div>
+            <div class="chart-wrap" id="lineChart" ${showChartTable ? 'hidden' : ''}></div>
+            <div class="table-wrap" id="lineTable" ${showChartTable ? '' : 'hidden'} style="max-height:300px;overflow:auto"></div>
+          </div>
+        </section>
+        <section class="panel" aria-labelledby="tagTitle">
+          <div class="panel-head"><div><h2 id="tagTitle">Questions par tag</h2><p>Les 6 tags les plus utilisés sur la période</p></div></div>
+          <div class="panel-body"><div class="bars chart-wrap" id="barChart"></div></div>
+        </section>
+      </div>
+      <div class="grid-2" style="margin-top:24px">
+        <section class="panel" aria-labelledby="recTitle">
+          <div class="panel-head"><div><h2 id="recTitle">Signalements à traiter</h2><p>Les plus signalés en premier</p></div><a class="btn btn-secondary btn-sm" href="#signalements">Tout voir</a></div>
+          ${
+            reports.length
+              ? `<div class="table-wrap"><table><thead><tr><th>Contenu</th><th>Motif</th><th class="num">Signalements</th><th class="r hide-sm">Reçu</th></tr></thead><tbody>
+            ${[...reports]
+              .sort((a, b) => b.count - a.count)
+              .slice(0, 4)
+              .map(
+                (r) =>
+                  `<tr><td><a class="cell-title" href="#signalements" data-open-report="${r.id}">${esc(r.type)} de ${esc(userBy(r.author).name)}</a></td><td>${esc(r.reason)}</td><td class="num">${r.count}</td><td class="r muted hide-sm">${r.time}</td></tr>`,
+              )
+              .join('')}
+          </tbody></table></div>`
+              : `<div class="empty"><b>Aucun signalement en attente</b>La file de modération est vide.</div>`
+          }
+        </section>
+        <section class="panel" aria-labelledby="todoTitle">
+          <div class="panel-head"><div><h2 id="todoTitle">À valider</h2><p>Actions qui attendent l'équipe</p></div></div>
+          <div class="panel-body" style="padding-top:8px;padding-bottom:8px">
+            <ul class="timeline">
+              <li><time>Offres</time><span><a href="#offres">${plural(pendingJobs.length, "offre d'emploi", "offres d'emploi")}</a> en attente de validation</span></li>
+              <li><time>Challenges</time><span><a href="#challenges">${plural(submissions.filter((s) => s.status === 'À évaluer').length, 'soumission', 'soumissions')}</a> à évaluer pour le défi en cours</span></li>
+              <li><time>Comptes</time><span><a href="#utilisateurs" data-action="filter-flagged">${plural(users.filter((u) => u.status === 'Signalé').length, 'compte signalé', 'comptes signalés')}</a> à examiner</span></li>
+            </ul>
+          </div>
+        </section>
+      </div>`,
+          after: () => {
+            drawCharts()
+            $('#countrySel').onchange = (e) => {
+              countryFilter = e.target.value
+              route()
+            }
+          },
+        }
+      }
+
+      /* Graphique en lignes : axe unique, crosshair, infobulle, étiquettes directes */
+      function drawCharts() {
+        const f = countryFactor()
+        const qs = windowSlice(dailyQuestions, range).map((v) => Math.round(v * f))
+        const as = windowSlice(dailyAnswers, range).map((v) => Math.round(v * f))
+        const dates = qs.map((_, i) => {
+          const d = new Date(TODAY)
+          d.setDate(d.getDate() - (range - 1 - i))
+          return d
+        })
+        const lbl = (d) => d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+
+        const wrap = $('#lineChart')
+        if (wrap) {
+          const W = Math.max(wrap.clientWidth, 280),
+            H = 260,
+            m = { t: 10, r: 78, b: 28, l: 36 }
+          const max = Math.max(...as, ...qs),
+            step = max > 150 ? 50 : max > 60 ? 25 : max > 30 ? 10 : 5,
+            top = Math.ceil(max / step) * step
+          const x = (i) => m.l + (i / (qs.length - 1)) * (W - m.l - m.r)
+          const y = (v) => m.t + (1 - v / top) * (H - m.t - m.b)
+          const path = (arr) =>
+            arr.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join('')
+          const ticks = []
+          for (let v = 0; v <= top; v += step) ticks.push(v)
+          const xIdx = [
+            0,
+            Math.round((qs.length - 1) / 3),
+            Math.round((2 * (qs.length - 1)) / 3),
+            qs.length - 1,
+          ]
+          let ly1 = y(as.at(-1)),
+            ly2 = y(qs.at(-1))
+          if (Math.abs(ly1 - ly2) < 16) {
+            const mid = (ly1 + ly2) / 2
+            ly1 = mid - 8
+            ly2 = mid + 8
+          }
+          wrap.innerHTML = `
+      <svg viewBox="0 0 ${W} ${H}" height="${H}" role="img" tabindex="0" aria-label="Graphique des questions et réponses par jour. Utilisez les flèches gauche et droite pour parcourir les jours.">
+        ${ticks.map((v) => `<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid-line)" stroke-width="1"/><text x="${m.l - 8}" y="${y(v) + 4}" text-anchor="end">${v}</text>`).join('')}
+        <line x1="${m.l}" x2="${W - m.r}" y1="${y(0)}" y2="${y(0)}" stroke="var(--axis)" stroke-width="1"/>
+        ${xIdx.map((i) => `<text x="${x(i)}" y="${H - 8}" text-anchor="${i === 0 ? 'start' : i === qs.length - 1 ? 'end' : 'middle'}">${lbl(dates[i])}</text>`).join('')}
+        <path d="${path(as)}" fill="none" stroke="var(--series-1)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="${path(qs)}" fill="none" stroke="var(--series-2)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        <text class="dlabel" x="${W - m.r + 8}" y="${ly1 + 4}">Réponses</text>
+        <text class="dlabel" x="${W - m.r + 8}" y="${ly2 + 4}">Questions</text>
+        <g id="hover" opacity="0">
+          <line id="hLine" y1="${m.t}" y2="${H - m.b}" stroke="var(--text-3)" stroke-width="1" stroke-dasharray="3 3"/>
+          <circle id="hA" r="4.5" fill="var(--series-1)" stroke="var(--surface)" stroke-width="2"/>
+          <circle id="hQ" r="4.5" fill="var(--series-2)" stroke="var(--surface)" stroke-width="2"/>
+        </g>
+        <rect id="hit" x="${m.l}" y="${m.t}" width="${W - m.l - m.r}" height="${H - m.t - m.b}" fill="transparent"/>
+      </svg>
+      <div class="tooltip" id="tip" hidden></div>`
+          const svg = wrap.querySelector('svg'),
+            tip = $('#tip'),
+            g = $('#hover')
+          let cur = -1
+          const show = (i) => {
+            cur = Math.max(0, Math.min(qs.length - 1, i))
+            const X = x(cur)
+            $('#hLine').setAttribute('x1', X)
+            $('#hLine').setAttribute('x2', X)
+            $('#hA').setAttribute('cx', X)
+            $('#hA').setAttribute('cy', y(as[cur]))
+            $('#hQ').setAttribute('cx', X)
+            $('#hQ').setAttribute('cy', y(qs[cur]))
+            g.setAttribute('opacity', 1)
+            tip.replaceChildren()
+            const head = document.createElement('div')
+            head.className = 't-head'
+            head.textContent = dates[cur].toLocaleDateString('fr-FR', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+            })
+            tip.append(head)
+            ;[
+              ['Réponses', as[cur], 'var(--series-1)'],
+              ['Questions', qs[cur], 'var(--series-2)'],
+            ].forEach(([n, v, c]) => {
+              const row = document.createElement('div')
+              row.className = 't-row'
+              const k = document.createElement('i')
+              k.style.background = c
+              const b = document.createElement('b')
+              b.textContent = v
+              const s = document.createElement('span')
+              s.textContent = n
+              row.append(k, b, s)
+              tip.append(row)
+            })
+            tip.hidden = false
+            const left = (X / W) * wrap.clientWidth
+            tip.style.left =
+              Math.min(Math.max(left + 12, 0), wrap.clientWidth - tip.offsetWidth) + 'px'
+            if (left + 12 + tip.offsetWidth > wrap.clientWidth)
+              tip.style.left = Math.max(left - tip.offsetWidth - 12, 0) + 'px'
+            tip.style.top = '8px'
+          }
+          const hide = () => {
+            g.setAttribute('opacity', 0)
+            tip.hidden = true
+          }
+          svg.addEventListener('pointermove', (e) => {
+            const r = svg.getBoundingClientRect(),
+              px = ((e.clientX - r.left) / r.width) * W
+            show(Math.round(((px - m.l) / (W - m.l - m.r)) * (qs.length - 1)))
+          })
+          svg.addEventListener('pointerleave', hide)
+          svg.addEventListener('blur', hide)
+          svg.addEventListener('focus', () => show(cur < 0 ? qs.length - 1 : cur))
+          svg.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+              e.preventDefault()
+              show(cur - 1)
+            }
+            if (e.key === 'ArrowRight') {
+              e.preventDefault()
+              show(cur + 1)
+            }
+            if (e.key === 'Home') {
+              e.preventDefault()
+              show(0)
+            }
+            if (e.key === 'End') {
+              e.preventDefault()
+              show(qs.length - 1)
+            }
+          })
+        }
+        const table = $('#lineTable')
+        if (table)
+          table.innerHTML = `<table><thead><tr><th>Jour</th><th class="num">Questions</th><th class="num">Réponses</th></tr></thead><tbody>
+    ${dates
+      .map(
+        (d, i) =>
+          `<tr><td>${lbl(d)}</td><td class="num">${qs[i]}</td><td class="num">${as[i]}</td></tr>`,
+      )
+      .reverse()
+      .join('')}</tbody></table>`
+
+        const bars = $('#barChart')
+        if (bars) {
+          const total = sum(qs)
+          const rows = Object.entries(tagShare).map(([t, p]) => [t, Math.round(total * p)])
+          const maxV = Math.max(...rows.map((r) => r[1]))
+          bars.innerHTML =
+            rows
+              .map(
+                ([t, v]) => `
+      <div class="bar-row" tabindex="0" data-tip="${v} questions, ${Math.round((v / total) * 100)} % du total" aria-label="${t} : ${v} questions, ${Math.round((v / total) * 100)} % du total">
+        <span class="b-label">${t}</span><span class="bar-track"><span class="bar-fill" style="display:block;width:${((v / maxV) * 100).toFixed(1)}%"></span></span><span class="b-val">${fmt(v)}</span>
+      </div>`,
+              )
+              .join('') + `<div class="tooltip" id="barTip" hidden></div>`
+          const bt = $('#barTip')
+          bars.querySelectorAll('.bar-row').forEach((r) => {
+            const on = () => {
+              bt.textContent = r.dataset.tip
+              bt.hidden = false
+              bt.style.left = '120px'
+              bt.style.top = r.offsetTop - 34 + 'px'
+            }
+            const off = () => (bt.hidden = true)
+            r.addEventListener('pointerenter', on)
+            r.addEventListener('pointerleave', off)
+            r.addEventListener('focus', on)
+            r.addEventListener('blur', off)
+          })
+        }
+      }
+      let resizeT
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeT)
+        resizeT = setTimeout(() => {
+          if ($('#lineChart')) drawCharts()
+        }, 120)
+      })
+
+      /* =====================================================================
+   SIGNALEMENTS
+   ===================================================================== */
+      const REASONS = [
+        'Tous',
+        'Spam',
+        'Contenu offensant',
+        'Hors sujet',
+        "Usurpation d'identité",
+        'Offre frauduleuse',
+      ]
+      function vReports() {
+        const list = reports
+          .filter((r) => reportFilter === 'Tous' || r.reason === reportFilter)
+          .sort((a, b) => b.count - a.count)
+        if (!list.find((r) => r.id === selectedReport)) selectedReport = list[0]?.id ?? null
+        const r = reports.find((x) => x.id === selectedReport)
+        const author = r ? userBy(r.author) : null
+        return {
+          crumbs: [
+            ['Modération', '#signalements'],
+            ['Signalements', '#signalements'],
+          ],
+          html: `
+      <div class="page-head"><div><h1>Signalements</h1><p>${plural(reports.length, 'signalement', 'signalements')} en attente. Un contenu signalé 5 fois est masqué automatiquement.</p></div></div>
+      <div class="filters"><div class="seg" role="group" aria-label="Filtrer par motif">${REASONS.map(
+        (x) => {
+          const n = x === 'Tous' ? reports.length : reports.filter((r) => r.reason === x).length
+          return `<button data-reason="${x}" aria-pressed="${reportFilter === x}">${x}<span class="n">${n}</span></button>`
+        },
+      ).join('')}</div></div>
+      <section class="panel">
+        ${
+          list.length
+            ? `<div class="split">
+          <div class="queue" role="list" aria-label="File de signalements">
+            ${list
+              .map(
+                (
+                  x,
+                ) => `<button class="q-item" role="listitem" data-report="${x.id}" aria-current="${x.id === selectedReport}">
+              <span class="q-top"><span class="pill">${esc(x.type)}</span><span class="reports-n">${x.count} signalement${x.count > 1 ? 's' : ''}</span><span class="muted">${x.time}</span></span>
+              <p>${esc(x.content)}</p><small>${esc(x.reason)}, par ${esc(userBy(x.author).name)}</small>
+            </button>`,
+              )
+              .join('')}
+          </div>
+          <div class="detail" id="reportDetail" tabindex="-1">
+            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><h2>${esc(r.type)} ${r.type === 'Profil' ? 'signalé' : 'signalée'} pour « ${esc(r.reason)} »</h2><span class="reports-n">${r.count} signalement${r.count > 1 ? 's' : ''}</span></div>
+            <div class="quote"><div class="ctx">${esc(r.context)}</div><p>${esc(r.content)}</p></div>
+            <dl class="dl">
+              <dt>Auteur</dt><dd><a class="who" href="#utilisateur/${author.id}">${avatar(author.name, 26)}<span><b>${esc(author.name)}</b></span></a></dd>
+              <dt>Statut du compte</dt><dd>${status(author.status)}</dd>
+              <dt>Antécédents</dt><dd>${author.warnings ? plural(author.warnings, 'avertissement', 'avertissements') : 'Aucun avertissement'}, ${plural(author.rep, 'point', 'points')} de réputation</dd>
+              <dt>Inscrit le</dt><dd>${dateFromDays(author.joinedDays)}</dd>
+            </dl>
+            <h3 class="section-title">Signalé par</h3>
+            <ul class="report-list">${r.reporters.map((id) => `<li>${avatar(userBy(id).name, 26)}<a href="#utilisateur/${id}" style="color:var(--text)">${esc(userBy(id).name)}</a><span class="muted" style="font-size:13px">${esc(r.reason)}</span></li>`).join('')}</ul>
+            <div class="action-bar">
+              <button class="btn btn-secondary" data-mod="ignore">Ignorer le signalement</button>
+              <button class="btn btn-secondary" data-mod="hide">Masquer le contenu</button>
+              <button class="btn btn-secondary" data-mod="warn">Avertir l'auteur</button>
+              <button class="btn btn-danger-line" data-mod="suspend" ${author.status === 'Suspendu' ? 'disabled' : ''}>Suspendre l'auteur</button>
+            </div>
+          </div>
+        </div>`
+            : `<div class="empty"><b>Aucun signalement ${reportFilter === 'Tous' ? 'en attente' : `pour le motif « ${esc(reportFilter)} »`}</b>${reportFilter === 'Tous' ? 'La file de modération est vide. Bon travail.' : `<button class="btn btn-secondary" data-reason="Tous" style="margin-top:12px">Voir tous les motifs</button>`}</div>`
+        }
+      </section>`,
+        }
+      }
+      function resolveReport(id, action, detail) {
+        const r = reports.find((x) => x.id === id)
+        const idx = reports.indexOf(r)
+        reports = reports.filter((x) => x.id !== id)
+        log(action, `${r.type} de ${userBy(r.author).name}`, detail)
+        selectedReport = null
+        route()
+        const next = $('.q-item')
+        if (next) next.focus()
+        toast(
+          `${action}. ${reports.length ? `Encore ${reports.length} à traiter.` : 'File vide.'}`,
+          () => {
+            reports.splice(idx, 0, r)
+            audit.shift()
+            selectedReport = r.id
+            route()
+          },
+        )
+      }
+
+      /* =====================================================================
+   CONTENUS
+   ===================================================================== */
+      function vContents() {
+        const list = contents.filter(
+          (c) => contentStatus === 'Toutes' || c.status === contentStatus,
+        )
+        return {
+          crumbs: [
+            ['Modération', '#signalements'],
+            ['Contenus', '#contenus'],
+          ],
+          html: `
+      <div class="page-head"><div><h1>Contenus</h1><p>Toutes les questions publiées sur la plateforme.</p></div></div>
+      <div class="filters"><div class="seg" role="group" aria-label="Filtrer par statut">${[
+        'Toutes',
+        'Publiée',
+        'Masquée',
+        'Fermée',
+      ]
+        .map(
+          (s) =>
+            `<button data-cstatus="${s}" aria-pressed="${contentStatus === s}">${s === 'Toutes' ? 'Toutes' : s + 's'}<span class="n">${s === 'Toutes' ? contents.length : contents.filter((c) => c.status === s).length}</span></button>`,
+        )
+        .join('')}</div></div>
+      <section class="panel"><div class="table-wrap"><table>
+        <thead><tr><th>Question</th><th class="hide-sm">Auteur</th><th class="hide-sm">Tags</th><th class="num">Réponses</th><th class="num">Signal.</th><th>Statut</th><th class="r">Actions</th></tr></thead>
+        <tbody>${list
+          .map(
+            (c) => `<tr>
+          <td><a class="cell-title" href="zetsu-maquette.html#question/${c.id}" target="_blank" rel="noopener">${esc(c.title)}</a><small class="muted">Publiée le ${c.date}</small></td>
+          <td class="hide-sm"><a class="who" href="#utilisateur/${c.author}">${avatar(userBy(c.author).name, 24)}<span><b>${esc(userBy(c.author).name)}</b></span></a></td>
+          <td class="hide-sm"><div class="tags">${c.tags.map((t) => `<span class="tag">${t}</span>`).join('')}</div></td>
+          <td class="num">${c.answers}</td><td class="num" style="${c.flags ? 'color:var(--crit-text);font-weight:600' : ''}">${c.flags}</td>
+          <td>${status(c.status)}</td>
+          <td><div class="row-actions">
+            ${c.status === 'Masquée' ? `<button class="btn btn-secondary btn-sm" data-content="${c.id}:Publiée">Republier</button>` : `<button class="btn btn-secondary btn-sm" data-content="${c.id}:Masquée">Masquer</button>`}
+            ${c.status === 'Fermée' ? `<button class="btn btn-ghost btn-sm" data-content="${c.id}:Publiée">Rouvrir</button>` : c.status === 'Publiée' ? `<button class="btn btn-ghost btn-sm" data-content="${c.id}:Fermée">Fermer</button>` : ''}
+          </div></td></tr>`,
+          )
+          .join('')}</tbody>
+      </table></div></section>`,
+        }
+      }
+
+      /* =====================================================================
+   TAGS
+   ===================================================================== */
+      function vTags() {
+        return {
+          crumbs: [
+            ['Modération', '#signalements'],
+            ['Tags', '#tags'],
+          ],
+          html: `
+      <div class="page-head"><div><h1>Tags</h1><p>Renommez, fusionnez les doublons et gérez les synonymes pour garder une recherche propre.</p></div></div>
+      <section class="panel" style="margin-bottom:24px"><form class="panel-body" id="tagForm" novalidate style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">
+        <div class="field" style="margin:0;flex:1;min-width:220px"><label for="newTag">Nouveau tag</label><input id="newTag" placeholder="ex. : kotlin" aria-describedby="newTagHint newTagErr">
+          <p class="hint" id="newTagHint">Minuscules, chiffres et tirets.</p><p class="error" id="newTagErr"></p></div>
+        <button class="btn btn-primary" type="submit" style="margin-top:27px">${icon('i-plus', 13)}Créer le tag</button>
+      </form></section>
+      <section class="panel"><div class="table-wrap"><table>
+        <thead><tr><th>Tag</th><th class="num">Questions</th><th class="hide-sm">Synonymes</th><th class="hide-sm">Créé</th><th class="r">Actions</th></tr></thead>
+        <tbody>${[...tags]
+          .sort((a, b) => b.count - a.count)
+          .map(
+            (t) => `<tr>
+          <td><span class="tag">${esc(t.name)}</span></td><td class="num">${t.count}</td>
+          <td class="hide-sm">${t.synonyms.length ? `<div class="tags">${t.synonyms.map((s) => `<span class="tag" style="opacity:.8">${esc(s)}</span>`).join('')}</div>` : `<span class="muted">Aucun</span>`}</td>
+          <td class="hide-sm muted">${t.created}</td>
+          <td><div class="row-actions"><button class="btn btn-ghost btn-sm" data-merge="${esc(t.name)}">Fusionner</button>
+            <button class="btn btn-ghost btn-sm" data-deltag="${esc(t.name)}" ${t.count ? `disabled title="Un tag utilisé ne peut pas être supprimé : fusionnez-le"` : ''}>Supprimer</button></div></td>
+        </tr>`,
+          )
+          .join('')}</tbody></table></div></section>`,
+          after: () => {
+            $('#tagForm').onsubmit = (e) => {
+              e.preventDefault()
+              const v = $('#newTag').value.trim().toLowerCase()
+              const err = !/^[a-z0-9][a-z0-9-]{1,23}$/.test(v)
+                ? 'Utilisez 2 à 24 caractères : minuscules, chiffres et tirets.'
+                : tags.some((t) => t.name === v || t.synonyms.includes(v))
+                  ? `Le tag « ${v} » existe déjà, ou c'est un synonyme.`
+                  : ''
+              $('#newTagErr').textContent = err
+              if (setError($('#newTag'), 'newTagErr', err)) return $('#newTag').focus()
+              tags.push({ name: v, count: 0, synonyms: [], created: 'oct. 2026' })
+              log('Tag créé', v)
+              route()
+              toast(`Tag « ${v} » créé`)
+            }
+          },
+        }
+      }
+
+      /* =====================================================================
+   UTILISATEURS
+   ===================================================================== */
+      function filteredUsers() {
+        const q = userQuery.toLowerCase()
+        const list = users.filter(
+          (u) =>
+            (!q || (u.name + ' ' + u.email).toLowerCase().includes(q)) &&
+            (userRole === 'Tous' || u.role === userRole) &&
+            (userStatus === 'Tous' || u.status === userStatus),
+        )
+        const { key, dir } = userSort
+        list.sort(
+          (a, b) =>
+            (typeof a[key] === 'string' ? a[key].localeCompare(b[key]) : a[key] - b[key]) *
+            (dir === 'asc' ? 1 : -1),
+        )
+        return list
+      }
+      function vUsers() {
+        const all = filteredUsers(),
+          pages = Math.max(1, Math.ceil(all.length / PAGE))
+        userPage = Math.min(userPage, pages)
+        const list = all.slice((userPage - 1) * PAGE, userPage * PAGE)
+        const sortTh = (key, label, cls = '') => {
+          const active = userSort.key === key
+          return `<th class="${cls}" ${active ? `aria-sort="${userSort.dir === 'asc' ? 'ascending' : 'descending'}"` : ''}><button class="sort" data-sort="${key}">${label}<svg width="12" height="12" aria-hidden="true"><use href="#i-up"/></svg></button></th>`
+        }
+        const allChecked = list.length && list.every((u) => selectedUsers.has(u.id))
+        return {
+          crumbs: [
+            ['Communauté', '#utilisateurs'],
+            ['Utilisateurs', '#utilisateurs'],
+          ],
+          html: `
+      <div class="page-head"><div><h1>Utilisateurs</h1><p>${plural(users.length, 'compte', 'comptes')}, dont ${users.filter((u) => u.status === 'Suspendu').length} suspendu et ${users.filter((u) => u.status === 'Signalé').length} signalé.</p></div>
+        <div class="actions"><button class="btn btn-secondary" data-action="export-csv">${icon('i-dl', 15)}Exporter en CSV</button></div></div>
+      <div class="filters">
+        <label class="sr-only" for="uSearch">Rechercher</label><input class="input" id="uSearch" type="search" placeholder="Nom ou email" value="${esc(userQuery)}">
+        <label class="sr-only" for="uRole">Rôle</label><select class="select" id="uRole">${['Tous', 'Membre', 'Modérateur'].map((r) => `<option value="${r}" ${userRole === r ? 'selected' : ''}>${r === 'Tous' ? 'Tous les rôles' : r}</option>`).join('')}</select>
+        <label class="sr-only" for="uStatus">Statut</label><select class="select" id="uStatus">${['Tous', 'Actif', 'Signalé', 'Suspendu'].map((r) => `<option value="${r}" ${userStatus === r ? 'selected' : ''}>${r === 'Tous' ? 'Tous les statuts' : r}</option>`).join('')}</select>
+      </div>
+      <section class="panel">
+        ${
+          selectedUsers.size
+            ? `<div class="bulk" role="region" aria-label="Actions groupées"><b>${plural(selectedUsers.size, 'compte sélectionné', 'comptes sélectionnés')}</b>
+          <button class="btn btn-secondary btn-sm" data-action="export-csv">Exporter la sélection</button>
+          <button class="btn btn-danger-line btn-sm" data-action="bulk-suspend">Suspendre 7 jours</button>
+          <button class="btn btn-ghost btn-sm" data-action="clear-sel">Désélectionner</button></div>`
+            : ''
+        }
+        ${
+          list.length
+            ? `<div class="table-wrap"><table>
+          <thead><tr><th style="width:44px"><input type="checkbox" class="cb" data-action="select-page" ${allChecked ? 'checked' : ''} aria-label="Sélectionner les comptes de cette page"></th>
+            ${sortTh('name', 'Utilisateur')}<th class="hide-sm">Pays</th><th class="hide-sm">Rôle</th>${sortTh('rep', 'Réputation', 'num')}${sortTh('joinedDays', 'Inscrit le', 'hide-sm')}<th>Statut</th><th class="r"><span class="sr-only">Actions</span></th></tr></thead>
+          <tbody>${list
+            .map(
+              (u) => `<tr class="${selectedUsers.has(u.id) ? 'selected' : ''}">
+            <td><input type="checkbox" class="cb" data-sel="${u.id}" ${selectedUsers.has(u.id) ? 'checked' : ''} aria-label="Sélectionner ${esc(u.name)}"></td>
+            <td><a class="who" href="#utilisateur/${u.id}">${avatar(u.name, 32)}<span style="min-width:0"><b>${esc(u.name)}</b><small>${esc(u.email)}</small></span></a></td>
+            <td class="hide-sm">${esc(u.country)}</td><td class="hide-sm">${u.role === 'Modérateur' ? `<span class="pill">${icon('i-shield', 12)}&nbsp;Modérateur</span>` : 'Membre'}</td>
+            <td class="num">${fmt(u.rep)}</td><td class="hide-sm muted">${dateFromDays(u.joinedDays)}</td><td>${status(u.status)}</td>
+            <td class="r"><a class="btn btn-ghost btn-sm" href="#utilisateur/${u.id}">Voir</a></td></tr>`,
+            )
+            .join('')}</tbody>
+        </table></div>
+        <div class="pager"><span>${(userPage - 1) * PAGE + 1} à ${Math.min(userPage * PAGE, all.length)} sur ${all.length}</span>
+          <div class="btns"><button class="btn btn-secondary btn-sm" data-page="${userPage - 1}" ${userPage === 1 ? 'disabled' : ''}>Précédent</button><button class="btn btn-secondary btn-sm" data-page="${userPage + 1}" ${userPage === pages ? 'disabled' : ''}>Suivant</button></div></div>`
+            : `<div class="empty"><b>Aucun compte ne correspond</b>Modifiez la recherche ou les filtres.<br><button class="btn btn-secondary" data-action="reset-users" style="margin-top:12px">Réinitialiser les filtres</button></div>`
+        }
+      </section>`,
+          after: () => {
+            const s = $('#uSearch')
+            s.oninput = (e) => {
+              userQuery = e.target.value
+              userPage = 1
+              const pos = s.selectionStart
+              route()
+              const n = $('#uSearch')
+              n.focus()
+              n.setSelectionRange(pos, pos)
+            }
+            $('#uRole').onchange = (e) => {
+              userRole = e.target.value
+              userPage = 1
+              route()
+            }
+            $('#uStatus').onchange = (e) => {
+              userStatus = e.target.value
+              userPage = 1
+              route()
+            }
+          },
+        }
+      }
+      function vUser(id) {
+        const u = userBy(id)
+        if (!u) return null
+        const sanctions = [
+          ...(u.warnings
+            ? [
+                {
+                  time: '08/10/2026',
+                  text: 'Avertissement : ton agressif dans une réponse',
+                  by: 'eric',
+                },
+              ]
+            : []),
+          ...(u.warnings > 1
+            ? [
+                {
+                  time: '12/09/2026',
+                  text: 'Avertissement : liens promotionnels répétés',
+                  by: 'mariam',
+                },
+              ]
+            : []),
+          ...(u.status === 'Suspendu'
+            ? [{ time: '07/10/2026', text: 'Suspension de 30 jours : spam répété', by: 'salif' }]
+            : []),
+        ]
+        const tabs = [
+          ['activite', 'Activité'],
+          ['sanctions', `Sanctions (${sanctions.length})`],
+          ['connexions', 'Connexions'],
+        ]
+        const myContents = contents.filter((c) => c.author === id)
+        let panel = ''
+        if (userTab === 'activite')
+          panel = myContents.length
+            ? `<ul class="timeline">${myContents.map((c) => `<li><time>${c.date}</time><span>A publié <a href="zetsu-maquette.html#question/${c.id}" target="_blank" rel="noopener">${esc(c.title)}</a> ${status(c.status)}</span></li>`).join('')}</ul>`
+            : `<p class="muted">Aucune question publiée récemment. ${plural(u.answers, 'réponse', 'réponses')} au total.</p>`
+        if (userTab === 'sanctions')
+          panel = sanctions.length
+            ? `<ul class="timeline">${sanctions.map((s) => `<li><time>${s.time}</time><span>${esc(s.text)} <span class="muted">par ${esc(staffBy(s.by).name)}</span></span></li>`).join('')}</ul>`
+            : `<p class="muted">Aucune sanction sur ce compte.</p>`
+        if (userTab === 'connexions')
+          panel = `<ul class="timeline">
+    <li><time>Aujourd'hui</time><span>Connexion via ${u.provider}, Chrome sur Android, IP 102.180.xx.xx (${esc(u.country)})</span></li>
+    <li><time>Hier</time><span>Connexion via ${u.provider}, Firefox sur Windows, IP 102.180.xx.xx</span></li>
+    <li><time>05/10</time><span>Modification du mot de passe</span></li></ul>`
+        return {
+          crumbs: [
+            ['Communauté', '#utilisateurs'],
+            ['Utilisateurs', '#utilisateurs'],
+            [u.name, '#utilisateur/' + id],
+          ],
+          html: `
+      <section class="panel">
+        <div class="panel-body profile-head">
+          ${avatar(u.name, 64)}
+          <div><h1>${esc(u.name)}</h1><p class="muted" style="font-size:14px">${esc(u.email)}, ${esc(u.country)}, inscrit le ${dateFromDays(u.joinedDays)} via ${u.provider}</p><div style="margin-top:6px">${status(u.status)}</div></div>
+          <div class="actions">
+            <a class="btn btn-secondary" href="zetsu-maquette.html#profil/${id}" target="_blank" rel="noopener">Profil public${icon('i-ext', 13)}</a>
+            ${
+              u.status === 'Suspendu'
+                ? `<button class="btn btn-secondary" data-action="reactivate" data-user="${id}">Réactiver le compte</button>`
+                : `<button class="btn btn-danger-line" data-action="suspend-user" data-user="${id}">Suspendre</button>`
+            }
+          </div>
+        </div>
+        <div class="stat-strip"><div><strong>${fmt(u.rep)}</strong><span>réputation</span></div><div><strong>${u.questions}</strong><span>questions</span></div><div><strong>${u.answers}</strong><span>réponses</span></div><div><strong>${u.warnings}</strong><span>avertissements</span></div></div>
+      </section>
+      <div class="grid-2" style="margin-top:24px">
+        <section class="panel">
+          <div class="tabbar" role="tablist" aria-label="Historique du compte">${tabs.map(([k, l]) => `<button role="tab" data-utab="${k}" aria-selected="${userTab === k}" aria-controls="utabPanel">${l}</button>`).join('')}</div>
+          <div class="panel-body" id="utabPanel" role="tabpanel">${panel}</div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h2>Gestion du compte</h2></div>
+          <div class="panel-body">
+            <div class="field"><label for="roleSel">Rôle</label><select id="roleSel" data-user="${id}">${['Membre', 'Modérateur'].map((r) => `<option ${u.role === r ? 'selected' : ''}>${r}</option>`).join('')}</select>
+              <p class="hint">Un modérateur peut traiter les signalements et masquer des contenus.</p></div>
+            <div class="switch-row"><span><b>Visible par les recruteurs</b><span>Choix de l'utilisateur, en lecture seule.</span></span><span class="pill">${u.rep > 100 ? 'Oui' : 'Non'}</span></div>
+            <div class="switch-row"><span><b>Réinitialiser le mot de passe</b><span>Envoie un lien par email.</span></span><button class="btn btn-secondary btn-sm" data-action="reset-pass" data-user="${id}">Envoyer</button></div>
+            <div class="switch-row"><span><b>Supprimer le compte</b><span>Ses contenus seront anonymisés.</span></span><button class="btn btn-danger-line btn-sm" data-action="delete-user" data-user="${id}">Supprimer</button></div>
+          </div>
+        </section>
+      </div>`,
+          after: () => {
+            $('#roleSel').onchange = async (e) => {
+              const ok = await confirmBox(
+                'Changer le rôle',
+                `Passer ${u.name} au rôle « ${e.target.value} » ? Le changement est immédiat.`,
+                'Changer le rôle',
+              )
+              if (!ok) {
+                e.target.value = u.role
+                return
+              }
+              u.role = e.target.value
+              log('Rôle modifié', u.name, `Nouveau rôle : ${u.role}`)
+              toast(`${u.name} est maintenant ${u.role.toLowerCase()}`)
+            }
+          },
+        }
+      }
+
+      /* =====================================================================
+   OFFRES
+   ===================================================================== */
+      function vJobs() {
+        const tabs = [
+          ['attente', 'En attente', pendingJobs.length],
+          ['publiees', 'Publiées', publishedJobs.length],
+          ['refusees', 'Refusées', refusedJobs.length],
+        ]
+        let body = ''
+        if (jobTab === 'attente')
+          body = pendingJobs.length
+            ? pendingJobs
+                .map(
+                  (j) => `
+    <article class="job-card">
+      ${avatar(j.company, 48, true)}
+      <div>
+        <h3>${esc(j.title)}</h3>
+        <p class="meta">${esc(j.company)}, ${esc(j.city)}, ${j.type}. Soumise ${j.time} par ${esc(j.by)}</p>
+        <div class="checks">${j.checks.map(([l, ok]) => `<span class="${ok ? 'ok' : 'ko'}">${icon(ok ? 'i-check' : 'i-x', 13)}${l}<span class="sr-only">${ok ? ' : oui' : ' : non'}</span></span>`).join('')}</div>
+        <details><summary>Voir l'annonce</summary><p>${esc(j.about)}</p><ul>${j.missions.map((m) => `<li>${esc(m)}</li>`).join('')}</ul></details>
+      </div>
+      <div class="acts"><button class="btn btn-primary" data-approve="${j.id}">Approuver</button><button class="btn btn-danger-line" data-refuse="${j.id}">Refuser</button></div>
+    </article>`,
+                )
+                .join('')
+            : `<div class="empty"><b>Aucune offre en attente</b>Les nouvelles offres apparaîtront ici avant publication.</div>`
+        if (jobTab === 'publiees')
+          body = `<div class="table-wrap"><table><thead><tr><th>Offre</th><th class="hide-sm">Entreprise</th><th class="num">Candidatures</th><th class="r">Publiée le</th></tr></thead><tbody>
+    ${publishedJobs.map((j) => `<tr><td><span class="cell-title">${esc(j.title)}</span></td><td class="hide-sm">${esc(j.company)}</td><td class="num">${j.applicants}</td><td class="r muted">${j.date}</td></tr>`).join('')}</tbody></table></div>`
+        if (jobTab === 'refusees')
+          body = `<div class="table-wrap"><table><thead><tr><th>Offre</th><th class="hide-sm">Entreprise</th><th>Motif</th><th class="r">Date</th></tr></thead><tbody>
+    ${refusedJobs.map((j) => `<tr><td><span class="cell-title">${esc(j.title)}</span></td><td class="hide-sm">${esc(j.company)}</td><td>${esc(j.reason)}</td><td class="r muted">${j.date}</td></tr>`).join('')}</tbody></table></div>`
+        return {
+          crumbs: [
+            ['Communauté', '#utilisateurs'],
+            ["Offres d'emploi", '#offres'],
+          ],
+          html: `
+      <div class="page-head"><div><h1>Offres d'emploi</h1><p>Chaque offre est vérifiée avant publication pour protéger les membres des arnaques.</p></div></div>
+      <div class="filters"><div class="seg" role="tablist" aria-label="Statut des offres">${tabs.map(([k, l, n]) => `<button role="tab" data-jtab="${k}" aria-selected="${jobTab === k}">${l}<span class="n">${n}</span></button>`).join('')}</div></div>
+      <section class="panel">${body}</section>`,
+        }
+      }
+
+      /* =====================================================================
+   CHALLENGES
+   ===================================================================== */
+      function vChallenges() {
+        const cur = challenges.find((c) => c.status === 'En cours')
+        return {
+          crumbs: [
+            ['Communauté', '#utilisateurs'],
+            ['Challenges', '#challenges'],
+          ],
+          html: `
+      <div class="page-head"><div><h1>Challenges</h1><p>Un défi par semaine, du lundi au dimanche.</p></div><div class="actions"><a class="btn btn-primary" href="#challenges/nouveau">${icon('i-plus', 13)}Créer un défi</a></div></div>
+      <section class="panel" style="margin-bottom:24px"><div class="table-wrap"><table>
+        <thead><tr><th>Défi</th><th>Statut</th><th class="hide-sm">Période</th><th class="num">Soumissions</th><th class="num hide-sm">Points</th></tr></thead>
+        <tbody>${challenges.map((c) => `<tr><td><span class="cell-title">${esc(c.title)}</span></td><td>${status(c.status)}</td><td class="hide-sm muted">${c.start} au ${c.end}</td><td class="num">${c.submissions}</td><td class="num hide-sm">+${c.points}</td></tr>`).join('')}</tbody>
+      </table></div></section>
+      ${
+        cur
+          ? `<section class="panel">
+        <div class="panel-head"><div><h2>Soumissions du défi en cours</h2><p>${esc(cur.title)}</p></div></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Participant</th><th class="hide-sm">Dépôt</th><th class="hide-sm">Reçu</th><th>Statut</th><th class="r">Évaluation</th></tr></thead>
+          <tbody>${submissions
+            .map(
+              (s, i) => `<tr>
+            <td><a class="who" href="#utilisateur/${s.user}">${avatar(userBy(s.user).name, 28)}<span><b>${esc(userBy(s.user).name)}</b></span></a></td>
+            <td class="hide-sm"><a href="#challenges" data-action="noop" class="mono" style="font-size:13px">${esc(s.repo)}</a></td>
+            <td class="hide-sm muted">${s.time}</td><td>${status(s.status)}</td>
+            <td><div class="row-actions">${
+              s.status === 'À évaluer'
+                ? `<label class="sr-only" for="score${i}">Note sur 100</label><input class="input" id="score${i}" type="number" min="0" max="100" placeholder="/100" style="width:80px;min-height:30px;font-size:13px"><button class="btn btn-primary btn-sm" data-grade="${i}">Valider</button><button class="btn btn-ghost btn-sm" data-reject="${i}">Refuser</button>`
+                : s.score
+                  ? `<span class="mono">${s.score}/100</span>`
+                  : `<span class="muted" style="font-size:13px">${esc(s.note || '')}</span>`
+            }</div></td>
+          </tr>`,
+            )
+            .join('')}</tbody>
+        </table></div></section>`
+          : ''
+      }`,
+        }
+      }
+      function vNewChallenge() {
+        return {
+          crumbs: [
+            ['Communauté', '#utilisateurs'],
+            ['Challenges', '#challenges'],
+            ['Nouveau défi', '#challenges/nouveau'],
+          ],
+          html: `
+      <div class="page-head"><div><h1>Nouveau défi</h1><p>L'aperçu se met à jour pendant la saisie.</p></div></div>
+      <div class="grid-2">
+        <form class="panel" id="chForm" novalidate>
+          <div class="panel-body">
+            <div class="field"><label for="chTitle">Titre</label><input id="chTitle" maxlength="80" aria-describedby="chTitleErr"><p class="error" id="chTitleErr">Le titre doit faire au moins 10 caractères.</p></div>
+            <div class="field"><label for="chDesc">Énoncé</label><textarea id="chDesc" aria-describedby="chDescErr"></textarea><p class="error" id="chDescErr">Décrivez le défi en au moins 40 caractères.</p></div>
+            <p class="label">Endpoints attendus</p>
+            <div id="endpoints"></div>
+            <button type="button" class="btn btn-ghost btn-sm" data-action="add-endpoint" style="margin-bottom:16px">${icon('i-plus', 12)}Ajouter un endpoint</button>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div class="field"><label for="chStart">Début</label><input id="chStart" type="date" value="2026-10-20" aria-describedby="chDateErr"></div>
+              <div class="field"><label for="chEnd">Fin</label><input id="chEnd" type="date" value="2026-10-26" aria-describedby="chDateErr"></div>
+            </div>
+            <p class="error" id="chDateErr" style="margin-top:-8px;margin-bottom:12px">La date de fin doit être après la date de début.</p>
+            <div class="field"><label for="chPts">Points de réputation</label><input id="chPts" type="number" min="5" max="100" value="20"></div>
+          </div>
+          <div class="save-bar"><a class="btn btn-ghost" href="#challenges">Annuler</a><button type="submit" class="btn btn-primary" id="chSubmit">Programmer le défi</button></div>
+        </form>
+        <section class="panel"><div class="panel-head"><h2>Aperçu pour les membres</h2></div><div class="panel-body"><div class="preview-box" id="chPreview"></div></div></section>
+      </div>`,
+          after: () => {
+            const eps = [
+              ['POST', 'Initier une action'],
+              ['GET', 'Consulter les résultats'],
+            ]
+            const renderEps = () => {
+              $('#endpoints').innerHTML = eps
+                .map(
+                  ([m, d], i) => `<div class="endpoint">
+          <label class="sr-only" for="epm${i}">Méthode ${i + 1}</label><select class="select" id="epm${i}" data-ep="${i}" data-k="0" style="width:100%">${['GET', 'POST', 'PUT', 'DELETE'].map((x) => `<option ${x === m ? 'selected' : ''}>${x}</option>`).join('')}</select>
+          <label class="sr-only" for="epd${i}">Description ${i + 1}</label><input class="input" id="epd${i}" data-ep="${i}" data-k="1" value="${esc(d)}">
+          <button type="button" class="btn btn-ghost btn-icon" data-delep="${i}" aria-label="Retirer l'endpoint ${i + 1}" ${eps.length === 1 ? 'disabled' : ''}>${icon('i-x', 13)}</button></div>`,
+                )
+                .join('')
+            }
+            const preview = () => {
+              const t = $('#chTitle').value.trim() || 'Titre du défi',
+                d = $('#chDesc').value.trim() || "L'énoncé apparaîtra ici."
+              const box = $('#chPreview')
+              box.replaceChildren()
+              const h = document.createElement('h3')
+              h.textContent = t
+              const p = document.createElement('p')
+              p.textContent = d
+              const ul = document.createElement('ul')
+              eps.forEach(([m, desc]) => {
+                const li = document.createElement('li')
+                const s = document.createElement('span')
+                s.className = 'mono'
+                s.textContent = m
+                li.append(s, document.createTextNode(desc))
+                ul.append(li)
+              })
+              const meta = document.createElement('p')
+              meta.style.marginTop = '12px'
+              meta.textContent = `Du ${new Date($('#chStart').value).toLocaleDateString('fr-FR')} au ${new Date($('#chEnd').value).toLocaleDateString('fr-FR')}, +${$('#chPts').value} points`
+              box.append(h, p, ul, meta)
+            }
+            renderEps()
+            preview()
+            $('#chForm').addEventListener('input', (e) => {
+              if (e.target.dataset.ep)
+                eps[+e.target.dataset.ep][+e.target.dataset.k] = e.target.value
+              preview()
+            })
+            $('#chForm').addEventListener('change', (e) => {
+              if (e.target.dataset.ep) {
+                eps[+e.target.dataset.ep][+e.target.dataset.k] = e.target.value
+                preview()
+              }
+            })
+            $('#chForm').addEventListener('click', (e) => {
+              const b = e.target.closest('button')
+              if (!b) return
+              if (b.dataset.action === 'add-endpoint') {
+                eps.push(['GET', ''])
+                renderEps()
+                preview()
+                $(`#epd${eps.length - 1}`).focus()
+              }
+              if (b.dataset.delep) {
+                eps.splice(+b.dataset.delep, 1)
+                renderEps()
+                preview()
+              }
+            })
+            $('#chForm').onsubmit = async (e) => {
+              e.preventDefault()
+              const bad = [
+                setError($('#chTitle'), 'chTitleErr', $('#chTitle').value.trim().length < 10) &&
+                  'chTitle',
+                setError($('#chDesc'), 'chDescErr', $('#chDesc').value.trim().length < 40) &&
+                  'chDesc',
+                setError($('#chEnd'), 'chDateErr', $('#chEnd').value <= $('#chStart').value) &&
+                  'chEnd',
+              ].filter(Boolean)
+              if (bad.length) return $('#' + bad[0]).focus()
+              await busy($('#chSubmit'), 'Programmation')
+              const fr = (v) => new Date(v).toLocaleDateString('fr-FR')
+              challenges.splice(1, 0, {
+                id: Date.now(),
+                title: $('#chTitle').value.trim(),
+                status: 'À venir',
+                start: fr($('#chStart').value),
+                end: fr($('#chEnd').value),
+                submissions: 0,
+                points: +$('#chPts').value,
+              })
+              log(
+                'Défi créé',
+                $('#chTitle').value.trim(),
+                `Du ${fr($('#chStart').value)} au ${fr($('#chEnd').value)}`,
+              )
+              go('challenges')
+              toast('Défi programmé')
+            }
+          },
+        }
+      }
+
+      /* =====================================================================
+   JOURNAL D'AUDIT
+   ===================================================================== */
+      let auditWho = 'Tous'
+      function vAudit() {
+        const list = audit.filter((a) => auditWho === 'Tous' || a.who === auditWho)
+        return {
+          crumbs: [
+            ['Système', '#journal'],
+            ["Journal d'audit", '#journal'],
+          ],
+          html: `
+      <div class="page-head"><div><h1>Journal d'audit</h1><p>Toutes les actions de l'équipe sont enregistrées et ne peuvent pas être modifiées.</p></div></div>
+      <div class="filters"><label class="sr-only" for="auditWho">Membre de l'équipe</label><select class="select" id="auditWho">
+        <option value="Tous">Toute l'équipe</option>${staff.map((s) => `<option value="${s.id}" ${auditWho === s.id ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select></div>
+      <section class="panel"><div class="table-wrap"><table>
+        <thead><tr><th>Date</th><th>Membre</th><th>Action</th><th>Cible</th><th class="hide-sm">Détails</th></tr></thead>
+        <tbody>${list
+          .map(
+            (
+              a,
+            ) => `<tr><td class="mono muted" style="font-size:13px;white-space:nowrap">${a.time}</td>
+          <td><span class="who">${avatar(staffBy(a.who).name, 24)}<span><b>${esc(staffBy(a.who).name)}</b></span></span></td>
+          <td style="font-weight:500">${esc(a.action)}</td><td>${esc(a.target)}</td><td class="hide-sm muted">${esc(a.detail)}</td></tr>`,
+          )
+          .join('')}</tbody>
+      </table></div></section>`,
+          after: () => {
+            $('#auditWho').onchange = (e) => {
+              auditWho = e.target.value
+              route()
+            }
+          },
+        }
+      }
+
+      /* =====================================================================
+   PARAMÈTRES
+   ===================================================================== */
+      const settings = {
+        autoHide: 5,
+        manualJobs: true,
+        require2fa: true,
+        session: '8 heures',
+        banned: "arnaque, frais d'inscription, gagner de l'argent rapidement",
+      }
+      function vSettings() {
+        return {
+          crumbs: [
+            ['Système', '#journal'],
+            ['Paramètres', '#parametres'],
+          ],
+          html: `
+      <div class="page-head"><div><h1>Paramètres</h1><p>Équipe, règles de modération et sécurité de l'administration.</p></div></div>
+      <div class="stack">
+        <section class="panel">
+          <div class="panel-head"><div><h2>Équipe</h2><p>${plural(staff.length, 'membre', 'membres')} ont accès à l'administration.</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Membre</th><th>Rôle</th><th class="hide-sm">Dernière activité</th><th class="r"><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody>${staff
+              .map(
+                (
+                  s,
+                ) => `<tr><td><span class="who">${avatar(s.name, 30)}<span><b>${esc(s.name)}${s.id === 'admin' ? ' (vous)' : ''}</b><small>${esc(s.email)}</small></span></span></td>
+              <td>${s.role}</td><td class="hide-sm muted">${s.last}</td><td class="r">${s.id === 'admin' ? '' : `<button class="btn btn-ghost btn-sm" data-revoke="${s.id}">Retirer l'accès</button>`}</td></tr>`,
+              )
+              .join('')}</tbody></table></div>
+          <form class="panel-body" id="inviteForm" novalidate style="border-top:1px solid var(--line);display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start">
+            <div class="field" style="margin:0;flex:1;min-width:220px"><label for="invEmail">Inviter par email</label><input id="invEmail" type="email" placeholder="prenom@zetsu.dev" aria-describedby="invErr"><p class="error" id="invErr">Entrez une adresse email valide.</p></div>
+            <div class="field" style="margin:0"><label for="invRole">Rôle</label><select id="invRole"><option>Modérateur</option><option>Administrateur</option></select></div>
+            <button class="btn btn-primary" type="submit" style="margin-top:27px">Envoyer l'invitation</button>
+          </form>
+        </section>
+        <form class="panel" id="rulesForm" novalidate>
+          <div class="panel-head"><div><h2>Règles de modération</h2><p>S'appliquent à toute la plateforme.</p></div></div>
+          <div class="panel-body">
+            <div class="field" style="max-width:320px"><label for="autoHide">Masquer automatiquement après</label>
+              <div style="display:flex;align-items:center;gap:8px"><input id="autoHide" type="number" min="2" max="20" value="${settings.autoHide}" aria-describedby="autoHideErr" style="width:90px"><span class="muted">signalements</span></div>
+              <p class="error" id="autoHideErr">Choisissez une valeur entre 2 et 20.</p></div>
+            <div class="field"><label for="banned">Expressions bloquées dans les offres</label><textarea id="banned" style="min-height:80px">${esc(settings.banned)}</textarea><p class="hint">Séparées par des virgules. Une offre qui en contient une passe en vérification manuelle.</p></div>
+            <label class="switch-row"><span><b>Validation manuelle des offres</b><span>Chaque offre est vérifiée par l'équipe avant publication.</span></span><span class="toggle"><input type="checkbox" id="manualJobs" ${settings.manualJobs ? 'checked' : ''}><i></i></span></label>
+          </div>
+          <div class="save-bar"><button type="submit" class="btn btn-primary" id="rulesSave">Enregistrer les règles</button></div>
+        </form>
+        <section class="panel">
+          <div class="panel-head"><div><h2>Sécurité</h2><p>Protection des comptes de l'équipe.</p></div></div>
+          <div class="panel-body">
+            <label class="switch-row"><span><b>Double authentification obligatoire</b><span>Pour tous les membres de l'équipe.</span></span><span class="toggle"><input type="checkbox" id="req2fa" ${settings.require2fa ? 'checked' : ''}><i></i></span></label>
+            <div class="switch-row"><span><b>Déconnexion automatique</b><span>Après une période d'inactivité.</span></span>
+              <label class="sr-only" for="sessSel">Durée</label><select class="select" id="sessSel">${['1 heure', '8 heures', '24 heures'].map((x) => `<option ${x === settings.session ? 'selected' : ''}>${x}</option>`).join('')}</select></div>
+          </div>
+        </section>
+      </div>`,
+          after: () => {
+            $('#inviteForm').onsubmit = (e) => {
+              e.preventDefault()
+              const v = $('#invEmail').value.trim()
+              if (setError($('#invEmail'), 'invErr', !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)))
+                return $('#invEmail').focus()
+              log('Invitation envoyée', v, $('#invRole').value)
+              e.target.reset()
+              toast(`Invitation envoyée à ${v}`)
+            }
+            $('#rulesForm').onsubmit = async (e) => {
+              e.preventDefault()
+              const n = +$('#autoHide').value
+              if (setError($('#autoHide'), 'autoHideErr', !(n >= 2 && n <= 20)))
+                return $('#autoHide').focus()
+              await busy($('#rulesSave'), 'Enregistrement')
+              Object.assign(settings, {
+                autoHide: n,
+                manualJobs: $('#manualJobs').checked,
+                banned: $('#banned').value,
+              })
+              log('Règles modifiées', 'Modération', `Masquage auto à ${n} signalements`)
+              toast('Règles enregistrées')
+            }
+            $('#req2fa').onchange = async (e) => {
+              if (!e.target.checked) {
+                const ok = await confirmBox(
+                  'Désactiver la double authentification',
+                  "Les comptes de l'équipe seront protégés par mot de passe seulement. C'est déconseillé pour un accès administrateur.",
+                  'Désactiver quand même',
+                  true,
+                )
+                if (!ok) {
+                  e.target.checked = true
+                  return
+                }
+              }
+              settings.require2fa = e.target.checked
+              log(
+                'Sécurité modifiée',
+                'Double authentification',
+                e.target.checked ? 'Activée' : 'Désactivée',
+              )
+              toast(
+                e.target.checked
+                  ? 'Double authentification obligatoire'
+                  : 'Double authentification désactivée',
+              )
+            }
+            $('#sessSel').onchange = (e) => {
+              settings.session = e.target.value
+              toast(`Déconnexion après ${e.target.value} d'inactivité`)
+            }
+          },
+        }
+      }
+
+      function vNotFound() {
+        return {
+          crumbs: [['Page introuvable', '#']],
+          html: `<section class="panel"><div class="empty"><b>Cette page n'existe pas</b>Le lien est peut-être incomplet.<br><a class="btn btn-primary" href="#tableau-de-bord" style="margin-top:16px">Retour au tableau de bord</a></div></section>`,
+        }
+      }
+
+      /* =====================================================================
+   CONNEXION
+   ===================================================================== */
+      $('#stepCreds').onsubmit = async (e) => {
+        e.preventDefault()
+        $('#loginAlert').classList.remove('show')
+        const b1 = setError(
+          $('#lEmail'),
+          'lEmailErr',
+          !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($('#lEmail').value.trim()),
+        )
+        const b2 = setError($('#lPass'), 'lPassErr', !$('#lPass').value)
+        if (b1) return $('#lEmail').focus()
+        if (b2) return $('#lPass').focus()
+        await busy($('#credSubmit'), 'Vérification')
+        if (!(
+          $('#lEmail').value.trim() === 'admin@zetsu.dev' && $('#lPass').value === 'admin1234'
+        )) {
+          const a = $('#loginAlert')
+          a.textContent =
+            'Identifiants incorrects. Après 5 essais, le compte est bloqué 15 minutes.'
+          a.classList.add('show')
+          return a.focus()
+        }
+        $('#stepCreds').hidden = true
+        $('#stepOtp').hidden = false
+        $('#loginTitle').textContent = 'Vérification en deux étapes'
+        $('#loginLead').textContent =
+          "Ouvrez votre application d'authentification et saisissez le code affiché."
+        $('#lOtp').focus()
+      }
+      $('#lOtp').addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6)
+        if (e.target.value.length === 6) $('#stepOtp').requestSubmit()
+      })
+      $('#stepOtp').onsubmit = async (e) => {
+        e.preventDefault()
+        $('#otpAlert').classList.remove('show')
+        if (setError($('#lOtp'), 'lOtpErr', !/^\d{6}$/.test($('#lOtp').value)))
+          return $('#lOtp').focus()
+        await busy($('#otpSubmit'), 'Vérification')
+        if ($('#lOtp').value !== '123456') {
+          const a = $('#otpAlert')
+          a.textContent = 'Code incorrect ou expiré. Les codes changent toutes les 30 secondes.'
+          a.classList.add('show')
+          $('#lOtp').value = ''
+          return $('#lOtp').focus()
+        }
+        logged = true
+        if (!location.hash || location.hash === '#connexion') location.hash = 'tableau-de-bord'
+        else route()
+        toast(`Bienvenue, ${ADMIN.name.split(' ')[0]}`)
+      }
+
+      /* =====================================================================
+   ÉVÉNEMENTS
+   ===================================================================== */
+      const warnChecks = () =>
+        setError($('#warnMsg'), 'warnErr', $('#warnMsg').value.trim().length < 20)
+      const suspChecks = () =>
+        setError($('#suspReason'), 'suspErr', $('#suspReason').value.trim().length < 20)
+      let suspendTarget = null,
+        refuseTarget = null,
+        mergeTarget = null
+
+      document.addEventListener('click', async (e) => {
+        const t = e.target.closest('button, a, input[type=checkbox]')
+        if (e.target.id === 'scrim') return closeNav()
+        if (!t) return
+        const d = t.dataset
+
+        if (t.hasAttribute('data-close')) return t.closest('dialog').close()
+        if (d.range) {
+          range = +d.range
+          return route()
+        }
+        if (d.reason) {
+          reportFilter = d.reason
+          selectedReport = null
+          return route()
+        }
+        if (d.report) {
+          selectedReport = +d.report
+          route()
+          const det = $('#reportDetail')
+          if (det) det.focus({ preventScroll: true })
+          if (innerWidth < 900 && det) det.scrollIntoView({ block: 'start' })
+          return
+        }
+        if (d.openReport) {
+          selectedReport = +d.openReport
+          reportFilter = 'Tous'
+          return
+        }
+        if (d.mod) {
+          const r = reports.find((x) => x.id === selectedReport),
+            author = userBy(r.author)
+          if (d.mod === 'ignore')
+            return resolveReport(r.id, 'Signalement ignoré', 'Contenu conforme aux règles')
+          if (d.mod === 'hide') return resolveReport(r.id, 'Contenu masqué', `Motif : ${r.reason}`)
+          if (d.mod === 'warn') {
+            $('#warnLead').textContent =
+              `${author.name} recevra ce message par email et dans ses notifications.`
+            $('#warnMsg').value =
+              `Bonjour ${author.name.split(' ')[0]}, votre ${r.type.toLowerCase()} a été signalé pour « ${r.reason} ». Merci de relire les règles de la communauté.`
+            $('#warnForm').onsubmit = (ev) => {
+              ev.preventDefault()
+              if (warnChecks()) return $('#warnMsg').focus()
+              author.warnings++
+              $('#dlgWarn').close()
+              resolveReport(
+                r.id,
+                'Avertissement envoyé',
+                `${author.name}${$('#warnHide').checked ? ', contenu masqué' : ''}`,
+              )
+            }
+            return $('#dlgWarn').showModal()
+          }
+          if (d.mod === 'suspend') {
+            suspendTarget = { user: author, report: r.id }
+            openSuspend(author)
+            return
+          }
+        }
+        if (d.content) {
+          const [id, st] = d.content.split(':')
+          const c = contents.find((x) => x.id === +id)
+          const old = c.status
+          c.status = st
+          log(
+            st === 'Masquée'
+              ? 'Contenu masqué'
+              : st === 'Fermée'
+                ? 'Question fermée'
+                : 'Contenu republié',
+            c.title,
+          )
+          route()
+          return toast(
+            st === 'Masquée'
+              ? 'Question masquée'
+              : st === 'Fermée'
+                ? 'Question fermée aux nouvelles réponses'
+                : 'Question republiée',
+            () => {
+              c.status = old
+              audit.shift()
+              route()
+            },
+          )
+        }
+        if (d.cstatus) {
+          contentStatus = d.cstatus
+          return route()
+        }
+        if (d.merge) {
+          mergeTarget = d.merge
+          $('#mergeLead').textContent =
+            `Les questions de « ${d.merge} » seront déplacées, et « ${d.merge} » deviendra un synonyme.`
+          $('#mergeTarget').innerHTML = tags
+            .filter((x) => x.name !== d.merge)
+            .map((x) => `<option>${esc(x.name)}</option>`)
+            .join('')
+          $('#mergeForm').onsubmit = (ev) => {
+            ev.preventDefault()
+            const from = tags.find((x) => x.name === mergeTarget),
+              to = tags.find((x) => x.name === $('#mergeTarget').value)
+            to.count += from.count
+            to.synonyms.push(from.name, ...from.synonyms)
+            tags = tags.filter((x) => x !== from)
+            log(
+              'Tags fusionnés',
+              `${from.name} → ${to.name}`,
+              plural(from.count, 'question déplacée', 'questions déplacées'),
+            )
+            $('#dlgMerge').close()
+            route()
+            toast(`« ${from.name} » fusionné dans « ${to.name} »`)
+          }
+          return $('#dlgMerge').showModal()
+        }
+        if (d.deltag) {
+          const ok = await confirmBox(
+            'Supprimer le tag',
+            `Supprimer « ${d.deltag} » ? Il n'est utilisé par aucune question.`,
+            'Supprimer',
+            true,
+          )
+          if (ok) {
+            tags = tags.filter((x) => x.name !== d.deltag)
+            log('Tag supprimé', d.deltag)
+            route()
+            toast('Tag supprimé')
+          }
+          return
+        }
+        if (d.sort) {
+          userSort = {
+            key: d.sort,
+            dir: userSort.key === d.sort && userSort.dir === 'asc' ? 'desc' : 'asc',
+          }
+          route()
+          return $(`[data-sort=${d.sort}]`).focus()
+        }
+        if (d.page) {
+          userPage = +d.page
+          route()
+          return
+        }
+        if (d.sel) {
+          t.checked ? selectedUsers.add(d.sel) : selectedUsers.delete(d.sel)
+          return route()
+        }
+        if (d.utab) {
+          userTab = d.utab
+          route()
+          return $(`[data-utab=${d.utab}]`).focus()
+        }
+        if (d.jtab) {
+          jobTab = d.jtab
+          route()
+          return $(`[data-jtab=${d.jtab}]`).focus()
+        }
+        if (d.approve) {
+          const j = pendingJobs.find((x) => x.id === +d.approve)
+          await busy(t, 'Publication')
+          pendingJobs = pendingJobs.filter((x) => x !== j)
+          publishedJobs.unshift({
+            title: j.title,
+            company: j.company,
+            date: '09/10',
+            applicants: 0,
+          })
+          log('Offre approuvée', j.title, j.company)
+          route()
+          return toast(`Offre de ${j.company} publiée`)
+        }
+        if (d.refuse) {
+          refuseTarget = pendingJobs.find((x) => x.id === +d.refuse)
+          $('#refLead').textContent = `${refuseTarget.company} recevra ce motif par email.`
+          $('#refReason').value = ''
+          $('#refPreset').value = ''
+          return $('#dlgRefuse').showModal()
+        }
+        if (d.grade !== undefined) {
+          const inp = $('#score' + d.grade),
+            v = +inp.value
+          if (!inp.value || v < 0 || v > 100) {
+            inp.setAttribute('aria-invalid', 'true')
+            inp.focus()
+            return toast('Entrez une note entre 0 et 100')
+          }
+          const s = submissions[+d.grade]
+          s.status = 'Validé'
+          s.score = v
+          userBy(s.user).rep += 20
+          log('Soumission validée', userBy(s.user).name, `${v}/100`)
+          route()
+          return toast(`${userBy(s.user).name} reçoit +20 points`)
+        }
+        if (d.reject !== undefined) {
+          const s = submissions[+d.reject]
+          s.status = 'Refusé'
+          s.note = "Ne répond pas à l'énoncé"
+          log('Soumission refusée', userBy(s.user).name)
+          route()
+          return toast('Soumission refusée')
+        }
+        if (d.revoke) {
+          const m = staffBy(d.revoke)
+          const ok = await confirmBox(
+            "Retirer l'accès",
+            `${m.name} ne pourra plus se connecter à l'administration.`,
+            "Retirer l'accès",
+            true,
+          )
+          if (ok) {
+            staff.splice(staff.indexOf(m), 1)
+            log('Accès retiré', m.name)
+            route()
+            toast(`Accès de ${m.name} retiré`)
+          }
+          return
+        }
+
+        switch (d.action) {
+          case 'toggle-theme':
+            return applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark')
+          case 'open-nav':
+            $('#sidebar').classList.add('open')
+            $('#scrim').classList.add('show')
+            t.setAttribute('aria-expanded', 'true')
+            return $('#nav a').focus()
+          case 'logout':
+            logged = false
+            $('#stepCreds').hidden = false
+            $('#stepOtp').hidden = true
+            $('#stepCreds').reset()
+            $('#stepOtp').reset()
+            $('#loginTitle').textContent = "Connexion à l'administration"
+            $('#loginLead').textContent =
+              "Accès réservé à l'équipe de modération et aux administrateurs."
+            location.hash = 'connexion'
+            return route()
+          case 'back-creds':
+            $('#stepCreds').hidden = false
+            $('#stepOtp').hidden = true
+            $('#loginTitle').textContent = "Connexion à l'administration"
+            return $('#lPass').focus()
+          case 'chart-table':
+            showChartTable = !showChartTable
+            return route()
+          case 'filter-flagged':
+            e.preventDefault()
+            userStatus = 'Signalé'
+            userPage = 1
+            return go('utilisateurs')
+          case 'reset-users':
+            userQuery = ''
+            userRole = 'Tous'
+            userStatus = 'Tous'
+            return route()
+          case 'select-page': {
+            const all = filteredUsers().slice((userPage - 1) * PAGE, userPage * PAGE)
+            all.forEach((u) => (t.checked ? selectedUsers.add(u.id) : selectedUsers.delete(u.id)))
+            return route()
+          }
+          case 'clear-sel':
+            selectedUsers.clear()
+            return route()
+          case 'bulk-suspend': {
+            const n = selectedUsers.size
+            const ok = await confirmBox(
+              'Suspendre les comptes',
+              `Suspendre ${plural(n, 'compte', 'comptes')} pendant 7 jours ? Chaque utilisateur sera prévenu par email.`,
+              'Suspendre',
+              true,
+            )
+            if (!ok) return
+            selectedUsers.forEach((id) => (userBy(id).status = 'Suspendu'))
+            log('Suspension groupée', plural(n, 'compte', 'comptes'), '7 jours')
+            selectedUsers.clear()
+            route()
+            return toast(`${plural(n, 'compte suspendu', 'comptes suspendus')}`)
+          }
+          case 'export-csv': {
+            const rows = selectedUsers.size
+              ? users.filter((u) => selectedUsers.has(u.id))
+              : filteredUsers()
+            const csv = [
+              'nom;email;pays;role;reputation;statut',
+              ...rows.map((u) => [u.name, u.email, u.country, u.role, u.rep, u.status].join(';')),
+            ].join('\n')
+            const a = document.createElement('a')
+            a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }))
+            a.download = 'utilisateurs-zetsu.csv'
+            a.click()
+            return toast(`${plural(rows.length, 'ligne exportée', 'lignes exportées')}`)
+          }
+          case 'suspend-user':
+            suspendTarget = { user: userBy(d.user) }
+            return openSuspend(suspendTarget.user)
+          case 'reactivate': {
+            const u = userBy(d.user)
+            u.status = 'Actif'
+            log('Compte réactivé', u.name)
+            route()
+            return toast(`${u.name} est de nouveau actif`)
+          }
+          case 'reset-pass':
+            log('Réinitialisation du mot de passe', userBy(d.user).name)
+            return toast('Lien de réinitialisation envoyé')
+          case 'delete-user': {
+            const u = userBy(d.user)
+            const ok = await confirmBox(
+              'Supprimer le compte',
+              `Supprimer définitivement le compte de ${u.name} ? Ses contenus resteront visibles sous « Utilisateur supprimé ».`,
+              'Supprimer le compte',
+              true,
+            )
+            if (ok) {
+              users.splice(users.indexOf(u), 1)
+              log('Compte supprimé', u.name)
+              go('utilisateurs')
+              toast(`Compte de ${u.name} supprimé`)
+            }
+            return
+          }
+          case 'noop':
+            e.preventDefault()
+            return toast('Lien vers GitHub dans la vraie application')
+        }
+      })
+
+      function openSuspend(u) {
+        $('#suspLead').textContent =
+          `${u.name} ne pourra plus publier ni se connecter pendant la durée choisie.`
+        $('#suspReason').value = ''
+        $('#suspReason').removeAttribute('aria-invalid')
+        $('#suspErr').classList.remove('show')
+        $('#dlgSuspend').showModal()
+      }
+      $('#suspForm').onsubmit = async (e) => {
+        e.preventDefault()
+        if (suspChecks()) return $('#suspReason').focus()
+        await busy($('#suspSubmit'), 'Suspension')
+        const u = suspendTarget.user,
+          dur = $('#suspDur').value
+        u.status = 'Suspendu'
+        $('#dlgSuspend').close()
+        if (suspendTarget.report)
+          resolveReport(suspendTarget.report, 'Compte suspendu', `${u.name}, ${dur}`)
+        else {
+          log('Compte suspendu', u.name, `${dur}, ${$('#suspReason').value.trim()}`)
+          route()
+          toast(`${u.name} est suspendu (${dur})`)
+        }
+      }
+      $('#refPreset').onchange = (e) => {
+        if (e.target.value) $('#refReason').value = e.target.value + '. '
+        $('#refReason').focus()
+      }
+      $('#refForm').onsubmit = (e) => {
+        e.preventDefault()
+        if (setError($('#refReason'), 'refErr', $('#refReason').value.trim().length < 15))
+          return $('#refReason').focus()
+        const j = refuseTarget
+        pendingJobs = pendingJobs.filter((x) => x !== j)
+        refusedJobs.unshift({
+          title: j.title,
+          company: j.company,
+          date: '09/10',
+          reason: $('#refReason').value.trim(),
+        })
+        log('Offre refusée', j.title, $('#refReason').value.trim())
+        $('#dlgRefuse').close()
+        route()
+        toast(`Offre de ${j.company} refusée`)
+      }
+
+      $('#gsearch').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          userQuery = e.target.value
+          userPage = 1
+          userRole = userStatus = 'Tous'
+          go('utilisateurs')
+        }
+      })
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeNav()
+        if (
+          e.key === '/' &&
+          logged &&
+          !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) &&
+          !document.querySelector('dialog[open]')
+        ) {
+          e.preventDefault()
+          $('#gsearch').focus()
+        }
+      })
+      document.addEventListener(
+        'click',
+        (e) => {
+          const a = e.target.closest('[data-open-report]')
+          if (a) {
+            selectedReport = +a.dataset.openReport
+            reportFilter = 'Tous'
+          }
+        },
+        true,
+      )
+
+      route()
+    </script>
+  </body>
+</html>

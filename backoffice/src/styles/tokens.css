@@ -1,0 +1,96 @@
+/* Design system de la maquette zetsu-backoffice.html (identique à l'application).
+   Séries de graphiques validées (daltonisme et contraste) :
+   clair #2a78d6 et #eb6834, sombre #3987e5 et #d95926. */
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f6f7f6;
+  --surface: #ffffff;
+  --surface-2: #f1f3f2;
+  --surface-3: #e7ebe9;
+  --line: #e2e6e4;
+  --line-strong: #cfd6d3;
+  --text: #0d1110;
+  --text-2: #444d4a;
+  --text-3: #5f6966;
+  --placeholder: #7f8985;
+  --green: #00e599;
+  --green-hover: #00cf8a;
+  --green-ink: #00170f;
+  --green-text: #00704b;
+  --green-wash: rgba(0, 180, 118, 0.1);
+  --gold-text: #8a5a00;
+  --good: #0ca30c;
+  --good-text: #006300;
+  --warn: #fab219;
+  --serious: #ec835a;
+  --crit: #d03b3b;
+  --crit-hover: #b3261e;
+  --crit-text: #b3261e;
+  --crit-wash: rgba(208, 59, 59, 0.07);
+  --on-color: #ffffff;
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --grid-line: #e7ebe9;
+  --axis: #cfd6d3;
+  --backdrop: rgba(13, 17, 16, 0.45);
+  --shadow: 0 8px 28px rgba(13, 17, 16, 0.1);
+  --side: #fbfcfb;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0b0c0c;
+  --surface: #121414;
+  --surface-2: #181b1b;
+  --surface-3: #202424;
+  --line: #262b2b;
+  --line-strong: #353b3b;
+  --text: #eef1f0;
+  --text-2: #b0b8b5;
+  --text-3: #8f9895;
+  --placeholder: #737c79;
+  --green-text: #00e599;
+  --green-wash: rgba(0, 229, 153, 0.1);
+  --gold-text: #f5b83d;
+  --good-text: #3ccf3c;
+  --crit-text: #ff8a80;
+  --crit-wash: rgba(255, 122, 107, 0.08);
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --grid-line: #232828;
+  --axis: #353b3b;
+  --backdrop: rgba(0, 0, 0, 0.7);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+  --side: #0f1111;
+}
+
+:root {
+  --av-1: #1f5fc4;
+  --av-2: #0b7a55;
+  --av-3: #9a5b0a;
+  --av-4: #b23a2e;
+  --av-5: #6b46c1;
+  --av-6: #0e7490;
+  --av-7: #9d174d;
+  --av-8: #4d6b12;
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 12px;
+  --f-sans: 'Geist Variable', system-ui, sans-serif;
+  --f-mono: 'Geist Mono Variable', ui-monospace, monospace;
+  --sidebar: 248px;
+  --brand-bg: #0b0c0c;
+  --brand-surface: #121414;
+  --brand-line: #262b2b;
+  --brand-text: #eef1f0;
+  --brand-muted: #a9b2af;
+  --brand-accent: #00e599;
+}

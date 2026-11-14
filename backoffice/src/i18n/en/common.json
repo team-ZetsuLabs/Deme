@@ -1,0 +1,15 @@
+{
+  "loading": "Loading…",
+  "error": "Something went wrong.",
+  "empty": "Nothing to show.",
+  "retry": "Try again",
+  "cancel": "Cancel",
+  "close": "Close",
+  "undo": "Undo",
+  "noteTooShort": "Write at least {{count}} characters.",
+  "page": "Page {{page}} of {{pages}}",
+  "previous": "Previous",
+  "next": "Next",
+  "save": "Save",
+  "search": "Search"
+}

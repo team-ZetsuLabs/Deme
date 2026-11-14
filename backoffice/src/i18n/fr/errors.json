@@ -1,0 +1,29 @@
+{
+  "notFound": {
+    "title": "Page introuvable",
+    "message": "L'adresse demandée n'existe pas dans le back office."
+  },
+  "crash": {
+    "title": "Une erreur est survenue",
+    "message": "Cet écran n'a pas pu s'afficher. Rechargez la page ; si le problème continue, prévenez l'équipe."
+  },
+  "reload": "Recharger la page",
+  "backHome": "Retour au tableau de bord",
+  "codes": {
+    "NETWORK_ERROR": "Connexion impossible. Vérifiez votre réseau et réessayez.",
+    "INVALID_CREDENTIALS": "Email ou mot de passe incorrect.",
+    "LOGIN_LOCKED": "Trop d'essais ratés. Réessayez dans 15 minutes.",
+    "ACCOUNT_SUSPENDED": "Ce compte est suspendu.",
+    "NOT_STAFF": "Ce compte n'a pas accès à l'administration.",
+    "UNAUTHENTICATED": "Votre session a expiré. Reconnectez-vous.",
+    "CSRF_INVALID": "Jeton de sécurité expiré, rechargez la page.",
+    "FORBIDDEN": "Vous n'avez pas le droit de faire cela.",
+    "LEVEL_TOO_LOW": "Votre niveau de réputation ne permet pas cette action.",
+    "CANNOT_SUSPEND_STAFF": "Impossible de suspendre soi-même ou un membre de l'équipe.",
+    "CANNOT_CHANGE_OWN_ROLE": "Vous ne pouvez pas changer votre propre rôle.",
+    "CASE_ALREADY_DECIDED": "Ce dossier a déjà été tranché.",
+    "CHALLENGE_OVERLAP": "Ce défi chevauche un autre défi.",
+    "HTTP_429": "Trop de demandes. Patientez un instant.",
+    "MOCK_NOT_FOUND": "Exemple de réponse manquant dans src/mocks."
+  }
+}

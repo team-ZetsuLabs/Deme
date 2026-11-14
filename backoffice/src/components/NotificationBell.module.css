@@ -1,0 +1,150 @@
+.root {
+  position: relative;
+}
+
+.bell {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: 2px;
+  right: 1px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--crit);
+  color: var(--on-color);
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 17px;
+  text-align: center;
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + var(--s2));
+  right: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+  max-height: min(70vh, 520px);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding: var(--s3) var(--s4);
+  border-bottom: 1px solid var(--line);
+}
+
+.head h2 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.body {
+  overflow-y: auto;
+}
+
+.state {
+  padding: var(--s5) var(--s4);
+  color: var(--text-2);
+  font-size: 14px;
+  text-align: center;
+}
+
+.retry {
+  border: none;
+  background: none;
+  color: var(--green-text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.list {
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s3);
+  width: 100%;
+  padding: var(--s3) var(--s4);
+  border: none;
+  border-top: 1px solid var(--line);
+  background: none;
+  text-align: left;
+  font-size: 14px;
+}
+
+li:first-child .item {
+  border-top: none;
+}
+
+.item:hover {
+  background: var(--surface-2);
+}
+
+.item[data-unread='true'] {
+  background: var(--green-wash);
+}
+
+.dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 7px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.item[data-unread='true'] .dot {
+  background: var(--green-text);
+}
+
+.text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.text small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .root {
+    position: static;
+  }
+
+  .panel {
+    position: fixed;
+    top: 60px;
+    right: var(--s4);
+    left: var(--s4);
+    width: auto;
+  }
+}

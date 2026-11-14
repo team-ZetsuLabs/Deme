@@ -1,0 +1,45 @@
+.dialog {
+  width: min(520px, calc(100vw - 32px));
+  margin: auto;
+  padding: 0;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+}
+
+.dialog::backdrop {
+  background: var(--backdrop);
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--s4) var(--s5);
+  border-bottom: 1px solid var(--line);
+}
+
+.head h2 {
+  font-size: 16.5px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.body {
+  padding: var(--s5);
+}
+
+.lead {
+  color: var(--text-2);
+  font-size: 14.5px;
+  margin-bottom: var(--s4);
+}
+
+.foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--s2);
+  margin-top: var(--s5);
+}

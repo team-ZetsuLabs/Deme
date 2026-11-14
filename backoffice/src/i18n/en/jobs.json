@@ -1,0 +1,38 @@
+{
+  "lead": "Every offer is checked before publication to protect members from scams.",
+  "statusLabel": "Offer status",
+  "meta": "{{company}}, {{place}}, {{type}}. Submitted {{ago}} by {{by}}",
+  "check": {
+    "pay": "Pay shown",
+    "website": "Company website provided"
+  },
+  "yes": ": yes",
+  "no": ": no",
+  "viewAd": "View the ad",
+  "compensation": "Pay:",
+  "approve": "Approve",
+  "published": "Offer from {{company}} published",
+  "refusedToast": "Offer from {{company}} refused",
+  "refuse": {
+    "action": "Refuse",
+    "title": "Refuse the offer",
+    "lead": "{{company}} will receive this reason.",
+    "reasonLabel": "Reason sent to the company",
+    "placeholder": "Say what the company must fix to republish.",
+    "submit": "Refuse the offer"
+  },
+  "none": {
+    "PENDING": "No offers pending",
+    "PUBLISHED": "No published offers",
+    "REJECTED": "No refused offers"
+  },
+  "noneHint": "New offers will appear here before publication.",
+  "col": {
+    "offer": "Offer",
+    "company": "Company",
+    "applicants": "Applicants",
+    "reason": "Reason",
+    "date": "Updated"
+  },
+  "noPlace": "location not specified"
+}

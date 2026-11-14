@@ -1,0 +1,189 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+}
+
+/* Panneau de marque : toujours sombre, en clair comme en sombre, sans dégradé. */
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s6);
+  padding: var(--s5) var(--s4);
+  background: var(--brand-bg);
+  color: var(--brand-text);
+}
+
+.pitch,
+.note {
+  display: none;
+}
+
+.formSide {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s5);
+  padding: var(--s7) var(--s4) var(--s5);
+}
+
+.tools {
+  position: absolute;
+  top: var(--s4);
+  right: var(--s4);
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+}
+
+.card h1 {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.lead {
+  color: var(--text-2);
+  margin: var(--s2) 0 var(--s5);
+}
+
+.alert {
+  padding: var(--s3);
+  border: 1px solid var(--crit);
+  background: var(--crit-wash);
+  border-radius: var(--r-md);
+  font-size: 14px;
+  margin-bottom: var(--s4);
+}
+
+.reveal {
+  position: relative;
+}
+
+.reveal input {
+  padding-right: 48px;
+}
+
+.reveal button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 100%;
+  border: none;
+  background: none;
+  border-radius: var(--r-md);
+  color: var(--text-3);
+}
+
+.reveal button:hover {
+  color: var(--text);
+}
+
+.attempts {
+  margin-top: var(--s4);
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+.footer {
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+@media (min-width: 900px) {
+  .page {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-rows: auto;
+  }
+
+  .brand {
+    justify-content: space-between;
+    padding: var(--s6);
+    border-right: 1px solid var(--brand-line);
+  }
+
+  .pitch {
+    display: block;
+    max-width: 520px;
+  }
+
+  .pitch h2 {
+    font-size: 40px;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+  }
+
+  .pitch h2 span {
+    color: var(--brand-accent);
+    white-space: nowrap;
+  }
+
+  .pitch p {
+    margin-top: var(--s4);
+    color: var(--brand-muted);
+    font-size: 16px;
+  }
+
+  .pitch ul {
+    margin-top: var(--s5);
+    display: grid;
+    gap: var(--s3);
+    list-style: none;
+  }
+
+  .pitch li {
+    display: flex;
+    align-items: center;
+    gap: var(--s3);
+    font-weight: 500;
+  }
+
+  .pitch li svg {
+    color: var(--brand-accent);
+    flex: none;
+  }
+
+  .note {
+    display: flex;
+    align-items: center;
+    gap: var(--s4);
+    padding: var(--s4);
+    border: 1px solid var(--brand-line);
+    border-radius: var(--r-lg);
+    background: var(--brand-surface);
+    color: var(--brand-muted);
+  }
+
+  .note svg {
+    flex: none;
+    color: var(--brand-accent);
+  }
+
+  .note p {
+    color: var(--brand-text);
+    font-size: 14.5px;
+  }
+
+  .note small {
+    display: block;
+    margin-top: 2px;
+    font-size: 13px;
+  }
+
+  .formSide {
+    padding: var(--s7) var(--s6) var(--s5);
+  }
+}

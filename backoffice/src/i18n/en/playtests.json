@@ -1,0 +1,101 @@
+{
+  "lead": "Closed-test campaigns published by members: approve new ones, follow the testers and suspend a campaign when there is a problem.",
+  "kpis": "Closed test indicators",
+  "statusFilter": "Campaign status",
+  "allStatuses": "All (except drafts)",
+  "problemFilter": "Detected problem",
+  "allProblems": "All problems",
+  "problem": {
+    "INACTIVE": "Inactive for 7 days",
+    "STALLED": "Testers to confirm",
+    "REPORTED": "Hidden by moderation"
+  },
+  "emptyTitle": "No campaigns",
+  "emptyHint": "Change the filters.",
+  "noPackage": "Website",
+  "testersCount": "{{count}} of {{target}} testers",
+  "stats": {
+    "pending": "To review",
+    "pendingHint": "Campaigns waiting",
+    "active": "Active",
+    "activeHint": "out of {{total}} campaigns",
+    "testers": "Testers",
+    "testersHint": "{{owners}} owners",
+    "running": "Running participations",
+    "runningHint": "{{done}} completed"
+  },
+  "col": {
+    "app": "App",
+    "owner": "Owner",
+    "platform": "Platform",
+    "progress": "Progress",
+    "status": "Status",
+    "created": "Created"
+  },
+  "tracking": {
+    "DAILY": "daily tracking",
+    "NONE": "no tracking"
+  },
+  "action": {
+    "approve": "Approve",
+    "reject": "Refuse",
+    "suspend": "Suspend",
+    "reactivate": "Reactivate",
+    "removeTester": "Remove"
+  },
+  "toast": {
+    "approved": "Campaign approved",
+    "rejected": "Campaign refused",
+    "suspended": "Campaign suspended",
+    "reactivated": "Campaign reactivated",
+    "removed": "Tester removed"
+  },
+  "note": {
+    "label": "Reason or message",
+    "required": "Required: it is shown to the owner.",
+    "optional": "Optional.",
+    "removeHint": "Shown to the tester; the owner is notified and the spot is freed.",
+    "reject": {
+      "title": "Refuse the campaign",
+      "lead": "The reason is shown to the owner of “{{name}}”, who can fix it and resubmit."
+    },
+    "suspend": {
+      "title": "Suspend the campaign",
+      "lead": "“{{name}}” stops accepting new testers; the countdown of current ones continues."
+    },
+    "approve": {
+      "title": "Approve the campaign",
+      "lead": "“{{name}}” will be announced to members who do mobile."
+    },
+    "reactivate": {
+      "title": "Reactivate the campaign",
+      "lead": "“{{name}}” accepts testers again."
+    },
+    "remove": {
+      "title": "Remove the tester",
+      "lead": "{{name}} loses their spot in this campaign."
+    }
+  },
+  "detail": {
+    "back": "Back to tests",
+    "createdOn": "created on {{date}}",
+    "progress": "progress",
+    "spots": "spots taken",
+    "days": "test days",
+    "completed": "completed",
+    "description": "Description",
+    "optIn": "Opt-in link:",
+    "instructions": "Instructions for testers",
+    "reviewNote": "Last reason:",
+    "testers": "Testers",
+    "noTesters": "No testers yet.",
+    "tester": "Tester",
+    "daysDone": "Days",
+    "google": "Google account",
+    "needsAttention": "To confirm: 3 days without “still enrolled”",
+    "owner": "Owner",
+    "history": "History",
+    "noHistory": "No events.",
+    "automatic": "Platform"
+  }
+}

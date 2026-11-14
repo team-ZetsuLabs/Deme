@@ -1,0 +1,235 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong.",
+    "empty": "Nothing to show.",
+    "retry": "Try again",
+    "cancel": "Cancel",
+    "close": "Close",
+    "undo": "Undo"
+  },
+  "nav": {
+    "reports": "Reports",
+    "jobs": "Pending job offers",
+    "users": "Users",
+    "tags": "Tags",
+    "challenges": "Challenges",
+    "referent": "Referent view"
+  },
+  "shell": {
+    "skip": "Skip to content",
+    "brandSub": "Back office",
+    "menu": "Menu",
+    "closeMenu": "Close menu",
+    "navLabel": "Main navigation",
+    "logout": "Log out"
+  },
+  "login": {
+    "title": "Team sign-in",
+    "intro": "Reserved for Moderators and Administrators.",
+    "email": "Email address",
+    "password": "Password",
+    "submit": "Sign in",
+    "note": "Demo screen: real sign-in will be connected with the API.",
+    "emailError": "Enter a valid email address.",
+    "passwordError": "Enter your password."
+  },
+  "reports": {
+    "title": "Reports and appeals",
+    "intro": "Work through the queue of reported content. Every decision is recorded and can be appealed.",
+    "filter": "Filter reports",
+    "tab": {
+      "pending": "To review",
+      "treated": "Handled",
+      "contests": "Appeals"
+    },
+    "empty": "No reports in this list.",
+    "target": {
+      "question": "Question",
+      "answer": "Answer",
+      "offer": "Offer",
+      "mission": "Mission",
+      "project": "Project",
+      "profile": "Profile"
+    },
+    "reason": {
+      "spam": "Spam",
+      "offensive": "Offensive",
+      "offTopic": "Off topic",
+      "impersonation": "Impersonation",
+      "fraudulentOffer": "Fraudulent offer"
+    },
+    "reportCount_one": "{{count}} report",
+    "reportCount_other": "{{count}} reports",
+    "status": {
+      "pending": "To review",
+      "ignored": "Ignored",
+      "hidden": "Hidden",
+      "warned": "Author warned",
+      "suspended": "Account suspended"
+    },
+    "action": {
+      "ignore": "Ignore",
+      "hide": "Hide",
+      "warn": "Warn",
+      "suspend": "Suspend"
+    },
+    "undoMessage": "Decision recorded. You have 6 seconds to undo it.",
+    "suspendDialog": {
+      "title": "Suspend this account?",
+      "body": "{{author}}'s account will be suspended. You can undo within 6 seconds, or reactivate it later from the Users screen."
+    },
+    "contest": {
+      "empty": "No appeals in progress.",
+      "status": {
+        "pending": "Pending",
+        "upheld": "Decision upheld",
+        "restored": "Content restored"
+      },
+      "restore": "Restore content",
+      "keep": "Uphold decision",
+      "authorMessage": "Author's message:"
+    }
+  },
+  "jobs": {
+    "title": "Pending job offers",
+    "intro": "An offer is only published once the team approves it. Check the company domain and the pay.",
+    "filter": "Filter offers",
+    "empty": "No offers in this list.",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "refused": "Refused"
+    },
+    "type": {
+      "permanent": "Permanent",
+      "remote": "Remote",
+      "mission": "Mission",
+      "internship": "Internship"
+    },
+    "domainVerified": "Domain verified",
+    "domainUnverified": "Domain not verified",
+    "salaryShown": "Pay shown",
+    "salaryMissing": "Pay missing",
+    "approve": "Approve",
+    "refuse": "Refuse",
+    "refuseTitle": "Refuse this offer",
+    "reasonLabel": "Reason for refusal",
+    "reasonHint": "The reason is sent to the company.",
+    "reasonError": "The reason must be at least {{count}} characters."
+  },
+  "users": {
+    "title": "Users",
+    "intro": "Find a member, suspend or reactivate their account, change their role.",
+    "search": "Search by name or email",
+    "empty": "No user matches this search.",
+    "level": {
+      "NEWCOMER": "Newcomer",
+      "MEMBER": "Member",
+      "CONTRIBUTOR": "Contributor",
+      "REFERENT": "Referent"
+    },
+    "reputation_one": "{{count}} point",
+    "reputation_other": "{{count}} points",
+    "active": "Active",
+    "suspended": "Suspended",
+    "suspend": "Suspend",
+    "reactivate": "Reactivate",
+    "role": {
+      "label": "Role",
+      "member": "Member",
+      "recruiter": "Recruiter",
+      "moderator": "Moderator",
+      "administrator": "Administrator"
+    },
+    "suspendDialog": {
+      "title": "Suspend this account?",
+      "body": "{{name}} will not be able to sign in or post until the account is reactivated."
+    }
+  },
+  "tags": {
+    "title": "Tags",
+    "intro": "Create tags, merge duplicates, delete unused tags.",
+    "empty": "No tags.",
+    "create": {
+      "label": "New tag",
+      "hint": "Lowercase letters, digits and hyphens, 2 to 30 characters.",
+      "submit": "Create tag",
+      "invalid": "Invalid format. Example: spring-boot.",
+      "exists": "This tag already exists."
+    },
+    "usage_one": "{{count}} question",
+    "usage_other": "{{count}} questions",
+    "merge": "Merge",
+    "delete": "Delete",
+    "deleteDisabled": "Only an unused tag can be deleted.",
+    "mergeDialog": {
+      "title": "Merge the tag {{name}}",
+      "target": "Tag to keep",
+      "hint": "Questions with the merged tag move to the tag you keep.",
+      "choose": "Choose a tag"
+    }
+  },
+  "challenges": {
+    "title": "Challenges and submissions",
+    "intro": "Create a challenge and grade members' repositories out of 100.",
+    "create": "Create a challenge",
+    "current": "Current challenge",
+    "endsOn": "Ends on {{date}}",
+    "points_one": "{{count}} point",
+    "points_other": "{{count}} points",
+    "submissions": "Submissions",
+    "noSubmissions": "No submissions for this challenge.",
+    "toGrade": "To grade",
+    "graded": "Score: {{score}} out of 100",
+    "score": "Score out of 100",
+    "saveScore": "Save score",
+    "saved": "Score saved.",
+    "scoreError": "Whole number from 0 to 100.",
+    "invalidLink": "Invalid link, it is not displayed.",
+    "form": {
+      "title": "Challenge title",
+      "brief": "Brief and specifications",
+      "points": "Points awarded",
+      "endsOn": "End date",
+      "submit": "Publish challenge",
+      "titleError": "The title must be at least 5 characters.",
+      "briefError": "The brief must be at least 20 characters.",
+      "pointsError": "Enter a positive whole number.",
+      "endsOnError": "Choose an end date."
+    }
+  },
+  "referent": {
+    "title": "Referent view",
+    "intro": "Moderation by trusted members. You can ignore or hide a piece of content; the author can appeal to the team."
+  },
+  "prefs": {
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "language": "Language"
+  },
+  "errors": {
+    "notFound": {
+      "title": "Page not found",
+      "message": "The requested address does not exist in the back office."
+    },
+    "crash": {
+      "title": "Something went wrong",
+      "message": "This screen could not be displayed. Reload the page; if the problem continues, tell the team."
+    },
+    "reload": "Reload the page",
+    "backHome": "Back to reports",
+    "codes": {
+      "NETWORK_ERROR": "Unable to connect. Check your network and try again.",
+      "LOGIN_LOCKED": "Too many failed attempts. Try again in 15 minutes.",
+      "ACCOUNT_SUSPENDED": "This account is suspended.",
+      "LEVEL_TOO_LOW": "Your reputation level does not allow this action.",
+      "HTTP_401": "Your session has expired. Sign in again.",
+      "HTTP_403": "You are not allowed to do this.",
+      "HTTP_404": "Item not found.",
+      "HTTP_429": "Too many requests. Please wait a moment.",
+      "MOCK_NOT_FOUND": "Sample response missing in src/mocks."
+    }
+  }
+}

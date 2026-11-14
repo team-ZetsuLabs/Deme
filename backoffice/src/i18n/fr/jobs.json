@@ -1,0 +1,38 @@
+{
+  "lead": "Chaque offre est vérifiée avant publication pour protéger les membres des arnaques.",
+  "statusLabel": "Statut des offres",
+  "meta": "{{company}}, {{place}}, {{type}}. Soumise {{ago}} par {{by}}",
+  "check": {
+    "pay": "Rémunération indiquée",
+    "website": "Site de l'entreprise renseigné"
+  },
+  "yes": " : oui",
+  "no": " : non",
+  "viewAd": "Voir l'annonce",
+  "compensation": "Rémunération :",
+  "approve": "Approuver",
+  "published": "Offre de {{company}} publiée",
+  "refusedToast": "Offre de {{company}} refusée",
+  "refuse": {
+    "action": "Refuser",
+    "title": "Refuser l'offre",
+    "lead": "{{company}} recevra ce motif.",
+    "reasonLabel": "Motif communiqué à l'entreprise",
+    "placeholder": "Précisez ce que l'entreprise doit corriger pour republier.",
+    "submit": "Refuser l'offre"
+  },
+  "none": {
+    "PENDING": "Aucune offre en attente",
+    "PUBLISHED": "Aucune offre publiée",
+    "REJECTED": "Aucune offre refusée"
+  },
+  "noneHint": "Les nouvelles offres apparaîtront ici avant publication.",
+  "col": {
+    "offer": "Offre",
+    "company": "Entreprise",
+    "applicants": "Candidatures",
+    "reason": "Motif",
+    "date": "Mise à jour"
+  },
+  "noPlace": "lieu non précisé"
+}

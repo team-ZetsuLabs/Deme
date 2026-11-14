@@ -1,0 +1,15 @@
+{
+  "loading": "Chargement…",
+  "error": "Une erreur est survenue.",
+  "empty": "Rien à afficher.",
+  "retry": "Réessayer",
+  "cancel": "Annuler",
+  "close": "Fermer",
+  "undo": "Annuler",
+  "noteTooShort": "Écrivez au moins {{count}} caractères.",
+  "page": "Page {{page}} sur {{pages}}",
+  "previous": "Précédent",
+  "next": "Suivant",
+  "save": "Enregistrer",
+  "search": "Rechercher"
+}
