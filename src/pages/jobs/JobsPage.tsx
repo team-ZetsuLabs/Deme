@@ -120,7 +120,7 @@ export default function JobsPage() {
                           company: job.companyName,
                           place:
                             [job.city, job.countryCode].filter(Boolean).join(', ') ||
-                            t('jobs.remote'),
+                            t('jobs.noPlace'),
                           type: t(`jobType.${job.type}`),
                           ago: formatAgo(job.createdAt, lang),
                           by: job.recruiter.displayName,

@@ -2,7 +2,6 @@
   "lead": "Chaque offre est vérifiée avant publication pour protéger les membres des arnaques.",
   "statusLabel": "Statut des offres",
   "meta": "{{company}}, {{place}}, {{type}}. Soumise {{ago}} par {{by}}",
-  "remote": "À distance",
   "check": {
     "pay": "Rémunération indiquée",
     "website": "Site de l'entreprise renseigné"
@@ -34,5 +33,6 @@
     "applicants": "Candidatures",
     "reason": "Motif",
     "date": "Mise à jour"
-  }
+  },
+  "noPlace": "lieu non précisé"
 }

@@ -2,7 +2,6 @@
   "lead": "Every offer is checked before publication to protect members from scams.",
   "statusLabel": "Offer status",
   "meta": "{{company}}, {{place}}, {{type}}. Submitted {{ago}} by {{by}}",
-  "remote": "Remote",
   "check": {
     "pay": "Pay shown",
     "website": "Company website provided"
@@ -34,5 +33,6 @@
     "applicants": "Applicants",
     "reason": "Reason",
     "date": "Updated"
-  }
+  },
+  "noPlace": "location not specified"
 }
