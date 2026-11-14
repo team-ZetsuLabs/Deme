@@ -158,7 +158,7 @@ test('le bouton « Voir le site » ouvre le site public dans un nouvel onglet', 
   render(<App />)
   await signIn()
   const link = await screen.findByRole('link', { name: /Voir le site/ })
-  expect(link).toHaveAttribute('href', 'https://hackathon-web-4glg.onrender.com/')
+  expect(link).toHaveAttribute('href', 'https://www.demeafrica.com/')
   expect(link).toHaveAttribute('target', '_blank')
   expect(link.getAttribute('rel')).toContain('noopener')
 })

@@ -20,7 +20,7 @@ La session est un cookie : tout passe par la même adresse, donc ni CORS ni jeto
 
 ## Site public
 
-Le bouton « Voir le site » et les liens vers les contenus des membres utilisent `VITE_SITE_URL` (par défaut https://hackathon-web-4glg.onrender.com/).
+Le bouton « Voir le site » et les liens vers les contenus des membres utilisent `VITE_SITE_URL` (par défaut https://www.demeafrica.com/).
 La cloche du header lit les notifications du compte connecté (compteur interrogé toutes les 60 s, onglet visible seulement).
 
 ## API
